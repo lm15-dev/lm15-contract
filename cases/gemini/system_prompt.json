@@ -1,0 +1,41 @@
+{
+  "id": "gemini.system_prompt",
+  "provider": "gemini",
+  "feature": "system_prompt",
+  "description": "System instruction via systemInstruction field",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Summarize DNA."
+            }
+          ]
+        }
+      ],
+      "systemInstruction": {
+        "parts": [
+          {
+            "text": "You are terse."
+          }
+        ]
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

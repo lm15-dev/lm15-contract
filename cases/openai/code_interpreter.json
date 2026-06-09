@@ -1,0 +1,62 @@
+{
+  "id": "openai.code_interpreter",
+  "provider": "openai",
+  "feature": "code_interpreter",
+  "description": "Code interpreter tool",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Use Python in the code interpreter to compute the SHA256 hash of the exact string 'curl-fixtures-2026-04-13'. Reply with only the lowercase hex digest."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "code_interpreter",
+          "container": {
+            "type": "auto"
+          }
+        }
+      ],
+      "include": [
+        "code_interpreter_call.outputs"
+      ],
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      },
+      "tool_call": {
+        "exact": 0
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

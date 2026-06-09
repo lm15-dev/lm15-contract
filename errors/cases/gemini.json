@@ -1,0 +1,99 @@
+{
+  "cases": [
+    {
+      "id": "gemini.auth_permission_denied",
+      "provider": "gemini",
+      "status": 403,
+      "body": {
+        "error": {
+          "status": "PERMISSION_DENIED",
+          "message": "API key not valid"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "gemini",
+        "provider_code": "PERMISSION_DENIED",
+        "status": 403
+      }
+    },
+    {
+      "id": "gemini.rate_limit",
+      "provider": "gemini",
+      "status": 429,
+      "body": {
+        "error": {
+          "status": "RESOURCE_EXHAUSTED",
+          "message": "Quota exceeded"
+        }
+      },
+      "expected": {
+        "class": "RateLimitError",
+        "code": "rate_limit",
+        "provider": "gemini",
+        "provider_code": "RESOURCE_EXHAUSTED",
+        "status": 429
+      }
+    },
+    {
+      "id": "gemini.context_length",
+      "provider": "gemini",
+      "status": 400,
+      "body": {
+        "error": {
+          "status": "INVALID_ARGUMENT",
+          "message": "input token count exceeds the model limit"
+        }
+      },
+      "expected": {
+        "class": "ContextLengthError",
+        "code": "context_length",
+        "provider": "gemini",
+        "provider_code": "INVALID_ARGUMENT",
+        "status": 400
+      }
+    },
+    {
+      "id": "gemini.model_not_found",
+      "provider": "gemini",
+      "status": 404,
+      "body": {
+        "error": {
+          "status": "NOT_FOUND",
+          "message": "models/gemini-missing is not found for API version v1beta"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "gemini",
+        "provider_code": "NOT_FOUND",
+        "status": 404
+      }
+    },
+    {
+      "id": "gemini.server_unavailable",
+      "provider": "gemini",
+      "status": 503,
+      "body": {
+        "error": {
+          "status": "UNAVAILABLE",
+          "message": "service unavailable"
+        }
+      },
+      "expected": {
+        "class": "ServerError",
+        "code": "server",
+        "provider": "gemini",
+        "provider_code": "UNAVAILABLE",
+        "status": 503
+      }
+    }
+  ],
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-06-09",
+    "evidence": "curated provider error bodies from lm15-python2/conformance@f0bd3ab; copied to lm15-contract 2026-06-09"
+  }
+}

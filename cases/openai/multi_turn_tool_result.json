@@ -1,0 +1,77 @@
+{
+  "id": "openai.multi_turn_tool_result",
+  "provider": "openai",
+  "feature": "multi_turn_tool_result",
+  "description": "Conversation with prior function_call and function_call_output items",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Montreal?"
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_weather_montreal",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Montreal\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_weather_montreal",
+          "output": "Montreal is 12 C and sunny."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get the current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "openai.file_search",
+  "provider": "openai",
+  "feature": "file_search",
+  "description": "File search / retrieval tool",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What files do you find? Reply briefly."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "file_search",
+          "vector_store_ids": [
+            "$AUTO_VECTOR_STORE_ID"
+          ],
+          "max_num_results": 1
+        }
+      ],
+      "tool_choice": {
+        "type": "file_search"
+      },
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

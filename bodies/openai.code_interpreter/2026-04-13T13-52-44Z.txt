@@ -1,0 +1,92 @@
+{
+  "id": "resp_028706d0eff20f4b0069dcf52cde6081908c146bee5c3b051e",
+  "object": "response",
+  "created_at": 1776088364,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1776088368,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-5.4-2026-03-05",
+  "output": [
+    {
+      "id": "ci_028706d0eff20f4b0069dcf52dedc88190ad7d5d69c5e3b85f",
+      "type": "code_interpreter_call",
+      "status": "completed",
+      "code": "import hashlib\ns = 'curl-fixtures-2026-04-13'\nprint(hashlib.sha256(s.encode('utf-8')).hexdigest())\n",
+      "container_id": "cntr_69dcf52d64c08193b49508831a68dd440f2786ad428f2b0a",
+      "outputs": [
+        {
+          "type": "logs",
+          "logs": "9bf29f35dcb696be740348714ac68a635b9d79b75fde705e8da27acf5c6b10d3\n"
+        }
+      ]
+    },
+    {
+      "id": "msg_028706d0eff20f4b0069dcf53007d48190b54dde57ba12c2c3",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "9bf29f35dcb696be740348714ac68a635b9d79b75fde705e8da27acf5c6b10d3"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": "none",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "auto",
+  "tools": [
+    {
+      "type": "code_interpreter",
+      "container": {
+        "type": "auto"
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 1347,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 84,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 1431
+  },
+  "user": null,
+  "metadata": {}
+}

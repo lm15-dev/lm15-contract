@@ -1,0 +1,83 @@
+{
+  "id": "gemini.multi_turn_function_response",
+  "provider": "gemini",
+  "feature": "multi_turn_function_response",
+  "description": "Conversation with prior functionCall and functionResponse parts",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "What is 2 + 2? Use the calculator tool, then answer in one word."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "id": "call_calc_2_plus_2",
+                "name": "calculator",
+                "args": {
+                  "expression": "2 + 2"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "id": "call_calc_2_plus_2",
+                "name": "calculator",
+                "response": {
+                  "result": "4"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "calculator",
+              "description": "Evaluate a basic arithmetic expression",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "expression": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "expression"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

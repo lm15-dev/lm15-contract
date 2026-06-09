@@ -1,0 +1,92 @@
+{
+  "id": "resp_0c56e15264865faa0069dd01239a34819eabf70c435cf71950",
+  "object": "response",
+  "created_at": 1776091427,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1776091431,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-5.4-2026-03-05",
+  "output": [
+    {
+      "id": "ci_0c56e15264865faa0069dd01247dd4819e9d296a794447f544",
+      "type": "code_interpreter_call",
+      "status": "completed",
+      "code": "import hashlib\ns='curl-fixtures-2026-04-13'\nhashlib.sha256(s.encode()).hexdigest()\n",
+      "container_id": "cntr_69dd0123c5448191b87b49f0bd106e9a0ea4dd65a3103cca",
+      "outputs": [
+        {
+          "type": "logs",
+          "logs": "'9bf29f35dcb696be740348714ac68a635b9d79b75fde705e8da27acf5c6b10d3'"
+        }
+      ]
+    },
+    {
+      "id": "msg_0c56e15264865faa0069dd0126dbc0819eb2528d6cea120975",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "9bf29f35dcb696be740348714ac68a635b9d79b75fde705e8da27acf5c6b10d3"
+        }
+      ],
+      "phase": "final_answer",
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": "none",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "auto",
+  "tools": [
+    {
+      "type": "code_interpreter",
+      "container": {
+        "type": "auto"
+      }
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 1336,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 75,
+    "output_tokens_details": {
+      "reasoning_tokens": 35
+    },
+    "total_tokens": 1411
+  },
+  "user": null,
+  "metadata": {}
+}

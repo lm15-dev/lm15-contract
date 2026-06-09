@@ -1,0 +1,53 @@
+{
+  "id": "gemini.google_search",
+  "provider": "gemini",
+  "feature": "google_search",
+  "description": "Google Search grounding tool",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "What was one positive news story from today? Reply in one sentence."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "googleSearch": {}
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      },
+      "citation": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

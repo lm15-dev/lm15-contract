@@ -1,0 +1,40 @@
+{
+  "id": "gemini.image_file_uri",
+  "provider": "gemini",
+  "feature": "image_file_uri",
+  "description": "Image via fileData (Google file URI)",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "What is shown in this image? Answer in a few words."
+            },
+            {
+              "fileData": {
+                "mimeType": "image/jpeg",
+                "fileUri": "https://storage.googleapis.com/cloud-samples-data/generative-ai/image/scones.jpg"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

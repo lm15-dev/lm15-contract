@@ -1,0 +1,123 @@
+{
+  "cases": [
+    {
+      "id": "openai.auth_invalid_key",
+      "provider": "openai",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Incorrect API key provided",
+          "type": "authentication_error",
+          "code": "invalid_api_key"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "openai",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      }
+    },
+    {
+      "id": "openai.billing_quota",
+      "provider": "openai",
+      "status": 429,
+      "body": {
+        "error": {
+          "message": "You exceeded your current quota",
+          "type": "insufficient_quota",
+          "code": "insufficient_quota"
+        }
+      },
+      "expected": {
+        "class": "BillingError",
+        "code": "billing",
+        "provider": "openai",
+        "provider_code": "insufficient_quota",
+        "status": 429
+      }
+    },
+    {
+      "id": "openai.rate_limit",
+      "provider": "openai",
+      "status": 429,
+      "body": {
+        "error": {
+          "message": "Rate limit reached",
+          "type": "rate_limit_error",
+          "code": "rate_limit_exceeded"
+        }
+      },
+      "expected": {
+        "class": "RateLimitError",
+        "code": "rate_limit",
+        "provider": "openai",
+        "provider_code": "rate_limit_exceeded",
+        "status": 429
+      }
+    },
+    {
+      "id": "openai.context_length",
+      "provider": "openai",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "This model's maximum context length was exceeded",
+          "type": "invalid_request_error",
+          "code": "context_length_exceeded"
+        }
+      },
+      "expected": {
+        "class": "ContextLengthError",
+        "code": "context_length",
+        "provider": "openai",
+        "provider_code": "context_length_exceeded",
+        "status": 400
+      }
+    },
+    {
+      "id": "openai.model_not_found",
+      "provider": "openai",
+      "status": 404,
+      "body": {
+        "error": {
+          "message": "The model `gpt-missing` does not exist",
+          "type": "invalid_request_error",
+          "code": "model_not_found"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "openai",
+        "provider_code": "model_not_found",
+        "status": 404
+      }
+    },
+    {
+      "id": "openai.server_error",
+      "provider": "openai",
+      "status": 500,
+      "body": {
+        "error": {
+          "message": "Internal server error",
+          "type": "server_error",
+          "code": "server_error"
+        }
+      },
+      "expected": {
+        "class": "ServerError",
+        "code": "server",
+        "provider": "openai",
+        "provider_code": "server_error",
+        "status": 500
+      }
+    }
+  ],
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-06-09",
+    "evidence": "curated provider error bodies from lm15-python2/conformance@f0bd3ab; copied to lm15-contract 2026-06-09"
+  }
+}

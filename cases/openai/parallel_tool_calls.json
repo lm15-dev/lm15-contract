@@ -1,0 +1,61 @@
+{
+  "id": "openai.parallel_tool_calls",
+  "provider": "openai",
+  "feature": "parallel_tool_calls",
+  "description": "Allow multiple function tool calls in a single turn",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call both get_temperature_montreal and get_humidity_montreal now. Do not answer with plain text."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_temperature_montreal",
+          "description": "Get the current temperature in Montreal",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        },
+        {
+          "type": "function",
+          "name": "get_humidity_montreal",
+          "description": "Get the current humidity in Montreal",
+          "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        }
+      ],
+      "tool_choice": "required",
+      "parallel_tool_calls": true,
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

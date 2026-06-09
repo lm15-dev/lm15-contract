@@ -1,0 +1,51 @@
+{
+  "id": "anthropic.container",
+  "provider": "anthropic",
+  "feature": "container",
+  "description": "Container for sandboxed execution via code_execution tool",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "anthropic-beta": "code-execution-2025-05-22",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Use the code_execution tool to calculate 2 + 2 and report the result."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "code_execution",
+          "type": "code_execution_20250522"
+        }
+      ],
+      "tool_choice": {
+        "type": "tool",
+        "name": "code_execution",
+        "disable_parallel_tool_use": true
+      },
+      "max_tokens": 512,
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

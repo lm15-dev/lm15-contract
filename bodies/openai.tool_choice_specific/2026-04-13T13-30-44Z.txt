@@ -1,0 +1,87 @@
+{
+  "id": "resp_0b3c1882cf79e0e70069dcf004f2b0819dbc7382778bab1718",
+  "object": "response",
+  "created_at": 1776087044,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1776087045,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-4.1-mini-2025-04-14",
+  "output": [
+    {
+      "id": "fc_0b3c1882cf79e0e70069dcf005423c819dbc9d4e130b3ef00e",
+      "type": "function_call",
+      "status": "completed",
+      "arguments": "{\"city\":\"Montreal\"}",
+      "call_id": "call_bDJKoOnDT4OG0nDnwSJjVPC1",
+      "name": "get_weather"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": null,
+  "reasoning": {
+    "effort": null,
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": {
+    "type": "function",
+    "name": "get_weather"
+  },
+  "tools": [
+    {
+      "type": "function",
+      "description": "Get the current weather for a city",
+      "name": "get_weather",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 1.0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 54,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 7,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 61
+  },
+  "user": null,
+  "metadata": {}
+}

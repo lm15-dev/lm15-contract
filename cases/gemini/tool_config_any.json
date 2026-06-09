@@ -1,0 +1,64 @@
+{
+  "id": "gemini.tool_config_any",
+  "provider": "gemini",
+  "feature": "tool_config_any",
+  "description": "Tool config forcing function calling mode ANY",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "I have 57 cats, each owns 44 mittens, how many mittens is that in total?"
+            }
+          ]
+        }
+      ],
+      "toolConfig": {
+        "functionCallingConfig": {
+          "mode": "ANY"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "multiplyNumbers",
+              "description": "Multiply two numbers",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "a": {
+                    "type": "number"
+                  },
+                  "b": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "a",
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

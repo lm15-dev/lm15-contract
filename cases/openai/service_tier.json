@@ -1,0 +1,41 @@
+{
+  "id": "openai.service_tier",
+  "provider": "openai",
+  "feature": "service_tier",
+  "description": "service_tier selection",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Reply with exactly: tiered"
+            }
+          ]
+        }
+      ],
+      "service_tier": "default",
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200,
+    "body_contains": [
+      "\"service_tier\": \"default\""
+    ]
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

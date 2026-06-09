@@ -1,0 +1,40 @@
+{
+  "id": "gemini.image_inline",
+  "provider": "gemini",
+  "feature": "image_inline",
+  "description": "Image input via inlineData base64",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Describe this image in a few words. It is a website icon."
+            },
+            {
+              "inlineData": {
+                "mimeType": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAQklEQVR4nGP8//8/Ay0BE01NH7Vg1AKqABacMoyMJBuGLUsN/SAatWDUglELRi0YtYAaAHeFQ6UG2dAPolELBt4CAIoVBz94d1SyAAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

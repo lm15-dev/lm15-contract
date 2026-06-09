@@ -1,0 +1,58 @@
+{
+  "id": "gemini.response_schema",
+  "provider": "gemini",
+  "feature": "response_schema",
+  "description": "Structured JSON output via generationConfig.responseSchema",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "List a few popular cookie recipes."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "responseMimeType": "application/json",
+        "responseSchema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "recipeName": {
+                "type": "string"
+              },
+              "ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recipeName",
+              "ingredients"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

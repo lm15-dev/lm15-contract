@@ -1,0 +1,43 @@
+{
+  "id": "anthropic.cache_control",
+  "provider": "anthropic",
+  "feature": "cache_control",
+  "description": "Prompt caching via top-level cache_control",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "anthropic-beta": "prompt-caching-2024-07-31",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Reply with exactly: pong"
+            }
+          ]
+        }
+      ],
+      "cache_control": {
+        "type": "ephemeral"
+      },
+      "max_tokens": 64,
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

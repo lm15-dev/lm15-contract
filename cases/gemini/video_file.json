@@ -1,0 +1,40 @@
+{
+  "id": "gemini.video_file",
+  "provider": "gemini",
+  "feature": "video_file",
+  "description": "Video input via fileData",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Describe this video in one short sentence."
+            },
+            {
+              "fileData": {
+                "mimeType": "video/mp4",
+                "fileUri": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

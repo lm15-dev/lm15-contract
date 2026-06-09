@@ -1,0 +1,64 @@
+{
+  "id": "openai.computer_use",
+  "provider": "openai",
+  "feature": "computer_use",
+  "description": "Computer use tool",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "computer-use-preview",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Look at the computer screenshot and reply with one word for the main logo shown."
+            }
+          ]
+        },
+        {
+          "type": "computer_call",
+          "id": "cu_react_logo",
+          "call_id": "call_react_logo",
+          "pending_safety_checks": [],
+          "status": "completed",
+          "action": {
+            "type": "screenshot"
+          }
+        },
+        {
+          "type": "computer_call_output",
+          "call_id": "call_react_logo",
+          "output": {
+            "type": "computer_screenshot",
+            "image_url": "https://raw.githubusercontent.com/github/explore/main/topics/react/react.png"
+          }
+        }
+      ],
+      "tools": [
+        {
+          "type": "computer_use_preview",
+          "display_width": 1024,
+          "display_height": 768,
+          "environment": "browser"
+        }
+      ],
+      "truncation": "auto",
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "openai.reasoning_encrypted",
+  "provider": "openai",
+  "feature": "reasoning_encrypted",
+  "description": "reasoning with encrypted_content include",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-5-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is 143 times 27? Reply with just the number."
+            }
+          ]
+        }
+      ],
+      "reasoning": {
+        "effort": "low"
+      },
+      "include": [
+        "reasoning.encrypted_content"
+      ],
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

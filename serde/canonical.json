@@ -1,0 +1,889 @@
+{
+  "cases": [
+    {
+      "id": "part.text",
+      "kind": "part",
+      "value": {
+        "type": "text",
+        "text": "hello"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.text_with_continuation",
+      "kind": "part",
+      "value": {
+        "type": "text",
+        "text": "hello",
+        "continuation": [
+          {
+            "provider": "openai",
+            "kind": "response_item_id",
+            "data": {
+              "id": "item_1"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.image_url",
+      "kind": "part",
+      "value": {
+        "type": "image",
+        "media_type": "image/png",
+        "url": "https://example.com/cat.png",
+        "detail": "low"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.audio_data",
+      "kind": "part",
+      "value": {
+        "type": "audio",
+        "media_type": "audio/wav",
+        "data": "aGk="
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.video_file",
+      "kind": "part",
+      "value": {
+        "type": "video",
+        "media_type": "video/mp4",
+        "file_id": "file_video"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.document_url",
+      "kind": "part",
+      "value": {
+        "type": "document",
+        "media_type": "application/pdf",
+        "url": "https://example.com/doc.pdf"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.tool_call",
+      "kind": "part",
+      "value": {
+        "type": "tool_call",
+        "id": "call_1",
+        "name": "lookup",
+        "input": {
+          "query": "weather"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.tool_result",
+      "kind": "part",
+      "value": {
+        "type": "tool_result",
+        "id": "call_1",
+        "name": "lookup",
+        "content": [
+          {
+            "type": "text",
+            "text": "sunny"
+          }
+        ],
+        "is_error": true
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.thinking",
+      "kind": "part",
+      "value": {
+        "type": "thinking",
+        "text": "reasoning",
+        "redacted": true
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.refusal",
+      "kind": "part",
+      "value": {
+        "type": "refusal",
+        "text": "no"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "part.citation",
+      "kind": "part",
+      "value": {
+        "type": "citation",
+        "text": "Example",
+        "url": "https://example.com",
+        "title": "Example title"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "message.user_multimodal",
+      "kind": "message",
+      "value": {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "describe"
+          },
+          {
+            "type": "image",
+            "media_type": "image/png",
+            "url": "https://example.com/cat.png"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "message.assistant_tool_call",
+      "kind": "message",
+      "value": {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_1",
+            "name": "lookup",
+            "input": {
+              "query": "weather"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "message.assistant_with_continuation",
+      "kind": "message",
+      "value": {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "text",
+            "text": "hello"
+          }
+        ],
+        "continuation": [
+          {
+            "provider": "openai",
+            "kind": "response_id",
+            "data": {
+              "id": "resp_1"
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "tool.function",
+      "kind": "tool",
+      "value": {
+        "type": "function",
+        "name": "lookup",
+        "description": "Look up data",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "query"
+          ]
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "tool.builtin",
+      "kind": "tool",
+      "value": {
+        "type": "builtin",
+        "name": "web_search",
+        "config": {
+          "context_size": "low"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "tool_choice.required",
+      "kind": "tool_choice",
+      "value": {
+        "mode": "required",
+        "allowed": [
+          "lookup"
+        ],
+        "parallel": false
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "reasoning.medium",
+      "kind": "reasoning",
+      "value": {
+        "effort": "medium",
+        "thinking_budget": 128,
+        "total_budget": 256
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "config.full",
+      "kind": "config",
+      "value": {
+        "max_tokens": 64,
+        "temperature": 0.2,
+        "top_p": 0.9,
+        "top_k": 20,
+        "stop": [
+          "END"
+        ],
+        "response_format": {
+          "type": "json_object"
+        },
+        "tool_choice": {
+          "mode": "required",
+          "allowed": [
+            "lookup"
+          ]
+        },
+        "reasoning": {
+          "effort": "low"
+        },
+        "extensions": {
+          "store": false
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "error_detail.unsupported_model",
+      "kind": "error_detail",
+      "value": {
+        "code": "unsupported_model",
+        "message": "missing model",
+        "provider_code": "model_not_found"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.text",
+      "kind": "delta",
+      "value": {
+        "type": "text",
+        "text": "hi",
+        "part_index": 0
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.thinking",
+      "kind": "delta",
+      "value": {
+        "type": "thinking",
+        "text": "hmm",
+        "part_index": 1
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.audio",
+      "kind": "delta",
+      "value": {
+        "type": "audio",
+        "data": "aGk=",
+        "media_type": "audio/wav",
+        "part_index": 0
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.image",
+      "kind": "delta",
+      "value": {
+        "type": "image",
+        "url": "https://example.com/image.png",
+        "media_type": "image/png",
+        "part_index": 0
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.tool_call",
+      "kind": "delta",
+      "value": {
+        "type": "tool_call",
+        "input": "{\"query\":",
+        "id": "call_1",
+        "name": "lookup",
+        "part_index": 0
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.citation",
+      "kind": "delta",
+      "value": {
+        "type": "citation",
+        "text": "Example",
+        "url": "https://example.com",
+        "title": "Example",
+        "part_index": 2
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "delta.continuation",
+      "kind": "delta",
+      "value": {
+        "type": "continuation",
+        "provider": "anthropic",
+        "kind": "thinking_signature",
+        "data": {
+          "signature": "abc"
+        },
+        "part_index": 1
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "usage.full",
+      "kind": "usage",
+      "value": {
+        "input_tokens": 10,
+        "output_tokens": 5,
+        "total_tokens": 15,
+        "cache_read_tokens": 1,
+        "cache_write_tokens": 2,
+        "reasoning_tokens": 3,
+        "input_audio_tokens": 4,
+        "output_audio_tokens": 5
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "stream.start",
+      "kind": "stream_event",
+      "value": {
+        "type": "start",
+        "id": "resp_1",
+        "model": "m"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "stream.delta",
+      "kind": "stream_event",
+      "value": {
+        "type": "delta",
+        "delta": {
+          "type": "text",
+          "text": "hi",
+          "part_index": 0
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "stream.end",
+      "kind": "stream_event",
+      "value": {
+        "type": "end",
+        "finish_reason": "stop",
+        "usage": {
+          "input_tokens": 1,
+          "output_tokens": 1,
+          "total_tokens": 2
+        },
+        "provider_data": {
+          "provider": "test"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "stream.error",
+      "kind": "stream_event",
+      "value": {
+        "type": "error",
+        "error": {
+          "code": "transport",
+          "message": "socket closed"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "request.with_tools",
+      "kind": "request",
+      "value": {
+        "model": "m",
+        "messages": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "type": "text",
+                "text": "hello"
+              }
+            ]
+          }
+        ],
+        "system": "be terse",
+        "tools": [
+          {
+            "type": "function",
+            "name": "lookup",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "config": {
+          "max_tokens": 32
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "response.with_citation",
+      "kind": "response",
+      "value": {
+        "id": "resp_1",
+        "model": "m",
+        "message": {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "hello"
+            },
+            {
+              "type": "citation",
+              "url": "https://example.com",
+              "title": "Example"
+            }
+          ]
+        },
+        "finish_reason": "stop",
+        "usage": {
+          "input_tokens": 1,
+          "output_tokens": 1,
+          "total_tokens": 2
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "audio_format.pcm16",
+      "kind": "audio_format",
+      "value": {
+        "encoding": "pcm16",
+        "sample_rate": 24000,
+        "channels": 1
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_config.full",
+      "kind": "live_config",
+      "value": {
+        "model": "m",
+        "system": "be helpful",
+        "tools": [
+          {
+            "type": "function",
+            "name": "lookup",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "voice": "alloy",
+        "input_format": {
+          "encoding": "pcm16",
+          "sample_rate": 24000,
+          "channels": 1
+        },
+        "output_format": {
+          "encoding": "opus",
+          "sample_rate": 24000,
+          "channels": 1
+        },
+        "extensions": {
+          "turn_detection": false
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.turn",
+      "kind": "live_client_event",
+      "value": {
+        "type": "turn",
+        "parts": [
+          {
+            "type": "text",
+            "text": "hello"
+          }
+        ],
+        "turn_complete": true
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.audio",
+      "kind": "live_client_event",
+      "value": {
+        "type": "audio",
+        "data": "aGk=",
+        "media_type": "audio/pcm;rate=16000"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.image",
+      "kind": "live_client_event",
+      "value": {
+        "type": "image",
+        "data": "aGk=",
+        "media_type": "image/jpeg"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.text",
+      "kind": "live_client_event",
+      "value": {
+        "type": "text",
+        "text": "hello"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.tool_result",
+      "kind": "live_client_event",
+      "value": {
+        "type": "tool_result",
+        "id": "call_1",
+        "content": [
+          {
+            "type": "text",
+            "text": "ok"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.interrupt",
+      "kind": "live_client_event",
+      "value": {
+        "type": "interrupt"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_client.end_audio",
+      "kind": "live_client_event",
+      "value": {
+        "type": "end_audio"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.audio",
+      "kind": "live_server_event",
+      "value": {
+        "type": "audio",
+        "data": "aGk=",
+        "media_type": "audio/pcm;rate=24000"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.text",
+      "kind": "live_server_event",
+      "value": {
+        "type": "text",
+        "text": "hello"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.tool_call",
+      "kind": "live_server_event",
+      "value": {
+        "type": "tool_call",
+        "id": "call_1",
+        "name": "lookup",
+        "input": {
+          "query": "weather"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.tool_call_delta",
+      "kind": "live_server_event",
+      "value": {
+        "type": "tool_call_delta",
+        "id": "call_1",
+        "name": "lookup",
+        "input_delta": "{\"query\""
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.interrupted",
+      "kind": "live_server_event",
+      "value": {
+        "type": "interrupted"
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.turn_end",
+      "kind": "live_server_event",
+      "value": {
+        "type": "turn_end",
+        "usage": {
+          "input_tokens": 1,
+          "output_tokens": 2,
+          "total_tokens": 3
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    },
+    {
+      "id": "live_server.error",
+      "kind": "live_server_event",
+      "value": {
+        "type": "error",
+        "error": {
+          "code": "provider",
+          "message": "bad"
+        }
+      },
+      "provenance": {
+        "source": "migrated-apr29",
+        "date": "2026-06-09",
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+      }
+    }
+  ]
+}

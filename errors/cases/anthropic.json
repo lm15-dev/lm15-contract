@@ -1,0 +1,109 @@
+{
+  "cases": [
+    {
+      "id": "anthropic.auth_invalid_key",
+      "provider": "anthropic",
+      "status": 401,
+      "body": {
+        "error": {
+          "type": "authentication_error",
+          "message": "invalid x-api-key"
+        },
+        "request_id": "req_auth"
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "anthropic",
+        "provider_code": "authentication_error",
+        "status": 401,
+        "request_id": "req_auth"
+      }
+    },
+    {
+      "id": "anthropic.rate_limit",
+      "provider": "anthropic",
+      "status": 429,
+      "body": {
+        "error": {
+          "type": "rate_limit_error",
+          "message": "rate limit exceeded"
+        },
+        "request_id": "req_rl"
+      },
+      "expected": {
+        "class": "RateLimitError",
+        "code": "rate_limit",
+        "provider": "anthropic",
+        "provider_code": "rate_limit_error",
+        "status": 429,
+        "request_id": "req_rl"
+      }
+    },
+    {
+      "id": "anthropic.context_length",
+      "provider": "anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "type": "invalid_request_error",
+          "message": "prompt is too long: token limit exceeded"
+        },
+        "request_id": "req_ctx"
+      },
+      "expected": {
+        "class": "ContextLengthError",
+        "code": "context_length",
+        "provider": "anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400,
+        "request_id": "req_ctx"
+      }
+    },
+    {
+      "id": "anthropic.model_not_found",
+      "provider": "anthropic",
+      "status": 404,
+      "body": {
+        "error": {
+          "type": "not_found_error",
+          "message": "model claude-missing not found"
+        },
+        "request_id": "req_model"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "anthropic",
+        "provider_code": "not_found_error",
+        "status": 404,
+        "request_id": "req_model"
+      }
+    },
+    {
+      "id": "anthropic_overloaded",
+      "provider": "anthropic",
+      "status": 529,
+      "body": {
+        "error": {
+          "type": "overloaded_error",
+          "message": "overloaded"
+        },
+        "request_id": "req_over"
+      },
+      "expected": {
+        "class": "ServerError",
+        "code": "server",
+        "provider": "anthropic",
+        "provider_code": "overloaded_error",
+        "status": 529,
+        "request_id": "req_over"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-06-09",
+    "evidence": "curated provider error bodies from lm15-python2/conformance@f0bd3ab; copied to lm15-contract 2026-06-09"
+  }
+}

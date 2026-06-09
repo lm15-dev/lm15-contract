@@ -1,0 +1,42 @@
+{
+  "id": "openai.structured_output_json_object",
+  "provider": "openai",
+  "feature": "structured_output_json_object",
+  "description": "Legacy JSON mode via text.format json_object",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Respond with a JSON object containing keys title and summary about DNA."
+            }
+          ]
+        }
+      ],
+      "text": {
+        "format": {
+          "type": "json_object"
+        }
+      },
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}

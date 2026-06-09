@@ -1,0 +1,60 @@
+{
+  "id": "openai.web_search",
+  "provider": "openai",
+  "feature": "web_search",
+  "description": "Web search tool",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What was one positive news story from today? Reply in one sentence."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "web_search_preview",
+          "search_context_size": "low"
+        }
+      ],
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      },
+      "citation": {
+        "min": 1
+      },
+      "tool_call": {
+        "exact": 0
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "migrated-apr29",
+    "date": "2026-06-09",
+    "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+  }
+}
