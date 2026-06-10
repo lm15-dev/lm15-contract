@@ -319,6 +319,11 @@ def is_stream_case(case: JsonObject) -> bool:
         return False
 
 
+def golden_path(case: JsonObject) -> Path:
+    """goldens/<provider>/<feature>.json — drafted by tools/scribe_goldens.py."""
+    return GOLDENS_DIR / str(case["provider"]) / f"{case['feature']}.json"
+
+
 # ─── Results and reports ─────────────────────────────────────────────
 
 @dataclass
@@ -665,9 +670,10 @@ def run_error_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
 def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> DirectionReport:
     """parse_response (direction="response") or replay_stream ("stream").
 
-    Compares against goldens/<case_id>.json: {"canonical_response": ...} plus
-    optional "events" for stream cases. No golden yet → honest "no-golden"
-    skip (counted, never a pass). Any non-empty "unmapped" fails the case.
+    Compares against goldens/<provider>/<feature>.json:
+    {"canonical_response": ...} plus optional "events" for stream cases. No
+    golden yet → honest "no-golden" skip (counted, never a pass). Any
+    non-empty "unmapped" fails the case.
     """
     want_stream = direction == "stream"
     report = DirectionReport(direction)
@@ -680,14 +686,14 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             continue
         if is_stream_case(case) != want_stream:
             continue
-        golden_path = GOLDENS_DIR / f"{case_id}.json"
-        if not golden_path.exists():
+        golden_file = golden_path(case)
+        if not golden_file.exists():
             report.results.append(CaseResult(case_id, "skip", reason="no-golden"))
             continue
         if "canonical_request" not in case:
             report.results.append(CaseResult(case_id, "skip", reason="no canonical_request attached"))
             continue
-        golden = json.loads(golden_path.read_text())
+        golden = json.loads(golden_file.read_text())
         body_b64 = base64.b64encode(pinned_body(case)).decode("ascii")
         if want_stream:
             reply = shim.call(

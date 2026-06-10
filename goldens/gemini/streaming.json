@@ -1,0 +1,97 @@
+{
+  "canonical_response": {
+    "model": "gemini-2.5-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Hello! How can I help you today?"
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "gemini",
+          "kind": "response_id",
+          "data": {
+            "id": "qgLdacjdI_zV1MkPl8e1wAY"
+          }
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3,
+      "output_tokens": 9,
+      "total_tokens": 33,
+      "reasoning_tokens": 21
+    }
+  },
+  "events": [
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "Hello! How can I help you today?"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "provider": "gemini",
+        "kind": "response_id",
+        "data": {
+          "id": "qgLdacjdI_zV1MkPl8e1wAY"
+        }
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 3,
+        "output_tokens": 9,
+        "total_tokens": 33,
+        "reasoning_tokens": 21
+      },
+      "provider_data": {
+        "candidates": [
+          {
+            "content": {
+              "parts": [
+                {
+                  "text": "Hello! How can I help you today?"
+                }
+              ],
+              "role": "model"
+            },
+            "finishReason": "STOP",
+            "index": 0
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 3,
+          "candidatesTokenCount": 9,
+          "totalTokenCount": 33,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 3
+            }
+          ],
+          "thoughtsTokenCount": 21
+        },
+        "modelVersion": "gemini-2.5-flash",
+        "responseId": "qgLdacjdI_zV1MkPl8e1wAY"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-06-10",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-04-13T14-50-18Z.txt"
+  }
+}

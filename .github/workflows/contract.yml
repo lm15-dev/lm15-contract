@@ -16,3 +16,5 @@ jobs:
         run: python3 tools/check_provenance.py
       - name: Audit corpus (orphan ratchet, volatile lint, burn-down reports)
         run: python3 tools/audit.py
+      - name: Mutation self-test (the comparator must catch every injected mutation)
+        run: python3 harness/selftest.py
