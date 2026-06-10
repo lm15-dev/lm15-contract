@@ -25,4 +25,4 @@ cutover, edits land in BOTH copies or not at all.
 `bodies/anthropic.streaming/2026-04-13T13-25-39Z.txt` already contains
 `message_delta` with full usage (`input_tokens: 9, output_tokens: 12`); the
 expectation pins the reference fix that consumes it
-(lm15-python2 commits d73f2a4 red test + the message_delta fix).
+(lm15-python2 commits d4b8557 red test + the message_delta fix).
