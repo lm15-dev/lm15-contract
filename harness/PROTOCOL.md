@@ -41,13 +41,25 @@ verbatim.
 In: `{}` → Out: `{"language": str, "ops": [str], "impl_version": str}`
 
 ### build_request
-In: `{"provider": "openai"|"anthropic"|"gemini", "canonical_request": <Request JSON>, "stream": bool, "api_key": str}`
+In: `{"provider": "openai"|"openai_chat"|"anthropic"|"gemini", "canonical_request": <Request JSON>, "stream": bool, "api_key": str, "base_url"?: str}`
 Out: `{"method": str, "url": str, "params": {str: str}, "headers": {str: str}, "body": <JSON|null>}`
 - `url` carries no query string — query params go in `params`.
 - Header names lowercased; values VERBATIM (the harness asserts exact auth
   formatting against the provided `api_key`, e.g. `Bearer test-key-123`).
 - The shim must construct the adapter with the given `api_key` and must not
   read environment keys.
+
+`base_url` (additive, optional, 2026-06-10): when present on `build_request`,
+`parse_response`, `replay_stream`, or `normalize_error`, the shim MUST
+construct the adapter against that base URL instead of the provider's
+default. This exists for dialect adapters that speak to many servers —
+provider `openai_chat` (OpenAI Chat Completions dialect: OpenAI, ollama,
+Groq, OpenRouter, vLLM, SGLang, …) — where the case fixture pins the server
+it was captured against. The harness forwards a case's top-level
+`"base_url"` field verbatim on every op; absence means the adapter default.
+Shims that predate this field treat unknown fields per JSON convention
+(ignore), so the addition is backward compatible only for cases that do not
+declare it — cases that DO declare `base_url` require a shim that honors it.
 
 ### parse_response
 In: `{"provider": str, "canonical_request": <Request JSON>, "status": int, "body_b64": str}`

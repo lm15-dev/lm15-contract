@@ -319,6 +319,19 @@ def is_stream_case(case: JsonObject) -> bool:
         return False
 
 
+def case_base_url(case: JsonObject) -> JsonObject:
+    """Optional per-case shim target: {"base_url": ...} or {} (PROTOCOL.md).
+
+    Cases for OpenAI-compatible servers (provider "openai_chat") pin the
+    server they were captured against via a top-level "base_url" field; the
+    harness forwards it verbatim on every op so the shim constructs the
+    adapter against the same base URL the fixture's wire request targets.
+    """
+    if "base_url" in case:
+        return {"base_url": case["base_url"]}
+    return {}
+
+
 def golden_path(case: JsonObject) -> Path:
     """goldens/<provider>/<feature>.json — drafted by tools/scribe_goldens.py."""
     return GOLDENS_DIR / str(case["provider"]) / f"{case['feature']}.json"
@@ -495,6 +508,7 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
             canonical_request=case["canonical_request"],
             stream=bool(case.get("stream", False)),
             api_key=API_KEY,
+            **case_base_url(case),
         )
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
@@ -701,6 +715,7 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
                 provider=case["provider"],
                 canonical_request=case["canonical_request"],
                 body_b64=body_b64,
+                **case_base_url(case),
             )
         else:
             reply = shim.call(
@@ -709,6 +724,7 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
                 canonical_request=case["canonical_request"],
                 status=int(case.get("expect", {}).get("status", 200)),
                 body_b64=body_b64,
+                **case_base_url(case),
             )
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))

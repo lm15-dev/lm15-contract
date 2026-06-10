@@ -77,6 +77,7 @@ def scribe(shim: check.Shim) -> tuple[dict[str, int], list[dict]]:
                 provider=case["provider"],
                 canonical_request=case["canonical_request"],
                 body_b64=body_b64,
+                **check.case_base_url(case),
             )
         else:
             reply = shim.call(
@@ -85,6 +86,7 @@ def scribe(shim: check.Shim) -> tuple[dict[str, int], list[dict]]:
                 canonical_request=case["canonical_request"],
                 status=int(case.get("expect", {}).get("status", 200)),
                 body_b64=body_b64,
+                **check.case_base_url(case),
             )
 
         error = None
