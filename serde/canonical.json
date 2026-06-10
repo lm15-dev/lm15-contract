@@ -1168,6 +1168,59 @@
         "date": "2026-06-10",
         "evidence": "lm15-python2/docs/serde-rules.md (omission rule: typed serializers omit their own empty optional fields; Usage counters are int|null, null = not reported, distinct from reported 0); changes/2026-06-10-usage-none-vs-zero.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
       }
+    },
+    {
+      "id": "config.number-float-fields-integral",
+      "kind": "config",
+      "value": {
+        "temperature": 1.0,
+        "top_p": 1.0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (Number rule: every numeric field has a declared JSON number type; float fields always serialize as JSON floats, int fields as JSON ints, constructors coerce same-valued cross-type input); changes/2026-06-10-number-rule.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "config.number-int-fields",
+      "kind": "config",
+      "value": {
+        "max_tokens": 64,
+        "top_k": 2
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (Number rule: every numeric field has a declared JSON number type; float fields always serialize as JSON floats, int fields as JSON ints, constructors coerce same-valued cross-type input); changes/2026-06-10-number-rule.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "model_info.number-integral-pricing",
+      "kind": "model_info",
+      "value": {
+        "id": "flat-1",
+        "provider": "exampleai",
+        "api_family": "openai-chat",
+        "inference": {
+          "input_modalities": [
+            "text"
+          ],
+          "output_modalities": [
+            "text"
+          ],
+          "pricing": {
+            "input_per_million": 1.0,
+            "output_per_million": 2.0,
+            "currency": "USD"
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (Number rule: every numeric field has a declared JSON number type; float fields always serialize as JSON floats, int fields as JSON ints, constructors coerce same-valued cross-type input); changes/2026-06-10-number-rule.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
     }
   ]
 }
