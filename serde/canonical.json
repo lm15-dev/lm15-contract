@@ -1132,6 +1132,42 @@
         "date": "2026-06-10",
         "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
       }
+    },
+    {
+      "id": "usage.nothing_reported",
+      "kind": "usage",
+      "value": {},
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule: typed serializers omit their own empty optional fields; Usage counters are int|null, null = not reported, distinct from reported 0); changes/2026-06-10-usage-none-vs-zero.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "usage.reported_zeros",
+      "kind": "usage",
+      "value": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule: typed serializers omit their own empty optional fields; Usage counters are int|null, null = not reported, distinct from reported 0); changes/2026-06-10-usage-none-vs-zero.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "usage.partial_input_only",
+      "kind": "usage",
+      "value": {
+        "input_tokens": 7
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule: typed serializers omit their own empty optional fields; Usage counters are int|null, null = not reported, distinct from reported 0); changes/2026-06-10-usage-none-vs-zero.md; canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
     }
   ]
 }
