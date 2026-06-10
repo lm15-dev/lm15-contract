@@ -1,0 +1,19 @@
+{
+  "_doc": [
+    "Vet shim registry for harness/check.py. Keys are --shim names; entries",
+    "give the subprocess argv ('command') and its working directory ('cwd'),",
+    "resolved relative to the lm15-contract root. Every command must speak",
+    "the JSONL protocol in harness/PROTOCOL.md on stdin/stdout and never",
+    "touch the network (the harness wraps it in `unshare -rn` when available).",
+    "To add a language, add an entry here once its shim exists, e.g.:",
+    "  \"rust\":       {\"command\": [\"cargo\", \"run\", \"--quiet\", \"--bin\", \"lm15-vet\"], \"cwd\": \"../lm15-rs\"}",
+    "  \"go\":         {\"command\": [\"go\", \"run\", \"./cmd/lm15-vet\"], \"cwd\": \"../lm15-go\"}",
+    "  \"typescript\": {\"command\": [\"node\", \"dist/vet.js\"], \"cwd\": \"../lm15-ts\"}",
+    "  \"julia\":      {\"command\": [\"julia\", \"bin/vet.jl\"], \"cwd\": \"../lm15-jl\"}",
+    "Keys starting with '_' are ignored by the harness."
+  ],
+  "python": {
+    "command": ["./.venv/bin/python", "-m", "lm15.vet"],
+    "cwd": "../lm15-python2"
+  }
+}
