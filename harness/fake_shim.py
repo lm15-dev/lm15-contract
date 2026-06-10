@@ -49,28 +49,43 @@ TARGET: str | None = None
 
 # ─── Corpus indexes (recorded-correct outputs) ───────────────────────
 
-def _canon_key(provider: Any, canonical_request: Any) -> str:
-    return json.dumps([provider, canonical_request], sort_keys=True, separators=(",", ":"))
+def _canon_key(provider: Any, canonical_request: Any, base_url: Any = None) -> str:
+    # base_url is part of the identity: cases for different OpenAI-compatible
+    # servers (vLLM :8000, SGLang :30000) share canonical_requests but record
+    # different wire URLs (see check.case_base_url / PROTOCOL.md).
+    return json.dumps(
+        [provider, base_url, canonical_request], sort_keys=True, separators=(",", ":")
+    )
 
 
 WIRE_CASES = check.load_wire_cases()
 BY_CANON: dict[str, list[JsonObject]] = {}
 for _case in WIRE_CASES:
     if "canonical_request" in _case:
-        BY_CANON.setdefault(_canon_key(_case["provider"], _case["canonical_request"]), []).append(_case)
+        BY_CANON.setdefault(
+            _canon_key(_case["provider"], _case["canonical_request"], _case.get("base_url")),
+            [],
+        ).append(_case)
+
+
+def _candidates(msg: JsonObject) -> list[JsonObject]:
+    return BY_CANON.get(
+        _canon_key(msg["provider"], msg["canonical_request"], msg.get("base_url")), []
+    )
 
 
 def find_wire_case(msg: JsonObject) -> JsonObject:
-    candidates = BY_CANON.get(_canon_key(msg["provider"], msg["canonical_request"]), [])
+    candidates = _candidates(msg)
     if not candidates:
         raise LookupError("no case fixture matches this canonical_request")
-    # Duplicate canonical_requests (e.g. anthropic.thinking/thinking_budget)
-    # necessarily record identical wire requests — any candidate echoes right.
+    # Duplicate canonical_requests at the same base_url (e.g.
+    # anthropic.thinking/thinking_budget) necessarily record identical wire
+    # requests — any candidate echoes right.
     return candidates[0]
 
 
 def find_parse_case(msg: JsonObject) -> JsonObject:
-    candidates = BY_CANON.get(_canon_key(msg["provider"], msg["canonical_request"]), [])
+    candidates = _candidates(msg)
     for case in candidates:
         if "pinned_body" in case:
             pinned = base64.b64encode(check.pinned_body(case)).decode("ascii")
