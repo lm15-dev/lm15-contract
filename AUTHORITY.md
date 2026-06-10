@@ -75,4 +75,4 @@ These rules bind every repository in the lm15 organization, every agent
 work-order, and the maintainer. Amendments to this document require a
 `changes/` entry and re-ratification below.
 
-Ratified-by: PENDING
+Ratified-by: Maxime Rivest, 2026-06-10 — rules read and assented to in session; transcribed at his request.
