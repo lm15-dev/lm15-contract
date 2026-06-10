@@ -1039,6 +1039,99 @@
         "date": "2026-06-10",
         "evidence": "lm15-python2/docs/model-hydration.md (canonical ModelInfo JSON, field-by-field schema); changes/2026-06-10-model-hydration-vectors.md"
       }
+    },
+    {
+      "id": "config.cache-full",
+      "kind": "config",
+      "value": {
+        "max_tokens": 1024,
+        "temperature": 0.5,
+        "cache": {
+          "mode": "auto",
+          "retention": "long",
+          "key": "session-42",
+          "prefix_until_index": 3
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "config.cache-minimal",
+      "kind": "config",
+      "value": {
+        "cache": {
+          "mode": "off"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "cache_config.full",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto",
+        "retention": "short",
+        "key": "tenant-a",
+        "prefix_until_index": 0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "cache_config.minimal",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "continuation_state.response-id",
+      "kind": "continuation_state",
+      "value": {
+        "provider": "openai",
+        "kind": "response_id",
+        "data": {
+          "id": "resp_123"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "continuation_state.opaque-data",
+      "kind": "continuation_state",
+      "value": {
+        "provider": "gemini",
+        "kind": "cached_content",
+        "data": {
+          "name": "cachedContents/xyz",
+          "ttl": "300s"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-10",
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+      }
     }
   ]
 }
