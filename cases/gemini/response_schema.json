@@ -69,38 +69,36 @@
       }
     ],
     "config": {
-      "extensions": {
-        "generationConfig": {
-          "responseMimeType": "application/json",
-          "responseSchema": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "recipeName": {
-                  "type": "string"
-                },
-                "ingredients": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
+      "response_format": {
+        "response_mime_type": "application/json",
+        "response_schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "recipeName": {
+                "type": "string"
               },
-              "required": [
-                "recipeName",
-                "ingredients"
-              ]
-            }
+              "ingredients": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recipeName",
+              "ingredients"
+            ]
           }
         }
       }
     }
   },
   "canonical_request_provenance": {
-    "source": "derived-from-reference",
+    "source": "canonical-rewrite",
     "date": "2026-06-10",
-    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+    "evidence": "wire-identical to live-validated fixture, verified by harness request direction"
   },
   "pinned_body": "2026-04-13T14-50-04Z.txt"
 }

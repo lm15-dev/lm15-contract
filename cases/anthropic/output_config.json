@@ -68,31 +68,27 @@
     ],
     "config": {
       "max_tokens": 128,
-      "extensions": {
-        "output_config": {
-          "format": {
-            "type": "json_schema",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "animal": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "animal"
-              ],
-              "additionalProperties": false
+      "response_format": {
+        "type": "json_schema",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "animal": {
+              "type": "string"
             }
-          }
+          },
+          "required": [
+            "animal"
+          ],
+          "additionalProperties": false
         }
       }
     }
   },
   "canonical_request_provenance": {
-    "source": "derived-from-reference",
+    "source": "canonical-rewrite",
     "date": "2026-06-10",
-    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+    "evidence": "wire-identical to live-validated fixture, verified by harness request direction"
   },
   "pinned_body": "2026-04-13T14-48-53Z.txt"
 }
