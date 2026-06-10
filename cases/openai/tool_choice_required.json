@@ -52,5 +52,48 @@
     "source": "migrated-apr29",
     "date": "2026-06-09",
     "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
-  }
+  },
+  "canonical_request": {
+    "model": "gpt-4.1-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Montreal? Use the tool."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get the current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "tool_choice": {
+        "mode": "required"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "derived-from-reference",
+    "date": "2026-06-10",
+    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-04-13T14-52-25Z.txt"
 }

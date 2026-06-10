@@ -38,5 +38,31 @@
     "source": "migrated-apr29",
     "date": "2026-06-09",
     "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
-  }
+  },
+  "canonical_request": {
+    "model": "gpt-4.1-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Describe this image in a few words."
+          },
+          {
+            "type": "image",
+            "media_type": "image/png",
+            "url": "https://raw.githubusercontent.com/github/explore/main/topics/react/react.png",
+            "detail": "low"
+          }
+        ]
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "derived-from-reference",
+    "date": "2026-06-10",
+    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-04-13T14-51-45Z.txt"
 }

@@ -52,5 +52,47 @@
     "source": "migrated-apr29",
     "date": "2026-06-09",
     "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
-  }
+  },
+  "canonical_request": {
+    "model": "claude-sonnet-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Return a JSON object matching the schema with animal set to cat."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 128,
+      "extensions": {
+        "output_config": {
+          "format": {
+            "type": "json_schema",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "animal": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "animal"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "derived-from-reference",
+    "date": "2026-06-10",
+    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-04-13T14-48-53Z.txt"
 }

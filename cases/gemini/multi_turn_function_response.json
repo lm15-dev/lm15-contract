@@ -79,5 +79,72 @@
     "source": "migrated-apr29",
     "date": "2026-06-09",
     "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
-  }
+  },
+  "canonical_request": {
+    "model": "gemini-2.5-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is 2 + 2? Use the calculator tool, then answer in one word."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_calc_2_plus_2",
+            "name": "calculator",
+            "input": {
+              "expression": "2 + 2"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_calc_2_plus_2",
+            "name": "calculator",
+            "content": [
+              {
+                "type": "text",
+                "text": "4"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "calculator",
+        "description": "Evaluate a basic arithmetic expression",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "expression": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "expression"
+          ]
+        }
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "derived-from-reference",
+    "date": "2026-06-10",
+    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-04-13T14-50-00Z.txt"
 }

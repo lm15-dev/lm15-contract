@@ -58,5 +58,43 @@
     "source": "migrated-apr29",
     "date": "2026-06-09",
     "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
-  }
+  },
+  "canonical_request": {
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use Python in the code interpreter to compute the SHA256 hash of the exact string 'curl-fixtures-2026-04-13'. Reply with only the lowercase hex digest."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "builtin",
+        "name": "code_execution",
+        "config": {
+          "container": {
+            "type": "auto"
+          }
+        }
+      }
+    ],
+    "config": {
+      "extensions": {
+        "include": [
+          "code_interpreter_call.outputs"
+        ]
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "derived-from-reference",
+    "date": "2026-06-10",
+    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-04-13T14-51-18Z.txt"
 }
