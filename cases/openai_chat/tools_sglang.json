@@ -1,0 +1,111 @@
+{
+  "id": "openai_chat.tools_sglang",
+  "provider": "openai_chat",
+  "feature": "tools_sglang",
+  "description": "Function tool declared, tool_choice auto (SGLang, OpenAI-compatible local server)",
+  "base_url": "http://192.168.2.24:30000/v1",
+  "request": {
+    "method": "POST",
+    "url": "http://192.168.2.24:30000/v1/chat/completions",
+    "headers": {
+      "Authorization": "Bearer test-key-123",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-0.8B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the get_weather tool."
+        }
+      ],
+      "max_completion_tokens": 1024,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a city.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "description": "City name"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-06-10",
+    "evidence": "live-validated against SGLang (http://192.168.2.24:30000/v1/chat/completions), model Qwen/Qwen3.5-0.8B, HTTP 200, captured 2026-06-10T19-31-54Z; verbatim body at bodies/openai_chat.tools_sglang/2026-06-10T19-31-54Z.txt; see changes/2026-06-10-vllm-sglang-live-cases.md"
+  },
+  "canonical_request": {
+    "model": "Qwen/Qwen3.5-0.8B",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Paris? Use the get_weather tool."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get the current weather for a city.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "City name"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1024,
+      "tool_choice": {
+        "mode": "auto"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-06-10",
+    "evidence": "authored with the case; wire side generated from it via python -m lm15.vet build_request @ lm15-python2 HEAD and live-validated (receipt above); DRAFT pending human review per AUTHORITY.md canonical-facts rule"
+  },
+  "pinned_body": "2026-06-10T19-31-54Z.txt"
+}
