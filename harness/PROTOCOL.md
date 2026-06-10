@@ -114,3 +114,11 @@ Out: `{"types": {<TypeName>: {"fields": [str]}}, "enums": {<EnumName>: [str]}}`
   paths per case.
 - Auth header values are compared EXACTLY against the api_key the harness
   injected (never redacted on the shim side).
+
+## Concurrency
+
+The contract pins pure transformations (build/parse/map). Concurrency and
+transport surface are per-language idiom and are OUT of contract scope:
+Python ships sync + mirror Async* classes; Go uses context; TypeScript is
+async-only; Julia uses tasks. Ports MUST share the pure core across their
+concurrency surfaces so conformance covers all of them.
