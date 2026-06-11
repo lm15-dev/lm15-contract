@@ -731,4 +731,4 @@ Factories: `ToolCallInfo.from_part(part)`, `to_part()`.
 
 ---
 
-Status: DRAFT — pending maintainer ratification (AUTHORITY.md canonical-facts authority transfers to spec/ upon ratification).
+Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; canonical-facts authority now includes spec/ per AUTHORITY.md).

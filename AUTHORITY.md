@@ -38,9 +38,10 @@ how provider output maps into canonical types.
 
 Precedence (highest wins):
 
-1. **Normative rules** — the written spec for the representation (today:
-   `lm15-python2/docs/serde-rules.md` and the type docstrings; to be extracted
-   into this repo as numbered invariants in Stage 2).
+1. **Normative rules** — the written spec for the representation:
+   `spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md` in this
+   repository (ratified 2026-06-11), together with
+   `lm15-python2/docs/serde-rules.md` and `docs/mapping-rules.md`.
 2. **The contract fixture** (`serde/canonical.json`, `expect_lm15` blocks).
 3. **lm15-python2** (the reference implementation).
 4. **The ports** (Go, Rust, TypeScript, Julia).
@@ -76,3 +77,4 @@ work-order, and the maintainer. Amendments to this document require a
 `changes/` entry and re-ratification below.
 
 Ratified-by: Maxime Rivest, 2026-06-10 — rules read and assented to in session; transcribed at his request.
+Re-ratified: Maxime Rivest, 2026-06-11 — canonical-facts precedence amended to name the ratified spec/ files (session assent: "I ratified the spec"); transcribed.
