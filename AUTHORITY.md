@@ -8,7 +8,7 @@ that move is a violation unless accompanied by the evidence specified below.
 
 The corpus in this repository — `cases/`, `bodies/`, `errors/`,
 `serde/canonical.json` — is the single source of truth for lm15 behavior.
-`lm15-python2` is the reference implementation: changes land there first, but
+`lm15-python` is the reference implementation: changes land there first, but
 it holds **no oracle authority**. Implementations never win by default.
 
 ## Wire facts
@@ -41,9 +41,9 @@ Precedence (highest wins):
 1. **Normative rules** — the written spec for the representation:
    `spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md` in this
    repository (ratified 2026-06-11), together with
-   `lm15-python2/docs/serde-rules.md` and `docs/mapping-rules.md`.
+   `lm15-python/docs/serde-rules.md` and `docs/mapping-rules.md`.
 2. **The contract fixture** (`serde/canonical.json`, `expect_lm15` blocks).
-3. **lm15-python2** (the reference implementation).
+3. **lm15-python** (the reference implementation).
 4. **The ports** (Go, Rust, TypeScript, Julia).
 
 A canonical fixture changes only with a citation of the normative rule that

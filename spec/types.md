@@ -1,11 +1,11 @@
 # lm15 canonical types
 
 The written schema for every public canonical dataclass in the lm15 model
-(`lm15-python2/lm15/types.py` is the reference; this document is the spec).
+(`lm15-python/lm15/types.py` is the reference; this document is the spec).
 Wire-format rules (omission, Number rule) are normative in
-[`lm15-python2/docs/serde-rules.md`](../../lm15-python2/docs/serde-rules.md);
+[`lm15-python/docs/serde-rules.md`](../../lm15-python/docs/serde-rules.md);
 response-mapping rules in
-[`lm15-python2/docs/mapping-rules.md`](../../lm15-python2/docs/mapping-rules.md).
+[`lm15-python/docs/mapping-rules.md`](../../lm15-python/docs/mapping-rules.md).
 Construction-time invariants are numbered in [invariants.md](invariants.md)
 (cited as INV-###). Closed value sets are in
 [vocabularies.md](vocabularies.md).

@@ -1,7 +1,7 @@
 # lm15 closed vocabularies
 
 Every closed string vocabulary in the canonical model. Reference:
-`lm15-python2/lm15/types.py` Literal aliases plus their runtime mirrors
+`lm15-python/lm15/types.py` Literal aliases plus their runtime mirrors
 (frozensets / dispatch tables), which `surface_dump` reflects and
 `tools/spec_drift.py` checks against this file.
 
@@ -129,7 +129,7 @@ Runtime mirror: `REASONING_SUMMARIES`.
 ## ErrorCode
 
 Runtime mirror: `ERROR_CODES`. Bidirectional with the error class hierarchy
-(`lm15-python2/lm15/errors.py`); `error.type` on the vet protocol is the
+(`lm15-python/lm15/errors.py`); `error.type` on the vet protocol is the
 CLASS name, `code` is the ErrorCode literal.
 
 | Value | Canonical class | Notes |

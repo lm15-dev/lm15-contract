@@ -10,7 +10,7 @@ Entrypoints:
 
 | Language | Command |
 |---|---|
-| Python (reference) | `python -m lm15.vet` (cwd: lm15-python2) |
+| Python (reference) | `python -m lm15.vet` (cwd: lm15-python) |
 | Rust | `cargo run --quiet --bin lm15-vet` |
 | Go | `go run ./cmd/lm15-vet` |
 | TypeScript | `node dist/vet.js` |
@@ -34,7 +34,7 @@ name.
 ## Ops
 
 All canonical JSON uses the canonical serde forms (see
-`lm15-python2/docs/serde-rules.md`): one omission rule, opaque payloads
+`lm15-python/docs/serde-rules.md`): one omission rule, opaque payloads
 verbatim.
 
 ### capabilities

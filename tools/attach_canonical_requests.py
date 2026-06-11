@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Attach canonical requests and pinned bodies to the contract corpus.
 
-For each logical case in lm15-python2/conformance/cross_sdk/test_cases.json,
+For each logical case in lm15-python/conformance/cross_sdk/test_cases.json,
 build the canonical Request via the reference's own interpretation
 (dump_request.request_for_case, imported by path), serialize it with
 lm15.serde.request_to_dict, and write it into the matching
 cases/<provider>/<feature>.json as "canonical_request". The attached value is
-a DRAFT derived from the reference — lm15-python2 holds no oracle authority
+a DRAFT derived from the reference — lm15-python holds no oracle authority
 (AUTHORITY.md, canonical facts) — so each one carries its own
 "canonical_request_provenance" block marking it pending human review. Logical
 cases with stream=true are recorded as "stream": true on the case.
@@ -26,19 +26,19 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PYTHON2 = ROOT.parent / "lm15-python2"
+PYTHON2 = ROOT.parent / "lm15-python"
 TEST_CASES = PYTHON2 / "conformance" / "cross_sdk" / "test_cases.json"
 DUMP_REQUEST = PYTHON2 / "conformance" / "cross_sdk" / "dump_request.py"
 
 CANONICAL_REQUEST_PROVENANCE = {
     "source": "derived-from-reference",
     "date": "2026-06-10",
-    "evidence": "request_for_case @ lm15-python2 HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule",
+    "evidence": "request_for_case @ lm15-python HEAD; DRAFT pending human review — see AUTHORITY.md canonical-facts rule",
 }
 
 
 def load_dump_request():
-    """Import dump_request.py by path (it puts lm15-python2 on sys.path itself)."""
+    """Import dump_request.py by path (it puts lm15-python on sys.path itself)."""
     spec = importlib.util.spec_from_file_location("dump_request", DUMP_REQUEST)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -58,7 +58,7 @@ def main() -> int:
     dump_request = load_dump_request()
     if str(PYTHON2) not in sys.path:
         sys.path.insert(0, str(PYTHON2))
-    from lm15.serde import request_to_dict  # noqa: E402  (needs lm15-python2 on sys.path)
+    from lm15.serde import request_to_dict  # noqa: E402  (needs lm15-python on sys.path)
 
     logical_cases = json.loads(TEST_CASES.read_text())["cases"]
 

@@ -10,7 +10,7 @@ scribe replays the pinned body through the vet shim — ``parse_response``, or
      "events": [...],            # stream cases only
      "provenance": {"source": "scribe-draft", ...}}
 
-DRAFT status and the circularity: the drafts are derived from lm15-python2,
+DRAFT status and the circularity: the drafts are derived from lm15-python,
 which holds NO oracle authority (AUTHORITY.md). Re-running the python shim
 against its own drafts is green by construction — the drafts pin regressions,
 not correctness. Correctness comes only at human freeze, with evidence per
@@ -41,7 +41,7 @@ import check  # harness/check.py — Shim, corpus loaders, golden_path
 FAILURES_FILE = check.GOLDENS_DIR / "_failures.json"
 
 PROVENANCE_EVIDENCE = (
-    "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; "
+    "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; "
     "DRAFT — not frozen, see AUTHORITY.md"
 )
 

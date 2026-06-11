@@ -17,7 +17,7 @@ jobs:
       - name: Audit corpus (orphan ratchet, volatile lint, burn-down reports)
         run: python3 tools/audit.py
       - name: Spec drift (reflected surface must be covered by spec/)
-        # Skips itself with a notice when lm15-python2 is not checked out as
+        # Skips itself with a notice when lm15-python is not checked out as
         # a sibling (same convention as the python2 vet smoke test); full
         # teeth locally and in any cross-repo checkout.
         run: python3 tools/spec_drift.py

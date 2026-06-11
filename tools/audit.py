@@ -16,7 +16,7 @@ Four checks, each with FAIL/REPORT lines and a one-line summary:
    provider wire syntax through config.extensions — the
    "extensions-passthrough" burn-down list, reported with exact ids.
 4. SURFACE COVERAGE (report-only): types/enums from the reference shim's
-   surface_dump (python -m lm15.vet, run as a subprocess in lm15-python2)
+   surface_dump (python -m lm15.vet, run as a subprocess in lm15-python)
    that no serde kind appearing in serde/canonical.json covers. "Covered"
    means directly addressable as the top-level value of that kind's serde —
    nested-only types are honest gaps, not silently excused.
@@ -233,12 +233,12 @@ def main(argv: list[str] | None = None) -> int:
     default_root = Path(__file__).resolve().parent.parent
     parser.add_argument("--root", type=Path, default=default_root)
     parser.add_argument("--python2", type=Path, default=None,
-                        help="lm15-python2 checkout for the vet shim (default: sibling of --root)")
+                        help="lm15-python checkout for the vet shim (default: sibling of --root)")
     parser.add_argument("--allowlist", type=Path, default=None,
                         help="orphan allowlist (default: <root>/tools/orphan-allowlist.json)")
     args = parser.parse_args(argv)
     root: Path = args.root
-    python2: Path = args.python2 or root.parent / "lm15-python2"
+    python2: Path = args.python2 or root.parent / "lm15-python"
     allowlist_path: Path = args.allowlist or root / "tools" / "orphan-allowlist.json"
 
     problems: list[str] = []

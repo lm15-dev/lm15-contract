@@ -2,7 +2,7 @@
 """spec_drift — the spec-rot gate.
 
 Runs the reference vet shim's ``surface_dump`` (reflection over
-lm15-python2's public dataclasses and string vocabularies) and fails when
+lm15-python's public dataclasses and string vocabularies) and fails when
 any reflected type, field, or enum value is missing from the spec tables in
 ``spec/types.md`` / ``spec/vocabularies.md``.
 
@@ -18,8 +18,8 @@ Parsing convention (matches how the spec files are written):
   it; its values are all backticked tokens inside that section's tables.
 
 Shim resolution: ``harness/shims.json`` entry "python" (default
-``../lm15-python2``). If that checkout is absent the gate SKIPS itself with
-exit 0 and a loud notice (same convention as lm15-python2's CI vet smoke
+``../lm15-python``). If that checkout is absent the gate SKIPS itself with
+exit 0 and a loud notice (same convention as lm15-python's CI vet smoke
 test); set ``LM15_SPEC_DRIFT_STRICT=1`` to turn a missing shim into a
 failure.
 """
@@ -149,7 +149,7 @@ def check_enums(reflected: dict, failures: list[str], extras: list[str]) -> None
 def main() -> int:
     result = surface_dump()
     if result is None:
-        msg = "spec_drift: python shim not found (lm15-python2 not checked out as sibling)"
+        msg = "spec_drift: python shim not found (lm15-python not checked out as sibling)"
         if os.environ.get("LM15_SPEC_DRIFT_STRICT"):
             print(f"{msg} — strict mode, failing", file=sys.stderr)
             return 2
