@@ -40,6 +40,8 @@ emitted even when empty:
 - `ThinkingPart.text` — same: `{"type": "thinking", "text": ""}`.
 - `RefusalPart.text` — always emitted (and non-empty by INV-016 anyway).
 - `ToolCallPart.input` — always emitted, `{}` when empty (opaque payload).
+- `FunctionTool.parameters` — always emitted; an explicit `{}` round-trips
+  verbatim as `{}` (opaque JSON-Schema payload — INV-033).
 - `ToolResultPart.id` and `ToolResultPart.content` — always emitted;
   `content` would serialize as `[]` if empty (unreachable through the
   constructor, which requires non-empty content — INV-014 — but the
@@ -379,7 +381,7 @@ Exactly one per stream, final (MAP-3, mapping-rules.md).
 | `type` | string `"function"` | — | `"function"` | always | discriminator |
 | `name` | string | yes | — | always | non-empty |
 | `description` | string | no | `null` | omit-empty | |
-| `parameters` | object (opaque JSON Schema) | no | `{"type": "object", "properties": {}}` | omit-empty | strict JSON object, required; CAUTION: a literal `{}` is omitted on the wire and deserializes back to the default schema (INV-033) |
+| `parameters` | object (opaque JSON Schema) | shape | `{"type": "object", "properties": {}}` | always (even `{}`) | strict JSON object, required; opaque payload — an explicit `{}` round-trips verbatim; absent on input deserializes to the default schema (INV-033) |
 
 ### BuiltinTool
 
@@ -446,7 +448,8 @@ Config level: `reasoning` absent = no explicit preference;
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
-Request entirely.
+Request entirely. On read, a present non-object `tool_choice`/`reasoning`/
+`cache` is malformed canonical JSON and raises `TypeError` (INV-042).
 
 ## Request / Response
 
@@ -732,3 +735,7 @@ Factories: `ToolCallInfo.from_part(part)`, `to_part()`.
 ---
 
 Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; canonical-facts authority now includes spec/ per AUTHORITY.md).
+Amended 2026-06-11 by maintainer delegation: FunctionTool.parameters is
+required-with-shape (INV-033 resolution); Config read-side nest rule noted
+(INV-042 resolution). See changes/2026-06-11-inv033-parameters-always-emitted.md
+and changes/2026-06-11-inv042-config-nests-reject.md.

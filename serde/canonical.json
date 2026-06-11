@@ -286,6 +286,20 @@
       }
     },
     {
+      "id": "tool.function.empty_parameters",
+      "kind": "tool",
+      "value": {
+        "type": "function",
+        "name": "noop",
+        "parameters": {}
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-06-11",
+        "evidence": "spec/invariants.md INV-033 (parameters is required-with-shape: explicit {} round-trips verbatim) + lm15-python2/docs/serde-rules.md (omission rule 3: opaque payloads never mutated); changes/2026-06-11-inv033-parameters-always-emitted.md; canonical-only fixture, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
       "id": "tool_choice.required",
       "kind": "tool_choice",
       "value": {
