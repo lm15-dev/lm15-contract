@@ -1,8 +1,6 @@
 {
-  "comment": "Stage 2 debt \u2014 a ratchet that only goes down. These case files have no canonical_request because no logical case exists for them in lm15-python2/conformance/cross_sdk/test_cases.json (see changes/2026-06-10-canonical-requests.md). Burn this list down: remove each id in the same commit that attaches its canonical_request. tools/audit.py hard-fails on any NEW orphan not listed here and on any STALE entry whose case has gained a canonical_request, so the list can never grow and never rot.",
+  "comment": "Stage 2 debt — a ratchet that only goes down. These case files have no canonical_request because the pure build/parse model cannot express them; spec/SCOPE.md declares both OUT OF 1.0 SCOPE (gemini.cached_content needs a /cachedContents side channel; openai.computer_use needs a new part type via MAP-1 amendment). They stay reachable via config.extensions/provider_data with no contract guarantee. Burn rule unchanged: remove each id in the same commit that attaches its canonical_request. tools/audit.py hard-fails on any NEW orphan not listed here and on any STALE entry whose case has gained a canonical_request.",
   "orphans": [
-    "anthropic.cache_control",
-    "anthropic.system_content_blocks",
     "gemini.cached_content",
     "openai.computer_use"
   ]
