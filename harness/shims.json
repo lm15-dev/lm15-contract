@@ -13,7 +13,30 @@
     "Keys starting with '_' are ignored by the harness."
   ],
   "python": {
-    "command": ["./.venv/bin/python", "-m", "lm15.vet"],
+    "command": [
+      "./.venv/bin/python",
+      "-m",
+      "lm15.vet"
+    ],
     "cwd": "../lm15-python2"
+  },
+  "rust": {
+    "command": [
+      "./target/release/lm15-vet"
+    ],
+    "cwd": "../lm15-rs"
+  },
+  "go": {
+    "command": [
+      "./bin/lm15-vet"
+    ],
+    "cwd": "../lm15-go"
+  },
+  "typescript": {
+    "command": [
+      "node",
+      "dist/vet.js"
+    ],
+    "cwd": "../lm15-ts"
   }
 }
