@@ -14,6 +14,8 @@ jobs:
           python-version: "3.12"
       - name: Enforce fixture provenance
         run: python3 tools/check_provenance.py
+      - name: Enforce secrecy invariant (spec/auth.md AUTH-5)
+        run: python3 tools/check_secrecy.py
       - name: Audit corpus (orphan ratchet, volatile lint, burn-down reports)
         run: python3 tools/audit.py
       - name: Spec drift (reflected surface must be covered by spec/)
