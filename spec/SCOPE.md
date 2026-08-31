@@ -36,6 +36,9 @@ evolution, but breaking changes in a 1.x release are permitted with a
   `ImageGeneration*`/`AudioGeneration*` types and their adapter routes).
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
+- **Live model listing** — `list_models()` returning canonical `ModelInfo`
+  tuples (`EndpointSupport.models`); mapping rules and live receipts in
+  `changes/2026-08-31-list-models-provisional.md`. No harness direction yet.
 
 Ports may implement provisional surfaces, but conformance does not require
 them and their fixtures carry no freeze guarantee.
