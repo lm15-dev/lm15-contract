@@ -224,7 +224,7 @@ rationale is the designed reason, ratified, not a guess.
   `tool_choice`/`reasoning`/`cache` is present but not a JSON object
   (`null` still reads as absent): malformed canonical input is an error,
   never silent data loss. The telemetry/metadata nests — `response.usage`,
-  `stream end.usage`, `model_info.origin/inference/training`,
+  `stream end.usage`, `model_info.origin/inference`,
   `live_config.input_format/output_format` — keep treating a non-dict value
   as absent (`None`/default). WHY: a config nest is the caller's own request;
   silently dropping a mistyped `tool_choice` changes what the request asks
