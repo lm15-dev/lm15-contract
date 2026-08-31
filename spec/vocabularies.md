@@ -186,16 +186,51 @@ Code mapping is most-specific-class-first; unknown code →
 
 ## BatchStatus
 
-Runtime mirror: `BATCH_STATUSES`.
+Runtime mirror: `BATCH_STATUSES`. The job lifecycle only — per-entry
+fates live in BatchOutcome; conflating the two dimensions is how batch
+APIs usually hurt people. Terminal subset mirror:
+`BATCH_TERMINAL_STATUSES` (`completed`/`failed`/`cancelled`/`expired`).
+Provider folds: `validating` → `queued`; `in_progress`/`finalizing`/
+`BATCH_STATE_RUNNING` → `running`; `canceling` → `cancelling`;
+Anthropic's `ended` splits on request_counts (all-cancelled →
+`cancelled`, all-expired → `expired`, else `completed`).
 
 | Value |
 |---|
-| `submitted` |
 | `queued` |
 | `running` |
+| `cancelling` |
 | `completed` |
 | `failed` |
 | `cancelled` |
+| `expired` |
+
+## BATCH_TERMINAL_STATUSES
+
+Derived subset of BatchStatus: the states in which a job will make no
+further progress (`BatchJobInfo.done`). Not a separate vocabulary — a
+named convenience mirror.
+
+| Value |
+|---|
+| `completed` |
+| `failed` |
+| `cancelled` |
+| `expired` |
+
+## BatchOutcome
+
+Runtime mirror: `BATCH_OUTCOMES`. The fate of one entry (adopted from
+Anthropic's result types, US spelling normalized to `cancelled`).
+`succeeded` carries a full canonical Response; `errored` a canonical
+ErrorDetail; `cancelled`/`expired` neither.
+
+| Value |
+|---|
+| `succeeded` |
+| `errored` |
+| `cancelled` |
+| `expired` |
 
 ## AudioEncoding
 

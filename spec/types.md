@@ -525,15 +525,37 @@ Exactly one of `bytes_data`/`path` (INV-011 family).
 |---|---|---|---|---|---|
 | `model` | string | no | `null` → inferred from `requests[0].model` (INV-032) | always after inference | routing convenience only |
 | `requests` | array of Request | yes | `[]` (but empty rejected) | always | non-empty |
+| `label` | string | no | `null` | omit-empty | non-empty when present; providers without a wire label field REJECT labeled submits (no silent drop) |
 | `extensions` | object (opaque) | no | `null` | omit-empty | |
 
-### BatchResponse
+### BatchJobInfo
+
+The ticket: a snapshot of one provider-side batch job. `id` is a plain
+string — store it anywhere; enumerability (`batch_list`) is the recovery
+path for a lost id, never client-side care.
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `id` | string | yes | — | always | non-empty |
+| `id` | string | yes | — | always | non-empty; the provider's job identifier verbatim |
 | `status` | string (BatchStatus) | yes | — | always | closed vocabulary |
-| `provider_data` | object (opaque) | no | `null` | omit-empty | |
+| `label` | string | no | `null` | omit-empty | non-empty when present |
+| `created_at` | string | no | `null` | omit-empty | ISO-8601 UTC `YYYY-MM-DDTHH:MM:SSZ`, normalized from the provider's epoch/ISO form |
+| `provider_data` | object (opaque) | no | `null` | omit-empty | raw job object verbatim |
+
+### BatchEntry
+
+The fate of one request, in submission order. Partial failure is a
+first-class outcome: a `completed` job may mix `succeeded` and `errored`
+entries. Implementations re-sort provider results so entry order always
+equals submission order (providers return results out of order —
+observed live, Anthropic, 2026-08-31).
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `index` | int | yes | — | always | non-negative; submission position |
+| `outcome` | string (BatchOutcome) | yes | — | always | closed vocabulary |
+| `response` | object (Response) | outcome-dependent | `null` | omit-empty | required iff `outcome="succeeded"`; parsed by the frozen chat response mapping |
+| `error` | object (ErrorDetail) | outcome-dependent | `null` | omit-empty | required iff `outcome="errored"`; `cancelled`/`expired` carry neither |
 
 ### ImageGenerationRequest
 

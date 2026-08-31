@@ -165,7 +165,8 @@ match this list, not the other way around). An unknown kind is an
 `part`, `message`, `tool`, `tool_choice`, `reasoning`, `config`,
 `cache_config`, `continuation_state`, `error_detail`, `delta`, `usage`,
 `stream_event`, `request`, `response`, `model_info`, `audio_format`,
-`live_config`, `live_client_event`, `live_server_event`
+`live_config`, `live_client_event`, `live_server_event`,
+`batch_request`, `batch_job`, `batch_entry`
 
 Adding a kind is an additive spec change requiring a `changes/` entry.
 

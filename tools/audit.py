@@ -66,6 +66,9 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "live_config": (("LiveConfig",), ()),
     "live_client_event": (("LiveClient*Event",), ("LiveClientEventType",)),
     "live_server_event": (("LiveServer*Event",), ("LiveServerEventType",)),
+    "batch_request": (("BatchRequest",), ()),
+    "batch_job": (("BatchJobInfo",), ("BatchStatus", "BATCH_STATUSES", "BATCH_TERMINAL_STATUSES")),
+    "batch_entry": (("BatchEntry",), ("BatchOutcome", "BATCH_OUTCOMES")),
 }
 
 
