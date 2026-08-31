@@ -79,7 +79,8 @@ def load_cases(root: Path) -> list[tuple[Path, dict]]:
 # ─── 1. ORPHANS (hard) ───────────────────────────────────────────────
 
 def check_orphans(root: Path, cases: list[tuple[Path, dict]],
-                  allowlist: set[str], problems: list[str]) -> str:
+                  allowlist: set[str], body_dir_allowlist: set[str],
+                  problems: list[str]) -> str:
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases if "canonical_request" not in data}
     case_ids = {data.get("id") for _, data in cases}
@@ -97,8 +98,14 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
     bodies = root / "bodies"
     body_dirs = sorted(p.name for p in bodies.iterdir() if p.is_dir()) if bodies.is_dir() else []
     for name in body_dirs:
-        if name not in case_ids:
+        if name not in case_ids and name not in body_dir_allowlist:
             problems.append(f"ORPHANS bodies/{name}/: body directory without a case file")
+    for name in sorted(body_dir_allowlist):
+        if name in case_ids:
+            problems.append(
+                f"ORPHANS bodies/{name}/: STALE allowlist entry — a case file now exists; "
+                "remove it from body_dirs in the same commit"
+            )
 
     for path, data in cases:
         case_id = data.get("id", str(path.relative_to(root)))
@@ -253,13 +260,16 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     allowlist: set[str] = set()
+    body_dir_allowlist: set[str] = set()
     if allowlist_path.is_file():
-        allowlist = set(json.loads(allowlist_path.read_text()).get("orphans", []))
+        allowlist_data = json.loads(allowlist_path.read_text())
+        allowlist = set(allowlist_data.get("orphans", []))
+        body_dir_allowlist = set(allowlist_data.get("body_dirs", []))
     else:
         problems.append(f"ORPHANS {allowlist_path}: allowlist file missing")
 
     summaries = [
-        check_orphans(root, cases, allowlist, problems),
+        check_orphans(root, cases, allowlist, body_dir_allowlist, problems),
         check_volatile(root, cases, problems),
         report_extensions_passthrough(root, cases),
         report_surface_coverage(root, python2),
