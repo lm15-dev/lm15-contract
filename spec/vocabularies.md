@@ -232,6 +232,24 @@ ErrorDetail; `cancelled`/`expired` neither.
 | `cancelled` |
 | `expired` |
 
+## FileReadiness
+
+Runtime mirror: `FILE_READINESS_VALUES`. Whether a stored file can be
+used in a model request yet. Deliberately NOT the provider wire words
+(Gemini says `ACTIVE`; OpenAI's deprecated `status` says `processed`).
+Provider folds (verified live 2026-08-31): Gemini `*PROCESSING` →
+`pending`, `*FAILED` → `failed`, `ACTIVE`/absent/unknown → `ready`
+(suffix match — the `BATCH_STATE_*`-vs-`JOB_STATE_*` drift precedent);
+OpenAI deprecated `status`: `uploaded` → `pending`, `error` → `failed`,
+`processed`/absent/unknown → `ready`; Anthropic reports no state →
+always `ready`.
+
+| Value | Meaning |
+|---|---|
+| `pending` | still processing; not yet usable in requests |
+| `ready` | usable in model requests (also the unknown-value fallback) |
+| `failed` | processing failed; unusable |
+
 ## AudioEncoding
 
 Runtime mirror: `AUDIO_ENCODINGS`.

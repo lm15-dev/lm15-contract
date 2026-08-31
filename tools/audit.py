@@ -69,6 +69,9 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "batch_request": (("BatchRequest",), ()),
     "batch_job": (("BatchJobInfo",), ("BatchStatus", "BATCH_STATUSES", "BATCH_TERMINAL_STATUSES")),
     "batch_entry": (("BatchEntry",), ("BatchOutcome", "BATCH_OUTCOMES")),
+    "file_upload_request": (("FileUploadRequest",), ()),
+    "file_info": (("FileInfo",), ("FileReadiness", "FILE_READINESS_VALUES")),
+    "file_page": (("FilePage",), ()),
 }
 
 

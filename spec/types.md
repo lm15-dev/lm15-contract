@@ -498,26 +498,56 @@ Convenience: `.text` (text + citation/thinking treated as metadata),
 
 ### FileUploadRequest
 
-In-memory only — `bytes_data` is raw bytes and this type has no canonical
-JSON serializer (not in the serde kind table).
+Files are an ACCOUNT-scoped resource on every provider — there is no
+`model` field. OpenAI's `purpose` storage classification is NOT part of
+the portable surface: the reference defaults to `user_data`, sets
+`batch` itself for batch inputs, and honors `extensions["purpose"]`.
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `filename` | string | yes | — | n/a | non-empty |
-| `bytes_data` | bytes (in-memory) | one-of | `null` | n/a | non-empty; bytearray coerced to bytes |
-| `media_type` | string | no | `"application/octet-stream"` | n/a | non-empty |
-| `model` | string | no | `null` | n/a | optional: some providers scope uploads to the account |
-| `extensions` | object | no | `null` | n/a | `{}` → `null` |
-| `path` | local path | one-of | `null` | n/a | str coerced to Path (INV-009); lazy read |
+| `filename` | string | yes | — | always | non-empty |
+| `bytes_data` | string (base64 on the wire; raw bytes in memory) | one-of | `null` | omit-empty | non-empty; bytearray coerced to bytes |
+| `media_type` | string | no | `"application/octet-stream"` | always (truthy) | non-empty |
+| `extensions` | object | no | `null` | omit-empty | `{}` → `null` |
+| `path` | string (local path) | one-of | `null` | omit-empty | str coerced to Path (INV-009); lazy read; serialized as a plain string per the media-part precedent (meaningful only where the filesystem is shared) |
 
 Exactly one of `bytes_data`/`path` (INV-011 family).
 
-### FileUploadResponse
+### FileInfo
 
-| Field | JSON type | Req | Default | Omission |
-|---|---|---|---|---|
-| `id` | string | yes | — | always |
-| `provider_data` | object (opaque) | no | `null` | omit-empty |
+The snapshot of one provider-side stored file; replaces the former
+`FileUploadResponse` and is returned by upload, get, and list. `id` is
+the canonical reference to place in a media Part's `file_id`: OpenAI
+and Anthropic file ids verbatim; Gemini the file URI VERBATIM (model
+requests address files by URI, not resource name — verified live
+2026-08-31; adapters derive the REST resource from the URI).
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `id` | string | yes | — | always | non-empty; provider reference verbatim |
+| `filename` | string | no | `null` | omit-empty | non-empty when present |
+| `media_type` | string | no | `null` | omit-empty | OpenAI reports no MIME type → `null` |
+| `size_bytes` | int | no | `null` | omit-empty | `>= 0`; Gemini's int64-as-string normalized |
+| `created_at` | string | no | `null` | omit-empty | ISO-8601 UTC `YYYY-MM-DDTHH:MM:SSZ`, normalized from epoch/ISO forms |
+| `expires_at` | string | no | `null` | omit-empty | same normalization; Gemini always (~48h), OpenAI on some purposes, Anthropic when set |
+| `readiness` | string (FileReadiness) | no | `"ready"` | always (truthy) | closed vocabulary |
+| `downloadable` | bool | no | `null` | omit-empty EXCEPT `false` (false is data, not emptiness) | tri-state: provider-stated capability or `null` when unreported |
+| `provider_data` | object (opaque) | no | `null` | omit-empty | raw file object verbatim |
+
+Convenience: `.ready` (`readiness == "ready"`).
+
+### FilePage
+
+One page of stored files. Listing is a CORE operation (the provider is
+the system of record; a lost id is recovered by listing). `next_cursor`
+is provider-issued and opaque (OpenAI `last_id` when `has_more`;
+Anthropic `next_page` token; Gemini `nextPageToken`); pass it back to
+`file_list`, `null` means the listing is complete.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `items` | array of FileInfo | no | `[]` | omit-empty | |
+| `next_cursor` | string | no | `null` | omit-empty | non-empty when present; opaque |
 
 ### BatchRequest
 
