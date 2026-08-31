@@ -4,6 +4,7 @@
 Every fixture must say where it came from. Rules:
 - every JSON file under cases/   : top-level "provenance" block
 - every JSON file under errors/  : top-level "provenance" block
+- every JSON file under auth/    : top-level "provenance" block
 - serde/canonical.json           : every entry in .cases[] has "provenance"
 
 A provenance block is an object with:
@@ -55,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     problems: list[str] = []
     scanned = 0
 
-    for sub in ("cases", "errors"):
+    for sub in ("cases", "errors", "auth"):
         base = root / sub
         if not base.is_dir():
             continue
