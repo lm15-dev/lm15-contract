@@ -52,7 +52,7 @@ rationale is the designed reason, ratified, not a guess.
   WHY: each numeric field has ONE declared wire form (serde-rules.md Number
   rule); rounding would silently change meaning.
 - **INV-008 — Float fields coerce same-valued ints.** `1 → 1.0`; applies to
-  `temperature`, `top_p`, `EmbeddingResponse.vectors` elements, pricing
+  `temperature`, `top_p`, pricing
   fields, error `retry_after`. WHY: same Number rule; before 2026-06-10 the
   wire form depended on the caller's Python literal, which other languages
   cannot reproduce.
@@ -112,7 +112,7 @@ rationale is the designed reason, ratified, not a guess.
 - **INV-020 — Bare-value and list→tuple coercion.** Sequences are stored as
   tuples; a bare element coerces to a 1-tuple: `Message.parts` (bare Part),
   `Request.messages` (bare Message), `Config.stop` (bare str),
-  `ToolChoice.allowed` (bare str), `EmbeddingRequest.inputs` (bare str),
+  `ToolChoice.allowed` (bare str),
   `LiveClientTurnEvent.parts` (bare Part), continuation everywhere
   (INV-005). A bare STRING for `Message.parts` is rejected with guidance to
   use `Message.user(...)`. WHY: shallow immutability requires tuples;

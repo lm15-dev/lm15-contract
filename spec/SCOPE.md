@@ -42,9 +42,12 @@ These surfaces ship in 1.0 but are NOT frozen. The intent is additive
 evolution, but breaking changes in a 1.x release are permitted with a
 `changes/` entry (no major-version bump required):
 
-- **Non-chat endpoints** — embeddings, files, batch, image generation,
-  audio generation (the `EmbeddingRequest`/`FileUpload*`/`Batch*`/
+- **Non-chat endpoints** — files, batch, image generation,
+  audio generation (the `FileUpload*`/`Batch*`/
   `ImageGeneration*`/`AudioGeneration*` types and their adapter routes).
+  Media generation stays in because its outputs are the SAME typed parts
+  the chat surface accepts as inputs (`ImagePart`, `AudioPart`) — the
+  conversation with the arrow reversed.
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
 
@@ -52,6 +55,15 @@ Ports may implement provisional surfaces, but conformance does not require
 them and their fixtures carry no freeze guarantee.
 
 ## OUT OF SCOPE for 1.0
+
+- **Embeddings** — removed pre-1.0 (2026-08-31,
+  `changes/2026-08-31-remove-embeddings.md`). Membership principle: lm15
+  speaks to models through Parts — messages in, messages (or the same
+  typed media parts) out. Embeddings are representation, not conversation:
+  text in, meaning-vector out, and nothing round-trips through the Part
+  vocabulary. They were the one surface held "by cohabitation" rather than
+  by type-system symmetry; a scope with no exceptions is easier to defend.
+  Use a provider's own client for vectors.
 
 - **`gemini.cached_content`** — Gemini explicit caching requires a
   cache-creation side channel (a separate `/cachedContents` POST before the

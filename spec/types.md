@@ -496,23 +496,6 @@ Convenience: `.text` (text + citation/thinking treated as metadata),
 
 ## Other endpoints
 
-### EmbeddingRequest
-
-| Field | JSON type | Req | Default | Omission | Constraints |
-|---|---|---|---|---|---|
-| `model` | string | yes | — | always | non-empty |
-| `inputs` | array of string | yes | — | always | non-empty, non-empty strings; bare string coerced (INV-020) |
-| `extensions` | object (opaque) | no | `null` | omit-empty | `{}` → `null` (INV-004) |
-
-### EmbeddingResponse
-
-| Field | JSON type | Req | Default | Omission | Constraints |
-|---|---|---|---|---|---|
-| `model` | string | yes | — | always | non-empty |
-| `vectors` | array of array of float | yes | — | always | non-empty; inner vectors non-empty; elements finite, int-coerced to float (INV-008) |
-| `usage` | object (Usage) | no | `Usage()` | omit-empty | |
-| `provider_data` | object (opaque) | no | `null` | omit-empty | |
-
 ### FileUploadRequest
 
 In-memory only — `bytes_data` is raw bytes and this type has no canonical
