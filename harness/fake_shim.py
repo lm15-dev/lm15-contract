@@ -41,6 +41,8 @@ MUTATIONS = (
     "usage_off_by_1000",    # parse: first integer usage field += 1000
     "dropped_event",        # replay_stream: last event dropped
     "bool_as_int",          # build_request: first boolean body leaf becomes 0/1
+    "auth_state_flip",      # explain_auth: first step's state flipped
+    "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
 )
 
 MUTATION = "none"
@@ -216,6 +218,47 @@ def op_serde_roundtrip(msg: JsonObject) -> JsonObject:
     return {"value": msg["value"]}
 
 
+def _borrowed_state(path: Path) -> str:
+    """Classify a harness-materialized borrowed file (see check.materialize_borrowed_file)."""
+    if not path.exists():
+        return "missing"
+    oauth = json.loads(path.read_text())["claudeAiOauth"]
+    import time
+
+    expired = int(oauth.get("expiresAt", 0)) <= int(time.time() * 1000)
+    if not expired:
+        return "fresh"
+    return "expired-with-refresh" if oauth.get("refreshToken") else "expired-no-refresh"
+
+
+def op_explain_auth(msg: JsonObject) -> JsonObject:
+    fixture = check.load_auth_fixture()
+    for case in fixture["cases"]:
+        if case["provider"] != msg["provider"]:
+            continue
+        if case.get("env", {}) != msg.get("env", {}):
+            continue
+        if case.get("api_keys_providers", []) != msg.get("api_keys_providers", []):
+            continue
+        has_borrowed = "borrowed_file" in case
+        if has_borrowed != ("credentials_path" in msg):
+            continue
+        if has_borrowed:
+            actual_state = _borrowed_state(Path(msg["credentials_path"]))
+            if case["borrowed_file"]["state"] != actual_state:
+                continue
+        expect = case["expect"]
+        steps = [dict(step) for step in expect["steps"]]
+        report_text = "\n".join(f"{s['kind']}: {s['state']}" for s in steps) or "empty chain"
+        if targeted(case):
+            if MUTATION == "auth_state_flip" and steps:
+                steps[0]["state"] = "absent" if steps[0]["state"] == "selected" else "selected"
+            elif MUTATION == "auth_sentinel_leak":
+                report_text += f"\nkey: {msg['sentinel']}"
+        return {"configured": expect["configured"], "steps": steps, "report_text": report_text}
+    raise LookupError("no auth fixture matches this (provider, env, api_keys_providers, borrowed state)")
+
+
 HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "capabilities": op_capabilities,
     "build_request": op_build_request,
@@ -223,6 +266,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "replay_stream": op_replay_stream,
     "normalize_error": op_normalize_error,
     "serde_roundtrip": op_serde_roundtrip,
+    "explain_auth": op_explain_auth,
 }
 
 

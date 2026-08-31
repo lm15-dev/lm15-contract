@@ -15,7 +15,7 @@ with the JSON path of the first difference — never papered over. This module
 imports NOTHING from lm15: stdlib only.
 
 Usage:
-    python harness/check.py --shim python [--direction request|response|stream|error|serde|all]
+    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|all]
                             [--case ID] [--report-dir harness/reports]
 """
 
@@ -28,6 +28,8 @@ import json
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -40,8 +42,9 @@ GOLDENS_DIR = CONTRACT_ROOT / "goldens"
 SERDE_FILE = CONTRACT_ROOT / "serde" / "canonical.json"
 SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
+AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -296,6 +299,10 @@ def load_error_cases() -> list[JsonObject]:
 
 def load_serde_cases() -> list[JsonObject]:
     return list(json.loads(SERDE_FILE.read_text())["cases"])
+
+
+def load_auth_fixture() -> JsonObject:
+    return json.loads(AUTH_FILE.read_text())
 
 
 def pinned_body(case: JsonObject) -> bytes:
@@ -756,6 +763,98 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
     return report
 
 
+# ─── Direction: auth ─────────────────────────────────────────────────
+
+def materialize_borrowed_file(case: JsonObject, tmp_dir: Path) -> str:
+    """Write the harness-owned borrowed credential file for one auth case.
+
+    The file format is a wire fact under AUTH-8 (spec/auth.md): the Claude
+    Code store is ``{"claudeAiOauth": {accessToken, expiresAt (ms),
+    refreshToken?}}``. The HARNESS materializes it — never the shim — so an
+    implementation cannot pass by writing a file that only its own parser
+    accepts. The fixture sentinel is planted as every secret value (AUTH-5).
+    """
+    if case["provider"] != "claude-code":
+        raise HarnessError(
+            f"auth case {case['id']!r}: no harness materializer for "
+            f"{case['provider']!r} borrowed files — add one before adding fixtures"
+        )
+    state = case["borrowed_file"]["state"]
+    if state == "missing":
+        return str(tmp_dir / f"{case['id']}-does-not-exist.json")
+    sentinel = load_auth_fixture()["sentinel"]
+    now_ms = int(time.time() * 1000)
+    oauth: JsonObject = {"accessToken": sentinel}
+    if state == "fresh":
+        oauth["expiresAt"] = now_ms + 3_600_000
+        oauth["refreshToken"] = sentinel
+    elif state == "expired-with-refresh":
+        oauth["expiresAt"] = 1
+        oauth["refreshToken"] = sentinel
+    elif state == "expired-no-refresh":
+        oauth["expiresAt"] = 1
+    else:
+        raise HarnessError(f"auth case {case['id']!r}: unknown borrowed_file state {state!r}")
+    path = tmp_dir / f"{case['id']}-credentials.json"
+    path.write_text(json.dumps({"claudeAiOauth": oauth}))
+    return str(path)
+
+
+def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """AUTH-1 resolution chains through the shim's explain_auth (AUTH-7).
+
+    The harness supplies EVERY input (env map, api_keys providers, borrowed
+    file, sentinel); the shim must not read its real environment. Compared
+    strictly: ``configured`` and the ``steps`` kind/state sequence. AUTH-5 is
+    enforced harness-side: the planted sentinel must not appear anywhere in
+    the shim's reply, and ``report_text`` (the human rendering) must be a
+    non-empty string so the secrecy check has a real surface to inspect.
+    """
+    report = DirectionReport("auth")
+    fixture = load_auth_fixture()
+    sentinel = str(fixture["sentinel"])
+    with tempfile.TemporaryDirectory(prefix="lm15-auth-") as tmp:
+        tmp_dir = Path(tmp)
+        for case in fixture["cases"]:
+            case_id = case["id"]
+            if case_filter and case_id != case_filter:
+                continue
+            fields: JsonObject = {
+                "provider": case["provider"],
+                "sentinel": sentinel,
+                "env": case.get("env", {}),
+                "api_keys_providers": case.get("api_keys_providers", []),
+            }
+            if "borrowed_file" in case:
+                fields["credentials_path"] = materialize_borrowed_file(case, tmp_dir)
+            reply = shim.call("explain_auth", **fields)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            if sentinel in json.dumps(reply, ensure_ascii=False):
+                report.results.append(CaseResult(
+                    case_id, "fail",
+                    reason="AUTH-5 violation: the planted sentinel appears in the shim reply",
+                ))
+                continue
+            result = reply["result"]
+            report_text = result.get("report_text")
+            if not isinstance(report_text, str) or not report_text:
+                report.results.append(CaseResult(
+                    case_id, "fail",
+                    reason="report_text missing or empty — the AUTH-5 check needs the rendered report",
+                ))
+                continue
+            expect = case["expect"]
+            actual = {key: result.get(key, _ABSENT) for key in expect}
+            diff = first_difference(expect, actual)
+            if diff is None:
+                report.results.append(CaseResult(case_id, "pass"))
+            else:
+                report.results.append(CaseResult(case_id, "fail", diff=diff))
+    return report
+
+
 # ─── Main ────────────────────────────────────────────────────────────
 
 def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path) -> DirectionReport:
@@ -767,6 +866,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_error_direction(shim, case_filter)
     if direction in ("response", "stream"):
         return run_parse_direction(shim, direction, case_filter)
+    if direction == "auth":
+        return run_auth_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

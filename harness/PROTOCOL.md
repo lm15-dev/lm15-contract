@@ -103,6 +103,31 @@ Out: `{"types": {<TypeName>: {"fields": [str]}}, "enums": {<EnumName>: [str]}}`
 - MUST be produced by reflection (e.g. dataclasses.fields), never a
   hand-maintained list — this feeds the coverage ratchet.
 
+### explain_auth
+In: `{"provider": str, "sentinel": str, "env": {str: str}, "api_keys_providers": [str], "credentials_path"?: str}`
+Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text": str}`
+- Drives the AUTH-7 explain surface over the AUTH-1 chain
+  (`auth/resolution.json`; spec/auth.md). The harness owns EVERY input:
+  - `env` is the complete environment for resolution. It is always present
+    (possibly empty); the shim must never consult its real process
+    environment or real home-directory credential stores.
+  - `api_keys_providers` lists providers for which an explicit api_keys
+    entry exists; the shim plants `sentinel` as each entry's value.
+  - `credentials_path`, when present, is a harness-materialized borrowed
+    OAuth credential file (or a deliberately nonexistent path). The harness
+    writes the file — never the shim — in the AUTH-8 wire format, with the
+    sentinel as every secret value.
+- `steps` carries the language-neutral `kind` vocabulary of the fixture
+  (`api_keys`, `env:<VAR>`, `placeholder`, `oauth-file`) and the AUTH-7
+  states (`selected`, `shadowed`, `absent`), in chain order.
+- `report_text` is the implementation's full human rendering of the report
+  (every rendered surface concatenated). It must be a non-empty string: the
+  harness enforces AUTH-5 by asserting the sentinel appears nowhere in the
+  ENTIRE reply, and an empty rendering would give that check nothing to
+  inspect.
+- The op performs no network I/O and no writes; reading the harness-given
+  `credentials_path` is the only file access.
+
 ## Serde kinds
 
 The closed set of `kind` strings for `serde_roundtrip` and `validate`

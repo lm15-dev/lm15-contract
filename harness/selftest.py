@@ -11,8 +11,8 @@ expectations) except for one injected mutation — and FAILS unless:
    reported at the mutated path.
 
 The mutation classes pin the comparator's teeth: tool-name drift, text
-corruption, absent-vs-empty conflation, usage arithmetic, event loss, and
-bool/int conflation. A comparator weakened enough to miss any of them fails
+corruption, absent-vs-empty conflation, usage arithmetic, event loss,
+bool/int conflation, auth-chain state drift, and AUTH-5 sentinel leakage. A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
 
@@ -106,6 +106,13 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             lambda c, g: _has_bool(check.expected_wire_request(c)["body"]),
             "bool_as_int (a wire fixture with a boolean body leaf)")),
     }
+
+    auth_cases = check.load_auth_fixture()["cases"]
+    flip_target = next((c["id"] for c in auth_cases if c["expect"]["steps"]), None)
+    if flip_target is None:
+        raise SystemExit("selftest: no auth case with steps — auth fixture too thin to self-test")
+    targets["auth_state_flip"] = ("auth", flip_target)
+    targets["auth_sentinel_leak"] = ("auth", auth_cases[0]["id"])
     return targets
 
 
@@ -174,7 +181,7 @@ def main() -> int:
             print(f"selftest: FAIL {failure}")
         print(f"selftest: {len(failures)} failure(s) — the harness comparator cannot be trusted")
         return 1
-    print("selftest: OK — baseline green and all 6 mutations caught red")
+    print(f"selftest: OK — baseline green and all {len(pick_targets())} mutations caught red")
     return 0
 
 
