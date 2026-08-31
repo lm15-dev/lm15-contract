@@ -1,0 +1,29 @@
+{
+  "id": "anthropic.models",
+  "provider": "anthropic",
+  "feature": "models",
+  "surface": "models",
+  "description": "Live model catalog listing (GET /models?limit=1000; catalog fits one page, has_more=false observed live)",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-08-31",
+    "evidence": "api.anthropic.com 2026-08-31T13-40-29Z, HTTP 200, 10 entries; changes/2026-08-31-list-models-provisional.md (receipts table); request block transcribed from the reference adapter against the receipted endpoint"
+  },
+  "entries_key": "data",
+  "request": {
+    "method": "GET",
+    "url": "https://api.anthropic.com/v1/models",
+    "params": {
+      "limit": "1000"
+    },
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    }
+  },
+  "pinned_body": "2026-08-31T13-40-29Z.txt",
+  "expect": {
+    "status": 200
+  }
+}

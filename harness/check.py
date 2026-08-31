@@ -15,7 +15,7 @@ with the JSON path of the first difference — never papered over. This module
 imports NOTHING from lm15: stdlib only.
 
 Usage:
-    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|all]
+    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|all]
                             [--case ID] [--report-dir harness/reports]
 """
 
@@ -44,7 +44,7 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -287,7 +287,14 @@ def load_shim(name: str) -> Shim:
 # ─── Corpus loading ──────────────────────────────────────────────────
 
 def load_wire_cases() -> list[JsonObject]:
-    return [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    """Chat-surface wire cases; models-surface cases have their own loader."""
+    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    return [case for case in cases if case.get("surface") != "models"]
+
+
+def load_model_cases() -> list[JsonObject]:
+    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    return [case for case in cases if case.get("surface") == "models"]
 
 
 def load_error_cases() -> list[JsonObject]:
@@ -855,6 +862,114 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     return report
 
 
+# ─── Direction: models ───────────────────────────────────────────────
+
+def _strip_models_provider_data(models):
+    """Split shim models into (golden-comparable models, provider_data list).
+
+    Every model must embed its wire entry verbatim at origin.provider_data
+    (the listing mapping rule). The stripped form mirrors the serde collapse:
+    an origin left as exactly {"type": "provider"} is omitted. Returns None
+    when any model lacks an embedded wire entry.
+    """
+    if not isinstance(models, list):
+        return None
+    stripped = []
+    embedded = []
+    for model in models:
+        if not isinstance(model, dict):
+            return None
+        origin = model.get("origin")
+        if not isinstance(origin, dict) or not isinstance(origin.get("provider_data"), dict):
+            return None
+        embedded.append(origin["provider_data"])
+        origin = {k: v for k, v in origin.items() if k != "provider_data"}
+        model = dict(model)
+        if origin == {"type": "provider"} or not origin:
+            model.pop("origin", None)
+        else:
+            model["origin"] = origin
+        stripped.append(model)
+    return stripped, embedded
+
+
+def _is_ordered_subsequence(needles: list, haystack: list) -> bool:
+    pos = 0
+    for needle in needles:
+        while pos < len(haystack) and haystack[pos] != needle:
+            pos += 1
+        if pos >= len(haystack):
+            return False
+        pos += 1
+    return True
+
+
+def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Model-catalog listing: build_models_request + parse_models_response.
+
+    Two results per case. The build side compares the wire GET request like
+    the request direction. The parse side compares the canonical ModelInfo
+    list against goldens/<provider>/models.json with origin.provider_data
+    stripped, then verifies the verbatim-embedding rule mechanically: the
+    stripped provider_data values must be an order-preserving subsequence of
+    the pinned body's entries under the case's entries_key (skipped entries
+    are allowed, invented or altered ones are not).
+    """
+    report = DirectionReport("models")
+    for case in load_model_cases():
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+
+        reply = shim.call("build_models_request", provider=case["provider"],
+                          api_key=API_KEY, **case_base_url(case))
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(f"{case_id}[build]", reply))
+        else:
+            diff = first_difference(expected_wire_request(case), actual_wire_request(reply["result"]))
+            if diff is None:
+                report.results.append(CaseResult(f"{case_id}[build]", "pass"))
+            else:
+                report.results.append(CaseResult(f"{case_id}[build]", "fail", diff=diff))
+
+        golden_file = golden_path(case)
+        if not golden_file.exists():
+            report.results.append(CaseResult(f"{case_id}[parse]", "skip", reason="no-golden"))
+            continue
+        golden = json.loads(golden_file.read_text())
+        body = pinned_body(case)
+        reply = shim.call("parse_models_response", provider=case["provider"],
+                          status=int(case.get("expect", {}).get("status", 200)),
+                          body_b64=base64.b64encode(body).decode("ascii"),
+                          **case_base_url(case))
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(f"{case_id}[parse]", reply))
+            continue
+        split = _strip_models_provider_data(reply["result"].get("models"))
+        if split is None:
+            report.results.append(CaseResult(
+                f"{case_id}[parse]", "fail",
+                reason="a model lacks origin.provider_data — the wire entry must be embedded verbatim",
+            ))
+            continue
+        stripped, embedded = split
+        entries = json.loads(body.decode("utf-8")).get(case["entries_key"], [])
+        if not _is_ordered_subsequence(embedded, entries):
+            report.results.append(CaseResult(
+                f"{case_id}[parse]", "fail",
+                reason="origin.provider_data values are not an order-preserving subsequence of "
+                       f"the body's {case['entries_key']!r} entries — wire entries must be "
+                       "embedded verbatim, never cleaned or invented",
+            ))
+            continue
+        diff = first_difference(golden["models"], stripped, ("models",))
+        if diff is None:
+            report.results.append(CaseResult(f"{case_id}[parse]", "pass"))
+        else:
+            report.results.append(CaseResult(f"{case_id}[parse]", "fail", diff=diff))
+    return report
+
+
 # ─── Main ────────────────────────────────────────────────────────────
 
 def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path) -> DirectionReport:
@@ -868,6 +983,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_parse_direction(shim, direction, case_filter)
     if direction == "auth":
         return run_auth_direction(shim, case_filter)
+    if direction == "models":
+        return run_models_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

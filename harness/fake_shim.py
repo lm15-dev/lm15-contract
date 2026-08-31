@@ -43,6 +43,8 @@ MUTATIONS = (
     "bool_as_int",          # build_request: first boolean body leaf becomes 0/1
     "auth_state_flip",      # explain_auth: first step's state flipped
     "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
+    "models_wrong_id",      # parse_models_response: first model's id rewritten
+    "models_param_drop",    # build_models_request: one query parameter dropped
 )
 
 MUTATION = "none"
@@ -231,6 +233,40 @@ def _borrowed_state(path: Path) -> str:
     return "expired-with-refresh" if oauth.get("refreshToken") else "expired-no-refresh"
 
 
+def find_models_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_model_cases():
+        if case["provider"] == msg["provider"] and case.get("base_url") == msg.get("base_url"):
+            return case
+    raise LookupError("no models case matches this (provider, base_url)")
+
+
+def op_build_models_request(msg: JsonObject) -> JsonObject:
+    case = find_models_case(msg)
+    result = check.expected_wire_request(case)
+    if MUTATION == "models_param_drop" and targeted(case) and result["params"]:
+        result["params"].pop(sorted(result["params"])[0])
+    return result
+
+
+def op_parse_models_response(msg: JsonObject) -> JsonObject:
+    case = find_models_case(msg)
+    golden = json.loads(check.golden_path(case).read_text())
+    entries = json.loads(check.pinned_body(case))[case["entries_key"]]
+    models = []
+    for i, model in enumerate(golden["models"]):
+        model = dict(model)
+        # Re-attach the verbatim wire entry the golden strips (goldens carry
+        # the mapped surface only; the harness checks embedding separately).
+        # In-order assignment holds while fixtures skip no entries.
+        origin = dict(model.get("origin", {"type": "provider"}))
+        origin["provider_data"] = entries[i]
+        model["origin"] = origin
+        models.append(model)
+    if MUTATION == "models_wrong_id" and targeted(case) and models:
+        models[0]["id"] = "not-the-recorded-model"
+    return {"models": models}
+
+
 def op_explain_auth(msg: JsonObject) -> JsonObject:
     fixture = check.load_auth_fixture()
     for case in fixture["cases"]:
@@ -267,6 +303,8 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "normalize_error": op_normalize_error,
     "serde_roundtrip": op_serde_roundtrip,
     "explain_auth": op_explain_auth,
+    "build_models_request": op_build_models_request,
+    "parse_models_response": op_parse_models_response,
 }
 
 

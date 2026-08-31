@@ -113,6 +113,24 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         raise SystemExit("selftest: no auth case with steps — auth fixture too thin to self-test")
     targets["auth_state_flip"] = ("auth", flip_target)
     targets["auth_sentinel_leak"] = ("auth", auth_cases[0]["id"])
+
+    model_cases = check.load_model_cases()
+    id_target = next(
+        (c["id"] for c in model_cases
+         if check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text())["models"]),
+        None,
+    )
+    param_target = next(
+        (c["id"] for c in model_cases if c.get("request", {}).get("params")), None
+    )
+    if id_target is None or param_target is None:
+        raise SystemExit("selftest: models corpus too thin to self-test (need a golden with "
+                         "models and a case with query params)")
+    # Models results are suffixed [build]/[parse]; the bare id drives the
+    # --case filter and the fake shim target, the suffixed id the lookup.
+    targets["models_wrong_id"] = ("models", f"{id_target}[parse]")
+    targets["models_param_drop"] = ("models", f"{param_target}[build]")
     return targets
 
 
@@ -158,7 +176,8 @@ def main() -> int:
 
         # 2. Every mutation must be caught red on its target case.
         for mutation, (direction, case_id) in pick_targets().items():
-            report = run_direction(mutation, direction, case_id, report_dir)
+            bare_id = case_id.split("[", 1)[0]
+            report = run_direction(mutation, direction, bare_id, report_dir)
             result = next((r for r in report.results if r.case_id == case_id), None)
             if result is None:
                 failures.append(f"{mutation}: target {case_id} produced no result in {direction}")

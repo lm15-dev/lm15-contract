@@ -1,0 +1,27 @@
+{
+  "id": "gemini.models",
+  "provider": "gemini",
+  "feature": "models",
+  "surface": "models",
+  "description": "Live model catalog listing (GET /models?pageSize=1000; catalog fits one page, no nextPageToken observed live)",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-08-31",
+    "evidence": "generativelanguage.googleapis.com 2026-08-31T13-40-29Z, HTTP 200, 53 entries; changes/2026-08-31-list-models-provisional.md (receipts table); request block transcribed from the reference adapter against the receipted endpoint"
+  },
+  "entries_key": "models",
+  "request": {
+    "method": "GET",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models",
+    "params": {
+      "pageSize": "1000"
+    },
+    "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    }
+  },
+  "pinned_body": "2026-08-31T13-40-29Z.txt",
+  "expect": {
+    "status": 200
+  }
+}

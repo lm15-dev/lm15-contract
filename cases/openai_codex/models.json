@@ -1,0 +1,31 @@
+{
+  "id": "openai_codex.models",
+  "provider": "openai-codex",
+  "feature": "models",
+  "surface": "models",
+  "description": "Live model catalog listing over the Codex subscription backend (GET /models?client_version=...; usable names are slug values under 'models')",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-08-31",
+    "evidence": "chatgpt.com/backend-api/codex 2026-08-31T13-40-42Z, HTTP 200, 9 entries; changes/2026-08-31-list-models-provisional.md (receipts table); request block transcribed from the reference adapter against the receipted endpoint; chatgpt-account-id pins the harness-injected 'test-account' (PROTOCOL.md), never a real account id; client_version pins the reference DEFAULT_CODEX_CLIENT_VERSION and bumps via a changes/ entry"
+  },
+  "entries_key": "models",
+  "request": {
+    "method": "GET",
+    "url": "https://chatgpt.com/backend-api/codex/models",
+    "params": {
+      "client_version": "0.147.0"
+    },
+    "headers": {
+      "authorization": "Bearer $CHATGPT_OAUTH_TOKEN",
+      "content-type": "application/json",
+      "chatgpt-account-id": "test-account",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15"
+    }
+  },
+  "pinned_body": "2026-08-31T13-40-42Z.txt",
+  "expect": {
+    "status": 200
+  }
+}

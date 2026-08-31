@@ -128,6 +128,33 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
 - The op performs no network I/O and no writes; reading the harness-given
   `credentials_path` is the only file access.
 
+### build_models_request
+In: `{"provider": str, "api_key": str, "base_url"?: str}`
+Out: same shape as `build_request` (`method`/`url`/`params`/`headers`/`body`)
+- The wire GET request for the provider's model catalog (the `models`
+  direction; mapping table in
+  `changes/2026-08-31-list-models-provisional.md`). `body` is null.
+- Subscription dialects are constructible with the injected key: for
+  provider `openai-codex` the shim MUST construct the adapter with account
+  id `test-account` (the ctor cannot derive one from a non-JWT key, and the
+  `chatgpt-account-id` header is compared verbatim); for `claude-code` the
+  injected key stands in for the OAuth access token.
+
+### parse_models_response
+In: `{"provider": str, "status": int, "body_b64": str, "base_url"?: str}`
+Out: `{"models": [<ModelInfo JSON>]}`
+- Canonical `model_info` serde, INCLUDING `origin.provider_data` (unlike
+  parse_response): the listing mapping embeds each wire entry verbatim, and
+  the harness verifies that mechanically — the returned `provider_data`
+  values must be an order-preserving subsequence of the pinned body's
+  entries under the case's `entries_key` (entries without a usable id are
+  skipped, never invented). For the golden comparison the harness strips
+  `origin.provider_data` and drops an origin left as exactly
+  `{"type": "provider"}` (mirroring the serde collapse); goldens pin the
+  mapped surface only.
+- A `status >= 400` input must surface the adapter's normalized error as an
+  `ok: false` reply.
+
 ## Serde kinds
 
 The closed set of `kind` strings for `serde_roundtrip` and `validate`

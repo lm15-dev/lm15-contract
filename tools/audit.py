@@ -81,8 +81,12 @@ def load_cases(root: Path) -> list[tuple[Path, dict]]:
 def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                   allowlist: set[str], body_dir_allowlist: set[str],
                   problems: list[str]) -> str:
+    # Models-surface cases carry no canonical_request by design (the listing
+    # surface has no canonical Request); they are exercised by the harness
+    # models direction and audited by their own completeness rule below.
     orphans = {data.get("id", str(path.relative_to(root)))
-               for path, data in cases if "canonical_request" not in data}
+               for path, data in cases
+               if "canonical_request" not in data and data.get("surface") != "models"}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):
@@ -116,6 +120,16 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
         if pinned and not (body_dir / str(pinned)).is_file():
             problems.append(f"ORPHANS {case_id}: pinned_body {pinned!r} does not exist "
                             f"under bodies/{case_id}/")
+        if data.get("surface") == "models":
+            for key in ("request", "pinned_body", "entries_key"):
+                if key not in data:
+                    problems.append(f"ORPHANS {case_id}: models-surface case missing {key!r} — "
+                                    "both harness phases need it")
+            golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"
+            if not golden.is_file():
+                problems.append(f"ORPHANS {case_id}: models-surface case has no golden at "
+                                f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
+                                "the parse phase would silently skip")
 
     return (f"ORPHANS: {len(cases)} case(s), {len(body_dirs)} body dir(s), "
             f"{len(orphans & allowlist)} allowlisted orphan(s) pending burn-down")

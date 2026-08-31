@@ -4,10 +4,11 @@ What the 1.0 freeze covers, what is provisional, and what is out of scope.
 Companion to [types.md](types.md), [vocabularies.md](vocabularies.md),
 [invariants.md](invariants.md), and `harness/PROTOCOL.md`.
 
-## FROZEN — the chat core
+## FROZEN — the chat core, auth resolution, and model listing
 
-The 1.0 contract freezes the chat core, exactly the surface the five harness
-directions exercise (`request`, `response`, `stream`, `error`, `serde`):
+The 1.0 contract freezes exactly the surface the seven harness directions
+exercise (`request`, `response`, `stream`, `error`, `serde`, `auth`,
+`models`):
 
 - **Canonical types** — Part/Message/Request/Response/StreamEvent/Delta,
   Tool, Config family, Usage, ContinuationState (types.md tables).
@@ -21,6 +22,16 @@ directions exercise (`request`, `response`, `stream`, `error`, `serde`):
   including the four blessed extension knobs (INV-049).
 - **Response parsing and streaming** — provider body/SSE → canonical
   Response and the post-coalesce event trace (MAP-1..3).
+- **Credential resolution** — the AUTH-1 chain as observed through AUTH-7
+  explain output, and the AUTH-5 secrecy invariant (spec/auth.md, ratified
+  2026-08-31; harness `auth` direction over `auth/resolution.json`).
+- **Model listing** — `list_models()` wire requests and the wire-entry →
+  `ModelInfo` mapping for all six adapters (harness `models` direction;
+  mapping rules in `changes/2026-08-31-list-models-provisional.md`, promoted
+  by `changes/2026-08-31-list-models-harness.md`). What freezes is the
+  MAPPING and the request shape — pinned bodies are catalog snapshots, and
+  catalog contents change server-side without contract meaning. Multi-page
+  catalogs remain future additive work.
 
 Frozen means: ports must match exactly; the corpus is the oracle per
 AUTHORITY.md; behavior changes require maintainer ratification.
@@ -36,9 +47,6 @@ evolution, but breaking changes in a 1.x release are permitted with a
   `ImageGeneration*`/`AudioGeneration*` types and their adapter routes).
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
-- **Live model listing** — `list_models()` returning canonical `ModelInfo`
-  tuples (`EndpointSupport.models`); mapping rules and live receipts in
-  `changes/2026-08-31-list-models-provisional.md`. No harness direction yet.
 
 Ports may implement provisional surfaces, but conformance does not require
 them and their fixtures carry no freeze guarantee.

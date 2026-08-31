@@ -1,0 +1,27 @@
+{
+  "id": "openai_chat.models",
+  "provider": "openai_chat",
+  "feature": "models",
+  "surface": "models",
+  "description": "Live model catalog listing (GET /models) against a Groq OpenAI-compatible server",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-08-31",
+    "evidence": "api.groq.com 2026-08-31T13-40-29Z, HTTP 200, 14 entries; changes/2026-08-31-list-models-provisional.md (receipts table); request block transcribed from the reference adapter against the receipted endpoint"
+  },
+  "base_url": "https://api.groq.com/openai/v1",
+  "entries_key": "data",
+  "request": {
+    "method": "GET",
+    "url": "https://api.groq.com/openai/v1/models",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $GROQ_API_KEY",
+      "content-type": "application/json"
+    }
+  },
+  "pinned_body": "2026-08-31T13-40-29Z.txt",
+  "expect": {
+    "status": 200
+  }
+}

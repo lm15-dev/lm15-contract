@@ -1,16 +1,9 @@
 {
-  "comment": "Stage 2 debt — a ratchet that only goes down. These case files have no canonical_request because the pure build/parse model cannot express them; spec/SCOPE.md declares both OUT OF 1.0 SCOPE (gemini.cached_content needs a /cachedContents side channel; openai.computer_use needs a new part type via MAP-1 amendment). They stay reachable via config.extensions/provider_data with no contract guarantee. Burn rule unchanged: remove each id in the same commit that attaches its canonical_request. tools/audit.py hard-fails on any NEW orphan not listed here and on any STALE entry whose case has gained a canonical_request.",
+  "comment": "Stage 2 debt \u2014 a ratchet that only goes down. These case files have no canonical_request because the pure build/parse model cannot express them; spec/SCOPE.md declares both OUT OF 1.0 SCOPE (gemini.cached_content needs a /cachedContents side channel; openai.computer_use needs a new part type via MAP-1 amendment). They stay reachable via config.extensions/provider_data with no contract guarantee. Burn rule unchanged: remove each id in the same commit that attaches its canonical_request. tools/audit.py hard-fails on any NEW orphan not listed here and on any STALE entry whose case has gained a canonical_request.",
   "orphans": [
     "gemini.cached_content",
     "openai.computer_use"
   ],
   "body_dirs_comment": "Body directories for PROVISIONAL surfaces that have live receipts (changes/ entry) but no case files because the surface has no harness direction yet. Burn rule: remove each entry in the same commit that adds its case file; the audit hard-fails on stale entries.",
-  "body_dirs": [
-    "anthropic.models",
-    "claude_code.models",
-    "gemini.models",
-    "openai.models",
-    "openai_chat.models",
-    "openai_codex.models"
-  ]
+  "body_dirs": []
 }
