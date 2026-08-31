@@ -29,6 +29,10 @@
   },
   "events": [
     {
+      "type": "start",
+      "model": "gemini-2.5-flash"
+    },
+    {
       "type": "delta",
       "delta": {
         "type": "text",
@@ -90,9 +94,9 @@
   ],
   "provenance": {
     "source": "scribe-draft",
-    "date": "2026-06-10",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "date": "2026-08-31",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-04-13T14-50-18Z.txt",
-    "reviewed": "2026-06-10 — independent adversarial review (66 agree, 3 flags resolved by MAP-1/MAP-2 in lm15-python2/docs/mapping-rules.md); approved by Maxime Rivest. See goldens/REVIEW-2026-06-10.md"
+    "reviewed": "2026-06-10 — independent adversarial review (66 agree, 3 flags resolved by MAP-1/MAP-2 in lm15-python2/docs/mapping-rules.md); approved by Maxime Rivest. See goldens/REVIEW-2026-06-10.md. Re-reviewed 2026-08-31 for MAP-4 (lm15-python/docs/mapping-rules.md): trace change verified to be exactly one synthesized StreamStartEvent prepended, carrying the request's model (id omitted per omit-empty); all other events and canonical_response byte-identical. See changes/2026-08-31-map4-stream-start.md"
   }
 }
