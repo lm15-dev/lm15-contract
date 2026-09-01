@@ -472,9 +472,22 @@ Config level: `reasoning` absent = no explicit preference;
 | `mode` | string (CacheMode) | no | `"auto"` | always | closed vocabulary |
 | `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary |
 | `key` | string | no | `null` | omit-empty | |
-| `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced |
+| `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced; index of the last message of the reusable prefix, clamped to the last message |
 
 `mode="off"` forbids `retention`/`key` (INV-027).
+
+**Prefix breakpoint mapping (2026-09-01).** `prefix_until_index` marks
+the end of the reusable prefix and rides on the last block of that
+message: Anthropic `cache_control: {"type": "ephemeral"}` on any block;
+OpenAI Responses and the openai_chat dialect `prompt_cache_breakpoint:
+{"mode": "explicit"}` on a TEXT block only (gpt-5.6+, live-captured
+2026-09-01; pre-5.6 models reject with HTTP 400 — the loud failure is the
+contract). On OpenAI, a prefix message that is assistant/tool or does not
+end with text RAISES rather than move the boundary. The mapping is gated
+on the compat policy's `cache_control` (`"openai"`), like
+`prompt_cache_key`; compat servers declaring `"none"` get nothing. Gemini
+has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md
+§6 for the cache-tier picture).
 
 ### Config
 
@@ -489,10 +502,10 @@ Config level: `reasoning` absent = no explicit preference;
 | `tool_choice` | object (ToolChoice) | no | `null` | omit-empty | |
 | `reasoning` | object (Reasoning) | no | `null` | omit-empty | |
 | `cache` | object (CacheConfig) | no | `null` | omit-empty | |
-| `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`); Gemini RAISES |
+| `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`; Gemini `unspecified`/`standard`/`flex`/`priority` → top-level `serviceTier`, echoed in `usageMetadata.serviceTier`, live-captured 2026-09-01) |
 | `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini RAISES |
 | `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic RAISES |
-| `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic RAISES. Provider caps (currently 0–20) are provider-owned, not encoded |
+| `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic RAISES; xAI RAISES (grok-4.20+ silently ignore the field on the wire — docs.x.ai, verified live 2026-09-01). Provider caps (currently 0–20) are provider-owned, not encoded |
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
@@ -523,7 +536,7 @@ enclosing serializers.
 | `output_tokens` | int | no | `null` | omit-empty | `>= 0` |
 | `total_tokens` | int | no | `null` (auto-computed: see INV-029) | omit-empty | `>= 0`; preserved verbatim when provider-reported |
 | `cache_read_tokens` | int | no | `null` | omit-empty | `>= 0` |
-| `cache_write_tokens` | int | no | `null` | omit-empty | `>= 0` |
+| `cache_write_tokens` | int | no | `null` | omit-empty | `>= 0`; Anthropic `cache_creation_input_tokens`; OpenAI `input_tokens_details.cache_write_tokens` / chat `prompt_tokens_details.cache_write_tokens` (added 2026-09-01) |
 | `reasoning_tokens` | int | no | `null` | omit-empty | `>= 0`; only when the provider reports an EXACT separate count |
 | `input_audio_tokens` | int | no | `null` | omit-empty | `>= 0` |
 | `output_audio_tokens` | int | no | `null` | omit-empty | `>= 0` |
