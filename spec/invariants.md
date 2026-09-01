@@ -266,10 +266,26 @@ rationale is the designed reason, ratified, not a guess.
 
 ## Blessed provider-only extension knobs
 
-- **INV-049 — Blessed provider-only extension knobs.** Four
+- **INV-049 — Blessed provider-only extension knobs.** Some
   `config.extensions` passthrough keys are PERMANENT, not burn-down debt.
   Each is provider syntax for a capability no canonical key can express
-  without inventing semantics the other providers don't have:
+  without inventing semantics the other providers don't have. The
+  NORMATIVE enumeration lives in `tools/extensions-verdicts.json`
+  ("blessed" bucket, one reason per case), enforced two-way by
+  `tools/audit.py`: an extensions-carrying case without a verdict is a
+  hard violation, and so is a stale registry entry. Since the 2026-09-01
+  burn-down (changes/2026-09-01-extensions-burn-down.md) the registry
+  holds 15 blessed cases — the four founding knobs below, plus Gemini's
+  safety-settings dial, Anthropic's inference-geo routing, OpenAI's
+  free-form request metadata, OpenAI's seven server-side
+  response-state knobs (previous_response_id / conversation / background /
+  truncation / context_management / stream_options / reasoning_encrypted —
+  the canonical conversation model deliberately resends the transcript
+  instead of modeling server state), and `openai.user` kept as the
+  passthrough mechanism's own pinned exemplar. A separate "deferred"
+  bucket names cross-provider concepts awaiting their own design pass
+  (logprobs output surface; builtin-tool forcing) — still debt, made
+  explicit. The founding four:
   - **anthropic thinking display** (cases `anthropic.thinking`,
     `anthropic.thinking_budget`): the wire `thinking` object's `"display"`
     field (e.g. `"summarized"`) selects how thinking is surfaced; canonical
@@ -283,9 +299,12 @@ rationale is the designed reason, ratified, not a guess.
     `openai.code_interpreter`): `include: ["code_interpreter_call.outputs"]`
     tunes the verbosity of provider-executed tool traces, which MAP-1 keeps
     out of canonical parts entirely (they live in `provider_data`).
-  These keys stay spelled in provider syntax inside `extensions` by design;
-  the audit's extensions-passthrough ratchet floor is 4 (these four).
-  Promoting any of them to a canonical key later is an additive spec change.
+  These keys stay spelled in provider syntax inside `extensions` by design.
+  Promoting any blessed knob to a canonical key later is an additive spec
+  change (registry entry deleted in the same commit — the audit enforces
+  staleness). Promoted so far (2026-09-01): `service_tier`, `user_id`,
+  `store` as Config fields; `prompt_cache_key`/`prompt_cache_retention`
+  rewritten onto the pre-existing CacheConfig.
   Blessed by maintainer delegation 2026-06-11; see
   changes/2026-06-11-inv049-blessed-extensions.md and
   changes/2026-06-10-passthrough-rewrites.md (the original keep analysis).

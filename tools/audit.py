@@ -245,21 +245,50 @@ def check_volatile(root: Path, cases: list[tuple[Path, dict]],
     return f"VOLATILE: {paths} volatile path(s) across {maps} map(s)"
 
 
-# ─── 3. RAW-PROVIDER LINT (report-only) ──────────────────────────────
+# ─── 3. RAW-PROVIDER LINT (hard: every passthrough case needs a verdict) ─
 
-def report_extensions_passthrough(root: Path, cases: list[tuple[Path, dict]]) -> str:
-    smugglers: list[str] = []
+def check_extensions_verdicts(root: Path, cases: list[tuple[Path, dict]],
+                              problems: list[str]) -> str:
+    """Every config.extensions passthrough case must carry an explicit
+    verdict (tools/extensions-verdicts.json): blessed permanent (INV-049)
+    or deferred to a NAMED design pass. An unlisted passthrough case is a
+    dodged design question — hard violation. Stale registry entries (case
+    gone, or extensions removed by promotion) are violations too: the
+    registry mirrors the corpus exactly, both directions."""
+    registry_path = root / "tools" / "extensions-verdicts.json"
+    if not registry_path.is_file():
+        problems.append(f"EXTENSIONS {registry_path}: verdict registry missing")
+        return "extensions-verdicts: registry missing"
+    registry = json.loads(registry_path.read_text())
+    blessed = dict(registry.get("blessed", {}))
+    deferred = dict(registry.get("deferred", {}))
+    overlap = set(blessed) & set(deferred)
+    for case_id in sorted(overlap):
+        problems.append(f"EXTENSIONS {case_id}: listed as BOTH blessed and deferred")
+
+    smugglers: set[str] = set()
     for path, data in cases:
         canonical = data.get("canonical_request")
         if not isinstance(canonical, dict):
             continue
         config = canonical.get("config")
         if isinstance(config, dict) and config.get("extensions"):
-            smugglers.append(str(data.get("id", path.relative_to(root))))
-    for case_id in smugglers:
-        print(f"REPORT extensions-passthrough: {case_id}")
-    return (f"extensions-passthrough (report-only): {len(smugglers)} case(s) smuggle "
-            f"provider wire syntax through config.extensions — burn-down list above")
+            smugglers.add(str(data.get("id", path.relative_to(root))))
+
+    undecided = smugglers - set(blessed) - set(deferred)
+    for case_id in sorted(undecided):
+        problems.append(f"EXTENSIONS {case_id}: config.extensions passthrough with NO verdict — "
+                        "promote the knob to a canonical field, bless it (INV-049 + registry), "
+                        "or defer it to a NAMED design pass in tools/extensions-verdicts.json")
+    for case_id in sorted((set(blessed) | set(deferred)) - smugglers):
+        problems.append(f"EXTENSIONS tools/extensions-verdicts.json: stale entry {case_id!r} — "
+                        "no such passthrough case (promoted or removed); delete the entry")
+    for case_id in sorted(deferred):
+        print(f"REPORT extensions-deferred: {case_id} — {deferred[case_id]}")
+    return (f"extensions-verdicts: {len(smugglers)} passthrough case(s) — "
+            f"{len(blessed & smugglers if isinstance(blessed, set) else set(blessed) & smugglers)} blessed permanent (INV-049), "
+            f"{len(set(deferred) & smugglers)} deferred to named design passes, "
+            f"{len(undecided)} undecided")
 
 
 # ─── 4. SURFACE COVERAGE (report-only) ───────────────────────────────
@@ -383,7 +412,7 @@ def main(argv: list[str] | None = None) -> int:
     summaries = [
         check_orphans(root, cases, allowlist, body_dir_allowlist, problems),
         check_volatile(root, cases, problems),
-        report_extensions_passthrough(root, cases),
+        check_extensions_verdicts(root, cases, problems),
         report_surface_coverage(root, python2),
         check_support_matrix(root, python2, problems),
     ]

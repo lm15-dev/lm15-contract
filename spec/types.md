@@ -445,6 +445,9 @@ Config level: `reasoning` absent = no explicit preference;
 | `tool_choice` | object (ToolChoice) | no | `null` | omit-empty | |
 | `reasoning` | object (Reasoning) | no | `null` | omit-empty | |
 | `cache` | object (CacheConfig) | no | `null` | omit-empty | |
+| `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`); Gemini RAISES |
+| `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini RAISES |
+| `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic RAISES |
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
