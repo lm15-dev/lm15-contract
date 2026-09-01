@@ -44,7 +44,7 @@ evolution, but breaking changes in a 1.x release are permitted with a
 
 - **Non-chat endpoints** — files, batch, image generation,
   audio generation (the `FileUploadRequest`/`FileInfo`/`FilePage`/`Batch*`/
-  `ImageGeneration*`/`AudioGeneration*` types and their adapter routes).
+  `ImageGeneration*`/`SpeechGeneration*` types and their adapter routes).
   Media generation stays in because its outputs are the SAME typed parts
   the chat surface accepts as inputs (`ImagePart`, `AudioPart`) — the
   conversation with the arrow reversed.

@@ -593,34 +593,43 @@ observed live, Anthropic, 2026-08-31).
 |---|---|---|---|---|---|
 | `model` | string | yes | — | always | non-empty |
 | `prompt` | string | yes | — | always | non-empty |
-| `size` | string | no | `null` | omit-empty | non-empty when present |
+| `size` | string | no | `null` | omit-empty | non-empty when present; provider's own sizing vocabulary (OpenAI pixels, Gemini aspect ratios); raises where no wire slot exists (xAI) |
+| `images` | array of ImagePart | no | `()` | omit-empty | input images for edits; any Part addressing mode; adapters route to the provider's edit door and raise where none exists |
 | `extensions` | object (opaque) | no | `null` | omit-empty | |
 
 ### ImageGenerationResponse
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `images` | array of ImagePart | yes | — | always | non-empty |
+| `images` | array of ImagePart | yes | — | always | non-empty; `media_type` from the wire, never assumed |
+| `text` | string | no | `null` | omit-empty | narration returned next to images (Gemini); never fabricated |
 | `id` | string | no | `null` | omit-empty | non-empty when present |
 | `model` | string | no | `null` | omit-empty | non-empty when present |
 | `usage` | object (Usage) | no | `Usage()` | omit-empty | |
 | `provider_data` | object (opaque) | no | `null` | omit-empty | |
 
-### AudioGenerationRequest
+### SpeechGenerationRequest
+
+Renamed from `AudioGenerationRequest` (2026-09-01): both wires that
+implement the endpoint sell text-to-speech and nothing more; "audio
+generation" promised music and sound effects no wire offers.  Omitted
+`voice`/`format` mean the SERVER's defaults — the reference
+implementation injects none of its own.  `format` raises on providers
+whose wire has no slot for it (Gemini: always PCM).
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
 | `model` | string | yes | — | always | non-empty |
 | `prompt` | string | yes | — | always | non-empty |
-| `voice` | string | no | `null` | omit-empty | non-empty when present |
-| `format` | string | no | `null` | omit-empty | non-empty when present |
+| `voice` | string | no | `null` | omit-empty | non-empty when present; provider's own voice vocabulary |
+| `format` | string | no | `null` | omit-empty | non-empty when present; raises where no wire slot exists |
 | `extensions` | object (opaque) | no | `null` | omit-empty | |
 
-### AudioGenerationResponse
+### SpeechGenerationResponse
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `audio` | object (AudioPart) | yes | — | always | |
+| `audio` | object (AudioPart) | yes | — | always | `media_type` from the wire verbatim, including parameterized MIME (`audio/L16;codec=pcm;rate=24000`) |
 | `id` | string | no | `null` | omit-empty | |
 | `model` | string | no | `null` | omit-empty | |
 | `usage` | object (Usage) | no | `Usage()` | omit-empty | |
