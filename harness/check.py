@@ -793,37 +793,43 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
 # ─── Direction: auth ─────────────────────────────────────────────────
 
 def materialize_borrowed_file(case: JsonObject, tmp_dir: Path) -> str:
-    """Write the harness-owned borrowed credential file for one auth case.
+    """Write the harness-owned local OAuth credential file for one auth case.
 
-    The file format is a wire fact under AUTH-8 (spec/auth.md): the Claude
+    The file formats are wire facts under AUTH-8 (spec/auth.md): the Claude
     Code store is ``{"claudeAiOauth": {accessToken, expiresAt (ms),
-    refreshToken?}}``. The HARNESS materializes it — never the shim — so an
-    implementation cannot pass by writing a file that only its own parser
-    accepts. The fixture sentinel is planted as every secret value (AUTH-5).
+    refreshToken?}}``; the lm15-owned store (xai) is ``{"xai": {type:
+    "oauth", access, expires (ms), refresh?}}``. The HARNESS materializes
+    the file — never the shim — so an implementation cannot pass by writing
+    a file that only its own parser accepts. The fixture sentinel is planted
+    as every secret value (AUTH-5).
     """
-    if case["provider"] != "claude-code":
+    provider = case["provider"]
+    if provider not in ("claude-code", "xai"):
         raise HarnessError(
             f"auth case {case['id']!r}: no harness materializer for "
-            f"{case['provider']!r} borrowed files — add one before adding fixtures"
+            f"{provider!r} credential files — add one before adding fixtures"
         )
     state = case["borrowed_file"]["state"]
     if state == "missing":
         return str(tmp_dir / f"{case['id']}-does-not-exist.json")
+    if state not in ("fresh", "expired-with-refresh", "expired-no-refresh"):
+        raise HarnessError(f"auth case {case['id']!r}: unknown borrowed_file state {state!r}")
     sentinel = load_auth_fixture()["sentinel"]
     now_ms = int(time.time() * 1000)
-    oauth: JsonObject = {"accessToken": sentinel}
-    if state == "fresh":
-        oauth["expiresAt"] = now_ms + 3_600_000
-        oauth["refreshToken"] = sentinel
-    elif state == "expired-with-refresh":
-        oauth["expiresAt"] = 1
-        oauth["refreshToken"] = sentinel
-    elif state == "expired-no-refresh":
-        oauth["expiresAt"] = 1
+    expiry_ms = now_ms + 3_600_000 if state == "fresh" else 1
+    has_refresh = state in ("fresh", "expired-with-refresh")
+    if provider == "claude-code":
+        oauth: JsonObject = {"accessToken": sentinel, "expiresAt": expiry_ms}
+        if has_refresh:
+            oauth["refreshToken"] = sentinel
+        body: JsonObject = {"claudeAiOauth": oauth}
     else:
-        raise HarnessError(f"auth case {case['id']!r}: unknown borrowed_file state {state!r}")
+        entry: JsonObject = {"type": "oauth", "access": sentinel, "expires": expiry_ms}
+        if has_refresh:
+            entry["refresh"] = sentinel
+        body = {"xai": entry}
     path = tmp_dir / f"{case['id']}-credentials.json"
-    path.write_text(json.dumps({"claudeAiOauth": oauth}))
+    path.write_text(json.dumps(body))
     return str(path)
 
 

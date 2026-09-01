@@ -239,16 +239,26 @@ def op_serde_roundtrip(msg: JsonObject) -> JsonObject:
 
 
 def _borrowed_state(path: Path) -> str:
-    """Classify a harness-materialized borrowed file (see check.materialize_borrowed_file)."""
+    """Classify a harness-materialized credential file (see check.materialize_borrowed_file).
+
+    Handles both AUTH-8 wire formats: the Claude Code store
+    (``claudeAiOauth``: accessToken/expiresAt/refreshToken) and the
+    lm15-owned store (``xai``: access/expires/refresh).
+    """
     if not path.exists():
         return "missing"
-    oauth = json.loads(path.read_text())["claudeAiOauth"]
+    data = json.loads(path.read_text())
+    if "claudeAiOauth" in data:
+        oauth = data["claudeAiOauth"]
+        expiry, refresh = oauth.get("expiresAt", 0), oauth.get("refreshToken")
+    else:
+        oauth = data["xai"]
+        expiry, refresh = oauth.get("expires", 0), oauth.get("refresh")
     import time
 
-    expired = int(oauth.get("expiresAt", 0)) <= int(time.time() * 1000)
-    if not expired:
+    if int(expiry) > int(time.time() * 1000):
         return "fresh"
-    return "expired-with-refresh" if oauth.get("refreshToken") else "expired-no-refresh"
+    return "expired-with-refresh" if refresh else "expired-no-refresh"
 
 
 def find_models_case(msg: JsonObject) -> JsonObject:

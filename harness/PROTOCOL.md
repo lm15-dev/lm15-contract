@@ -113,10 +113,12 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
     environment or real home-directory credential stores.
   - `api_keys_providers` lists providers for which an explicit api_keys
     entry exists; the shim plants `sentinel` as each entry's value.
-  - `credentials_path`, when present, is a harness-materialized borrowed
+  - `credentials_path`, when present, is a harness-materialized local
     OAuth credential file (or a deliberately nonexistent path). The harness
-    writes the file — never the shim — in the AUTH-8 wire format, with the
-    sentinel as every secret value.
+    writes the file — never the shim — in the provider's AUTH-8 wire
+    format (the borrowed Claude Code store, or the lm15-owned store for
+    `key-then-oauth` providers such as xai), with the sentinel as every
+    secret value.
 - `steps` carries the language-neutral `kind` vocabulary of the fixture
   (`api_keys`, `env:<VAR>`, `placeholder`, `oauth-file`) and the AUTH-7
   states (`selected`, `shadowed`, `absent`), in chain order.
