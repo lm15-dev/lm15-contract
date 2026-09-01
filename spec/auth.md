@@ -22,24 +22,35 @@ a second copy of the same fact and will drift (amended 2026-09-01):
   particular (stored-credential-owns-provider): a failed OAuth load or
   refresh never falls back to an environment variable silently. An `oauth`
   manifest declares no environment keys.
-- **`key-then-oauth`** (`xai`) — the ordinary chain first; when it yields
-  nothing, the stored local OAuth credential is the final rung. Stated
-  trade-off: a configured key silently beats a stored subscription login,
-  which can move billing from subscription (prepaid) to per-token.
-  Explicit-beats-ambient is the rule everywhere in lm15; the doctor
-  (AUTH-7) makes the winning rung visible.
+- **`oauth-unless-explicit`** (`xai`) — an explicit `api_keys` entry wins;
+  otherwise a **usable** stored local OAuth credential (fresh, or expired
+  with a refresh token) wins; the declared environment keys are consulted
+  only when no usable credential is stored. Rationale: deliberate
+  in-process configuration always wins, but between two kinds of stored
+  state — a subscription login and an ambient environment variable — the
+  subscription wins because it spends no money per token, and normal
+  inference must never unexpectedly spend money. Stated trade-off: with a
+  usable login stored, a set environment key is silently ignored; forcing
+  that key's account requires passing it explicitly. The doctor (AUTH-7)
+  makes the winning and shadowed rungs visible. Implementations expose an
+  offline stored-credential probe on the adapter (reads files, never the
+  network) so routers can walk this chain without I/O beyond the
+  credential file.
 
-For a `key` or `key-then-oauth` provider constructed through the router,
-the credential resolves in exactly this order; the first hit wins and later
-rungs are dead:
+For a `key` provider constructed through the router, the credential
+resolves in exactly this order; the first hit wins and later rungs are
+dead:
 
 1. an explicit `api_keys` entry for the provider (static value or
    credential-provider callable);
 2. the provider's declared environment keys, in declared order, first
    non-empty value;
-3. for local-server presets only: the preset's placeholder key;
-4. for `key-then-oauth` providers only: the stored local OAuth credential
-   (AUTH-8 store paths), usable when fresh or refreshable.
+3. for local-server presets only: the preset's placeholder key.
+
+For an `oauth-unless-explicit` provider the order is: the explicit
+`api_keys` entry; the stored local OAuth credential (AUTH-8 store paths)
+when usable; the declared environment keys; then the typed
+not-configured error carrying the login hint.
 
 ## AUTH-2 — Credential providers
 
@@ -157,5 +168,11 @@ Ratified-by: Maxime Rivest, 2026-08-31 — assented in session ("I ratify");
 transcribed.
 
 Amended 2026-09-01 (AUTH-1 credential policy declaration; AUTH-9 uniform
-login entry point; xai key-then-oauth fixtures) — ratified in session
-("implement all three!"); see changes/2026-09-01-credential-policy.md.
+login entry point; xai fixtures) — ratified in session ("implement all
+three!"); see changes/2026-09-01-credential-policy.md.
+
+Amended 2026-09-01, same day (AUTH-1: xai policy reordered to
+`oauth-unless-explicit` — stored subscription beats environment keys;
+supersedes the morning's `key-then-oauth` before any port consumed it) —
+ratified in session ("we always want to use subscriptions before
+billing"); see changes/2026-09-01-subscription-first.md.
