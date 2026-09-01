@@ -287,6 +287,38 @@ def shim_surface_dump(python2: Path) -> tuple[dict | None, str]:
     return reply["result"], ""
 
 
+def check_support_matrix(root: Path, python2: Path, problems: list[str]) -> str:
+    """HARD: spec/support-matrix.json must equal the reference's reflected
+    provider manifests (surface_dump.providers), both directions.  A skipped
+    comparison (no shim) is report-only — the pin still binds ports."""
+    pinned_path = root / "spec" / "support-matrix.json"
+    if not pinned_path.is_file():
+        problems.append("SUPPORT-MATRIX: spec/support-matrix.json is missing")
+        return "support matrix: MISSING"
+    pinned = json.loads(pinned_path.read_text()).get("providers", {})
+    surface, reason = shim_surface_dump(python2)
+    if surface is None:
+        print(f"REPORT support-matrix: comparison skipped — {reason}")
+        return f"support matrix: pinned {len(pinned)} provider(s), comparison skipped ({reason})"
+    reflected = surface.get("providers")
+    if reflected is None:
+        problems.append("SUPPORT-MATRIX: reference surface_dump exposes no providers section")
+        return "support matrix: reference exposes no providers"
+    for provider in sorted(set(pinned) | set(reflected)):
+        if provider not in pinned:
+            problems.append(f"SUPPORT-MATRIX: provider {provider!r} exists in the reference "
+                            "but is not pinned — pin it (with receipts) or remove the adapter")
+        elif provider not in reflected:
+            problems.append(f"SUPPORT-MATRIX: provider {provider!r} is pinned but missing "
+                            "from the reference")
+        elif pinned[provider] != reflected[provider]:
+            for key in sorted(set(pinned[provider]) | set(reflected[provider])):
+                if pinned[provider].get(key) != reflected[provider].get(key):
+                    problems.append(f"SUPPORT-MATRIX: {provider}.{key} drift — pinned "
+                                    f"{pinned[provider].get(key)!r}, reference {reflected[provider].get(key)!r}")
+    return f"support matrix: {len(pinned)} provider(s) pinned and matching"
+
+
 def report_surface_coverage(root: Path, python2: Path) -> str:
     surface, reason = shim_surface_dump(python2)
     if surface is None:
@@ -353,6 +385,7 @@ def main(argv: list[str] | None = None) -> int:
         check_volatile(root, cases, problems),
         report_extensions_passthrough(root, cases),
         report_surface_coverage(root, python2),
+        check_support_matrix(root, python2, problems),
     ]
 
     for problem in problems:

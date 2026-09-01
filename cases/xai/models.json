@@ -1,0 +1,27 @@
+{
+ "id": "xai.models",
+ "provider": "xai",
+ "feature": "models",
+ "surface": "models",
+ "description": "xAI model catalog listing (GET /models)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai/v1/models 2026-09-01, HTTP 200 via subscription OAuth (12 entries incl. aliases and token prices) \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/models.json; request block transcribed from the reference adapter; changes/2026-09-01-xai-provider.md"
+ },
+ "entries_key": "data",
+ "request": {
+  "method": "GET",
+  "url": "https://api.x.ai/v1/models",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $XAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": null
+ },
+ "pinned_body": "models.json",
+ "expect": {
+  "status": 200
+ }
+}

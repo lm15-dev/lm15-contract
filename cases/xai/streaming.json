@@ -1,0 +1,61 @@
+{
+ "id": "xai.streaming",
+ "provider": "xai",
+ "feature": "streaming",
+ "description": "xAI Grok streaming (Chat Completions dialect, subscription OAuth)",
+ "request": {
+  "method": "POST",
+  "url": "https://api.x.ai/v1/chat/completions",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $XAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "model": "grok-4.6",
+   "messages": [
+    {
+     "role": "user",
+     "content": "Say ok."
+    }
+   ],
+   "stream": true,
+   "stream_options": {
+    "include_usage": true
+   },
+   "max_tokens": 600
+  }
+ },
+ "expect": {
+  "status": 200
+ },
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai 2026-09-01, grok-4.6 SSE with stream_options.include_usage honored (usage in final chunk) \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/chat-stream.sse; request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-xai-provider.md"
+ },
+ "canonical_request": {
+  "model": "grok-4.6",
+  "messages": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Say ok."
+     }
+    ]
+   }
+  ],
+  "config": {
+   "max_tokens": 600
+  }
+ },
+ "canonical_request_provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-01",
+  "evidence": "authored with the case; wire side generated via python -m lm15.vet build_request and live-validated (receipt above)"
+ },
+ "pinned_body": "chat-stream.sse",
+ "stream": true
+}

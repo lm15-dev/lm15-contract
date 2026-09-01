@@ -1,0 +1,153 @@
+{
+ "_doc": [
+  "The ratified endpoint-support matrix: provider -> EndpointSupport booleans,",
+  "auth modes, and env key conventions, pinned 2026-09-01. tools/audit.py",
+  "compares this file against the reference implementation via surface_dump",
+  "(HARD check, both directions): a port or the reference silently changing",
+  "who supports what is contract drift, not a patch. Widening support lands",
+  "here FIRST, with live receipts, like every provider behavior."
+ ],
+ "providers": {
+  "anthropic": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": false,
+    "files": true,
+    "batches": true,
+    "images": false,
+    "speech": false,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "x-api-key"
+   ],
+   "env_keys": [
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  "claude-code": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": false,
+    "files": false,
+    "batches": false,
+    "images": false,
+    "speech": false,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "claude-code-oauth",
+    "bearer-oauth"
+   ],
+   "env_keys": []
+  },
+  "gemini": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": true,
+    "files": true,
+    "batches": true,
+    "images": true,
+    "speech": true,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "query-api-key",
+    "x-goog-api-key"
+   ],
+   "env_keys": [
+    "GEMINI_API_KEY",
+    "GOOGLE_API_KEY"
+   ]
+  },
+  "openai": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": true,
+    "files": true,
+    "batches": true,
+    "images": true,
+    "speech": true,
+    "responses_api": true,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "bearer"
+   ],
+   "env_keys": [
+    "OPENAI_API_KEY"
+   ]
+  },
+  "openai-chat": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": false,
+    "files": false,
+    "batches": false,
+    "images": false,
+    "speech": false,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "bearer"
+   ],
+   "env_keys": [
+    "OPENAI_API_KEY"
+   ]
+  },
+  "openai-codex": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": false,
+    "files": false,
+    "batches": false,
+    "images": false,
+    "speech": false,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "chatgpt-oauth",
+    "bearer-oauth"
+   ],
+   "env_keys": []
+  },
+  "xai": {
+   "supports": {
+    "complete": true,
+    "stream": true,
+    "live": false,
+    "files": false,
+    "batches": false,
+    "images": true,
+    "speech": false,
+    "responses_api": false,
+    "models": true,
+    "extra": []
+   },
+   "auth_modes": [
+    "bearer",
+    "xai-oauth"
+   ],
+   "env_keys": [
+    "XAI_API_KEY"
+   ]
+  }
+ }
+}

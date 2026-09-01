@@ -91,7 +91,14 @@ def find_wire_case(msg: JsonObject) -> JsonObject:
     candidates = _candidates(msg)
     if not candidates:
         raise LookupError("no case fixture matches this canonical_request")
-    # Duplicate canonical_requests at the same base_url (e.g.
+    # A streaming and a non-streaming case may legitimately share one
+    # canonical_request (xai.basic_text / xai.streaming); the stream flag
+    # is part of the wire identity, so prefer the matching candidate.
+    stream = bool(msg.get("stream"))
+    for case in candidates:
+        if bool(case.get("stream")) == stream:
+            return case
+    # Remaining duplicates at the same base_url (e.g.
     # anthropic.thinking/thinking_budget) necessarily record identical wire
     # requests — any candidate echoes right.
     return candidates[0]

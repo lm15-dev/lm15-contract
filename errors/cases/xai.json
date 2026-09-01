@@ -1,0 +1,51 @@
+{
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai error envelopes captured verbatim 2026-09-01 (model-not-found 400 during the xAI case campaign; unauthenticated 401 during the keyless capability probe) \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/"
+ },
+ "cases": [
+  {
+   "id": "xai.model_not_found",
+   "provider": "xai",
+   "status": 400,
+   "body": {
+    "code": "invalid-argument",
+    "error": "Model not found: grok-nonexistent"
+   },
+   "expected": {
+    "class": "InvalidRequestError",
+    "code": "invalid_request",
+    "provider": "xai",
+    "provider_code": "invalid-argument",
+    "status": 400
+   },
+   "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "api.x.ai 2026-09-01 HTTP 400 verbatim \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/chat-error-model.json"
+   }
+  },
+  {
+   "id": "xai.unauthenticated",
+   "provider": "xai",
+   "status": 401,
+   "body": {
+    "code": "unauthenticated:no-credentials",
+    "error": "No credentials presented."
+   },
+   "expected": {
+    "class": "AuthError",
+    "code": "auth",
+    "provider": "xai",
+    "provider_code": "unauthenticated:no-credentials",
+    "status": 401
+   },
+   "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "api.x.ai 2026-09-01 HTTP 401 verbatim (keyless probe during the capability scan)"
+   }
+  }
+ ]
+}
