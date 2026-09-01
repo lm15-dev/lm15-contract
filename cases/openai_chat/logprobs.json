@@ -1,0 +1,60 @@
+{
+  "id": "openai_chat.logprobs",
+  "provider": "openai_chat",
+  "feature": "logprobs",
+  "description": "Chosen-token logprobs (Config.logprobs=0) on the Chat Completions dialect",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say exactly: hi"
+        }
+      ],
+      "max_completion_tokens": 20,
+      "logprobs": true
+    }
+  },
+  "expect": {
+    "status": 200,
+    "body_contains": [
+      "\"logprobs\""
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "live-captured 2026-09-01 against api.openai.com (the corpus's usual Groq target currently rejects its own pinned models as nonexistent, so OpenAI's chat endpoint is the dialect server with evidence); changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  },
+  "pinned_body": "2026-09-01T13-20-22Z.txt",
+  "canonical_request": {
+    "model": "gpt-4.1-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say exactly: hi"
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 20,
+      "logprobs": 0
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "Config.logprobs=0 means chosen tokens only: wire logprobs=true with NO top_logprobs, matching the live capture; changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  }
+}

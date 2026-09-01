@@ -3,7 +3,7 @@
     "Verdict registry for config.extensions passthrough cases (the 2026-09-01",
     "burn-down; changes/2026-09-01-extensions-burn-down.md). Every wire case",
     "whose canonical_request carries non-empty config.extensions MUST appear",
-    "in exactly one bucket below — tools/audit.py enforces this as a HARD",
+    "in exactly one bucket below \u2014 tools/audit.py enforces this as a HARD",
     "violation. Promoted concepts appear in no bucket: their cases were",
     "rewritten onto canonical fields and no longer carry extensions.",
     "",
@@ -11,29 +11,27 @@
     "  The value names the reason a canonical spelling would be fake",
     "  portability. Adding an entry is an additive spec change (changes/).",
     "deferred: real cross-provider concepts DELIBERATELY awaiting their own",
-    "  design pass. The value names the pass. These are still debt — the",
+    "  design pass. The value names the pass. These are still debt \u2014 the",
     "  registry makes the deferral explicit instead of silent."
   ],
   "blessed": {
-    "anthropic.thinking": "INV-049: thinking display selector — no other provider exposes one",
-    "anthropic.thinking_budget": "INV-049: thinking display selector — no other provider exposes one",
-    "openai.max_tool_calls": "INV-049: per-response tool-invocation cap — no canonical loop-budget concept",
+    "anthropic.thinking": "INV-049: thinking display selector \u2014 no other provider exposes one",
+    "anthropic.thinking_budget": "INV-049: thinking display selector \u2014 no other provider exposes one",
+    "openai.max_tool_calls": "INV-049: per-response tool-invocation cap \u2014 no canonical loop-budget concept",
     "openai.code_interpreter": "INV-049: include tunes provider-executed tool trace verbosity (MAP-1 keeps those out of canonical parts)",
-    "gemini.safety_settings": "INV-049: request-side safety threshold dial — OpenAI/Anthropic expose no equivalent wire field",
-    "anthropic.inference_geo": "INV-049: data-residency routing preference — Anthropic-only wire field",
+    "gemini.safety_settings": "INV-049: request-side safety threshold dial \u2014 OpenAI/Anthropic expose no equivalent wire field",
+    "anthropic.inference_geo": "INV-049: data-residency routing preference \u2014 Anthropic-only wire field",
     "openai.metadata": "INV-049: free-form request tags tied to OpenAI's stored-response dashboard; Anthropic's metadata carries ONLY user_id (a different concept, promoted to Config.user_id)",
-    "openai.user": "INV-049: legacy end-user spelling DEPRECATED by OpenAI in favor of safety_identifier (promoted as Config.user_id); kept as the passthrough MECHANISM's own pinned exemplar — the escape hatch needs one case proving arbitrary keys flow verbatim",
+    "openai.user": "INV-049: legacy end-user spelling DEPRECATED by OpenAI in favor of safety_identifier (promoted as Config.user_id); kept as the passthrough MECHANISM's own pinned exemplar \u2014 the escape hatch needs one case proving arbitrary keys flow verbatim",
     "openai.previous_response_id": "INV-049: OpenAI server-side response-state machinery; the canonical conversation model deliberately resends the transcript",
     "openai.conversation": "INV-049: OpenAI server-side response-state machinery; the canonical conversation model deliberately resends the transcript",
     "openai.background": "INV-049: OpenAI server-side response-state machinery (async stored responses); the job-shaped canonical concept is batch",
     "openai.truncation": "INV-049: OpenAI server-side context-truncation policy for stored-state conversations",
     "openai.context_management": "INV-049: OpenAI server-side context compaction config for stored-state conversations",
-    "openai.stream_options": "INV-049: OpenAI stream-frame mechanics (obfuscation padding) — transport detail, not canonical semantics",
+    "openai.stream_options": "INV-049: OpenAI stream-frame mechanics (obfuscation padding) \u2014 transport detail, not canonical semantics",
     "openai.reasoning_encrypted": "INV-049: encrypted reasoning passthrough for OpenAI's stateless replay of stored-state reasoning"
   },
   "deferred": {
-    "openai.top_logprobs": "logprobs design pass — cross-provider concept (Gemini responseLogprobs) blocked on a canonical OUTPUT surface for token probabilities",
-    "openai.include": "logprobs design pass — same knobs as openai.top_logprobs (duplicate coverage; fold or drop when the pass lands)",
-    "openai.file_search": "builtin-tool-forcing design pass — ToolChoice cannot yet express 'force this builtin'; each provider forces builtins differently"
+    "openai.file_search": "builtin-tool-forcing design pass \u2014 ToolChoice cannot yet express 'force this builtin'; each provider forces builtins differently"
   }
 }

@@ -1,0 +1,124 @@
+{
+  "id": "openai.tool_choice_allowed",
+  "provider": "openai",
+  "feature": "tool_choice_allowed",
+  "description": "Mixed function+builtin allowlist with mode=auto via allowed_tools",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is 2+2? Answer directly if you can."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 200,
+      "tools": [
+        {
+          "type": "function",
+          "name": "add",
+          "description": "Add two numbers",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "number"
+              },
+              "b": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        {
+          "type": "web_search_preview"
+        }
+      ],
+      "tool_choice": {
+        "type": "allowed_tools",
+        "mode": "auto",
+        "tools": [
+          {
+            "type": "function",
+            "name": "add"
+          },
+          {
+            "type": "web_search_preview"
+          }
+        ]
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "live-captured 2026-09-01 with the exact adapter-built wire body; also fixes the old mapping that FORCED a single allowed tool even under mode=auto; changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  },
+  "pinned_body": "2026-09-01T13-20-22Z.txt",
+  "canonical_request": {
+    "model": "gpt-4.1-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is 2+2? Answer directly if you can."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "add",
+        "description": "Add two numbers",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "a": {
+              "type": "number"
+            },
+            "b": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "type": "builtin",
+        "name": "web_search"
+      }
+    ],
+    "config": {
+      "max_tokens": 200,
+      "tool_choice": {
+        "mode": "auto",
+        "allowed": [
+          "add",
+          "web_search"
+        ]
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "authored with the ratified kind-aware ToolChoice resolution; wire-identical to the live capture; changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  }
+}

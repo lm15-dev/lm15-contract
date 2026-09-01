@@ -1,0 +1,84 @@
+{
+  "id": "openai.tool_choice_builtin",
+  "provider": "openai",
+  "feature": "tool_choice_builtin",
+  "description": "Force a builtin (hosted) tool via ToolChoice allowed-name resolution",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the capital of France?"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 200,
+      "tools": [
+        {
+          "type": "web_search_preview"
+        }
+      ],
+      "tool_choice": {
+        "type": "web_search_preview"
+      }
+    }
+  },
+  "expect": {
+    "status": 200,
+    "body_contains": [
+      "web_search_call"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "live-captured 2026-09-01 with the exact adapter-built wire body (response contains a forced web_search_call); changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  },
+  "pinned_body": "2026-09-01T13-20-22Z.txt",
+  "canonical_request": {
+    "model": "gpt-4.1-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the capital of France?"
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "builtin",
+        "name": "web_search"
+      }
+    ],
+    "config": {
+      "max_tokens": 200,
+      "tool_choice": {
+        "mode": "required",
+        "allowed": [
+          "web_search"
+        ]
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "authored with the ratified kind-aware ToolChoice resolution; wire-identical to the live capture; changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  }
+}

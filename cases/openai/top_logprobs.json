@@ -55,17 +55,12 @@
     ],
     "config": {
       "max_tokens": 16,
-      "extensions": {
-        "include": [
-          "message.output_text.logprobs"
-        ],
-        "top_logprobs": 2
-      }
+      "logprobs": 2
     }
   },
   "canonical_request_provenance": {
-    "source": "orphan-adoption",
-    "date": "2026-06-10",
-    "evidence": "wire-identical to live-validated fixture via harness"
+    "source": "promotion",
+    "date": "2026-09-01",
+    "evidence": "wire-identical to live-validated fixture via harness; canonical_request rewritten 2026-09-01 (logprobs design pass): the smuggled include/top_logprobs extensions became the promoted Config.logprobs field, wire request UNCHANGED (request-direction harness proves build equality) \u2014 changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
   }
 }

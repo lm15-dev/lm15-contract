@@ -1,0 +1,91 @@
+{
+  "id": "anthropic.tool_choice_builtin",
+  "provider": "anthropic",
+  "feature": "tool_choice_builtin",
+  "description": "Force a builtin (server) tool via the named tool_choice form",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the capital of France?"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "tools": [
+        {
+          "type": "web_search_20250305",
+          "name": "web_search",
+          "max_uses": 1
+        }
+      ],
+      "tool_choice": {
+        "type": "tool",
+        "name": "web_search"
+      }
+    }
+  },
+  "expect": {
+    "status": 200,
+    "body_contains": [
+      "server_tool_use"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "live-captured 2026-09-01: the API reference documents named tool_choice for client tools only, but the capture proves server tools accept it (response contains a forced server_tool_use); changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  },
+  "pinned_body": "2026-09-01T13-20-22Z.txt",
+  "canonical_request": {
+    "model": "claude-sonnet-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the capital of France?"
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "builtin",
+        "name": "web_search",
+        "config": {
+          "max_uses": 1
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "tool_choice": {
+        "mode": "required",
+        "allowed": [
+          "web_search"
+        ]
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "live-capture",
+    "date": "2026-09-01",
+    "evidence": "authored with the ratified kind-aware ToolChoice resolution; wire-identical to the live capture; changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
+  }
+}

@@ -264,6 +264,13 @@ empty strings ARE emitted, and `part_index` is always emitted (exception:
 | `type` | string `"text"` | — | `"text"` | always |
 | `text` | string | yes | — | always (even `""`) |
 | `part_index` | int | no | `0` | always |
+| `logprobs` | array of TokenLogprob | no | `[]` | omit-empty |
+
+`logprobs` carries the token logprobs for exactly the tokens in this
+fragment, when requested via `Config.logprobs` and streamed per chunk by
+the provider (verified live for OpenAI Responses 2026-09-01).
+Materialization concatenates fragment logprobs in arrival order into
+`Response.logprobs`.
 
 ### ThinkingDelta
 
@@ -408,6 +415,31 @@ Deserialization dispatch: `"type": "builtin"` → BuiltinTool; anything else
 Factory: `ToolChoice.from_tools(allowed, *, mode="auto", parallel=None)` —
 accepts Tool objects or names.
 
+**Kind-aware name resolution (2026-09-01).** `allowed` entries may name
+tools of either kind; adapters resolve each name against `Request.tools`
+(INV-031 guarantees presence, tool names are unique) and emit the
+kind-correct wire form, or raise when the wire cannot express it:
+
+- **openai (Responses)**: single name + `mode="required"` →
+  `{"type": "function", "name"}` or the hosted-tool form
+  `{"type": "web_search_preview"}` (live-captured 2026-09-01); any other
+  allowlist (multi-name, or single with `mode="auto"`) →
+  `{"type": "allowed_tools", "mode", "tools"}` — mixed kinds supported.
+  A single allowed name with `mode="auto"` no longer forces the call.
+- **anthropic**: single name + `mode="required"` →
+  `{"type": "tool", "name"}` — works for server tools too
+  (live-captured 2026-09-01; the API reference is silent). Allowlist
+  covering ALL declared tools → plain `any`/`auto` (no restriction).
+  Proper-subset allowlists RAISE — the wire cannot express them and
+  degrading would let the model call excluded tools.
+- **gemini**: function-name allowlists ride `allowedFunctionNames` with
+  mode `ANY` (`required`) or `VALIDATED` (`auto` — the doc-required mode;
+  `allowedFunctionNames` is illegal under `AUTO`). Builtin names RAISE —
+  `googleSearch`/`codeExecution` have no tool_choice form.
+- **openai_chat dialect**: function forcing and the nested
+  `allowed_tools` form; builtin names RAISE — the dialect wire has no
+  hosted-tool tool_choice.
+
 ### Reasoning
 
 | Field | JSON type | Req | Default | Omission | Constraints |
@@ -448,6 +480,7 @@ Config level: `reasoning` absent = no explicit preference;
 | `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`); Gemini RAISES |
 | `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini RAISES |
 | `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic RAISES |
+| `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic RAISES. Provider caps (currently 0–20) are provider-owned, not encoded |
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
@@ -492,10 +525,48 @@ enclosing serializers.
 | `message` | object (Message) | yes | — | always | role MUST be `assistant`; never empty (MAP-2) |
 | `finish_reason` | string (FinishReason) | yes | — | always | closed vocabulary |
 | `usage` | object (Usage) | yes | — | omit-empty (when `{}`) | |
+| `logprobs` | array of TokenLogprob | no | `null` | omit-empty | `null` = provider did not report (the Usage convention); never `[]` on parse |
 | `provider_data` | object (opaque) | no | `null` | never by default (`response_to_dict` emits it only with `include_provider_data=True`; the vet protocol serializes WITHOUT it, surfacing only the `_lm15_unmapped` canary) | strict JSON object |
+
+`logprobs` is decoding telemetry — the same category as `usage` and
+`finish_reason`, never re-sent in history. Per-block provider lists
+(OpenAI Responses attaches them per `output_text` block) concatenate in
+document order; the block boundary survives in the stream
+(`TextDelta.part_index`) and in `provider_data`, not here.
 
 Convenience: `.text` (text + citation/thinking treated as metadata),
 `.tool_calls`, `.citations`, `.parse_json(default=...)`, `.json`.
+
+### TokenLogprob
+
+The chosen token at one decoding step, with ranked alternatives. Two flat
+types instead of one recursive type: the wire never nests alternatives
+inside alternatives, and the type system says so.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `token` | string | yes | — | always (even `""`) | |
+| `logprob` | float | yes | — | always (even `0.0`) | float-coerced (int input accepted) |
+| `bytes` | array of int | no | `null` | omit-empty | token UTF-8 bytes when reported (OpenAI); each `>= 0` |
+| `token_id` | int | no | `null` | omit-empty | vocabulary id when reported (Gemini) |
+| `top` | array of TopLogprob | no | `[]` | omit-empty | provider-reported ranked list, descending logprob |
+
+No guarantee the chosen token appears in `top`. Providers also differ on
+whether the requested alternative count includes the chosen token (Gemini
+documents that it does; OpenAI counts alternatives only) — the reported
+list is preserved as-is, never adjusted.
+
+### TopLogprob
+
+One scored alternative token at a decoding step — `TokenLogprob` without
+the nested `top`.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `token` | string | yes | — | always (even `""`) | |
+| `logprob` | float | yes | — | always (even `0.0`) | float-coerced |
+| `bytes` | array of int | no | `null` | omit-empty | each `>= 0` |
+| `token_id` | int | no | `null` | omit-empty | |
 
 ## Other endpoints
 
