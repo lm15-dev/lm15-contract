@@ -1,8 +1,6 @@
 # 2026-09-01 — Explicit reasoning-off reaches the wire or fails loudly
 
-Ratification: PENDING — awaiting Maxime Rivest. Do not push before
-ratification (AUTHORITY.md). The reference implementation change is
-committed in lm15-python alongside this record.
+Ratification: RATIFIED 2026-09-01 by maintainer delegation — standing instruction from Maxime Rivest in session ("for ones that have one obvious right decision, you can ratify for me without my involvement"); the rule follows already-ratified principles and every wire claim carries a live receipt. Transcribed.
 
 ## The finding
 
