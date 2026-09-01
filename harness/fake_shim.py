@@ -45,6 +45,8 @@ MUTATIONS = (
     "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
     "models_wrong_id",      # parse_models_response: first model's id rewritten
     "models_param_drop",    # build_models_request: one query parameter dropped
+    "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
+    "live_frame_key_drop",  # replay_live: one key dropped from the first encoded client frame
 )
 
 MUTATION = "none"
@@ -267,6 +269,34 @@ def op_parse_models_response(msg: JsonObject) -> JsonObject:
     return {"models": models}
 
 
+def find_live_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_live_cases():
+        if case["provider"] == msg["provider"] and case["live_config"] == msg["live_config"]:
+            return case
+    raise LookupError("no live case matches this (provider, live_config)")
+
+
+def op_replay_live(msg: JsonObject) -> JsonObject:
+    case = find_live_case(msg)
+    transcript = check.load_live_transcript(case)
+    setup = next((e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "setup"), [])
+    client_frames = [e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "event"]
+    events = json.loads(check.golden_path(case).read_text())["events"]
+    if targeted(case):
+        if MUTATION == "live_dropped_event":
+            for group in reversed(events):
+                if group:
+                    group.pop()
+                    break
+        elif MUTATION == "live_frame_key_drop":
+            for frames in client_frames:
+                if frames and isinstance(frames[0], dict) and frames[0]:
+                    frames[0] = dict(frames[0])
+                    frames[0].pop(sorted(frames[0])[0])
+                    break
+    return {"setup_frames": setup, "client_frames": client_frames, "events": events}
+
+
 def op_explain_auth(msg: JsonObject) -> JsonObject:
     fixture = check.load_auth_fixture()
     for case in fixture["cases"]:
@@ -305,6 +335,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "explain_auth": op_explain_auth,
     "build_models_request": op_build_models_request,
     "parse_models_response": op_parse_models_response,
+    "replay_live": op_replay_live,
 }
 
 

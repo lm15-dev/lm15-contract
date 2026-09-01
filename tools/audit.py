@@ -87,12 +87,14 @@ def load_cases(root: Path) -> list[tuple[Path, dict]]:
 def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                   allowlist: set[str], body_dir_allowlist: set[str],
                   problems: list[str]) -> str:
-    # Models-surface cases carry no canonical_request by design (the listing
-    # surface has no canonical Request); they are exercised by the harness
-    # models direction and audited by their own completeness rule below.
+    # Models- and live-surface cases carry no canonical_request by design
+    # (the listing surface has no canonical Request; the live surface's
+    # canonical inputs are live_config + client events in the transcript).
+    # Each is exercised by its own harness direction and audited by its own
+    # completeness rule below.
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases
-               if "canonical_request" not in data and data.get("surface") != "models"}
+               if "canonical_request" not in data and data.get("surface") not in ("models", "live")}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):
@@ -136,6 +138,26 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                 problems.append(f"ORPHANS {case_id}: models-surface case has no golden at "
                                 f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
                                 "the parse phase would silently skip")
+        if data.get("surface") == "live":
+            for key in ("live_config", "pinned_body"):
+                if key not in data:
+                    problems.append(f"ORPHANS {case_id}: live-surface case missing {key!r} — "
+                                    "the replay needs it")
+            golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"
+            if not golden.is_file():
+                problems.append(f"ORPHANS {case_id}: live-surface case has no golden at "
+                                f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
+                                "the decode phase would silently skip")
+            transcript_path = bodies / str(case_id) / str(data.get("pinned_body", ""))
+            if transcript_path.is_file():
+                for i, line in enumerate(transcript_path.read_text().splitlines()):
+                    if not line.strip():
+                        continue
+                    entry = json.loads(line)
+                    if entry.get("dir") not in ("client", "server"):
+                        problems.append(f"ORPHANS {case_id}: transcript line {i} has no "
+                                        "client/server dir — not a directed frame")
+                        break
 
     return (f"ORPHANS: {len(cases)} case(s), {len(body_dirs)} body dir(s), "
             f"{len(orphans & allowlist)} allowlisted orphan(s) pending burn-down")

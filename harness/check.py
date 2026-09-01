@@ -44,7 +44,7 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -287,14 +287,32 @@ def load_shim(name: str) -> Shim:
 # ─── Corpus loading ──────────────────────────────────────────────────
 
 def load_wire_cases() -> list[JsonObject]:
-    """Chat-surface wire cases; models-surface cases have their own loader."""
+    """Chat-surface wire cases; models/live surfaces have their own loaders."""
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
-    return [case for case in cases if case.get("surface") != "models"]
+    return [case for case in cases if case.get("surface") not in ("models", "live")]
 
 
 def load_model_cases() -> list[JsonObject]:
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
     return [case for case in cases if case.get("surface") == "models"]
+
+
+def load_live_cases() -> list[JsonObject]:
+    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    return [case for case in cases if case.get("surface") == "live"]
+
+
+def load_live_transcript(case: JsonObject) -> list[JsonObject]:
+    """Pinned transcript entries: {"dir":"client","kind":"setup"|"event",...}
+    and {"dir":"server","frame"|"frame_b64": ...}, in wire order."""
+    path = BODIES_DIR / case["id"] / case["pinned_body"]
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+
+
+def live_server_frame_bytes(entry: JsonObject) -> bytes:
+    if "frame_b64" in entry:
+        return base64.b64decode(entry["frame_b64"])
+    return entry["frame"].encode("utf-8")
 
 
 def load_error_cases() -> list[JsonObject]:
@@ -862,6 +880,68 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     return report
 
 
+# ─── Direction: live ───────────────────────────────────────────────
+
+def run_live_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Recorded-transcript replay of the live websocket codec (replay_live).
+
+    Three results per case. [setup]: the shim's connect-time frames vs the
+    transcript's recorded setup frames. [encode]: per canonical client
+    event, the wire frames vs the recorded frames (grouping included — the
+    frame bundle per event is contract). [decode]: per verbatim recorded
+    server frame, the canonical events vs the golden (an empty group pins
+    "this housekeeping frame is deliberately ignored"). Session mechanics
+    (locking, queues, iteration sugar) are per-language and out of scope.
+    """
+    report = DirectionReport("live")
+    for case in load_live_cases():
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        transcript = load_live_transcript(case)
+        setup_expected = next(
+            (e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "setup"), [])
+        client_entries = [e for e in transcript if e["dir"] == "client" and e.get("kind") == "event"]
+        server_entries = [e for e in transcript if e["dir"] == "server"]
+        reply = shim.call(
+            "replay_live",
+            provider=case["provider"],
+            live_config=case["live_config"],
+            client_events=[e["event"] for e in client_entries],
+            server_frames_b64=[
+                base64.b64encode(live_server_frame_bytes(e)).decode("ascii") for e in server_entries
+            ],
+            **case_base_url(case),
+        )
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        result = reply["result"]
+        volatile = case.get("volatile") or {}
+
+        diff = first_difference(setup_expected, result.get("setup_frames", _ABSENT),
+                                ("setup_frames",), volatile=volatile)
+        report.results.append(CaseResult(f"{case_id}[setup]", "pass") if diff is None
+                              else CaseResult(f"{case_id}[setup]", "fail", diff=diff))
+
+        diff = first_difference([e["frames"] for e in client_entries],
+                                result.get("client_frames", _ABSENT),
+                                ("client_frames",), volatile=volatile)
+        report.results.append(CaseResult(f"{case_id}[encode]", "pass") if diff is None
+                              else CaseResult(f"{case_id}[encode]", "fail", diff=diff))
+
+        golden_file = golden_path(case)
+        if not golden_file.exists():
+            report.results.append(CaseResult(f"{case_id}[decode]", "skip", reason="no-golden"))
+            continue
+        golden = json.loads(golden_file.read_text())
+        diff = first_difference(golden["events"], result.get("events", _ABSENT),
+                                ("events",), volatile=volatile, usage_int_float=True)
+        report.results.append(CaseResult(f"{case_id}[decode]", "pass") if diff is None
+                              else CaseResult(f"{case_id}[decode]", "fail", diff=diff))
+    return report
+
+
 # ─── Direction: models ───────────────────────────────────────────────
 
 def _strip_models_provider_data(models):
@@ -985,6 +1065,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_auth_direction(shim, case_filter)
     if direction == "models":
         return run_models_direction(shim, case_filter)
+    if direction == "live":
+        return run_live_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

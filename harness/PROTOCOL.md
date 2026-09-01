@@ -155,6 +155,35 @@ Out: `{"models": [<ModelInfo JSON>]}`
 - A `status >= 400` input must surface the adapter's normalized error as an
   `ok: false` reply.
 
+### replay_live
+In: `{"provider": "openai"|"gemini", "live_config": <LiveConfig JSON>, "client_events": [<LiveClientEvent JSON>], "server_frames_b64": [str], "base_url"?: str}`
+Out: `{"setup_frames": [<wire JSON>], "client_frames": [[<wire JSON>]], "events": [[<LiveServerEvent JSON>]]}`
+- Recorded-transcript replay of the live websocket CODEC — three pure
+  transformations, no socket:
+  - `setup_frames`: the frames the implementation would send at connect
+    time for this LiveConfig, in send order (OpenAI: the GA
+    `session.update`; Gemini: the `setup` frame).
+  - `client_frames`: one wire-frame LIST per canonical client event, in
+    order — the grouping is contract (e.g. OpenAI `end_audio` →
+    `input_audio_buffer.commit` + `response.create`).
+  - `events`: one canonical-event LIST per server frame (decoded from the
+    verbatim recorded bytes), in order. An EMPTY list is a real assertion:
+    this housekeeping frame is deliberately ignored (e.g. Gemini
+    `setupComplete`, OpenAI `conversation.item.added`, the benign
+    `response_cancel_not_active` barge-in race error).
+- Wire frames are compared as parsed JSON (key order and whitespace
+  irrelevant), the same standard as request bodies. Server frame input is
+  b64 for byte fidelity; text frames are utf-8.
+- Session mechanics — locking, pending queues, iteration, `turn()` sugar,
+  reconnection — are per-language idiom, OUT of contract scope. The codec
+  (config → setup, client event → frames, frame → events) IS the contract.
+- Live cases carry `surface: "live"`, a canonical `live_config`, and a
+  `pinned_body` transcript (JSONL of directed entries:
+  `{"dir":"client","kind":"setup"|"event",...}` with recorded frames, and
+  `{"dir":"server","frame"|"frame_b64":...}` verbatim). Goldens pin the
+  canonical decode (`{"events": [[...]]}`) only; setup/encode expectations
+  come from the transcript itself (wire truth).
+
 ## Serde kinds
 
 The closed set of `kind` strings for `serde_roundtrip` and `validate`

@@ -131,6 +131,25 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     # --case filter and the fake shim target, the suffixed id the lookup.
     targets["models_wrong_id"] = ("models", f"{id_target}[parse]")
     targets["models_param_drop"] = ("models", f"{param_target}[build]")
+
+    live_cases = check.load_live_cases()
+    decode_target = next(
+        (c["id"] for c in live_cases
+         if check.golden_path(c).exists()
+         and any(g for g in json.loads(check.golden_path(c).read_text())["events"])),
+        None,
+    )
+    encode_target = next(
+        (c["id"] for c in live_cases
+         if any(e["dir"] == "client" and e.get("kind") == "event" and e["frames"]
+                for e in check.load_live_transcript(c))),
+        None,
+    )
+    if decode_target is None or encode_target is None:
+        raise SystemExit("selftest: live corpus too thin to self-test (need a golden with "
+                         "events and a transcript with client frames)")
+    targets["live_dropped_event"] = ("live", f"{decode_target}[decode]")
+    targets["live_frame_key_drop"] = ("live", f"{encode_target}[encode]")
     return targets
 
 
