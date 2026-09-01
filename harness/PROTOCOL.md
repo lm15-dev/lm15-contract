@@ -184,6 +184,65 @@ Out: `{"setup_frames": [<wire JSON>], "client_frames": [[<wire JSON>]], "events"
   canonical decode (`{"events": [[...]]}`) only; setup/encode expectations
   come from the transcript itself (wire truth).
 
+### file_op_build
+In: `{"provider": str, "file_op": "upload"|"get"|"list"|"delete"|"download", "api_key": str, "upload_request"?: <FileUploadRequest JSON>, "file_id"?: str, "limit"?: int, "cursor"?: str|null, "base_url"?: str}`
+Out: the wire request, `build_request`-shaped.
+- One op per files-lifecycle wire request, discriminated by `file_op` —
+  the same seam as the reference implementation's pure build hooks.
+  `upload` takes the canonical FileUploadRequest (bytes as base64);
+  `get`/`delete`/`download` take `file_id`; `list` takes `limit` and an
+  optional opaque `cursor`.
+
+### file_op_parse
+In: `{"provider": str, "kind": "info"|"page", "status": int, "body_b64": str, "base_url"?: str}`
+Out: `{"file": <FileInfo JSON>}` or `{"page": <FilePage JSON>}`.
+- Canonical snapshot from a pinned wire body. A `status >= 400` raises
+  through the provider's error normalization (typed error out).
+
+### batch_op_build
+In: `{"provider": str, "action": "upload"|"submit"|"status"|"cancel"|"list"|"result_fetches", "api_key": str, "batch_request"?: <BatchRequest JSON>, "batch_id"?: str, "limit"?: int, "upload_body"?: <JSON>, "status_body"?: <JSON>, "base_url"?: str}`
+Out: `{"requests": [<wire request>...]}`.
+- ALWAYS a list: `upload` is zero requests on single-step providers
+  (Anthropic, Gemini) and one (the JSONL multipart) on OpenAI;
+  `result_fetches` is zero on Gemini (results are inlined in the
+  terminal operation) and one-or-more on OpenAI (output + error files).
+  `submit` receives the parsed `upload_body` when an upload step
+  preceded it (OpenAI's file object), else null/absent.
+
+### batch_op_parse
+In: `{"provider": str, "kind": "job"|"list"|"entries", "status"?: int, "body_b64"?: str, "status_body"?: <JSON>, "fetched_b64"?: [str], "base_url"?: str}`
+Out: `{"job": <BatchJobInfo JSON>}`, `{"jobs": [...]}`, or `{"entries": [<BatchEntry JSON>...]}`.
+- `entries` takes the terminal status body plus the fetched result texts
+  and returns entries in SUBMISSION order — re-sorting is contract
+  (Anthropic returned results out of order in live capture 2026-08-31).
+  Statuses are the canonical vocabulary, never provider wire words.
+
+### generation_build
+In: `{"provider": str, "kind": "image"|"speech", "api_key": str, "generation_request": <ImageGenerationRequest|SpeechGenerationRequest JSON>, "base_url"?: str}`
+Out: the wire request, `build_request`-shaped.
+- Image requests with input `images` must route to the provider's real
+  edit door (OpenAI `/images/edits` multipart; Gemini the same chat
+  call; xAI `/images/edits` with `image:{url|file_id}`) — never to an
+  endpoint that silently ignores them. Fields with no wire slot raise
+  (Gemini speech `format`, xAI `size`, >1 input image on xAI).
+
+### generation_parse
+In: `{"provider": str, "kind": "image"|"speech", "generation_request": <JSON>, "status": int, "headers"?: {str: str}, "body_b64": str, "base_url"?: str}`
+Out: `<ImageGenerationResponse|SpeechGenerationResponse JSON>`.
+- `headers` matter: OpenAI speech bodies are raw media bytes whose
+  media type exists only in the `content-type` header. Media types come
+  from the wire verbatim (parameterized MIME included); `provider_data`
+  must be present (the harness asserts presence, then strips it before
+  golden comparison, digesting media payloads >= 512 chars as
+  `sha256:<hex>` on both sides).
+- Endpoint-surface cases carry `surface: "files"|"batch"|"generation"`.
+  Files/batch cases hold a `steps` list (each step pins its wire
+  request block and optional pinned body + golden key); generation
+  cases hold one `generation_request`/`request`/`pinned_body` triple.
+  Multipart wire bodies compare with the boundary token normalized to
+  `BOUNDARY` on both sides — the boundary is the only legitimately
+  random byte.
+
 ## Serde kinds
 
 The closed set of `kind` strings for `serde_roundtrip` and `validate`

@@ -1,0 +1,38 @@
+{
+ "id": "xai.image_gen",
+ "provider": "xai",
+ "feature": "image_gen",
+ "surface": "generation",
+ "kind": "image",
+ "description": "image generation (image_gen)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai 2026-09-01, grok-imagine-image, HTTP 200; explicit mime_type image/jpeg and ticks-only usage; request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "grok-imagine-image",
+  "prompt": "A simple flat red circle centered on a white background",
+  "extensions": {
+   "response_format": "b64_json"
+  }
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://api.x.ai/v1/images/generations",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $XAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "model": "grok-imagine-image",
+   "prompt": "A simple flat red circle centered on a white background",
+   "response_format": "b64_json"
+  }
+ },
+ "pinned_body": "image-generate.json",
+ "expect": {
+  "status": 200
+ }
+}

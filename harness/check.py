@@ -23,6 +23,8 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
+import re
 import datetime
 import json
 import shutil
@@ -44,7 +46,7 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -289,7 +291,7 @@ def load_shim(name: str) -> Shim:
 def load_wire_cases() -> list[JsonObject]:
     """Chat-surface wire cases; models/live surfaces have their own loaders."""
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
-    return [case for case in cases if case.get("surface") not in ("models", "live")]
+    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation")]
 
 
 def load_model_cases() -> list[JsonObject]:
@@ -1050,6 +1052,239 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
     return report
 
 
+# ─── Directions: files / batch / generation (endpoint surfaces) ──────
+#
+# One case file per provider per surface, with a `steps` list (files,
+# batch) or a single build/parse pair (generation).  Each step pins the
+# expected wire request exactly like the request direction, and parses
+# pinned live bodies against goldens.  Two normalizations, applied to
+# BOTH sides identically:
+#
+# - multipart bodies: the random boundary token is rewritten to
+#   "BOUNDARY" in the content-type header and the body before byte
+#   comparison (the boundary is the only legitimately random byte);
+# - long media payloads: any string >= 512 chars inside golden-compared
+#   values is replaced by its sha256 digest, so goldens stay reviewable
+#   while content drift is still caught exactly.
+
+_MULTIPART_RE = re.compile(r'boundary=([^;\s]+)')
+
+
+def _normalize_multipart(request: JsonObject) -> JsonObject:
+    headers = request.get("headers") or {}
+    ctype = str(headers.get("content-type", ""))
+    match = _MULTIPART_RE.search(ctype)
+    if not match:
+        return request
+    boundary = match.group(1)
+    out = dict(request)
+    out["headers"] = {**headers, "content-type": ctype.replace(boundary, "BOUNDARY")}
+    if isinstance(request.get("body_b64"), str):
+        raw = base64.b64decode(request["body_b64"])
+        out["body_b64"] = base64.b64encode(raw.replace(boundary.encode(), b"BOUNDARY")).decode("ascii")
+    return out
+
+
+def _digest_long_strings(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {k: _digest_long_strings(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_digest_long_strings(v) for v in value]
+    if isinstance(value, str) and len(value) >= 512:
+        return "sha256:" + hashlib.sha256(value.encode("utf-8")).hexdigest()
+    return value
+
+
+def load_surface_cases(surface: str) -> list[JsonObject]:
+    cases = [json.loads(p.read_text()) for p in sorted(CASES_DIR.glob("*/*.json"))]
+    return [case for case in cases if case.get("surface") == surface]
+
+
+def _compare_build(report: DirectionReport, label: str, spec: JsonObject, reply: JsonObject) -> None:
+    if not reply.get("ok"):
+        report.results.append(shim_reply_failure(label, reply))
+        return
+    expected = expected_wire_request(spec)
+    fixture_b64 = spec.get("request", {}).get("body_b64")
+    if isinstance(fixture_b64, str):
+        expected["body_b64"] = fixture_b64
+    expected = _normalize_multipart(expected)
+    actual = _normalize_multipart(actual_wire_request(reply["result"]))
+    diff = first_difference(expected, actual)
+    if diff is None:
+        report.results.append(CaseResult(label, "pass"))
+    else:
+        report.results.append(CaseResult(label, "fail", diff=diff))
+
+
+def _compare_golden(report: DirectionReport, label: str, golden_value: Any, actual_value: Any) -> None:
+    diff = first_difference(_digest_long_strings(golden_value), _digest_long_strings(actual_value))
+    if diff is None:
+        report.results.append(CaseResult(label, "pass"))
+    else:
+        report.results.append(CaseResult(label, "fail", diff=diff))
+
+
+def _step_body(case: JsonObject, name: str) -> bytes:
+    return (BODIES_DIR / case["id"] / name).read_bytes()
+
+
+def run_files_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Files lifecycle: file_op_build per step, file_op_parse vs goldens."""
+    report = DirectionReport("files")
+    for case in load_surface_cases("files"):
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        golden_file = golden_path(case)
+        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        for step in case["steps"]:
+            op = step["file_op"]
+            label = f"{case_id}[{op}]"
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            for key in ("upload_request", "file_id", "limit", "cursor"):
+                if key in step:
+                    fields[key] = step[key]
+            _compare_build(report, label, step, shim.call("file_op_build", file_op=op, **fields))
+            if "pinned_body" not in step:
+                continue
+            parse_label = f"{case_id}[{op}.parse]"
+            kind = step["parse"]
+            reply = shim.call(
+                "file_op_parse", provider=case["provider"], kind=kind,
+                status=int(step.get("expect", {}).get("status", 200)),
+                body_b64=base64.b64encode(_step_body(case, step["pinned_body"])).decode("ascii"),
+                **case_base_url(case),
+            )
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(parse_label, reply))
+                continue
+            golden_key = step.get("golden_key", op)
+            if golden_key not in golden:
+                report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
+                continue
+            actual = reply["result"].get("file" if kind == "info" else "page")
+            _compare_golden(report, parse_label, golden[golden_key], actual)
+    return report
+
+
+def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Batch lifecycle: batch_op_build per step, batch_op_parse vs goldens."""
+    report = DirectionReport("batch")
+    for case in load_surface_cases("batch"):
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        golden_file = golden_path(case)
+        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        for step in case["steps"]:
+            action = step["action"]
+            label = f"{case_id}[{action}]"
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            for key in ("batch_request", "batch_id", "limit", "upload_body"):
+                if key in step:
+                    fields[key] = step[key]
+            if "status_body_from" in step:
+                fields["status_body"] = json.loads(_step_body(case, step["status_body_from"]).decode("utf-8"))
+            reply = shim.call("batch_op_build", action=action, **fields)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(label, reply))
+            else:
+                expected_requests = step.get("requests", [step["request"]] if "request" in step else [])
+                actual_requests = reply["result"].get("requests", [])
+                if len(expected_requests) != len(actual_requests):
+                    report.results.append(CaseResult(
+                        label, "fail",
+                        reason=f"expected {len(expected_requests)} wire request(s), shim built {len(actual_requests)}",
+                    ))
+                else:
+                    for i, (spec, actual) in enumerate(zip(expected_requests, actual_requests)):
+                        sub = label if len(expected_requests) == 1 else f"{label}#{i}"
+                        wrapped = {"request": spec} if "url" in spec else spec
+                        expected = expected_wire_request(wrapped)
+                        fixture_b64 = wrapped.get("request", {}).get("body_b64")
+                        if isinstance(fixture_b64, str):
+                            expected["body_b64"] = fixture_b64
+                        expected = _normalize_multipart(expected)
+                        got = _normalize_multipart(actual_wire_request(actual))
+                        diff = first_difference(expected, got)
+                        report.results.append(CaseResult(sub, "pass") if diff is None
+                                              else CaseResult(sub, "fail", diff=diff))
+            if "parse" not in step:
+                continue
+            kind = step["parse"]
+            parse_label = f"{case_id}[{action}.parse]"
+            parse_fields: JsonObject = {"provider": case["provider"], "kind": kind, **case_base_url(case)}
+            if kind == "entries":
+                parse_fields["status_body"] = json.loads(_step_body(case, step["status_body_from"]).decode("utf-8"))
+                parse_fields["fetched_b64"] = [
+                    base64.b64encode(_step_body(case, name)).decode("ascii")
+                    for name in step.get("fetched_from", [])
+                ]
+            else:
+                parse_fields["status"] = int(step.get("expect", {}).get("status", 200))
+                parse_fields["body_b64"] = base64.b64encode(_step_body(case, step["pinned_body"])).decode("ascii")
+            reply = shim.call("batch_op_parse", **parse_fields)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(parse_label, reply))
+                continue
+            golden_key = step.get("golden_key", action)
+            if golden_key not in golden:
+                report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
+                continue
+            key = {"job": "job", "list": "jobs", "entries": "entries"}[kind]
+            _compare_golden(report, parse_label, golden[golden_key], reply["result"].get(key))
+    return report
+
+
+def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Image/speech generation: generation_build + generation_parse vs goldens.
+
+    The parse side strips provider_data (it must be PRESENT — the verbatim
+    body or the honest header record — but its bulk is the pinned body
+    itself) and digests long media payloads on both sides.
+    """
+    report = DirectionReport("generation")
+    for case in load_surface_cases("generation"):
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        reply = shim.call("generation_build", provider=case["provider"], kind=case["kind"],
+                          api_key=API_KEY, generation_request=case["generation_request"],
+                          **case_base_url(case))
+        _compare_build(report, f"{case_id}[build]", case, reply)
+
+        golden_file = golden_path(case)
+        if "pinned_body" not in case:
+            continue
+        parse_label = f"{case_id}[parse]"
+        reply = shim.call(
+            "generation_parse", provider=case["provider"], kind=case["kind"],
+            generation_request=case["generation_request"],
+            status=int(case.get("expect", {}).get("status", 200)),
+            headers=case.get("response_headers", {}),
+            body_b64=base64.b64encode(pinned_body(case)).decode("ascii"),
+            **case_base_url(case),
+        )
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(parse_label, reply))
+            continue
+        if not golden_file.exists():
+            report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
+            continue
+        golden = json.loads(golden_file.read_text())
+        result = dict(reply["result"])
+        if result.get("provider_data") in (None, {}):
+            report.results.append(CaseResult(
+                parse_label, "fail",
+                reason="provider_data is absent — the wire body (or the header record) must be preserved verbatim",
+            ))
+            continue
+        result.pop("provider_data", None)
+        _compare_golden(report, parse_label, golden["response"], result)
+    return report
+
+
 # ─── Main ────────────────────────────────────────────────────────────
 
 def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path) -> DirectionReport:
@@ -1065,6 +1300,12 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_auth_direction(shim, case_filter)
     if direction == "models":
         return run_models_direction(shim, case_filter)
+    if direction == "files":
+        return run_files_direction(shim, case_filter)
+    if direction == "batch":
+        return run_batch_direction(shim, case_filter)
+    if direction == "generation":
+        return run_generation_direction(shim, case_filter)
     if direction == "live":
         return run_live_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")

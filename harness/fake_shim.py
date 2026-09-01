@@ -47,6 +47,13 @@ MUTATIONS = (
     "models_param_drop",    # build_models_request: one query parameter dropped
     "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
     "live_frame_key_drop",  # replay_live: one key dropped from the first encoded client frame
+    "gen_wrong_media_type",     # generation_parse: first media part's media_type rewritten
+    "gen_dropped_narration",    # generation_parse: the narration text field dropped
+    "gen_multipart_field_drop", # generation_build: a multipart form field name corrupted
+    "file_readiness_flip",      # file_op_parse: readiness "ready" -> "pending"
+    "file_param_drop",          # file_op_build: one query parameter dropped
+    "batch_entry_order_swap",   # batch_op_parse entries: first two entries swapped
+    "batch_status_vocab_drift", # batch_op_parse job: canonical status replaced by the wire word
 )
 
 MUTATION = "none"
@@ -325,6 +332,114 @@ def op_explain_auth(msg: JsonObject) -> JsonObject:
     raise LookupError("no auth fixture matches this (provider, env, api_keys_providers, borrowed state)")
 
 
+# ─── Endpoint surfaces: files / batch / generation ───────────────────
+
+def _echo_wire(spec: JsonObject) -> JsonObject:
+    """Echo a pinned wire block through the harness's own normalizer so the
+    unmutated baseline is exactly green (auth rewrite, lowercase, noise)."""
+    result = check.expected_wire_request(spec)
+    raw = spec.get("request", {}).get("body_b64")
+    if isinstance(raw, str):
+        result["body_b64"] = raw
+    return result
+
+
+def find_generation_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_surface_cases("generation"):
+        if (case["provider"] == msg["provider"] and case["kind"] == msg["kind"]
+                and case["generation_request"] == msg["generation_request"]):
+            return case
+    raise LookupError("no generation case matches this (provider, kind, generation_request)")
+
+
+def op_generation_build(msg: JsonObject) -> JsonObject:
+    case = find_generation_case(msg)
+    result = _echo_wire(case)
+    if MUTATION == "gen_multipart_field_drop" and targeted(case) and result.get("body_b64"):
+        raw = base64.b64decode(result["body_b64"])
+        result["body_b64"] = base64.b64encode(raw.replace(b'name="model"', b'name="modell"', 1)).decode("ascii")
+    return result
+
+
+def op_generation_parse(msg: JsonObject) -> JsonObject:
+    case = find_generation_case(msg)
+    result = dict(json.loads(check.golden_path(case).read_text())["response"])
+    result["provider_data"] = {"echo": "fixture"}  # presence is asserted, bulk is stripped
+    if targeted(case):
+        if MUTATION == "gen_wrong_media_type":
+            if result.get("images"):
+                result["images"] = [dict(result["images"][0], media_type="image/not-the-format"),
+                                    *result["images"][1:]]
+            elif isinstance(result.get("audio"), dict):
+                result["audio"] = dict(result["audio"], media_type="audio/not-the-format")
+        elif MUTATION == "gen_dropped_narration":
+            result.pop("text", None)
+    return result
+
+
+def find_files_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_surface_cases("files"):
+        if case["provider"] == msg["provider"]:
+            return case
+    raise LookupError("no files case for this provider")
+
+
+def op_file_op_build(msg: JsonObject) -> JsonObject:
+    case = find_files_case(msg)
+    step = next(s for s in case["steps"] if s["file_op"] == msg["file_op"])
+    result = _echo_wire(step)
+    if MUTATION == "file_param_drop" and targeted(case) and result["params"]:
+        result["params"].pop(sorted(result["params"])[0])
+    return result
+
+
+def op_file_op_parse(msg: JsonObject) -> JsonObject:
+    case = find_files_case(msg)
+    body = base64.b64decode(msg["body_b64"])
+    step = next(s for s in case["steps"]
+                if s.get("pinned_body") and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
+    golden = json.loads(check.golden_path(case).read_text())
+    value = dict(golden[step.get("golden_key", step["file_op"])])
+    if MUTATION == "file_readiness_flip" and targeted(case) and value.get("readiness") == "ready":
+        value["readiness"] = "pending"
+    return {"file" if msg["kind"] == "info" else "page": value}
+
+
+def find_batch_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_surface_cases("batch"):
+        if case["provider"] == msg["provider"]:
+            return case
+    raise LookupError("no batch case for this provider")
+
+
+def op_batch_op_build(msg: JsonObject) -> JsonObject:
+    case = find_batch_case(msg)
+    step = next(s for s in case["steps"] if s["action"] == msg["action"])
+    return {"requests": [_echo_wire({"request": spec}) for spec in step.get("requests", [])]}
+
+
+def op_batch_op_parse(msg: JsonObject) -> JsonObject:
+    case = find_batch_case(msg)
+    golden = json.loads(check.golden_path(case).read_text())
+    kind = msg["kind"]
+    if kind == "entries":
+        entries = [dict(e) for e in golden["entries"]]
+        if MUTATION == "batch_entry_order_swap" and targeted(case) and len(entries) >= 2:
+            entries[0], entries[1] = entries[1], entries[0]
+        return {"entries": entries}
+    body = base64.b64decode(msg["body_b64"])
+    step = next(s for s in case["steps"]
+                if s.get("pinned_body") and s.get("parse") == kind
+                and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
+    value = golden[step.get("golden_key", step["action"])]
+    if kind == "job":
+        job = dict(value)
+        if MUTATION == "batch_status_vocab_drift" and targeted(case) and job.get("status") == "completed":
+            job["status"] = "ended"  # a wire word, not the canonical vocabulary
+        return {"job": job}
+    return {"jobs": value}
+
+
 HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "capabilities": op_capabilities,
     "build_request": op_build_request,
@@ -336,6 +451,12 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "build_models_request": op_build_models_request,
     "parse_models_response": op_parse_models_response,
     "replay_live": op_replay_live,
+    "generation_build": op_generation_build,
+    "generation_parse": op_generation_parse,
+    "file_op_build": op_file_op_build,
+    "file_op_parse": op_file_op_parse,
+    "batch_op_build": op_batch_op_build,
+    "batch_op_parse": op_batch_op_parse,
 }
 
 

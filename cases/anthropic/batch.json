@@ -1,0 +1,214 @@
+{
+ "id": "anthropic.batch",
+ "provider": "anthropic",
+ "feature": "batch",
+ "surface": "batch",
+ "description": "batch lifecycle (upload/submit/status/results/cancel/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.anthropic.com Message Batches 2026-08-31: submit/status/results/list transcripts; results returned OUT OF SUBMISSION ORDER (the re-sort fact) \u2014 lm15-dev/curl-fixtures/batch-2026-08-31/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "steps": [
+  {
+   "action": "upload",
+   "batch_request": {
+    "model": "claude-haiku-4-5-20251001",
+    "requests": [
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "requests": []
+  },
+  {
+   "action": "submit",
+   "batch_request": {
+    "model": "claude-haiku-4-5-20251001",
+    "requests": [
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.anthropic.com/v1/messages/batches",
+     "params": {},
+     "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+     },
+     "body": {
+      "requests": [
+       {
+        "custom_id": "0",
+        "params": {
+         "model": "claude-haiku-4-5-20251001",
+         "messages": [
+          {
+           "role": "user",
+           "content": [
+            {
+             "type": "text",
+             "text": "Capital of France? One word."
+            }
+           ]
+          }
+         ],
+         "stream": false,
+         "max_tokens": 1024
+        }
+       },
+       {
+        "custom_id": "1",
+        "params": {
+         "model": "claude-haiku-4-5-20251001",
+         "messages": [
+          {
+           "role": "user",
+           "content": [
+            {
+             "type": "text",
+             "text": "Capital of Japan? One word."
+            }
+           ]
+          }
+         ],
+         "stream": false,
+         "max_tokens": 1024
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "pinned_body": "anthropic-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "batch_id": "msgbatch_01LKpzTz5ohcvYq2S2MCMd5i",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01LKpzTz5ohcvYq2S2MCMd5i",
+     "params": {},
+     "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "anthropic-status2.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetches",
+   "status_body_from": "anthropic-status2.json",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.anthropic.com/v1/messages/batches/msgbatch_01LKpzTz5ohcvYq2S2MCMd5i/results",
+     "params": {},
+     "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "parse": "entries",
+   "fetched_from": [
+    "anthropic-results.jsonl"
+   ],
+   "golden_key": "entries"
+  },
+  {
+   "action": "list",
+   "limit": 20,
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.anthropic.com/v1/messages/batches",
+     "params": {
+      "limit": "20"
+     },
+     "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "anthropic-list.json",
+   "parse": "list",
+   "expect": {
+    "status": 200
+   }
+  }
+ ]
+}

@@ -1,0 +1,111 @@
+{
+ "id": "anthropic.files",
+ "provider": "anthropic",
+ "feature": "files",
+ "surface": "files",
+ "description": "files lifecycle (upload/get/list/delete/download)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-08-31",
+  "evidence": "api.anthropic.com Files GA 2026-08-31 (upload/get/list/delete/download transcripts, lm15-dev/curl-fixtures/files-2026-08-31/); request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "steps": [
+  {
+   "file_op": "upload",
+   "upload_request": {
+    "filename": "sample.txt",
+    "media_type": "text/plain",
+    "bytes_data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4KbG0xNSBmaWxlcyBjYXB0dXJlIDIwMjYtMDgtMzEuCg=="
+   },
+   "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/files",
+    "params": {},
+    "headers": {
+     "x-api-key": "$ANTHROPIC_API_KEY",
+     "anthropic-version": "2023-06-01",
+     "content-type": "multipart/form-data; boundary=lm15-2b839efb89764674ab882437a46d5496"
+    },
+    "body": null,
+    "body_b64": "LS1sbTE1LTJiODM5ZWZiODk3NjQ2NzRhYjg4MjQzN2E0NmQ1NDk2DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9ImZpbGUiOyBmaWxlbmFtZT0ic2FtcGxlLnR4dCINCkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbg0KDQpUaGUgcXVpY2sgYnJvd24gZm94IGp1bXBzIG92ZXIgdGhlIGxhenkgZG9nLgpsbTE1IGZpbGVzIGNhcHR1cmUgMjAyNi0wOC0zMS4KDQotLWxtMTUtMmI4MzllZmI4OTc2NDY3NGFiODgyNDM3YTQ2ZDU0OTYtLQ0K"
+   },
+   "pinned_body": "anthropic-upload.json",
+   "parse": "info",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "get",
+   "file_id": "file_01BMcX8RJhdSVQw4ns12MxHF",
+   "request": {
+    "method": "GET",
+    "url": "https://api.anthropic.com/v1/files/file_01BMcX8RJhdSVQw4ns12MxHF",
+    "params": {},
+    "headers": {
+     "x-api-key": "$ANTHROPIC_API_KEY",
+     "anthropic-version": "2023-06-01",
+     "content-type": "application/json"
+    },
+    "body": null
+   },
+   "pinned_body": "anthropic-get.json",
+   "parse": "info",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "list",
+   "limit": 20,
+   "request": {
+    "method": "GET",
+    "url": "https://api.anthropic.com/v1/files",
+    "params": {
+     "limit": "20"
+    },
+    "headers": {
+     "x-api-key": "$ANTHROPIC_API_KEY",
+     "anthropic-version": "2023-06-01",
+     "content-type": "application/json"
+    },
+    "body": null
+   },
+   "pinned_body": "anthropic-list.json",
+   "parse": "page",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "delete",
+   "file_id": "file_01BMcX8RJhdSVQw4ns12MxHF",
+   "request": {
+    "method": "DELETE",
+    "url": "https://api.anthropic.com/v1/files/file_01BMcX8RJhdSVQw4ns12MxHF",
+    "params": {},
+    "headers": {
+     "x-api-key": "$ANTHROPIC_API_KEY",
+     "anthropic-version": "2023-06-01",
+     "content-type": "application/json"
+    },
+    "body": null
+   }
+  },
+  {
+   "file_op": "download",
+   "file_id": "file_01BMcX8RJhdSVQw4ns12MxHF",
+   "request": {
+    "method": "GET",
+    "url": "https://api.anthropic.com/v1/files/file_01BMcX8RJhdSVQw4ns12MxHF/content",
+    "params": {},
+    "headers": {
+     "x-api-key": "$ANTHROPIC_API_KEY",
+     "anthropic-version": "2023-06-01",
+     "content-type": "application/json"
+    },
+    "body": null
+   }
+  }
+ ]
+}

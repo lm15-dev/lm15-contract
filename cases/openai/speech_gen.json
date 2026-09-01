@@ -1,0 +1,39 @@
+{
+ "id": "openai.speech_gen",
+ "provider": "openai",
+ "feature": "speech_gen",
+ "surface": "generation",
+ "kind": "speech",
+ "description": "speech generation (speech_gen)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.openai.com 2026-09-01, gpt-4o-mini-tts, HTTP 200 raw MPEG body; content-type header pinned from the capture (server default format); request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "gpt-4o-mini-tts",
+  "prompt": "Hi.",
+  "voice": "alloy"
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://api.openai.com/v1/audio/speech",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $OPENAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "model": "gpt-4o-mini-tts",
+   "input": "Hi.",
+   "voice": "alloy"
+  }
+ },
+ "pinned_body": "openai-speech-mp3.bin",
+ "expect": {
+  "status": 200
+ },
+ "response_headers": {
+  "content-type": "audio/mpeg"
+ }
+}

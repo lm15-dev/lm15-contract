@@ -67,6 +67,10 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "live_client_event": (("LiveClient*Event",), ("LiveClientEventType",)),
     "live_server_event": (("LiveServer*Event",), ("LiveServerEventType",)),
     "batch_request": (("BatchRequest",), ()),
+    "image_generation_request": (("ImageGenerationRequest",), ()),
+    "image_generation_response": (("ImageGenerationResponse",), ()),
+    "speech_generation_request": (("SpeechGenerationRequest",), ()),
+    "speech_generation_response": (("SpeechGenerationResponse",), ()),
     "batch_job": (("BatchJobInfo",), ("BatchStatus", "BATCH_STATUSES", "BATCH_TERMINAL_STATUSES")),
     "batch_entry": (("BatchEntry",), ("BatchOutcome", "BATCH_OUTCOMES")),
     "file_upload_request": (("FileUploadRequest",), ()),
@@ -87,14 +91,16 @@ def load_cases(root: Path) -> list[tuple[Path, dict]]:
 def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                   allowlist: set[str], body_dir_allowlist: set[str],
                   problems: list[str]) -> str:
-    # Models- and live-surface cases carry no canonical_request by design
-    # (the listing surface has no canonical Request; the live surface's
-    # canonical inputs are live_config + client events in the transcript).
-    # Each is exercised by its own harness direction and audited by its own
-    # completeness rule below.
+    # Models-, live-, and endpoint-surface cases carry no canonical_request
+    # by design: the listing surface has no canonical Request; the live
+    # surface's canonical inputs are live_config + client events; the files/
+    # batch/generation surfaces carry their canonical payloads inline
+    # (upload_request / batch_request / generation_request), checked by the
+    # completeness rules below.  Each has its own harness direction.
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases
-               if "canonical_request" not in data and data.get("surface") not in ("models", "live")}
+               if "canonical_request" not in data
+               and data.get("surface") not in ("models", "live", "files", "batch", "generation")}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):
@@ -123,11 +129,43 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
         case_id = data.get("id", str(path.relative_to(root)))
         body_dir = bodies / str(case_id)
         pinned = data.get("pinned_body")
-        if body_dir.is_dir() and not pinned:
+        step_pins = [
+            name for step in (data.get("steps") or [])
+            for name in ([step.get("pinned_body")] if step.get("pinned_body") else [])
+            + list(step.get("fetched_from") or [])
+            + ([step.get("status_body_from")] if step.get("status_body_from") else [])
+            + ([step.get("upload_body")] and [] or [])
+        ]
+        if body_dir.is_dir() and not pinned and not step_pins:
             problems.append(f"ORPHANS {case_id}: body dir exists but case has no pinned_body")
         if pinned and not (body_dir / str(pinned)).is_file():
             problems.append(f"ORPHANS {case_id}: pinned_body {pinned!r} does not exist "
                             f"under bodies/{case_id}/")
+        if data.get("surface") == "generation":
+            for key in ("kind", "generation_request", "request", "pinned_body"):
+                if key not in data:
+                    problems.append(f"ORPHANS {case_id}: generation-surface case missing {key!r} — "
+                                    "both harness phases need it")
+            golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"
+            if not golden.is_file():
+                problems.append(f"ORPHANS {case_id}: generation-surface case has no golden at "
+                                f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
+                                "the parse phase would silently skip")
+        if data.get("surface") in ("files", "batch"):
+            steps = data.get("steps")
+            if not isinstance(steps, list) or not steps:
+                problems.append(f"ORPHANS {case_id}: {data.get('surface')}-surface case has no steps")
+            else:
+                for i, step in enumerate(steps):
+                    has_wire = "request" in step or "requests" in step
+                    if not has_wire:
+                        problems.append(f"ORPHANS {case_id}: step {i} pins no wire request block")
+                    for name in step.get("fetched_from", []) or ([step["pinned_body"]] if "pinned_body" in step else []):
+                        if not (bodies / str(case_id) / str(name)).is_file():
+                            problems.append(f"ORPHANS {case_id}: step {i} references missing body {name!r}")
+            golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"
+            if not golden.is_file():
+                problems.append(f"ORPHANS {case_id}: {data.get('surface')}-surface case has no golden")
         if data.get("surface") == "models":
             for key in ("request", "pinned_body", "entries_key"):
                 if key not in data:

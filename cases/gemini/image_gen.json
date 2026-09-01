@@ -1,0 +1,42 @@
+{
+ "id": "gemini.image_gen",
+ "provider": "gemini",
+ "feature": "image_gen",
+ "surface": "generation",
+ "kind": "image",
+ "description": "image generation (image_gen)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "generativelanguage.googleapis.com 2026-09-01, gemini-2.5-flash-image, HTTP 200; narration text next to inline image (the text-field fact); request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "gemini-2.5-flash-image",
+  "prompt": "A simple flat red circle centered on a white background"
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent",
+  "params": {},
+  "headers": {
+   "x-goog-api-key": "$GEMINI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "contents": [
+    {
+     "role": "user",
+     "parts": [
+      {
+       "text": "A simple flat red circle centered on a white background"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "pinned_body": "gemini-image.json",
+ "expect": {
+  "status": 200
+ }
+}

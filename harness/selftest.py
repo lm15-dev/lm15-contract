@@ -150,6 +150,60 @@ def pick_targets() -> dict[str, tuple[str, str]]:
                          "events and a transcript with client frames)")
     targets["live_dropped_event"] = ("live", f"{decode_target}[decode]")
     targets["live_frame_key_drop"] = ("live", f"{encode_target}[encode]")
+
+    gen_cases = check.load_surface_cases("generation")
+    media_target = next((c["id"] for c in gen_cases if check.golden_path(c).exists()), None)
+    text_target = next(
+        (c["id"] for c in gen_cases
+         if check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text())["response"].get("text")),
+        None,
+    )
+    multipart_target = next(
+        (c["id"] for c in gen_cases if isinstance(c.get("request", {}).get("body_b64"), str)), None
+    )
+    if media_target is None or text_target is None or multipart_target is None:
+        raise SystemExit("selftest: generation corpus too thin to self-test (need a golden, "
+                         "a narration-text golden, and a multipart build case)")
+    targets["gen_wrong_media_type"] = ("generation", f"{media_target}[parse]")
+    targets["gen_dropped_narration"] = ("generation", f"{text_target}[parse]")
+    targets["gen_multipart_field_drop"] = ("generation", f"{multipart_target}[build]")
+
+    files_cases = check.load_surface_cases("files")
+    readiness_target = None
+    param_target_files = None
+    for c in files_cases:
+        golden = json.loads(check.golden_path(c).read_text()) if check.golden_path(c).exists() else {}
+        for step in c["steps"]:
+            key = step.get("golden_key", step["file_op"])
+            if readiness_target is None and step.get("parse") == "info" and golden.get(key, {}).get("readiness") == "ready":
+                readiness_target = (c["id"], step["file_op"])
+            if param_target_files is None and step.get("request", {}).get("params"):
+                param_target_files = (c["id"], step["file_op"])
+    if readiness_target is None or param_target_files is None:
+        raise SystemExit("selftest: files corpus too thin to self-test (need a ready golden "
+                         "and a build step with query params)")
+    targets["file_readiness_flip"] = ("files", f"{readiness_target[0]}[{readiness_target[1]}.parse]")
+    targets["file_param_drop"] = ("files", f"{param_target_files[0]}[{param_target_files[1]}]")
+
+    batch_cases = check.load_surface_cases("batch")
+    swap_target = next(
+        (c["id"] for c in batch_cases
+         if check.golden_path(c).exists()
+         and len(json.loads(check.golden_path(c).read_text()).get("entries", [])) >= 2),
+        None,
+    )
+    vocab_target = next(
+        (c["id"] for c in batch_cases
+         if check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text()).get("status", {}).get("status") == "completed"),
+        None,
+    )
+    if swap_target is None or vocab_target is None:
+        raise SystemExit("selftest: batch corpus too thin to self-test (need >=2 entries "
+                         "and a completed status golden)")
+    targets["batch_entry_order_swap"] = ("batch", f"{swap_target}[result_fetches.parse]")
+    targets["batch_status_vocab_drift"] = ("batch", f"{vocab_target}[status.parse]")
     return targets
 
 

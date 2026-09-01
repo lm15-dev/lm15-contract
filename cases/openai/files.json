@@ -1,0 +1,106 @@
+{
+ "id": "openai.files",
+ "provider": "openai",
+ "feature": "files",
+ "surface": "files",
+ "description": "files lifecycle (upload/get/list/delete/download)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-08-31",
+  "evidence": "api.openai.com Files 2026-08-31 + 2026-09-01 live-proof (transcripts, lm15-dev/curl-fixtures/files-2026-08-31/); request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "steps": [
+  {
+   "file_op": "upload",
+   "upload_request": {
+    "filename": "sample.txt",
+    "media_type": "text/plain",
+    "bytes_data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4KbG0xNSBmaWxlcyBjYXB0dXJlIDIwMjYtMDgtMzEuCg=="
+   },
+   "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/files",
+    "params": {},
+    "headers": {
+     "authorization": "Bearer $OPENAI_API_KEY",
+     "content-type": "multipart/form-data; boundary=lm15-f99a2bed784b47aea13be92e9dec1f08"
+    },
+    "body": null,
+    "body_b64": "LS1sbTE1LWY5OWEyYmVkNzg0YjQ3YWVhMTNiZTkyZTlkZWMxZjA4DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InB1cnBvc2UiDQoNCnVzZXJfZGF0YQ0KLS1sbTE1LWY5OWEyYmVkNzg0YjQ3YWVhMTNiZTkyZTlkZWMxZjA4DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9ImZpbGUiOyBmaWxlbmFtZT0ic2FtcGxlLnR4dCINCkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbg0KDQpUaGUgcXVpY2sgYnJvd24gZm94IGp1bXBzIG92ZXIgdGhlIGxhenkgZG9nLgpsbTE1IGZpbGVzIGNhcHR1cmUgMjAyNi0wOC0zMS4KDQotLWxtMTUtZjk5YTJiZWQ3ODRiNDdhZWExM2JlOTJlOWRlYzFmMDgtLQ0K"
+   },
+   "pinned_body": "openai-upload.json",
+   "parse": "info",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "get",
+   "file_id": "file-DHLYq8rMTixWCBz1GF8auM",
+   "request": {
+    "method": "GET",
+    "url": "https://api.openai.com/v1/files/file-DHLYq8rMTixWCBz1GF8auM",
+    "params": {},
+    "headers": {
+     "authorization": "Bearer $OPENAI_API_KEY",
+     "content-type": "application/json"
+    },
+    "body": null
+   },
+   "pinned_body": "openai-get.json",
+   "parse": "info",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "list",
+   "limit": 20,
+   "request": {
+    "method": "GET",
+    "url": "https://api.openai.com/v1/files",
+    "params": {
+     "limit": "20"
+    },
+    "headers": {
+     "authorization": "Bearer $OPENAI_API_KEY",
+     "content-type": "application/json"
+    },
+    "body": null
+   },
+   "pinned_body": "openai-list.json",
+   "parse": "page",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "file_op": "delete",
+   "file_id": "file-DHLYq8rMTixWCBz1GF8auM",
+   "request": {
+    "method": "DELETE",
+    "url": "https://api.openai.com/v1/files/file-DHLYq8rMTixWCBz1GF8auM",
+    "params": {},
+    "headers": {
+     "authorization": "Bearer $OPENAI_API_KEY",
+     "content-type": "application/json"
+    },
+    "body": null
+   }
+  },
+  {
+   "file_op": "download",
+   "file_id": "file-DHLYq8rMTixWCBz1GF8auM",
+   "request": {
+    "method": "GET",
+    "url": "https://api.openai.com/v1/files/file-DHLYq8rMTixWCBz1GF8auM/content",
+    "params": {},
+    "headers": {
+     "authorization": "Bearer $OPENAI_API_KEY",
+     "content-type": "application/json"
+    },
+    "body": null
+   }
+  }
+ ]
+}

@@ -1,0 +1,218 @@
+{
+ "id": "openai.batch",
+ "provider": "openai",
+ "feature": "batch",
+ "surface": "batch",
+ "description": "batch lifecycle (upload/submit/status/results/cancel/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.openai.com Batch 2026-09-01: JSONL upload + submit/status/results/cancel/list transcripts (label via metadata; validating-stage cancel edge) \u2014 lm15-dev/curl-fixtures/batch-2026-08-31/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "steps": [
+  {
+   "action": "upload",
+   "batch_request": {
+    "model": "gpt-5-nano",
+    "requests": [
+     {
+      "model": "gpt-5-nano",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "gpt-5-nano",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.openai.com/v1/files",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "multipart/form-data; boundary=lm15-e5587a5c869b48cf8bb2df5808a73f64"
+     },
+     "body": null,
+     "body_b64": "LS1sbTE1LWU1NTg3YTVjODY5YjQ4Y2Y4YmIyZGY1ODA4YTczZjY0DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InB1cnBvc2UiDQoNCmJhdGNoDQotLWxtMTUtZTU1ODdhNWM4NjliNDhjZjhiYjJkZjU4MDhhNzNmNjQNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0iZmlsZSI7IGZpbGVuYW1lPSJsbTE1LWJhdGNoLmpzb25sIg0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQp7ImN1c3RvbV9pZCI6IjAiLCJtZXRob2QiOiJQT1NUIiwidXJsIjoiL3YxL3Jlc3BvbnNlcyIsImJvZHkiOnsibW9kZWwiOiJncHQtNS1uYW5vIiwiaW5wdXQiOlt7InJvbGUiOiJ1c2VyIiwiY29udGVudCI6W3sidHlwZSI6ImlucHV0X3RleHQiLCJ0ZXh0IjoiQ2FwaXRhbCBvZiBGcmFuY2U/IE9uZSB3b3JkLiJ9XX1dLCJzdHJlYW0iOmZhbHNlfX0KeyJjdXN0b21faWQiOiIxIiwibWV0aG9kIjoiUE9TVCIsInVybCI6Ii92MS9yZXNwb25zZXMiLCJib2R5Ijp7Im1vZGVsIjoiZ3B0LTUtbmFubyIsImlucHV0IjpbeyJyb2xlIjoidXNlciIsImNvbnRlbnQiOlt7InR5cGUiOiJpbnB1dF90ZXh0IiwidGV4dCI6IkNhcGl0YWwgb2YgSmFwYW4/IE9uZSB3b3JkLiJ9XX1dLCJzdHJlYW0iOmZhbHNlfX0KDQotLWxtMTUtZTU1ODdhNWM4NjliNDhjZjhiYjJkZjU4MDhhNzNmNjQtLQ0K"
+    }
+   ]
+  },
+  {
+   "action": "submit",
+   "batch_request": {
+    "model": "gpt-5-nano",
+    "requests": [
+     {
+      "model": "gpt-5-nano",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "gpt-5-nano",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.openai.com/v1/batches",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": {
+      "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
+      "endpoint": "/v1/responses",
+      "completion_window": "24h"
+     }
+    }
+   ],
+   "pinned_body": "openai-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   },
+   "upload_body": {
+    "object": "file",
+    "id": "file-Y3XW9fZshD2PqA7rkR3dku",
+    "purpose": "batch",
+    "filename": "input.jsonl",
+    "bytes": 417,
+    "created_at": 1788204140,
+    "expires_at": 1790796140,
+    "status": "processed",
+    "status_details": null
+   }
+  },
+  {
+   "action": "status",
+   "batch_id": "batch_6a9619e3815481909970e51995cae906",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/batches/batch_6a9619e3815481909970e51995cae906",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "openai-status.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetches",
+   "status_body_from": "openai-status.json",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/files/file-9ZCttSgpoPxGChqYBekQRc/content",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "parse": "entries",
+   "fetched_from": [
+    "openai-results.jsonl"
+   ],
+   "golden_key": "entries"
+  },
+  {
+   "action": "cancel",
+   "batch_id": "batch_6a9619e3815481909970e51995cae906",
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.openai.com/v1/batches/batch_6a9619e3815481909970e51995cae906/cancel",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "openai-cancel.json",
+   "parse": "job",
+   "golden_key": "cancel",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "list",
+   "limit": 20,
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/batches",
+     "params": {
+      "limit": "20"
+     },
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "openai-list.json",
+   "parse": "list",
+   "expect": {
+    "status": 200
+   }
+  }
+ ]
+}

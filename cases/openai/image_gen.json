@@ -1,0 +1,42 @@
+{
+ "id": "openai.image_gen",
+ "provider": "openai",
+ "feature": "image_gen",
+ "surface": "generation",
+ "kind": "image",
+ "description": "image generation (image_gen)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.openai.com 2026-09-01T12-25-41Z, gpt-image-1-mini, HTTP 200 (lm15-dev/curl-fixtures/genmedia-2026-09-01/openai-image-jpeg.json); request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "gpt-image-1-mini",
+  "prompt": "A tiny flat yellow star on black",
+  "size": "1024x1024",
+  "extensions": {
+   "quality": "low",
+   "output_format": "jpeg"
+  }
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://api.openai.com/v1/images/generations",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $OPENAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "model": "gpt-image-1-mini",
+   "prompt": "A tiny flat yellow star on black",
+   "size": "1024x1024",
+   "quality": "low",
+   "output_format": "jpeg"
+  }
+ },
+ "pinned_body": "openai-image-jpeg.json",
+ "expect": {
+  "status": 200
+ }
+}

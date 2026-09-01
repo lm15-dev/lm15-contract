@@ -1,0 +1,55 @@
+{
+ "id": "gemini.speech_gen",
+ "provider": "gemini",
+ "feature": "speech_gen",
+ "surface": "generation",
+ "kind": "speech",
+ "description": "speech generation (speech_gen)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "generativelanguage.googleapis.com 2026-09-01, gemini-2.5-flash-preview-tts, HTTP 200; parameterized PCM MIME verbatim; request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "gemini-2.5-flash-preview-tts",
+  "prompt": "Hello from the capture campaign.",
+  "voice": "Kore"
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
+  "params": {},
+  "headers": {
+   "x-goog-api-key": "$GEMINI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "contents": [
+    {
+     "role": "user",
+     "parts": [
+      {
+       "text": "Hello from the capture campaign."
+      }
+     ]
+    }
+   ],
+   "generationConfig": {
+    "responseModalities": [
+     "AUDIO"
+    ],
+    "speechConfig": {
+     "voiceConfig": {
+      "prebuiltVoiceConfig": {
+       "voiceName": "Kore"
+      }
+     }
+    }
+   }
+  }
+ },
+ "pinned_body": "gemini-speech.json",
+ "expect": {
+  "status": 200
+ }
+}

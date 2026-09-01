@@ -1,0 +1,200 @@
+{
+ "id": "gemini.batch",
+ "provider": "gemini",
+ "feature": "batch",
+ "surface": "batch",
+ "description": "batch lifecycle (upload/submit/status/results/cancel/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "generativelanguage.googleapis.com batches 2026-08-31: inline submit (displayName label), BATCH_STATE_* vocabulary, results inlined in the terminal operation \u2014 lm15-dev/curl-fixtures/batch-2026-08-31/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "steps": [
+  {
+   "action": "upload",
+   "batch_request": {
+    "model": "gemini-2.5-flash",
+    "requests": [
+     {
+      "model": "gemini-2.5-flash",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "gemini-2.5-flash",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "label": "lm15-batch-probe"
+   },
+   "requests": []
+  },
+  {
+   "action": "submit",
+   "batch_request": {
+    "model": "gemini-2.5-flash",
+    "requests": [
+     {
+      "model": "gemini-2.5-flash",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of France? One word."
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "model": "gemini-2.5-flash",
+      "messages": [
+       {
+        "role": "user",
+        "parts": [
+         {
+          "type": "text",
+          "text": "Capital of Japan? One word."
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "label": "lm15-batch-probe"
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:batchGenerateContent",
+     "params": {},
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": {
+      "batch": {
+       "inputConfig": {
+        "requests": {
+         "requests": [
+          {
+           "request": {
+            "contents": [
+             {
+              "role": "user",
+              "parts": [
+               {
+                "text": "Capital of France? One word."
+               }
+              ]
+             }
+            ]
+           },
+           "metadata": {
+            "key": "0"
+           }
+          },
+          {
+           "request": {
+            "contents": [
+             {
+              "role": "user",
+              "parts": [
+               {
+                "text": "Capital of Japan? One word."
+               }
+              ]
+             }
+            ]
+           },
+           "metadata": {
+            "key": "1"
+           }
+          }
+         ]
+        }
+       },
+       "displayName": "lm15-batch-probe"
+      }
+     }
+    }
+   ],
+   "pinned_body": "gemini-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "batch_id": "batches/1r4qodkmjh3hbq9tpoy3t1qkkz5pkyfm1ie3",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/batches/1r4qodkmjh3hbq9tpoy3t1qkkz5pkyfm1ie3",
+     "params": {},
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "gemini-status2.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetches",
+   "status_body_from": "gemini-status2.json",
+   "requests": [],
+   "parse": "entries",
+   "fetched_from": [],
+   "golden_key": "entries"
+  },
+  {
+   "action": "list",
+   "limit": 20,
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/batches",
+     "params": {
+      "pageSize": "20"
+     },
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "gemini-list.json",
+   "parse": "list",
+   "expect": {
+    "status": 200
+   }
+  }
+ ]
+}

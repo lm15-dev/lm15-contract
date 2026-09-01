@@ -1,0 +1,48 @@
+{
+ "id": "xai.image_edit",
+ "provider": "xai",
+ "feature": "image_edit",
+ "surface": "generation",
+ "kind": "image",
+ "description": "image generation (image_edit)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai 2026-09-01 /images/edits image:{url:<data URI>}, HTTP 200; input-honoring pixel-verified (generations endpoint ignores image input \u2014 negative captures pinned in xai-2026-09-01/); request block transcribed from the reference adapter against the receipted endpoint; changes/2026-09-01-endpoint-harness-directions.md"
+ },
+ "generation_request": {
+  "model": "grok-imagine-image",
+  "prompt": "Add one small solid blue square in the bottom-right corner. Keep everything else exactly the same.",
+  "images": [
+   {
+    "type": "image",
+    "media_type": "image/png",
+    "data": "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAIAAADTED8xAAAFAElEQVR4nO3Zy3HbWBBAUWhqUlAEzj8kR6AgOAu5PCpREknwA6LvOWsvgH59AVB+ORwOC1T9s/UFwJYEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYC0f7e+gJDfr6/n/+Nfb2/3uxL+ejkcDltfw0wXrfs5JHEPArilmy/9d8RwKwK4gYft/TElXEkA622498eUsI4A1niq1f9IBpcSwAWedu+PKeFMAjjLjlb/Ixmc5D/CTtvp9i97vvKH8Qb4yZgF8ir4jgC+Nmb1P5LBMZ9AXxi5/cvc+7qGAD6bvSWz724Fn0D/Sy2Hz6F33gB/pLZ/6d3vdwSwLNVtaN71JwJI70H53t/VA7AB8Ql0fwTHD/5Y82dx9A1g+481ZxINAN4VA2g+6s4RnEwugOAZX6Q2n1YAtdNdJzWlUACpc71SZ1aVADoneiuRiVUCgC8lAog8zG6uMLf5ARRO8X7GT294AOPP7wFmz3B4APCzyQHMfnQ90uBJTg4AThobwOCH1iamznNmAFNPa1sjpzozADjTwABGPqiexLzZDgwAzicA0qYFMO8d/WyGTXhaAHCRUQEMezg9rUlzHhUAXEoApM0JYNJ7+fmNmfacAGAFAZA2JIAxb+QdmTHzIQHAOgIgTQCkTQhgxsfoHg2Y/IQAYDUBkCYA0gRAmgBI230AA/4QsWt7n//uA4BrCIA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASNt9AL/e3ra+hLS9z3/3AcA1BECaAEgTAGkCIG1CAHv/Q8R+DZj8hABgNQGQJgDShgQw4GN0d2bMfEgAsI4ASJsTwIw38l6MmfacAGAFAZA2KoAx7+UnN2nOowKAS00LYNLD6TkNm/C0AOAiAiBtYADD3tFPZd5sBwYA55sZwLwH1TMYOdWZASxDT2tDU+c5NgA4x+QApj60Hm/wJCcHACcND2Dwo+thZs9weADL9PO7t/HTmx/AEjjFOynMLREAfKcSQOFhdluRiVUCWDInehOdWYUCWErneo3UlFoBLLHTXaE2n1wAS++MzxecTDEA+CsaQPBRd1JzJi+Hw2Hra9jS79fXrS9he83Vfxd9A/xVPvt38QnUA1jaG1C+93cCWJbqHjTv+hMB/FHbhtr9fqf+I/jY+J/FVv8jb4DPZu/H7LtbQQBfmLolU+/rGj6BfjLmc8jqf0cAp+06A6v/M59Ap+13h/Z75Q/jDXCBHb0KrP6ZBLDG05Zg7y8lgPWeKgOrv44AbmDDEuz9lQRwSw8rwd7figDu5eYxWPp7EMDjXJSEdX8MAZDmP8JIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkPYfM4AqsmNOyNkAAAAASUVORK5CYII="
+   }
+  ],
+  "extensions": {
+   "response_format": "b64_json"
+  }
+ },
+ "request": {
+  "method": "POST",
+  "url": "https://api.x.ai/v1/images/edits",
+  "params": {},
+  "headers": {
+   "authorization": "Bearer $XAI_API_KEY",
+   "content-type": "application/json"
+  },
+  "body": {
+   "model": "grok-imagine-image",
+   "prompt": "Add one small solid blue square in the bottom-right corner. Keep everything else exactly the same.",
+   "response_format": "b64_json",
+   "image": {
+    "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAIAAADTED8xAAAFAElEQVR4nO3Zy3HbWBBAUWhqUlAEzj8kR6AgOAu5PCpREknwA6LvOWsvgH59AVB+ORwOC1T9s/UFwJYEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYC0f7e+gJDfr6/n/+Nfb2/3uxL+ejkcDltfw0wXrfs5JHEPArilmy/9d8RwKwK4gYft/TElXEkA622498eUsI4A1niq1f9IBpcSwAWedu+PKeFMAjjLjlb/Ixmc5D/CTtvp9i97vvKH8Qb4yZgF8ir4jgC+Nmb1P5LBMZ9AXxi5/cvc+7qGAD6bvSWz724Fn0D/Sy2Hz6F33gB/pLZ/6d3vdwSwLNVtaN71JwJI70H53t/VA7AB8Ql0fwTHD/5Y82dx9A1g+481ZxINAN4VA2g+6s4RnEwugOAZX6Q2n1YAtdNdJzWlUACpc71SZ1aVADoneiuRiVUCgC8lAog8zG6uMLf5ARRO8X7GT294AOPP7wFmz3B4APCzyQHMfnQ90uBJTg4AThobwOCH1iamznNmAFNPa1sjpzozADjTwABGPqiexLzZDgwAzicA0qYFMO8d/WyGTXhaAHCRUQEMezg9rUlzHhUAXEoApM0JYNJ7+fmNmfacAGAFAZA2JIAxb+QdmTHzIQHAOgIgTQCkTQhgxsfoHg2Y/IQAYDUBkCYA0gRAmgBI230AA/4QsWt7n//uA4BrCIA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASNt9AL/e3ra+hLS9z3/3AcA1BECaAEgTAGkCIG1CAHv/Q8R+DZj8hABgNQGQJgDShgQw4GN0d2bMfEgAsI4ASJsTwIw38l6MmfacAGAFAZA2KoAx7+UnN2nOowKAS00LYNLD6TkNm/C0AOAiAiBtYADD3tFPZd5sBwYA55sZwLwH1TMYOdWZASxDT2tDU+c5NgA4x+QApj60Hm/wJCcHACcND2Dwo+thZs9weADL9PO7t/HTmx/AEjjFOynMLREAfKcSQOFhdluRiVUCWDInehOdWYUCWErneo3UlFoBLLHTXaE2n1wAS++MzxecTDEA+CsaQPBRd1JzJi+Hw2Hra9jS79fXrS9he83Vfxd9A/xVPvt38QnUA1jaG1C+93cCWJbqHjTv+hMB/FHbhtr9fqf+I/jY+J/FVv8jb4DPZu/H7LtbQQBfmLolU+/rGj6BfjLmc8jqf0cAp+06A6v/M59Ap+13h/Z75Q/jDXCBHb0KrP6ZBLDG05Zg7y8lgPWeKgOrv44AbmDDEuz9lQRwSw8rwd7figDu5eYxWPp7EMDjXJSEdX8MAZDmP8JIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkPYfM4AqsmNOyNkAAAAASUVORK5CYII="
+   }
+  }
+ },
+ "pinned_body": "image-edit-data-uri.json",
+ "expect": {
+  "status": 200
+ }
+}
