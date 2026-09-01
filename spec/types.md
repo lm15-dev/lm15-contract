@@ -401,6 +401,17 @@ Exactly one per stream, final (MAP-3, mapping-rules.md).
 Deserialization dispatch: `"type": "builtin"` → BuiltinTool; anything else
 (including absent `type`) → FunctionTool (INV-034).
 
+**Chat dialect policy (2026-09-01).** The base Chat Completions wire
+carries function/custom tools only, and unproven compat servers may
+silently IGNORE unknown tool types (OpenRouter, verified live) — so the
+openai_chat dialect RAISES on BuiltinTool by default (it previously
+dropped them silently). The typed compat knob `builtin_tools` maps where
+execution is proven: `"groq"` → `web_search` → `{"type":
+"browser_search"}`, `code_execution` → `{"type": "code_interpreter"}`
+(server-executed, live-captured 2026-09-01; the `executed_tools` trace
+stays in provider_data per MAP-1). Named builtin forcing still raises on
+the dialect; plain `mode="required"` flows through.
+
 ## Configuration
 
 ### ToolChoice
@@ -438,7 +449,8 @@ kind-correct wire form, or raise when the wire cannot express it:
   `googleSearch`/`codeExecution` have no tool_choice form.
 - **openai_chat dialect**: function forcing and the nested
   `allowed_tools` form; builtin names RAISE — the dialect wire has no
-  hosted-tool tool_choice.
+  hosted-tool tool_choice (offering builtins is a separate per-server
+  policy — see BuiltinTool, chat dialect policy).
 
 ### Reasoning
 
