@@ -204,6 +204,25 @@ def pick_targets() -> dict[str, tuple[str, str]]:
                          "and a completed status golden)")
     targets["batch_entry_order_swap"] = ("batch", f"{swap_target}[result_fetches.parse]")
     targets["batch_status_vocab_drift"] = ("batch", f"{vocab_target}[status.parse]")
+
+    video_cases = check.load_surface_cases("video")
+    video_vocab = next(
+        (c["id"] for c in video_cases
+         if check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text()).get("done", {}).get("status") == "completed"),
+        None,
+    )
+    video_url = next(
+        (c["id"] for c in video_cases
+         if check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text()).get("part", {}).get("url")),
+        None,
+    )
+    if video_vocab is None or video_url is None:
+        raise SystemExit("selftest: video corpus too thin to self-test (need a completed "
+                         "status golden and a URL-delivered part golden)")
+    targets["video_status_vocab_drift"] = ("video", f"{video_vocab}[done.parse]")
+    targets["video_part_url_drift"] = ("video", f"{video_url}[part.parse]")
     return targets
 
 

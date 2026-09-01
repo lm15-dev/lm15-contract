@@ -46,7 +46,7 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation", "video")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -291,7 +291,7 @@ def load_shim(name: str) -> Shim:
 def load_wire_cases() -> list[JsonObject]:
     """Chat-surface wire cases; models/live surfaces have their own loaders."""
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
-    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation")]
+    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation", "video")]
 
 
 def load_model_cases() -> list[JsonObject]:
@@ -1237,6 +1237,83 @@ def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     return report
 
 
+def run_video_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Video jobs: video_op_build per step, video_op_parse vs goldens.
+
+    The batch direction's step machinery with the video op family: build
+    steps pin wire request LISTS (result_fetch is legitimately zero
+    requests on xAI), parse steps pin job snapshots, list pages, and the
+    terminal VideoPart (whose bytes digest like all long media)."""
+    report = DirectionReport("video")
+    for case in load_surface_cases("video"):
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        golden_file = golden_path(case)
+        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        for step in case["steps"]:
+            action = step["action"]
+            step_name = step.get("golden_key", action)
+            label = f"{case_id}[{step_name}]"
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            for key in ("video_request", "video_id", "limit", "model"):
+                if key in step:
+                    fields[key] = step[key]
+            if "status_body_from" in step:
+                fields["status_body"] = json.loads(_step_body(case, step["status_body_from"]).decode("utf-8"))
+            reply = shim.call("video_op_build", action=action, **fields)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(label, reply))
+            else:
+                expected_requests = step.get("requests", [])
+                actual_requests = reply["result"].get("requests", [])
+                if len(expected_requests) != len(actual_requests):
+                    report.results.append(CaseResult(
+                        label, "fail",
+                        reason=f"expected {len(expected_requests)} wire request(s), shim built {len(actual_requests)}",
+                    ))
+                else:
+                    if not expected_requests:
+                        report.results.append(CaseResult(label, "pass"))
+                    for i, (spec, actual) in enumerate(zip(expected_requests, actual_requests)):
+                        sub = label if len(expected_requests) == 1 else f"{label}#{i}"
+                        wrapped = {"request": spec}
+                        expected = expected_wire_request(wrapped)
+                        fixture_b64 = spec.get("body_b64")
+                        if isinstance(fixture_b64, str):
+                            expected["body_b64"] = fixture_b64
+                        diff = first_difference(_normalize_multipart(expected),
+                                                _normalize_multipart(actual_wire_request(actual)))
+                        report.results.append(CaseResult(sub, "pass") if diff is None
+                                              else CaseResult(sub, "fail", diff=diff))
+            if "parse" not in step:
+                continue
+            kind = step["parse"]
+            parse_label = f"{case_id}[{step_name}.parse]"
+            parse_fields: JsonObject = {"provider": case["provider"], "kind": kind, **case_base_url(case)}
+            if kind == "part":
+                parse_fields["status_body"] = json.loads(_step_body(case, step["status_body_from"]).decode("utf-8"))
+                if "fetched_from" in step:
+                    parse_fields["fetched_b64"] = base64.b64encode(_step_body(case, step["fetched_from"])).decode("ascii")
+                    parse_fields["headers"] = step.get("fetched_headers", {})
+            else:
+                parse_fields["status"] = int(step.get("expect", {}).get("status", 200))
+                parse_fields["body_b64"] = base64.b64encode(_step_body(case, step["pinned_body"])).decode("ascii")
+                if "video_id" in step:
+                    parse_fields["video_id"] = step["video_id"]
+            reply = shim.call("video_op_parse", **parse_fields)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(parse_label, reply))
+                continue
+            golden_key = step.get("golden_key", action)
+            if golden_key not in golden:
+                report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
+                continue
+            key = {"job": "job", "list": "jobs", "part": "part"}[kind]
+            _compare_golden(report, parse_label, golden[golden_key], reply["result"].get(key))
+    return report
+
+
 def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Image/speech generation: generation_build + generation_parse vs goldens.
 
@@ -1306,6 +1383,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_batch_direction(shim, case_filter)
     if direction == "generation":
         return run_generation_direction(shim, case_filter)
+    if direction == "video":
+        return run_video_direction(shim, case_filter)
     if direction == "live":
         return run_live_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")

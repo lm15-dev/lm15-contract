@@ -1,0 +1,127 @@
+{
+ "id": "openai.video",
+ "provider": "openai",
+ "feature": "video",
+ "surface": "video",
+ "description": "video job lifecycle (submit/status/result/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.openai.com /v1/videos 2026-09-01: sora-2 4s job submit/queued -> in_progress -> completed; content endpoint delivered video/mp4 bytes (1.4 MB) \u2014 lm15-dev/curl-fixtures/video-2026-09-01/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-video-generation.md"
+ },
+ "steps": [
+  {
+   "action": "submit",
+   "video_request": {
+    "model": "sora-2",
+    "prompt": "A red ball bounces once on a white floor",
+    "seconds": 4
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.openai.com/v1/videos",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": {
+      "model": "sora-2",
+      "prompt": "A red ball bounces once on a white floor",
+      "seconds": "4"
+     }
+    }
+   ],
+   "pinned_body": "openai-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "video_id": "video_6a96c91899508193993c9696c937873e01945c26a50f6a7a",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/videos/video_6a96c91899508193993c9696c937873e01945c26a50f6a7a",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "openai-status-running.json",
+   "parse": "job",
+   "golden_key": "running",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "video_id": "video_6a96c91899508193993c9696c937873e01945c26a50f6a7a",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/videos/video_6a96c91899508193993c9696c937873e01945c26a50f6a7a",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "openai-status-done.json",
+   "parse": "job",
+   "golden_key": "done",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetch",
+   "status_body_from": "openai-status-done.json",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/videos/video_6a96c91899508193993c9696c937873e01945c26a50f6a7a/content",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "parse": "part",
+   "golden_key": "part",
+   "fetched_from": "openai-content.mp4",
+   "fetched_headers": {
+    "content-type": "video/mp4"
+   }
+  },
+  {
+   "action": "list",
+   "limit": 20,
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.openai.com/v1/videos",
+     "params": {
+      "limit": "20"
+     },
+     "headers": {
+      "authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ]
+  }
+ ]
+}

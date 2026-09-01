@@ -1,0 +1,70 @@
+{
+ "id": "xai.video",
+ "provider": "xai",
+ "feature": "video",
+ "surface": "video",
+ "description": "video job lifecycle (submit/status/result/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "api.x.ai /v1/videos/generations 2026-09-01: request_id ticket -> pending+progress -> done with a PUBLIC MP4 URL (no-auth download verified); NO list endpoint (probed 404) \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-video-generation.md"
+ },
+ "steps": [
+  {
+   "action": "submit",
+   "video_request": {
+    "model": "grok-imagine-video",
+    "prompt": "A red ball bounces once on a white floor"
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://api.x.ai/v1/videos/generations",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $XAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": {
+      "model": "grok-imagine-video",
+      "prompt": "A red ball bounces once on a white floor"
+     }
+    }
+   ],
+   "pinned_body": "video-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "video_id": "0d309c8f-7733-990b-86d2-45afac7672a2",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://api.x.ai/v1/videos/0d309c8f-7733-990b-86d2-45afac7672a2",
+     "params": {},
+     "headers": {
+      "authorization": "Bearer $XAI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "video-status-final.json",
+   "parse": "job",
+   "golden_key": "done",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetch",
+   "status_body_from": "video-status-final.json",
+   "requests": [],
+   "parse": "part",
+   "golden_key": "part"
+  }
+ ]
+}

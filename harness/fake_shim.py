@@ -54,6 +54,8 @@ MUTATIONS = (
     "file_param_drop",          # file_op_build: one query parameter dropped
     "batch_entry_order_swap",   # batch_op_parse entries: first two entries swapped
     "batch_status_vocab_drift", # batch_op_parse job: canonical status replaced by the wire word
+    "video_status_vocab_drift", # video_op_parse job: canonical status replaced by the wire word
+    "video_part_url_drift",     # video_op_parse part: the delivery URL rewritten
 )
 
 MUTATION = "none"
@@ -447,6 +449,41 @@ def op_batch_op_parse(msg: JsonObject) -> JsonObject:
     return {"jobs": value}
 
 
+def find_video_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_surface_cases("video"):
+        if case["provider"] == msg["provider"]:
+            return case
+    raise LookupError("no video case for this provider")
+
+
+def op_video_op_build(msg: JsonObject) -> JsonObject:
+    case = find_video_case(msg)
+    step = next(s for s in case["steps"] if s["action"] == msg["action"])
+    return {"requests": [_echo_wire({"request": spec}) for spec in step.get("requests", [])]}
+
+
+def op_video_op_parse(msg: JsonObject) -> JsonObject:
+    case = find_video_case(msg)
+    golden = json.loads(check.golden_path(case).read_text())
+    kind = msg["kind"]
+    if kind == "part":
+        part = dict(golden["part"])
+        if MUTATION == "video_part_url_drift" and targeted(case) and part.get("url"):
+            part["url"] = "https://not-the-recorded-host/video.mp4"
+        return {"part": part}
+    body = base64.b64decode(msg["body_b64"])
+    step = next(s for s in case["steps"]
+                if s.get("pinned_body") and s.get("parse") == kind
+                and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
+    value = golden[step.get("golden_key", step["action"])]
+    if kind == "job":
+        job = dict(value)
+        if MUTATION == "video_status_vocab_drift" and targeted(case) and job.get("status") == "completed":
+            job["status"] = "done"  # the wire word, not the canonical vocabulary
+        return {"job": job}
+    return {"jobs": value}
+
+
 HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "capabilities": op_capabilities,
     "build_request": op_build_request,
@@ -462,6 +499,8 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "generation_parse": op_generation_parse,
     "file_op_build": op_file_op_build,
     "file_op_parse": op_file_op_parse,
+    "video_op_build": op_video_op_build,
+    "video_op_parse": op_video_op_parse,
     "batch_op_build": op_batch_op_build,
     "batch_op_parse": op_batch_op_parse,
 }

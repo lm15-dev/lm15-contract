@@ -638,6 +638,35 @@ whose wire has no slot for it (Gemini: always PCM).
 | `usage` | object (Usage) | no | `Usage()` | omit-empty | |
 | `provider_data` | object (opaque) | no | `null` | omit-empty | |
 
+### VideoGenerationRequest
+
+Video is job-shaped on every wire that sells it (Sora, Veo,
+grok-imagine): submission returns a ticket (`VideoJobInfo`), not bytes.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `model` | string | yes | — | always | non-empty |
+| `prompt` | string | yes | — | always | non-empty |
+| `seconds` | int | no | `null` | omit-empty | `> 0`; maps Sora `seconds` (string enum) and Veo `durationSeconds`; raises where no wire slot exists (xAI) |
+| `images` | array of ImagePart | no | `()` | omit-empty | input frames (image-to-video); raises until the provider mapping is live-receipted |
+| `extensions` | object (opaque) | no | `null` | omit-empty | |
+
+### VideoJobInfo
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `id` | string | yes | — | always | non-empty; the ticket (on xAI the only copy — no list endpoint) |
+| `status` | string (VideoStatus) | yes | — | always | closed vocabulary: `queued`/`running`/`completed`/`failed`/`cancelled`; provider wire words stay in provider_data |
+| `progress` | int | no | `null` | omit-empty | 0–100 when the provider reports one |
+| `created_at` | string | no | `null` | omit-empty | ISO-8601 UTC normalized |
+| `model` | string | no | `null` | omit-empty | |
+| `provider_data` | object (opaque) | no | `null` | omit-empty | verbatim job state |
+
+The result of a completed job is a `VideoPart` in the provider's own
+delivery mode: bytes for Sora (content endpoint) and Veo (the file URI
+is key-bound — 403 without the header, verified live), a public URL for
+xAI.
+
 ## Audio / Live (realtime)
 
 ### AudioFormat

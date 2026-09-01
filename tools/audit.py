@@ -71,6 +71,8 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "image_generation_response": (("ImageGenerationResponse",), ()),
     "speech_generation_request": (("SpeechGenerationRequest",), ()),
     "speech_generation_response": (("SpeechGenerationResponse",), ()),
+    "video_generation_request": (("VideoGenerationRequest",), ()),
+    "video_job": (("VideoJobInfo",), ("VideoStatus", "VIDEO_STATUSES", "VIDEO_TERMINAL_STATUSES")),
     "batch_job": (("BatchJobInfo",), ("BatchStatus", "BATCH_STATUSES", "BATCH_TERMINAL_STATUSES")),
     "batch_entry": (("BatchEntry",), ("BatchOutcome", "BATCH_OUTCOMES")),
     "file_upload_request": (("FileUploadRequest",), ()),
@@ -100,7 +102,7 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases
                if "canonical_request" not in data
-               and data.get("surface") not in ("models", "live", "files", "batch", "generation")}
+               and data.get("surface") not in ("models", "live", "files", "batch", "generation", "video")}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):
@@ -151,7 +153,7 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                 problems.append(f"ORPHANS {case_id}: generation-surface case has no golden at "
                                 f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
                                 "the parse phase would silently skip")
-        if data.get("surface") in ("files", "batch"):
+        if data.get("surface") in ("files", "batch", "video"):
             steps = data.get("steps")
             if not isinstance(steps, list) or not steps:
                 problems.append(f"ORPHANS {case_id}: {data.get('surface')}-surface case has no steps")
@@ -160,7 +162,9 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                     has_wire = "request" in step or "requests" in step
                     if not has_wire:
                         problems.append(f"ORPHANS {case_id}: step {i} pins no wire request block")
-                    for name in step.get("fetched_from", []) or ([step["pinned_body"]] if "pinned_body" in step else []):
+                    fetched = step.get("fetched_from", [])
+                    fetched = [fetched] if isinstance(fetched, str) else list(fetched)
+                    for name in fetched or ([step["pinned_body"]] if "pinned_body" in step else []):
                         if not (bodies / str(case_id) / str(name)).is_file():
                             problems.append(f"ORPHANS {case_id}: step {i} references missing body {name!r}")
             golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"

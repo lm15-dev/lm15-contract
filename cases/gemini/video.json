@@ -1,0 +1,127 @@
+{
+ "id": "gemini.video",
+ "provider": "gemini",
+ "feature": "video",
+ "surface": "video",
+ "description": "video job lifecycle (submit/status/result/list)",
+ "provenance": {
+  "source": "live-capture",
+  "date": "2026-09-01",
+  "evidence": "generativelanguage.googleapis.com predictLongRunning 2026-09-01: veo-3.1-lite operation -> done with a KEY-BOUND file URI (403 without header, verified) \u2014 lm15-dev/curl-fixtures/video-2026-09-01/; request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-video-generation.md"
+ },
+ "steps": [
+  {
+   "action": "submit",
+   "video_request": {
+    "model": "veo-3.1-lite-generate-preview",
+    "prompt": "A red ball bounces once on a white floor"
+   },
+   "requests": [
+    {
+     "method": "POST",
+     "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-generate-preview:predictLongRunning",
+     "params": {},
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY",
+      "content-type": "application/json"
+     },
+     "body": {
+      "instances": [
+       {
+        "prompt": "A red ball bounces once on a white floor"
+       }
+      ]
+     }
+    }
+   ],
+   "pinned_body": "gemini-submit.json",
+   "parse": "job",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "video_id": "models/veo-3.1-lite-generate-preview/operations/0008ar3b1ksa",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-generate-preview/operations/0008ar3b1ksa",
+     "params": {},
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "gemini-status-running.json",
+   "parse": "job",
+   "golden_key": "running",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "status",
+   "video_id": "models/veo-3.1-lite-generate-preview/operations/0008ar3b1ksa",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-generate-preview/operations/0008ar3b1ksa",
+     "params": {},
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ],
+   "pinned_body": "gemini-status-done.json",
+   "parse": "job",
+   "golden_key": "done",
+   "expect": {
+    "status": 200
+   }
+  },
+  {
+   "action": "result_fetch",
+   "status_body_from": "gemini-status-done.json",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/files/3ci3eli6fui0:download",
+     "params": {
+      "alt": "media"
+     },
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ],
+   "parse": "part",
+   "golden_key": "part",
+   "fetched_from": "gemini-video.mp4",
+   "fetched_headers": {
+    "content-type": "video/mp4"
+   }
+  },
+  {
+   "action": "list",
+   "limit": 20,
+   "model": "veo-3.1-lite-generate-preview",
+   "requests": [
+    {
+     "method": "GET",
+     "url": "https://generativelanguage.googleapis.com/v1beta/models/veo-3.1-lite-generate-preview/operations",
+     "params": {
+      "pageSize": "20"
+     },
+     "headers": {
+      "x-goog-api-key": "$GEMINI_API_KEY"
+     },
+     "body": null
+    }
+   ]
+  }
+ ]
+}

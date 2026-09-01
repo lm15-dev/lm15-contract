@@ -217,6 +217,28 @@ Out: `{"job": <BatchJobInfo JSON>}`, `{"jobs": [...]}`, or `{"entries": [<BatchE
   (Anthropic returned results out of order in live capture 2026-08-31).
   Statuses are the canonical vocabulary, never provider wire words.
 
+### video_op_build
+In: `{"provider": str, "action": "submit"|"status"|"result_fetch"|"list", "api_key": str, "video_request"?: <VideoGenerationRequest JSON>, "video_id"?: str, "status_body"?: <JSON>, "limit"?: int, "model"?: str|null, "base_url"?: str}`
+Out: `{"requests": [<wire request>...]}`.
+- Video is job-shaped on every wire (Sora, Veo, grok-imagine).  ALWAYS
+  a list: `result_fetch` is zero requests on xAI (the terminal body
+  carries a public URL) and one on OpenAI (content endpoint) and
+  Gemini (the file URI is KEY-BOUND — 403 without the header, verified
+  live — so the fetch must carry auth).  `list` takes `model` on
+  Gemini (operations list per model) and must raise on xAI (no list
+  endpoint exists; the stored ticket is the only copy).
+
+### video_op_parse
+In: `{"provider": str, "kind": "job"|"list"|"part", "status"?: int, "body_b64"?: str, "video_id"?: str, "status_body"?: <JSON>, "fetched_b64"?: str, "headers"?: {str: str}, "base_url"?: str}`
+Out: `{"job": <VideoJobInfo JSON>}`, `{"jobs": [...]}`, or `{"part": <VideoPart JSON>}`.
+- `video_id` accompanies job parses on wires whose status bodies do
+  not echo the id (xAI).  Statuses are the canonical vocabulary
+  (`queued`/`running`/`completed`/`failed`/`cancelled`); wire words
+  stay in provider_data.  `part` returns the finished video in the
+  provider's own delivery mode: URL (xAI) or bytes from the fetched
+  content (media type from its content-type header) — no silent
+  re-hosting.
+
 ### generation_build
 In: `{"provider": str, "kind": "image"|"speech", "api_key": str, "generation_request": <ImageGenerationRequest|SpeechGenerationRequest JSON>, "base_url"?: str}`
 Out: the wire request, `build_request`-shaped.
