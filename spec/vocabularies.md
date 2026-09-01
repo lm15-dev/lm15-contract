@@ -232,6 +232,47 @@ ErrorDetail; `cancelled`/`expired` neither.
 | `cancelled` |
 | `expired` |
 
+## VideoStatus
+
+Runtime mirror: `VIDEO_STATUSES`. The video job lifecycle (ticket
+pattern, changes/2026-09-01-video-generation.md). Reuses batch's words
+where meanings match; no `cancelling`/`expired` — no probed video wire
+exposes either state. Terminal subset mirror: `VIDEO_TERMINAL_STATUSES`
+(`completed`/`failed`/`cancelled`).
+Provider folds: openai `in_progress` → `running` (other tokens map
+verbatim); xai `pending` → `running`, `done` → `completed`; gemini
+operations carry only `done` + `error` — done with error → `failed`,
+done → `completed`, not done → `running` (the wire exposes no
+queued/running distinction; the submit acknowledgement alone is
+`queued` on xai).
+Stated exception to forward-compatibility rule 2: the video adapters
+RAISE `ProviderError` on an unknown wire status instead of folding to
+a fallback. Ratified with the surface (the harness status-drift
+selftest mutation guards it, changes/2026-09-01-video-generation.md):
+a job status steers a polling loop, and a wrong fallback such as
+`running` would poll a dead job forever — failing loudly is the honest
+move here.
+
+| Value |
+|---|
+| `queued` |
+| `running` |
+| `completed` |
+| `failed` |
+| `cancelled` |
+
+## VIDEO_TERMINAL_STATUSES
+
+Derived subset of VideoStatus: the states in which a job will make no
+further progress (`VideoJobInfo.done`). Not a separate vocabulary — a
+named convenience mirror, parallel to BATCH_TERMINAL_STATUSES.
+
+| Value |
+|---|
+| `completed` |
+| `failed` |
+| `cancelled` |
+
 ## FileReadiness
 
 Runtime mirror: `FILE_READINESS_VALUES`. Whether a stored file can be
