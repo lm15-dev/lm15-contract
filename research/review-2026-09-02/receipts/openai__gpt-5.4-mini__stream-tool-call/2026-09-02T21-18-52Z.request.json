@@ -1,0 +1,43 @@
+{
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.4-mini",
+  "input": [
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "input_text",
+      "text": "What is the weather in Gatineau? Use the get_weather tool."
+     }
+    ]
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "name": "get_weather",
+    "description": "Current weather for a city.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "city": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "city"
+     ]
+    }
+   }
+  ],
+  "stream": true,
+  "reasoning": {
+   "effort": "none"
+  }
+ }
+}

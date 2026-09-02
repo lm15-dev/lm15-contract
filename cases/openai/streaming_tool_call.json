@@ -1,0 +1,102 @@
+{
+  "id": "openai.streaming_tool_call",
+  "provider": "openai",
+  "feature": "streaming_tool_call",
+  "description": "Streaming tool call on the openai dialect: the call's name arrives on its first fragment (MAP-9 premise), pinned as SSE.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "gpt-5.4-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Gatineau? Use the get_weather tool."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Current weather for a city.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "tool_call": {
+        "min": 1
+      }
+    },
+    "finish_reason": "tool_call"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-02",
+    "evidence": "api.openai.com 2026-09-02T21-21-41Z, gpt-5.4-mini, HTTP 200, streamed; adapter-built wire; the first frame that carries the call (line 1) also carries its name (line 1) — review probe 7, changes/2026-09-02-review-live-probes.md"
+  },
+  "canonical_request": {
+    "model": "gpt-5.4-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Gatineau? Use the get_weather tool."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Current weather for a city.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-02",
+    "evidence": "authored for the capture; wire side generated from it via the reference adapter and sent verbatim (receipt above)"
+  },
+  "pinned_body": "2026-09-02T21-21-41Z.txt",
+  "stream": true
+}

@@ -1,0 +1,40 @@
+{
+ "url": "https://api.openai.com/v1/chat/completions",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.4-mini",
+  "messages": [
+   {
+    "role": "user",
+    "content": "What is the weather in Gatineau? Use the get_weather tool."
+   }
+  ],
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "get_weather",
+     "description": "Current weather for a city.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "city": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "city"
+      ]
+     }
+    }
+   }
+  ],
+  "stream": true,
+  "stream_options": {
+   "include_usage": true
+  }
+ }
+}

@@ -1,0 +1,105 @@
+{
+  "canonical_response": {
+    "id": "msg_011CefKAcwrxpVDgJAAkGQiB",
+    "model": "claude-haiku-4-5-20251001",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "toolu_01X9APqeWe35EEFY9GH4zsfv",
+          "name": "get_weather",
+          "input": {
+            "city": "Gatineau"
+          }
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "anthropic",
+          "kind": "message_id",
+          "data": {
+            "id": "msg_011CefKAcwrxpVDgJAAkGQiB"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 573,
+      "output_tokens": 57,
+      "total_tokens": 630,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "msg_011CefKAcwrxpVDgJAAkGQiB",
+      "model": "claude-haiku-4-5-20251001"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "provider": "anthropic",
+        "kind": "message_id",
+        "data": {
+          "id": "msg_011CefKAcwrxpVDgJAAkGQiB"
+        }
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "toolu_01X9APqeWe35EEFY9GH4zsfv",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": ""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\": \""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "Gatineau\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 573,
+        "output_tokens": 57,
+        "total_tokens": 630,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-02T21-21-45Z.txt"
+  }
+}

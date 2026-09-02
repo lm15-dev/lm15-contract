@@ -1,0 +1,36 @@
+{
+ "url": "https://api.anthropic.com/v1/messages",
+ "headers": {
+  "x-api-key": "$REDACTED",
+  "anthropic-version": "2023-06-01",
+  "content-type": "application/json"
+ },
+ "body": {
+  "model": "claude-haiku-4-5",
+  "max_tokens": 300,
+  "messages": [
+   {
+    "role": "user",
+    "content": "What is the weather in Gatineau? Use the get_weather tool."
+   }
+  ],
+  "tools": [
+   {
+    "name": "get_weather",
+    "description": "Current weather for a city.",
+    "input_schema": {
+     "type": "object",
+     "properties": {
+      "city": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "city"
+     ]
+    }
+   }
+  ],
+  "stream": true
+ }
+}

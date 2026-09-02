@@ -1,0 +1,42 @@
+{
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "content-type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Is 7 a Mersenne prime? Think it through, then answer in one sentence."
+     }
+    ]
+   },
+   {
+    "role": "model",
+    "parts": [
+     {
+      "text": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime."
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "And is 15 one? One sentence."
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 400,
+   "thinkingConfig": {
+    "includeThoughts": true,
+    "thinkingLevel": "low"
+   }
+  }
+ }
+}

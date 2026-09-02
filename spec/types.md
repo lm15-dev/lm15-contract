@@ -497,7 +497,7 @@ Model classes are detected by name (a stated, rotting table; the server
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
 | `mode` | string (CacheMode) | no | `"auto"` | always | closed vocabulary |
-| `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary |
+| `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary. `long`: Anthropic `ttl: 1h`; OpenAI every class `prompt_cache_retention: 24h` (5.6+ amended 2026-09-02, review probe 2); Gemini RAISES |
 | `key` | string | no | `null` | omit-empty | |
 | `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced; index of the last message of the reusable prefix, clamped to the last message; mutually exclusive with `prefix` |
 | `prefix` | string (CachePrefix) | no | `null` | omit-empty | closed vocabulary: `stable` = the end of system + tools, `history` = the end of the last message; mutually exclusive with `prefix_until_index` (MAP-6 A2) |
