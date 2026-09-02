@@ -1,0 +1,44 @@
+{
+ "method": "POST",
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "What is 6 times 7? Reply with just the number."
+     }
+    ]
+   }
+  ],
+  "cachedContent": "cachedContents/em0gazsn95jfgfvln1oqobi03wjnc1kb55au6xt3",
+  "tools": [
+   {
+    "functionDeclarations": [
+     {
+      "name": "lookup",
+      "parameters": {
+       "type": "object",
+       "properties": {
+        "n": {
+         "type": "integer"
+        }
+       }
+      }
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "thinkingConfig": {
+    "thinkingBudget": 0
+   },
+   "maxOutputTokens": 16
+  }
+ }
+}
