@@ -1,6 +1,6 @@
 # 2026-09-01 — Caching: one model for every provider (MAP-6, proposed)
 
-Ratification: PENDING — awaiting Maxime Rivest. This entry is the output of the first design pass (`playbooks/design-pass.md`); the full record is under `research/caching/`. Nothing in the reference implementation changes until ratification. Do not push before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("ratified"), after reading this entry with amendments A1–A3 and both open questions resolved (mode=off option 2; the resource tier provider-neutral). Transcribed. MAP-6 is normative from this date; spec/types.md and spec/vocabularies.md rows cite it.
 
 ## What the pass established (receipts in research/caching/)
 
