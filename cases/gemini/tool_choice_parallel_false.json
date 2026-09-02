@@ -1,0 +1,77 @@
+{
+  "id": "gemini.tool_choice_parallel_false",
+  "provider": "gemini",
+  "feature": "tool_choice_parallel_false",
+  "description": "MAP-8 rule 2: parallel=false on Gemini raises. Receipt: GenerateContent has no parallel knob and returned two calls regardless, on 2.5 and 3.7. There is no wire request: the canonical outcome is UnsupportedFeatureError at build time.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-02",
+    "evidence": "MAP-8 design pass (changes/2026-09-02-tool-choice-structured-output.md, ratified 2026-09-02). The refusal is pinned because the live cell was silent or a server 400: research/tool-choice/receipts/gemini__gemini-2.5-flash__tc:parallel-false/2026-09-02T13-10-12Z.txt (HTTP 200, calls=[lookup, lookup]); also gemini__gemini-3.7-flash__tc:parallel-false/2026-09-02T13-10-30Z.txt; matrix research/tool-choice/20-results.json."
+  },
+  "canonical_request": {
+    "model": "gemini-2.5-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Gatineau?"
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "lookup",
+        "description": "Look up a fact.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "q"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "name": "weather",
+        "description": "Current weather for a city.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "tool_choice": {
+        "mode": "auto",
+        "parallel": false
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-02",
+    "evidence": "authored with the case from the MAP-8 experiment cell it pins; the reference raises at build_request (lm15-python tests/test_tool_choice_structured_output.py); see changes/2026-09-02-map8-raises-pinned.md"
+  }
+}

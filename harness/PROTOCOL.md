@@ -38,13 +38,21 @@ pin a refusal and what survived it:
 - `error.events`: for `replay_stream`, the full canonical event trace that
   parsed before assembly refused.
 
-**Pinned raises.** A case whose canonical outcome is a typed refusal
-declares `"expect_lm15": {"raises": {"type": <class>, "code": <ErrorCode>}}`.
-Its golden is `{"error": {"type", "code"}, "partial_response"?, "events"?}`
-— the message is never pinned (ports word their own). The harness fails the
-case when the shim answers `ok: true` ("invented a fact"), when `type` or
-`code` differ, or when `partial_response`/`events` differ from the golden.
-First such case: `openai_chat.tool_call_unnamed` (2026-09-02).
+**Pinned raises.** A case whose canonical outcome at one op is a typed
+refusal declares
+`"expect_lm15": {"raises": {"op": <vet op>, "type": <class>, "code": <ErrorCode>}}`,
+where `op` is `build_request`, `parse_response`, or `replay_stream`. The
+case is the declaration; the message is never pinned (ports word their
+own). The harness fails the case when the shim answers `ok: true` at that
+op ("invented a fact") or when `type` or `code` differ.
+
+- `op: build_request` — no wire `request`, no body, no golden: the case is
+  the whole pin. The response/stream directions do not run it. First
+  cases: the four MAP-8 refusals (2026-09-02).
+- `op: replay_stream` / `parse_response` — the case carries its wire
+  request and pinned body as usual; the golden holds only what the refusal
+  salvaged: `{"partial_response"?, "events"?}`, compared exactly. First
+  case: `openai_chat.tool_call_unnamed` (MAP-9, 2026-09-02).
 
 ## Ops
 

@@ -60,6 +60,8 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
     failures: list[dict] = []
     for case in check.load_wire_cases():
         case_id = case["id"]
+        if check.expected_raise(case, "build_request") is not None:
+            continue  # refuses before any wire; the case is the whole pin
         if "pinned_body" not in case:
             counts["no-body"] += 1
             print(f"  no-body  {case_id}")
@@ -90,7 +92,7 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
             )
 
         error = None
-        raises = check.expected_raise(case)
+        raises = check.expected_raise(case, op)
         if raises is not None:
             got = reply.get("error") or {}
             if reply.get("ok") or got.get("type") != raises.get("type") or got.get("code") != raises.get("code"):
@@ -117,13 +119,17 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
         golden: dict
         if raises is not None:
             got = reply["error"]
-            # Pin the class and ErrorCode, never the message (ports word
-            # their own), plus what the refusal salvaged.
-            golden = {"error": {"type": got["type"], "code": got["code"]}}
+            # The case already declares the class and ErrorCode; the golden
+            # holds only what the refusal salvaged.
+            golden = {}
             if "partial_response" in got:
                 golden["partial_response"] = got["partial_response"]
             if streaming and "events" in got:
                 golden["events"] = got["events"]
+            if not golden:
+                counts["kept"] += 1
+                print(f"  no-golden {case_id}: refusal salvages nothing; the case is the whole pin")
+                continue
         else:
             result = reply["result"]
             golden = {"canonical_response": result["canonical_response"]}

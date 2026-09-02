@@ -59,6 +59,7 @@ MUTATIONS = (
     "cache_expiry_drift",       # cache_op_parse info: expires_at rewritten (the billed lifetime)
     "cache_model_drop",         # cache_op_build create: the model field dropped from the body
     "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
+    "build_maps_a_refused_cell", # build_request: a pinned refusal answered with a wire request (a silent cell)
 )
 
 MUTATION = "none"
@@ -189,8 +190,23 @@ def op_capabilities(msg: JsonObject) -> JsonObject:
     }
 
 
+class PinnedRaise(Exception):
+    """A golden that pins a refusal: the reply must be ok=false with these fields."""
+
+    def __init__(self, error: JsonObject) -> None:
+        super().__init__(error.get("type", "?"))
+        self.error = error
+
+
 def op_build_request(msg: JsonObject) -> JsonObject:
     case = find_wire_case(msg)
+    raises = check.expected_raise(case, "build_request")
+    if raises is not None:
+        if MUTATION == "build_maps_a_refused_cell" and targeted(case):
+            # The silent cell: a wire request produced where the receipts
+            # say the provider ignores or drops the intent.
+            return {"method": "POST", "url": "https://invented/", "params": {}, "headers": {}, "body": {}}
+        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal"})
     result = check.expected_wire_request(case)
     if MUTATION == "bool_as_int" and targeted(case):
         mutate_first_bool(result["body"])
@@ -206,19 +222,12 @@ def op_parse_response(msg: JsonObject) -> JsonObject:
     return {"canonical_response": resp}
 
 
-class PinnedRaise(Exception):
-    """A golden that pins a refusal: the reply must be ok=false with these fields."""
-
-    def __init__(self, error: JsonObject) -> None:
-        super().__init__(error.get("type", "?"))
-        self.error = error
-
-
 def op_replay_stream(msg: JsonObject) -> JsonObject:
     case = find_parse_case(msg)
     golden = json.loads(check.golden_path(case).read_text())
     events = golden.get("events", [])
-    if "error" in golden:
+    raises = check.expected_raise(case, "replay_stream")
+    if raises is not None:
         if MUTATION == "assembly_guesses_name" and targeted(case):
             # The pre-MAP-9 behaviour: invent a tool name and hand back a
             # Response as if nothing were wrong.
@@ -227,8 +236,7 @@ def op_replay_stream(msg: JsonObject) -> JsonObject:
                 {"type": "tool_call", "id": "tool_call_0", "name": "get_weather", "input": {"city": "Gatineau"}}
             )
             return {"events": events, "canonical_response": resp}
-        error = dict(golden["error"])
-        error["message"] = "pinned refusal"
+        error = {"type": raises["type"], "code": raises["code"], "message": "pinned refusal"}
         if "partial_response" in golden:
             error["partial_response"] = golden["partial_response"]
         error["events"] = events

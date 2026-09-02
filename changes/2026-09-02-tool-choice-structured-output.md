@@ -89,3 +89,5 @@ spec/types.md.
 
 Open questions 1 (`name` dropped as a label) and 2 (Gemini `parallel`
 raise) stand as proposed.
+
+Pinned in the corpus 2026-09-02: the four refusals are build-request raise cases (`2026-09-02-map8-raises-pinned.md`).

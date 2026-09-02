@@ -402,15 +402,28 @@ class DirectionReport:
         return counts
 
 
-def expected_raise(case: JsonObject) -> JsonObject | None:
-    """``expect_lm15.raises`` — {"type": <class name>, "code": <ErrorCode>} when
-    the canonical outcome of this case is a typed refusal, not a Response."""
+RAISE_OPS = ("build_request", "parse_response", "replay_stream")
+
+
+def expected_raise(case: JsonObject, op: str | None = None) -> JsonObject | None:
+    """``expect_lm15.raises`` — {"op": <vet op>, "type": <class>, "code": <ErrorCode>}
+    when the canonical outcome of this case at that op is a typed refusal,
+    not a Response or a wire request. With ``op`` given, returns the
+    declaration only when it names that op."""
     raises = (case.get("expect_lm15") or {}).get("raises")
-    return raises if isinstance(raises, dict) else None
+    if not isinstance(raises, dict):
+        return None
+    if raises.get("op") not in RAISE_OPS:
+        raise ValueError(f"{case.get('id')}: expect_lm15.raises.op must be one of {RAISE_OPS}")
+    if op is not None and raises["op"] != op:
+        return None
+    return raises
 
 
-def compare_raise(case_id: str, reply: JsonObject, golden: JsonObject, volatile: JsonObject) -> CaseResult:
-    want = golden.get("error") or {}
+def compare_raise(case_id: str, reply: JsonObject, want: JsonObject,
+                  golden: JsonObject | None, volatile: JsonObject) -> CaseResult:
+    """The case declares the refusal (`want` = expect_lm15.raises); the golden,
+    when there is one, holds only what the refusal salvaged."""
     if reply.get("ok"):
         return CaseResult(
             case_id, "fail",
@@ -424,7 +437,7 @@ def compare_raise(case_id: str, reply: JsonObject, golden: JsonObject, volatile:
                 diff={"path": f"$.error.{key}", "expected": want.get(key), "actual": got.get(key, "<absent>")},
             )
     for key in ("partial_response", "events"):
-        if key not in golden:
+        if golden is None or key not in golden:
             continue
         diff = first_difference(
             golden[key], got.get(key, _ABSENT), (key,), volatile=volatile, usage_int_float=True,
@@ -576,6 +589,13 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
             api_key=API_KEY,
             **case_base_url(case),
         )
+        raises = expected_raise(case, "build_request")
+        if raises is not None:
+            # A pinned refusal at build time (MAP-8 silent cells, Anthropic
+            # json_object): there is no wire request to compare, and a shim
+            # that produces one invented a mapping the receipts refute.
+            report.results.append(compare_raise(case_id, reply, raises, None, case.get("volatile") or {}))
+            continue
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
             continue
@@ -761,6 +781,8 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
         case_id = case["id"]
         if case_filter and case_id != case_filter:
             continue
+        if expected_raise(case, "build_request") is not None:
+            continue  # refuses before any wire; nothing to parse or replay
         if "pinned_body" not in case:
             report.results.append(CaseResult(case_id, "skip", reason="no pinned_body"))
             continue
@@ -793,14 +815,14 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
                 **case_base_url(case),
             )
         volatile = case.get("volatile") or {}
-        raises = expected_raise(case)
+        raises = expected_raise(case, "replay_stream" if want_stream else "parse_response")
         if raises is not None:
             # The golden pins a refusal (e.g. MAP-9 StreamAssemblyError):
             # the shim must answer ok=false with the pinned error type and
             # ErrorCode, and whatever the golden says survived the refusal
             # (partial_response, events) must match exactly. A shim that
             # answers ok=true here invented a fact.
-            report.results.append(compare_raise(case_id, reply, golden, volatile))
+            report.results.append(compare_raise(case_id, reply, raises, golden, volatile))
             continue
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))

@@ -103,11 +103,15 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             "dropped_event (a stream golden with events)")),
         "assembly_guesses_name": ("stream", first(
             streams,
-            lambda c, g: "error" in g,
-            "assembly_guesses_name (a stream golden that pins a refusal)")),
+            lambda c, g: check.expected_raise(c, "replay_stream") is not None,
+            "assembly_guesses_name (a stream case that pins a refusal)")),
+        "build_maps_a_refused_cell": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: check.expected_raise(c, "build_request") is not None,
+            "build_maps_a_refused_cell (a request case that pins a refusal)")),
         "bool_as_int": ("request", first(
             [(c, g) for c, g in cases],
-            lambda c, g: _has_bool(check.expected_wire_request(c)["body"]),
+            lambda c, g: "request" in c and _has_bool(check.expected_wire_request(c)["body"]),
             "bool_as_int (a wire fixture with a boolean body leaf)")),
     }
 

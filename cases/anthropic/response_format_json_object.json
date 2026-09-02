@@ -1,0 +1,76 @@
+{
+  "id": "anthropic.response_format_json_object",
+  "provider": "anthropic",
+  "feature": "response_format_json_object",
+  "description": "MAP-8 rule 6: json_object on Anthropic raises — the Messages API has no any-JSON mode. Receipt: the closest wire form (output_config.format with an open object schema) is a 400 on both model classes. There is no wire request: the canonical outcome is UnsupportedFeatureError at build time.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-02",
+    "evidence": "MAP-8 design pass (changes/2026-09-02-tool-choice-structured-output.md, ratified 2026-09-02). The refusal is pinned because the live cell was silent or a server 400: research/tool-choice/receipts/anthropic__claude-sonnet-5__so:json_object/2026-09-02T13-09-01Z.txt (HTTP 400, additionalProperties must be false); also anthropic__claude-sonnet-4-5__so:json_object/2026-09-02T13-09-43Z.txt; matrix research/tool-choice/20-results.json."
+  },
+  "canonical_request": {
+    "model": "claude-sonnet-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Gatineau?"
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "lookup",
+        "description": "Look up a fact.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "q"
+          ]
+        }
+      },
+      {
+        "type": "function",
+        "name": "weather",
+        "description": "Current weather for a city.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_object"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-02",
+    "evidence": "authored with the case from the MAP-8 experiment cell it pins; the reference raises at build_request (lm15-python tests/test_tool_choice_structured_output.py); see changes/2026-09-02-map8-raises-pinned.md"
+  }
+}
