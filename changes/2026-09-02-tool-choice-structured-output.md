@@ -1,9 +1,6 @@
-# 2026-09-02 — Tool choice and structured output: three silent cells, one canonical shape (MAP-8, proposed)
+# 2026-09-02 — Tool choice and structured output: three silent cells, one canonical shape (MAP-8, ratified)
 
-Ratification: PENDING — awaiting Maxime Rivest. Third and fourth design
-passes (`playbooks/design-pass.md`), run together; records under
-`research/tool-choice/` and `research/structured-output/`. Do not push
-before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("i ratify"), after reading this entry and the walkthrough at `research/structured-output/50-cookbook-draft.md`. Open question 1 resolved as proposed (`name` dropped as a label where there is no slot); open question 2 resolved as proposed (Gemini `parallel=false` raises). Transcribed. MAP-8 and INV-050 are normative from this date. Third and fourth design passes (`playbooks/design-pass.md`); records under `research/tool-choice/` and `research/structured-output/`.
 
 ## What the passes established (141 live cells, 19 sources)
 

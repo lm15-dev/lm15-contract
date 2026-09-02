@@ -1,9 +1,6 @@
-# 2026-09-02 — Stream assembly never invents a tool-call name (MAP-9, proposed)
+# 2026-09-02 — Stream assembly never invents a tool-call name (MAP-9, ratified)
 
-Ratification: PENDING — awaiting Maxime Rivest. The design was proposed in
-session and accepted in principle ("I agree, this is really good, do that");
-the stamp is the separate act, as for MAP-6 to MAP-8. Do not push before
-ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("i ratify"), after the design was proposed with worked examples and accepted ("I agree, this is really good, do that"), and after reading this entry with its four stated trade-offs. Transcribed. MAP-9, ErrorCode `stream_assembly`, and the pinned-raise golden shape are normative from this date.
 
 ## What this changes
 
