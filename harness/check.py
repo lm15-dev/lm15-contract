@@ -402,6 +402,38 @@ class DirectionReport:
         return counts
 
 
+def expected_raise(case: JsonObject) -> JsonObject | None:
+    """``expect_lm15.raises`` — {"type": <class name>, "code": <ErrorCode>} when
+    the canonical outcome of this case is a typed refusal, not a Response."""
+    raises = (case.get("expect_lm15") or {}).get("raises")
+    return raises if isinstance(raises, dict) else None
+
+
+def compare_raise(case_id: str, reply: JsonObject, golden: JsonObject, volatile: JsonObject) -> CaseResult:
+    want = golden.get("error") or {}
+    if reply.get("ok"):
+        return CaseResult(
+            case_id, "fail",
+            reason=f"expected raise {want.get('type', '?')} ({want.get('code', '?')}); shim returned a response",
+        )
+    got = reply.get("error") or {}
+    for key in ("type", "code"):
+        if got.get(key) != want.get(key):
+            return CaseResult(
+                case_id, "fail",
+                diff={"path": f"$.error.{key}", "expected": want.get(key), "actual": got.get(key, "<absent>")},
+            )
+    for key in ("partial_response", "events"):
+        if key not in golden:
+            continue
+        diff = first_difference(
+            golden[key], got.get(key, _ABSENT), (key,), volatile=volatile, usage_int_float=True,
+        )
+        if diff is not None:
+            return CaseResult(case_id, "fail", diff=diff)
+    return CaseResult(case_id, "pass")
+
+
 def shim_reply_failure(case_id: str, reply: JsonObject) -> CaseResult:
     error = reply.get("error") or {}
     return CaseResult(
@@ -760,6 +792,16 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
                 body_b64=body_b64,
                 **case_base_url(case),
             )
+        volatile = case.get("volatile") or {}
+        raises = expected_raise(case)
+        if raises is not None:
+            # The golden pins a refusal (e.g. MAP-9 StreamAssemblyError):
+            # the shim must answer ok=false with the pinned error type and
+            # ErrorCode, and whatever the golden says survived the refusal
+            # (partial_response, events) must match exactly. A shim that
+            # answers ok=true here invented a fact.
+            report.results.append(compare_raise(case_id, reply, golden, volatile))
+            continue
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
             continue
@@ -770,7 +812,6 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
                 CaseResult(case_id, "fail", reason=f"unmapped provider fields: {unmapped}")
             )
             continue
-        volatile = case.get("volatile") or {}
         diff = first_difference(
             golden["canonical_response"],
             result.get("canonical_response", _ABSENT),

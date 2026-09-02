@@ -58,6 +58,7 @@ MUTATIONS = (
     "video_part_url_drift",     # video_op_parse part: the delivery URL rewritten
     "cache_expiry_drift",       # cache_op_parse info: expires_at rewritten (the billed lifetime)
     "cache_model_drop",         # cache_op_build create: the model field dropped from the body
+    "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
 )
 
 MUTATION = "none"
@@ -205,11 +206,34 @@ def op_parse_response(msg: JsonObject) -> JsonObject:
     return {"canonical_response": resp}
 
 
+class PinnedRaise(Exception):
+    """A golden that pins a refusal: the reply must be ok=false with these fields."""
+
+    def __init__(self, error: JsonObject) -> None:
+        super().__init__(error.get("type", "?"))
+        self.error = error
+
+
 def op_replay_stream(msg: JsonObject) -> JsonObject:
     case = find_parse_case(msg)
     golden = json.loads(check.golden_path(case).read_text())
-    resp = golden["canonical_response"]
     events = golden.get("events", [])
+    if "error" in golden:
+        if MUTATION == "assembly_guesses_name" and targeted(case):
+            # The pre-MAP-9 behaviour: invent a tool name and hand back a
+            # Response as if nothing were wrong.
+            resp = json.loads(json.dumps(golden.get("partial_response", {})))
+            resp.setdefault("message", {}).setdefault("parts", []).append(
+                {"type": "tool_call", "id": "tool_call_0", "name": "get_weather", "input": {"city": "Gatineau"}}
+            )
+            return {"events": events, "canonical_response": resp}
+        error = dict(golden["error"])
+        error["message"] = "pinned refusal"
+        if "partial_response" in golden:
+            error["partial_response"] = golden["partial_response"]
+        error["events"] = events
+        raise PinnedRaise(error)
+    resp = golden["canonical_response"]
     if targeted(case):
         mutate_response(resp)
         if MUTATION == "dropped_event":
@@ -563,6 +587,8 @@ def handle_line(line: str) -> JsonObject:
         if handler is None:
             raise ValueError(f"unknown op: {msg.get('op')}")
         result = handler(msg)
+    except PinnedRaise as exc:
+        return {"id": req_id, "ok": False, "error": exc.error}
     except Exception as exc:
         return {"id": req_id, "ok": False, "error": {"type": type(exc).__name__, "message": str(exc)}}
     return {"id": req_id, "ok": True, "result": result}

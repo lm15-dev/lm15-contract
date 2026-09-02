@@ -29,7 +29,22 @@ Failure: `{"id": <string>, "ok": false, "error": {"type": <string>, "message": <
 `ok: false` is a *result*, not a protocol failure — reject vectors expect it.
 The `error.type` for lm15-typed errors is the canonical error class name
 (e.g. `InvalidRequestError`); for unexpected exceptions, the native exception
-name.
+name. For lm15-typed errors the reply also carries `error.code`, the
+ErrorCode literal (spec/vocabularies.md). Two optional fields let a golden
+pin a refusal and what survived it:
+
+- `error.partial_response`: a canonical Response JSON — everything the op
+  assembled before it refused (today: `StreamAssemblyError`, MAP-9).
+- `error.events`: for `replay_stream`, the full canonical event trace that
+  parsed before assembly refused.
+
+**Pinned raises.** A case whose canonical outcome is a typed refusal
+declares `"expect_lm15": {"raises": {"type": <class>, "code": <ErrorCode>}}`.
+Its golden is `{"error": {"type", "code"}, "partial_response"?, "events"?}`
+— the message is never pinned (ports word their own). The harness fails the
+case when the shim answers `ok: true` ("invented a fact"), when `type` or
+`code` differ, or when `partial_response`/`events` differ from the golden.
+First such case: `openai_chat.tool_call_unnamed` (2026-09-02).
 
 ## Ops
 
@@ -72,6 +87,10 @@ Out: `{"canonical_response": <Response JSON>}`
 ### replay_stream
 In: `{"provider": str, "canonical_request": <Request JSON>, "body_b64": str}`
 Out: `{"events": [<StreamEvent JSON>], "canonical_response": <Response JSON>}`
+Refusal (MAP-9, a tool call whose fragments never carried a name):
+`ok: false`, `error: {"type": "StreamAssemblyError", "code": "stream_assembly",
+"message", "partial_response": <Response JSON without the unnamed call(s)>,
+"events": [<StreamEvent JSON>]}`. The shim must not guess a name.
 - `events` is the full canonical event trace, in order, serialized with the
   canonical stream-event serde. `canonical_response` is the materialized
   final Response (same rules as parse_response).

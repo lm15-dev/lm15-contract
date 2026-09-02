@@ -1,0 +1,78 @@
+{
+  "error": {
+    "type": "StreamAssemblyError",
+    "code": "stream_assembly"
+  },
+  "partial_response": {
+    "model": "llama-3.1-8b-instant",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Checking."
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 48,
+      "output_tokens": 11,
+      "total_tokens": 59
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "llama-3.1-8b-instant"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "Checking."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "call_7f1c"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\": "
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "\"Gatineau\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 48,
+        "output_tokens": 11,
+        "total_tokens": 59
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-02-hand-authored.txt"
+  }
+}

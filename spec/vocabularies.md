@@ -151,6 +151,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `unsupported_feature` | `UnsupportedFeatureError` (and base `CapabilityError`) | local adapter capability |
 | `not_configured` | `NotConfiguredError` (and base `ConfigurationError`) | missing key/config |
 | `transport` | `TransportError` | network failure at the LM layer |
+| `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact (MAP-9: a tool call whose fragments never carried a name); carries `partial` (the Response assembled without the offending call) and `part_index` |
 | `provider` | `ProviderError` | catch-all; the code fallback |
 
 Class hierarchy (ports must replicate the SHAPE; idiomatic error mechanisms
@@ -159,6 +160,7 @@ allowed):
 ```
 LM15Error
 ├── TransportError
+├── StreamAssemblyError
 ├── ConfigurationError
 │   └── NotConfiguredError
 ├── CapabilityError
@@ -176,7 +178,8 @@ LM15Error
 
 Error metadata fields (every class): `message`, `code`, `provider`,
 `provider_code`, `status`, `request_id`, `retry_after` (float-typed; int
-coerces per the Number rule). Retryable set: RateLimitError, TimeoutError,
+coerces per the Number rule). `StreamAssemblyError` adds `partial`
+(Response or absent) and `part_index` (int or absent). Retryable set: RateLimitError, TimeoutError,
 ServerError, TransportError. HTTP mapping: unmatched status → `ProviderError`.
 Code mapping is most-specific-class-first; unknown code →
 `ProviderError`.

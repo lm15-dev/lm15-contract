@@ -90,7 +90,16 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
             )
 
         error = None
-        if not reply.get("ok"):
+        raises = check.expected_raise(case)
+        if raises is not None:
+            got = reply.get("error") or {}
+            if reply.get("ok") or got.get("type") != raises.get("type") or got.get("code") != raises.get("code"):
+                error = {
+                    "type": "ExpectedRaise",
+                    "message": f"case expects {raises}; shim answered "
+                               f"{'ok' if reply.get('ok') else got.get('type')}",
+                }
+        elif not reply.get("ok"):
             error = reply.get("error") or {"type": "?", "message": "?"}
         elif reply["result"].get("unmapped"):
             # The harness fails any non-empty unmapped canary; a golden drawn
@@ -105,10 +114,21 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
             print(f"  FAILED   {case_id}: {error['type']}: {error['message']}")
             continue
 
-        result = reply["result"]
-        golden: dict = {"canonical_response": result["canonical_response"]}
-        if streaming:
-            golden["events"] = result["events"]
+        golden: dict
+        if raises is not None:
+            got = reply["error"]
+            # Pin the class and ErrorCode, never the message (ports word
+            # their own), plus what the refusal salvaged.
+            golden = {"error": {"type": got["type"], "code": got["code"]}}
+            if "partial_response" in got:
+                golden["partial_response"] = got["partial_response"]
+            if streaming and "events" in got:
+                golden["events"] = got["events"]
+        else:
+            result = reply["result"]
+            golden = {"canonical_response": result["canonical_response"]}
+            if streaming:
+                golden["events"] = result["events"]
         golden["provenance"] = draft_provenance(case)
 
         path = check.golden_path(case)

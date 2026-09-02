@@ -99,8 +99,12 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             "usage_off_by_1000 (a response golden with integer usage)")),
         "dropped_event": ("stream", first(
             streams,
-            lambda c, g: len(g.get("events", [])) > 0,
+            lambda c, g: len(g.get("events", [])) > 0 and "canonical_response" in g,
             "dropped_event (a stream golden with events)")),
+        "assembly_guesses_name": ("stream", first(
+            streams,
+            lambda c, g: "error" in g,
+            "assembly_guesses_name (a stream golden that pins a refusal)")),
         "bool_as_int": ("request", first(
             [(c, g) for c, g in cases],
             lambda c, g: _has_bool(check.expected_wire_request(c)["body"]),
