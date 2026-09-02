@@ -162,7 +162,7 @@ loopback callback listener, credential store) follow:
   an error page and the wait continues; a provider `error` parameter ends
   the wait as a typed failure; authorization codes are repr-suppressed.
 
-## AUTH-10 — Access policy: auth by composition (proposed 2026-09-02)
+## AUTH-10 — Access policy: auth by composition
 
 An adapter is three composed things: a **dialect** (the wire codec:
 Anthropic Messages, OpenAI Responses, OpenAI Chat Completions, Gemini), for
@@ -234,3 +234,7 @@ Amended 2026-09-01, same day (AUTH-1: xai policy reordered to
 supersedes the morning's `key-then-oauth` before any port consumed it) —
 ratified in session ("we always want to use subscriptions before
 billing"); see changes/2026-09-01-subscription-first.md.
+
+Amended 2026-09-02 (AUTH-10: access policy as a value; subscription
+adapters are names for a binding) — ratified in session ("i ratify auth
+10"); see changes/2026-09-02-auth-by-composition.md.

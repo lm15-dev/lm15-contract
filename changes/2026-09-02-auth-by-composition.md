@@ -1,9 +1,6 @@
-# 2026-09-02 — Auth by composition: the access policy is a value (AUTH-10, proposed)
+# 2026-09-02 — Auth by composition: the access policy is a value (AUTH-10, ratified)
 
-Ratification: PENDING — awaiting Maxime Rivest. Decision D from the
-2026-09-01 API review ("model subscription auth as composition, not
-subclassing"), accepted in principle then; the plan asked for is this
-entry and the implementation. Do not push before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("i ratify auth 10"), after reading this entry with its four stated behaviour changes and three trade-offs. Decision D from the 2026-09-01 API review, accepted in principle then. Transcribed. AUTH-10 is normative from this date.
 
 ## What this changes
 
