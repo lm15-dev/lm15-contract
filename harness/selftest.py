@@ -205,6 +205,23 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     targets["batch_entry_order_swap"] = ("batch", f"{swap_target}[result_fetches.parse]")
     targets["batch_status_vocab_drift"] = ("batch", f"{vocab_target}[status.parse]")
 
+    cache_cases = check.load_surface_cases("cache")
+    expiry_target = next(
+        ((c["id"], s["cache_op"]) for c in cache_cases for s in c["steps"]
+         if s.get("pinned_body") and check.golden_path(c).exists()
+         and json.loads(check.golden_path(c).read_text()).get(s.get("golden_key", s["cache_op"]), {}).get("expires_at")),
+        None,
+    )
+    create_target = next(
+        (c["id"] for c in cache_cases if any(s["cache_op"] == "create" and isinstance(s.get("request", {}).get("body"), dict)
+                                             and "model" in s["request"]["body"] for s in c["steps"])),
+        None,
+    )
+    if expiry_target is None or create_target is None:
+        raise SystemExit("selftest: cache corpus too thin to self-test (need an expires_at golden and a create step with a model)")
+    targets["cache_expiry_drift"] = ("cache", f"{expiry_target[0]}[{expiry_target[1]}.parse]")
+    targets["cache_model_drop"] = ("cache", f"{create_target}[create]")
+
     video_cases = check.load_surface_cases("video")
     video_vocab = next(
         (c["id"] for c in video_cases

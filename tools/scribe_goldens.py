@@ -55,8 +55,8 @@ def draft_provenance(case: dict) -> dict:
     }
 
 
-def scribe(shim: check.Shim) -> tuple[dict[str, int], list[dict]]:
-    counts = {"drafted": 0, "failed": 0, "no-body": 0, "no-canonical-request": 0}
+def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int], list[dict]]:
+    counts = {"drafted": 0, "kept": 0, "failed": 0, "no-body": 0, "no-canonical-request": 0}
     failures: list[dict] = []
     for case in check.load_wire_cases():
         case_id = case["id"]
@@ -112,6 +112,18 @@ def scribe(shim: check.Shim) -> tuple[dict[str, int], list[dict]]:
         golden["provenance"] = draft_provenance(case)
 
         path = check.golden_path(case)
+        if path.exists() and not overwrite:
+            # Guard (2026-09-02): the scribe never rewrites an existing golden
+            # unless told to.  Re-running it over the corpus used to replace
+            # every golden's provenance and DROP the `reviewed` line of frozen
+            # goldens — the review record the oracle rests on.  Frozen
+            # goldens are never rewritten at all: their evidence is a human
+            # review, not a shim run.
+            existing = json.loads(path.read_text())
+            frozen = "reviewed" in (existing.get("provenance") or {})
+            counts["kept"] += 1
+            print(f"  kept     {case_id}: golden exists{' (REVIEWED — never overwritten)' if frozen else '; pass --overwrite to redraft'}")
+            continue
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n")
         counts["drafted"] += 1
@@ -121,13 +133,14 @@ def scribe(shim: check.Shim) -> tuple[dict[str, int], list[dict]]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--shim", default="python", help="shim name from harness/shims.json")
+    parser.add_argument("--overwrite", action="store_true", help="redraft existing UNREVIEWED goldens (reviewed goldens are never rewritten)")
     args = parser.parse_args(argv)
 
     shim = check.load_shim(args.shim)
     try:
         if not shim.sandboxed:
             print("warning: unshare -rn unavailable — shim runs WITHOUT no-network enforcement", file=sys.stderr)
-        counts, failures = scribe(shim)
+        counts, failures = scribe(shim, overwrite=args.overwrite)
     finally:
         try:
             shim.close()
@@ -150,7 +163,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print(
-        f"scribe_goldens: drafted {counts['drafted']}  failed {counts['failed']}  "
+        f"scribe_goldens: drafted {counts['drafted']}  kept {counts['kept']}  failed {counts['failed']}  "
         f"no-body {counts['no-body']}  no-canonical-request {counts['no-canonical-request']}  "
         f"(failures: {FAILURES_FILE.relative_to(CONTRACT_ROOT)})"
     )

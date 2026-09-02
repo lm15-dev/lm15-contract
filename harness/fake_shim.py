@@ -56,6 +56,8 @@ MUTATIONS = (
     "batch_status_vocab_drift", # batch_op_parse job: canonical status replaced by the wire word
     "video_status_vocab_drift", # video_op_parse job: canonical status replaced by the wire word
     "video_part_url_drift",     # video_op_parse part: the delivery URL rewritten
+    "cache_expiry_drift",       # cache_op_parse info: expires_at rewritten (the billed lifetime)
+    "cache_model_drop",         # cache_op_build create: the model field dropped from the body
 )
 
 MUTATION = "none"
@@ -459,6 +461,34 @@ def op_batch_op_parse(msg: JsonObject) -> JsonObject:
     return {"jobs": value}
 
 
+def find_cache_case(msg: JsonObject) -> JsonObject:
+    for case in check.load_surface_cases("cache"):
+        if case["provider"] == msg["provider"]:
+            return case
+    raise LookupError("no cache case for this provider")
+
+
+def op_cache_op_build(msg: JsonObject) -> JsonObject:
+    case = find_cache_case(msg)
+    step = next(s for s in case["steps"] if s["cache_op"] == msg["cache_op"])
+    result = _echo_wire(step)
+    if MUTATION == "cache_model_drop" and targeted(case) and isinstance(result.get("body"), dict):
+        result["body"] = {k: v for k, v in result["body"].items() if k != "model"}
+    return result
+
+
+def op_cache_op_parse(msg: JsonObject) -> JsonObject:
+    case = find_cache_case(msg)
+    body = base64.b64decode(msg["body_b64"])
+    step = next(s for s in case["steps"]
+                if s.get("pinned_body") and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
+    golden = json.loads(check.golden_path(case).read_text())
+    value = dict(golden[step.get("golden_key", step["cache_op"])])
+    if MUTATION == "cache_expiry_drift" and targeted(case) and value.get("expires_at"):
+        value["expires_at"] = "2099-01-01T00:00:00Z"
+    return {"cache" if msg["kind"] == "info" else "page": value}
+
+
 def find_video_case(msg: JsonObject) -> JsonObject:
     for case in check.load_surface_cases("video"):
         if case["provider"] == msg["provider"]:
@@ -513,6 +543,8 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "video_op_parse": op_video_op_parse,
     "batch_op_build": op_batch_op_build,
     "batch_op_parse": op_batch_op_parse,
+    "cache_op_build": op_cache_op_build,
+    "cache_op_parse": op_cache_op_parse,
 }
 
 

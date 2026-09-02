@@ -180,3 +180,38 @@ created_at, expires_at, label, provider_data`; `cache_get`, `cache_list`
 owns them; a future provider may not). Model pinning is a property of
 the tier. Gemini is the first implementer; Vertex the second; all other
 adapters raise on every verb, as files do on subscription adapters.
+
+## Implementation landed (2026-09-02, awaiting ratification of this entry)
+
+Reference: lm15-python — `CacheConfig.prefix/resource`, `CacheInfo`,
+`CachePage`, `CachedPrefix`; the mapping table on all adapters (OpenAI
+both dialects incl. the gpt-5.6+ off switch and the stable-prefix
+developer-message rendering, Anthropic history/stable marks, Gemini
+resource wire + raises, compat gating); the cache surface (hooks, drivers,
+async mirrors, `lm.cache`, `router.cache`, `EndpointSupport.caches`);
+removal of the Gemini hidden `cachedContents` POST; MAP-6 in
+docs/mapping-rules.md; cookbook 19 with live outputs; 922 tests.
+
+Contract: 8 new live cases (openai/openai_chat `cache_off` and
+`cache_stable`, anthropic `cache_history`, gemini `cache_history_fallback`,
+`cache_resource`, and the `gemini.cache` lifecycle surface case), 7 drafted
+goldens, the `cache` harness direction (`cache_op_build`/`cache_op_parse`,
+PROTOCOL.md), two selftest mutations (23 total), `caches` column in
+spec/support-matrix.json, SCOPE.md moves the resource tier to provisional,
+orphan `gemini.cached_content` burned down. The scribe gained a guard: it
+never rewrites an existing golden without `--overwrite`, and never a
+reviewed one.
+
+Receipts of note: `openai.cache_off` — 3k-token prefix on gpt-5.6-sol,
+`cache_write_tokens == 0` (implicit mode wrote 3088 per call);
+`anthropic.cache_history` — turn 1 writes 3271, turn 2 reads 3275 and
+writes 24; `gemini.cache_resource` — `cachedContentTokenCount == 3580`
+against the object created in `gemini.cache`.
+
+Trade-offs taken in code, stated: (1) the gpt-5.6 class is detected by a
+`gpt-<major>.<minor>` parse — names outside that pattern keep implicit
+writes on `mode="off"` until a release, `extensions` overrides; (2) with
+`resource` set and no `prefix_until_index`, all messages are sent (the
+object is assumed to hold system/tools only); (3) `prefix="stable"` on
+OpenAI moves the system prompt from `instructions` into the first input
+item — a wire change visible in the pinned case.

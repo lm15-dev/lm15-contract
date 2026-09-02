@@ -50,6 +50,10 @@ evolution, but breaking changes in a 1.x release are permitted with a
   conversation with the arrow reversed.
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
+- **Cache resources** — the stored tier of MAP-6 (`CacheInfo`, `CachePage`,
+  `CachedPrefix`, the `cache_*` verbs, the `cache` harness direction),
+  added 2026-09-02 (changes/2026-09-01-caching-design.md). Provider-
+  neutral in shape; Gemini is the first implementer.
 
 Ports may implement provisional surfaces, but conformance does not require
 them and their fixtures carry no freeze guarantee.
@@ -65,10 +69,11 @@ them and their fixtures carry no freeze guarantee.
   by type-system symmetry; a scope with no exceptions is easier to defend.
   Use a provider's own client for vectors.
 
-- **`gemini.cached_content`** — Gemini explicit caching requires a
-  cache-creation side channel (a separate `/cachedContents` POST before the
-  chat request), which the contract's pure build/parse model cannot express;
-  CacheConfig covers only in-request cache hints.
+- ~~`gemini.cached_content`~~ — was out of scope because the old adapter
+  created the object inside `complete()`. Since 2026-09-02 the object is
+  an explicit, provisional surface (above) and `CacheConfig.resource`
+  references it from a pure `build_request`; the orphan case is superseded
+  by `gemini.cache` + `gemini.cache_resource`.
 - **`openai.computer_use`** — provider-executed computer use surfaces
   execution traces that MAP-1 keeps out of canonical parts; canonical access
   would need a NEW part type via MAP-1's amendment path (additive, never a

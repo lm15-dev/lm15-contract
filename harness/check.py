@@ -46,7 +46,7 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation", "video")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation", "video", "cache")
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -291,7 +291,7 @@ def load_shim(name: str) -> Shim:
 def load_wire_cases() -> list[JsonObject]:
     """Chat-surface wire cases; models/live surfaces have their own loaders."""
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
-    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation", "video")]
+    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation", "video", "cache")]
 
 
 def load_model_cases() -> list[JsonObject]:
@@ -1174,6 +1174,46 @@ def run_files_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     return report
 
 
+def run_cache_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Cache-resource lifecycle (MAP-6 stored tier): cache_op_build per step,
+    cache_op_parse vs goldens.  Same shape as files; no provider named."""
+    report = DirectionReport("cache")
+    for case in load_surface_cases("cache"):
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        golden_file = golden_path(case)
+        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        for step in case["steps"]:
+            op = step["cache_op"]
+            label = f"{case_id}[{op}]"
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            for key in ("prefix_request", "cache_id", "limit", "cursor", "ttl_seconds", "label"):
+                if key in step:
+                    fields[key] = step[key]
+            _compare_build(report, label, step, shim.call("cache_op_build", cache_op=op, **fields))
+            if "pinned_body" not in step:
+                continue
+            parse_label = f"{case_id}[{op}.parse]"
+            kind = step["parse"]
+            reply = shim.call(
+                "cache_op_parse", provider=case["provider"], kind=kind,
+                status=int(step.get("expect", {}).get("status", 200)),
+                body_b64=base64.b64encode(_step_body(case, step["pinned_body"])).decode("ascii"),
+                **case_base_url(case),
+            )
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(parse_label, reply))
+                continue
+            golden_key = step.get("golden_key", op)
+            if golden_key not in golden:
+                report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
+                continue
+            actual = reply["result"].get("cache" if kind == "info" else "page")
+            _compare_golden(report, parse_label, golden[golden_key], actual)
+    return report
+
+
 def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Batch lifecycle: batch_op_build per step, batch_op_parse vs goldens."""
     report = DirectionReport("batch")
@@ -1393,6 +1433,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_video_direction(shim, case_filter)
     if direction == "live":
         return run_live_direction(shim, case_filter)
+    if direction == "cache":
+        return run_cache_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

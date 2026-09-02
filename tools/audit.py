@@ -102,7 +102,7 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases
                if "canonical_request" not in data
-               and data.get("surface") not in ("models", "live", "files", "batch", "generation", "video")}
+               and data.get("surface") not in ("models", "live", "files", "batch", "generation", "video", "cache")}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):

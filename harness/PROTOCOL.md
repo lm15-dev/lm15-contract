@@ -379,3 +379,17 @@ transport surface are per-language idiom and are OUT of contract scope:
 Python ships sync + mirror Async* classes; Go uses context; TypeScript is
 async-only; Julia uses tasks. Ports MUST share the pure core across their
 concurrency surfaces so conformance covers all of them.
+
+### cache_op_build
+In: `{"provider": str, "api_key": str, "cache_op": "create"|"get"|"list"|"delete"|"update", "prefix_request"?: <Request JSON>, "cache_id"?: str, "limit"?: int, "cursor"?: str, "ttl_seconds"?: int, "label"?: str, "base_url"?: str}`
+Out: same shape as `build_request`.
+- The stored-cache tier of MAP-6 (changes/2026-09-01-caching-design.md).
+  `create` takes the prefix as a canonical Request (model, system, tools,
+  messages; default config); the other ops take `cache_id` verbatim.
+  Providers without the tier reply `ok: false` with `UnsupportedFeatureError`.
+
+### cache_op_parse
+In: `{"provider": str, "kind": "info"|"page", "status": int, "body_b64": str, "base_url"?: str}`
+Out: `{"cache": <CacheInfo JSON>}` for `info`, `{"page": <CachePage JSON>}` for `page`.
+- `CacheInfo.provider_data` is the wire object verbatim; the harness digests
+  long strings as for files.
