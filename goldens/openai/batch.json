@@ -1,488 +1,493 @@
 {
- "submit": {
-  "id": "batch_6a9619e3815481909970e51995cae906",
-  "status": "queued",
-  "label": "lm15-capture-2026-09-01",
-  "created_at": "2026-09-01T00:18:43Z",
-  "provider_data": {
-   "id": "batch_6a9619e3815481909970e51995cae906",
-   "object": "batch",
-   "endpoint": "/v1/responses",
-   "model": null,
-   "errors": null,
-   "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
-   "completion_window": "24h",
-   "status": "validating",
-   "output_file_id": null,
-   "error_file_id": null,
-   "created_at": 1788221923,
-   "in_progress_at": null,
-   "expires_at": 1788308323,
-   "finalizing_at": null,
-   "completed_at": null,
-   "failed_at": null,
-   "expired_at": null,
-   "cancelling_at": null,
-   "cancelled_at": null,
-   "request_counts": {
-    "total": 0,
-    "completed": 0,
-    "failed": 0
-   },
-   "usage": {
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "total_tokens": 0,
-    "input_tokens_details": {
-     "cached_tokens": 0
-    },
-    "output_tokens_details": {
-     "reasoning_tokens": 0
-    }
-   },
-   "metadata": {
-    "label": "lm15-capture-2026-09-01"
-   }
-  }
- },
- "status": {
-  "id": "batch_6a9619e3815481909970e51995cae906",
-  "status": "completed",
-  "label": "lm15-capture-2026-09-01",
-  "created_at": "2026-09-01T00:18:43Z",
-  "provider_data": {
-   "id": "batch_6a9619e3815481909970e51995cae906",
-   "object": "batch",
-   "endpoint": "/v1/responses",
-   "model": "gpt-5-nano-2025-08-07",
-   "errors": null,
-   "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
-   "completion_window": "24h",
-   "status": "completed",
-   "output_file_id": "file-9ZCttSgpoPxGChqYBekQRc",
-   "error_file_id": null,
-   "created_at": 1788221923,
-   "in_progress_at": 1788221986,
-   "expires_at": 1788308323,
-   "finalizing_at": 1788222000,
-   "completed_at": 1788222001,
-   "failed_at": null,
-   "expired_at": null,
-   "cancelling_at": null,
-   "cancelled_at": null,
-   "request_counts": {
-    "total": 2,
-    "completed": 2,
-    "failed": 0
-   },
-   "usage": {
-    "input_tokens": 26,
-    "output_tokens": 220,
-    "total_tokens": 246,
-    "input_tokens_details": {
-     "cached_tokens": 0
-    },
-    "output_tokens_details": {
-     "reasoning_tokens": 128
-    }
-   },
-   "metadata": {
-    "label": "lm15-capture-2026-09-01"
-   }
-  }
- },
- "entries": [
-  {
-   "index": 0,
-   "outcome": "succeeded",
-   "response": {
-    "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348",
-    "model": "gpt-5-nano-2025-08-07",
-    "message": {
-     "role": "assistant",
-     "parts": [
-      {
-       "type": "thinking",
-       "text": "",
-       "continuation": [
-        {
-         "provider": "openai",
-         "kind": "reasoning_item",
-         "data": {
-          "id": "rs_042bef270b694d2f006a961a2b369887d28369f32828b2253d",
-          "encrypted_content": "sha256:f8971e5828c1e4d59c25c9f8b57322c73f281767b2c3c6889f76b13b824932f5"
-         }
-        }
-       ]
-      },
-      {
-       "type": "text",
-       "text": "Paris"
-      }
-     ],
-     "continuation": [
-      {
-       "provider": "openai",
-       "kind": "response_id",
-       "data": {
-        "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348"
-       }
-      }
-     ]
-    },
-    "finish_reason": "stop",
-    "usage": {
-     "input_tokens": 13,
-     "output_tokens": 120,
-     "total_tokens": 133,
-     "cache_read_tokens": 0,
-     "cache_write_tokens": 0,
-     "reasoning_tokens": 64
-    },
-    "provider_data": {
-     "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348",
-     "object": "response",
-     "created_at": 1788221994,
-     "status": "completed",
-     "background": false,
-     "billing": {
-      "payer": "developer"
-     },
-     "completed_at": 1788221995,
-     "error": null,
-     "frequency_penalty": 0.0,
-     "incomplete_details": null,
-     "instructions": null,
-     "max_output_tokens": 1024,
-     "max_tool_calls": null,
-     "model": "gpt-5-nano-2025-08-07",
-     "moderation": null,
-     "output": [
-      {
-       "id": "rs_042bef270b694d2f006a961a2b369887d28369f32828b2253d",
-       "type": "reasoning",
-       "content": [],
-       "encrypted_content": "sha256:f8971e5828c1e4d59c25c9f8b57322c73f281767b2c3c6889f76b13b824932f5",
-       "summary": []
-      },
-      {
-       "id": "msg_042bef270b694d2f006a961a2b9bf087d28dee390258d234e2",
-       "type": "message",
-       "status": "completed",
-       "content": [
-        {
-         "type": "output_text",
-         "annotations": [],
-         "logprobs": [],
-         "text": "Paris"
-        }
-       ],
-       "role": "assistant"
-      }
-     ],
-     "parallel_tool_calls": true,
-     "presence_penalty": 0.0,
-     "previous_response_id": null,
-     "prompt_cache_key": null,
-     "prompt_cache_retention": "in_memory",
-     "reasoning": {
-      "context": "current_turn",
-      "effort": "medium",
-      "mode": "standard",
-      "summary": null
-     },
-     "safety_identifier": null,
-     "service_tier": "default",
-     "store": true,
-     "temperature": 1.0,
-     "text": {
-      "format": {
-       "type": "text"
-      },
-      "verbosity": "medium"
-     },
-     "tool_choice": "auto",
-     "tool_usage": {
-      "image_gen": {
-       "input_tokens": 0,
-       "input_tokens_details": {
-        "image_tokens": 0,
-        "text_tokens": 0
-       },
-       "output_tokens": 0,
-       "output_tokens_details": {
-        "image_tokens": 0,
-        "text_tokens": 0
-       },
-       "total_tokens": 0
-      },
-      "web_search": {
-       "num_requests": 0
-      }
-     },
-     "tools": [],
-     "top_logprobs": 0,
-     "top_p": 1.0,
-     "truncation": "disabled",
-     "usage": {
-      "input_tokens": 13,
-      "input_tokens_details": {
-       "cache_write_tokens": 0,
-       "cached_tokens": 0
-      },
-      "output_tokens": 120,
-      "output_tokens_details": {
-       "reasoning_tokens": 64
-      },
-      "total_tokens": 133
-     },
-     "user": null,
-     "metadata": {}
-    }
-   }
-  },
-  {
-   "index": 1,
-   "outcome": "succeeded",
-   "response": {
-    "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f",
-    "model": "gpt-5-nano-2025-08-07",
-    "message": {
-     "role": "assistant",
-     "parts": [
-      {
-       "type": "thinking",
-       "text": "",
-       "continuation": [
-        {
-         "provider": "openai",
-         "kind": "reasoning_item",
-         "data": {
-          "id": "rs_09b1350c4220b768006a961a2d15e087d29f96d220d358e65d",
-          "encrypted_content": "sha256:b23f20fb68343d5213590ca348c2a1e7a61f7be13b1c37fff42ab1ae8b4d3d88"
-         }
-        }
-       ]
-      },
-      {
-       "type": "text",
-       "text": "Tokyo"
-      }
-     ],
-     "continuation": [
-      {
-       "provider": "openai",
-       "kind": "response_id",
-       "data": {
-        "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f"
-       }
-      }
-     ]
-    },
-    "finish_reason": "stop",
-    "usage": {
-     "input_tokens": 13,
-     "output_tokens": 100,
-     "total_tokens": 113,
-     "cache_read_tokens": 0,
-     "cache_write_tokens": 0,
-     "reasoning_tokens": 64
-    },
-    "provider_data": {
-     "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f",
-     "object": "response",
-     "created_at": 1788221996,
-     "status": "completed",
-     "background": false,
-     "billing": {
-      "payer": "developer"
-     },
-     "completed_at": 1788221997,
-     "error": null,
-     "frequency_penalty": 0.0,
-     "incomplete_details": null,
-     "instructions": null,
-     "max_output_tokens": 1024,
-     "max_tool_calls": null,
-     "model": "gpt-5-nano-2025-08-07",
-     "moderation": null,
-     "output": [
-      {
-       "id": "rs_09b1350c4220b768006a961a2d15e087d29f96d220d358e65d",
-       "type": "reasoning",
-       "content": [],
-       "encrypted_content": "sha256:b23f20fb68343d5213590ca348c2a1e7a61f7be13b1c37fff42ab1ae8b4d3d88",
-       "summary": []
-      },
-      {
-       "id": "msg_09b1350c4220b768006a961a2d669087d2b90a5b05614c6850",
-       "type": "message",
-       "status": "completed",
-       "content": [
-        {
-         "type": "output_text",
-         "annotations": [],
-         "logprobs": [],
-         "text": "Tokyo"
-        }
-       ],
-       "role": "assistant"
-      }
-     ],
-     "parallel_tool_calls": true,
-     "presence_penalty": 0.0,
-     "previous_response_id": null,
-     "prompt_cache_key": null,
-     "prompt_cache_retention": "in_memory",
-     "reasoning": {
-      "context": "current_turn",
-      "effort": "medium",
-      "mode": "standard",
-      "summary": null
-     },
-     "safety_identifier": null,
-     "service_tier": "default",
-     "store": true,
-     "temperature": 1.0,
-     "text": {
-      "format": {
-       "type": "text"
-      },
-      "verbosity": "medium"
-     },
-     "tool_choice": "auto",
-     "tool_usage": {
-      "image_gen": {
-       "input_tokens": 0,
-       "input_tokens_details": {
-        "image_tokens": 0,
-        "text_tokens": 0
-       },
-       "output_tokens": 0,
-       "output_tokens_details": {
-        "image_tokens": 0,
-        "text_tokens": 0
-       },
-       "total_tokens": 0
-      },
-      "web_search": {
-       "num_requests": 0
-      }
-     },
-     "tools": [],
-     "top_logprobs": 0,
-     "top_p": 1.0,
-     "truncation": "disabled",
-     "usage": {
-      "input_tokens": 13,
-      "input_tokens_details": {
-       "cache_write_tokens": 0,
-       "cached_tokens": 0
-      },
-      "output_tokens": 100,
-      "output_tokens_details": {
-       "reasoning_tokens": 64
-      },
-      "total_tokens": 113
-     },
-     "user": null,
-     "metadata": {}
-    }
-   }
-  }
- ],
- "cancel": {
-  "id": "batch_6a961a925edc8190acfc8e7977923a44",
-  "status": "cancelled",
-  "label": "lm15-cancel-capture-2026-09-01",
-  "created_at": "2026-09-01T00:21:38Z",
-  "provider_data": {
-   "id": "batch_6a961a925edc8190acfc8e7977923a44",
-   "object": "batch",
-   "endpoint": "/v1/responses",
-   "model": null,
-   "errors": null,
-   "input_file_id": "file-NtFV1FTQeaZg1DSb8gSWm9",
-   "completion_window": "24h",
-   "status": "cancelled",
-   "output_file_id": null,
-   "error_file_id": null,
-   "created_at": 1788222098,
-   "in_progress_at": null,
-   "expires_at": 1788308498,
-   "finalizing_at": null,
-   "completed_at": null,
-   "failed_at": null,
-   "expired_at": null,
-   "cancelling_at": 1788222098,
-   "cancelled_at": 1788222704,
-   "request_counts": {
-    "total": 0,
-    "completed": 0,
-    "failed": 0
-   },
-   "usage": {
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "total_tokens": 0,
-    "input_tokens_details": {
-     "cached_tokens": 0
-    },
-    "output_tokens_details": {
-     "reasoning_tokens": 0
-    }
-   },
-   "metadata": {
-    "label": "lm15-cancel-capture-2026-09-01"
-   }
-  }
- },
- "list": [
-  {
-   "id": "batch_6a9619e3815481909970e51995cae906",
-   "status": "completed",
-   "label": "lm15-capture-2026-09-01",
-   "created_at": "2026-09-01T00:18:43Z",
-   "provider_data": {
+  "submit": {
     "id": "batch_6a9619e3815481909970e51995cae906",
-    "object": "batch",
-    "endpoint": "/v1/responses",
-    "model": "gpt-5-nano-2025-08-07",
-    "errors": null,
-    "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
-    "completion_window": "24h",
-    "status": "completed",
-    "output_file_id": "file-9ZCttSgpoPxGChqYBekQRc",
-    "error_file_id": null,
-    "created_at": 1788221923,
-    "in_progress_at": 1788221986,
-    "expires_at": 1788308323,
-    "finalizing_at": 1788222000,
-    "completed_at": 1788222001,
-    "failed_at": null,
-    "expired_at": null,
-    "cancelling_at": null,
-    "cancelled_at": null,
-    "request_counts": {
-     "total": 2,
-     "completed": 2,
-     "failed": 0
-    },
-    "usage": {
-     "input_tokens": 26,
-     "output_tokens": 220,
-     "total_tokens": 246,
-     "input_tokens_details": {
-      "cached_tokens": 0
-     },
-     "output_tokens_details": {
-      "reasoning_tokens": 128
-     }
-    },
-    "metadata": {
-     "label": "lm15-capture-2026-09-01"
+    "status": "queued",
+    "label": "lm15-capture-2026-09-01",
+    "created_at": "2026-09-01T00:18:43Z",
+    "provider_data": {
+      "id": "batch_6a9619e3815481909970e51995cae906",
+      "object": "batch",
+      "endpoint": "/v1/responses",
+      "model": null,
+      "errors": null,
+      "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
+      "completion_window": "24h",
+      "status": "validating",
+      "output_file_id": null,
+      "error_file_id": null,
+      "created_at": 1788221923,
+      "in_progress_at": null,
+      "expires_at": 1788308323,
+      "finalizing_at": null,
+      "completed_at": null,
+      "failed_at": null,
+      "expired_at": null,
+      "cancelling_at": null,
+      "cancelled_at": null,
+      "request_counts": {
+        "total": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "metadata": {
+        "label": "lm15-capture-2026-09-01"
+      }
     }
-   }
+  },
+  "status": {
+    "id": "batch_6a9619e3815481909970e51995cae906",
+    "status": "completed",
+    "label": "lm15-capture-2026-09-01",
+    "created_at": "2026-09-01T00:18:43Z",
+    "provider_data": {
+      "id": "batch_6a9619e3815481909970e51995cae906",
+      "object": "batch",
+      "endpoint": "/v1/responses",
+      "model": "gpt-5-nano-2025-08-07",
+      "errors": null,
+      "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
+      "completion_window": "24h",
+      "status": "completed",
+      "output_file_id": "file-9ZCttSgpoPxGChqYBekQRc",
+      "error_file_id": null,
+      "created_at": 1788221923,
+      "in_progress_at": 1788221986,
+      "expires_at": 1788308323,
+      "finalizing_at": 1788222000,
+      "completed_at": 1788222001,
+      "failed_at": null,
+      "expired_at": null,
+      "cancelling_at": null,
+      "cancelled_at": null,
+      "request_counts": {
+        "total": 2,
+        "completed": 2,
+        "failed": 0
+      },
+      "usage": {
+        "input_tokens": 26,
+        "output_tokens": 220,
+        "total_tokens": 246,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 128
+        }
+      },
+      "metadata": {
+        "label": "lm15-capture-2026-09-01"
+      }
+    }
+  },
+  "entries": [
+    {
+      "index": 0,
+      "outcome": "succeeded",
+      "response": {
+        "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348",
+        "model": "gpt-5-nano-2025-08-07",
+        "message": {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "thinking",
+              "text": "",
+              "continuation": [
+                {
+                  "provider": "openai",
+                  "kind": "reasoning_item",
+                  "data": {
+                    "id": "rs_042bef270b694d2f006a961a2b369887d28369f32828b2253d",
+                    "encrypted_content": "sha256:f8971e5828c1e4d59c25c9f8b57322c73f281767b2c3c6889f76b13b824932f5"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Paris"
+            }
+          ],
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "response_id",
+              "data": {
+                "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348"
+              }
+            }
+          ]
+        },
+        "finish_reason": "stop",
+        "usage": {
+          "input_tokens": 13,
+          "output_tokens": 120,
+          "total_tokens": 133,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 64
+        },
+        "provider_data": {
+          "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348",
+          "object": "response",
+          "created_at": 1788221994,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1788221995,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": 1024,
+          "max_tool_calls": null,
+          "model": "gpt-5-nano-2025-08-07",
+          "moderation": null,
+          "output": [
+            {
+              "id": "rs_042bef270b694d2f006a961a2b369887d28369f32828b2253d",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "sha256:f8971e5828c1e4d59c25c9f8b57322c73f281767b2c3c6889f76b13b824932f5",
+              "summary": []
+            },
+            {
+              "id": "msg_042bef270b694d2f006a961a2b9bf087d28dee390258d234e2",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Paris"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "context": "current_turn",
+            "effort": "medium",
+            "mode": "standard",
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": true,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 13,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 120,
+            "output_tokens_details": {
+              "reasoning_tokens": 64
+            },
+            "total_tokens": 133
+          },
+          "user": null,
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "index": 1,
+      "outcome": "succeeded",
+      "response": {
+        "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f",
+        "model": "gpt-5-nano-2025-08-07",
+        "message": {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "thinking",
+              "text": "",
+              "continuation": [
+                {
+                  "provider": "openai",
+                  "kind": "reasoning_item",
+                  "data": {
+                    "id": "rs_09b1350c4220b768006a961a2d15e087d29f96d220d358e65d",
+                    "encrypted_content": "sha256:b23f20fb68343d5213590ca348c2a1e7a61f7be13b1c37fff42ab1ae8b4d3d88"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Tokyo"
+            }
+          ],
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "response_id",
+              "data": {
+                "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f"
+              }
+            }
+          ]
+        },
+        "finish_reason": "stop",
+        "usage": {
+          "input_tokens": 13,
+          "output_tokens": 100,
+          "total_tokens": 113,
+          "cache_read_tokens": 0,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 64
+        },
+        "provider_data": {
+          "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f",
+          "object": "response",
+          "created_at": 1788221996,
+          "status": "completed",
+          "background": false,
+          "billing": {
+            "payer": "developer"
+          },
+          "completed_at": 1788221997,
+          "error": null,
+          "frequency_penalty": 0.0,
+          "incomplete_details": null,
+          "instructions": null,
+          "max_output_tokens": 1024,
+          "max_tool_calls": null,
+          "model": "gpt-5-nano-2025-08-07",
+          "moderation": null,
+          "output": [
+            {
+              "id": "rs_09b1350c4220b768006a961a2d15e087d29f96d220d358e65d",
+              "type": "reasoning",
+              "content": [],
+              "encrypted_content": "sha256:b23f20fb68343d5213590ca348c2a1e7a61f7be13b1c37fff42ab1ae8b4d3d88",
+              "summary": []
+            },
+            {
+              "id": "msg_09b1350c4220b768006a961a2d669087d2b90a5b05614c6850",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "Tokyo"
+                }
+              ],
+              "role": "assistant"
+            }
+          ],
+          "parallel_tool_calls": true,
+          "presence_penalty": 0.0,
+          "previous_response_id": null,
+          "prompt_cache_key": null,
+          "prompt_cache_retention": "in_memory",
+          "reasoning": {
+            "context": "current_turn",
+            "effort": "medium",
+            "mode": "standard",
+            "summary": null
+          },
+          "safety_identifier": null,
+          "service_tier": "default",
+          "store": true,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "text"
+            },
+            "verbosity": "medium"
+          },
+          "tool_choice": "auto",
+          "tool_usage": {
+            "image_gen": {
+              "input_tokens": 0,
+              "input_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "output_tokens": 0,
+              "output_tokens_details": {
+                "image_tokens": 0,
+                "text_tokens": 0
+              },
+              "total_tokens": 0
+            },
+            "web_search": {
+              "num_requests": 0
+            }
+          },
+          "tools": [],
+          "top_logprobs": 0,
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 13,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 100,
+            "output_tokens_details": {
+              "reasoning_tokens": 64
+            },
+            "total_tokens": 113
+          },
+          "user": null,
+          "metadata": {}
+        }
+      }
+    }
+  ],
+  "cancel": {
+    "id": "batch_6a961a925edc8190acfc8e7977923a44",
+    "status": "cancelled",
+    "label": "lm15-cancel-capture-2026-09-01",
+    "created_at": "2026-09-01T00:21:38Z",
+    "provider_data": {
+      "id": "batch_6a961a925edc8190acfc8e7977923a44",
+      "object": "batch",
+      "endpoint": "/v1/responses",
+      "model": null,
+      "errors": null,
+      "input_file_id": "file-NtFV1FTQeaZg1DSb8gSWm9",
+      "completion_window": "24h",
+      "status": "cancelled",
+      "output_file_id": null,
+      "error_file_id": null,
+      "created_at": 1788222098,
+      "in_progress_at": null,
+      "expires_at": 1788308498,
+      "finalizing_at": null,
+      "completed_at": null,
+      "failed_at": null,
+      "expired_at": null,
+      "cancelling_at": 1788222098,
+      "cancelled_at": 1788222704,
+      "request_counts": {
+        "total": 0,
+        "completed": 0,
+        "failed": 0
+      },
+      "usage": {
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "metadata": {
+        "label": "lm15-cancel-capture-2026-09-01"
+      }
+    }
+  },
+  "list": [
+    {
+      "id": "batch_6a9619e3815481909970e51995cae906",
+      "status": "completed",
+      "label": "lm15-capture-2026-09-01",
+      "created_at": "2026-09-01T00:18:43Z",
+      "provider_data": {
+        "id": "batch_6a9619e3815481909970e51995cae906",
+        "object": "batch",
+        "endpoint": "/v1/responses",
+        "model": "gpt-5-nano-2025-08-07",
+        "errors": null,
+        "input_file_id": "file-Y3XW9fZshD2PqA7rkR3dku",
+        "completion_window": "24h",
+        "status": "completed",
+        "output_file_id": "file-9ZCttSgpoPxGChqYBekQRc",
+        "error_file_id": null,
+        "created_at": 1788221923,
+        "in_progress_at": 1788221986,
+        "expires_at": 1788308323,
+        "finalizing_at": 1788222000,
+        "completed_at": 1788222001,
+        "failed_at": null,
+        "expired_at": null,
+        "cancelling_at": null,
+        "cancelled_at": null,
+        "request_counts": {
+          "total": 2,
+          "completed": 2,
+          "failed": 0
+        },
+        "usage": {
+          "input_tokens": 26,
+          "output_tokens": 220,
+          "total_tokens": 246,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 128
+          }
+        },
+        "metadata": {
+          "label": "lm15-capture-2026-09-01"
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the openai.batch surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md"
   }
- ]
 }

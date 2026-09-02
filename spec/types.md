@@ -659,7 +659,7 @@ requests address files by URI, not resource name — verified live
 | `created_at` | string | no | `null` | omit-empty | ISO-8601 UTC `YYYY-MM-DDTHH:MM:SSZ`, normalized from epoch/ISO forms |
 | `expires_at` | string | no | `null` | omit-empty | same normalization; Gemini always (~48h), OpenAI on some purposes, Anthropic when set |
 | `readiness` | string (FileReadiness) | no | `"ready"` | always (truthy) | closed vocabulary |
-| `downloadable` | bool | no | `null` | omit-empty EXCEPT `false` (false is data, not emptiness) | tri-state: provider-stated capability or `null` when unreported |
+| `downloadable` | bool | no | `null` | omit-empty EXCEPT `false` (false is data, not emptiness) | tri-state: provider-stated capability or `null` when unreported. Anthropic states it (`downloadable`); Gemini derives it: `source: UPLOADED` → `false` (input-only files), else `null` — changes/2026-08-31-files-lifecycle.md, made spec text 2026-09-02 |
 | `provider_data` | object (opaque) | no | `null` | omit-empty | raw file object verbatim |
 
 Convenience: `.ready` (`readiness == "ready"`).

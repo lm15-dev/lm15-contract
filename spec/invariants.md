@@ -47,7 +47,7 @@ rationale is the designed reason, ratified, not a guess.
   are meaningless.
 - **INV-007 — Int fields coerce same-valued floats and reject the rest.**
   `2.0 → 2`; `2.5` raises; applies to `max_tokens`, `top_k`,
-  `thinking_budget`, `total_budget`, `prefix_until_index`, every Usage
+  `thinking_budget`, `prefix_until_index`, every Usage
   counter, `sample_rate`, `channels`, every `part_index`.
   WHY: each numeric field has ONE declared wire form (serde-rules.md Number
   rule); rounding would silently change meaning.
@@ -142,14 +142,17 @@ rationale is the designed reason, ratified, not a guess.
 
 ## Config-family consistency rules
 
-- **INV-026 — `Reasoning(effort="off")` forbids `thinking_budget`,
-  `total_budget`, and `summary`.** WHY: a budget with reasoning off would be
-  silently dead configuration (docstring: raises "instead of silently
-  discarding").
-- **INV-027 — `CacheConfig(mode="off")` forbids `retention` and `key`.**
-  WHY: same dead-knob logic as INV-026 — `__post_init__` raises
-  `"CacheConfig(mode='off') cannot specify retention or key"` instead of
-  silently discarding.
+- **INV-026 — `Reasoning(effort="off")` forbids `thinking_budget` and
+  `summary`.** (`total_budget` was removed 2026-09-02, MAP-7 rule 6.) WHY:
+  a budget with reasoning off would be silently dead configuration
+  (docstring: raises "instead of silently discarding").
+- **INV-027 — `CacheConfig(mode="off")` forbids `retention`, `key`,
+  `prefix`, `prefix_until_index`, and `resource`; `prefix` and
+  `prefix_until_index` are mutually exclusive.** (Widened 2026-09-02 with
+  MAP-6; the text lagged until the independent review.) WHY: same
+  dead-knob logic as INV-026 — `__post_init__` raises
+  `"CacheConfig(mode='off') cannot specify retention, key, prefix,
+  prefix_until_index, or resource"` instead of silently discarding.
 - **INV-028 — `ToolChoice(mode="none")` forbids `allowed` and `parallel`.**
   WHY: same — `__post_init__` raises `"ToolChoice(mode='none') cannot
   specify allowed or parallel"`; `none` means tools are not used at all.

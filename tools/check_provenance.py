@@ -27,10 +27,13 @@ import sys
 from pathlib import Path
 
 ALLOWED_SOURCES = {"live-capture", "migrated-apr29", "hand-authored"}
+# Goldens are derived artefacts: drafted by the reference shim from a pinned body,
+# then (optionally) reviewed. Their source vocabulary is separate.
+GOLDEN_SOURCES = {"scribe-draft", "hand-authored"}
 REQUIRED_KEYS = {"source", "date", "evidence"}
 
 
-def check_block(block, where: str, problems: list[str]) -> None:
+def check_block(block, where: str, problems: list[str], allowed: set[str] = ALLOWED_SOURCES) -> None:
     if not isinstance(block, dict):
         problems.append(f"{where}: missing or non-object provenance block")
         return
@@ -38,8 +41,8 @@ def check_block(block, where: str, problems: list[str]) -> None:
     if missing:
         problems.append(f"{where}: provenance missing keys {sorted(missing)}")
         return
-    if block["source"] not in ALLOWED_SOURCES:
-        problems.append(f"{where}: provenance source {block['source']!r} not in {sorted(ALLOWED_SOURCES)}")
+    if block["source"] not in allowed:
+        problems.append(f"{where}: provenance source {block['source']!r} not in {sorted(allowed)}")
     if not str(block["evidence"]).strip():
         problems.append(f"{where}: provenance evidence is empty")
     date = str(block["date"])
@@ -56,19 +59,27 @@ def main(argv: list[str] | None = None) -> int:
     problems: list[str] = []
     scanned = 0
 
-    for sub in ("cases", "errors", "auth"):
+    for sub in ("cases", "errors", "auth", "goldens"):
         base = root / sub
         if not base.is_dir():
             continue
         for path in sorted(base.rglob("*.json")):
+            if sub == "goldens" and path.name.startswith("_"):
+                continue  # goldens/_failures.json is a scribe report, not a fixture
             scanned += 1
             try:
                 data = json.loads(path.read_text())
             except Exception as exc:
                 problems.append(f"{path.relative_to(root)}: unreadable JSON ({exc})")
                 continue
-            check_block(data.get("provenance") if isinstance(data, dict) else None,
-                        str(path.relative_to(root)), problems)
+            block = data.get("provenance") if isinstance(data, dict) else None
+            if sub == "goldens":
+                # Independent review 2026-09-02: 29 goldens had no block and
+                # this checker never looked. Goldens are fixtures under
+                # AUTHORITY.md; they carry provenance like everything else.
+                check_block(block, str(path.relative_to(root)), problems, allowed=GOLDEN_SOURCES)
+            else:
+                check_block(block, str(path.relative_to(root)), problems)
 
     serde_path = root / "serde" / "canonical.json"
     if serde_path.is_file():

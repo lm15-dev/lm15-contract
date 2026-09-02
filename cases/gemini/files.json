@@ -1,90 +1,90 @@
 {
- "id": "gemini.files",
- "provider": "gemini",
- "feature": "files",
- "surface": "files",
- "description": "files lifecycle (upload/get/list/delete/download)",
- "provenance": {
-  "source": "live-capture",
-  "date": "2026-08-31",
-  "evidence": "generativelanguage.googleapis.com Files 2026-08-31 (multipart/related upload; no download endpoint \u2014 input-only files); request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
- },
- "steps": [
-  {
-   "file_op": "upload",
-   "upload_request": {
-    "filename": "sample.txt",
-    "media_type": "text/plain",
-    "bytes_data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4KbG0xNSBmaWxlcyBjYXB0dXJlIDIwMjYtMDgtMzEuCg=="
-   },
-   "request": {
-    "method": "POST",
-    "url": "https://generativelanguage.googleapis.com/upload/v1beta/files",
-    "params": {},
-    "headers": {
-     "x-goog-api-key": "$GEMINI_API_KEY",
-     "x-goog-upload-protocol": "multipart",
-     "content-type": "multipart/related; boundary=lm15-795443ea22974ac4bbf54f86eaa5cf95"
-    },
-    "body": null,
-    "body_b64": "LS1sbTE1LTc5NTQ0M2VhMjI5NzRhYzRiYmY1NGY4NmVhYTVjZjk1DQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL2pzb247IGNoYXJzZXQ9VVRGLTgNCg0KeyJmaWxlIjp7ImRpc3BsYXlfbmFtZSI6InNhbXBsZS50eHQifX0NCi0tbG0xNS03OTU0NDNlYTIyOTc0YWM0YmJmNTRmODZlYWE1Y2Y5NQ0KQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluDQoNClRoZSBxdWljayBicm93biBmb3gganVtcHMgb3ZlciB0aGUgbGF6eSBkb2cuCmxtMTUgZmlsZXMgY2FwdHVyZSAyMDI2LTA4LTMxLgoNCi0tbG0xNS03OTU0NDNlYTIyOTc0YWM0YmJmNTRmODZlYWE1Y2Y5NS0tDQo="
-   },
-   "pinned_body": "gemini-upload.json",
-   "parse": "info",
-   "expect": {
-    "status": 200
-   }
+  "id": "gemini.files",
+  "provider": "gemini",
+  "feature": "files",
+  "surface": "files",
+  "description": "files lifecycle (upload/get/list/delete/download)",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-08-31",
+    "evidence": "generativelanguage.googleapis.com Files 2026-08-31 (multipart/related upload; the initial 'no download endpoint' claim was overturned live the same day, see changes/2026-08-31-files-lifecycle.md; `downloadable` is derived from `source: UPLOADED`); request blocks transcribed from the reference adapter against the receipted endpoints; changes/2026-09-01-endpoint-harness-directions.md"
   },
-  {
-   "file_op": "get",
-   "file_id": "files/n9i36fxppl2j",
-   "request": {
-    "method": "GET",
-    "url": "https://generativelanguage.googleapis.com/v1beta/files/n9i36fxppl2j",
-    "params": {},
-    "headers": {
-     "x-goog-api-key": "$GEMINI_API_KEY"
+  "steps": [
+    {
+      "file_op": "upload",
+      "upload_request": {
+        "filename": "sample.txt",
+        "media_type": "text/plain",
+        "bytes_data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4KbG0xNSBmaWxlcyBjYXB0dXJlIDIwMjYtMDgtMzEuCg=="
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/upload/v1beta/files",
+        "params": {},
+        "headers": {
+          "x-goog-api-key": "$GEMINI_API_KEY",
+          "x-goog-upload-protocol": "multipart",
+          "content-type": "multipart/related; boundary=lm15-795443ea22974ac4bbf54f86eaa5cf95"
+        },
+        "body": null,
+        "body_b64": "LS1sbTE1LTc5NTQ0M2VhMjI5NzRhYzRiYmY1NGY4NmVhYTVjZjk1DQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL2pzb247IGNoYXJzZXQ9VVRGLTgNCg0KeyJmaWxlIjp7ImRpc3BsYXlfbmFtZSI6InNhbXBsZS50eHQifX0NCi0tbG0xNS03OTU0NDNlYTIyOTc0YWM0YmJmNTRmODZlYWE1Y2Y5NQ0KQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluDQoNClRoZSBxdWljayBicm93biBmb3gganVtcHMgb3ZlciB0aGUgbGF6eSBkb2cuCmxtMTUgZmlsZXMgY2FwdHVyZSAyMDI2LTA4LTMxLgoNCi0tbG0xNS03OTU0NDNlYTIyOTc0YWM0YmJmNTRmODZlYWE1Y2Y5NS0tDQo="
+      },
+      "pinned_body": "gemini-upload.json",
+      "parse": "info",
+      "expect": {
+        "status": 200
+      }
     },
-    "body": null
-   },
-   "pinned_body": "gemini-get.json",
-   "parse": "info",
-   "expect": {
-    "status": 200
-   }
-  },
-  {
-   "file_op": "list",
-   "limit": 20,
-   "request": {
-    "method": "GET",
-    "url": "https://generativelanguage.googleapis.com/v1beta/files",
-    "params": {
-     "pageSize": "20"
+    {
+      "file_op": "get",
+      "file_id": "files/n9i36fxppl2j",
+      "request": {
+        "method": "GET",
+        "url": "https://generativelanguage.googleapis.com/v1beta/files/n9i36fxppl2j",
+        "params": {},
+        "headers": {
+          "x-goog-api-key": "$GEMINI_API_KEY"
+        },
+        "body": null
+      },
+      "pinned_body": "gemini-get.json",
+      "parse": "info",
+      "expect": {
+        "status": 200
+      }
     },
-    "headers": {
-     "x-goog-api-key": "$GEMINI_API_KEY"
+    {
+      "file_op": "list",
+      "limit": 20,
+      "request": {
+        "method": "GET",
+        "url": "https://generativelanguage.googleapis.com/v1beta/files",
+        "params": {
+          "pageSize": "20"
+        },
+        "headers": {
+          "x-goog-api-key": "$GEMINI_API_KEY"
+        },
+        "body": null
+      },
+      "pinned_body": "gemini-list.json",
+      "parse": "page",
+      "expect": {
+        "status": 200
+      }
     },
-    "body": null
-   },
-   "pinned_body": "gemini-list.json",
-   "parse": "page",
-   "expect": {
-    "status": 200
-   }
-  },
-  {
-   "file_op": "delete",
-   "file_id": "files/n9i36fxppl2j",
-   "request": {
-    "method": "DELETE",
-    "url": "https://generativelanguage.googleapis.com/v1beta/files/n9i36fxppl2j",
-    "params": {},
-    "headers": {
-     "x-goog-api-key": "$GEMINI_API_KEY"
-    },
-    "body": null
-   }
-  }
- ]
+    {
+      "file_op": "delete",
+      "file_id": "files/n9i36fxppl2j",
+      "request": {
+        "method": "DELETE",
+        "url": "https://generativelanguage.googleapis.com/v1beta/files/n9i36fxppl2j",
+        "params": {},
+        "headers": {
+          "x-goog-api-key": "$GEMINI_API_KEY"
+        },
+        "body": null
+      }
+    }
+  ]
 }

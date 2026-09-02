@@ -1,33 +1,38 @@
 {
- "submit": {
-  "id": "0d309c8f-7733-990b-86d2-45afac7672a2",
-  "status": "queued",
-  "provider_data": {
-   "request_id": "0d309c8f-7733-990b-86d2-45afac7672a2"
+  "submit": {
+    "id": "0d309c8f-7733-990b-86d2-45afac7672a2",
+    "status": "queued",
+    "provider_data": {
+      "request_id": "0d309c8f-7733-990b-86d2-45afac7672a2"
+    }
+  },
+  "done": {
+    "id": "0d309c8f-7733-990b-86d2-45afac7672a2",
+    "status": "completed",
+    "progress": 100,
+    "model": "grok-imagine-video",
+    "provider_data": {
+      "status": "done",
+      "video": {
+        "url": "https://vidgen.x.ai/xai-vidgen-bucket/xai-video-0d309c8f-7733-990b-86d2-45afac7672a2.mp4",
+        "duration": 8,
+        "respect_moderation": true
+      },
+      "model": "grok-imagine-video",
+      "usage": {
+        "cost_in_usd_ticks": 4000000000
+      },
+      "progress": 100
+    }
+  },
+  "part": {
+    "type": "video",
+    "media_type": "video/mp4",
+    "url": "https://vidgen.x.ai/xai-vidgen-bucket/xai-video-0d309c8f-7733-990b-86d2-45afac7672a2.mp4"
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the xai.video surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md"
   }
- },
- "done": {
-  "id": "0d309c8f-7733-990b-86d2-45afac7672a2",
-  "status": "completed",
-  "progress": 100,
-  "model": "grok-imagine-video",
-  "provider_data": {
-   "status": "done",
-   "video": {
-    "url": "https://vidgen.x.ai/xai-vidgen-bucket/xai-video-0d309c8f-7733-990b-86d2-45afac7672a2.mp4",
-    "duration": 8,
-    "respect_moderation": true
-   },
-   "model": "grok-imagine-video",
-   "usage": {
-    "cost_in_usd_ticks": 4000000000
-   },
-   "progress": 100
-  }
- },
- "part": {
-  "type": "video",
-  "media_type": "video/mp4",
-  "url": "https://vidgen.x.ai/xai-vidgen-bucket/xai-video-0d309c8f-7733-990b-86d2-45afac7672a2.mp4"
- }
 }
