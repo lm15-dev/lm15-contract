@@ -63,9 +63,9 @@ switched by `images` presence; Gemini composes the frozen chat mapping
 
 ## Evidence
 
-`lm15-dev/curl-fixtures/genmedia-2026-09-01/` (OpenAI images + edits +
+`lm15-contract/receipts/2026-09-01-genmedia/` (OpenAI images + edits +
 speech, Gemini image + edit + speech, pixel-check inputs) and
-`lm15-dev/curl-fixtures/xai-2026-09-01/` (catalogs, images, edits,
+`lm15-contract/receipts/2026-09-01-xai/` (catalogs, images, edits,
 rejected shapes — negative results pinned too).
 
 ## Deferred, with reasons

@@ -1,0 +1,60 @@
+Traceback (most recent call last):
+  File "/tmp/live_files_proof.py", line 57, in <module>
+    prove(name, lm, model)
+    ~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/live_files_proof.py", line 22, in prove
+    resp = lm.complete(Request(model=model, messages=(
+        Message(role="user", parts=(
+    ...<2 lines>...
+        Message(role="user", parts=()) if False else Message.user("What is the magic word in the attached document? Answer with exactly one word."),
+    )))
+  File "/home/maxime/Projects/lm15-dev/lm15-python/lm15/providers/base.py", line 175, in complete
+    raise error
+lm15.errors.BillingError: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/. (openai, HTTP 429)
+
+=== anthropic ===
+uploaded: file_01458BTQBALrmxuYunC34LNA
+  filename: lm15-magic.pdf | media_type: application/pdf | size: 598
+  created: 2026-08-31T22:59:50Z | expires: None
+  readiness: ready | downloadable: False
+wait_ready -> ready
+chat answer: PLUM
+file_get: True | readiness: ready
+file_list: 1 items | ours present: True | cursor: False
+download refused (typed): InvalidRequestError: File `file_01458BTQBALrmxuYunC34LNA` is not downloadable. Only files generated b
+deleted
+get-after-delete (typed): InvalidRequestError
+
+=== openai ===
+uploaded: file-3Ujo27ZtPuSpW3vL35ng77
+  filename: lm15-magic.pdf | media_type: None | size: 598
+  created: 2026-08-31T22:59:54Z | expires: None
+  readiness: ready | downloadable: None
+wait_ready -> ready
+
+=== gemini ===
+uploaded: https://generativelanguage.googleapis.com/v1beta/files/p1h32i7b1f72
+  filename: lm15-magic.pdf | media_type: application/pdf | size: 598
+  created: 2026-08-31T22:59:57Z | expires: 2026-09-02T22:59:56Z
+  readiness: ready | downloadable: False
+wait_ready -> ready
+chat answer: PLUM
+file_get: True | readiness: ready
+file_list: 1 items | ours present: True | cursor: False
+download refused (typed): InvalidRequestError: Only GENERATED files can be downloaded. (gemini, HTTP 400)
+deleted
+get-after-delete (typed): AuthError
+
+=== summary ===
+anthropic: OK
+openai: FAIL: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/. (openai, HTTP 429)
+gemini: OK
+
+=== openai five-op proof (chat step blocked by billing hard limit; see summary above) ===
+uploaded: file-5qESe7u4M6jartDQEzh7hC | readiness: ready | size: 598
+wait_ready -> ready
+file_get: lm15-magic.pdf
+file_list: 2 items | ours present: True
+download refused (typed): InvalidRequestError: Not allowed to download files of purpose: user_data (openai, HTTP 400)
+deleted
+get-after-delete (typed): InvalidRequestError

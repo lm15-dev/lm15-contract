@@ -7,7 +7,7 @@ tools loop had no BuiltinTool branch — a `BuiltinTool` in
 `Request.tools` vanished from the wire with no error, so a user could
 believe a web search backed an answer that came from model memory).
 
-## Evidence (live probes, 2026-09-01, captures in curl-fixtures/chat-builtin-tools-2026-09-01/)
+## Evidence (live probes, 2026-09-01, captures in lm15-contract/receipts/2026-09-01-chat-builtin-tools/)
 
 - **OpenAI chat wire**: `tools` carries `function`/`custom` only
   (chat--create.md); `web_search_options` exists but its search-preview

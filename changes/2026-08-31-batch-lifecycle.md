@@ -40,7 +40,7 @@ under a fabricated, un-refetchable batch id) is gone.
   permitted`.
 
 ## Wire facts established live (2026-08-31, transcripts in
-lm15-dev/curl-fixtures/batch-2026-08-31/)
+lm15-contract/receipts/2026-08-31-batch/)
 
 - Anthropic Message Batches: create (inline requests), status, results
   JSONL (returned OUT of submission order), list, no label field.

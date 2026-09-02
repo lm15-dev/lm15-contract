@@ -1,0 +1,32 @@
+=== 2026-09-01: OpenAI proofs with restored billing headroom ===
+=== batch: re-attach by id alone (the ticket model) ===
+status: completed | label: lm15-capture-2026-09-01 | created: 2026-09-01T00:18:43Z
+  entry[0] succeeded: 'Paris' (model=gpt-5-nano-2025-08-07)
+  entry[1] succeeded: 'Tokyo' (model=gpt-5-nano-2025-08-07)
+
+=== batch: enumeration (the queue remembers) ===
+  batch_6a961a925edc8190ac cancelling lm15-cancel-capture-2026-09-01
+  batch_6a9619e38154819099 completed lm15-capture-2026-09-01
+
+=== files: successful download through lm15 (batch output file) ===
+downloaded 7536 bytes; first line custom_id: {"id": "batch_req_6a961a30d934 ...
+
+=== files: FULL loop with chat (the arrow billing blocked yesterday) ===
+uploaded: file-NsJ7KzLTYme8JbGQXumnD6 | readiness: ready
+chat answer: PLUM
+file_list: 4 items | ours present: True
+deleted
+get-after-delete (typed): InvalidRequestError
+
+=== openrouter smoke ===
+base_url: https://openrouter.ai/api/v1
+chat: Rome | model: openai/gpt-5-nano | usage: 191
+list_models: 425 models; first: ibm-granite/granite-4.2-8b
+files honestly refused: openai_chat: files not supported
+
+=== session log summary: batch cancel + async twins (raw body: batch-2026-08-31/openai-cancel.json) ===
+batch(label=lm15-cancel-capture-2026-09-01) -> queued
+cancel() -> cancelling
+wait(timeout=300) -> TimeoutError fired as specified (OpenAI finalizes cancel in ~10 min)
+re-attach later -> cancelled, done=True; results() == () (request_counts.total=0: cancelled during validating)
+AsyncOpenAILM live: file_upload -> ready; file_list found it; file_delete ok; batches() enumerated [cancelling, completed]

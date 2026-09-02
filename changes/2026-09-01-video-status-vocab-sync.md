@@ -38,5 +38,5 @@ a new decision.
 
 Folds transcribed from `lm15-python/lm15/providers/{openai,xai,gemini}.py`
 as pinned by the video campaign's live captures
-(`lm15-dev/curl-fixtures/video-2026-09-01/`, `xai-2026-09-01/`).
+(`lm15-contract/receipts/2026-09-01-video/`, `receipts/2026-09-01-xai/`).
 `tools/spec_drift.py` green after this entry; no fixture changes.

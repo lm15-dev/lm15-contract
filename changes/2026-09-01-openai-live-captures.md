@@ -7,7 +7,7 @@ Every OpenAI claim that previously rested on documented shapes and
 synthetic tests is now backed by live wire evidence. No contract
 surface changes; this entry upgrades evidence status only.
 
-## Batch (transcripts in lm15-dev/curl-fixtures/batch-2026-08-31/)
+## Batch (transcripts in lm15-contract/receipts/2026-08-31-batch/)
 
 - Submit verified live: JSONL upload (`purpose=batch`) + `/v1/batches`
   create with `metadata.label` (openai-submit.json). Status polled
@@ -31,7 +31,7 @@ surface changes; this entry upgrades evidence status only.
   counts for cancelled-early jobs legitimately differ by provider —
   each mirrors its provider's own accounting.
 
-## Files (transcripts in lm15-dev/curl-fixtures/files-2026-08-31/)
+## Files (transcripts in lm15-contract/receipts/2026-08-31-files/)
 
 - The one arrow billing blocked is closed: upload a PDF → `file_id` in
   a chat request → gpt-5-nano answers the magic word (`PLUM`). The full

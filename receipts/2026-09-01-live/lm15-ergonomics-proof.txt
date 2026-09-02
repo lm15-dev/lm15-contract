@@ -1,0 +1,12 @@
+=== openai: sync turn()/result() ===
+turn 1: 'live hello' | ended_by: turn_end | audio bytes: 0 | tokens: 56
+turn 2 ended_by: tool_call | calls: [('get_weather', {'city': 'Montreal'})]
+turn 3 (continuation): 'The weather in Montreal is currently 21°C and sunny.' | ended_by: turn_end
+=== gemini: sync turn()/result() ===
+turn 1: 'live hello' | ended_by: turn_end | audio bytes: 43682 | tokens: 230
+turn 2 ended_by: tool_call | calls: [('get_weather', {'city': 'Montreal'})]
+turn 3 (continuation): 'The weather in Montreal is 21 degrees Celsius and sunny.' | ended_by: turn_end
+=== openai: native async session ===
+async turn: 'async live hello' | ended_by: turn_end
+=== gemini: native async session ===
+async turn: 'async live hello' | ended_by: turn_end

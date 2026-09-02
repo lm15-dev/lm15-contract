@@ -1,0 +1,16 @@
+=== text turn ===
+final: LiveServerTurnEndEvent(usage=Usage(input_tokens=13, output_tokens=5, total_tokens=18, cache_read_tokens=0, cache_write_tokens=None, reasoning_tokens=None, input_audio_tokens=0, output_audio_tokens=0), type='turn_end')
+text: 'Live hello.'
+
+=== audio out (transcript via text events) ===
+pcm bytes: 79200 | transcript: 'Live hello!'
+
+=== audio in (send_audio + end_audio, VAD off) ===
+heard: "Hello! I'm here and ready to help. How can I assist you today?"
+
+=== tools ===
+tool_call: get_weather {'city': 'Montreal'}
+answer: "It's currently 21 degrees Celsius and sunny in Montreal. Anything else you'd like to know?"
+
+=== interrupt ===
+event types: ['text', 'text', 'text', 'text', 'text', 'text', 'text', 'text'] ... terminal: interrupted

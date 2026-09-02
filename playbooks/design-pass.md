@@ -14,8 +14,9 @@ its output with one question: does every claim point at a receipt?
 1. `AUTHORITY.md`, `spec/*.md`, `lm15-python/docs/mapping-rules.md`,
    `lm15-dev/THEORY.md`.
 2. The current adapter code for the concept.
-3. Today's scrapes (`curl-fixtures/api-references/`) and the live model
-   listings (`lm15-dev/model-listings/`).
+3. Today's scrapes (run `scrapes/<provider>/update.sh`) and a fresh live
+   `/models` listing, saved as a new dated folder under `receipts/` (the
+   2026-09-01 one is `receipts/2026-09-01-model-listings/`).
 4. Credentials through the environment; a dollar budget stated up front.
 5. The exact deliverables (§8 and §9 below).
 

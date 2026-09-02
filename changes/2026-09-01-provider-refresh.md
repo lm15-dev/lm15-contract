@@ -4,12 +4,12 @@ Ratification: RATIFIED 2026-09-01 by maintainer delegation — standing instruct
 
 ## Why now
 
-The doc snapshots under `curl-fixtures/api-references/` dated from
+The doc snapshots under `lm15-contract/scrapes/` dated from
 2026-04-13 and `lm15-python/conformance/provider_docs/` from 2026-04-29.
 Re-scraped 2026-09-01. Fed today's pages, `conformance/check_doc_drift.py`
 went from 0 to 3 unmapped request parameters. Each was then verified
 live. Model inventories were refreshed through `list_models()` on all six
-adapters (`lm15-dev/model-listings/listing-2026-09-01.json`); every model
+adapters (`lm15-contract/receipts/2026-09-01-model-listings/listing-2026-09-01.json`); every model
 name in README, docs, code, and cases still resolves live.
 
 ## 1. Gemini `serviceTier` (was: lm15 raised)
@@ -108,7 +108,7 @@ drops the `reviewed` line of frozen goldens (observed today, reverted).
 ## 4. xAI silently ignores `logprobs` (was: lm15 sent it)
 
 docs.x.ai models page (saved as
-`curl-fixtures/api-references/xai-models-2026-09-01.md`): "`logprobs` and
+`lm15-contract/scrapes/xai/pages/models.md`): "`logprobs` and
 `top_logprobs` are not supported by models `grok-4.20` and newer. These
 fields will be silently ignored if set." Every Grok model listed today is
 4.20 or newer.
@@ -167,7 +167,7 @@ surface (the files precedent). See `lm15-dev/THEORY.md` F1.
   change needing a receipt. Any recent version is accepted.
 - A dozen scraper URLs in `update.sh` now 404 (doc sites moved pages);
   the API-reference pages the adapters depend on all fetched. Listed in
-  `lm15-dev/model-listings/REPORT-2026-09-01.md`.
+  `lm15-contract/receipts/2026-09-01-model-listings/REPORT-2026-09-01.md`.
 - `conformance/provider_docs/` was a second, drifted copy of the scrape.
   Replaced with today's pages; the tool should read the scrape directory
   directly (one copy).

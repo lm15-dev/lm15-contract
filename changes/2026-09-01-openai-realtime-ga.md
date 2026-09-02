@@ -16,7 +16,7 @@ cookbook's "Gemini is the only provider with live support" was the
 truth. The adapter now speaks the GA shape and the claim is inverted:
 both first-party live providers are live-verified.
 
-## GA wire facts (captures in lm15-dev/curl-fixtures/live-2026-09-01/)
+## GA wire facts (captures in lm15-contract/receipts/2026-09-01-live/)
 
 - No beta header. `session.update` requires `session.type: "realtime"`;
   `modalities` → `output_modalities`; audio config nests under

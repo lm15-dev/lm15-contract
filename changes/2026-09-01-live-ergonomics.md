@@ -23,7 +23,7 @@ vocabularies, or serde kinds change.
   contract of complete(). Verified live 2026-09-01: the handoff
   behaves IDENTICALLY on OpenAI GA Realtime and Gemini
   BidiGenerateContent (transcripts in
-  lm15-dev/curl-fixtures/live-2026-09-01/lm15-ergonomics-proof.txt).
+  lm15-contract/receipts/2026-09-01-live/lm15-ergonomics-proof.txt).
 - Native async live: `await lm.live(config)` on AsyncOpenAILM /
   AsyncGeminiLM returns `AsyncWebSocketLiveSession` over
   `websockets.asyncio` — a real awaitable socket sharing the sync

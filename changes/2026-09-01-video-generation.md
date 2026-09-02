@@ -39,7 +39,7 @@ done + public URL). 24 results green; two new selftest mutations
 
 ## Evidence
 
-`lm15-dev/curl-fixtures/video-2026-09-01/` (Sora + Veo transcripts and
-downloaded MP4s) and `xai-2026-09-01/` (grok-imagine). Live-proven
+`lm15-contract/receipts/2026-09-01-video/` (Sora + Veo transcripts and
+downloaded MP4s) and `receipts/2026-09-01-xai/` (grok-imagine). Live-proven
 end-to-end via the shipped code: re-attach by id on all three wires,
 results delivered in each honest mode, listing where wires list.

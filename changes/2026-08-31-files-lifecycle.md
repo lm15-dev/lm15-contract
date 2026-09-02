@@ -67,7 +67,7 @@ poller, on OpenAI, Anthropic, and Gemini, with an async twin each.
   drivers: files are an API-key surface.
 
 ## Wire facts established live (2026-08-31, transcripts in
-lm15-dev/curl-fixtures/files-2026-08-31/)
+lm15-contract/receipts/2026-08-31-files/)
 
 - Anthropic Files is GA multipart/form-data — NO beta header required
   (the raw-body + x-filename upload shipped before was stale);
