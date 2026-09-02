@@ -1,0 +1,73 @@
+{
+ "method": "POST",
+ "url": "https://api.anthropic.com/v1/messages",
+ "headers": {
+  "x-api-key": "$REDACTED",
+  "anthropic-version": "2023-06-01",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "claude-sonnet-5",
+  "max_tokens": 4000,
+  "messages": [
+   {
+    "role": "user",
+    "content": "Use lookup with n=7, then explain in one sentence whether 7 is a Mersenne prime. Think it through carefully."
+   },
+   {
+    "role": "assistant",
+    "content": [
+     {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "EscDCpABCBEYAipAw92mGFg4pQYC2qlen5gxyC6gUIvF4K+BI6YX56vlsUcwGAg52Htuc0DT6Ce8OhuIv9MaZsjBVEkvt09QZDSfHzIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaoAfGw4NQGEgxw4zGqjIMJwr/uUOMaDH1v8riJDsgWlZH1AiIwRbxRW7uO+wmycs1RtPn95A5XMiZhriQL4T509s7hrrm2bndLlFkMWw0TxuhPLnqAKuMBw/eQrVGYqxoT4w8CiWhlsvLiRH6TRRPZ27/nNMXA19ge5WUaEwRhC/pMPZ/MX6dQrUogeF/ZDjusFOSac1jCl2qiwAv9uiAAQ2n+jYjY0gQzKh9MwI3CYrCMG7GNruOywBbsKCiffWYCgr32DSX8ed1uWnQznyNaQ4hPsNQ4WSsY2n1dKDC8+S6HzRo3HFQ56iiZy5vS3biN60y0N/oiWxtcBPLNbwmBLFp2Y1FtvBWOcAsWC0DmpoONDnkC+ru/qmKWQuc1OLALmH79NcXu92DOTX2r4jruULSMrDik3JoF27UYAQ=="
+     },
+     {
+      "type": "tool_use",
+      "id": "toolu_01JAsNW281iEmMG831XU1mXf",
+      "name": "lookup",
+      "input": {
+       "n": 7
+      },
+      "caller": {
+       "type": "direct"
+      }
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "content": [
+     {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01JAsNW281iEmMG831XU1mXf",
+      "content": "49"
+     }
+    ]
+   }
+  ],
+  "tools": [
+   {
+    "name": "lookup",
+    "description": "Look up a number.",
+    "input_schema": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   }
+  ],
+  "thinking": {
+   "type": "adaptive"
+  },
+  "output_config": {
+   "effort": "high"
+  }
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "method": "POST",
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Use lookup with n=7 and tell me the result."
+     }
+    ]
+   },
+   {
+    "role": "model",
+    "parts": [
+     {
+      "functionCall": {
+       "name": "lookup",
+       "args": {
+        "n": 7
+       }
+      },
+      "thoughtSignature": "CsoBARFNMg9jNrpu1pRFcoytAUe56M+tFZtLrR45VaHZF59ulifyEW043ovtCFjrq9RL4E/xxWZcd7Bt3UoIYNdfLv1mfuJz5FkpRw4Hg5irK8EDWDk5fS+3LWRi4jC0gknsxlo8ljSLVWFFL/8iVNJTVdYizs9iJClwnDIlJnFnzLawV4bIbw3PoiiONKOtM5VQak7qsezu9VcBLp6MWF42aWVKyit9uuae1p05PTq+fjNrRaNfKCZ1uNhP0qg7YbzaXCwpKNWVbVwxSA=="
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "parts": [
+     {
+      "functionResponse": {
+       "name": "lookup",
+       "response": {
+        "result": "49"
+       }
+      }
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 4000
+  },
+  "tools": [
+   {
+    "functionDeclarations": [
+     {
+      "name": "lookup",
+      "description": "Look up a number.",
+      "parameters": {
+       "type": "object",
+       "properties": {
+        "n": {
+         "type": "integer"
+        }
+       },
+       "required": [
+        "n"
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ }
+}

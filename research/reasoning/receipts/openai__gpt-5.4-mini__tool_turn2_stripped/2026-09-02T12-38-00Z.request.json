@@ -1,0 +1,53 @@
+{
+ "method": "POST",
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.4-mini",
+  "input": [
+   {
+    "role": "user",
+    "content": "Use lookup with n=7 and tell me the result."
+   },
+   {
+    "id": "fc_03150190048113ad016a9818a6e52c87d280ea44705c8baa03",
+    "type": "function_call",
+    "status": "completed",
+    "arguments": "{\"n\":7}",
+    "call_id": "call_mcCNNL6NhFAROZfiFzvC9dKO",
+    "name": "lookup"
+   },
+   {
+    "type": "function_call_output",
+    "call_id": "call_mcCNNL6NhFAROZfiFzvC9dKO",
+    "output": "49"
+   }
+  ],
+  "max_output_tokens": 4000,
+  "tools": [
+   {
+    "type": "function",
+    "name": "lookup",
+    "description": "Look up a number.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   }
+  ],
+  "reasoning": {
+   "effort": "low"
+  },
+  "store": false
+ }
+}

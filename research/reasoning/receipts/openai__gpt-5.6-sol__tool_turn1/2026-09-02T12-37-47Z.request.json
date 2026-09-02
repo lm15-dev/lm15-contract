@@ -1,0 +1,35 @@
+{
+ "method": "POST",
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.6-sol",
+  "input": "Use lookup with n=7 and tell me the result.",
+  "max_output_tokens": 4000,
+  "tools": [
+   {
+    "type": "function",
+    "name": "lookup",
+    "description": "Look up a number.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   }
+  ],
+  "reasoning": {
+   "effort": "low"
+  },
+  "store": false
+ }
+}

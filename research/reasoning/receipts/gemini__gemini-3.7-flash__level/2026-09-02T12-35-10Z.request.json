@@ -1,0 +1,26 @@
+{
+ "method": "POST",
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "What is 17 times 23? Reply with just the number."
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 4000,
+   "thinkingConfig": {
+    "thinkingLevel": "medium"
+   }
+  }
+ }
+}

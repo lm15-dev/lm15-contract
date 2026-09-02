@@ -1,0 +1,25 @@
+{
+ "method": "POST",
+ "url": "https://api.anthropic.com/v1/messages",
+ "headers": {
+  "x-api-key": "$REDACTED",
+  "anthropic-version": "2023-06-01",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "claude-haiku-4-5-20251001",
+  "max_tokens": 4000,
+  "messages": [
+   {
+    "role": "user",
+    "content": "What is 17 times 23? Reply with just the number."
+   }
+  ],
+  "thinking": {
+   "type": "adaptive"
+  },
+  "output_config": {
+   "effort": "max"
+  }
+ }
+}

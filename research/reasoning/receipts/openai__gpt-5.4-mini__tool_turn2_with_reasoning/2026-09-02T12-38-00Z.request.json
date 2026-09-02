@@ -1,0 +1,60 @@
+{
+ "method": "POST",
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.4-mini",
+  "input": [
+   {
+    "role": "user",
+    "content": "Use lookup with n=7 and tell me the result."
+   },
+   {
+    "id": "rs_03150190048113ad016a9818a6c93087d295f919b925307407",
+    "type": "reasoning",
+    "content": [],
+    "encrypted_content": "gAAAAABqmBinmX-UUACvfJ-rycvgDVag0C4CA85Yl6MjChuhHvKjNjaRQkjgH4VvvmPKLI9JrQ3qqHTzYTFHn-mGa7fkOgqzLugCFHOu2ld2h1Jv1cqQw5tKYCqB6iscOqv8o8YMZ77UO71ru-SyAzJR_JWN8kussig-Y384jEhVkp6xXMsLrEvCWN16YzieIuAU84hhTP3N3OGK-UUqHrQiBADKryan0TyaEm3kH3jf5Hxv24xYzuhu-j2LB3VnKF28tsJcQsSqUhGt3ur0uPVn5-RbD_eMpl70hb4S7xk2cyJTjt8N2ySdodGTHbShmtpMJNSCAhN_E3BmVzt29vbZjyB8mortAItmIrj9Cn3_p3zZ9IZ1tb7cCA5TzX23LiAwIY9UA1cbai9SB6P7rTceDXKK7Sp2OVqHYgkEEaLPk36jDKRKvESKYBBnF0ElR65AiGOg-fhr2MeR1kXAWP5e0SNC9dHnQgxxpm9AraRx_XtevXUCzjwYW4zM9zeA85iCRUDNC6Iv__khXAOR_izwpes_bpevri_qkzj3FfE7eoIGilORb-qpgfnWOgx4gtF1I28sBQJIHGdQy_1oP-7PTSqYkgC8MN8jr6aoWOuMpC3uT10j4I7zhTB8XUEr7fnrz8IW2roVccyiYK3ohrjnQgZ-yyqW3dEwEtb2iusJWOWFo4qPyv3zbYeW8QNWTFjNUe9pRSxvEE-dVQIoAUciSv0qyFh1ScuLpO1X149XCZUoQefJqbXE5hTNcFOLzpo3fabEO18sRsGtVhhJ-_wzTUJLm35nmiSyp-zgDbxcagWoIaokrnH54PJViW_fY3C2gTGpKe8JrKeD04QZLW6mu7RWFDNQd2DFgDbcVzugK9rNS5EiCoP0PmHxWqz-EVjeTQ34KcANNHLdnwBmXINFo5fcCEeA86i8XNxHI-qkY6pYM-nGTNi2dXlgWJw1qvo5WJsYpCv1WJD52RqIEFMFra-CDOEB3R8Dl2hfqY7SiRG-GquCMQhMkV1XpQ2ES0pbnIrVtoKpDQiDWE-PvcPEwH1f4Vvd8DnF1vmg-Y6eqJPwBDvolMevnky58ax3YYSHyXENc7vrUxeXMx49TpUSsHd2gjMud1UM6tsXj1wJ_jwSxoudHkyHjosZySR41yqttxhbb6YBklKSkmMyrOdCnHNnBKzTgV1VVXGeIXNscqJommGQdhimxAu2WWNrQysTFSKQ5R3B-QRwafAZnjoFu10vaEjyTw==",
+    "summary": []
+   },
+   {
+    "id": "fc_03150190048113ad016a9818a6e52c87d280ea44705c8baa03",
+    "type": "function_call",
+    "status": "completed",
+    "arguments": "{\"n\":7}",
+    "call_id": "call_mcCNNL6NhFAROZfiFzvC9dKO",
+    "name": "lookup"
+   },
+   {
+    "type": "function_call_output",
+    "call_id": "call_mcCNNL6NhFAROZfiFzvC9dKO",
+    "output": "49"
+   }
+  ],
+  "max_output_tokens": 4000,
+  "tools": [
+   {
+    "type": "function",
+    "name": "lookup",
+    "description": "Look up a number.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   }
+  ],
+  "reasoning": {
+   "effort": "low"
+  },
+  "store": false
+ }
+}
