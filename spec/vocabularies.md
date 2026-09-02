@@ -314,6 +314,8 @@ Runtime mirror: `TOOL_CHOICE_MODES`.
 
 ## CacheMode
 
+Runtime mirror: `CACHE_MODES` (added 2026-09-01; the vocabulary is unchanged).
+
 | Value |
 |---|
 | `auto` |
@@ -321,10 +323,21 @@ Runtime mirror: `TOOL_CHOICE_MODES`.
 
 ## CacheRetention
 
+Runtime mirror: `CACHE_RETENTIONS` (added 2026-09-01; the vocabulary is unchanged).
+
 | Value |
 |---|
 | `short` |
 | `long` |
+
+## CachePrefix
+
+Runtime mirror: `CACHE_PREFIXES`. Added 2026-09-01 (MAP-6, changes/2026-09-01-caching-design.md A2): the two prefix INTENTS a caller can name without counting messages.
+
+| Value |
+|---|
+| `stable` |
+| `history` |
 
 ## LiveClientEventType
 

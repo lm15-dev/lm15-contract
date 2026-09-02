@@ -472,9 +472,11 @@ Config level: `reasoning` absent = no explicit preference;
 | `mode` | string (CacheMode) | no | `"auto"` | always | closed vocabulary |
 | `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary |
 | `key` | string | no | `null` | omit-empty | |
-| `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced; index of the last message of the reusable prefix, clamped to the last message |
+| `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced; index of the last message of the reusable prefix, clamped to the last message; mutually exclusive with `prefix` |
+| `prefix` | string (CachePrefix) | no | `null` | omit-empty | closed vocabulary: `stable` = the end of system + tools, `history` = the end of the last message; mutually exclusive with `prefix_until_index` (MAP-6 A2) |
+| `resource` | string | no | `null` | omit-empty | non-empty; a `CacheInfo.id` (opaque, provider-owned format) naming a stored cache object to reference; providers without the resource tier RAISE (MAP-6) |
 
-`mode="off"` forbids `retention`/`key` (INV-027).
+`mode="off"` forbids `retention`, `key`, `prefix`, `prefix_until_index`, and `resource` (INV-027, widened 2026-09-01: an explicit off carries no other intent).
 
 **Prefix breakpoint mapping (2026-09-01).** `prefix_until_index` marks
 the end of the reusable prefix and rides on the last block of that
@@ -647,6 +649,59 @@ Anthropic `next_page` token; Gemini `nextPageToken`); pass it back to
 |---|---|---|---|---|---|
 | `items` | array of FileInfo | no | `[]` | omit-empty | |
 | `next_cursor` | string | no | `null` | omit-empty | non-empty when present; opaque |
+
+### CacheInfo
+
+A snapshot of one provider-side stored cache object — the resource tier
+of MAP-6 (changes/2026-09-01-caching-design.md). A stored cache belongs
+to one model on every provider that has the tier (a KV state is
+model-specific by nature), so `model` is required. Nothing in this table
+names a provider: id formats, TTL spellings, and what the wire does with
+`CacheConfig.resource` are adapter concerns.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `id` | string | yes | — | always | non-empty; the provider's reference verbatim; place it in `CacheConfig.resource` |
+| `model` | string | yes | — | always | non-empty; the model the object was created for |
+| `tokens` | int | no | `null` | omit-empty | `>= 0`; stored token count when reported (storage cost = tokens × hours × rate) |
+| `created_at` | string | no | `null` | omit-empty | ISO-8601 UTC `YYYY-MM-DDTHH:MM:SSZ`, normalized |
+| `expires_at` | string | no | `null` | omit-empty | same normalization |
+| `label` | string | no | `null` | omit-empty | non-empty when present |
+| `provider_data` | object (opaque) | no | `null` | omit-empty | raw object verbatim |
+
+Created by `cache_create(prefix: Request, ttl_seconds=None, label=None)`;
+the prefix's `model`, `system`, `tools`, and `messages` form the object; a
+non-default `config` on the prefix RAISES. Verbs: `cache_get(id)`,
+`cache_list(limit, cursor)`, `cache_delete(id)`,
+`cache_update(id, ttl_seconds)`. Support is declared by
+`EndpointSupport.caches`; adapters without it RAISE on every verb.
+
+### CachePage
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `items` | array of CacheInfo | no | `[]` | omit-empty | |
+| `next_cursor` | string | no | `null` | omit-empty | non-empty when present; opaque |
+
+### CachedPrefix
+
+The ergonomic over the resource tier: `cached = lm.cache(prefix)`, then
+`cached.request(messages)` (Python sugar: `cached + messages`). On
+providers with the resource tier `lm.cache` creates the object; on
+marker and automatic providers it is pure. The built Request and its
+wire bytes are what the contract pins; the sugar is per-language.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `prefix` | object (Request) | yes | — | always | `config` must be default (a cached object has no generation settings) |
+| `resource` | object (CacheInfo) | no | `null` | omit-empty | when present, `resource.model == prefix.model` |
+
+`request(messages, config=None)` appends `messages` (a string → one user
+message, a Message, a sequence, or a Request with the same model and no
+system/tools) and sets `config.cache =
+CacheConfig(prefix_until_index=len(prefix.messages) - 1, resource=resource.id)`;
+a `config` that already carries `cache` RAISES. Convenience: `id`,
+`expires_at`, `cache_config()`.
 
 ### BatchRequest
 
