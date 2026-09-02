@@ -1,0 +1,11 @@
+ Mistral Docs Docs &amp; API Search docs ⌘K Vibe Studio Inference &amp; Models Admin Resources API Reference Search docs ⌘K Toggle theme Reach out Try Studio Home Studio Overview Build Conversations Chat Completions Vision Reasoning Citations &amp; References Advanced Function Calling Structured Outputs Custom JSON Mode Moderation &amp; Guardrailing Agents Connectors Workflows Search Agentic Search Libraries Search Toolkit Process Document AI Audio Batch Processing Safety &amp; utilities Embeddings Moderation &amp; Guardrailing Studio Conversations Structured Outputs Structured Outputs 
+ When utilizing LLMs as agents or steps within a lengthy process, chain, or pipeline, it is often necessary for the outputs to adhere to a specific structured format. JSON is the most commonly used format for this purpose. 
+ Tip Before continuing, we recommend reading the Chat Completions documentation to learn more about the chat completions API and how to use it before proceeding. 
+ We offer a reliable method to obtain structured output in your desired format. 
+ Our system includes a built-in mode for JSON output, along with the capability to use custom structured outputs. 
+ Warning For JSON mode, it is essential to explicitly instruct the model in your prompt to output JSON and specify the desired format. Custom structured outputs are more reliable and are recommended whenever possible. However, it is still advisable to iterate on your prompts. 
+ Use JSON mode when more flexibility in the output is required while maintaining a JSON structure, and customize it if you want to enforce a clearer format to improve reliability. 
+ Structured Outputs Available Copy section link Structured Outputs Available 
+ Custom : Use your own schema to enforce a specific format. 
+ JSON : To enforce a JSON output. 
+ WHY MISTRAL About us Our customers Careers Contact us EXPLORE AI Solutions Partners Research DOCUMENTATION Documentation Ambassadors Cookbooks BUILD Studio Vibe Mistral Code Mistral Compute Try the API LEGAL Terms of service Privacy policy Legal notice Privacy Choices Brand COMMUNITY Discord ↗ X ↗ Github ↗ LinkedIn ↗ Ambassadors Mistral AI © 2026 Toggle theme Function Calling Custom 

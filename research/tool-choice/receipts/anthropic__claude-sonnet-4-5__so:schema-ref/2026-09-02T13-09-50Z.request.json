@@ -1,0 +1,53 @@
+{
+ "url": "https://api.anthropic.com/v1/messages",
+ "headers": {
+  "x-api-key": "$REDACTED",
+  "anthropic-version": "2023-06-01",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "claude-sonnet-4-5",
+  "max_tokens": 600,
+  "messages": [
+   {
+    "role": "user",
+    "content": "Extract the person: John is 34 years old, email john@x.io, code ABC."
+   }
+  ],
+  "output_config": {
+   "format": {
+    "type": "json_schema",
+    "schema": {
+     "type": "object",
+     "properties": {
+      "person": {
+       "$ref": "#/$defs/Person"
+      }
+     },
+     "required": [
+      "person"
+     ],
+     "additionalProperties": false,
+     "$defs": {
+      "Person": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string"
+        },
+        "age": {
+         "type": "integer"
+        }
+       },
+       "required": [
+        "name",
+        "age"
+       ],
+       "additionalProperties": false
+      }
+     }
+    }
+   }
+  }
+ }
+}

@@ -70,8 +70,8 @@
     ],
     "config": {
       "response_format": {
-        "response_mime_type": "application/json",
-        "response_schema": {
+        "type": "json_schema",
+        "schema": {
           "type": "array",
           "items": {
             "type": "object",
@@ -98,7 +98,7 @@
   "canonical_request_provenance": {
     "source": "canonical-rewrite",
     "date": "2026-06-10",
-    "evidence": "wire-identical to live-validated fixture, verified by harness request direction"
+    "evidence": "wire-identical to live-validated fixture, verified by harness request direction; 2026-09-02: rewritten from the provider-native response_mime_type/response_schema spelling to the canonical shape (INV-050, changes/2026-09-02-tool-choice-structured-output.md); the pinned wire is unchanged (responseSchema chosen by the additionalProperties rule)"
   },
   "pinned_body": "2026-04-13T14-50-04Z.txt"
 }

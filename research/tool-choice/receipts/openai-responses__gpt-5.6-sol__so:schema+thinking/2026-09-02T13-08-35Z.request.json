@@ -1,0 +1,38 @@
+{
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.6-sol",
+  "input": "Extract the person: John is 34 years old, email john@x.io, code ABC.",
+  "max_output_tokens": 600,
+  "text": {
+   "format": {
+    "type": "json_schema",
+    "name": "person",
+    "schema": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "age": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "name",
+      "age"
+     ],
+     "additionalProperties": false
+    },
+    "strict": true
+   }
+  },
+  "reasoning": {
+   "effort": "low"
+  }
+ }
+}

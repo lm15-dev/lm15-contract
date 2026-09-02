@@ -1,0 +1,53 @@
+{
+ "url": "https://api.anthropic.com/v1/messages",
+ "headers": {
+  "x-api-key": "$REDACTED",
+  "anthropic-version": "2023-06-01",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "claude-sonnet-4-5",
+  "max_tokens": 600,
+  "messages": [
+   {
+    "role": "user",
+    "content": "Look up n=7 with the lookup tool."
+   }
+  ],
+  "tools": [
+   {
+    "name": "lookup",
+    "description": "Look up a number.",
+    "input_schema": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   },
+   {
+    "name": "weather",
+    "description": "Get the weather for a city.",
+    "input_schema": {
+     "type": "object",
+     "properties": {
+      "city": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "city"
+     ]
+    }
+   }
+  ],
+  "tool_choice": {
+   "type": "auto"
+  }
+ }
+}

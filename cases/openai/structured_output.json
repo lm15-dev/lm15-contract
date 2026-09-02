@@ -75,29 +75,27 @@
     ],
     "config": {
       "response_format": {
-        "format": {
-          "type": "json_schema",
-          "name": "recipe",
-          "strict": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "ingredients": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
+        "type": "json_schema",
+        "name": "recipe",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
             },
-            "required": [
-              "name",
-              "ingredients"
-            ],
-            "additionalProperties": false
-          }
+            "ingredients": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "name",
+            "ingredients"
+          ],
+          "additionalProperties": false
         }
       }
     }
@@ -105,7 +103,7 @@
   "canonical_request_provenance": {
     "source": "canonical-rewrite",
     "date": "2026-06-10",
-    "evidence": "wire-identical to live-validated fixture, verified by harness request direction"
+    "evidence": "wire-identical to live-validated fixture, verified by harness request direction; 2026-09-02: rewritten from the provider-native {format: ...} spelling to the canonical shape (INV-050, changes/2026-09-02-tool-choice-structured-output.md); the pinned wire is unchanged"
   },
   "pinned_body": "2026-04-13T14-52-13Z.txt"
 }

@@ -1,0 +1,65 @@
+{
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Extract the person: John is 34 years old, email john@x.io, code ABC. (tools available but not needed)"
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 600,
+   "responseMimeType": "application/json",
+   "responseJsonSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "age": {
+      "type": "integer"
+     }
+    },
+    "required": [
+     "name",
+     "age"
+    ],
+    "additionalProperties": false
+   }
+  },
+  "tools": [
+   {
+    "functionDeclarations": [
+     {
+      "name": "lookup",
+      "description": "Look up a number.",
+      "parameters": {
+       "type": "object",
+       "properties": {
+        "n": {
+         "type": "integer"
+        }
+       },
+       "required": [
+        "n"
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "toolConfig": {
+   "functionCallingConfig": {
+    "mode": "AUTO"
+   }
+  }
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "url": "https://api.openai.com/v1/responses",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.6-sol",
+  "input": "Look up n=7 with the lookup tool.",
+  "max_output_tokens": 600,
+  "tools": [
+   {
+    "type": "function",
+    "name": "lookup",
+    "description": "Look up a number.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "n": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "n"
+     ]
+    }
+   },
+   {
+    "type": "function",
+    "name": "weather",
+    "description": "Get the weather for a city.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "city": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "city"
+     ]
+    }
+   }
+  ],
+  "tool_choice": "auto"
+ }
+}

@@ -451,6 +451,13 @@ kind-correct wire form, or raise when the wire cannot express it:
   `allowed_tools` form; builtin names RAISE — the dialect wire has no
   hosted-tool tool_choice (offering builtins is a separate per-server
   policy — see BuiltinTool, chat dialect policy).
+- **xAI** (MAP-8, live 2026-09-02): `allowed` subsets RAISE — api.x.ai
+  accepts `allowed_tools` and ignores it (the excluded tool was called);
+  a single name with `required` maps to the forced-function form, which
+  held. A forced tool together with `response_format` RAISES (JSON text
+  came back, no call).
+- **Gemini `parallel=false`** RAISES (MAP-8): no wire knob; two calls
+  came back with the preference set on 2.5 and 3.7.
 
 ### Reasoning
 
@@ -520,7 +527,7 @@ has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md
 | `top_p` | float | no | `null` | omit-empty | in `[0, 1]`; int-coerced |
 | `top_k` | int | no | `null` | omit-empty | `> 0`; float-coerced |
 | `stop` | array of string | no | `[]` | omit-empty | non-empty strings; bare string coerced to 1-tuple (INV-020) |
-| `response_format` | object (opaque) | no | `null` | omit-empty | strict JSON object |
+| `response_format` | object (opaque) | no | `null` | omit-empty | strict JSON object; exactly two shapes (INV-050): `{"type": "json_object"}` or `{"type": "json_schema", "schema", "name"?, "strict"?}`. Mapping (MAP-8): OpenAI Responses `text.format` (`name` defaults to `response`); chat dialect/xAI/Groq `response_format.json_schema`; Anthropic `output_config.format` (`json_object` RAISES: no any-JSON mode; `strict` satisfied, `name` dropped as a label); Gemini `responseMimeType` + `responseJsonSchema`/`responseSchema` |
 | `tool_choice` | object (ToolChoice) | no | `null` | omit-empty | |
 | `reasoning` | object (Reasoning) | no | `null` | omit-empty | |
 | `cache` | object (CacheConfig) | no | `null` | omit-empty | |

@@ -1,0 +1,41 @@
+{
+ "url": "https://api.groq.com/openai/v1/chat/completions",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Extract the person: John is 34 years old, email john@x.io, code ABC."
+   }
+  ],
+  "max_tokens": 600,
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "person",
+    "schema": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "age": {
+       "type": "integer"
+      }
+     },
+     "required": [
+      "name",
+      "age"
+     ],
+     "additionalProperties": false
+    },
+    "strict": true
+   }
+  },
+  "reasoning_effort": "low"
+ }
+}

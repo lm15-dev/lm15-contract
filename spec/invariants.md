@@ -264,6 +264,21 @@ rationale is the designed reason, ratified, not a guess.
   empty tuples**, equal to the omitted form (round-trip identity with the
   omission rule).
 
+## Structured output shape
+
+- **INV-050 — `response_format` has exactly two shapes.**
+  `{"type": "json_object"}` (any valid JSON) or `{"type": "json_schema",
+  "schema": <JSON Schema>, "name"?: str, "strict"?: bool}`. Any other
+  object is rejected at `Config` construction; provider-native spellings
+  (`{"format": ...}`, `{"response_mime_type": ...}`, `{"json_schema":
+  {...}}`, a bare schema) belong in `extensions`. `schema` is an opaque
+  payload (INV-002): adapters never rewrite a keyword, drop `minimum`, or
+  flip `additionalProperties` to make a request pass — the provider's
+  400 is the contract. WHY: the 2026-09-02 pass found four adapter
+  heuristics accepting several spellings for one intent, with the wire
+  deciding which; two canonical spellings for one intent violates
+  principle 2 of types.py (MAP-8, changes/2026-09-02-tool-choice-structured-output.md).
+
 ## Blessed provider-only extension knobs
 
 - **INV-049 — Blessed provider-only extension knobs.** Some

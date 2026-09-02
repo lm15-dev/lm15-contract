@@ -1,0 +1,51 @@
+{
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Extract the person: John is 34 years old, email john@x.io, code ABC."
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 600,
+   "responseMimeType": "application/json",
+   "responseJsonSchema": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "age": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 150
+     },
+     "email": {
+      "type": "string",
+      "format": "email"
+     },
+     "code": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+     }
+    },
+    "required": [
+     "name",
+     "age",
+     "email",
+     "code"
+    ],
+    "additionalProperties": false
+   }
+  }
+ }
+}

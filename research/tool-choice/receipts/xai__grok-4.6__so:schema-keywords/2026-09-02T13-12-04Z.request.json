@@ -1,0 +1,52 @@
+{
+ "url": "https://api.x.ai/v1/chat/completions",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "grok-4.6",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Extract the person: John is 34 years old, email john@x.io, code ABC."
+   }
+  ],
+  "max_tokens": 600,
+  "response_format": {
+   "type": "json_schema",
+   "json_schema": {
+    "name": "person",
+    "schema": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "age": {
+       "type": "integer",
+       "minimum": 0,
+       "maximum": 150
+      },
+      "email": {
+       "type": "string",
+       "format": "email"
+      },
+      "code": {
+       "type": "string",
+       "pattern": "^[A-Z]{3}$"
+      }
+     },
+     "required": [
+      "name",
+      "age",
+      "email",
+      "code"
+     ],
+     "additionalProperties": false
+    },
+    "strict": true
+   }
+  }
+ }
+}

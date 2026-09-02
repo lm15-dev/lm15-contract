@@ -1,0 +1,63 @@
+{
+ "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+ "headers": {
+  "x-goog-api-key": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "contents": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Look up n=7 with the lookup tool."
+     }
+    ]
+   }
+  ],
+  "generationConfig": {
+   "maxOutputTokens": 600
+  },
+  "tools": [
+   {
+    "functionDeclarations": [
+     {
+      "name": "lookup",
+      "description": "Look up a number.",
+      "parameters": {
+       "type": "object",
+       "properties": {
+        "n": {
+         "type": "integer"
+        }
+       },
+       "required": [
+        "n"
+       ]
+      }
+     },
+     {
+      "name": "weather",
+      "description": "Get the weather for a city.",
+      "parameters": {
+       "type": "object",
+       "properties": {
+        "city": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "city"
+       ]
+      }
+     }
+    ]
+   }
+  ],
+  "toolConfig": {
+   "functionCallingConfig": {
+    "mode": "AUTO"
+   }
+  }
+ }
+}

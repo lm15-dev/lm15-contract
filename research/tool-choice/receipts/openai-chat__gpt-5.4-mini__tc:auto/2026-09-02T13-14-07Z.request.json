@@ -1,0 +1,56 @@
+{
+ "url": "https://api.openai.com/v1/chat/completions",
+ "headers": {
+  "Authorization": "$REDACTED",
+  "Content-Type": "application/json"
+ },
+ "body": {
+  "model": "gpt-5.4-mini",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Look up n=7 with the lookup tool."
+   }
+  ],
+  "max_completion_tokens": 600,
+  "tools": [
+   {
+    "type": "function",
+    "function": {
+     "name": "lookup",
+     "description": "Look up a number.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "n": {
+        "type": "integer"
+       }
+      },
+      "required": [
+       "n"
+      ]
+     }
+    }
+   },
+   {
+    "type": "function",
+    "function": {
+     "name": "weather",
+     "description": "Get the weather for a city.",
+     "parameters": {
+      "type": "object",
+      "properties": {
+       "city": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "city"
+      ]
+     }
+    }
+   }
+  ],
+  "tool_choice": "auto"
+ }
+}
