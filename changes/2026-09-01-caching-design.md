@@ -165,3 +165,18 @@ other provider, including OpenAI <5.6 where the option is rejected and
 writes are free, `mode="off"` sends nothing. Same two conditions as A1:
 no money is spent by the fallback, and the outcome is visible in usage.
 Rule 2 above is amended to say so.
+
+**Open question 3 resolved (2026-09-01, Maxime Rivest in session: "its a
+yes but make sure it is NOT google / gemini specific").** The cache
+resource is a canonical tier, not a Gemini feature. Rules 7 and 8 are
+restated provider-neutrally: `CacheConfig.resource` holds a `CacheInfo.id`
+(opaque, provider-owned format); `cache_create` takes a `Request` prefix
+(model, system, tools, messages; a non-default config raises),
+`ttl_seconds`, `label`; `CacheInfo` carries `id, model, tokens,
+created_at, expires_at, label, provider_data`; `cache_get`, `cache_list`
+(cursor page), `cache_delete`, `cache_update(id, ttl_seconds)`;
+`EndpointSupport.caches` declares support. What the wire does with
+`resource` is per adapter (Gemini omits system/tools because its object
+owns them; a future provider may not). Model pinning is a property of
+the tier. Gemini is the first implementer; Vertex the second; all other
+adapters raise on every verb, as files do on subscription adapters.
