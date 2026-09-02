@@ -1,8 +1,6 @@
 # 2026-09-02 — Reasoning: one dial, two spellings, no silent drops (MAP-7, proposed)
 
-Ratification: PENDING — awaiting Maxime Rivest. Output of the second
-design pass (`playbooks/design-pass.md`); the record is under
-`research/reasoning/`. Do not push before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("ratified!"), after reading this entry with its three implementation amendments, the two amended reviewed goldens (openai.reasoning, openai.reasoning_encrypted), and the open questions (grading table numbers kept; summary="auto" satisfied silently where thinking is always shown). Transcribed. MAP-7 is normative from this date.
 
 ## What the pass established (134 live cells, 17 sources)
 
