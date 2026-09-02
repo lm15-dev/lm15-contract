@@ -370,6 +370,7 @@ Runtime mirror: `CACHE_PREFIXES`. Added 2026-09-01 (MAP-6, changes/2026-09-01-ca
 | `tool_call_delta` |
 | `interrupted` |
 | `turn_end` |
+| `usage` | added 2026-09-02: billed tokens of a response that does not end the turn (function-call response, cancelled response); a session's bill is the sum of `usage` + `turn_end` events; never a turn boundary |
 | `error` |
 
 ## Open string namespaces (NOT vocabularies)

@@ -2058,6 +2058,26 @@
         "date": "2026-09-02",
         "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
       }
+    },
+    {
+      "id": "live_server_event.usage",
+      "kind": "live_server_event",
+      "value": {
+        "type": "usage",
+        "usage": {
+          "input_tokens": 54,
+          "output_tokens": 21,
+          "total_tokens": 75,
+          "cache_read_tokens": 0,
+          "input_audio_tokens": 0,
+          "output_audio_tokens": 0
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored with the usage live event (changes/2026-09-02-live-usage-event.md); values from the amended golden openai.live_tools events[21]; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD"
+      }
     }
   ]
 }

@@ -567,8 +567,32 @@ enclosing serializers.
 | `cache_read_tokens` | int | no | `null` | omit-empty | `>= 0` |
 | `cache_write_tokens` | int | no | `null` | omit-empty | `>= 0`; Anthropic `cache_creation_input_tokens`; OpenAI `input_tokens_details.cache_write_tokens` / chat `prompt_tokens_details.cache_write_tokens` (added 2026-09-01) |
 | `reasoning_tokens` | int | no | `null` | omit-empty | `>= 0`; only when the provider reports an EXACT separate count |
-| `input_audio_tokens` | int | no | `null` | omit-empty | `>= 0` |
-| `output_audio_tokens` | int | no | `null` | omit-empty | `>= 0` |
+| `input_audio_tokens` | int | no | `null` | omit-empty | `>= 0`; OpenAI `*_tokens_details.audio_tokens`; Gemini `promptTokensDetails[modality=AUDIO]` (mapped 2026-09-02) |
+| `output_audio_tokens` | int | no | `null` | omit-empty | `>= 0`; OpenAI `output_tokens_details.audio_tokens`; Gemini `candidatesTokensDetails`/`responseTokensDetails[modality=AUDIO]` (mapped 2026-09-02) |
+
+**Counters are provider-verbatim (normative, 2026-09-02).** Every counter
+is the provider's own number under the provider's own taxonomy; lm15
+never re-derives one counter from another (the single exception is
+INV-029's `total_tokens = input + output` when the provider reports no
+total). This is what a bill reconciles against, and it is what makes the
+same field mean different things across providers. The inclusion rules,
+each pinned by a golden:
+
+| Provider | `input_tokens` includes cached tokens? | `output_tokens` includes reasoning tokens? | `total_tokens` |
+|---|---|---|---|
+| OpenAI, both dialects | yes (`cache_off`: 3091 input, 3088 written ⊂ input) | yes (`reasoning_tokens` ⊂ `output_tokens`) | provider: input + output |
+| Anthropic | **no** — `cache_read_tokens` and `cache_write_tokens` are disjoint from `input_tokens` (`cache_history`: input 3, write 3275) | yes (`reasoning_budget`: 220 output, 188 reasoning) | not reported; lm15 sums input + output, so it **excludes** cache tokens |
+| Gemini | yes (`cache_resource`: 3598 input, 3580 read ⊂ input) | **no** — `thoughtsTokenCount` is outside `candidatesTokenCount` (`thinking_level`: 48 output, 155 reasoning, total 222 = 19 + 48 + 155) | provider: prompt + candidates + thoughts |
+| xAI | yes (`basic_text`: 639 input, 512 read) | **no** (`structured_output`: 254 + 9 + 111 = 374) | provider: prompt + completion + reasoning |
+
+Consequences a port must reproduce: a cross-provider sum of
+`output_tokens` is not comparable; "tokens billed" on Anthropic is
+`input + cache_read + cache_write + output`, on the others it is
+`total_tokens`. Normalising in the adapters was considered and rejected
+(independent review 2026-09-02, §4 item 3): it would break reconciliation
+against every provider's bill and touch dozens of goldens. Stated
+trade-off: `Usage` alone cannot tell a consumer which rule applies; the
+provider string on the `Response` can.
 
 ### Response
 
@@ -963,6 +987,23 @@ xAI.
 |---|---|---|---|---|
 | `type` | string `"turn_end"` | — | `"turn_end"` | always |
 | `usage` | object (Usage) | yes | — | omit-empty (when `{}`) |
+
+### LiveServerUsageEvent
+
+| Field | JSON type | Req | Default | Omission |
+|---|---|---|---|---|
+| `type` | string `"usage"` | — | `"usage"` | always |
+| `usage` | object (Usage) | yes | — | omit-empty (when `{}`) |
+
+Billed usage for a response that did not end the turn (added 2026-09-02,
+independent review §4 item 6): OpenAI Realtime emits it for a
+function-call `response.done` (the turn stays open; pinned 75 tokens in
+`openai.live_tools`) and, before `interrupted`, for a cancelled
+`response.done` (pinned 143 in `openai.live_interrupt`); Gemini emits it
+when a non-`turnComplete` frame carries `usageMetadata` (a rule, no
+pinned frame does today). Never a turn boundary: dispatch loops that
+break on `turn_end`/`interrupted`/`error` ignore it. A session's bill is
+the sum over every `usage` and `turn_end` event.
 
 ### LiveServerErrorEvent
 
