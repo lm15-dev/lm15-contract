@@ -162,6 +162,64 @@ loopback callback listener, credential store) follow:
   an error page and the wait continues; a provider `error` parameter ends
   the wait as a typed failure; authorization codes are repr-suppressed.
 
+## AUTH-10 — Access policy: auth by composition (proposed 2026-09-02)
+
+An adapter is three composed things: a **dialect** (the wire codec:
+Anthropic Messages, OpenAI Responses, OpenAI Chat Completions, Gemini), for
+the chat dialect an optional **compat** value (a server's quirks), and an
+**access policy** — a value that says how the dialect reaches a backend.
+Subscription access is never a subclass of a dialect: Go and Rust have no
+inheritance, and a class per access path makes every port invent its own
+shape for the same facts.
+
+`AccessPolicy` (the reference's `ProviderManifest` under its true name) is
+pure data. Ports copy the table as data and consult it at the same named
+points:
+
+| Field | Meaning | Consulted at |
+|---|---|---|
+| `provider` | canonical provider string | errors, routing, doctor |
+| `supports` | endpoint surfaces this access path carries | every surface driver: a dialect that implements a surface still RAISES when the policy does not carry it |
+| `credential_policy`, `auth_modes`, `env_keys`, `enterprise_variants` | AUTH-1; support-matrix pinned | router, doctor, error guidance |
+| `auth_header` | `bearer` or the dialect's API-key header | the auth header |
+| `headers` | static headers, in order | every request; Anthropic joins `anthropic-beta` with its own betas |
+| `login_hint` | re-login guidance | auth errors — always under `oauth`; under `oauth-unless-explicit` only when the stored login was the rung that won |
+| `backend` | dialect-consulted variant (`api` is the public API) | a small stated set of branches inside the dialect |
+| `backend_options` | string knobs the variant needs | those branches |
+| `system_prefix` | text the backend requires first in system/instructions | payload |
+| `base_url` | this access path's default base URL | construction, when the caller left the dialect default |
+
+The policies (reference: `lm15/access.py`):
+
+| Policy | Dialect | credential | auth_header | backend | Notable fields |
+|---|---|---|---|---|---|
+| `anthropic` | Anthropic | key | `x-api-key` | api | files, batches, models |
+| `claude-code` | Anthropic | oauth | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
+| `openai` | Responses | key | bearer | api | full surface |
+| `openai-codex` | Responses | oauth | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
+| `openai_chat` | Chat | key | bearer | api | complete, stream, models |
+| `xai` | Chat (+ provider adapter) | oauth-unless-explicit | bearer | api | base `https://api.x.ai/v1`; images, video, models |
+| `gemini` | Gemini | key | `x-goog-api-key` | api | full surface incl. caches |
+
+The `chatgpt-codex` backend branches, exhaustively: (1) payload —
+`instructions` defaults to the prefix, `store: false`, `stream: true`,
+no max-token knob; (2) `complete` materializes the stream (streaming-first
+backend); (3) errors — a `{"detail": "..."}` envelope is classified before
+the OpenAI envelope; (4) `/models` takes `client_version` and lists
+`models[].slug`. The `claude-code` backend has no branches beyond the
+policy fields.
+
+What stays per-language: loading a stored login (keyed by `provider`) and
+the offline stored-credential probe. The policy says *that* a login is
+used; the loader says *how*. A subscription adapter class, where a
+language keeps one for ergonomics, holds the class-level policy and
+constructors and nothing that touches the wire.
+
+WHY: the same wire from `AnthropicLM(access=CLAUDE_CODE)` and from a named
+`ClaudeCodeLM` is verifiable (lm15-python `tests/test_access_policy.py`);
+a port's binding is a table lookup, not a re-derivation of headers from
+memory.
+
 ---
 
 Ratified-by: Maxime Rivest, 2026-08-31 — assented in session ("I ratify");
