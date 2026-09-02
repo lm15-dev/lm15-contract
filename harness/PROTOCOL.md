@@ -302,11 +302,19 @@ match this list, not the other way around). An unknown kind is an
 `ok: false` ValueError.
 
 `part`, `message`, `tool`, `tool_choice`, `reasoning`, `config`,
-`cache_config`, `continuation_state`, `error_detail`, `delta`, `usage`,
-`stream_event`, `request`, `response`, `model_info`, `audio_format`,
-`live_config`, `live_client_event`, `live_server_event`,
-`batch_request`, `batch_job`, `batch_entry`,
-`file_upload_request`, `file_info`, `file_page`
+`cache_config`, `cache_info`, `cache_page`, `cached_prefix`,
+`token_logprob`, `continuation_state`, `error_detail`, `delta`, `usage`,
+`stream_event`, `request`, `response`, `model_info`, `batch_request`,
+`batch_job`, `batch_entry`, `file_upload_request`, `file_info`, `file_page`,
+`image_generation_request`, `image_generation_response`,
+`speech_generation_request`, `speech_generation_response`,
+`video_generation_request`, `video_job`, `audio_format`, `live_config`,
+`live_client_event`, `live_server_event`
+
+(35 kinds as of 2026-09-02; tools/audit.py fails when this list and the vectors disagree. The list had drifted to 25 while the reference
+grew the generation, video, cache, and logprob kinds; synced with
+`changes/2026-09-02-serde-coverage.md`. `tools/audit.py` maps every kind to
+the types and enums it covers and reports any public type covered by none.)
 
 Adding a kind is an additive spec change requiring a `changes/` entry.
 

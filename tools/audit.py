@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -45,6 +46,11 @@ FORBIDDEN_VOLATILE_SUBSTRINGS = ("text", "tool_call.input", "name")
 # the kind's serde directly serializes at top level (fnmatch globs, one "*").
 # Anything in surface_dump matched by no kind present in serde/canonical.json
 # is reported as a gap.
+# Types that never cross a wire and so have no serde kind by design.
+NON_WIRE_TYPES = {
+    "ToolCallInfo",  # callback view of a ToolCallPart handed to tool functions; the part is the wire form
+}
+
 KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "part": (("*Part",), ("PartType", "PART_TYPES")),
     "message": (("Message",), ("Role", "ROLE_VALUES")),
@@ -54,7 +60,12 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
                                    "ReasoningSummary", "REASONING_SUMMARIES")),
     "config": (("Config",), ()),
     "cache_config": (("CacheConfig",), ("CacheMode", "CACHE_MODES",
-                                         "CacheRetention", "CACHE_RETENTIONS")),
+                                         "CacheRetention", "CACHE_RETENTIONS",
+                                         "CachePrefix", "CACHE_PREFIXES")),
+    "cache_info": (("CacheInfo",), ()),
+    "cache_page": (("CachePage",), ()),
+    "cached_prefix": (("CachedPrefix",), ()),
+    "token_logprob": (("TokenLogprob", "TopLogprob"), ()),
     "continuation_state": (("ContinuationState",), ()),
     "error_detail": (("ErrorDetail",), ("ErrorCode", "ERROR_CODES")),
     "delta": (("*Delta",), ("DeltaType", "DELTA_TYPES")),
@@ -352,11 +363,16 @@ def check_support_matrix(root: Path, python2: Path, problems: list[str]) -> str:
     return f"support matrix: {len(pinned)} provider(s) pinned and matching"
 
 
-def report_surface_coverage(root: Path, python2: Path) -> str:
+def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> str:
+    """HARD since 2026-09-02 (it reached zero gaps): every public type and
+    enum is covered by a serde kind with vectors, and the PROTOCOL.md
+    "Serde kinds" list equals the kinds present in serde/canonical.json.
+    Both are ratchets: a new type without a vector, or a kind added to the
+    reference without the protocol text, fails the audit."""
     surface, reason = shim_surface_dump(python2)
     if surface is None:
         print(f"REPORT surface-coverage: skipped — {reason}")
-        return f"surface coverage (report-only): skipped ({reason})"
+        return f"surface coverage: skipped ({reason})"
 
     serde_path = root / "serde" / "canonical.json"
     serde_cases = json.loads(serde_path.read_text()).get("cases", []) if serde_path.is_file() else []
@@ -367,15 +383,31 @@ def report_surface_coverage(root: Path, python2: Path) -> str:
                    for kind in kinds_present & set(KIND_COVERS)
                    for pattern in KIND_COVERS[kind][column])
 
-    gap_types = sorted(t for t in surface.get("types", {}) if not covered(t, 0))
+    gap_types = sorted(t for t in surface.get("types", {}) if not covered(t, 0) and t not in NON_WIRE_TYPES)
     gap_enums = sorted(e for e in surface.get("enums", {}) if not covered(e, 1))
     for name in gap_types:
-        print(f"REPORT surface-coverage: type {name} covered by no serde kind")
+        problems.append(f"SURFACE type {name} covered by no serde kind — add vectors under a kind in serde/canonical.json")
     for name in gap_enums:
-        print(f"REPORT surface-coverage: enum {name} covered by no serde kind")
-    return (f"surface coverage (report-only): {len(gap_types)} type(s) and "
-            f"{len(gap_enums)} enum(s) uncovered by the {len(kinds_present)} "
-            f"serde kind(s) in serde/canonical.json")
+        problems.append(f"SURFACE enum {name} covered by no serde kind — add vectors under a kind in serde/canonical.json")
+
+    protocol = root / "harness" / "PROTOCOL.md"
+    listed: set[str] = set()
+    if protocol.is_file():
+        text = protocol.read_text()
+        start = text.find("## Serde kinds")
+        end = text.find("\n## ", start + 1)
+        section = text[start:end if end > 0 else None]
+        # A kind is a backticked snake_case word in that section; the prose
+        # mentions of `kind`, `serde_roundtrip`, `validate` are not kinds.
+        listed = set(re.findall(r"`([a-z_]+)`", section)) - {"kind", "serde_roundtrip", "validate"}
+    missing_in_protocol = sorted(kinds_present - listed)
+    missing_in_vectors = sorted(listed - kinds_present)
+    for k in missing_in_protocol:
+        problems.append(f"SURFACE serde kind {k!r} has vectors but is not listed in harness/PROTOCOL.md 'Serde kinds'")
+    for k in missing_in_vectors:
+        problems.append(f"SURFACE serde kind {k!r} is listed in harness/PROTOCOL.md but serde/canonical.json has no vector for it")
+    return (f"surface coverage: {len(gap_types)} type(s) and {len(gap_enums)} enum(s) uncovered; "
+            f"{len(kinds_present)} serde kind(s) in vectors, {len(listed)} listed in PROTOCOL.md")
 
 
 # ─── main ────────────────────────────────────────────────────────────
@@ -417,7 +449,7 @@ def main(argv: list[str] | None = None) -> int:
         check_orphans(root, cases, allowlist, body_dir_allowlist, problems),
         check_volatile(root, cases, problems),
         check_extensions_verdicts(root, cases, problems),
-        report_surface_coverage(root, python2),
+        check_surface_coverage(root, python2, problems),
         check_support_matrix(root, python2, problems),
     ]
 

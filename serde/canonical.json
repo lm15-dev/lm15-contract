@@ -1848,6 +1848,216 @@
         "date": "2026-09-01",
         "evidence": "shapes verified against live OpenAI captures (bodies/openai.top_logprobs, bodies/openai_chat.logprobs) and the Gemini generate-content LogprobsResult schema (token_id); changes/2026-09-01-logprobs-and-builtin-tool-forcing.md"
       }
+    },
+    {
+      "id": "cache_config.prefix_stable",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto",
+        "prefix": "stable"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_config.prefix_history_long",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto",
+        "retention": "long",
+        "prefix": "history"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_config.resource",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto",
+        "resource": "cachedContents/abc123",
+        "prefix_until_index": 2
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_info.full",
+      "kind": "cache_info",
+      "value": {
+        "id": "cachedContents/abc123",
+        "model": "gemini-2.5-flash",
+        "tokens": 3580,
+        "created_at": "2026-09-02T12:00:00Z",
+        "expires_at": "2026-09-02T13:00:00Z",
+        "label": "tenant-a",
+        "provider_data": {
+          "displayName": "tenant-a"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_info.minimal",
+      "kind": "cache_info",
+      "value": {
+        "id": "cachedContents/abc123",
+        "model": "gemini-2.5-flash"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_page.full",
+      "kind": "cache_page",
+      "value": {
+        "items": [
+          {
+            "id": "cachedContents/a",
+            "model": "gemini-2.5-flash",
+            "tokens": 10
+          },
+          {
+            "id": "cachedContents/b",
+            "model": "gemini-2.5-flash"
+          }
+        ],
+        "next_cursor": "tok"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cache_page.empty",
+      "kind": "cache_page",
+      "value": {},
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cached_prefix.with_resource",
+      "kind": "cached_prefix",
+      "value": {
+        "prefix": {
+          "model": "gemini-2.5-flash",
+          "system": "You are terse.",
+          "messages": [
+            {
+              "role": "user",
+              "parts": [
+                {
+                  "type": "text",
+                  "text": "hi"
+                }
+              ]
+            }
+          ]
+        },
+        "resource": {
+          "id": "cachedContents/abc123",
+          "model": "gemini-2.5-flash",
+          "tokens": 3580
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "cached_prefix.marks_only",
+      "kind": "cached_prefix",
+      "value": {
+        "prefix": {
+          "model": "gemini-2.5-flash",
+          "system": "You are terse.",
+          "messages": [
+            {
+              "role": "user",
+              "parts": [
+                {
+                  "type": "text",
+                  "text": "hi"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "token_logprob.full",
+      "kind": "token_logprob",
+      "value": {
+        "token": "hi",
+        "logprob": -0.25,
+        "bytes": [
+          104,
+          105
+        ],
+        "token_id": 544,
+        "top": [
+          {
+            "token": "hi",
+            "logprob": -0.25,
+            "bytes": [
+              104,
+              105
+            ],
+            "token_id": 544
+          },
+          {
+            "token": "yo",
+            "logprob": -3.0
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
+    },
+    {
+      "id": "token_logprob.minimal",
+      "kind": "token_logprob",
+      "value": {
+        "token": "hi",
+        "logprob": -0.25
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-02",
+        "evidence": "authored to close the serde coverage gaps reported by tools/audit.py (CacheInfo, CachePage, CachedPrefix, TokenLogprob/TopLogprob, CachePrefix); values mirror the MAP-6 cache cases (goldens/gemini/cache*.json) and the logprobs response vector; round-tripped through python -m lm15.vet serde_roundtrip @ lm15-python HEAD; see changes/2026-09-02-serde-coverage.md"
+      }
     }
   ]
 }
