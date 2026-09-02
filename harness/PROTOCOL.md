@@ -6,7 +6,9 @@ shims as subprocesses and performs ALL comparison itself — shims only
 transform. A shim must never touch the network: the harness runs it inside a
 no-network sandbox, and any connection attempt is a hard failure.
 
-Entrypoints:
+Entrypoints (each cwd carries a `CONTRACT_PIN` file with one commit hash;
+`harness/check.py` refuses to run when it differs from the contract
+checkout's HEAD):
 
 | Language | Command |
 |---|---|

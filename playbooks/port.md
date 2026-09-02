@@ -13,7 +13,8 @@ that four ports converge instead of each inventing a shape.
    (MAP-1 to MAP-9), `lm15-python/docs/serde-rules.md`.
 2. This repository at the pinned commit, read-only. The shim is run by
    `harness/check.py --shim <lang>`; the entry in `harness/shims.json`.
-3. The idiom rules for the language (§ Idioms below).
+3. The idiom rules for the language (§ Idioms below) and the public
+   surface names (`playbooks/api-family.md`).
 4. No network. The harness sandboxes the shim; a port's unit tests must
    not need keys either (a live smoke test may exist, env-gated, and is not
    a gate).
@@ -25,7 +26,7 @@ when its direction is green with zero skips added, and stays green.
 
 | # | Module | Gate |
 |---|---|---|
-| 1 | canonical types + serde (`spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md`, `docs/serde-rules.md`) | `--direction serde` (35 kinds, 109 vectors); `validate` rejects what the invariants reject |
+| 1 | canonical types + serde (`spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md`, `docs/serde-rules.md`) | `--direction serde` (every kind in PROTOCOL.md; `tools/audit.py` reports the count and any uncovered type); `validate` rejects what the invariants reject |
 | 2 | errors (`spec/vocabularies.md` ErrorCode, hierarchy shape) | `--direction error` |
 | 3 | auth (`spec/auth.md` AUTH-1..10: chain, doctor, credential providers, access policies) | `--direction auth`; `auth_resolution.json` |
 | 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (143 cases incl. build-time raises) |
@@ -45,9 +46,11 @@ a port that does not implement one answers `ok: false` with
 1. **The corpus is read-only to the port.** A port never edits a case,
    body, golden, or vector to pass. A disagreement is either a port bug or
    a `changes/` entry in this repository with evidence — decided here, not
-   in the port. The port's CI checks out this repository at its
-   `CONTRACT_PIN` and fails if the working tree is dirty; the harness
-   itself does not verify the hash (stated gap, 2026-09-02).
+   in the port. The port carries a `CONTRACT_PIN` file (one commit hash)
+   next to its shim; `harness/check.py` refuses to run when the pin does
+   not equal the contract checkout's HEAD (`--no-check-pin` skips this,
+   for local work only). The port's CI checks out this repository at the
+   pin and fails if the working tree is dirty.
 2. **Copy tables as data.** Mapping tables in the reference (reasoning
    grading table, model-class detectors, access policies, compat presets,
    finish-reason maps, error-code maps) are data. Port them as data; do
@@ -99,10 +102,12 @@ Shared decisions so ports look like one family:
 
 1. `python3 harness/check.py --shim <lang> --direction all` at the pinned
    commit: report per direction, zero fails, skips only in unstarted
-   directions.
+   directions. The harness verifies the pin itself.
 2. README "Stated deviations" reviewed against rule 8.
 3. `CONTRACT_PIN` in the port moves in the same commit as the code that
    needed it.
+4. The public surface reviewed against `playbooks/api-family.md`
+   (its "Reviewing against this page" section).
 
 (`harness/selftest.py` drives only the fake shim; it proves the
 comparator, not a port. A per-port mutation run is a stated gap.)

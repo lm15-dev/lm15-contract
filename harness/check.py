@@ -217,6 +217,7 @@ class Shim:
     def __init__(self, name: str, command: list[str], cwd: Path) -> None:
         self.name = name
         self.command = list(command)
+        self.cwd = cwd
         self.sandboxed = _unshare_available()
         argv = (["unshare", "-rn"] if self.sandboxed else []) + self.command
         self._next_id = 0
@@ -272,6 +273,56 @@ def _unshare_available() -> bool:
     except Exception:
         return False
     return probe.returncode == 0
+
+
+def contract_head() -> str | None:
+    """Commit hash of this checkout, or None when git is unavailable."""
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(CONTRACT_ROOT), "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=10, check=True,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return out.stdout.strip() or None
+
+
+def contract_dirty() -> bool:
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(CONTRACT_ROOT), "status", "--porcelain", "--untracked-files=no"],
+            capture_output=True, text=True, timeout=10, check=True,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return bool(out.stdout.strip())
+
+
+def check_pin(shim: Shim) -> None:
+    """Refuse to grade a port against a contract it was not pinned to.
+
+    The port's ``CONTRACT_PIN`` (one commit hash, in the shim's cwd) must
+    equal this checkout's HEAD. A missing pin file is an error: every port
+    carries one (playbooks/port.md rule 1). A dirty contract tree is a
+    warning — the port's own CI is the place that refuses dirty trees.
+    """
+    pin_file = shim.cwd / "CONTRACT_PIN"
+    if not pin_file.is_file():
+        raise HarnessError(
+            f"shim {shim.name!r} has no CONTRACT_PIN at {pin_file} (pass --no-check-pin to skip)"
+        )
+    pinned = pin_file.read_text().strip()
+    head = contract_head()
+    if head is None:
+        print("warning: cannot read contract HEAD (no git?) — pin not verified", file=sys.stderr)
+        return
+    if pinned != head:
+        raise HarnessError(
+            f"shim {shim.name!r} pins contract {pinned[:12]} but this checkout is {head[:12]}; "
+            "check out the pinned commit or move the pin with the code that needed it"
+        )
+    if contract_dirty():
+        print("warning: contract working tree is dirty — results do not describe a pinned commit", file=sys.stderr)
 
 
 def load_shim(name: str) -> Shim:
@@ -1510,6 +1561,10 @@ def main(argv: list[str] | None = None) -> int:
         "--report-dir", default="harness/reports",
         help="report directory (relative paths resolve against the lm15-contract root)",
     )
+    parser.add_argument(
+        "--no-check-pin", action="store_true",
+        help="skip verifying the shim's CONTRACT_PIN against this checkout's HEAD",
+    )
     args = parser.parse_args(argv)
 
     report_dir = Path(args.report_dir)
@@ -1520,6 +1575,8 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         shim = load_shim(args.shim)
+        if not args.no_check_pin:
+            check_pin(shim)
     except HarnessError as exc:
         print(f"harness error: {exc}", file=sys.stderr)
         return 2
