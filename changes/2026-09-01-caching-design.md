@@ -108,3 +108,51 @@ Spend this pass: ~110 requests, ~330k input tokens across OpenAI,
 Anthropic, Gemini, xAI, Groq, plus one Gemini cache resource for 5 min
 (deleted). Estimated under 2 USD. Receipts expire 2026-12-01: rerun
 `research/caching/20-experiments.py` and diff `20-results.json`.
+
+## Amendments after the cookbook test (2026-09-01, same day)
+
+The maintainer tested the proposal against a beginner's cookbook and a
+provider switch. Two of the proposed rules failed that test; the
+amendments below replace them. `research/caching/50-cookbook-draft.md`
+is the test.
+
+**A1 — Prefix intents fall back to the automatic tier where no marker
+exists.** Rule 4 above ("every provider without an in-request marker
+RAISES") is withdrawn for prefix intents. `prefix="stable"`,
+`prefix="history"`, and `prefix_until_index=N` send nothing on Gemini,
+xAI, Groq, older OpenAI, and compat servers without `cache_control`, and
+the automatic tier applies. Justification, and the two conditions that
+bound the exception: the dropped control **costs nothing** (no write
+charge, no resource created) and the outcome **is observable**
+(`usage.cache_read_tokens`). `retention="long"`, `key`, and `resource`
+name specific mechanisms whose loss changes cost or meaning; they still
+raise. Provider agnosticism is defined as: the same code runs everywhere,
+does the best thing the provider offers, and shows the result.
+
+**A2 — Named prefix intents.** `CacheConfig.prefix: "stable" | "history"
+| None`, mutually exclusive with `prefix_until_index`. `"stable"` marks
+the end of system + tools (Anthropic: the system block; OpenAI ≥5.6: the
+last text block of the first developer message, since top-level
+`instructions` cannot carry a breakpoint — mapping needs a receipt).
+`"history"` marks the last block of the last message (Anthropic's
+trailing marker; OpenAI ≥5.6: nothing, implicit mode already does it).
+`mode="auto"` with no prefix means `"stable"`. This resolves open
+question 2 (Anthropic default) without index arithmetic.
+
+**A3 — `CachedPrefix`, the ergonomic over the resource surface.**
+`lm.cache(prefix: Request) -> CachedPrefix` (also on the routers): pure on
+marker and automatic providers; on Gemini it calls `cache_create` and
+returns the object's `id`, `tokens`, `expires_at`. `CachedPrefix` is a
+frozen, serializable value carrying the prefix Request's model, system,
+tools, messages, a content hash, and the optional resource fields.
+`cached.request(messages, config=None) -> Request` appends messages and
+sets `CacheConfig(prefix_until_index=<end of prefix>, resource=<id>)`;
+`cached + messages` is Python sugar for it. Adding a suffix that
+redefines `system` or `tools` raises. `cached.delete()` frees the
+resource where one exists. With `resource` set, the Gemini adapter
+omits `systemInstruction`, `tools`, and `toolConfig` from the wire (they
+are in the object by construction) instead of raising; rule 7 is
+amended accordingly. The contract pins the built `Request` and wire
+bytes; the sugar is per-language.
+
+Open questions 2 is resolved by A2. Open questions 1 and 3 stand.

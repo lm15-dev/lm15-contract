@@ -86,3 +86,13 @@ mirrors, a harness direction.
   measurement: 0 hits, full write per call under fan-out.
 - *Rename `key` to `affinity`.* Tempting; not proposed. `key` stays a
   hint, `resource` is the hard reference. Two fields, two meanings.
+
+## Amendments (same day, after the cookbook test)
+
+See `changes/2026-09-01-caching-design.md` §Amendments: A1 prefix intents
+fall back to the automatic tier where no marker exists (no cost, visible
+outcome); A2 named intents `prefix="stable" | "history"`; A3
+`CachedPrefix` = `lm.cache(Request)` + `cached + messages`, the ergonomic
+over the resource surface. The RAISE cells for `prefix_until_index` in
+the table above become "nothing (automatic tier)"; the `resource` +
+system/tools cell becomes "omit from wire (in the object by construction)".
