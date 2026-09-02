@@ -156,3 +156,12 @@ amended accordingly. The contract pins the built `Request` and wire
 bytes; the sugar is per-language.
 
 Open questions 2 is resolved by A2. Open questions 1 and 3 stand.
+
+**Open question 1 resolved (2026-09-01, Maxime Rivest in session: "i agree,
+option 2").** `mode="off"` on OpenAI ≥5.6 sends
+`prompt_cache_options: {"mode": "explicit"}` with no breakpoints (the
+provider's real off switch; stops the 1.25× implicit writes). On every
+other provider, including OpenAI <5.6 where the option is rejected and
+writes are free, `mode="off"` sends nothing. Same two conditions as A1:
+no money is spent by the fallback, and the outcome is visible in usage.
+Rule 2 above is amended to say so.
