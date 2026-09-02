@@ -1,9 +1,6 @@
 # 2026-09-02 — Independent review follow-up: what was fixed, what waits
 
-Ratification: PENDING for item 1 (two draft goldens re-drafted under an
-existing rule); the rest is mechanical. The review itself is
-`goldens/REVIEW-2026-09-02-independent.md`, written by an agent that had
-not seen any of the corpus before. Do not push before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("i ratify and i accept all your recommendations"), after reading this entry and the independent review (`goldens/REVIEW-2026-09-02-independent.md`, written by an agent that had not seen any of the corpus before). Item 1 (two re-drafted goldens under MAP-7 rule 8) is normative; the three recommendations under "Not fixed here" were accepted and land in `2026-09-02-usage-semantics.md`, `2026-09-02-live-usage-event.md`, and `2026-09-02-gemini-modality-counters.md`. Transcribed.
 
 ## Fixed in this entry
 

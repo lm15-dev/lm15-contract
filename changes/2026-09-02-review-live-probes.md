@@ -1,9 +1,6 @@
-# 2026-09-02 — Seven live probes: two MAP-6 amendments, one bug, five receipts (proposed)
+# 2026-09-02 — Seven live probes: two MAP-6 amendments, one bug, five receipts (ratified)
 
-Ratification: PENDING — awaiting Maxime Rivest. Two rules change
-(MAP-6 rules 4 and 5), four cases are re-captured, four stream cases and
-five goldens are new, and one reference bug is fixed. Record under
-`research/review-2026-09-02/`. Do not push before ratification.
+Ratification: RATIFIED 2026-09-02 — Maxime Rivest, in session ("i ratify and i accept all your recommendations"), after reading this entry with the stated limit on probe 2 (the echo, not the lifetime, is what one call shows). MAP-6 rules 4 and 5 are amended from this date; the four re-captured cases and four streaming tool-call cases are normative. Transcribed.
 
 ## Amendments (need the stamp)
 
