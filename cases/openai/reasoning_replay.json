@@ -1,0 +1,185 @@
+{
+  "id": "openai.reasoning_replay",
+  "provider": "openai",
+  "feature": "reasoning_replay",
+  "description": "Turn 2 of a tool round-trip: the assistant turn's ThinkingPart carries openai:reasoning_item continuation (id + encrypted_content) and is replayed as a {type: reasoning, summary: []} input item before the function_call (MAP-7 rule 8)",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "headers": {
+      "Authorization": "Bearer $OPENAI_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model": "gpt-5.4-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Decide whether 7 is a Mersenne prime, then call lookup with n=7 to double check, then answer."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_0d5857fcedbcfadf016a981bc20d7487d295722ca2167b5de1",
+          "encrypted_content": "gAAAAABqmBvCF4fq3RSo5Q3czOCAwcoMz1CaU65guabPJM90uMF4gMsM6ETraLWKs0lv5qeepwHm1Fb2WTFhS79aVQQOSN5OT3h04sVBEyCXitlAoYvg2PrMyuVrlBy4y4FyM3yKqkEXTc78CTKc5cglt1tAhzCON5GIqqF819nsXCF_IWAN3dfcjpi-E51ro7UXHmrCrQl4wJ1yPXmRf_XAOfodCp1zWtylccAQ2unbn-sXxp3pG6CzO-ZRylypChiy11mMGWqhdquPzJYcz82yLdzbDmEoPYLYPMaEBzGKwFw53AjHIBVL71sLBQgGV23s9BXooXhYdZVlcLN6f1NXbw2IGHMuPsw4bkbpMo15PxvhR35tk_kKGNh_biLP3o4QXs_RC7YXYuaoWjD1fAKgItOV2U7a7CsgAPg5fpLYl5HBt5oyTfbFD3YhO0xtdb3E_85YYypvTY_pm0UWfFOutUAn30LEQFpJRe5SPoXXJqcAWCHe5mZzmJDZzqDRzGu9gAR-LxWymfB_owQg0W4EVijsLpIpvEnI2_lHe0DvLMF5P82C1Jlr1nvNkzOfNtzS4ihfBfAPZnGzNPdbBUYhkTtE95h8RmOXVq-zf6ejIeKMQEnG0UxJ5tRhov1vsH18PNISmPiam5Led6pj7PNEABNGcwTWZdviWhkT6Im3Lf_HrJfOpRQL5Ce8h-cHCPdpzXOohTxstTtdfyoQk_ce90B3-l3feUiUi8svcm4w6kcQzfA7P10CN9CGuUvWuIWKh4mzBl6-S5lCWFPuHEi_b_daLIaPPZbur36b4ZRHA7_LBPSAq18PP6gsVy3bah1g_Ck9e4awDz7hc7hY4mJnQaGWQE9wRIv8RgCsTjeh3-gbFfJJ7F4hwIFDs46L1AMO_TeTWbzOVYXmx1mmuQkOQc4Rnk38iJ-cSYyAk8XkCpSmdm5nLaACVUSHX2Jk2XvsuZZkajuZzHXbUaxJ-j78_j88ZkLFdw6RhGOdKjNKhU83mQaw3SwMHYgGiL1ov-TUnsDePaG318Do9I1uOL0K_W2oY60YY3NIHx58aK0Wl7qWDiRDJC4lyTUb3sq2ScXm9X96SZTXgPqRSG-0fFyWM8_DDF1Js8W515qdlSTqy31Y1SXpLYucMbKhDk-sKvYf_lH6UDErNWwg5MY5ukJuQwmyiHrwJXJ4xgpPiWGO7xJdQakzaPu5EyyKcZbR27Skn16J-ljAO5lLFt5wq_GO1cLdO8S0BKHTeUZIvTLch3G6msplerRQLL-b1RgyQdU8PMXlteF-VsOMjYpE6go2PQdG8P9B0reaAK2UWiNkpNTSsrIHWgRzTzXq74qIIVryfqSWwrUhNRgvjB28JifdNh5-I2Mf8zHgcMsMb2fCyER2S-qSnjnZsYscHD_dP7aukTLpmIkIOOaW3rP_6pkcq85EYRrd6Et4_MPoZ6isDiVlqGpwmH5u0dMQc_X6LANnHLDA3f7L0fgfFAmQyx6Tv5oRZhON-66maYAsyTbdSpT1vD7ZQG6I0M15nZ2kdLqaHEJ-xzEBr9aXyDfCtzj2o_-NskyZom3nDcsLQFtSwI9nAfNv9Yc=",
+          "summary": []
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_VRiNF67PstJuWBs3Xja1Nmdh",
+          "name": "lookup",
+          "arguments": "{\"n\":7}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_VRiNF67PstJuWBs3Xja1Nmdh",
+          "output": "49"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "lookup",
+          "description": "Look up a number.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "n"
+            ]
+          }
+        }
+      ],
+      "reasoning": {
+        "effort": "high"
+      },
+      "store": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-02",
+    "evidence": "api.openai.com turn 1 2026-09-02T12:51:13Z (request sha256 d75a27640d043c5a, body 2026-09-02T12-51-13Z.turn1.txt kept beside the pinned one): gpt-5.4-mini, effort high, store=false → a reasoning item with encrypted_content (81 reasoning tokens) and a function_call. Turn 2 2026-09-02T12:51:14Z, request sha256 d40ff6e663df2a5e, HTTP 200: the reasoning item replayed as input[1] with its id, encrypted_content, and a required (empty) summary, then the function_call and function_call_output. Counter-evidence: the same item without `summary` → HTTP 400 missing_required_parameter input[1].summary (2026-09-02T12:52Z). Pinned body is turn 2; changes/2026-09-02-reasoning-design.md",
+    "captured_by": "lm15-python reference adapter (parse_response → build_request → live send)"
+  },
+  "canonical_request": {
+    "model": "gpt-5.4-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Decide whether 7 is a Mersenne prime, then call lookup with n=7 to double check, then answer."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "",
+            "continuation": [
+              {
+                "provider": "openai",
+                "kind": "reasoning_item",
+                "data": {
+                  "id": "rs_0d5857fcedbcfadf016a981bc20d7487d295722ca2167b5de1",
+                  "encrypted_content": "gAAAAABqmBvCF4fq3RSo5Q3czOCAwcoMz1CaU65guabPJM90uMF4gMsM6ETraLWKs0lv5qeepwHm1Fb2WTFhS79aVQQOSN5OT3h04sVBEyCXitlAoYvg2PrMyuVrlBy4y4FyM3yKqkEXTc78CTKc5cglt1tAhzCON5GIqqF819nsXCF_IWAN3dfcjpi-E51ro7UXHmrCrQl4wJ1yPXmRf_XAOfodCp1zWtylccAQ2unbn-sXxp3pG6CzO-ZRylypChiy11mMGWqhdquPzJYcz82yLdzbDmEoPYLYPMaEBzGKwFw53AjHIBVL71sLBQgGV23s9BXooXhYdZVlcLN6f1NXbw2IGHMuPsw4bkbpMo15PxvhR35tk_kKGNh_biLP3o4QXs_RC7YXYuaoWjD1fAKgItOV2U7a7CsgAPg5fpLYl5HBt5oyTfbFD3YhO0xtdb3E_85YYypvTY_pm0UWfFOutUAn30LEQFpJRe5SPoXXJqcAWCHe5mZzmJDZzqDRzGu9gAR-LxWymfB_owQg0W4EVijsLpIpvEnI2_lHe0DvLMF5P82C1Jlr1nvNkzOfNtzS4ihfBfAPZnGzNPdbBUYhkTtE95h8RmOXVq-zf6ejIeKMQEnG0UxJ5tRhov1vsH18PNISmPiam5Led6pj7PNEABNGcwTWZdviWhkT6Im3Lf_HrJfOpRQL5Ce8h-cHCPdpzXOohTxstTtdfyoQk_ce90B3-l3feUiUi8svcm4w6kcQzfA7P10CN9CGuUvWuIWKh4mzBl6-S5lCWFPuHEi_b_daLIaPPZbur36b4ZRHA7_LBPSAq18PP6gsVy3bah1g_Ck9e4awDz7hc7hY4mJnQaGWQE9wRIv8RgCsTjeh3-gbFfJJ7F4hwIFDs46L1AMO_TeTWbzOVYXmx1mmuQkOQc4Rnk38iJ-cSYyAk8XkCpSmdm5nLaACVUSHX2Jk2XvsuZZkajuZzHXbUaxJ-j78_j88ZkLFdw6RhGOdKjNKhU83mQaw3SwMHYgGiL1ov-TUnsDePaG318Do9I1uOL0K_W2oY60YY3NIHx58aK0Wl7qWDiRDJC4lyTUb3sq2ScXm9X96SZTXgPqRSG-0fFyWM8_DDF1Js8W515qdlSTqy31Y1SXpLYucMbKhDk-sKvYf_lH6UDErNWwg5MY5ukJuQwmyiHrwJXJ4xgpPiWGO7xJdQakzaPu5EyyKcZbR27Skn16J-ljAO5lLFt5wq_GO1cLdO8S0BKHTeUZIvTLch3G6msplerRQLL-b1RgyQdU8PMXlteF-VsOMjYpE6go2PQdG8P9B0reaAK2UWiNkpNTSsrIHWgRzTzXq74qIIVryfqSWwrUhNRgvjB28JifdNh5-I2Mf8zHgcMsMb2fCyER2S-qSnjnZsYscHD_dP7aukTLpmIkIOOaW3rP_6pkcq85EYRrd6Et4_MPoZ6isDiVlqGpwmH5u0dMQc_X6LANnHLDA3f7L0fgfFAmQyx6Tv5oRZhON-66maYAsyTbdSpT1vD7ZQG6I0M15nZ2kdLqaHEJ-xzEBr9aXyDfCtzj2o_-NskyZom3nDcsLQFtSwI9nAfNv9Yc="
+                }
+              }
+            ]
+          },
+          {
+            "type": "tool_call",
+            "id": "call_VRiNF67PstJuWBs3Xja1Nmdh",
+            "name": "lookup",
+            "input": {
+              "n": 7
+            }
+          }
+        ],
+        "continuation": [
+          {
+            "provider": "openai",
+            "kind": "response_id",
+            "data": {
+              "id": "resp_0d5857fcedbcfadf016a981bc1ba9087d2aa1758e93d61ced6"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_VRiNF67PstJuWBs3Xja1Nmdh",
+            "content": [
+              {
+                "type": "text",
+                "text": "49"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "lookup",
+        "description": "Look up a number.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "n"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 600,
+      "reasoning": {
+        "effort": "high"
+      },
+      "store": false
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-02",
+    "evidence": "turn 2 built from turn 1's canonical Response.message (ThinkingPart with continuation) + Message.tool; wire generated by the reference adapter and live-validated; MAP-7 rule 8 (changes/2026-09-02-reasoning-design.md)"
+  },
+  "pinned_body": "2026-09-02T12-51-14Z.txt"
+}

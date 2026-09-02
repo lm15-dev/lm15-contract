@@ -114,3 +114,49 @@ design pass (`playbooks/design-pass.md`); the record is under
    numbers for both providers, or pick provider-specific tables.
 2. `summary="auto"` on Anthropic/xAI: silently satisfied (proposed) or
    raise because nothing is sent.
+
+## Amendments during implementation (2026-09-02)
+
+- **Rule 5 corrected.** A budget plus an effort on a budget-only class is
+  not a conflict: the budget is the spelling on the wire and `effort`
+  stays the required universal intent (the existing `gemini.thinking`
+  case has both). Raising there would have made `effort` unusable
+  exactly where users pass a budget.
+- **Rule 8 receipt.** A replayed OpenAI reasoning item MUST carry
+  `summary`, even `[]`: HTTP 400 "Missing required parameter:
+  input[1].summary" (2026-09-02T12:52Z). The adapter always sends it.
+- **Rule 9 (Groq) narrowed.** `reasoning_format: "parsed"` rides
+  `summary="auto"` on the `groq` preset (a visibility knob, MAP-7 rule
+  7), not every request: the pinned Groq cases run through `base_url`
+  without the preset, and a Groq-wide field would have broken ten Llama
+  cases. Qwen 3.6's dial accepts only `none|default`, so any effort word
+  fails loudly there; the documented door is
+  `extensions={"reasoning_format": "parsed"}` with `reasoning` absent.
+  A provider limit, stated.
+
+## Implementation landed (2026-09-02, awaiting ratification)
+
+Reference: `Reasoning` (effort required, `adaptive` removed, `max`
+added, `total_budget` removed; legacy spellings read leniently);
+`EFFORT_THINKING_BUDGETS` shared table; Anthropic two classes
+(`anthropic_adaptive_class`), Gemini two classes (`gemini_level_class`),
+OpenAI verbatim + reasoning-item round-trip, chat dialect raises +
+`thinking_replay` default `as_text`, Groq visibility; MAP-7 in
+docs/mapping-rules.md; docs and cookbook prose; 931 tests.
+
+Contract: cases `anthropic.reasoning_adaptive` (Sonnet 5, 108 thinking
+tokens, signed block), `anthropic.reasoning_budget` (Sonnet 4.5, table
+budget 2048, wire max_tokens 3048), `gemini.thinking_level` (3.7 Flash,
+`thinkingLevel: low` + `includeThoughts`), `openai.reasoning_replay`
+(two-turn tool round-trip, the item replayed with id, encrypted_content,
+empty summary; turn-1 body kept beside); 4 drafted goldens; serde vector
+`reasoning.medium` drops `total_budget`; `gemini.thinking` canonical
+gains `summary: "auto"` (wire unchanged); spec vocabulary and Reasoning
+table. **Two reviewed goldens amended** (`openai.reasoning`,
+`openai.reasoning_encrypted`) plus `openai.batch`: the reasoning item is
+now an empty ThinkingPart with its replay state (rule 9) — the 2026-06-10
+review line is kept and an `amended` line cites this entry; this is the
+change that needs the maintainer's eyes most.
+
+Open question 1 (table numbers) and 2 (`summary="auto"` satisfied
+silently on Anthropic/xAI) stand.

@@ -456,14 +456,34 @@ kind-correct wire form, or raise when the wire cannot express it:
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `effort` | string (ReasoningEffort) | no | `"off"` | always | closed vocabulary |
-| `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007) |
-| `total_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced |
-| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary |
+| `effort` | string (ReasoningEffort) | yes | — | always | closed vocabulary; the one dial (MAP-7 rule 2). Required since 2026-09-02: `Reasoning()` no longer means off |
+| `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007); a token cap on budget wires only (Anthropic manual class `budget_tokens`, floor 1024 server-side; Gemini `thinkingBudget`); RAISES on OpenAI, xAI, the chat dialect, and Anthropic's adaptive class |
+| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, RAISE elsewhere |
 
-`effort="off"` forbids budgets and summary (INV-026). Tri-state at the
-Config level: `reasoning` absent = no explicit preference;
-`Reasoning(effort="off")` = explicitly off. Property: `is_off`.
+`effort="off"` forbids `thinking_budget` and `summary` (INV-026). Tri-state at
+the Config level: `reasoning` absent = the model decides (every
+provider's default); `Reasoning(effort="off")` = explicitly off (MAP-5:
+the native disable or a loud failure). Property: `is_off`.
+
+`total_budget` was removed 2026-09-02 (MAP-7 rule 6): `Config.max_tokens`
+is the ceiling. On Anthropic's manual class the adapter adds the thinking
+budget to it (the wire's `max_tokens` includes thinking); on the adaptive
+class `max_tokens` is the total — provider semantics.
+
+**Per-provider mapping (MAP-7, receipted 2026-09-02).** OpenAI: `reasoning.effort`
+verbatim (`off` → `none`). Anthropic adaptive class (Sonnet/Opus 4.6+,
+Sonnet 5, Opus 5, Fable, Mythos): `thinking: {type: adaptive}` +
+`output_config.effort` (`minimal` RAISES). Anthropic manual class (4.5 and
+earlier): `thinking: {type: enabled, budget_tokens}` from the shared
+grading table (minimal 1024 · low 2048 · medium 8192 · high 16384 · xhigh
+24576 · max 32768) unless `thinking_budget` is given. Gemini 2.5: the same
+table into `thinkingBudget` (`off` → 0). Gemini 3.x: `thinkingLevel`
+verbatim for minimal/low/medium/high; `xhigh`/`max` and `off` RAISE (no
+level; no honoured off switch). xAI: `reasoning_effort` verbatim; `off`
+RAISES. Groq/compat: per `thinking_format`; the `groq` preset adds
+`reasoning_format: "parsed"` so a `<think>` block never leaks into text.
+Model classes are detected by name (a stated, rotting table; the server
+400s loudly when wrong; `extensions` overrides).
 
 ### CacheConfig
 

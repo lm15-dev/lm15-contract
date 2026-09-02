@@ -6,6 +6,19 @@
       "role": "assistant",
       "parts": [
         {
+          "type": "thinking",
+          "text": "",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_0c3f28d4f3b25eb10069dd0310d8d48196a53b4d9e37674f1b"
+              }
+            }
+          ]
+        },
+        {
           "type": "text",
           "text": "3861"
         }
@@ -34,6 +47,7 @@
     "date": "2026-06-10",
     "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-04-13T14-52-00Z.txt",
-    "reviewed": "2026-06-10 — independent adversarial review (66 agree, 3 flags resolved by MAP-1/MAP-2 in lm15-python2/docs/mapping-rules.md); approved by Maxime Rivest. See goldens/REVIEW-2026-06-10.md"
+    "reviewed": "2026-06-10 — independent adversarial review (66 agree, 3 flags resolved by MAP-1/MAP-2 in lm15-python2/docs/mapping-rules.md); approved by Maxime Rivest. See goldens/REVIEW-2026-06-10.md",
+    "amended": "2026-09-02 — MAP-7 rule 8 (changes/2026-09-02-reasoning-design.md): the reasoning item is replay state; it becomes an empty ThinkingPart carrying the item id (and encrypted_content) as continuation instead of vanishing. Review of 2026-06-10 stands for every other part; this amendment awaits ratification."
   }
 }

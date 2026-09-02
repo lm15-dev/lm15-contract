@@ -6,6 +6,20 @@
       "role": "assistant",
       "parts": [
         {
+          "type": "thinking",
+          "text": "",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_02660fdb8340f41c0069dd03126b7c81a2a58c41ac8196e718",
+                "encrypted_content": "gAAAAABp3QMTkePbwdz5DnA2AAtQlY-CjIbNAeRCQK1tAyooNNOeTFNk1uJKAdBuRWzNKm029lWv7vd6GuEO0WI4kYGrn6oVKYGxRl80JKBHBwPg4KHEPXFRz-80P1acRELpFvxnATuY6SO7qEixmSy80Q6pYGJuApvOLAnDSVy5NUiwyaVS7UneJ93-zuWQpZTyJwPW2CdWPATU4-3pUama48czrexojaXcG6E7PuuKahwMBqnLMOlMI7zz923oeRG-Nm-CbgbuXcyBx895nplhWFYo2NUVQ00UyXKX7_kAREXBe4T_R-6AgJ3ZZcM-SNGHgwQROglHmd4o2Yl19EfRKm_yRfpmWwmr5VIFVOw-6-oH2BxMs8uE3RFVPl5ijIrMH-ctXBVlaFqv9FqzvD10SA5A_t2henSo4F4au3PQMhDNdaPrPf9Vc54xlvppUEm8Ujp3fPNz3r6ebJl5tOlmNXZbj5FPMKHlWXjeYrJjzmUfeID-PkmHMZP4eX_eS0_6Gd-98bu0JKs-S0lDvR6QOeEb_H5fTqG8hzuD2vp4AKzogloxNpqsacVBdJUQb77IIoWPjApo8V9MN-uWC5z4bc3nDWTBoEyLr3ntb29rSuKt15Sb75O_sgtQXbVSjKOeK3Z8d5t9zWQmEtUh15ff1RJL1Q2DBdXR82q6YRfLUtpRka-wMqOtKdpoLH8E3hTqYANvpwQxTNfEqtjMnYrRIDwmBCIVGbS4IKget9pHFDDS0UDOR2JpkoNq4SGEKCvQphr0i73oE6K-jxWIYxJXCT80YtIMxZPXQmtxCD3WiiZKEj5bAHyAccBP95yIQlrN2v4lrUIMYTl9WjmTk_PjzHNxGV1J1JG-fNTnm2kQma1uIAeFMTkEK28AGrjzY62Prh0zUaHkfex2H3vF4Tb-oi0FqbgjZXMR3STRfx2s8rxS9piQdIKGcxc74TgMq__y2-vRRIvB"
+              }
+            }
+          ]
+        },
+        {
           "type": "text",
           "text": "3861"
         }
@@ -34,6 +48,7 @@
     "date": "2026-06-10",
     "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-04-13T14-52-01Z.txt",
-    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle"
+    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle",
+    "amended": "2026-09-02 — MAP-7 rule 8 (changes/2026-09-02-reasoning-design.md): the reasoning item is replay state; it becomes an empty ThinkingPart carrying the item id (and encrypted_content) as continuation instead of vanishing. Review of 2026-06-10 stands for every other part; this amendment awaits ratification."
   }
 }

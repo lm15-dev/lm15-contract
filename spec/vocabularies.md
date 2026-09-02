@@ -104,17 +104,23 @@ where a token (`tool_call`) appears in both.
 
 ## ReasoningEffort
 
-Runtime mirror: `REASONING_EFFORTS`.
+Runtime mirror: `REASONING_EFFORTS`. Amended 2026-09-02 (MAP-7,
+changes/2026-09-02-reasoning-design.md): `adaptive` removed (it meant
+"absent" — leaving `config.reasoning` unset is how the model decides on
+every provider); `max` added (OpenAI, Anthropic adaptive class). Every
+provider has this dial with these words; each model accepts a subset and
+rejects the rest with a 400; words with no native level on a provider
+RAISE client-side rather than downgrade.
 
 | Value |
 |---|
 | `off` |
-| `adaptive` |
 | `minimal` |
 | `low` |
 | `medium` |
 | `high` |
 | `xhigh` |
+| `max` |
 
 ## ReasoningSummary
 
