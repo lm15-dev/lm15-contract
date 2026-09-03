@@ -1,0 +1,56 @@
+{
+  "id": "zai.response_format_json_schema",
+  "provider": "zai",
+  "feature": "response_format_json_schema",
+  "description": "MAP-8: response_format.type=json_schema on Z.AI raises. Receipt: a schema with the single required key `city` was answered 200 with markdown-fenced JSON carrying landmark/city/country/continent/coordinates — the schema was ignored. json_object is honoured (zai.response_format_json_object). No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.z.ai 2026-09-03, glm-5.3-flash: json_schema ignored: 200, content begins ```json with keys the schema never named — receipts/2026-09-03-zai/probe-json-schema.json (HTTP 200); docs.z.ai chat--create.md documents the narrower support; refusal pinned per MAP-8 (a silent widen is worse than an error); changes/2026-09-03-zai-live.md"
+  },
+  "canonical_request": {
+    "model": "glm-5.3-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Where is the Eiffel Tower? Reply as json."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "response_format": {
+        "type": "json_schema",
+        "name": "place",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        },
+        "strict": true
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the probe cell it pins (research/providers/zai/capture.py); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

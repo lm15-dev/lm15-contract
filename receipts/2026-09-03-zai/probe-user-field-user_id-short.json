@@ -1,0 +1,32 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $ZAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 200,
+      "reasoning_effort": "low",
+      "user_id": "abc"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1214",
+      "message": "user_id:The unique ID of the user must be between 6 and 128 characters in length."
+    }
+  },
+  "timestamp": "2026-09-03T01-52-25Z",
+  "response_headers": {}
+}

@@ -1,0 +1,224 @@
+[
+  {
+    "feature": "basic_text",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-22Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 15, 'output_tokens': 131, 'total_tokens': 146, 'cache_read_tokens': 0, 'reasoning_tokens': 127} unmapped=None",
+    "usage": {
+      "input_tokens": 15,
+      "output_tokens": 131,
+      "total_tokens": 146,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 127
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "streaming",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-29Z",
+    "model": "glm-5.3-flash",
+    "parse": "216 stream events"
+  },
+  {
+    "feature": "reasoning_low",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-37Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 15, 'output_tokens': 4, 'total_tokens': 19, 'cache_read_tokens': 0, 'reasoning_tokens': 0} unmapped=None",
+    "usage": {
+      "input_tokens": 15,
+      "output_tokens": 4,
+      "total_tokens": 19,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "tools",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-39Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=tool_call usage={'input_tokens': 166, 'output_tokens': 42, 'total_tokens': 208, 'cache_read_tokens': 0, 'reasoning_tokens': 30} unmapped=None",
+    "usage": {
+      "input_tokens": 166,
+      "output_tokens": 42,
+      "total_tokens": 208,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 30
+    },
+    "finish_reason": "tool_call",
+    "unmapped": null
+  },
+  {
+    "feature": "streaming_tool_call",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-42Z",
+    "model": "glm-5.3-flash",
+    "parse": "31 stream events"
+  },
+  {
+    "feature": "multi_turn_tool_result",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-53Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 211, 'output_tokens': 27, 'total_tokens': 238, 'cache_read_tokens': 0, 'reasoning_tokens': 0} unmapped=None",
+    "usage": {
+      "input_tokens": 211,
+      "output_tokens": 27,
+      "total_tokens": 238,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "response_format_json_object",
+    "status": 200,
+    "timestamp": "2026-09-03T01-51-59Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 95, 'output_tokens': 143, 'total_tokens': 238, 'cache_read_tokens': 0, 'reasoning_tokens': 125} unmapped=None",
+    "usage": {
+      "input_tokens": 95,
+      "output_tokens": 143,
+      "total_tokens": 238,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 125
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "system_prompt",
+    "status": 200,
+    "timestamp": "2026-09-03T01-52-04Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 23, 'output_tokens': 4, 'total_tokens': 27, 'cache_read_tokens': 0, 'reasoning_tokens': 0} unmapped=None",
+    "usage": {
+      "input_tokens": 23,
+      "output_tokens": 4,
+      "total_tokens": 27,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 0
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "user_id",
+    "status": 200,
+    "timestamp": "2026-09-03T01-52-06Z",
+    "model": "glm-5.3-flash",
+    "parse": "finish=stop usage={'input_tokens': 15, 'output_tokens': 13, 'total_tokens': 28, 'cache_read_tokens': 0, 'reasoning_tokens': 10} unmapped=None",
+    "usage": {
+      "input_tokens": 15,
+      "output_tokens": 13,
+      "total_tokens": 28,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 10
+    },
+    "finish_reason": "stop",
+    "unmapped": null
+  },
+  {
+    "feature": "models",
+    "status": 200,
+    "entries": [
+      "glm-4.5",
+      "glm-4.5-air",
+      "glm-4.6",
+      "glm-4.7",
+      "glm-5",
+      "glm-5-turbo",
+      "glm-5.1",
+      "glm-5.2",
+      "glm-5.3",
+      "glm-5.3-flash"
+    ]
+  },
+  {
+    "probe": "thinking-disabled-glm-5.3",
+    "status": 400,
+    "summary": "{\"code\": \"1210\", \"message\": \"This model always engages in thinking and cannot be disabled; please use low, high, or max\"}"
+  },
+  {
+    "probe": "thinking-disabled-glm-5.2",
+    "status": 200,
+    "summary": "finish=stop content='Ok.' reasoning=no usage_keys=['completion_tokens', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "effort-medium",
+    "status": 400,
+    "summary": "{\"code\": \"1210\", \"message\": \"This model always engages in thinking and cannot be disabled; please use low, high, or max\"}"
+  },
+  {
+    "probe": "effort-minimal",
+    "status": 400,
+    "summary": "{\"code\": \"1210\", \"message\": \"This model always engages in thinking and cannot be disabled; please use low, high, or max\"}"
+  },
+  {
+    "probe": "error-bad-effort",
+    "status": 400,
+    "summary": "{\"code\": \"1210\", \"message\": \"This model always engages in thinking and cannot be disabled; please use low, high, or max\"}"
+  },
+  {
+    "probe": "tool-choice-required",
+    "status": 200,
+    "summary": "finish=stop content='ok' reasoning=no usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "tool-choice-none",
+    "status": 200,
+    "summary": "finish=tool_calls content='' reasoning=no usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "user-field-user",
+    "status": 200,
+    "summary": "finish=stop content='ok.' reasoning=yes usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "user-field-user_id-short",
+    "status": 400,
+    "summary": "{\"code\": \"1214\", \"message\": \"user_id:The unique ID of the user must be between 6 and 128 characters in length.\"}"
+  },
+  {
+    "probe": "json-schema",
+    "status": 200,
+    "summary": "finish=stop content='```json\\n{\\n  \"landmark\": \"Eiffel Tower\",\\n  \"city\": \"Paris\",\\n ' reasoning=yes usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "temperature-1.3",
+    "status": 200,
+    "summary": "finish=stop content='Ok' reasoning=yes usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "error-unauthenticated",
+    "status": 401,
+    "summary": "{\"code\": \"401\", \"message\": \"token expired or incorrect\"}"
+  },
+  {
+    "probe": "error-model-not-found",
+    "status": 400,
+    "summary": "{\"code\": \"1214\", \"message\": \"modelCode: does not exist\"}"
+  },
+  {
+    "probe": "error-missing-reasoning-content-with-tools",
+    "status": 200,
+    "summary": "finish=stop content='The weather in Paris is currently **sunny**! ☀️' reasoning=no usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "cache-usage-first",
+    "status": 200,
+    "summary": "finish=stop content='Ok.' reasoning=yes usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  },
+  {
+    "probe": "cache-usage-second",
+    "status": 200,
+    "summary": "finish=stop content='ok' reasoning=no usage_keys=['completion_tokens', 'completion_tokens_details', 'prompt_tokens', 'prompt_tokens_details', 'total_tokens'] details={'cached_tokens': 0} hit=None"
+  }
+]

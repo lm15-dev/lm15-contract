@@ -30,6 +30,7 @@ Rules:
 | `2026-09-01-model-listings/` | `changes/2026-09-01-provider-refresh.md` (the live `/models` listings and report behind the model-name refresh) |
 | `2026-09-01-video/` | `changes/2026-09-01-video-generation.md`, `changes/2026-09-01-video-status-vocab-sync.md` |
 | `2026-09-01-xai/` | `changes/2026-09-01-xai-provider.md` |
+| `2026-09-03-zai/` | `changes/2026-09-03-zai-live.md` (probe receipts, the unfunded-account 429, models listing, SUMMARY) |
 | `2026-09-03-deepseek/` | `changes/2026-09-03-deepseek-live.md` (probe receipts, models listing, SUMMARY of the capture) |
 
 History: these folders lived in `lm15-dev/curl-fixtures/` (seven of them

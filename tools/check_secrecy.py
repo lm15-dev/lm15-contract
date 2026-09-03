@@ -43,6 +43,8 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     # platform.deepseek.com keys: "sk-" + exactly 32 lowercase hex (observed
     # shape 2026-09-03); the exact length keeps it from matching prose.
     ("deepseek api key", re.compile(r"\bsk-[0-9a-f]{32}\b")),
+    # z.ai keys: 32 hex, a dot, 16 alphanumerics (observed shape 2026-09-03).
+    ("z.ai api key", re.compile(r"\b[0-9a-f]{32}\.[A-Za-z0-9]{16}\b")),
 )
 
 SCANNED_SUFFIXES = {".json", ".txt", ".md", ".sse"}

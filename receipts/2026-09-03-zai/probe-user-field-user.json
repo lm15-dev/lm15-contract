@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $ZAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 200,
+      "reasoning_effort": "low",
+      "user": "lm15-probe"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "ok.",
+          "reasoning_content": "Users asks to say \"ok.\" Simple request, harmless. Respond with exactly \"ok.\" as asked. No formatting needed—just the word.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788400344,
+    "id": "202609030952216ace53ba7d7b43ad",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202609030952216ace53ba7d7b43ad",
+    "usage": {
+      "completion_tokens": 33,
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      },
+      "prompt_tokens": 15,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 48
+    }
+  },
+  "timestamp": "2026-09-03T01-52-21Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

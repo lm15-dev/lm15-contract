@@ -1,0 +1,61 @@
+{
+  "id": "zai.tool_choice_required",
+  "provider": "zai",
+  "feature": "tool_choice_required",
+  "description": "MAP-8: tool_choice beyond auto on Z.AI raises. Receipt: mode=required with one tool and 'Say ok.' answered plain text (no call); mode=none with a weather question called the tool. The server documents auto only and ignores the rest. No wire request: the canonical outcome is UnsupportedFeatureError at build time.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.z.ai 2026-09-03, glm-5.3-flash: tool_choice=required ignored (finish=stop, content='ok', no tool_calls); probe-tool-choice-none.json: tool_choice=none ignored (finish=tool_calls) — receipts/2026-09-03-zai/probe-tool-choice-required.json (HTTP 200); docs.z.ai chat--create.md documents the narrower support; refusal pinned per MAP-8 (a silent widen is worse than an error); changes/2026-09-03-zai-live.md"
+  },
+  "canonical_request": {
+    "model": "glm-5.3-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "tool_choice": {
+        "mode": "required"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the probe cell it pins (research/providers/zai/capture.py); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

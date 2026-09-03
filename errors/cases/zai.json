@@ -1,0 +1,101 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.z.ai error envelopes captured verbatim 2026-09-03 by research/providers/zai/capture.py; receipts/2026-09-03-zai/probe-error-*.json; the 1113 billing envelope from the unfunded first attempt (receipts/2026-09-03-zai/NOTE-2026-09-03T01-40Z.md)"
+  },
+  "cases": [
+    {
+      "id": "zai.insufficient_balance",
+      "provider": "zai",
+      "status": 429,
+      "body": {
+        "error": {
+          "code": "1113",
+          "message": "Insufficient balance or no resource package. Please recharge."
+        }
+      },
+      "expected": {
+        "class": "BillingError",
+        "code": "billing",
+        "provider": "zai",
+        "provider_code": "1113",
+        "status": 429
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.z.ai 2026-09-03T01-40-35Z HTTP 429 verbatim, first capture attempt on an unfunded account — receipts/2026-09-03-zai/failed-basic_text-2026-09-03T01-40-35Z.txt and NOTE-2026-09-03T01-40Z.md; docs.z.ai api-code.md lists 1113 as 429. Pinned as BillingError (not retryable): the reference had mapped every 429 to RateLimitError and would have retried a drained balance forever."
+      }
+    },
+    {
+      "id": "zai.unauthenticated",
+      "provider": "zai",
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "401",
+          "message": "token expired or incorrect"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "zai",
+        "provider_code": "401",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.z.ai HTTP 401 verbatim 2026-09-03T01-52-34Z — receipts/2026-09-03-zai/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "zai.model_not_found",
+      "provider": "zai",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "1214",
+          "message": "modelCode: does not exist"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "zai",
+        "provider_code": "1214",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.z.ai HTTP 400 verbatim 2026-09-03T01-52-35Z — receipts/2026-09-03-zai/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "zai.bad_effort",
+      "provider": "zai",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "1210",
+          "message": "This model always engages in thinking and cannot be disabled; please use low, high, or max"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "zai",
+        "provider_code": "1210",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.z.ai HTTP 400 verbatim 2026-09-03T01-52-15Z — receipts/2026-09-03-zai/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

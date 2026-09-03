@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $ZAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "glm-5.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 100,
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Ok.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788400332,
+    "id": "202609030952111fb9f22794cc47dd",
+    "model": "glm-5.2",
+    "object": "chat.completion",
+    "request_id": "202609030952111fb9f22794cc47dd",
+    "usage": {
+      "completion_tokens": 2,
+      "prompt_tokens": 9,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 11
+    }
+  },
+  "timestamp": "2026-09-03T01-52-11Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

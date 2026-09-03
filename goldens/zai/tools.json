@@ -1,0 +1,37 @@
+{
+  "canonical_response": {
+    "id": "20260903095139fc2a4eeb505d446e",
+    "model": "glm-5.3-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user wants to know the weather in Paris and explicitly asked me to use the tool. I'll call the get_weather function with city \"Paris\"."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_-7293015237823822048",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 166,
+      "output_tokens": 42,
+      "total_tokens": 208,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 30
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T01-51-39Z.txt"
+  }
+}

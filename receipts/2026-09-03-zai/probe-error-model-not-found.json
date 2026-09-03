@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $ZAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "glm-nonexistent",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1214",
+      "message": "modelCode: does not exist"
+    }
+  },
+  "timestamp": "2026-09-03T01-52-35Z",
+  "response_headers": {}
+}

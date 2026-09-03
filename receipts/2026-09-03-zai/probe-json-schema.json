@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $ZAI_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower? Reply as json."
+        }
+      ],
+      "max_tokens": 300,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          },
+          "strict": true
+        }
+      },
+      "thinking": {
+        "type": "enabled"
+      },
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "```json\n{\n  \"landmark\": \"Eiffel Tower\",\n  \"city\": \"Paris\",\n  \"country\": \"France\",\n  \"continent\": \"Europe\",\n  \"coordinates\": {\n    \"latitude\": 48.8584,\n    \"longitude\": 2.2945\n  },\n  \"address\": \"Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France\"\n}\n```",
+          "reasoning_content": "Simple.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788400350,
+    "id": "20260903095226a85b9467218346e1",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20260903095226a85b9467218346e1",
+    "usage": {
+      "completion_tokens": 95,
+      "completion_tokens_details": {
+        "reasoning_tokens": 2
+      },
+      "prompt_tokens": 24,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 119
+    }
+  },
+  "timestamp": "2026-09-03T01-52-26Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}
