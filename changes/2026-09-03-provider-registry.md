@@ -95,6 +95,10 @@ under `research/providers/deepseek/sources/`.
 
 ## What is not yet evidenced
 
+**Superseded the same day:** `changes/2026-09-03-deepseek-live.md` lands
+the receipts and closes the six decisions.  The paragraph below is kept
+as the record of the state this entry was written in.
+
 `deepseek` has **no live receipt**.  Its support-matrix row, its compat
 preset, and its docs table line come from `scrapes/deepseek/pages/`
 (2026-09-03).  The dossier lists six decisions that need a wire

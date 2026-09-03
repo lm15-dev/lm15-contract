@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $DEEPSEEK_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 200,
+      "temperature": 0.0
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "08b440bd-6fbe-4daa-87b1-18a7b296e311",
+    "object": "chat.completion",
+    "created": 1788397892,
+    "model": "deepseek-v4-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok.",
+          "reasoning_content": "We need answer to user. They said \"Say ok.\" So respond \"ok\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 86,
+      "completion_tokens": 20,
+      "total_tokens": 106,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 17
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 86
+    },
+    "system_fingerprint": "a26a7955944dc5c60445bff77fac9c8e"
+  },
+  "timestamp": "2026-09-03T01-11-32Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

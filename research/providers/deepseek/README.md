@@ -8,12 +8,12 @@ Status ledger (the states from the provider-expansion plan, 2026-09-01):
 | researched | 2026-09-03 | this dossier; `scrapes/deepseek/pages/` (15 pages); `sources/` (terms, privacy) |
 | implemented | 2026-09-03 | `lm15.registry.PROVIDERS["deepseek"]`, `lm15.access.DEEPSEEK`, compat preset `deepseek` |
 | offline-conformant | 2026-09-03 | auth case `deepseek-env-selected`; support matrix pinned; registry tests |
-| **live-verified** | — | **pending** — run `capture.py` with `DEEPSEEK_API_KEY`; see § Live validation |
-| supported | — | after the receipts land and a reviewer signs the `changes/` entry |
+| live-verified | 2026-09-03 | 11 cases, 4 error envelopes, 13 probes: `changes/2026-09-03-deepseek-live.md`, `receipts/2026-09-03-deepseek/` |
+| supported | — | after a reviewer ratifies the two `changes/` entries |
 
-Until the live row is filled, every wire claim below is at AUTHORITY.md
-precedence level 2 (provider documentation), not level 1.  The support
-matrix row for `deepseek` says so in its `_doc`.
+Every wire claim below now has a receipt (AUTHORITY.md precedence 1).
+Where the live wire contradicted the docs, the receipt wins and the row
+says so.
 
 ## Identity
 
@@ -79,7 +79,7 @@ unknown model to `deepseek-v4-flash` silently (`guide--anthropic-api.md:52-60`)
 | system message | `role: system` | `instruction_role="system"` |
 | `max_tokens` | `max_tokens` | `max_tokens_field="max_tokens"` |
 | streaming | `stream: true`, `data: [DONE]`; `stream_options.include_usage` puts usage on the last chunk (`:173-180`) | `stream_usage="include"` |
-| reasoning on + effort | `thinking: {type: enabled}` + `reasoning_effort: low\|high\|max`; **default is enabled/high**; `medium`,`xhigh` → `high` server-side; `minimal` undocumented (`guide--thinking-mode.md:10-22`) | `thinking_format="deepseek"` (already sends both) — **probe `minimal`** |
+| reasoning on + effort | `thinking: {type: enabled}` + `reasoning_effort`; **default is enabled/high**; docs list `low\|high\|max` but the wire accepts `none, minimal, low, medium, high, xhigh, max` (400 message for `bogus`, live 2026-09-03) | `thinking_format="deepseek"`; effort verbatim |
 | reasoning off | `thinking: {type: disabled}` | same format; off is honoured per docs (unlike xAI) |
 | thinking replay | `reasoning_content` on assistant messages; **required on every assistant turn when `tools` present, else 400** (`guide--thinking-mode.md:98-102`); ignored without tools | `thinking_replay="native"`, `assistant_reasoning_content="include_empty"` ← **changed in this pass** |
 | tools | `tools[].function`, `tool_choice` none/auto/required/`{type:function,function:{name}}`, `strict` (default false) (`:201-258`) | dialect default; `strict_tools="omit"` |
@@ -88,7 +88,7 @@ unknown model to `deepseek-v4-flash` silently (`guide--anthropic-api.md:52-60`)
 | `frequency_penalty`, `presence_penalty` | deprecated, silently ignored (`:276-278`) | lm15 has no such Config fields; only via extensions |
 | `stop` | string or array ≤16 | dialect default |
 | logprobs | `logprobs`, `top_logprobs ≤ 20`; also on `reasoning_content` tokens (`:260-262`, `:370-410`) | dialect default; **probe** the reasoning logprobs shape (lm15 has no slot for it) |
-| user identity | **`user_id`**, regex `[a-zA-Z0-9\-_]+`, ≤512 (`:264-274`, `rate-limit.md`) — not OpenAI's `user` | lm15 sends `user` — **probe**: rejected, ignored, or both accepted? May need a compat field `user_field` |
+| user identity | **`user_id`**, regex `[a-zA-Z0-9\-_]+`, ≤512 (`:264-274`, `rate-limit.md`) — not OpenAI's `user` | `user_field="user_id"` (live 2026-09-03: `user`, `user_id`, and an invalid `user_id` all 200 with no echo — the documented name is the only one worth sending) |
 | prompt caching | automatic, on disk, no request field (`guide--kv-cache.md`) | `cache_control="none"` |
 | images | `image_url` {url \| data URL, detail low/high/original/auto}, vision model only (`:64-73`) | dialect default; `images` stays false in the matrix (that column means *generation*) |
 | files | `type: file` with `file_id` from "the Files API" (`:77-85`) — a Files API exists but is not scraped | `files: false` until researched |
@@ -151,7 +151,16 @@ Source: `sources/deepseek-open-platform-terms-of-service.md` (release
 **Verdict: allowed, API key only.**  No OAuth client to borrow, no
 coding-plan restriction, no ambiguity.
 
-## Open decisions (need live evidence before they become rules)
+## Open decisions — closed 2026-09-03
+
+All six were resolved by the capture; the verdicts and receipts are in
+`changes/2026-09-03-deepseek-live.md` § The six open decisions.  In short:
+`user_id` is sent (new compat `user_field`); temperature in thinking mode
+is documented, not raised; effort passes verbatim (the server accepts the
+whole lm15 vocabulary — the 400 for `bogus` lists it); `json_schema` is
+a loud 400; the cache usage spelling needs no change (both fields are
+sent, equal); `insufficient_system_resource` stays unmapped until seen.
+The original questions, kept for the record:
 
 1. **`user` vs `user_id`.**  If DeepSeek rejects `user`, lm15's promoted
    `Config.user_id` is broken on this provider and a compat field

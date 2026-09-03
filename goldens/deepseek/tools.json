@@ -1,0 +1,37 @@
+{
+  "canonical_response": {
+    "id": "2cad965d-1db2-4ac1-8a7a-5f5603ca7ab0",
+    "model": "deepseek-v4-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user asks about weather in Paris. Let me call the get_weather tool."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_00_NGdVue2x4cD329WPuGuh4760",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 363,
+      "output_tokens": 62,
+      "total_tokens": 425,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 17
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-02",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T01-11-11Z.txt"
+  }
+}

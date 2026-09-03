@@ -1,0 +1,109 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.deepseek.com error envelopes captured verbatim 2026-09-03 by research/providers/deepseek/capture.py; receipts/2026-09-03-deepseek/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "deepseek.unauthenticated",
+      "provider": "deepseek",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Authentication Fails, Your api key: ****alid is invalid",
+          "type": "authentication_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "deepseek",
+        "provider_code": "invalid_request_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com HTTP 401 verbatim 2026-09-03T01-11-34Z — receipts/2026-09-03-deepseek/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepseek.model_not_found",
+      "provider": "deepseek",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The supported API model names are deepseek-v4-pro, deepseek-v4-flash, and deepseek-v4-flash-vision-exp, but you passed deepseek-nonexistent.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepseek",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com HTTP 400 verbatim 2026-09-03T01-11-35Z — receipts/2026-09-03-deepseek/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepseek.bad_effort",
+      "provider": "deepseek",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant `bogus`, expected one of `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` at line 1 column 130",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepseek",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com HTTP 400 verbatim 2026-09-03T01-11-37Z — receipts/2026-09-03-deepseek/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepseek.missing_reasoning_content_with_tools",
+      "provider": "deepseek",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The `reasoning_content` in the thinking mode must be passed back to the API.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepseek",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com HTTP 400 verbatim 2026-09-03T01-11-38Z — receipts/2026-09-03-deepseek/probe-error-missing-reasoning-content-with-tools.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

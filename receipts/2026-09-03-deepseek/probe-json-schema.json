@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $DEEPSEEK_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower? Reply as json."
+        }
+      ],
+      "max_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          },
+          "strict": true
+        }
+      },
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "This response_format type is unavailable now",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T01-11-31Z",
+  "response_headers": {
+    "Content-Type": "application/octet-stream"
+  }
+}

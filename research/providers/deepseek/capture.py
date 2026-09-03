@@ -308,6 +308,17 @@ def cases(model: str, force: bool, only: set[str] | None) -> list[dict]:
             evidence_note="instruction_role=system",
             force=force,
         ))
+    if want("user_id"):
+        rows.append(write_case(
+            "user_id",
+            Request(model=model, messages=(Message.user("Say ok."),),
+                    config=Config(max_tokens=50, user_id="lm15-case-user", reasoning=Reasoning(effort="off"))),
+            stream=False,
+            description="DeepSeek user identity: Config.user_id rides DeepSeek's documented `user_id` field (compat user_field), not OpenAI's `user`",
+            expect_lm15={"parts": {"text": {"min": 1}}, "finish_reason": "stop", "usage": {"required": True}},
+            evidence_note="probe 2026-09-03: `user` and `user_id` both 200 with no echo; the documented name is sent",
+            force=force,
+        ))
     if want("models"):
         case_path = CONTRACT / "cases" / PROVIDER / "models.json"
         if case_path.exists() and not force:

@@ -1,0 +1,58 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $DEEPSEEK_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 50,
+      "thinking": {
+        "type": "disabled"
+      },
+      "user_id": "lm15-probe"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "1d8e9c5b-91ff-451c-b3df-57dc89f3dfa8",
+    "object": "chat.completion",
+    "created": 1788397883,
+    "model": "deepseek-v4-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 2,
+      "total_tokens": 9,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 7
+    },
+    "system_fingerprint": "a26a7955944dc5c60445bff77fac9c8e"
+  },
+  "timestamp": "2026-09-03T01-11-23Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

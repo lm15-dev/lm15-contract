@@ -1,0 +1,35 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $DEEPSEEK_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 10,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Failed to deserialize the JSON body into the target type: reasoning_effort: unknown variant `bogus`, expected one of `none`, `minimal`, `low`, `medium`, `high`, `xhigh`, `max` at line 1 column 130",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T01-11-37Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $DEEPSEEK_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 200,
+      "thinking": {
+        "type": "enabled"
+      },
+      "reasoning_effort": "minimal"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "bc60092a-096c-4ab7-a4dd-8fd5983847b2",
+    "object": "chat.completion",
+    "created": 1788397887,
+    "model": "deepseek-v4-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "1.  The user said \"Say ok.\" This is a direct instruction to repeat the word \"ok\".\n\n2.  My response should be exactly that, just \"ok\". No extra fluff, no explanation, no follow-up questions. Just comply.\n\n3.  Check for any safety/privacy concerns: none. It's a harmless word.\n\n4.  Final output: \"ok\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 82,
+      "total_tokens": 89,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 80
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 7
+    },
+    "system_fingerprint": "a26a7955944dc5c60445bff77fac9c8e"
+  },
+  "timestamp": "2026-09-03T01-11-27Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}
