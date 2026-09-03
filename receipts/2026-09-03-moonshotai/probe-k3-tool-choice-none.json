@@ -1,0 +1,73 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none",
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a996b3e0ce040dfa07e4f5a",
+    "object": "chat.completion",
+    "created": 1788439359,
+    "model": "kimi-k3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can’t call the weather tool in this response.",
+          "reasoning_content": "The user asks weather in Paris and says use tool. Need not call. Need final answer likely explain cannot use tool in this response. However prior instruction says must not call tools in next message. We can answer maybe \"I can’t call the weather tool right now.\" But user specifically requested use tool; system overrides. Keep concise."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 213,
+      "completion_tokens": 94,
+      "total_tokens": 307,
+      "completion_tokens_details": {
+        "reasoning_tokens": 68
+      }
+    }
+  },
+  "timestamp": "2026-09-03T12-42-37Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

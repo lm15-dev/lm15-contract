@@ -1,0 +1,83 @@
+#!/bin/bash
+# Re-scrape the Kimi API Platform docs (platform.kimi.ai, native .md
+# endpoints; index at https://platform.kimi.ai/docs/llms.txt).  Same
+# 200-with-body guard as the others.  The pricing pages are scraped because
+# they are native Markdown here (unlike Z.AI's rendered app), and so are
+# the terms and privacy pages; the dossier's frozen copies live under
+# research/providers/moonshotai/sources/.
+set -e
+DIR="$(cd "$(dirname "$0")/pages" && pwd)"
+source "$(dirname "$0")/../fetch.sh"
+BASE="https://platform.kimi.ai/docs"
+
+PAGES=(
+  "llms.txt=/llms.txt"
+  "overview.md=/overview.md"
+  "models.md=/models.md"
+  "model--kimi-k3.md=/guide/kimi-k3-quickstart.md"
+  "model--kimi-k2.7-code.md=/guide/kimi-k2-7-code-quickstart.md"
+  "model--kimi-k2.6.md=/guide/kimi-k2-6-quickstart.md"
+  "guide--thinking-models.md=/guide/use-thinking-models.md"
+  "guide--reasoning-effort.md=/guide/use-reasoning-effort.md"
+  "guide--multi-turn.md=/guide/engage-in-multi-turn-conversations-using-kimi-api.md"
+  "guide--streaming.md=/guide/utilize-the-streaming-output-feature-of-kimi-api.md"
+  "guide--json-mode.md=/guide/use-json-mode-feature-of-kimi-api.md"
+  "guide--partial-mode.md=/guide/use-partial-mode-feature-of-kimi-api.md"
+  "guide--vision.md=/guide/use-kimi-vision-model.md"
+  "guide--context-caching.md=/guide/use-context-caching-feature-of-kimi-api.md"
+  "guide--dynamic-tool-loading.md=/guide/use-dynamic-tool-loading.md"
+  "guide--tool-calls.md=/guide/use-kimi-api-to-complete-tool-calls.md"
+  "guide--web-search.md=/guide/use-web-search.md"
+  "guide--official-tools.md=/guide/use-official-tools.md"
+  "guide--tool-choice.md=/guide/use-tool-choice.md"
+  "guide--k3-tool-calling.md=/guide/kimi-k3-tool-calling-best-practice.md"
+  "guide--response-format.md=/guide/response_format.md"
+  "guide--auto-reconnect.md=/guide/auto-reconnect.md"
+  "guide--file-qa.md=/guide/use-kimi-api-for-file-based-qa.md"
+  "guide--batch.md=/guide/use-batch-api.md"
+  "guide--codex.md=/guide/codex-kimi.md"
+  "guide--claude-code.md=/guide/claude-code-kimi.md"
+  "guide--org.md=/guide/org-best-practice.md"
+  "api--overview.md=/api/overview.md"
+  "api--models-overview.md=/api/models-overview.md"
+  "chat--create.md=/api/chat.md"
+  "responses--create.md=/api/responses.md"
+  "messages--create.md=/api/messages.md"
+  "models--list.md=/api/list-models.md"
+  "estimate.md=/api/estimate.md"
+  "balance.md=/api/balance.md"
+  "signatures-verify.md=/api/signatures-verify.md"
+  "files.md=/api/files.md"
+  "files--upload.md=/api/files-upload.md"
+  "files--list.md=/api/files-list.md"
+  "files--retrieve.md=/api/files-retrieve.md"
+  "files--delete.md=/api/files-delete.md"
+  "files--content.md=/api/files-content.md"
+  "batch--create.md=/api/batch-create.md"
+  "batch--list.md=/api/batch-list.md"
+  "batch--retrieve.md=/api/batch-retrieve.md"
+  "batch--cancel.md=/api/batch-cancel.md"
+  "pricing--chat.md=/pricing/chat.md"
+  "pricing--k3.md=/pricing/chat-k3.md"
+  "pricing--k2.7-code.md=/pricing/chat-k27-code.md"
+  "pricing--k2.6.md=/pricing/chat-k26.md"
+  "pricing--batch.md=/pricing/batch.md"
+  "pricing--tools.md=/pricing/tools.md"
+  "pricing--limits.md=/pricing/limits.md"
+  "errors.md=/api/errors.md"
+  "introduction.md=/introduction.md"
+  "guide--troubleshooting.md=/guide/troubleshooting.md"
+  "guide--tool-call-repeat.md=/guide/tool-call-repeat.md"
+  "guide--product-plans.md=/guide/product-plans.md"
+  "guide--benchmark.md=/guide/benchmark-best-practice.md"
+  "agreement--terms.md=/agreement/modeluse.md"
+  "agreement--privacy.md=/agreement/userprivacy.md"
+  "changelog.md=/platform-changelog.md"
+  "openapi.json=/openapi.json"
+)
+
+echo "Kimi API Platform docs -> $DIR"
+for entry in "${PAGES[@]}"; do
+  fetch_page "${entry%%=*}" "${BASE}${entry#*=}"
+done
+fetch_summary

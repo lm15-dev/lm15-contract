@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-nonexistent",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "type": "resource_not_found_error",
+      "message": "Not found the model kimi-nonexistent or Permission denied"
+    },
+    "request_id": "f4353da4-a799-11f1-b862-00163e734e28",
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T13-18-29Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

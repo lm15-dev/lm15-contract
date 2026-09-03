@@ -1,0 +1,101 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai error envelopes captured verbatim 2026-09-03 by research/providers/moonshotai/capture.py; receipts/2026-09-03-moonshotai/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "moonshotai.unauthenticated",
+      "provider": "moonshotai",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Invalid Authentication",
+          "type": "invalid_authentication_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "moonshotai",
+        "provider_code": "invalid_authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai HTTP 401 verbatim 2026-09-03T12-42-47Z — receipts/2026-09-03-moonshotai/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai.model_not_found",
+      "provider": "moonshotai",
+      "status": 404,
+      "body": {
+        "error": {
+          "message": "Not found the model kimi-nonexistent or Permission denied",
+          "type": "resource_not_found_error"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "moonshotai",
+        "provider_code": "resource_not_found_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai HTTP 404 verbatim 2026-09-03T12-42-48Z — receipts/2026-09-03-moonshotai/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai.k26_tool_choice_required",
+      "provider": "moonshotai",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "tool_choice 'required' is incompatible with thinking enabled",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai HTTP 400 verbatim 2026-09-03T12-42-42Z — receipts/2026-09-03-moonshotai/probe-error-k26-tool-choice-required.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai.temperature",
+      "provider": "moonshotai",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid temperature: only 1 is allowed for this model",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai HTTP 400 verbatim 2026-09-03T12-42-28Z — receipts/2026-09-03-moonshotai/probe-error-temperature.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

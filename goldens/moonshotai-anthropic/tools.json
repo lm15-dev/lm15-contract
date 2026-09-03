@@ -1,0 +1,47 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-6a9972f6ebdb2d85020f4704",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user explicitly asks weather in Paris and to use tool. Need call get_weather. Then final concise. Need not analyze natively. Use tool."
+        },
+        {
+          "type": "tool_call",
+          "id": "get_weather_0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "anthropic",
+          "kind": "message_id",
+          "data": {
+            "id": "chatcmpl-6a9972f6ebdb2d85020f4704"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 84,
+      "total_tokens": 84,
+      "cache_read_tokens": 175,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 32
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T13-15-32Z.txt"
+  }
+}

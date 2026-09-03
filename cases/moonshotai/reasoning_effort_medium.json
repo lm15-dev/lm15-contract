@@ -1,0 +1,43 @@
+{
+  "id": "moonshotai.reasoning_effort_medium",
+  "provider": "moonshotai",
+  "feature": "reasoning_effort_medium",
+  "description": "MAP-7 rule 2: an effort word with no native level on kimi-k3 raises client-side. Receipt: reasoning_effort=medium answered HTTP 200 with 17 reasoning tokens, and reasoning_effort=bogus answered HTTP 200 with 17 reasoning tokens — the server accepts any word without validating it, so a downgrade would be silent. The documented levels are low, high, max. No wire request: the canonical outcome is UnsupportedFeatureError at build time.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai/probe-error-k3-effort-medium.json (HTTP 200, reasoning_tokens 17) and probe-error-bad-effort.json (reasoning_effort=bogus, HTTP 200, reasoning_tokens 17); platform.kimi.ai guide--reasoning-effort.md documents low|high|max only; refusal pinned per MAP-7 rule 2 (words with no native level raise client-side) via OpenAIChatCompat.reasoning_efforts; changes/2026-09-03-moonshotai-live.md"
+  },
+  "canonical_request": {
+    "model": "kimi-k3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "reasoning": {
+        "effort": "medium"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the probe cell it pins (research/providers/moonshotai/capture.py); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

@@ -45,6 +45,9 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("deepseek api key", re.compile(r"\bsk-[0-9a-f]{32}\b")),
     # z.ai keys: 32 hex, a dot, 16 alphanumerics (observed shape 2026-09-03).
     ("z.ai api key", re.compile(r"\b[0-9a-f]{32}\.[A-Za-z0-9]{16}\b")),
+    # platform.kimi.ai keys: "sk-" + exactly 48 mixed-case alphanumerics
+    # (observed shape 2026-09-03); the exact length keeps it from prose.
+    ("moonshot api key", re.compile(r"\bsk-[A-Za-z0-9]{48}\b")),
 )
 
 SCANNED_SUFFIXES = {".json", ".txt", ".md", ".sse"}

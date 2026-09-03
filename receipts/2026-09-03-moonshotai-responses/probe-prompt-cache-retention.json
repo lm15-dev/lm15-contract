@@ -1,0 +1,45 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 300,
+      "reasoning": {
+        "effort": "low"
+      },
+      "prompt_cache_key": "lm15-probe",
+      "prompt_cache_retention": "24h"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "invalid_request_error: invalid_request_error: prompt_cache_retention is not supported",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T13-12-53Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

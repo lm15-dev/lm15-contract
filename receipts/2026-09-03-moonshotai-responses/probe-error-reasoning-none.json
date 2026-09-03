@@ -1,0 +1,43 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 300,
+      "reasoning": {
+        "effort": "none"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "invalid_request_error: invalid_request_error: reasoning.effort value \"none\" is not supported",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T13-12-30Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

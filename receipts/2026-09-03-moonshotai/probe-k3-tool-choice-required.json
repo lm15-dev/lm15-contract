@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required",
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a996b39a6c67ea270476bab",
+    "object": "chat.completion",
+    "created": 1788439353,
+    "model": "kimi-k3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user asked me to \"Say ok.\" But the system requires tool call. Need call a tool. Only available get_weather, irrelevant. Need then final say ok. Do that.",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "get_weather_0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"London\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 203,
+      "completion_tokens": 92,
+      "total_tokens": 295,
+      "completion_tokens_details": {
+        "reasoning_tokens": 39
+      }
+    }
+  },
+  "timestamp": "2026-09-03T12-42-32Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

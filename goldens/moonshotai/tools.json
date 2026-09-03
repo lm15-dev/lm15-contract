@@ -1,0 +1,36 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-6a996be811a3491b3b52f084",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user explicitly asks to use the tool. We have get_weather. Need call it. Then final report. Since low thinking, concise."
+        },
+        {
+          "type": "tool_call",
+          "id": "get_weather_0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 175,
+      "output_tokens": 82,
+      "total_tokens": 257,
+      "reasoning_tokens": 30
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T12-45-27Z.txt"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "max_tokens": 600,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "output_config": {
+        "effort": "medium"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a9971abff88d3c66b0d468e",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is just saying \"Say ok.\" Simple."
+      },
+      {
+        "type": "text",
+        "text": "Ok."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 89,
+      "output_tokens": 29,
+      "output_tokens_details": {
+        "thinking_tokens": 12
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 89,
+      "cached_tokens": 89,
+      "completion_tokens": 29,
+      "total_tokens": 118
+    }
+  },
+  "timestamp": "2026-09-03T13-10-03Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

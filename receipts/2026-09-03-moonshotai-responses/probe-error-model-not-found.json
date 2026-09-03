@@ -1,0 +1,40 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-nonexistent",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 100
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Not found the model kimi-nonexistent or Permission denied",
+      "type": "invalid_request_error",
+      "param": "model",
+      "code": "model_not_found"
+    }
+  },
+  "timestamp": "2026-09-03T13-12-58Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

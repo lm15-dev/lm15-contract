@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "thinking": {
+        "type": "enabled",
+        "keep": "all"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a996b2596a2d2e875d2e2af",
+    "object": "chat.completion",
+    "created": 1788439333,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "OK.",
+          "reasoning_content": "The user simply said \"Say ok.\" This is a very straightforward request. They want me to say \"ok\". I should comply and respond with \"ok\" or \"OK\". There's no trick or complexity here. I'll just say \"OK.\""
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 54,
+      "total_tokens": 64,
+      "cached_tokens": 10,
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 10
+      }
+    }
+  },
+  "timestamp": "2026-09-03T12-42-13Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

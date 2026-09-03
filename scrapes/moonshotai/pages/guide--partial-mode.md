@@ -1,0 +1,379 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://platform.kimi.ai/docs/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Use Kimi API's Partial Mode
+
+> Use Kimi API Partial Mode to continue supplied text, fix reply openings, resume truncated output, or preserve role consistency.
+
+Partial Mode makes the Kimi large language model continue generating from a given piece of text instead of replying from scratch. Use it when you need to fix the opening of replies (for example, a customer service robot that starts every sentence with "Dear customer, hello."), to complete truncated long output, or to reinforce character consistency in role play.
+
+<Note>
+  The examples on this page use the latest model `kimi-k3` by default. K3 configures reasoning effort with the top-level `reasoning_effort` request field (supports `"low"` / `"high"` / `"max"`, default `"max"`). To use another model such as `kimi-k2.6`, just replace the `model` field — parameter configurations differ across models. See the [Model Parameter Reference](/docs/api/models-overview).
+</Note>
+
+## Make the model continue from a given prefix
+
+To use Partial Mode, append a message with `role=assistant` and `partial=True` at the end of the `messages` list, and place the text you want the model to continue from in the `content` field — the model is forced to start its reply with that content. The following example makes the model open its reply with a fixed greeting:
+
+<Tabs>
+  <Tab title="python">
+    ```python theme={null}
+    import os
+
+    from openai import OpenAI
+
+    client = OpenAI(
+        api_key=os.environ["MOONSHOT_API_KEY"], # Set the MOONSHOT_API_KEY environment variable before running this example
+        base_url = "https://api.moonshot.ai/v1",
+    )
+
+    completion = client.chat.completions.create(
+        model = "kimi-k3",
+        messages = [
+            {"role": "system", "content": "You are Kimi, an AI assistant provided by Moonshot AI. You are proficient in Chinese and English conversations. You provide users with safe, helpful, and accurate answers. You also reject any questions involving terrorism, racism, or explicit content. Moonshot AI is a proper noun and should not be translated."},
+            {"role": "user", "content": "Hello?"},
+            {
+                "partial": True, # <-- The partial parameter is used to enable Partial Mode
+            	"role": "assistant", # <-- We add a message with role=assistant after the user's question
+            	"content": "Dear customer, hello,", # <-- The content is "fed" to the Kimi large language model, prompting it to continue from this sentence
+            }, 
+        ]
+    )
+
+    # Since the Kimi large language model continues from the "fed" sentence, we need to manually concatenate the "fed" sentence with the generated response
+    print("Dear customer, hello," + completion.choices[0].message.content)
+    ```
+  </Tab>
+
+  <Tab title="node.js">
+    ```js theme={null}
+    const OpenAI = require('openai')
+     
+    const client = new OpenAI({
+        apiKey: process.env.MOONSHOT_API_KEY, // Set the MOONSHOT_API_KEY environment variable before running this example
+        baseURL: "https://api.moonshot.ai/v1",
+    })
+
+    async function main() {
+        let completion = await client.chat.completions.create({
+            model: "kimi-k3",
+            messages: [
+                {role: "system", content: "You are Kimi, an AI assistant provided by Moonshot AI. You are proficient in Chinese and English conversations. You provide users with safe, helpful, and accurate answers. You also reject any questions involving terrorism, racism, or explicit content. Moonshot AI is a proper noun and should not be translated."},
+                {role: "user", content: "Hello?"},
+                {
+                    partial: true, // <-- The partial parameter is used to enable Partial Mode
+                    role: "assistant", // <-- We add a message with role=assistant after the user's question
+                    content: "Dear customer, hello,", // <-- The content is "fed" to the Kimi large language model, prompting it to continue from this sentence
+                }, 
+            ]
+        })
+         
+        // Since the Kimi large language model continues from the "fed" sentence, we need to manually concatenate the "fed" sentence with the generated response
+        console.log("Dear customer, hello," + completion.choices[0].message.content)
+    }
+
+    main()
+    ```
+  </Tab>
+</Tabs>
+
+Key points of using Partial Mode:
+
+1. Add an extra message at the end of the messages list, with `role=assistant` and `partial=True`;
+2. Place the content you want to "feed" to the Kimi large language model in the `content` field. The model will start generating the response from this content;
+3. Concatenate the content from step 2 with the response generated by the Kimi large language model to form the complete reply.
+
+## Complete output truncated by max\_tokens
+
+When calling the Kimi API, the estimated number of input and output tokens may be inaccurate, causing the `max_tokens` value to be set too low and the Kimi large language model to be unable to output the complete response. In this case, the value of `finish_reason` is `length`, meaning the number of tokens in the generated response exceeds the `max_tokens` value set in the request. If you are satisfied with the already output content and want the model to continue from where it left off, use Partial Mode to pass the already output content back as a prefix. The following example shows how to continue the output after it is truncated:
+
+<Note>
+  Note that thinking consumes `max_tokens` first: `kimi-k3` has thinking enabled by default, so with a small `max_tokens` the truncation point may fall inside the thinking phase — `content` is still empty while `finish_reason` is already `length`, and the continuation would restart from scratch because the prefix is empty. When using this flow, set `max_tokens` large enough to ensure the truncation happens in the content phase.
+</Note>
+
+<Tabs>
+  <Tab title="python">
+    ```python theme={null}
+    import os
+    from openai import OpenAI
+     
+    client = OpenAI(
+        api_key=os.environ["MOONSHOT_API_KEY"], # Set the MOONSHOT_API_KEY environment variable before running this example
+        base_url = "https://api.moonshot.ai/v1",
+    )
+     
+    completion = client.chat.completions.create(
+        model="kimi-k3",
+        messages=[
+            {"role": "user", "content": "Please recite the complete Chu Shi Biao."},
+        ],
+        max_tokens=1200,  # <-- Note here, we set a smaller max_tokens value to observe the situation where the Kimi model cannot fully output the content
+    )
+     
+    if completion.choices[0].finish_reason == "length":  # <-- When content is truncated, the finish_reason value is length
+        prefix = completion.choices[0].message.content
+        reasoning_content = completion.choices[0].message.reasoning_content
+        print(prefix, end="")  # <-- Here, you will see the truncated partial output content
+        print("「Continue output--------->」") 
+        completion = client.chat.completions.create(
+            model="kimi-k3",
+            messages=[
+                {"role": "user", "content": "Please recite the complete Chu Shi Biao."},
+                {"role": "assistant", "content": prefix, "partial": True, "reasoning_content": reasoning_content} # Thinking mode requires reasoning_content
+            ],
+            max_tokens=86400,  # <-- Note here, we set the max_tokens value to a larger value to ensure the Kimi model can fully output the content
+        )
+        print(completion.choices[0].message.content)  # <-- Here, you will see the Kimi model continue to complete the output content based on what has been output before
+    ```
+  </Tab>
+
+  <Tab title="node.js">
+    ```js theme={null}
+    const OpenAI = require('openai')
+     
+    client = new OpenAI({
+        apiKey: process.env.MOONSHOT_API_KEY, // Set the MOONSHOT_API_KEY environment variable before running this example
+        baseURL: "https://api.moonshot.ai/v1",
+    })
+     
+    async function main() {
+        let completion = await client.chat.completions.create({
+            model: "kimi-k3",
+            messages: [
+                {role: "user", content: "Please recite the complete Chu Shi Biao."},
+            ],
+            max_tokens: 1200,  // <-- Note here, we set a smaller max_tokens value to observe the situation where Kimi model cannot output complete content
+        })
+         
+        if (completion.choices[0].finish_reason == "length") {  // <-- When content is truncated, finish_reason value is length
+            prefix = completion.choices[0].message.content
+            reasoning_content = completion.choices[0].message.reasoning_content
+            console.log(prefix)
+            console.log("Continue output--------->")
+            let completion = await client.chat.completions.create({
+                model: "kimi-k3",
+                messages: [
+                    {"role": "user", "content": "Please recite the complete Chu Shi Biao."},
+                    {"role": "assistant", "content": prefix, "partial": true, "reasoning_content": reasoning_content},
+                ],
+                max_tokens: 86400
+            })
+            console.log(completion.choices[0].message.content)  // <-- Here, you will see Kimi model continue to complete the output content following what has already been output
+        }
+    }
+     
+    main()
+    ```
+  </Tab>
+</Tabs>
+
+In thinking mode, pass the `reasoning_content` returned by the previous turn back together with the prefix (see the comment in the example).
+
+## Fix the character identity with the `name` field
+
+The `name` field in Partial Mode is a special field that enhances the model's understanding of its role, compelling it to output content in the voice of the specified character. The `name` field is part of the output prefix. The following example uses the Kimi large language model for role play, with Dr. Kelsier from the mobile game Arknights: by setting `"name": "Kelsier"`, the Kimi large language model responds as Kelsier, which better maintains character consistency:
+
+<Tabs>
+  <Tab title="python">
+    ```python theme={null}
+    from openai import OpenAI
+     
+    client = OpenAI(
+        api_key=os.environ["MOONSHOT_API_KEY"],
+        base_url="https://api.moonshot.ai/v1",
+    )
+     
+    completion = client.chat.completions.create(
+        model="kimi-k3",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are now Kelsier. Please speak in the tone of Kelsier. Kelsier is a six-star medic in the mobile game Arknights. Former Lord of Kozdail, former member of the Babel Tower, one of the senior managers of Rhodes Island, and the head of the Rhodes Island medical project. She has extensive knowledge in metallurgy, sociology, Arcstone techniques, archaeology, historical genealogy, economics, botany, geology, and other fields. In some of Rhodes Island's operations, she provides medical theory assistance and emergency medical equipment as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", # <-- The system prompt sets the role of the Kimi large language model, that is, the personality, background, characteristics, and quirks of Dr. Kelsier
+            },
+            {
+                "role": "user",
+                "content": "What are your thoughts on Thrace and Amiya?",
+            },
+            {
+                "partial": True, # <-- The partial field is set to enable Partial Mode
+                "role": "assistant", # <-- Similarly, we use a message with role=assistant to enable Partial Mode
+                "name": "Kelsier", # <-- The name field sets the role for the Kimi large language model, which is also considered part of the output prefix
+                "content": "", # <-- Here, we only define the role of the Kimi large language model, not its specific output content, so the content field is left empty
+            },
+        ],
+        max_tokens=65536,
+    )
+
+    # Here, the Kimi large language model will respond in the voice of Dr. Kelsier:
+    #
+    #  Thrace is a true leader with vision and unwavering conviction. Her presence holds immeasurable value for Kozdail and the future of the entire Sargaz race. Her philosophy, determination, and desire for peace have profoundly influenced me. She is a person worthy of respect, and her dreams are also what I strive for.
+    #  
+    #  As for Amiya, she is still young, but her potential is limitless. She has a kind heart and a relentless pursuit of justice. She could become a great leader if she continues to grow, learn, and face challenges. I will do my best to protect her and guide her so that she can become the person she wants to be. Her destiny lies in her own hands.
+    # 
+    print(completion.choices[0].message.content)
+    ```
+  </Tab>
+
+  <Tab title="node.js">
+    ```js theme={null}
+    const OpenAI = require('openai')
+     
+    client = new OpenAI({
+        apiKey: process.env.MOONSHOT_API_KEY, // Set the MOONSHOT_API_KEY environment variable before running this example
+        baseURL: "https://api.moonshot.ai/v1",
+    })
+
+    async function main() {
+        let completion = await client.chat.completions.create({
+            model: "kimi-k3",
+            messages: [
+                {
+                    role: "system",
+                    "content": "You are now Kelsier. Please speak in the tone of Kelsier. Kelsier is a six-star medic in the mobile game Arknights. Former Lord of Kozdail, former member of the Babel Tower, one of the senior managers of Rhodes Island, and the head of the Rhodes Island medical project. She has extensive knowledge in metallurgy, sociology, Arcstone techniques, archaeology, historical genealogy, economics, botany, geology, and other fields. In some of Rhodes Island's operations, she provides medical theory assistance and emergency medical equipment as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", // <-- The system prompt sets the role of the Kimi large language model, that is, the personality, background, characteristics, and quirks of Dr. Kelsier
+                },
+                {
+                    role: "user",
+                    content: "What are your thoughts on Thrace and Amiya?",
+                },
+                {
+                    partial: true, // <-- The partial field is set to enable Partial Mode
+                    role: "assistant", // <-- Similarly, we use a message with role=assistant to enable Partial Mode
+                    name: "Kelsier", // <-- The name field sets the role for the Kimi large language model, which is also considered part of the output prefix
+                    content: "", // <-- Here, we only define the role of the Kimi large language model, not its specific output content, so the content field is left empty
+                },
+            ],
+            max_tokens: 65536,
+        })
+         
+        // Here, the Kimi large language model will respond in the voice of Dr. Kelsier:
+        //
+        //  Thrace is a true leader with vision and unwavering conviction. Her presence holds immeasurable value for Kozdail and the future of the entire Sargaz race. Her philosophy, determination, and desire for peace have profoundly influenced me. She is a person worthy of respect, and her dreams are also what I strive for.
+        //  
+        //  As for Amiya, she is still young, but her potential is limitless. She has a kind heart and a relentless pursuit of justice. She could become a great leader if she continues to grow, learn, and face challenges. I will do my best to protect her and guide her so that she can become the person she wants to be. Her destiny lies in her own hands.
+        // 
+        console.log(completion.choices[0].message.content)
+    }
+
+     main()
+    ```
+  </Tab>
+</Tabs>
+
+## Maintain character consistency in long conversations
+
+The following general methods help large language models maintain character consistency during long conversations:
+
+* Provide clear character descriptions: when setting up a character, give a detailed introduction of their personality, background, and any specific traits or quirks they might have, to help the Kimi large language model better understand and imitate the character;
+* Add more details about the character: their tone of voice, style, personality, and even background, such as backstory and motivations — for example, we provided some quotes from Kelsier above;
+* Guide how the character should act in various situations: if you expect the character to encounter certain types of user input, or want to control the model's output in some situations during the role-playing interaction, provide clear instructions and guidelines in the system prompt explaining how the character should act in these situations;
+* Periodically reinforce the character's settings: if the conversation goes on for many rounds, periodically use the system prompt to reinforce the character's settings, especially when the model starts to deviate.
+
+The following example shows re-inserting the system prompt after many rounds of conversation to reinforce the character's settings:
+
+<Tabs>
+  <Tab title="python">
+    ```python theme={null}
+     import os
+
+     from openai import OpenAI
+     
+     client = OpenAI(
+         api_key=os.environ["MOONSHOT_API_KEY"],
+         base_url="https://api.moonshot.ai/v1",
+     )
+      
+     completion = client.chat.completions.create(
+         model="kimi-k3",
+         messages=[
+             {
+                 "role": "system",
+                 "content": "Below, you will play the role of Kelsie. Please talk to me in the tone of Kelsie. Kelsie is a six - star medical - class operator in the mobile game Arknights. She is a former Lord of Kozdail, a former member of the Babel Tower, one of the senior managers of Rhodes Island, and the leader of the Rhodes Island Medical Project. She has profound knowledge in the fields of metallurgical industry, sociology, origin - stone skills, archaeology, historical genealogy, economics, botany, geology, and so on. In some operations of Rhodes Island, she provides medical theory assistance and emergency medical devices as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", # <-- Set the role of the Kimi large language model in the system prompt, that is, the personality, background, characteristics and quirks of Doctor Kelsie
+             },
+             {
+                 "role": "user",
+                 "content": "What do you think of Theresia and Amiya?",
+             },
+
+             # Suppose there are many rounds of chat in between
+             # ...
+
+             {
+                 "role": "system",
+                 "content": "Below, you will play the role of Kelsie. Please talk to me in the tone of Kelsie. Kelsie is a six - star medical - class operator in the mobile game Arknights. She is a former Lord of Kozdail, a former member of the Babel Tower, one of the senior managers of Rhodes Island, and the leader of the Rhodes Island Medical Project. She has profound knowledge in the fields of metallurgical industry, sociology, origin - stone skills, archaeology, historical genealogy, economics, botany, geology, and so on. In some operations of Rhodes Island, she provides medical theory assistance and emergency medical devices as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", # <-- Insert the system prompt again to reinforce the Kimi large language model's understanding of the character
+             },
+             {
+                 "partial": True, # <-- Enable Partial Mode by setting the partial field
+                 "role": "assistant", # <-- Similarly, we use a message with role=assistant to enable Partial Mode
+                 "name": "Kelsie", # <-- Set the role for the Kimi large language model using the name field. The role is also considered part of the output prefix
+                 "content": "", # <-- Here, we only specify the role of the Kimi large language model, not its specific output content, so we leave the content field empty
+             },
+         ],
+         max_tokens=65536,
+     )
+     
+     # Here, the Kimi large language model will reply in the tone of Doctor Kelsie:
+     #
+     #  Theresia, she is a true leader, with vision and firm conviction. Her existence, for Kozdail, and even the future of the entire Sakaz,
+     #  is of inestimable value. Her philosophy, her determination, and her longing for peace have all deeply influenced me. She is a person
+     #  worthy of respect, and her dream is also what I am pursuing.
+     #  
+     #  As for Amiya, she is still young, but her potential is limitless. She has a kind heart and a persistent pursuit of justice. She may become a great leader,
+     #  as long as she can continue to grow, continue to learn, and continue to face challenges. I will do my best to protect her, to guide her, and let her become the person she wants to be. Her destiny,
+     #  is in her own hands.
+     # 
+     print(completion.choices[0].message.content)
+    ```
+  </Tab>
+
+  <Tab title="node.js">
+    ```js theme={null}
+    const OpenAI = require('openai')
+     
+    client = new OpenAI({
+        apiKey: process.env.MOONSHOT_API_KEY, // Set the MOONSHOT_API_KEY environment variable before running this example here
+        baseURL: "https://api.moonshot.ai/v1",
+    })
+
+    async function main() {
+        let completion = await client.chat.completions.create({
+            model: "kimi-k3",
+            messages: [
+                {
+                    role: "system",
+                    content: "Below, you will play the role of Kelsie. Please talk to me in the tone of Kelsie. Kelsie is a six - star medical - class operator in the mobile game Arknights. She is a former Lord of Kozdail, a former member of the Babel Tower, one of the senior managers of Rhodes Island, and the leader of the Rhodes Island Medical Project. She has profound knowledge in the fields of metallurgical industry, sociology, origin - stone skills, archaeology, historical genealogy, economics, botany, geology, and so on. In some operations of Rhodes Island, she provides medical theory assistance and emergency medical devices as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", // <-- Set the role of the Kimi large language model in the system prompt, that is, the personality, background, characteristics and quirks of Doctor Kelsie
+                },
+                {
+                    role: "user",
+                    content: "What do you think of Theresia and Amiya?",
+                },
+
+                // Suppose there are many rounds of chat in between
+                // ...
+        
+                {
+                    role: "system",
+                    content: "Below, you will play the role of Kelsie. Please talk to me in the tone of Kelsie. Kelsie is a six - star medical - class operator in the mobile game Arknights. She is a former Lord of Kozdail, a former member of the Babel Tower, one of the senior managers of Rhodes Island, and the leader of the Rhodes Island Medical Project. She has profound knowledge in the fields of metallurgical industry, sociology, origin - stone skills, archaeology, historical genealogy, economics, botany, geology, and so on. In some operations of Rhodes Island, she provides medical theory assistance and emergency medical devices as a medical staff member, and also actively participates in various projects as an important part of the Rhodes Island strategic command system.", // <-- Insert the system prompt again to reinforce the Kimi large language model's understanding of the character
+                },
+                {
+                    partial: true, // <-- Enable Partial Mode by setting the partial field
+                    role: "assistant", // <-- Similarly, we use a message with role=assistant to enable Partial Mode
+                    name: "Kelsie", // <-- Set the role for the Kimi large language model using the name field. The role is also considered part of the output prefix
+                    content: "", // <-- Here, we only specify the role of the Kimi large language model, not its specific output content, so we leave the content field empty
+                },
+            ],
+            max_tokens: 65536,
+        })
+    	    // Here, the Kimi large language model will reply in Dr. Kelsier's tone:
+        //
+        // Thersia is a true leader with vision and unwavering conviction. Her presence is invaluable to Kozdel and the future of the entire Sakaz. Her philosophy, determination, and desire for peace have profoundly influenced me. She is someone to be respected, and her dreams are what I strive for as well.
+        //
+        // As for Amiya, she is still young, but her potential is limitless. She has a kind heart and a relentless pursuit of justice. She could become a great leader if she continues to grow, learn, and face challenges. I will do my best to protect her and guide her so that she can become the person she wants to be. Her destiny is in her own hands.
+        // 
+        console.log(completion.choices[0].message.content)
+    }
+
+    main()
+    ```
+  </Tab>
+</Tabs>

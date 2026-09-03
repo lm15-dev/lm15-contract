@@ -1,0 +1,64 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a9971a177ff55618a965e67",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user has simply asked me to say \"ok.\" This is a very minimal request. There's nothing harmful, complex, or controversial here. It's just a simple instruction.\n\nShould I just say \"ok\"? The request is benign. There's no reason to refuse or add unnecessary elaboration. The user might be testing the system, checking if I'm responsive, or just wants a simple acknowledgment.\n\nThe most natural response is to simply comply: \"Ok\" or \"Ok.\" Perhaps I could add a tiny bit of warmth or ask if there's something I can help with, but honestly, the simplest response is best here. The person asked me to say \"ok\" — I should just say it.\n\nFormat considerations: This should be extremely short. Just \"Ok.\" or maybe \"Ok!\" Possibly with a brief follow-up like \"What's up?\" but even that might be unnecessary. The cleanest response is just \"Ok.\" I might add a small offer to help, but keeping it minimal respects the simplicity of the request. I'll just say \"Ok.\" — that fully satisfies the request. Maybe a very brief addition asking what they need could be helpful, but it's not required. I'll keep it minimal."
+      },
+      {
+        "type": "text",
+        "text": "Ok."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 88,
+      "output_tokens": 257,
+      "output_tokens_details": {
+        "thinking_tokens": 240
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 88,
+      "cached_tokens": 88,
+      "completion_tokens": 257,
+      "total_tokens": 345
+    }
+  },
+  "timestamp": "2026-09-03T13-09-52Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

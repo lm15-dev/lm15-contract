@@ -1,0 +1,38 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 100
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "Invalid Authentication",
+      "type": "invalid_authentication_error"
+    }
+  },
+  "timestamp": "2026-09-03T13-12-57Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

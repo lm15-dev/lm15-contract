@@ -1,0 +1,43 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-6a99730c540d2ea67b5465ed",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user is asking where the Eiffel Tower is, with a required JSON schema response containing city and country. Need final raw JSON only. Need ensure no markdown. Answer city Paris country France. Need final only JSON object. Done."
+        },
+        {
+          "type": "text",
+          "text": "{\"city\":\"Paris\",\"country\":\"France\"}"
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "anthropic",
+          "kind": "message_id",
+          "data": {
+            "id": "chatcmpl-6a99730c540d2ea67b5465ed"
+          }
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 184,
+      "output_tokens": 72,
+      "total_tokens": 256,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 48
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T13-15-55Z.txt"
+  }
+}

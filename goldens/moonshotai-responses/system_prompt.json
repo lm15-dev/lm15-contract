@@ -1,0 +1,52 @@
+{
+  "canonical_response": {
+    "id": "resp_6a99734697b6a104eb5d413b",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user asks to say ok, and system says answer exactly two words. Need final exactly two words. Could be \"Okay okay\" or \"Ok.\" one word violates exactly two. Need two words: \"Okay then.\" But user said say ok. Best exactly two words: \"Ok ok\". Ensure final has exactly two words, no punctuation issue? \"Ok ok\" two tokens.",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_lU7c6PU2K8OTExpAhSSDIagO"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "Ok ok"
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "openai",
+          "kind": "response_id",
+          "data": {
+            "id": "resp_6a99734697b6a104eb5d413b"
+          }
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 107,
+      "output_tokens": 96,
+      "total_tokens": 203,
+      "cache_read_tokens": 107,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 79
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T13-16-52Z.txt"
+  }
+}

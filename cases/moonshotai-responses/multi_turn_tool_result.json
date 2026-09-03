@@ -1,0 +1,187 @@
+{
+  "id": "moonshotai-responses.multi_turn_tool_result",
+  "provider": "moonshotai-responses",
+  "feature": "multi_turn_tool_result",
+  "description": "Moonshot kimi-k3 over the Responses wire: the live turn-1 output (reasoning item with its summary text, function_call) replayed with a function_call_output — the stateless replay (store is always false)",
+  "base_url": "https://api.moonshot.ai/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_7UqRTwszrga3kMgQizsdxjzg",
+          "summary": [
+            {
+              "type": "summary_text",
+              "text": "The user explicitly requests using the tool. Need call get_weather for Paris. Then summarize result. We need await output."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "get_weather_0",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "get_weather_0",
+          "output": "Sunny, 22°C"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai/v1/responses 2026-09-03T13-16-40Z, kimi-k3, HTTP 200; turn-1 call get_weather {'city': 'Paris'}, 1 thinking part(s) replayed as a reasoning item with summary text; adapter-built wire (OpenAILM, compat+access 'moonshotai-responses'); verbatim body at bodies/moonshotai-responses.multi_turn_tool_result/2026-09-03T13-16-40Z.txt; changes/2026-09-03-moonshotai-responses-live.md"
+  },
+  "canonical_request": {
+    "model": "kimi-k3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Paris? Use the tool."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "The user explicitly requests using the tool. Need call get_weather for Paris. Then summarize result. We need await output.",
+            "continuation": [
+              {
+                "provider": "openai",
+                "kind": "reasoning_item",
+                "data": {
+                  "id": "rs_7UqRTwszrga3kMgQizsdxjzg"
+                }
+              }
+            ]
+          },
+          {
+            "type": "tool_call",
+            "id": "get_weather_0",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          }
+        ],
+        "continuation": [
+          {
+            "provider": "openai",
+            "kind": "response_id",
+            "data": {
+              "id": "resp_6a997335e5ed4ab85680feea"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "get_weather_0",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sunny, 22°C"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 600,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored with the case (research/providers/moonshotai-responses/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-03T13-16-40Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "moonshotai-anthropic.temperature",
+  "provider": "moonshotai-anthropic",
+  "feature": "temperature",
+  "description": "MAP-8: config.temperature raises before the wire. Receipt: temperature=0.5 answered HTTP 200 on this wire while the same server's Chat Completions wire answers 400 'only 1 is allowed for this model' — the model's sampling is fixed and the field is swallowed silently here. messages--create.md lists no temperature/top_p/top_k. No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai/anthropic/v1/messages 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai-anthropic/probe-error-temperature.json (HTTP 200) and receipts/2026-09-03-moonshotai-anthropic/probe-error-top-k.json (HTTP 200) against errors/cases/moonshotai.json moonshotai.temperature (HTTP 400 on the chat wire); refusal pinned per MAP-8 §2 via AnthropicCompat.sampling_params; changes/2026-09-03-moonshotai-wires.md"
+  },
+  "canonical_request": {
+    "model": "kimi-k3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "reasoning": {
+        "effort": "low"
+      },
+      "temperature": 0.5
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the probe cell it pins (research/providers/moonshotai-anthropic/capture.py); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

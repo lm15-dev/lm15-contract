@@ -1,0 +1,232 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai/v1/responses error envelopes captured verbatim 2026-09-03 by research/providers/moonshotai-responses/capture.py; receipts/2026-09-03-moonshotai-responses/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "moonshotai-responses.unauthenticated",
+      "provider": "moonshotai-responses",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Invalid Authentication",
+          "type": "invalid_authentication_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 401 verbatim 2026-09-03T13-12-57Z — receipts/2026-09-03-moonshotai-responses/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.model_not_found",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "Not found the model kimi-nonexistent or Permission denied",
+          "type": "invalid_request_error",
+          "param": "model",
+          "code": "model_not_found"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "moonshotai-responses",
+        "provider_code": "model_not_found",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-58Z — receipts/2026-09-03-moonshotai-responses/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.reasoning_none",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: invalid_request_error: reasoning.effort value \"none\" is not supported",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-30Z — receipts/2026-09-03-moonshotai-responses/probe-error-reasoning-none.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.effort_bogus",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: invalid_request_error: reasoning.effort value \"bogus\" is not supported",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-35Z — receipts/2026-09-03-moonshotai-responses/probe-error-effort-bogus.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.tool_choice_required",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: responses: unsupported tool_choice value: \"required\"",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-44Z — receipts/2026-09-03-moonshotai-responses/probe-error-tool-choice-required.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.tool_choice_none",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: responses: unsupported tool_choice value: \"none\"",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-45Z — receipts/2026-09-03-moonshotai-responses/probe-error-tool-choice-none.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.json_object",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: invalid_request_error: text.format: unsupported type \"json_object\"",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-46Z — receipts/2026-09-03-moonshotai-responses/probe-error-json-object.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.temperature",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid temperature: only 1 is allowed for this model",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-12-54Z — receipts/2026-09-03-moonshotai-responses/probe-error-temperature.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-responses.builtin_code_execution",
+      "provider": "moonshotai-responses",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "invalid_request_error: responses: unsupported tool type: \"code_execution\"",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-responses",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/v1/responses HTTP 400 verbatim 2026-09-03T13-13-03Z — receipts/2026-09-03-moonshotai-responses/probe-error-builtin-code-execution.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

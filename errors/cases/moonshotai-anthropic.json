@@ -1,0 +1,82 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.moonshot.ai/anthropic/v1/messages error envelopes captured verbatim 2026-09-03 by research/providers/moonshotai-anthropic/capture.py; receipts/2026-09-03-moonshotai-anthropic/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "moonshotai-anthropic.unauthenticated",
+      "provider": "moonshotai-anthropic",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Invalid Authentication",
+          "type": "invalid_authentication_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "moonshotai-anthropic",
+        "provider_code": "invalid_authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/anthropic/v1/messages HTTP 401 verbatim 2026-09-03T13-18-27Z — receipts/2026-09-03-moonshotai-anthropic/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-anthropic.model_not_found",
+      "provider": "moonshotai-anthropic",
+      "status": 404,
+      "body": {
+        "error": {
+          "type": "resource_not_found_error",
+          "message": "Not found the model kimi-nonexistent or Permission denied"
+        },
+        "request_id": "f4353da4-a799-11f1-b862-00163e734e28",
+        "type": "error"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "moonshotai-anthropic",
+        "provider_code": "resource_not_found_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/anthropic/v1/messages HTTP 404 verbatim 2026-09-03T13-18-29Z — receipts/2026-09-03-moonshotai-anthropic/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "moonshotai-anthropic.tool_choice_named",
+      "provider": "moonshotai-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "type": "invalid_request_error",
+          "message": "tool_choice 'specified' is incompatible with thinking enabled"
+        },
+        "request_id": "dbf10485-a798-11f1-9fa8-00163e603a82",
+        "type": "error"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "moonshotai-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.moonshot.ai/anthropic/v1/messages HTTP 400 verbatim 2026-09-03T13-10-39Z — receipts/2026-09-03-moonshotai-anthropic/probe-error-tool-choice-named.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

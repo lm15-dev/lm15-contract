@@ -9,7 +9,9 @@
     "2026-09-02: `caches` column added (MAP-6 stored-cache tier); gemini is the first implementer. changes/2026-09-01-caching-design.md",
     "2026-09-03: the six chat-bound registry providers (groq, openrouter, deepseek, ollama, vllm, sglang) are pinned; the reference reflects lm15.registry.PROVIDERS, not only the adapter classes. deepseek's row is declared from provider documentation and awaits its live receipt (research/providers/deepseek/). changes/2026-09-03-provider-registry.md",
     "2026-09-03: zai pinned with live receipts (changes/2026-09-03-zai-live.md).",
-    "2026-09-03: deepseek-anthropic pinned (the Messages wire of the same service; models=false \u2014 GET /models is 404 there). changes/2026-09-03-deepseek-anthropic-live.md"
+    "2026-09-03: deepseek-anthropic pinned (the Messages wire of the same service; models=false \u2014 GET /models is 404 there). changes/2026-09-03-deepseek-anthropic-live.md",
+    "2026-09-03: moonshotai (Kimi API Platform, Chat Completions wire) pinned with live receipts; env keys MOONSHOTAI_API_KEY then MOONSHOT_API_KEY (both vendor-named). Files and batches exist on the service (files are for content extraction and vision input; batches take JSONL) and are not registered yet; the Responses and Anthropic wires are separate provider strings to come. changes/2026-09-03-moonshotai-live.md",
+    "2026-09-03: moonshotai-responses (Responses wire; kimi-k3 documented, stateless, web_search built-in; the same GET /models) and moonshotai-anthropic (Messages wire, bearer token; GET /models is 404 on the /anthropic root) pinned with live receipts. changes/2026-09-03-moonshotai-wires.md"
   ],
   "providers": {
     "anthropic": {
@@ -335,6 +337,75 @@
       ],
       "env_keys": [
         "ZAI_API_KEY"
+      ]
+    },
+    "moonshotai": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
+      ]
+    },
+    "moonshotai-responses": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": true,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
+      ]
+    },
+    "moonshotai-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
       ]
     }
   }

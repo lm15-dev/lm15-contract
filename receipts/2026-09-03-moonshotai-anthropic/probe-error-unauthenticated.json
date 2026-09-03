@@ -1,0 +1,39 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "Invalid Authentication",
+      "type": "invalid_authentication_error"
+    }
+  },
+  "timestamp": "2026-09-03T13-18-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -13,6 +13,7 @@ design-pass.md`, step 3) start from a fresh run of these scripts.
 | xAI | `xai/pages/models.md` (1) | — | hand-fetched 2026-09-01; no script yet |
 | Z.AI | `zai/pages/` (22) | `chat--create.md`, `guide--thinking-mode.md`, `model--glm-5.3.md` | `bash scrapes/zai/update.sh` (native `.md`; index at docs.z.ai/llms.txt; the pricing and rate-limit pages are rendered apps and are not scraped) |
 | DeepSeek | `deepseek/pages/` (15) | `chat--create.md`, `guide--thinking-mode.md` | `bash scrapes/deepseek/update.sh` (HTML → article text via `html2text.py`; the site has no Markdown endpoint) |
+| Moonshot AI (Kimi) | `moonshotai/pages/` (61) | `chat--create.md` (OpenAPI with per-model request schemas), `api--models-overview.md`, `guide--thinking-models.md`, `guide--reasoning-effort.md`, `errors.md` | `bash scrapes/moonshotai/update.sh` (native `.md`; index at platform.kimi.ai/docs/llms.txt; pricing, terms and privacy are native Markdown too and are scraped) |
 
 Every `update.sh` sources `fetch.sh`: a page is written only when the
 server answers 200 with a body. A dead URL keeps the cached copy, is

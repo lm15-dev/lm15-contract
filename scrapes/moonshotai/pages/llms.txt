@@ -1,0 +1,84 @@
+# Kimi API Platform
+
+> Kimi K3 is our flagship model for long-horizon coding and end-to-end knowledge work, with a 1M-token context window and industry-leading intelligence. The Kimi API Platform provides K3, K2.7 Code, K2.6 and other large language model APIs, supporting long context, multimodal understanding, and Tool Calling.
+
+- [Quickstart](https://platform.kimi.ai/docs/overview.md): Create an API Key and complete your first Kimi API call.
+- [Model List](https://platform.kimi.ai/docs/models.md): Review currently available Kimi multimodal and coding models, plus migration guidance for discontinued models.
+- [Kimi K3](https://platform.kimi.ai/docs/guide/kimi-k3-quickstart.md): Explore Kimi K3 for long-horizon coding, knowledge work, deep reasoning, visual understanding, and a 1M-token context window.
+- [Kimi K2.7 Code](https://platform.kimi.ai/docs/guide/kimi-k2-7-code-quickstart.md): Explore Kimi K2.7 Code and its high-speed variant for coding, multimodal input, thinking, tool calling, and 256K-token contexts.
+- [Kimi K2.6](https://platform.kimi.ai/docs/guide/kimi-k2-6-quickstart.md): Explore Kimi K2.6 text, image, and video understanding, thinking mode, tool calling, and its 256K-token context window.
+- [Thinking Models](https://platform.kimi.ai/docs/guide/use-thinking-models.md): Understand Kimi thinking modes, model selection, `reasoning_content`, multi-turn retention, tool calling, and reasoning-token billing.
+- [Reasoning Effort](https://platform.kimi.ai/docs/guide/use-reasoning-effort.md): Use `reasoning_effort` values `low`, `high`, and `max` to balance Kimi K3 reasoning depth, latency, and token usage.
+- [Set Parameters for Multi-turn Chat](https://platform.kimi.ai/docs/guide/engage-in-multi-turn-conversations-using-kimi-api.md): Maintain message history, control context length, and construct multi-turn conversations with the stateless Kimi API.
+- [Use the Streaming Feature of the Kimi API](https://platform.kimi.ai/docs/guide/utilize-the-streaming-output-feature-of-kimi-api.md): Use Kimi API server-sent events to reduce time to first token, parse incremental output, and capture final usage data.
+- [Use Kimi API's JSON Mode](https://platform.kimi.ai/docs/guide/use-json-mode-feature-of-kimi-api.md): Enable Kimi API JSON Mode with `response_format` and safely prompt for, receive, and parse structured JSON output.
+- [Use Kimi API's Partial Mode](https://platform.kimi.ai/docs/guide/use-partial-mode-feature-of-kimi-api.md): Use Kimi API Partial Mode to continue supplied text, fix reply openings, resume truncated output, or preserve role consistency.
+- [Configure Kimi Vision Models](https://platform.kimi.ai/docs/guide/use-kimi-vision-model.md): Build image and video inputs for Kimi multimodal models using base64, URLs, file uploads, and multi-image conversations.
+- [Use the Context Caching Feature of Kimi API](https://platform.kimi.ai/docs/guide/use-context-caching-feature-of-kimi-api.md): Understand Kimi API automatic context caching, cache-hit conditions, billing, usage fields, and use cases for reducing cost and latency.
+- [Dynamically Loaded Tools](https://platform.kimi.ai/docs/guide/use-dynamic-tool-loading.md): Append tool definitions to Kimi conversations on demand to reduce token usage, improve tool selection, and preserve prefix caching.
+- [Use Kimi API for Tool Calls](https://platform.kimi.ai/docs/guide/use-kimi-api-to-complete-tool-calls.md): Define, register, and execute Kimi API `tool_calls`, return tool results, and handle tool calls in streaming responses.
+- [Use Kimi API's Internet Search Functionality](https://platform.kimi.ai/docs/guide/use-web-search.md): Add web search to Kimi API applications using the recommended official tool channel or the built-in `$web_search` flow for supported models.
+- [How to Use Official Tools in Kimi API](https://platform.kimi.ai/docs/guide/use-official-tools.md): Review the official tools available on Kimi Open Platform and learn how to configure and call them through the Chat Completions API.
+- [Tool Choice](https://platform.kimi.ai/docs/guide/use-tool-choice.md): Use `tool_choice` to let Kimi select tools automatically, require a tool call, forbid tools, or force a specific function.
+- [Kimi K3 API Tool Calling Best Practices](https://platform.kimi.ai/docs/guide/kimi-k3-tool-calling-best-practice.md): When your agent has a large tool inventory, combine dynamic loading, tool_choice, and reasoning effort in the tool-calling flow.
+- [Use response_format to control model output format](https://platform.kimi.ai/docs/guide/response_format.md): Use `response_format` for JSON Mode or Structured Output and handle schema, structure, and Partial Mode constraints.
+- [Automatic Reconnection on Disconnect](https://platform.kimi.ai/docs/guide/auto-reconnect.md): Implement automatic reconnection for Kimi API streaming requests and use Partial Mode to continue generation after an interruption.
+- [Use Kimi API for File-Based Q&A](https://platform.kimi.ai/docs/guide/use-kimi-api-for-file-based-qa.md): Upload files, extract their contents, and add them to Kimi API conversations for single-file or multi-file question answering.
+- [Using Batch API for Bulk Processing](https://platform.kimi.ai/docs/guide/use-batch-api.md): Upload JSONL requests, create and monitor Batch API jobs, and download results for large-scale asynchronous inference.
+- [Use Kimi API Platform with Kimi Code CLI](https://platform.kimi.ai/docs/guide/kimi-code-cli.md): Connect, switch, and update Kimi Code CLI with a Kimi API Platform API Key.
+- [Use Kimi K3 in Codex](https://platform.kimi.ai/docs/guide/codex-kimi.md): Connect Codex directly to Kimi K3 through the Kimi Responses API: set an API key, edit `~/.codex/config.toml`, and verify the connection in both Codex Desktop and the CLI.
+- [Use Kimi in OpenClaw](https://platform.kimi.ai/docs/guide/use-kimi-in-openclaw.md): Build a cross-platform AI agent with OpenClaw and the Kimi API. Install OpenClaw and configure your Kimi API key.
+- [Use Kimi in Claude Code](https://platform.kimi.ai/docs/guide/claude-code-kimi.md): Learn how to integrate the Kimi API into Claude Code and verify your configuration.
+- [Use Kimi Models in OpenCode](https://platform.kimi.ai/docs/guide/open-code.md): Install OpenCode, connect it to the Kimi Open Platform through built-in authentication, and use Kimi K3 with its thinking-effort variants.
+- [Use Kimi K3 in Hermes Agent](https://platform.kimi.ai/docs/guide/use-kimi-in-hermes-agent.md): Install Hermes Agent, connect it to the Global Kimi Open Platform, and enable Kimi K3 text, image, and video understanding.
+- [Configure ModelScope MCP Server in Playground](https://platform.kimi.ai/docs/guide/configure-the-modelscope-mcp-server.md): Sync and enable ModelScope-hosted MCP services in Kimi Playground so models can call your configured tools.
+- [MoonPalace - Moonshot AI's Kimi API Debugging Tool](https://platform.kimi.ai/docs/guide/use-moonpalace.md): Install and use MoonPalace to debug Kimi API conversations, parameters, files, tool calls, and context caching across platforms.
+- [Use Playground to Debug the Model](https://platform.kimi.ai/docs/guide/use-playground-to-debug-the-model.md): Compare models, tune parameters, test tool calls, and turn successful experiments into API requests with Kimi Playground.
+- [Setting Up and Verifying Your Organization](https://platform.kimi.ai/docs/guide/org-best-practice.md): Create and verify a Kimi Open Platform organization, configure an IP allowlist, and manage members, projects, and API keys.
+- [API Overview](https://platform.kimi.ai/docs/api/overview.md): Review Kimi API base URLs, authentication, request conventions, compatibility, and links to the main API endpoints.
+- [Model Parameter Reference](https://platform.kimi.ai/docs/api/models-overview.md): Compare default values, supported ranges, and constraints for Chat Completions API parameters across Kimi model families.
+- [Chat Completions API](https://platform.kimi.ai/docs/api/chat.md): Create a chat completion: send messages to Kimi models and get replies, with streaming, tool calling, and vision input.
+- [Responses API](https://platform.kimi.ai/docs/api/responses.md): Creates a model response. Provide text or image inputs to generate text or JSON outputs. Have the model call the function tools you define, or use server-side web search.
+- [Messages API](https://platform.kimi.ai/docs/api/messages.md): Call Kimi models with an Anthropic Messages API compatible format, supporting streaming, tool use, image input, thinking, and structured output.
+- [List Models](https://platform.kimi.ai/docs/api/list-models.md): List currently available models and their IDs.
+- [Estimate Tokens](https://platform.kimi.ai/docs/api/estimate.md): Estimate the token count of your input before sending a request.
+- [Check Balance](https://platform.kimi.ai/docs/api/balance.md): Check the available balance of the current account.
+- [Verify Request Signature](https://platform.kimi.ai/docs/api/signatures-verify.md): Verify a request signature to prove that a request was handled by the Kimi API for the specified model, rather than routed elsewhere.
+- [Files](https://platform.kimi.ai/docs/api/files.md): Explore Kimi API file management for uploading, listing, retrieving, reading, and deleting files used for content extraction or visual understanding.
+- [Upload File](https://platform.kimi.ai/docs/api/files-upload.md): Upload a file for text content extraction, image understanding, or video understanding. Supports text-based formats such as pdf, doc, and txt.
+- [List Files](https://platform.kimi.ai/docs/api/files-list.md): List the files uploaded to the current account.
+- [Get File Information](https://platform.kimi.ai/docs/api/files-retrieve.md): Get metadata for a specific file.
+- [Delete File](https://platform.kimi.ai/docs/api/files-delete.md): Delete a specific uploaded file.
+- [Get File Content](https://platform.kimi.ai/docs/api/files-content.md): Retrieve the extracted text content of a file uploaded with purpose file-extract.
+- [Create Batch](https://platform.kimi.ai/docs/api/batch-create.md): Create a batch job to process requests asynchronously at a lower price.
+- [List Batches](https://platform.kimi.ai/docs/api/batch-list.md): List the batch jobs of the current account.
+- [Retrieve Batch](https://platform.kimi.ai/docs/api/batch-retrieve.md): Get the details and progress of a specific batch job.
+- [Cancel Batch](https://platform.kimi.ai/docs/api/batch-cancel.md): Cancel an in-progress batch job.
+- [Model Inference Pricing Explanation](https://platform.kimi.ai/docs/pricing/chat.md): Understand token billing, input and output charges, cache discounts, and pricing links for Kimi model inference.
+- [Flagship Model Kimi K3 Pricing](https://platform.kimi.ai/docs/pricing/chat-k3.md): Review Kimi K3 flagship model pricing for input, output, and cache-hit tokens, along with billing notes.
+- [Coding Model Kimi K2.7 Code Pricing](https://platform.kimi.ai/docs/pricing/chat-k27-code.md): Review Kimi K2.7 Code and high-speed model pricing for input, output, and cache-hit tokens, along with billing notes.
+- [Kimi K2.6 Model Pricing](https://platform.kimi.ai/docs/pricing/chat-k26.md): Review Kimi K2.6 pricing for input, output, and cache-hit tokens, along with billing notes.
+- [BatchJob Pricing](https://platform.kimi.ai/docs/pricing/batch.md): Review Kimi BatchJob pricing for input, output, and cache-hit tokens, along with billing notes.
+- [WebSearch Pricing](https://platform.kimi.ai/docs/pricing/tools.md): Review pricing, billing units, and usage notes for the Kimi web-search tool.
+- [Recharge and Rate Limiting](https://platform.kimi.ai/docs/pricing/limits.md): Review Kimi Open Platform recharge requirements, account tiers, RPM, TPM, and TPD limits, and options for requesting higher capacity.
+- [Account and Billing](https://platform.kimi.ai/docs/guide/account-and-payments.md): Find answers about Kimi Open Platform recharge, balances, credits, invoices, billing, and organization verification.
+- [Common Error Codes](https://platform.kimi.ai/docs/api/errors.md): Look up Kimi API HTTP status codes, error types, common causes, and recommended troubleshooting steps.
+- [Main Concepts](https://platform.kimi.ai/docs/introduction.md): Learn the core Kimi API concepts behind models, prompts, tokens, context windows, streaming, tool calling, and multimodal input.
+- [Troubleshooting](https://platform.kimi.ai/docs/guide/troubleshooting.md): Troubleshoot common Kimi API issues involving accounts, billing, authentication, model parameters, output length, rate limits, and connectivity.
+- [How to Fix Repeated Tool Calls](https://platform.kimi.ai/docs/guide/tool-call-repeat.md): Check the tool_calls message layout, detect repeated tool calls on the client side, and use system prompt reminders to stop the model from repeating the same tool call.
+- [Join the Kimi Developer Community](https://platform.kimi.ai/docs/api/join-the-community.md): Connect with Kimi developers on Discord and the developer forum.
+- [Compare with Other Kimi Products](https://platform.kimi.ai/docs/guide/product-plans.md): The Kimi API Open Platform uses pay-as-you-go billing with no subscription plan. It is different from products such as Kimi Membership and Kimi Code — please distinguish between them.
+- [Ask questions about PDF content](https://platform.kimi.ai/docs/guide/ask-questions-about-pdf-content.md): Ask questions about PDF content with the Kimi API, with real run outputs.
+- [AI-Readable Docs](https://platform.kimi.ai/docs/guide/ai-readable-docs.md): Provide the Kimi API Platform documentation to AI coding assistants, enterprise bots, or RAG systems through llms.txt, llms-full.txt, the OpenAPI schema, and per-page Markdown.
+- [Best Practices for Prompts](https://platform.kimi.ai/docs/guide/prompt-best-practice.md): Write more reliable and controllable Kimi system and user prompts with clear instructions, examples, roles, and output constraints.
+- [Best Practices for Benchmarking](https://platform.kimi.ai/docs/guide/benchmark-best-practice.md): Run reproducible Kimi model benchmarks with recommended parameters, sample counts, streaming requests, and retry strategies.
+- [Using the Console for Batch Inference](https://platform.kimi.ai/docs/guide/use-batch-inference.md): Create, monitor, and download batch inference results from the Kimi Open Platform console without writing code.
+- [Build an Agent with Kimi K3](https://platform.kimi.ai/docs/guide/use-kimi-k3-to-setup-agent.md): Build a runnable industry-research agent by combining Kimi K3, the official web-search tool, and a custom tool.
+- [Manage Email and Google Sign-In](https://platform.kimi.ai/docs/guide/account-security-and-sign-in.md): Bind or update an email address, connect a Google account, and understand how sign-in methods affect your Kimi Platform account.
+- [Terms of Service for Kimi OpenPlatform](https://platform.kimi.ai/docs/agreement/modeluse.md): Review the rules for accounts, API usage, billing, data, compliance, and the rights and obligations of Kimi Open Platform users.
+- [Kimi OpenPlatform Privacy Policy](https://platform.kimi.ai/docs/agreement/userprivacy.md): Learn how Kimi Open Platform collects, uses, stores, shares, and protects personal information and how users can exercise their data rights.
+- [Platform Changelog](https://platform.kimi.ai/docs/platform-changelog.md): Review historical Kimi Open Platform feature releases, model launches, product improvements, and issue fixes.
+
+## OpenAPI Specs
+
+- [openapi](/docs/openapi.json)

@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "max_tokens": 600,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a99719e77ff55618a965e54",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "OK"
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 21,
+      "output_tokens": 11,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 21,
+      "cached_tokens": 21,
+      "completion_tokens": 11,
+      "total_tokens": 32
+    }
+  },
+  "timestamp": "2026-09-03T13-09-50Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

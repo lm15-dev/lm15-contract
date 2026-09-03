@@ -1,0 +1,98 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_6a997258ca5520828d2ab781",
+    "object": "response",
+    "created_at": 1788441176,
+    "completed_at": 1788441176,
+    "status": "incomplete",
+    "error": null,
+    "incomplete_details": {
+      "reason": "max_output_tokens"
+    },
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_7GU29mRa1DL3jRVatmbAKzst",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "Say"
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 89,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 89
+      },
+      "output_tokens": 4,
+      "output_tokens_details": {
+        "reasoning_tokens": 1
+      },
+      "total_tokens": 93
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-09-03T13-12-55Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

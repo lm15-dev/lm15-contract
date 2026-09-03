@@ -1,0 +1,99 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": "Say ok.",
+      "max_output_tokens": 600,
+      "reasoning": {
+        "effort": "low",
+        "summary": "auto"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_6a9972468fdef22d6d19064d",
+    "object": "response",
+    "created_at": 1788441158,
+    "completed_at": 1788441160,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_ZWyig8VBe6kUC7SUY3h3crzb",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user simply says \"Say ok.\" Need obey. Now final should be exactly ok likely. Need not add punctuation? User says Say ok. Respond \"ok\". Ensure no extra."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_XJPjUmws8bYf4YwmaJa8Idmg",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "ok",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 89,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 89
+      },
+      "output_tokens": 54,
+      "output_tokens_details": {
+        "reasoning_tokens": 38
+      },
+      "total_tokens": 143
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-09-03T13-12-37Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

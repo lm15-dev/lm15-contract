@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "reasoning_effort": "low",
+      "thinking": {
+        "type": "enabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6a996b171e7a0b5fda5a823e",
+    "object": "chat.completion",
+    "created": 1788439320,
+    "model": "kimi-k3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "User asked to say \"ok\". Just respond."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 89,
+      "completion_tokens": 28,
+      "total_tokens": 117,
+      "completion_tokens_details": {
+        "reasoning_tokens": 11
+      }
+    }
+  },
+  "timestamp": "2026-09-03T12-41-58Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

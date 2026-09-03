@@ -1,0 +1,281 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://platform.kimi.ai/docs/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Kimi K2.7 Code
+
+> Explore Kimi K2.7 Code and its high-speed variant for coding, multimodal input, thinking, tool calling, and 256K-token contexts.
+
+## Overview of Kimi K2.7 Code Model
+
+Kimi K2.7 Code is Kimi's dedicated coding model. It follows instructions more reliably in long contexts, completes coding tasks with higher success rates. External benchmark evaluations show that Kimi K2.7 Code significantly improves instruction compliance and long-horizon coding performance compared to K2.6, while reducing overthinking tendencies by 30% on average.
+
+Kimi K2.7 Code HighSpeed (kimi-k2.7-code-highspeed) is the high-speed version of Kimi K2.7 Code, the same model as Kimi K2.7 Code, but with an output speed of approximately 180 Tokens/s and up to 260 Tokens/s in short context scenarios, delivering a more extreme coding experience. (Currently, the resource is limited, and the experience of the high-speed model may be slightly fluctuate，we are gradually increasing the resource.)
+
+### Long-horizon coding capability breakthrough
+
+In external benchmark evaluations, Kimi K2.7 Code significantly improves instruction compliance and long-horizon coding performance compared to K2.6, while reducing overthinking tendencies by 30% on average.
+
+<img src="https://mintcdn.com/moonshotai/n5oM6VnQjqbRMA-W/assets/pics/k27.png?fit=max&auto=format&n=n5oM6VnQjqbRMA-W&q=85&s=c031ca63ef9fbbcec355fbf527a404fb" alt="kimi-k2.7" width="1080" height="608" data-path="assets/pics/k27.png" />
+
+### Enhanced Agentic capabilities
+
+In external benchmark evaluations, Kimi K2.7 Code significantly improves Agentic capabilities compared to K2.6, with performance improvement of 10%.
+
+<img src="https://mintcdn.com/moonshotai/n5oM6VnQjqbRMA-W/assets/pics/k27-agent.png?fit=max&auto=format&n=n5oM6VnQjqbRMA-W&q=85&s=8b6ea0021c49442042be4aa8f7dd2198" alt="kimi-k2.7" width="1080" height="709" data-path="assets/pics/k27-agent.png" />
+
+### Ultra-Long Context Support
+
+* `kimi-k2.7-code`, `kimi-k2.7-code-highspeed`, `kimi-k2.6` models all provide a 256K context window.
+
+### Long-Thinking Capabilities
+
+* Kimi K2.7 Code still has strong reasoning capabilities, supporting multi-step tool invocation and reasoning, excelling at solving complex problems, such as complex logical reasoning, mathematical problems, and code writing.
+* Kimi K2.7 Code does not support non-thinking mode.
+
+## Example Usage
+
+Here is a complete usage example to help you quickly get started with the Kimi K2.7 Code model.
+
+### Install the OpenAI SDK
+
+Kimi API is fully compatible with OpenAI's API format. You can install the OpenAI SDK as follows:
+
+```bash theme={null}
+pip install --upgrade 'openai>=1.0'
+```
+
+### Verify the Installation
+
+```bash theme={null}
+python -c 'import openai; print("version =",openai.__version__)'
+
+# The output may be version = 1.10.0, indicating the OpenAI SDK was installed successfully and your Python environment is using OpenAI SDK v1.10.0.
+```
+
+## Quick Start
+
+* [Try it now](https://platform.kimi.ai/playground): Test model performance in your business scenarios through interactive operations in the Dev Workbench
+* [Apply for API Key](https://platform.kimi.ai/console/api-keys): Test via API call immediately
+
+### Multimodal Tool Capability Example
+
+Kimi K2.7 Code model combines multiple capabilities. The following example demonstrates K2.7 Code's visual understanding + tool calling capabilities.
+
+First, download this sample video to your local machine, such as `~/Download/test_video.mp4`
+
+<Frame>
+  <video controls style={{ width: '100%', height: 'auto' }}>
+    <source src="https://mintcdn.com/moonshotai/AP772Is8kVTEjpLL/assets/pics/test_video.mp4?fit=max&auto=format&n=AP772Is8kVTEjpLL&q=85&s=b316516bf71c00a59a1be4d0e9d9b9e0" type="video/mp4" data-path="assets/pics/test_video.mp4" />
+  </video>
+</Frame>
+
+Then run the following code:
+
+```python theme={null}
+import base64
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+from openai import OpenAI
+
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "watch_video_clip",
+        "description": "Watch a video file or a sub-clip of it. If start_time and end_time are not provided, the entire video will be returned.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string", 
+                    "description": "The path to the video file to watch"
+                },
+                "start_time": {
+                    "type": "number",
+                    "description": "The start time of the clip in seconds (optional, defaults to 0)"
+                },
+                "end_time": {
+                    "type": "number",
+                    "description": "The end time of the clip in seconds (optional, defaults to end of video)"
+                }
+            },
+            "required": ["path"]
+        }
+    }
+}]
+
+def watch_video_clip(path: str, start_time: float | None = None, end_time: float | None = None) -> list[dict]:
+    """
+    Watch a video file or a sub-clip of it.
+
+    Args:
+        path: The path to the video file to watch
+        start_time: The start time in seconds (optional, defaults to 0)
+        end_time: The end time in seconds (optional, defaults to end of video)
+
+    Returns:
+        A list of content blocks in MultiModal Tool API format
+    """
+
+    video_path = Path(path)
+    if not video_path.exists():
+        raise FileNotFoundError(f"Video file not found: {path}")
+
+    # Get video duration if needed
+    if start_time is None and end_time is None:
+        # Return entire video
+        with open(path, "rb") as f:
+            video_base64 = base64.b64encode(f.read()).decode("utf-8")
+        return [
+            {"type": "video_url", "video_url": {"url": f"data:video/mp4;base64,{video_base64}"}},
+            {"type": "text", "text": f"Full video: {video_path.name}"}
+        ]
+
+    # Get video duration for defaults
+    probe = subprocess.run(
+        ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", path],
+        capture_output=True, text=True
+    )
+    duration = float(json.loads(probe.stdout)["format"]["duration"])
+
+    start_time = start_time or 0
+    end_time = end_time or duration
+    clip_duration = end_time - start_time
+
+    # Extract clip
+    with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as tmp:
+        tmp_path = tmp.name
+
+    try:
+        subprocess.run([
+            "ffmpeg", "-y", "-ss", str(start_time), "-i", path,
+            "-t", str(clip_duration), "-c:v", "libx264", "-c:a", "aac",
+            "-preset", "fast", "-crf", "23", "-movflags", "+faststart",
+            "-loglevel", "error", tmp_path
+        ], check=True)
+
+        with open(tmp_path, "rb") as f:
+            video_base64 = base64.b64encode(f.read()).decode("utf-8")
+
+        return [
+            {"type": "video_url", "video_url": {"url": f"data:video/mp4;base64,{video_base64}"}},
+            {"type": "text", "text": f"Clip from {video_path.name}: {start_time}s - {end_time}s"}
+        ]
+    finally:
+        if os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+
+client = OpenAI(
+    api_key=os.environ.get("MOONSHOT_API_KEY"),
+    base_url="https://api.moonshot.ai/v1"
+)
+
+def agent_loop(user_message: str):
+    """Simple agent loop with multimodal tool support."""
+
+    messages = [
+        {"role": "system", "content": "You are a video analysis assistant. Use watch_video_clip to examine specific portions of videos."},
+        {"role": "user", "content": user_message}
+    ]
+
+    while True:
+        response = client.chat.completions.create(
+            model="kimi-k2.7-code",
+            messages=messages,
+            tools=tools,
+            tool_choice="auto"
+        )
+        message = response.choices[0].message
+        messages.append(message.model_dump())
+
+        # No tool calls = done
+        if not message.tool_calls:
+            return message.content
+
+        # Execute tool calls
+        for tool_call in message.tool_calls:
+            if tool_call.function.name == "watch_video_clip":
+                args = json.loads(tool_call.function.arguments)
+                result = watch_video_clip(
+                    path=args["path"],
+                    start_time=args.get("start_time"),
+                    end_time=args.get("end_time")
+                )
+                # Multimodal tool result
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": result
+                })
+
+# Usage
+answer = agent_loop("Analyze what happens between seconds 8-13 in ~/Download/test_video.mp4")
+print(answer)
+```
+
+## Best Practices
+
+### Supported Formats
+
+Images are supported in formats: png, jpeg, webp, gif.<br />Videos are supported in formats: mp4, mpeg, mov, avi, x-flv, mpg, webm, wmv, 3gpp.
+
+### Token Calculation and Billing
+
+Image and video token usage is dynamically calculated. You can use the [token estimation API](/docs/api/estimate) to check the expected token consumption for a request containing images or video before processing.
+
+Generally, the higher the resolution of an image, the more tokens it will consume. For videos, the number of tokens depends on the number of keyframes and their resolution—the more keyframes and the higher their resolution, the greater the token consumption.
+
+The Vision model is billed based on the total number of tokens processed. For more information, see:
+
+For token pricing details, refer to [Model Pricing](/docs/pricing/chat-k27-code).
+
+### Recommended Resolution
+
+We recommend that image resolution should not exceed 4k (4096×2160), and video resolution should not exceed FHD (1920×1080). Higher resolutions will only increase processing time and will not improve the model's understanding.
+
+### Upload File or Base64?
+
+Due to the limitation on the overall size of the request body, for very large videos you **must** use the file upload method to utilize vision capabilities.For images or videos that will be referenced multiple times, it is recommended to use the file upload method. Regarding file upload limitations, please refer to the [File Upload documentation](/docs/api/files-upload).
+
+Image quantity limit: The Vision model has no limit on the number of images, but ensure that the request body size does not exceed 100M
+
+URL-formatted images: Not supported, currently only supports base64-encoded image content
+
+## Parameters Differences in Request Body
+
+Parameters are listed in [chat](/docs/api/chat). However, behaviour of some parameters may be different in k2.7-code/k2.6 models.
+
+**We recommend using the default values instead of manually configuring these parameters.**
+
+Differences are listed below.
+
+| Field              | Required | Description                                                                  | Type   | Values                                                                                                          |
+| ------------------ | -------- | ---------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+| max\_tokens        | optional | The maximum number of tokens to generate for the chat completion.            | int    | Default to be 32k aka 32768                                                                                     |
+| thinking           | optional | **New!** This parameter controls if the thinking is enabled for this request | object | Default to be `{"type": "enabled"}`. Kimi K2.7 Code model will throw an error if the thinking mode is disabled. |
+| temperature        | optional | The sampling temperature to use                                              | float  | Kimi K2.7 Code model will use a fixed value 1.0. Any other value will result in an error                        |
+| top\_p             | optional | A sampling method                                                            | float  | Kimi K2.7 Code model will use a fixed value 0.95. Any other value will result in an error                       |
+| n                  | optional | The number of results to generate for each input message                     | int    | Kimi K2.7 Code model will use a fixed value 1. Any other value will result in an error                          |
+| presence\_penalty  | optional | Penalizing new tokens based on whether they appear in the text               | float  | Kimi K2.7 Code model will use a fixed value 0.0. Any other value will result in an error                        |
+| frequency\_penalty | optional | Penalizing new tokens based on their existing frequency in the text          | float  | Kimi K2.7 Code model will use a fixed value 0.0. Any other value will result in an error                        |
+
+## Tool Use Compatibility
+
+When using tools, please note the following constraints to ensure model performance:
+
+* `tool_choice` can only be set to "auto" or "none" (default is "auto") to avoid conflicts between reasoning content and the specified tool\_choice. Any other value will result in an error;
+* During multi-step tool calling, we recommend keeping the `reasoning_content` from the assistant message in the current turn's tool call within the context; omitting it does not cause an error, but may degrade reasoning continuity and tool-call quality;
+
+## Model Pricing
+
+For token pricing details, refer to [Model Pricing](/docs/pricing/chat-k27-code).
+
+## Learn More
+
+* For the benchmark testing with Kimi K2.7 Code, please refer to this [benchmark best practice](/docs/guide/benchmark-best-practice)
+* See how to use Kimi K2 Series models in [Claude Code](/docs/guide/claude-code-kimi)
+* Learn how to configure and use the [Thinking Model](/docs/guide/use-thinking-models)
+* For all model pricing see [here](/docs/pricing/chat), [Billing & Rate Limit details](/docs/pricing/limits), and [Web Search Pricing](/docs/pricing/tools)

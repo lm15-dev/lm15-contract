@@ -1,0 +1,151 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "max_output_tokens": 600,
+      "reasoning": {
+        "effort": "low"
+      },
+      "input": [
+        {
+          "type": "message",
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        },
+        {
+          "type": "function_call",
+          "call_id": "get_weather_0",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "get_weather_0",
+          "output": "Sunny, 22°C"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_6a99725025c76e7ab1dbe9da",
+    "object": "response",
+    "created_at": 1788441169,
+    "completed_at": 1788441172,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_LAPzrB64xKVO56zHYxzadd7o",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The tool says Paris is sunny and 22°C. Provide concise answer. Mention \"currently\". Ensure not overclaim real-time? It's from tool. Final: It's sunny in Paris with a temperature of 22°C."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_RDXeGk1rGDJSMRQ4e8s756qt",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "It’s sunny in Paris, 22°C.",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 262,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 70,
+      "output_tokens_details": {
+        "reasoning_tokens": 45
+      },
+      "total_tokens": 332
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-09-03T13-12-48Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}
