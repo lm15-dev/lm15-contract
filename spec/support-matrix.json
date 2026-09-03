@@ -8,7 +8,8 @@
     "here FIRST, with live receipts, like every provider behavior.",
     "2026-09-02: `caches` column added (MAP-6 stored-cache tier); gemini is the first implementer. changes/2026-09-01-caching-design.md",
     "2026-09-03: the six chat-bound registry providers (groq, openrouter, deepseek, ollama, vllm, sglang) are pinned; the reference reflects lm15.registry.PROVIDERS, not only the adapter classes. deepseek's row is declared from provider documentation and awaits its live receipt (research/providers/deepseek/). changes/2026-09-03-provider-registry.md",
-    "2026-09-03: zai pinned with live receipts (changes/2026-09-03-zai-live.md)."
+    "2026-09-03: zai pinned with live receipts (changes/2026-09-03-zai-live.md).",
+    "2026-09-03: deepseek-anthropic pinned (the Messages wire of the same service; models=false \u2014 GET /models is 404 there). changes/2026-09-03-deepseek-anthropic-live.md"
   ],
   "providers": {
     "anthropic": {
@@ -71,6 +72,28 @@
       },
       "auth_modes": [
         "bearer"
+      ],
+      "env_keys": [
+        "DEEPSEEK_API_KEY"
+      ]
+    },
+    "deepseek-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "x-api-key"
       ],
       "env_keys": [
         "DEEPSEEK_API_KEY"

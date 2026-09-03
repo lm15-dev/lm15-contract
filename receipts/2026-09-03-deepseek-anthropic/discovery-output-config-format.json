@@ -1,0 +1,65 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "max_tokens": 200,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower? Reply as json."
+        }
+      ],
+      "thinking": {
+        "type": "disabled"
+      },
+      "output_config": {
+        "format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "2656aed4-1735-45db-b806-b7fbbb2f7f64",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"location\": \"Paris, France\", \"coordinates\": {\"latitude\": 48.8584, \"longitude\": 2.2945}, \"landmark\": \"Champ de Mars, 5 Avenue Anatole France, 75007 Paris\"}"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 52,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-51Z"
+}

@@ -1,0 +1,65 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "thinking": {
+        "type": "enabled"
+      },
+      "output_config": {
+        "effort": "max"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "1df58e62-7590-4876-abed-bb9536d394b5",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks to say \"ok.\" This is a simple request. I should comply and say \"ok.\" No need for elaboration.",
+        "signature": "1df58e62-7590-4876-abed-bb9536d394b5"
+      },
+      {
+        "type": "text",
+        "text": "Ok."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 99,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 30,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-18-18Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

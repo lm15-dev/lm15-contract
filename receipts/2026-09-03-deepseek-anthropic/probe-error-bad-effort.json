@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "enabled"
+      },
+      "output_config": {
+        "effort": "bogus"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Failed to deserialize the JSON body into the target type: output_config.effort: unknown variant `bogus`, expected one of `low`, `medium`, `high`, `xhigh`, `ultra`, `max` at line 1 column 171",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T02-18-23Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

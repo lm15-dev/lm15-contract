@@ -1,0 +1,38 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "Authentication Fails, Your api key: ****alid is invalid",
+      "type": "authentication_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-56Z"
+}

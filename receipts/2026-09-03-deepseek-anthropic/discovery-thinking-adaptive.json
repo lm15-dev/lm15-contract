@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "2e517a2e-bbca-4633-a2cb-855d393abc6b",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "1.  The user's message is \"Say ok.\" This is a direct instruction to output the word \"ok\". There is no complexity or need for further elaboration. I should simply comply.\n\n2.  The only appropriate response is to output exactly what was asked: \"ok\".",
+        "signature": "2e517a2e-bbca-4633-a2cb-855d393abc6b"
+      },
+      {
+        "type": "text",
+        "text": "ok"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 7,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 59,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-45Z"
+}

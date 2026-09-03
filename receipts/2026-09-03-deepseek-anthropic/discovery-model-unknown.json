@@ -1,0 +1,38 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "totally-unknown-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "The supported API model names are deepseek-v4-pro, deepseek-v4-flash, and deepseek-v4-flash-vision-exp, but you passed totally-unknown-model.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-36Z"
+}

@@ -1,0 +1,101 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "The user asks for the weather in Paris and to use the tool. I'll call get_weather with city Paris.",
+              "signature": "b4a1194c-9cf6-45a2-8520-4bf35b43232e"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_00_vZeDk9nAueKFOIGuskam3691",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_00_vZeDk9nAueKFOIGuskam3691",
+              "content": "Sunny, 22°C"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "87c2672c-d656-4294-895a-cbb7a0bf43ce",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "87c2672c-d656-4294-895a-cbb7a0bf43ce"
+      },
+      {
+        "type": "text",
+        "text": "The weather in Paris is currently **sunny** with a temperature of **22°C**."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 67,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 384,
+      "output_tokens": 20,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-39Z"
+}

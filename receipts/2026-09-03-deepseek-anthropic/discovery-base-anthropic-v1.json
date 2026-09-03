@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 200
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "51f2ccca-c96a-447d-93f2-1f3514812a60",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user simply wants me to say \"ok\". No need for more.",
+        "signature": "51f2ccca-c96a-447d-93f2-1f3514812a60"
+      },
+      {
+        "type": "text",
+        "text": "ok"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 86,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 17,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-00Z"
+}

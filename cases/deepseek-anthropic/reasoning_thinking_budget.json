@@ -1,0 +1,44 @@
+{
+  "id": "deepseek-anthropic.reasoning_thinking_budget",
+  "provider": "deepseek-anthropic",
+  "feature": "reasoning_thinking_budget",
+  "description": "budget_tokens is documented as ignored on this endpoint; a Reasoning.thinking_budget would be a silent no-op, so lm15 raises before the wire (thinking_format=deepseek takes effort only). No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "guide--anthropic-api.md: thinking 'Supported (budget_tokens is ignored)'; receipts/2026-09-03-deepseek-anthropic/discovery-lm15-manual-class-budget.json (the plain Anthropic manual-class wire with budget_tokens=2048: HTTP 200, 18 output tokens — the budget did nothing); changes/2026-09-03-deepseek-anthropic-live.md"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 100,
+      "reasoning": {
+        "effort": "low",
+        "thinking_budget": 4096
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the discovery/probe cell it pins (research/providers/deepseek-anthropic/); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

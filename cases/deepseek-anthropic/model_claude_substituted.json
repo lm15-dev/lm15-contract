@@ -1,0 +1,40 @@
+{
+  "id": "deepseek-anthropic.model_claude_substituted",
+  "provider": "deepseek-anthropic",
+  "feature": "model_claude_substituted",
+  "description": "The endpoint maps claude-* names onto DeepSeek models without saying so: claude-opus-4-1 was served by deepseek-v4-pro (response.model), HTTP 200. lm15 refuses a model outside the endpoint's own prefix (compat model_prefixes) so the caller never gets a silently substituted model. No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedModelError",
+      "code": "unsupported_model"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.deepseek.com/anthropic 2026-09-03: receipts/2026-09-03-deepseek-anthropic/discovery-model-claude-opus.json (HTTP 200, model=deepseek-v4-pro for claude-opus-4-1); guide--anthropic-api.md § Anthropic Model Mapping documents the remap; an unknown name is a loud 400 (discovery-model-unknown.json), so only claude-* is silent; changes/2026-09-03-deepseek-anthropic-live.md"
+  },
+  "canonical_request": {
+    "model": "claude-opus-4-1",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 100
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the discovery/probe cell it pins (research/providers/deepseek-anthropic/); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

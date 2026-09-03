@@ -81,7 +81,15 @@ class Capture:
         norm = normalize_transport_request(treq)
         headers = {}
         for k, v in norm["headers"].items():
-            headers[k] = f"Bearer {self.placeholder}" if k.lower() == "authorization" else v
+            # Every credential-carrying header the dialects use; a new header
+            # name here is a new leak vector (x-api-key was missed once,
+            # 2026-09-03, and caught by tools/check_secrecy.py before commit).
+            if k.lower() == "authorization":
+                headers[k] = f"Bearer {self.placeholder}"
+            elif k.lower() in ("x-api-key", "x-goog-api-key", "api-key"):
+                headers[k] = self.placeholder
+            else:
+                headers[k] = v
         return {"method": norm["method"], "url": norm["url"], "params": norm["params"], "headers": headers, "body": norm["body"]}
 
     def send(self, treq) -> tuple[int, bytes, str, dict]:
@@ -155,7 +163,7 @@ class Capture:
                 "source": "live-capture",
                 "date": ts[:10],
                 "evidence": f"{self.host} {ts}, {request.model}, HTTP {status}; {evidence_note}; adapter-built wire "
-                            f"(OpenAIChatLM, compat+access '{self.provider}'); verbatim body at bodies/{self.provider}.{feature}/{body_name}; "
+                            f"({type(adapter).__name__}, compat+access '{self.provider}'); verbatim body at bodies/{self.provider}.{feature}/{body_name}; "
                             f"changes/{self.date}-{self.provider}-live.md",
             },
             "canonical_request": serde.request_to_dict(request),
@@ -334,6 +342,11 @@ def _summary(body) -> str:
     if isinstance(body, dict):
         if "error" in body:
             return json.dumps(body["error"], ensure_ascii=False)[:200]
+        if body.get("type") == "message":  # Anthropic Messages shape
+            blocks = body.get("content") or []
+            text = "".join(b.get("text", "") for b in blocks if b.get("type") == "text")
+            return (f"model={body.get('model')} stop={body.get('stop_reason')} blocks={[b.get('type') for b in blocks]} "
+                    f"text={text[:60]!r} usage={body.get('usage')}")
         ch = (body.get("choices") or [{}])[0]
         msg = ch.get("message", {})
         u = body.get("usage", {})

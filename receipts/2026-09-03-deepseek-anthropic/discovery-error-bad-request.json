@@ -1,0 +1,49 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "x"
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "7f7361b5-830c-4020-9e80-c121db7d97fa",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "We need answer to user \"x\". Need infer? They just sent \"x\". Could be placeholder, test, maybe wants explanation of letter x? Need respond clarifying? Maybe \"x\" as variable? Need ask what they need. Since no context, best concise: \"What would you like to know about x?\" But maybe they expect continuation? We need not overexplain. Could say \"Hi! It looks like you just sent 'x'. Could you provide more detail or a question?\" Need comply.",
+        "signature": "7f7361b5-830c-4020-9e80-c121db7d97fa"
+      },
+      {
+        "type": "text",
+        "text": "Hi! It looks like you just sent “x.” Could you clarify what you need? Are you asking about the letter, a math variable, or something else?"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 84,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 137,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-57Z"
+}

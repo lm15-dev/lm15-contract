@@ -31,7 +31,7 @@ says so.
 | Endpoint | Base URL | Dialect | lm15 name |
 |---|---|---|---|
 | Chat Completions | `https://api.deepseek.com` (`/chat/completions`) | openai-chat | `deepseek` (this dossier) |
-| Anthropic Messages | `https://api.deepseek.com/anthropic` | anthropic | not registered — candidate `deepseek-anthropic` |
+| Anthropic Messages | `https://api.deepseek.com/anthropic/v1` | anthropic | `deepseek-anthropic` — `research/providers/deepseek-anthropic/` (live-verified 2026-09-03) |
 | Responses API | (documented as supported; page not scraped) | openai-responses | not registered |
 | Beta (prefix completion, FIM) | `https://api.deepseek.com/beta` | openai-chat + `prefix` field | not registered; user passes `base_url` |
 

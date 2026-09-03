@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "enabled"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "c5acdd9d-fadf-4f6a-81a9-390258c0549b",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "1.  The user said \"Say ok.\" This is a direct instruction to output the word \"ok\".\n\n2.  The instruction is simple and unambiguous. I should follow it exactly.",
+        "signature": "c5acdd9d-fadf-4f6a-81a9-390258c0549b"
+      },
+      {
+        "type": "text",
+        "text": "ok."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 7,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 41,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-10-47Z"
+}

@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Count from 1 to 10, separated by commas."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100,
+      "stop_sequences": [
+        "5"
+      ],
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "392398ed-d376-4156-a24e-8621021aec51",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "text",
+        "text": "1, 2, 3, 4, "
+      }
+    ],
+    "stop_reason": "stop_sequence",
+    "stop_sequence": "5",
+    "usage": {
+      "input_tokens": 16,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 13,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-09-03T02-18-26Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

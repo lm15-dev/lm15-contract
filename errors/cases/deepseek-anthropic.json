@@ -1,0 +1,84 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.deepseek.com/anthropic error envelopes captured verbatim 2026-09-03 by research/providers/deepseek-anthropic/capture.py; receipts/2026-09-03-deepseek-anthropic/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "deepseek-anthropic.unauthenticated",
+      "provider": "deepseek-anthropic",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Authentication Fails, Your api key: ****alid is invalid",
+          "type": "authentication_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "deepseek-anthropic",
+        "provider_code": "authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com/anthropic HTTP 401 verbatim 2026-09-03T02-18-20Z — receipts/2026-09-03-deepseek-anthropic/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepseek-anthropic.model_not_found",
+      "provider": "deepseek-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The supported API model names are deepseek-v4-pro, deepseek-v4-flash, and deepseek-v4-flash-vision-exp, but you passed deepseek-nonexistent.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepseek-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com/anthropic HTTP 400 verbatim 2026-09-03T02-18-21Z — receipts/2026-09-03-deepseek-anthropic/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepseek-anthropic.bad_effort",
+      "provider": "deepseek-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "Failed to deserialize the JSON body into the target type: output_config.effort: unknown variant `bogus`, expected one of `low`, `medium`, `high`, `xhigh`, `ultra`, `max` at line 1 column 171",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepseek-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.deepseek.com/anthropic HTTP 400 verbatim 2026-09-03T02-18-23Z — receipts/2026-09-03-deepseek-anthropic/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

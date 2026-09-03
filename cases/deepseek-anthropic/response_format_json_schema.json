@@ -1,0 +1,56 @@
+{
+  "id": "deepseek-anthropic.response_format_json_schema",
+  "provider": "deepseek-anthropic",
+  "feature": "response_format_json_schema",
+  "description": "output_config.format with a JSON schema is accepted and ignored: a schema requiring only `city` was answered 200 with location/coordinates/landmark. Silent, so lm15 raises before the wire (compat structured_output=reject). No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "receipts/2026-09-03-deepseek-anthropic/discovery-output-config-format.json (HTTP 200, keys the schema never named); guide--anthropic-api.md: output_config 'Only effort is supported'; changes/2026-09-03-deepseek-anthropic-live.md"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Where is the Eiffel Tower? Reply as json."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "name": "place",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        },
+        "strict": true
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the discovery/probe cell it pins (research/providers/deepseek-anthropic/); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "deepseek-anthropic.tool_choice_parallel_false",
+  "provider": "deepseek-anthropic",
+  "feature": "tool_choice_parallel_false",
+  "description": "disable_parallel_tool_use is documented as ignored on this endpoint; ToolChoice.parallel=False would be a silent no-op (MAP-8 rule 2), so lm15 raises before the wire (compat parallel_tool_calls=reject). No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "guide--anthropic-api.md tool_choice table: auto/any/tool 'Supported (disable_parallel_tool_use is ignored)' (scraped 2026-09-03); documentation-level — the ignore cannot be observed with one tool, and the refusal follows the MAP-8 rule for documented silent knobs; changes/2026-09-03-deepseek-anthropic-live.md"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Paris? Use the tool."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "tool_choice": {
+        "mode": "auto",
+        "parallel": false
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored from the discovery/probe cell it pins (research/providers/deepseek-anthropic/); the reference raises at build_request (lm15-python tests/test_registry.py)"
+  }
+}

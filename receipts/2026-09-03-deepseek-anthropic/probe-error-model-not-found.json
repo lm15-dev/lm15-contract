@@ -1,0 +1,35 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "x-api-key": "$DEEPSEEK_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "deepseek-nonexistent",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "The supported API model names are deepseek-v4-pro, deepseek-v4-flash, and deepseek-v4-flash-vision-exp, but you passed deepseek-nonexistent.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T02-18-21Z",
+  "response_headers": {
+    "Content-Type": "application/octet-stream"
+  }
+}
