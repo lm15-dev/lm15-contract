@@ -1,168 +1,295 @@
 {
- "_doc": [
-  "The ratified endpoint-support matrix: provider -> EndpointSupport booleans,",
-  "auth modes, and env key conventions, pinned 2026-09-01. tools/audit.py",
-  "compares this file against the reference implementation via surface_dump",
-  "(HARD check, both directions): a port or the reference silently changing",
-  "who supports what is contract drift, not a patch. Widening support lands",
-  "here FIRST, with live receipts, like every provider behavior.",
-  "2026-09-02: `caches` column added (MAP-6 stored-cache tier); gemini is the first implementer. changes/2026-09-01-caching-design.md"
- ],
- "providers": {
-  "anthropic": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": false,
-    "files": true,
-    "batches": true,
-    "images": false,
-    "speech": false,
-    "video": false,
-    "responses_api": false,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "x-api-key"
-   ],
-   "env_keys": [
-    "ANTHROPIC_API_KEY"
-   ]
-  },
-  "claude-code": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": false,
-    "files": false,
-    "batches": false,
-    "images": false,
-    "speech": false,
-    "video": false,
-    "responses_api": false,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "claude-code-oauth",
-    "bearer-oauth"
-   ],
-   "env_keys": []
-  },
-  "gemini": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": true,
-    "files": true,
-    "batches": true,
-    "images": true,
-    "speech": true,
-    "video": true,
-    "responses_api": false,
-    "models": true,
-    "caches": true,
-    "extra": []
-   },
-   "auth_modes": [
-    "query-api-key",
-    "x-goog-api-key"
-   ],
-   "env_keys": [
-    "GEMINI_API_KEY",
-    "GOOGLE_API_KEY"
-   ]
-  },
-  "openai": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": true,
-    "files": true,
-    "batches": true,
-    "images": true,
-    "speech": true,
-    "video": true,
-    "responses_api": true,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "bearer"
-   ],
-   "env_keys": [
-    "OPENAI_API_KEY"
-   ]
-  },
-  "openai-chat": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": false,
-    "files": false,
-    "batches": false,
-    "images": false,
-    "speech": false,
-    "video": false,
-    "responses_api": false,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "bearer"
-   ],
-   "env_keys": [
-    "OPENAI_API_KEY"
-   ]
-  },
-  "openai-codex": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": false,
-    "files": false,
-    "batches": false,
-    "images": false,
-    "speech": false,
-    "video": false,
-    "responses_api": false,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "chatgpt-oauth",
-    "bearer-oauth"
-   ],
-   "env_keys": []
-  },
-  "xai": {
-   "supports": {
-    "complete": true,
-    "stream": true,
-    "live": false,
-    "files": false,
-    "batches": false,
-    "images": true,
-    "speech": false,
-    "video": true,
-    "responses_api": false,
-    "models": true,
-    "caches": false,
-    "extra": []
-   },
-   "auth_modes": [
-    "bearer",
-    "xai-oauth"
-   ],
-   "env_keys": [
-    "XAI_API_KEY"
-   ]
+  "_doc": [
+    "The ratified endpoint-support matrix: provider -> EndpointSupport booleans,",
+    "auth modes, and env key conventions, pinned 2026-09-01. tools/audit.py",
+    "compares this file against the reference implementation via surface_dump",
+    "(HARD check, both directions): a port or the reference silently changing",
+    "who supports what is contract drift, not a patch. Widening support lands",
+    "here FIRST, with live receipts, like every provider behavior.",
+    "2026-09-02: `caches` column added (MAP-6 stored-cache tier); gemini is the first implementer. changes/2026-09-01-caching-design.md",
+    "2026-09-03: the six chat-bound registry providers (groq, openrouter, deepseek, ollama, vllm, sglang) are pinned; the reference reflects lm15.registry.PROVIDERS, not only the adapter classes. deepseek's row is declared from provider documentation and awaits its live receipt (research/providers/deepseek/). changes/2026-09-03-provider-registry.md"
+  ],
+  "providers": {
+    "anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": true,
+        "batches": true,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "x-api-key"
+      ],
+      "env_keys": [
+        "ANTHROPIC_API_KEY"
+      ]
+    },
+    "claude-code": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "claude-code-oauth",
+        "bearer-oauth"
+      ],
+      "env_keys": []
+    },
+    "deepseek": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "DEEPSEEK_API_KEY"
+      ]
+    },
+    "gemini": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": true,
+        "files": true,
+        "batches": true,
+        "images": true,
+        "speech": true,
+        "video": true,
+        "responses_api": false,
+        "models": true,
+        "caches": true,
+        "extra": []
+      },
+      "auth_modes": [
+        "query-api-key",
+        "x-goog-api-key"
+      ],
+      "env_keys": [
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY"
+      ]
+    },
+    "groq": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "GROQ_API_KEY"
+      ]
+    },
+    "ollama": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": []
+    },
+    "openai": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": true,
+        "files": true,
+        "batches": true,
+        "images": true,
+        "speech": true,
+        "video": true,
+        "responses_api": true,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    "openai-chat": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "OPENAI_API_KEY"
+      ]
+    },
+    "openai-codex": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "chatgpt-oauth",
+        "bearer-oauth"
+      ],
+      "env_keys": []
+    },
+    "openrouter": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "OPENROUTER_API_KEY"
+      ]
+    },
+    "sglang": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": []
+    },
+    "vllm": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": []
+    },
+    "xai": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": true,
+        "speech": false,
+        "video": true,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer",
+        "xai-oauth"
+      ],
+      "env_keys": [
+        "XAI_API_KEY"
+      ]
+    }
   }
- }
 }

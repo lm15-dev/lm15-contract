@@ -11,6 +11,7 @@ design-pass.md`, step 3) start from a fresh run of these scripts.
 | Anthropic | `anthropic/pages/` (25) | `messages--create.md` | `bash scrapes/anthropic/update.sh` |
 | Gemini | `gemini/pages/` (14) | `generate-content.md` | `bash scrapes/gemini/update.sh` |
 | xAI | `xai/pages/models.md` (1) | — | hand-fetched 2026-09-01; no script yet |
+| DeepSeek | `deepseek/pages/` (15) | `chat--create.md`, `guide--thinking-mode.md` | `bash scrapes/deepseek/update.sh` (HTML → article text via `html2text.py`; the site has no Markdown endpoint) |
 
 Every `update.sh` sources `fetch.sh`: a page is written only when the
 server answers 200 with a body. A dead URL keeps the cached copy, is

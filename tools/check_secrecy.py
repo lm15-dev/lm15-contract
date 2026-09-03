@@ -40,9 +40,12 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("github token", re.compile(r"gh[pousr]_[A-Za-z0-9]{36,}")),
     ("slack token", re.compile(r"xox[baprs]-[A-Za-z0-9-]{10,}")),
     ("aws access key id", re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b")),
+    # platform.deepseek.com keys: "sk-" + exactly 32 lowercase hex (observed
+    # shape 2026-09-03); the exact length keeps it from matching prose.
+    ("deepseek api key", re.compile(r"\bsk-[0-9a-f]{32}\b")),
 )
 
-SCANNED_SUFFIXES = {".json", ".txt", ".md"}
+SCANNED_SUFFIXES = {".json", ".txt", ".md", ".sse"}
 SKIPPED_PARTS = {".git", "__pycache__", "node_modules"}
 
 
