@@ -112,7 +112,7 @@ sends for a ThinkingPart with text, so no new knob.
 | `reasoning.summary` | not in schema | `auto` → 200 | sent when set; nothing to translate |
 | `tool_choice` | `auto` only | `required`, `none` → **400** | loud; no knob |
 | `text.format` | json_schema only | json_object → **400**; json_schema strict → exact | loud; `json_object` users get the server's error |
-| builtin tools | function\|custom\|namespace\|web_search | `web_search` → 200 with a leading `web_search_call` item (4,627 input tokens); `code_execution` verbatim → **400** | `builtin_tools="meta"` (the `web_search` spelling); names the server lacks fail loudly |
+| builtin tools | function\|custom\|namespace\|web_search | `web_search` → 200 with a leading `web_search_call` item (4,627 input tokens); `code_execution` verbatim → **400** | `builtin_tools="verbatim"` (the canonical name is the wire type); names the server lacks fail loudly |
 | caching | `prompt_cache_key`; `prompt_cache_retention` **not supported** (400) | `CacheConfig(retention="long")` → 400 | `cache_control="openai_implicit"`; retention is loud, documented in the docs note |
 | temperature | not in schema | 0.5 → **400** "only 1 is allowed" | loud |
 | `max_output_tokens: 1` | — | 200, `status: incomplete`, empty output | as OpenAI |
@@ -187,11 +187,6 @@ the default content-use clause.**
 - Request signatures (`X-Msh-Request-Nonce` → `Msh-Request-Signature`,
   `signatures-verify.md`) are a provenance feature lm15 does not expose.
 - Files and Batches: see Identity.
-- `builtin_tools="meta"` on the Responses compat is a spelling table
-  (`web_search` → `web_search`) that Moonshot shares; the value is named
-  after the first server that needed it.  Renaming it to the shape (e.g.
-  `"plain"`) touches the Meta entry, which was still uncommitted and under
-  edit by another session on 2026-09-03; a follow-up.
 
 ## Pi comparison (input, not authority)
 

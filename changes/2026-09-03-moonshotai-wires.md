@@ -38,11 +38,11 @@ evidence, different decision.
 No new Responses-compat field.  The stateless reasoning replay — a
 `reasoning` item carrying `summary: [{summary_text}]` — is what the
 dialect already sends for a ThinkingPart with text (Meta pass).  The
-`web_search` built-in rides `builtin_tools="meta"`, a spelling table
-(`web_search` → `web_search`) Moonshot shares; **the value is named after
-the first server, not the shape** — a rename (e.g. `"plain"`) is a
-follow-up because the Meta entry was uncommitted and under edit by
-another session on the day.  `CacheConfig(retention="long")` reaches the
+`web_search` built-in rides `builtin_tools="verbatim"`: the canonical name
+is the wire type on this server as on Meta's.  The value was first
+written as `"meta"` and renamed the same day (the Meta entry, still
+unratified, is amended in place): a shape is not named after the first
+server that needed it.  `CacheConfig(retention="long")` reaches the
 wire as `prompt_cache_retention` and is refused loudly by the server; the
 docs note says so.
 
