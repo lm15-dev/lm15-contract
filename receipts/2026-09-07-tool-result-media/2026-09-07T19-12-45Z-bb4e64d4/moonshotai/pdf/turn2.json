@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-09-07T19-13-36Z",
+  "status": 400,
+  "latency_s": 0.31,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user wants me to:\n1. Call fetch_panel with label \"A\" exactly once\n2. Wait for the result\n3. Inspect the panel (3 columns × 2 rows of solid colors)\n4. Read colors left to right across top row, then left to right across bottom row\n5. Use only allowed color names: red, green, blue, yellow, magenta, cyan\n6. Return ONLY JSON in the format {\"A\":[six color names]}\n7. Do not guess before receiving the panel\n\nI need to call the tool first. Since I can only call fetch_panel with label \"A\", and I need to see the result before producing the JSON, I should make the tool call in this turn.",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "fetch_panel_0",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\": \"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "fetch_panel_0",
+          "content": [
+            {
+              "type": "file",
+              "file": {
+                "filename": "panel.pdf",
+                "file_data": "data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAoYmx1ZSByZWQgZ3JlZW4geWVsbG93IGN5YW4gbWFnZW50YSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "d11b21750dd59c8069b443585384fa5e9cd563d437c1631586862f8608f56c87",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

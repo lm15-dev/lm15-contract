@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-17-22Z",
+  "status": 200,
+  "latency_s": 1.74,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "7b995056aa77a6d80282cb83859f2e34accc10d7dd687f2f327b56367bcef1a7",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_65392ab9534247ed826115e32c40cf4c"
+  },
+  "provenance": "adapter-built"
+}

@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-09-07T19-13-22Z",
+  "provider": "deepseek-anthropic",
+  "status": 200,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "b2921c61fb630b217592eaa665f25149f80d9b9835e316850eaf1c084259ad37",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "86ef7eeb3bd2027a464e9cfa5398ac759a8a5df7ded72e728abf081788bf1eb4",
+  "response_bytes": 531,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

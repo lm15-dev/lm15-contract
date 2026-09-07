@@ -1,0 +1,170 @@
+[
+  {
+    "provider": "gemini",
+    "model": "gemini-3.7-flash",
+    "dialect": "gemini",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "yellow",
+        "green",
+        "cyan",
+        "red",
+        "blue",
+        "magenta"
+      ],
+      "B": [
+        "blue",
+        "green",
+        "cyan",
+        "yellow",
+        "magenta",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "green",
+        "cyan",
+        "red",
+        "blue",
+        "magenta"
+      ],
+      "B": [
+        "blue",
+        "green",
+        "cyan",
+        "yellow",
+        "magenta",
+        "red"
+      ]
+    },
+    "output": "{\"A\": [\"yellow\", \"green\", \"cyan\", \"red\", \"blue\", \"magenta\"], \"B\": [\"blue\", \"green\", \"cyan\", \"yellow\", \"magenta\", \"red\"]}",
+    "usage": {
+      "promptTokenCount": 2426,
+      "candidatesTokenCount": 42,
+      "totalTokenCount": 2712,
+      "promptTokensDetails": [
+        {
+          "modality": "IMAGE",
+          "tokenCount": 2160
+        },
+        {
+          "modality": "TEXT",
+          "tokenCount": 266
+        }
+      ],
+      "thoughtsTokenCount": 244,
+      "serviceTier": "standard"
+    }
+  },
+  {
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5",
+    "dialect": "anthropic",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "magenta",
+        "yellow",
+        "blue",
+        "green",
+        "red",
+        "cyan"
+      ],
+      "B": [
+        "green",
+        "magenta",
+        "yellow",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "yellow",
+        "blue",
+        "green",
+        "red",
+        "cyan"
+      ],
+      "B": [
+        "green",
+        "magenta",
+        "yellow",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "output": "Now I'll inspect both images and identify the colors in each grid (3 columns \u00d7 2 rows, reading left to right across the top row, then left to right across the bottom row).\n\n**Panel A:**\n- Top row (left to right): magenta, yellow, blue\n- Bottom row (left to right): green, red, cyan\n\n**Panel B:**\n- Top row (left to right): green, magenta, yellow\n- Bottom row (left to right): cyan, blue, red\n\n```json\n{\"A\":[\"magenta\",\"yellow\",\"blue\",\"green\",\"red\",\"cyan\"],\"B\":[\"green\",\"magenta\",\"yellow\",\"cyan\",\"blue\",\"red\"]}\n```",
+    "usage": {
+      "input_tokens": 939,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "cyan",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta"
+      ],
+      "B": [
+        "blue",
+        "cyan",
+        "yellow",
+        "magenta",
+        "green",
+        "red"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "input_tokens": 276,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 45,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 321
+    }
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-07T19-16-52Z",
+  "provider": "bedrock-chat",
+  "status": 200,
+  "model": "deepseek.v3.2",
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260907T191652Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "b441a7fec0a6b0cf445ef7e5a936777d22b02691be67ab9c98efc3e293f2e253",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "8f28039fc57060dc0b70fe57b62bb0beac5edd4601e96d7593291ae5d7a1f078",
+  "response_bytes": 556,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

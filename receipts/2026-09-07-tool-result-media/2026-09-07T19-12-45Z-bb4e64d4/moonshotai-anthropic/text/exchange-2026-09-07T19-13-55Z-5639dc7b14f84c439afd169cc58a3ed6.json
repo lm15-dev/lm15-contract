@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-09-07T19-13-55Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "We need call fetch_panel label A once, inspect result. Need use it. We can call fetch_panel. Then after result, final JSON only. Need not guess. Let's call."
+            },
+            {
+              "type": "tool_use",
+              "id": "fetch_panel_0",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "fetch_panel_0",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel A colors in reading order: yellow, blue, magenta, red, cyan, green"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "a791849822faca488427bf5e9029d1308a0b475d8ca00b1f0da2fda326a8099e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b2916544a07041f3b8c0e76e14b054bf54344011189df312c3a5cebba18d9d0d",
+  "response_bytes": 744,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

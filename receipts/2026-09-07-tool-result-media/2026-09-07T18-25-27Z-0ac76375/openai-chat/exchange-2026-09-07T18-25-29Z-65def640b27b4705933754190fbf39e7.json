@@ -1,0 +1,106 @@
+{
+  "timestamp": "2026-09-07T18-25-29Z",
+  "provider": "openai-chat",
+  "status": 200,
+  "model": "gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_fOl32NLvUXi2GZNVdIgVBeLF",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\": \"A\"}"
+              }
+            },
+            {
+              "id": "call_33UqBnXbBlqV5AngRluGQcxs",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\": \"B\"}"
+              }
+            }
+          ],
+          "refusal": null,
+          "annotations": []
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_fOl32NLvUXi2GZNVdIgVBeLF",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACSUlEQVR4nO3TMQ3EQAADwYA4/lAeTupAeBApVlZGWgAuxtd9znTnN959T3flAgCaDqC6WgBA49UCABqvFgDQeLUAgMarBQA0Xi0AoPFqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLQCg8WoBAI1XCwBovFoAQOPVAgAarxYA0Hi1AIDGqwUANF4tAKDxagEAjVcLAGi8WgBA49UCABqvFgDQeLUAgMarBQA0Xi0AoPFqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLQCg8WoBAI1XCwBovFoAQOPVAgAarxYA0Hi1AIDGqwUANF4tAKDxagEAjVcLAGi8WgBA49UCABqvFgDQeLUAgMarBQA0Xi0AoPFqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLeA9oHrCu57nTFcf8G0AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEXwb0B7VwaCbU8282AAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_33UqBnXbBlqV5AngRluGQcxs",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel returned by the requested tool."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXUlEQVR4nO3SQQ3AMBDEwIA4/lAKJ+9AaDnkYVm1ZAC70qxzRt087vZsdQsXECB1AQpQgMzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS7gFtB8F8zxC+6iAdwWoAAFyBwuIED0ggCp4xcESB2/IEDq+AUBUscvCJA6fkGA1PELAqSOXxAgdfyCAKnjFwRIHb8gQOr4BQFSxy8IkDp+QYDU8QsCpI5fECB1/IIAqeMXBEgdvyBA6vgFAVLHLwiQOn5BgNTxCwKkjl8QIHX8ggCp4xcESB2/IEDq+AUBUscvCJA6fkGA1PELAqSOXxAgdfyCAKnjFwRIHb8gQOr4BQFSxy8IkDp+QYDU8QsCpI5fECB1/IIAqeMXBEgdvyBA6vgFAVLHLwiQOn5BgNTxCwKkjl8QIHX8ggCp4xcESB2/IEDq+AUBUscvCJA6fkGA1PELAqSOXxAgdfyCAKnjFwRIHb8gQOr4BQFSxy/4N6AXttdoJpbo8VYAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "fc227a0867c6464844486b14735af639c1b44a29e74c36cd16098327fd42824b",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9cab7ed4e6b8087cc0f1970ada699720b68fb2d9b5156f4575324660e896d593",
+  "response_bytes": 1318,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

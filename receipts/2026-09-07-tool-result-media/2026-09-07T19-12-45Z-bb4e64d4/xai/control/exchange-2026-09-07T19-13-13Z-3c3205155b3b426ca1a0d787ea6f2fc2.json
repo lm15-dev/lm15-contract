@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-09-07T19-13-13Z",
+  "provider": "xai",
+  "status": 200,
+  "model": "grok-4.20",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $XAI_API_KEY"
+    },
+    "body": {
+      "model": "grok-4.20",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACS0lEQVR4nO3SQQ3DQBAEQYM4/lACJ29DiILBj9bIJTWA2VVd53yn6xc863/Bclf9QIB6BAANlwsAqF4A0HT9AoCm6xcANF2/AKDp+gUATdcvAGi6fgFA0/ULAJquXwDQdP0CgKbrFwA0Xb8AoOn6BQBN1y8AaLp+AUDT9QsAmq5fANB0/QKApusXADRdvwCg6foFAE3XLwBoun4BQNP1CwCarl8A0HT9AoCm6xcANF2/AKDp+gUATdcvAGi6fgFA0/ULAJquXwDQdP0CgKbrFwA0Xb8AoOn6BQBN1y8AaLp+AUDT9QsAmq5fANB0/QKApusXADRdvwCg6foFAE3XLwBoun4BQNP1CwCarl8A0HT9AoCm6xcANF2/AKDp+gUATdcvAGi6fgFA0/ULAJquXwDQdP0CgKbrFwA0Xb8AoOn6BS8H1E941vmc6e57O4AAAmi5XABAPQKAhssFANQjAGg3gAACaLlcAEA9AoCGywUA1CMAaDeAAAJouVwAQD0CgIbLBQDUIwBoN4AAAmi5XABAPQKAhssFANQjAGg3gAACaLlcAEA9AoCGywUA1CMAaDeAAAJouVwAQD0CgIbLBQDUIwBoN4AAAmi5XABAPQKAhssFANQjAGg3gAACaLlcAEA9AoCGywUA1CMAaDeAAAJouVwAQD0CgIbLBQDUIwBoN4AAAmi5XABAPQKAhssFANQjAGg3gAACaLlcAEA9AoCGywUA1CMAaDeAAAJouVwAQD0CgIbLBQDUIwBoN4AAAmi5XABAPYI3A/oBNlNoJriFXzUAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600
+    }
+  },
+  "request_sha256": "39550ba2383efb6ac216474f7126eb3dcc7b80f8dffe72a4356bce9b918069ff",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "85ac32880eed5f6a43eff84192e8dfa53a427cefcc0b0cf75ee0c119b438f4e7",
+  "response_bytes": 943,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

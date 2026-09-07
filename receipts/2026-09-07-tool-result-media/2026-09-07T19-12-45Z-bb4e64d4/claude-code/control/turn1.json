@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-07T19-13-03Z",
+  "status": 200,
+  "latency_s": 1.67,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "anthropic-dangerous-direct-browser-access": "true",
+      "x-app": "cli",
+      "user-agent": "claude-cli/2.1.170",
+      "anthropic-beta": "claude-code-20250219,oauth-2025-04-20",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "claude-sonnet-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image",
+              "source": {
+                "type": "base64",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACQklEQVR4nO3SQQkEQQADwRUx/qWcnH2vhBMxjyZQ0AJCqOe873Znu/q+2556AEDbAQQQQMvV9wFUCwAo3wDQcAABBNBy9X0A1QIAyjcANBxAAAG0XH0fQLUAgPINAA0HEEAALVffB1AtAKB8A0DDAQQQQMvV9wFUCwAo3wDQcAABBNBy9X0A1QIAyjcANBxAAAG0XH0fQLUAgPINAA0HEEAALVffB1AtAKB8A0DDAQQQQMvV9wFUCwAo3wDQcAABBNBy9X0A1QIAyjcANBxAAAG0XH0fQLUAgPINAA0HEEAALVffB1AtAKB8A0DDAQQQQMvV9wFUCwAo3wDQcAABBNBy9X0A1QIAyjcANBxAAAG0XH0fQLUAgPINAA0HEEAALVffdw2ov/Cu79vu/LYDCCCAlssFALRdLgCg7XIBAG2XCwBou1wAQNvlAgDaLhcA0Ha5AIC2ywUAtF0uAKDtcgEAbZcLAGi7XABA2+UCANouFwDQdrkAgLbLBQC0XS4AoO1yAQBtlwsAaLtcAEDb5QIA2i4XANB2uQCAtssFALRdLgCg7XIBAG2XCwBou1wAQNvlAgDaLhcA0Ha5AIC2ywUAtF0uAKDtcgEAbZcLAGi7XABA2+UCANouFwDQdrkAgLbLBQC0XS4AoO1yAQBtlwsAaLtcAEDb5QIA2i4XANB2uQCAtssFALRdLgCg7XIBAG2XCwBou1wAQNvlAgDaLhcA0Ha5AIC2ywUAtF0uAKDtcgEAbZcLAGi7XABA2+UCLvsD6eRoJruHRS0AAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "system": [
+        {
+          "type": "text",
+          "text": "You are Claude Code, Anthropic's official CLI for Claude."
+        }
+      ]
+    }
+  },
+  "response_sha256": "cea29da87f5d7c8337c892d7c65e95bb31e01fb2b6fde9ab8b189c67838ef3d8",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "request-id": "req_011CepcPzJsXS7QDVzdyHksr"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

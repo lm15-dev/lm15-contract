@@ -1,0 +1,165 @@
+{
+  "id": "deepseek.tool_result_error",
+  "provider": "deepseek",
+  "feature": "tool_result_error",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_00_ET_uxBkoi1CNPDmfXEBOYGm7219",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\": \"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_00_ET_uxBkoi1CNPDmfXEBOYGm7219",
+          "content": [
+            {
+              "type": "text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "cyan",
+      "green",
+      "magenta",
+      "yellow",
+      "red",
+      "blue"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek/error/exchange-2026-09-07T19-13-18Z-6bb39495896a4dbf9a852515b4668a61.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek/error/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_00_ET_uxBkoi1CNPDmfXEBOYGm7219",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_00_ET_uxBkoi1CNPDmfXEBOYGm7219",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": false
+}

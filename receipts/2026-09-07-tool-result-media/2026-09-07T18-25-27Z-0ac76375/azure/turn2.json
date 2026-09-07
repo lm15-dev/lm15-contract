@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-09-07T18-26-06Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+            }
+          ]
+        },
+        {
+          "id": "fc_01a40cc5f0dc5159006a9f01be53e081909cbd80ee53c51360",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"label\":\"A\"}",
+          "call_id": "call_5WnTj9JwUWFOmIM2o4n2PmlL",
+          "name": "fetch_panel"
+        },
+        {
+          "id": "fc_01a40cc5f0dc5159006a9f01be54008190b3623a515b9997e9",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"label\":\"B\"}",
+          "call_id": "call_XdwNXeT3A2ubTacnYRKuxQSU",
+          "name": "fetch_panel"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_5WnTj9JwUWFOmIM2o4n2PmlL",
+          "output": [
+            {
+              "type": "input_image",
+              "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXElEQVR4nO3SQQ0AIRTEUER8/1JWDmckrAgOTUOTKph5a8/I2+rmG3WLvj9APIIAicMFBIhHECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeARPA6IHvA4HfNc5oy5AAQqQOVxAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS7gsh/DgGgmc8tNCAAAAABJRU5ErkJggg=="
+            }
+          ]
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_XdwNXeT3A2ubTacnYRKuxQSU",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Panel returned by the requested tool."
+            },
+            {
+              "type": "input_image",
+              "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACQElEQVR4nO3SMQ3EQADEwIA4/lAeTupAeBAprFVGMgAXc93nTHfue7r+4F1XLgCg6QACCKDl+gOApusPAJquPwBouv4AoOn6A4Cm6w8Amq4/AGi6/gCg6foDgKbrDwCarj8AaLr+AKDp+gOApusPAJquPwBouv4AoOn6A4Cm6w8Amq4/AGi6/gCg6foDgKbrDwCarj8AaLr+AKDp+gOApusPAJquPwBouv4AoOn6A4Cm6w8Amq4/AGi6/gCg6foDgKbrDwCarj8AaLr+AKDp+gOApusPAJquPwBouv4AoOn6A4Cm6w8Amq4/AGi6/gCg6foDgKbrDwCarj8AaLr+AKDp+gOApusPAJquPwBouv4AoOn6A4Cm6w8Amq4/AGi6/gCg6foDgKbrDwCarj8AaLr+AKDp+oOXgM7vbNcbftXznOkAAgig5XIBAPUIAFquFgBQLQCg5QACCKDlcgEA9QgAWq4WAFAtAKDlAAIIoOVyAQD1CABarhYAUC0AoOUAAgig5XIBAPUIAFquFgBQLQCg5QACCKDlcgEA9QgAWq4WAFAtAKDlAAIIoOVyAQD1CABarhYAUC0AoOUAAgig5XIBAPUIAFquFgBQLQCg5QACCKDlcgEA9QgAWq4WAFAtAKDlAAIIoOVyAQD1CABarhYAUC0AoOUAAgig5XIBAPUIAFquFgBQLQCg5QACCKDlcgEA9QgAWq4WAFAtAKDlAAIIoOVyAQD1CABarhYAUC0AoOUAAgig5XIBAPUIvgzoD3w1aCZoa7oaAAAAAElFTkSuQmCC"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "e71fee5f9e82a26ff9c859d51f829999d32265c07749f7142658687c31d65e16",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "cd8a051e-8b7f-4fcc-a330-d93e4b5f95bf"
+  },
+  "provenance": "raw-body-patched; not proof of current SDK support"
+}

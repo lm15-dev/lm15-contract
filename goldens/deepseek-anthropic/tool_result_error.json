@@ -1,0 +1,42 @@
+{
+  "canonical_response": {
+    "id": "28d88a97-b045-4851-a470-b096e9861bea",
+    "model": "deepseek-v4-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The tool returned an error: \"panel service unavailable (HTTP 503)\". So I should return ONLY JSON with A null and note.",
+          "continuation": [
+            {
+              "provider": "anthropic",
+              "kind": "thinking_signature",
+              "data": {
+                "signature": "28d88a97-b045-4851-a470-b096e9861bea"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "{\"A\":null,\"note\":\"panel service unavailable (HTTP 503)\"}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 36,
+      "output_tokens": 44,
+      "total_tokens": 80,
+      "cache_read_tokens": 512,
+      "cache_write_tokens": 0
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-13-26Z.txt"
+  }
+}

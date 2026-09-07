@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-09-07T19-13-46Z",
+  "status": 400,
+  "latency_s": 0.24,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_JaDb2EvimxEKt53NiMUP3q9Z",
+          "status": "completed",
+          "summary": [
+            {
+              "type": "summary_text",
+              "text": "The user wants me to call fetch_panel with label \"A\" once, then inspect the result and return JSON with six color names. Let me call the tool."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "id": "fc_bh7fu6vmAeVbTaiZQI2mrVBF",
+          "status": "completed",
+          "call_id": "fetch_panel_0",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "fetch_panel_0",
+          "output": [
+            {
+              "type": "input_file",
+              "filename": "panel.pdf",
+              "file_data": "data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAoeWVsbG93IG1hZ2VudGEgY3lhbiByZWQgZ3JlZW4gYmx1ZSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "bfba8d811ea1e396604f8eb18763f9a604327c6aa3303c9cfe0b17ef37c2561c",
+  "response_headers": {
+    "Content-Type": "application/json"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-09-07T19-16-56Z",
+  "status": 400,
+  "latency_s": 0.39,
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260907T191656Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACV0lEQVR4nO3SQQ0AMRCAwIpY/1JOzr4r4WQQUhIcMGdn5Y26+dwden+A3AUoQAEyhwsIEI8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh7B04DuHXU84Kf9b4DoaAEBogUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QLeBvQDBw5oJraIgxwAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "9687f97e9ebd77b682a4dc9524a8f6c4e986634f4925a4ab5bc4525f0da82191",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "a2870ac1-e568-41a1-817f-46767fc94487"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

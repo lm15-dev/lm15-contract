@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-09-07T19-13-50Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "983643e2502d5ad542d494750f64f63533847285f9d377fac2f13200f46c41ef",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "af3f33b9c0805c1f31eba6b15b4e596e37e570fa8743af77938cb9b60630a1bb",
+  "response_bytes": 721,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

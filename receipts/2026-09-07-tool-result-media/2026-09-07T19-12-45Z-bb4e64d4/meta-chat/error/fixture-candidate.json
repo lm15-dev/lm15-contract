@@ -1,0 +1,168 @@
+{
+  "id": "meta-chat.tool_result_error",
+  "provider": "meta-chat",
+  "feature": "tool_result_error",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        },
+        {
+          "content": "I'll fetch panel A to read its six colors.",
+          "refusal": null,
+          "tool_calls": [
+            {
+              "id": "call_74da79df-7fcd-46be-ad97-ceb0ec572c9b",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_74da79df-7fcd-46be-ad97-ceb0ec572c9b",
+          "content": [
+            {
+              "type": "text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "cyan",
+      "magenta",
+      "red",
+      "green",
+      "yellow",
+      "blue"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-chat/error/exchange-2026-09-07T19-14-24Z-06d880f090674730b03133837a909b60.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-chat/error/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "text",
+            "text": "I'll fetch panel A to read its six colors."
+          },
+          {
+            "type": "tool_call",
+            "id": "call_74da79df-7fcd-46be-ad97-ceb0ec572c9b",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_74da79df-7fcd-46be-ad97-ceb0ec572c9b",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": false
+}

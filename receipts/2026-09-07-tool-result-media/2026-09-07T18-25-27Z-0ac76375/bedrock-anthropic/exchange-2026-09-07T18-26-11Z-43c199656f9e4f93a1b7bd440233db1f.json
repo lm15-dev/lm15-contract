@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-09-07T18-26-11Z",
+  "provider": "bedrock-anthropic",
+  "status": 403,
+  "model": "anthropic.claude-haiku-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260907T182611Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "7752ba6b8e833634ba4c904f83c99acd71ebc1ee3c598f70e111f4c2fd4ba782",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "30c033ba92ee40ca067da0b44f4058777bd658c6118d95595a9661c58fc948de",
+  "response_bytes": 357,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

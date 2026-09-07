@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-13-10Z",
+  "status": 200,
+  "latency_s": 3.17,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $XAI_API_KEY"
+    },
+    "body": {
+      "model": "grok-4.20",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}. Do not guess before receiving the panels."
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "a9ee593153fb898a00b04ff2526aec83d074f9b4f1317f565bdd45afd777e2f6",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "c239654c-6844-9dd5-9c96-203f29c45645"
+  },
+  "provenance": "adapter-built"
+}

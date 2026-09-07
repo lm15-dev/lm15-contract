@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-09-07T19-13-15Z",
+  "provider": "xai",
+  "status": 200,
+  "model": "grok-4.20",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $XAI_API_KEY"
+    },
+    "body": {
+      "model": "grok-4.20",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The task is: Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only...",
+          "tool_calls": [
+            {
+              "id": "call-5f0384be-6fd8-45a1-a7fe-ee56a0c6d165-0",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              },
+              "type": "function"
+            }
+          ],
+          "refusal": null
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call-5f0384be-6fd8-45a1-a7fe-ee56a0c6d165-0",
+          "content": [
+            {
+              "type": "text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "6783f00186f5597d449830b23275a105f5982f0d06db468aa59cf93fff65ea98",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "6626cffbd69714fa09e089241720540a70501a3f18c77e43883e214e192b5d25",
+  "response_bytes": 942,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

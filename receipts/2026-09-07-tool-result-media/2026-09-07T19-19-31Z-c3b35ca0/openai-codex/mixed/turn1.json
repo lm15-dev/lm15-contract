@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-09-07T19-19-34Z",
+  "status": 200,
+  "latency_s": 1.9,
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "41d3bdb8-3e3c-4f60-89ce-791d8e0846c3",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "gpt-5.4-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "response_sha256": "edfdd55447920fb954f7b9b6cca01b0b42e2df985ee66631515a222ccebaf067",
+  "response_headers": {},
+  "provenance": "adapter-built"
+}

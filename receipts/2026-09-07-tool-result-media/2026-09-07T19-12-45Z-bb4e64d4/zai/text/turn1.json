@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-16-07Z",
+  "status": 200,
+  "latency_s": 3.73,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "9ab12446926ed2fd82b473809c164525a3187db069f575d85a6b5a3af7c16515",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "4881b1a2-1358-404b-ab0f-3a591fc7231a"
+  },
+  "provenance": "adapter-built"
+}

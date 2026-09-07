@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-09-07T19-17-33Z",
+  "provider": "gemini",
+  "status": 400,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                }
+              },
+              "thoughtSignature": "CtoDARFNMg/OoKel5vbW6nH7k7FQKOH9JZ4fMXBHiH8x0WoSFRuw0sbu+Qmp3FgASe3BkztQIdEFBfQm34WygPuUUgS0CYmTcnUR8wQ3pTexxjRug6GbXA96hr4z1r7ZrQxKpOYKlgEK//JMc57lVtXzWWcmKn7NRJRr8q9j74R3Iu6phgdjHa+/XLOqYHxxsTLPjzcF64X89xI5N1TeSzCVDlvAhv4cuGg8gh+XzmUcXAiAvxD3jBAR3D6fXStZ1k0pEavdJ/fgRh0sFwDDnrjFjU4goCNJTdv6JIZVSJXUnhMLo9FED+cjEHZ2NLWSn/w8B/AS/07GsL2KBCXU514f11xqegcpH6bqidLy7mvhdJJNYSb4EME1FOAUDkLEcvWu4zHU1Es1bdBDwWQdYW+FyWZDFyoLgH1ryFh9LEMWgIxivCAmXoz4Xu3XemJskNLBDNgsWddOeeA1qR27Fxzpsqvn5XTrnB5ylaRz5n9LP45xADOkG31W7oGZFbI7hzcNk3gTGKxOglD+F5xuWYsN2J8pOREoSMWp2m/vgFmA1CV5dFsThjkSzFdm971XYCYCQO5b068sV3cRRJlIZXNySu/anFG68H4FGxl5MGy8lige5RHL9zjw/aDm"
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {
+                  "result": "see attached panel"
+                },
+                "parts": [
+                  {
+                    "inlineData": {
+                      "mimeType": "image/png",
+                      "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXUlEQVR4nO3SQQ0AIRTEUER8/1JWDmckrAgOTUOTKph5a8/I2+rOGXWLvj9APIIAicMFBIhHECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeARPA6IHvA4HfNk36gJERwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4t4LIfbSloJn0iLjYAAAAASUVORK5CYII="
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "f319cd8254993a371b96880fc70415625444c0db105840b1f501ccaff93604d4",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b1a49d9f026e6c035c068bfabb7cd9346fa6ba004abd1cb54cb56f14ed73906d",
+  "response_bytes": 153,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

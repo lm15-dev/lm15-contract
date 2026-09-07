@@ -1,0 +1,38 @@
+{
+  "provider": "deepseek-anthropic",
+  "model": "deepseek-v4-flash",
+  "dialect": "anthropic",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "accepted_but_visual_check_failed",
+  "answer": null,
+  "expected": {
+    "A": [
+      "magenta",
+      "green",
+      "cyan",
+      "yellow",
+      "blue",
+      "red"
+    ],
+    "B": [
+      "red",
+      "magenta",
+      "cyan",
+      "blue",
+      "yellow",
+      "green"
+    ]
+  },
+  "output": "\nI was unable to inspect the panels: both tool results came back as `[Unsupported Image]`, so no color content was visible to me. Per your instruction not to guess, I will not fabricate the color sequences.\n\nReturning only valid JSON is not possible here without the visual data. Please re-send the panels in a supported image format and I'll provide the requested `{\"A\":[...],\"B\":[...]}` output.",
+  "usage": {
+    "input_tokens": 86,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 512,
+    "output_tokens": 290,
+    "service_tier": "standard"
+  }
+}

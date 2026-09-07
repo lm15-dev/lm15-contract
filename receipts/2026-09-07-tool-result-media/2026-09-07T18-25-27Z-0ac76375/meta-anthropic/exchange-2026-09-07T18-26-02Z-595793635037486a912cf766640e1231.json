@@ -1,0 +1,124 @@
+{
+  "timestamp": "2026-09-07T18-26-02Z",
+  "provider": "meta-anthropic",
+  "status": 200,
+  "model": "muse-spark-1.3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "data": "Q-PaDgEGa5ZWrzhINLe55RFQoP7jfcx2AAWAC3CN3Yn7D136xVOrHuzFshZfMdx_NXejl-SPSyFGLlr0avjWWWMj9s09lGI8VUjTwJosetGi5nRqA34rSs7m9kLhGvPnMkBBn6EdSEm1neeLH3YlmWglCXel7jPYd2GSZJ3a-4F1ZA2Q6Rfk2gPRLrOi1AC-aCgwo6d2yklHLSgZVt6yueyiotTGTpcUhBWCjh5m3WuZz3hRuxr1pMaUcN_WC2Hb2MPq9KwQAXT1w1vvSqVlOpYF5CfTjvvtVs1dt711szFMVO5VfZR_JhWrYDHC_ZiEyOxWKHg9wFXiLIdVMoqpcTKFAExcno9qJWix4IeTOq4w_QL8o9JtRUYlqFZxOqweAzVvYSOLdJyuPCHSLjF03qXXjiqFU65kfXr7j7x7skkqQ9OAoTu--t6PaGxECKyVk5ia8rbGh8SPf7H2jClFqW2cpFK29QsXxD8bEFtJHJl4DWVLK8c9cNEk8aIRXO1mz8UzL0mhOwusLCWcqvDvoGXeo27VLcSw6pOQ104BRpGitVFcGA1PQYyRLlm_tDBUAXtt4vq0HSjoNPgCyHEnaqS_Cs9fkl9IDZoG09uwHDWZfQaYmBvHwHvkiqiE2Cy7Cn46oMo4h28_jPLZRyYzJLHQtjMBKKotr2atTf3uJhnqDwZs2ceVcuG_HEw9uYtRMLlzaH-43OMf2FlMRn_TkpmExLypJTd3nFE0lu5PVw9FHnYh1RJ5cTKCt-xcGlLZBe1nUNEKswiiHeVQ0kh0up012B3YUAUzDPSXqmE9qCkTd1iE-Lw5v2nWNZLwCbQMKUzijRpMnmK8mG_Z_HO2zTuIMUbhkU9hZdf6czSkuat85YtcCb--0Gtma1-X0BPh8uM66XFsf8kfRQcqWVCwxxmUivjnN2o64G3g67s955VJD_R7aeH2JnUySMcvYOOYpGo3XZadGQx1GPvLOp9wR2XBZ5Y_jrhtZoAV6uLqhTLvgoOMcNFF86e2-IBERKAyevP75eyjuO0ARubucc3dR_M5QbZezZgYBLMzaQYz4QnLjY7XHn5V5mnQDql-cTe_Yzvxx2QQ-VAAqRiltZE0zEJ_CjR1WaIdALvp-PRAZPguC4T7o7OQFddEfb3R60ZVSUZBsRxoP20l3zndPuJgLDNM6xEVs4l1I8kYzcdFP5W2h1fNp1U8U-pOc_hUCjjUwwv3ViR5IyGa_hwVAiosVYvR_Pn966cI2d_RLUg3MPjk5jJsPqVPtDjdTMaa7nQE3jvLvaCTiRvnOMrP6bpAcSDeXmfQx0pCnKqwcmXvWFytvKpAccS-x9sl509T5P1v-BQmkpFYuD8s_9vYDNjmjyweAW95tuBRtmNWEo8bOjgAAWVZY9T9byk1s_ghCWuUQRhhitOYGGhRsRp_Gp3XJZdO70WbBNYRehQfXnOYs3pdvJBO5bSvLdJ8s_R3jSIccBtur8vb1fHScNH1-yzQp_MZX0N9kjjIb3_fDZBXFqhzODtzXh9GOtU2v856rp5rJDX4aDmdEy6ynLJ7IdNnY1T8QMdPDjV64fNyu2qRgmdoYou6QUUvZS577CX4Vlnbt_9Wxxmgwv24RYI5oqjE8WU-TAziwyosF4Fi905E-LPHVlv2I7qAdlpZTa7MkTW2ZxPzHhbrja4S0LfrSr6vyQCLvkqF-9ksAuvxUM69TWCA8hleboM54Urhgk7SVar4wicnl_0mYiaQsKZzPmcwfOEtSDTCKWvC2Y9G6jjRoNWXKeIQoce5k8s2jsgcSRrR5rxh1bxa06QyMXwJK2S2759taOOEgOzT-tr1A1pitBLMSzCu66eUjUK2wWjrGIUQiZOFFRKTsEQ2wFHT9OX0RL3qqdwTE6x25Pl3QH3cSWgbVn6HpxQKJM1EtFr-4miQi0CXrIV7sIC_3PjZqk-9ygBAtG8WV8ZJWG5jLCox1FWz4mUkXVNNpHdAtR1UJGKvqJkowUEWfpUbnYD8iIV05SdJ6kyyGnd9r1ivB5HHtKnNhyofG78quCIyn7CbnkDV8qA6cS6Noc1xoS8MOn9buPCUY8AHSkD2ZDwP7uG_zrVMmagl1gs3Vt-U0tyP7jDZpVDscsqFog8nmXsujB-N1K9m51XWkaKw0BFTAjFbi4f5mgViPPNqg91Biwgr5oBLinyWQdbZRXVlTtF0uSbLPHXg8uSH1LH5Zo-FQWsZTLrq4SufKio_amsxnSfncORRCzDCHYWkvtcjE22XucMeJwrWNfmI1wBCR5fyWHCqf58PXiQ5R3pLEbELdbiPkwVt09397v-rw5JcQMKwM7ArNtvSc5DZBYj__ECLqYZS4k1rYKzR1LqAuwkXc5frg2UjoHnFU8UOqU-8Zbx63Rvt3MQmibf9dflRpzM9ukiG0rxlXC373ta3JgUdSBiK5QinIAq4lyW-zVQpD4jmIjUJAveQY9bMOlNrLmtwmIeAPLAZB1jo-zGkoXLs-QlYH3Az1Z05DQbfk5_oKp3uZI7_cCO0H6GP3upD4lmsE6lSEJDixJQwZhYaDWk1ppiBscRvrCO5dPzHvaQAoD52kZskmSuegkxquO1_MbMgZ0lTx9347Be9phAH6YY0f5dlSggG47ym4emTZ_lHLY9xhPU0dt67qQ2ZrzBvA89YWZB-Uags_fjvo2UrrhbjHzY05aftMKo8Sts8vN5qkBORbHRsfiOsKR8NOCTplO0JMkM_EQ04JpS-Q8r7tzBmqI5VDg0qLI-ch7RkL93bxRzLh6-LpdWWL207o5goKGrqTbA",
+              "type": "redacted_thinking"
+            },
+            {
+              "text": "I'll fetch both panels to read their color grids.",
+              "type": "text"
+            },
+            {
+              "id": "call_621217f3-1adf-431a-94cd-2da0efe3ddf6",
+              "input": {
+                "label": "A"
+              },
+              "name": "fetch_panel",
+              "type": "tool_use"
+            },
+            {
+              "id": "call_d39178a4-5900-426c-97f7-8f43b1288f5c",
+              "input": {
+                "label": "B"
+              },
+              "name": "fetch_panel",
+              "type": "tool_use"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_621217f3-1adf-431a-94cd-2da0efe3ddf6",
+              "content": [
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACMklEQVR4nO3SQQ3DQAADwYAIfyiFk3cgtBzusbI60hKwNdf9ubd7nume34Llrl4AQMsBBBBAy+UCAOoRALRcLQCgWgBAywEEEEDL5QIA6hEAtFwtAKBaAEDLAQQQQMvlAgDqEQC0XC0AoFoAQMsBBBBAy+UCAOoRALRcLQCgWgBAywEEEEDL5QIA6hEAtFwtAKBaAEDLAQQQQMvlAgDqEQC0XC0AoFoAQMsBBBBAy+UCAOoRALRcLQCgWgBAywEEEEDL5QIA6hEAtFwtAKBaAEDLAQQQQMvlAgDqEQC0XC0AoFoAQMsBBBBAy+UCAOoRALRcLQCgWgBAywEEEEDL5QIA6hEAtFwtAKBaAEDLAQQQQMvlAgDqEQC0XC0AoFoAQMsBBBBAy+UCTgH1F571vvd0NYDTAAIIoOVyAQD1CAAaLhcAUI8AoN0AAgig5XIBAPUIABouFwBQjwCg3QACCKDlcgEA9QgAGi4XAFCPAKDdAAIIoOVyAQD1CAAaLhcAUI8AoN0AAgig5XIBAPUIABouFwBQjwCg3QACCKDlcgEA9QgAGi4XAFCPAKDdAAIIoOVyAQD1CAAaLhcAUI8AoN0AAgig5XIBAPUIABouFwBQjwCg3QACCKDlcgEA9QgAGi4XAFCPAKDdAAIIoOVyAQD1CAAaLhcAUI8AoN0AAgig5XIBAPUIABouFwBQjwCg3QACCKDlcgEA9QgAGi4XAFCPAKDdAAIIoOVyAQD1CP4Z0BctB2gm6o86SwAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            },
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_d39178a4-5900-426c-97f7-8f43b1288f5c",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel returned by the requested tool."
+                },
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACRElEQVR4nO3SQQkEQQADwRUx/qWcnH2vhBMxjyZQ0AJCqOc973Tfd6ar/7vt6ScAtBxAAAG0XP0fQLUAgOoJAC0HEEAALVf/B1AtAKB6AkDLAQQQQMvV/wFUCwCongDQcgABBNBy9X8A1QIAqicAtBxAAAG0XP0fQLUAgOoJAC0HEEAALVf/B1AtAKB6AkDLAQQQQMvV/wFUCwCongDQcgABBNBy9X8A1QIAqicAtBxAAAG0XP0fQLUAgOoJAC0HEEAALVf/B1AtAKB6AkDLAQQQQMvV/wFUCwCongDQcgABBNBy9X8A1QIAqicAtBxAAAG0XP0fQLUAgOoJAC0HEEAALVf/B1AtAKB6AkDLAQQQQMvV/wFUCwCongDQcgABBNBy9X/XgM7vbHfe6foFdwEEEEDL9QsAmq5fANB0/QKApusXADRdvwCg6foFAE3XLwBoun4BQNP1CwCarl8A0HT9AoCm6xcANF2/AKDp+gUATdcvAGi6fgFA0/ULAJquXwDQdP0CgKbrFwA0Xb8AoOn6BQBN1y8AaLp+AUDT9QsAmq5fANB0/QKApusXADRdvwCg6foFAE3XLwBoun4BQNP1CwCarl8A0HT9AoCm6xcANF2/AKDp+gUATdcvAGi6fgFA0/ULAJquXwDQdP0CgKbrFwA0Xb8AoOn6BQBN1y8AaLp+AUDT9QsAmq5fANB0/QKApusXADRdvwCg6foFAE3XLwBoun4BQNP1CwCarl8A0HT9AoCm6xcANF2/AKDp+gV3/QE4smgmtqPt/QAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "ca900cb4faa3cb7332330a2725b2cb8b7e7a7378a5eb6ff956de3072bef45d7e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "603f6c8431781c3bda35d8c38fcf5e6af9f31ee5b60f267ed1364de54dd1ce1e",
+  "response_bytes": 11512,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

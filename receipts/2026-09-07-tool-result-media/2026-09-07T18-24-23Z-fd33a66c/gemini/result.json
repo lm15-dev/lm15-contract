@@ -1,0 +1,65 @@
+{
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "dialect": "gemini",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "visual_match",
+  "answer": {
+    "A": [
+      "yellow",
+      "green",
+      "cyan",
+      "red",
+      "blue",
+      "magenta"
+    ],
+    "B": [
+      "blue",
+      "green",
+      "cyan",
+      "yellow",
+      "magenta",
+      "red"
+    ]
+  },
+  "expected": {
+    "A": [
+      "yellow",
+      "green",
+      "cyan",
+      "red",
+      "blue",
+      "magenta"
+    ],
+    "B": [
+      "blue",
+      "green",
+      "cyan",
+      "yellow",
+      "magenta",
+      "red"
+    ]
+  },
+  "output": "{\"A\": [\"yellow\", \"green\", \"cyan\", \"red\", \"blue\", \"magenta\"], \"B\": [\"blue\", \"green\", \"cyan\", \"yellow\", \"magenta\", \"red\"]}",
+  "usage": {
+    "promptTokenCount": 2426,
+    "candidatesTokenCount": 42,
+    "totalTokenCount": 2712,
+    "promptTokensDetails": [
+      {
+        "modality": "IMAGE",
+        "tokenCount": 2160
+      },
+      {
+        "modality": "TEXT",
+        "tokenCount": 266
+      }
+    ],
+    "thoughtsTokenCount": 244,
+    "serviceTier": "standard"
+  }
+}

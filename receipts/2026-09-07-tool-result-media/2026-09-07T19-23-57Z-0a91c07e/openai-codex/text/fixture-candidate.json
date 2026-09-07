@@ -1,0 +1,97 @@
+{
+  "id": "openai-codex.tool_result_text",
+  "provider": "openai-codex",
+  "feature": "tool_result_text",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "41d3bdb8-3e3c-4f60-89ce-791d8e0846c3",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "gpt-5.4-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "id": "fc_06c2e4edc7f98b58016a9f0f4fd27487d1b82f04d7b7cb6c5f",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"label\":\"A\"}",
+          "call_id": "call_w7TcqWnNXg7AC02mcohttmH5",
+          "name": "fetch_panel"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_w7TcqWnNXg7AC02mcohttmH5",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Panel A colors in reading order: yellow, blue, green, red, magenta, cyan"
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "yellow",
+      "blue",
+      "green",
+      "red",
+      "magenta",
+      "cyan"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-23-57Z-0a91c07e/openai-codex/text/exchange-2026-09-07T19-24-00Z-485bec6bda29436ca9f4991280096665.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-23-57Z-0a91c07e/openai-codex/text/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "python_body_matches_sent": false,
+  "canonical_or_build_error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+}

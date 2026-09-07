@@ -1,0 +1,173 @@
+{
+  "id": "zai.tool_result_error",
+  "provider": "zai",
+  "feature": "tool_result_error",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        },
+        {
+          "content": "\nI'll call the fetch_panel tool to retrieve panel A and then interpret the colors according to your instructions.\n",
+          "reasoning_content": "I need to call the fetch_panel tool with label \"A\" to get the visual panel. The user has specified that each panel is a grid of 3 columns and 2 rows of solid colors, and I should read it left to right across the top row, then left to right across the bottom row. The colors should be only from the list: red, green, blue, yellow, magenta, cyan.\n\nI'll call the fetch_panel tool with label \"A\" and then process the result according to the instructions.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_-7288278541731359539",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288278541731359539",
+          "content": [
+            {
+              "type": "text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "red",
+      "blue",
+      "magenta",
+      "yellow",
+      "green",
+      "cyan"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/error/exchange-2026-09-07T19-16-51Z-bb028ee2b64d46ef97e33fd93b1c7a51.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/error/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "glm-4.6v",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "I need to call the fetch_panel tool with label \"A\" to get the visual panel. The user has specified that each panel is a grid of 3 columns and 2 rows of solid colors, and I should read it left to right across the top row, then left to right across the bottom row. The colors should be only from the list: red, green, blue, yellow, magenta, cyan.\n\nI'll call the fetch_panel tool with label \"A\" and then process the result according to the instructions."
+          },
+          {
+            "type": "text",
+            "text": "\nI'll call the fetch_panel tool to retrieve panel A and then interpret the colors according to your instructions.\n"
+          },
+          {
+            "type": "tool_call",
+            "id": "call_-7288278541731359539",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_-7288278541731359539",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": false
+}

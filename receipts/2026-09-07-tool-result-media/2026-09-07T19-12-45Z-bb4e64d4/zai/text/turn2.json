@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-09-07T19-16-11Z",
+  "status": 200,
+  "latency_s": 2.76,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "content": "\nI will now call the tool to fetch panel A.\n",
+          "reasoning_content": "The user wants me to call the fetch_panel tool with label \"A\" and then, after receiving the result, inspect the panel and return a JSON object with the color names in order.\n\nI need to follow these steps:\n1. Call the fetch_panel tool with label \"A\".\n2. Wait for the tool result.\n3. Inspect the panel (which is a 3x2 grid of colors).\n4. Read the colors left to right, top row then bottom row.\n5. Map the colors to the allowed names: red, green, blue, yellow, magenta, cyan.\n6. Format the output as a JSON object: {\"A\": [list of six color names]}.\n\nI will start by calling the tool.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_-7288279057127438742",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288279057127438742",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel A colors in reading order: red, yellow, cyan, green, blue, magenta"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "a7424bf31121a67c5445452ec2ab5dce7c333995cdd50bf0852f030e33de73d9",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "8170309f-30f3-46f6-8a36-d8008a88f690"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

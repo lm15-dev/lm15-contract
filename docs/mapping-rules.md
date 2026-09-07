@@ -1,7 +1,8 @@
 # Canonical mapping rules
 
-Normative rules for mapping provider responses into the canonical lm15
-representation. Companion to `serde-rules.md` (which governs the JSON wire
+Normative rules for mapping between provider wires and the canonical lm15
+representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
+side of message content). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
 
@@ -440,6 +441,81 @@ holding the error and knows why.
 
 ---
 
+## MAP-10 — Message content reaches the wire natively or raises
+
+Measured 2026-09-07 (≈220 cells over 31 bindings; `lm15-contract/research/
+tool-result-content/`, receipts `receipts/2026-09-07-tool-result-media/`).
+Before this rule every dialect except Anthropic rendered
+`ToolResultPart.content` through a lossy text join: an image returned by a
+tool became a caption or the literal string `[{"type": "image"}]`, the
+request got HTTP 200, and the model answered as if the tool had returned
+less. MAP-5..8 forbade silent drops for *knobs*; nobody had applied the
+same rule to *parts inside messages*. This rule does.
+
+1. **Every part reaches the wire as a native block, or the adapter raises
+   before any wire.** A part in any message — including inside
+   `ToolResultPart.content` — maps to the dialect's own block for that
+   kind (image, document, …) inside the same wire item, or
+   `build_request` raises `UnsupportedFeatureError`. There is no
+   `extensions` door for a part: a part is not a knob.
+2. **No lossy rendering of a non-text part.** A caption, a type name, a
+   placeholder, a data URI as prose, or base64 as text is a silent
+   substitution and is forbidden. `parts_to_text` (and its port
+   equivalents) renders only text-bearing parts and is used only on the
+   cells this document names; passing a media part to it is a bug.
+3. **The threshold is "the model received it", not HTTP 200.** A server
+   that accepts the bytes and shows the model a marker
+   (`[Unsupported Image]`, DeepSeek; a silently ignored `image_url` on
+   an OpenAI Chat tool row) is *unsupported* for that part kind. The
+   preset says `reject`; the raise names the mechanism ("server silently
+   drops" vs "server rejects") and the sibling door that carries it.
+4. **A wire slot that exists is used, whatever its shape.** Gemini nests
+   media under `functionResponse.parts`; Responses turns `output` into an
+   array; Anthropic takes blocks in `tool_result.content`. Refusing a part
+   the wire carries is a missing mapping, not caution. Model gating that
+   fails loudly server-side (Gemini 2.5: HTTP 400 "Multimodal function
+   responses are not supported for this model") is left to the server;
+   lm15 keeps no model allowlist for message content.
+5. **Order, association and status survive.** Blocks keep the caller's
+   order inside the result item; each result rides under its own call id;
+   `is_error` maps to the wire's flag (`is_error`, Gemini
+   `response.error`) or, where the wire has none (Responses, Chat), the
+   text of the result is prefixed `[error] ` — stated here so a port
+   produces the same bytes.
+6. **Names are resolved, never invented.** Where the wire requires the
+   function name on a result (Gemini `functionResponse.name`): the
+   caller's `ToolResultPart.name` if given; else the name of the nearest
+   preceding assistant `ToolCallPart` with the same id in the transcript;
+   else raise. `"tool"` as a default name is forbidden.
+7. **Text-only content is a string where the wire takes a string.** That
+   is not lossy and is the ratified cell for every binding.
+8. **The verdict per (preset, part kind) is data**, a typed compat knob
+   (`tool_result_media: native | reject` on the Chat, Responses and
+   Anthropic compat tables; `spec/types.md`), pinned by
+   `cases/<provider>/tool_result_*.json` (native) and `expect_lm15.raises`
+   cases (reject). A blank cell is drift (`tools/check_content_coverage.py`).
+
+Measured verdicts (2026-09-07; the ledger is
+`research/tool-result-content/20-results.md`):
+
+- native for images: openai (Responses; gpt-5.4 exact at a readable
+  oracle), openai-codex, meta (Responses), moonshotai-responses,
+  anthropic, claude-code, meta-anthropic, moonshotai-anthropic, gemini
+  (3.x; 2.5 answers 400), xai, moonshotai, zai.
+- native for documents: openai (Responses), anthropic, claude-code,
+  meta-anthropic, gemini.
+- reject (server 400): groq, meta-chat, bedrock-chat; documents on xai
+  (its own 400 names /v1/responses), moonshotai (all three doors),
+  openai-chat, zai.
+- reject (200, model did not receive): openai-chat and azure-chat
+  (control passed on the same model), deepseek, deepseek-anthropic.
+- reject until a receipt exists: openrouter (401 during the pass), ollama
+  (source drops the call id on image rows; live timeouts), vllm, sglang
+  (no server reachable), the blocked cloud hosts.
+
+Stated deviation: Gemini's documented `$ref`-by-`displayName` interleave is
+not emitted; lm15 puts text in `response` and media in `parts`, in order.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -460,3 +536,6 @@ rule, MAP-7 rules 11–12 and the MAP-7.8 dialect sentence, and the
 MAP-9.6 withheld-field list with INV-051
 (`lm15-contract/changes/2026-09-06-decisions.md`,
 `lm15-contract/changes/2026-09-06-ratification.md`).
+MAP-10 was written on 2026-09-07 from the tool-result-content design pass
+after the Rust port review probed a cell the corpus did not cover
+(`lm15-contract/changes/2026-09-07-tool-result-content.md`).

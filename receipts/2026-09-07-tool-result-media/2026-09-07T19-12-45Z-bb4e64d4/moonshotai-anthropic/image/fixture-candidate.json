@@ -1,0 +1,183 @@
+{
+  "id": "moonshotai-anthropic.tool_result_image",
+  "provider": "moonshotai-anthropic",
+  "feature": "tool_result_image",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "We need answer user. Must call fetch_panel label A once. Need inspect panel from tool result. Then final only JSON. We need not guess before receiving. Call fetch_panel. Ensure only one call. Then analyze result. We don't have vision direct? Tool returns visual panel likely in result. Need inspect. Let's call."
+            },
+            {
+              "type": "tool_use",
+              "id": "fetch_panel_0",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "fetch_panel_0",
+              "content": [
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACSUlEQVR4nO3SMQ0AMQzAwIIIfygPp3MhPIgMliVL3r3cmbnqrjz6v+3gAgKkLkABCpA5+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/a0A8gV3zuXvPXYACFCBzuIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XMCyH5hVaCYBpgT9AAAAAElFTkSuQmCC"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "blue",
+      "magenta",
+      "cyan",
+      "red",
+      "green",
+      "yellow"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/moonshotai-anthropic/image/exchange-2026-09-07T19-13-59Z-1b4771b227ee40f3b41faa20c9dfcdb3.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/moonshotai-anthropic/image/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "kimi-k3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "We need answer user. Must call fetch_panel label A once. Need inspect panel from tool result. Then final only JSON. We need not guess before receiving. Call fetch_panel. Ensure only one call. Then analyze result. We don't have vision direct? Tool returns visual panel likely in result. Need inspect. Let's call."
+          },
+          {
+            "type": "tool_call",
+            "id": "fetch_panel_0",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "fetch_panel_0",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACSUlEQVR4nO3SMQ0AMQzAwIIIfygPp3MhPIgMliVL3r3cmbnqrjz6v+3gAgKkLkABCpA5+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/a0A8gV3zuXvPXYACFCBzuIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XMCyH5hVaCYBpgT9AAAAAElFTkSuQmCC"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": true
+}

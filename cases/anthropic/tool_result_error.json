@@ -1,0 +1,172 @@
+{
+  "id": "anthropic.tool_result_error",
+  "provider": "anthropic",
+  "feature": "tool_result_error",
+  "description": "MAP-10 rule 5: is_error reaches the wire's own flag",
+  "base_url": "https://api.anthropic.com/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "toolu_01WrKXutHuu6CL4uxybgLfjP",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "toolu_01WrKXutHuu6CL4uxybgLfjP",
+              "content": "panel service unavailable (HTTP 503)",
+              "is_error": true
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/anthropic/error/exchange-2026-09-07T19-12-59Z-8d98a9a95ee246bb9cd05cbf5ea49119.json",
+    "evidence": "anthropic 2026-09-07T19-12-59Z, claude-haiku-4-5, HTTP 200; tool-result-content matrix cell 'error' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/anthropic.tool_result_error/2026-09-07T19-12-59Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/anthropic/error/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].content[0].caller — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[2].content[0].content — text-only result: the probe sent a one-block array, the ratified cell is the string form; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "claude-haiku-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "toolu_01WrKXutHuu6CL4uxybgLfjP",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "toolu_01WrKXutHuu6CL4uxybgLfjP",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell error); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-12-59Z.txt"
+}

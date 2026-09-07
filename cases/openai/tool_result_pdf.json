@@ -1,0 +1,165 @@
+{
+  "id": "openai.tool_result_pdf",
+  "provider": "openai",
+  "feature": "tool_result_pdf",
+  "description": "MAP-10: a PDF document in a tool result as a native document block",
+  "base_url": "https://api.openai.com/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_38YPG7GDcQPDOKKzPZCnbU3n",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_38YPG7GDcQPDOKKzPZCnbU3n",
+          "output": [
+            {
+              "type": "input_file",
+              "filename": "file.pdf",
+              "file_data": "data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAocmVkIGdyZWVuIGN5YW4geWVsbG93IG1hZ2VudGEgYmx1ZSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-17-07Z-53fdeabb/openai/pdf/exchange-2026-09-07T19-17-12Z-c7d2b499d1d7435eab244bd66117a55a.json",
+    "evidence": "openai 2026-09-07T19-17-12Z, gpt-5.4, HTTP 200; tool-result-content matrix cell 'pdf' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/openai.tool_result_pdf/2026-09-07T19-17-12Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-17-07Z-53fdeabb/openai/pdf/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.input[1].id — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[1].status — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].output[0].filename — document filename: the adapter's deterministic name (file.<subtype>); changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_38YPG7GDcQPDOKKzPZCnbU3n",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_38YPG7GDcQPDOKKzPZCnbU3n",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "document",
+                "media_type": "application/pdf",
+                "data": "JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAocmVkIGdyZWVuIGN5YW4geWVsbG93IG1hZ2VudGEgYmx1ZSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell pdf); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-17-12Z.txt"
+}

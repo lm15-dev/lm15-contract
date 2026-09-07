@@ -1,0 +1,158 @@
+{
+  "id": "openai.tool_result_text",
+  "provider": "openai",
+  "feature": "tool_result_text",
+  "description": "MAP-10 rule 7: a text-only tool result stays a string",
+  "base_url": "https://api.openai.com/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_hUfKWxjAdXKrmrcVGIsNUOd5",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_hUfKWxjAdXKrmrcVGIsNUOd5",
+          "output": "Panel A colors in reading order: yellow, green, cyan, red, blue, magenta"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-17-07Z-53fdeabb/openai/text/exchange-2026-09-07T19-17-09Z-14fe8ceea28f4ffc9fb337e9fdd3ffc9.json",
+    "evidence": "openai 2026-09-07T19-17-09Z, gpt-5.4, HTTP 200; tool-result-content matrix cell 'text' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/openai.tool_result_text/2026-09-07T19-17-09Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-17-07Z-53fdeabb/openai/text/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.input[1].id — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[1].status — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].output — text-only result: the probe sent a one-block array, the ratified cell is the string form; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "gpt-5.4",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_hUfKWxjAdXKrmrcVGIsNUOd5",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_hUfKWxjAdXKrmrcVGIsNUOd5",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "Panel A colors in reading order: yellow, green, cyan, red, blue, magenta"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell text); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-17-09Z.txt"
+}

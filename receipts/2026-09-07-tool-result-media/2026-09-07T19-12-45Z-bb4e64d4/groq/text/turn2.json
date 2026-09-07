@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-09-07T19-14-40Z",
+  "status": 200,
+  "latency_s": 0.16,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.8-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "gted6jy3w",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "gted6jy3w",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel A colors in reading order: green, yellow, red, blue, magenta, cyan"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "e236ef4f281a9ad7cfcbc190d007bf1851a39295404b9d63503da1539deda31e",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m1ymphwre89t3879hg8bqsg8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-19-53Z",
+  "provider": "ollama",
+  "status": 200,
+  "model": "qwen3.5:0.8b",
+  "sent": {
+    "method": "POST",
+    "url": "http://localhost:11434/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "qwen3.5:0.8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "e79ecdf8e0226057beff72fd7983787910e68f68d361a750b01c28ff89430d01",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "8baa1f41062bcfa77c11d6cdc94a1e541f050322901c57cbf10c1b8a3643d18d",
+  "response_bytes": 825,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

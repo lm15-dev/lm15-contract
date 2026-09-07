@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-09-07T19-14-08Z",
+  "provider": "meta",
+  "status": 200,
+  "model": "muse-spark-1.3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a9f0d00ee5d31b798b047b4:rs_4bb09c8b-4ec6-4ac1-a6aa-8a53871673ce",
+          "summary": [],
+          "status": "completed"
+        },
+        {
+          "type": "message",
+          "id": "rs_0cb1c125-2ac8-4b44-9bb1-ba27f26380cf",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "I'll fetch panel A to read the color grid.",
+              "annotations": [],
+              "logprobs": []
+            }
+          ],
+          "phase": "commentary",
+          "status": "completed"
+        },
+        {
+          "type": "function_call",
+          "id": "fc_b0f3f285-55f6-4757-bf48-73035c934e5e",
+          "call_id": "call_b0f3f285-55f6-4757-bf48-73035c934e5e",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}",
+          "status": "completed"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_b0f3f285-55f6-4757-bf48-73035c934e5e",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Panel A colors in reading order: red, yellow, cyan, green, blue, magenta"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "a15778109d6b3c579decc74b08948226d535917966d2aa71661ff73608c2bfbc",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "6775852d8f42ae4e7328734b2bbaaee7108be07064b1cc6a15fbd5fff1c9413d",
+  "response_bytes": 1214,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

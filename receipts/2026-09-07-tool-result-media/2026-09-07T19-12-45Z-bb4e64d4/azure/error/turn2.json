@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-09-07T19-14-37Z",
+  "status": 429,
+  "latency_s": 0.27,
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        },
+        {
+          "id": "fc_0edc161675d03535006a9f0d1d6a30819594464cc155e54959",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"label\":\"A\"}",
+          "call_id": "call_cHX3i38A5caDx697CigJbWjz",
+          "name": "fetch_panel"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_cHX3i38A5caDx697CigJbWjz",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "8fb0da8f981dda55e55c8b43213771e4120c54926d69246a6432067cbd27694d",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "cbd87edc-39bd-4f66-860d-35b110557a2a"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

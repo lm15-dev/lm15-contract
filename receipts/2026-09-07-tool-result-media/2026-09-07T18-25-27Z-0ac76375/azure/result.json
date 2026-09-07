@@ -1,0 +1,60 @@
+{
+  "provider": "azure",
+  "model": "gpt-4.1-mini",
+  "dialect": "openai-responses",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "accepted_but_visual_check_failed",
+  "answer": {
+    "A": [
+      "red",
+      "yellow",
+      "green",
+      "magenta",
+      "red",
+      "green"
+    ],
+    "B": [
+      "magenta",
+      "green",
+      "magenta",
+      "green",
+      "magenta",
+      "green"
+    ]
+  },
+  "expected": {
+    "A": [
+      "red",
+      "magenta",
+      "green",
+      "cyan",
+      "blue",
+      "yellow"
+    ],
+    "B": [
+      "red",
+      "cyan",
+      "magenta",
+      "green",
+      "blue",
+      "yellow"
+    ]
+  },
+  "output": "{\"A\":[\"red\",\"yellow\",\"green\",\"magenta\",\"red\",\"green\"],\"B\":[\"magenta\",\"green\",\"magenta\",\"green\",\"magenta\",\"green\"]}",
+  "usage": {
+    "input_tokens": 274,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 37,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 311
+  }
+}

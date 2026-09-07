@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-09-07T19-13-05Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}. Do not guess before receiving the panels."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "fa2d5a129ba114b1913822ac5f60f02c91a1f2808123b02e2f0c3f0118471ed3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "1ce63931f9c6eecd40d611e3e812e454b3a2648cd0eccb7aa2fe321d05227fa2",
+  "response_bytes": 1356,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

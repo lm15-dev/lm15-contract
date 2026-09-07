@@ -60,7 +60,7 @@ MUTATIONS = (
     "cache_expiry_drift",       # cache_op_parse info: expires_at rewritten (the billed lifetime)
     "cache_model_drop",         # cache_op_build create: the model field dropped from the body
     "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
-    "build_maps_a_refused_cell", # build_request: a pinned refusal answered with a wire request (a silent cell)
+    "build_maps_a_refused_cell", "tool_result_image_dropped", "tool_result_ids_swapped", "tool_result_error_stripped", # build_request: a pinned refusal answered with a wire request (a silent cell)
     "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
@@ -215,6 +215,19 @@ def op_build_request(msg: JsonObject) -> JsonObject:
     result = check.expected_wire_request(case)
     if MUTATION == "bool_as_int" and targeted(case):
         mutate_first_bool(result["body"])
+    if MUTATION == "tool_result_image_dropped" and targeted(case):
+        # The pre-MAP-10 behaviour: the image inside a tool result rendered
+        # as a type-name placeholder string, HTTP 200, model none the wiser.
+        _first_result_item(result["body"], lambda item, key: item.__setitem__(key, '[{"type": "image"}]'))
+    if MUTATION == "tool_result_ids_swapped" and targeted(case):
+        # Two results, two calls: association lost.
+        items = _result_items(result["body"])
+        if len(items) >= 2:
+            (a, ka), (b, kb) = items[0], items[1]
+            a[ka], b[kb] = b[kb], a[ka]
+    if MUTATION == "tool_result_error_stripped" and targeted(case):
+        # is_error dropped on the way to the wire (MAP-10 rule 5).
+        _strip_error_flag(result["body"])
     if MUTATION == "pinned_credential_scheme_drift" and targeted(case):
         # The AUTH-2 scheme-selection drift: the pinned token lands in the
         # key header.  Only a verbatim header compare (PROTOCOL.md
@@ -223,6 +236,48 @@ def op_build_request(msg: JsonObject) -> JsonObject:
         value = result["headers"].pop("authorization")
         result["headers"]["x-api-key"] = value.removeprefix("Bearer ")
     return result
+
+
+def _result_items(body: JsonObject) -> list[tuple[JsonObject, str]]:
+    """(container, id-key) of every tool-result item on any of the four wires."""
+    out: list[tuple[JsonObject, str]] = []
+    for item in body.get("input", []):
+        if isinstance(item, dict) and item.get("type") == "function_call_output":
+            out.append((item, "call_id"))
+    for msg in body.get("messages", []):
+        if isinstance(msg, dict) and msg.get("role") == "tool":
+            out.append((msg, "tool_call_id"))
+        if isinstance(msg, dict) and isinstance(msg.get("content"), list):
+            for block in msg["content"]:
+                if isinstance(block, dict) and block.get("type") == "tool_result":
+                    out.append((block, "tool_use_id"))
+    for content in body.get("contents", []):
+        for part in content.get("parts", []) if isinstance(content, dict) else []:
+            if isinstance(part, dict) and "functionResponse" in part:
+                out.append((part["functionResponse"], "id"))
+    return out
+
+
+def _first_result_item(body: JsonObject, set_content) -> None:
+    for item, id_key in _result_items(body):
+        for key in ("output", "content"):
+            if isinstance(item.get(key), list):
+                set_content(item, key)
+                return
+        if "parts" in item:  # Gemini: the media rides in functionResponse.parts
+            item.pop("parts")
+            item["response"] = {"result": '[{"type": "image"}]'}
+            return
+
+
+def _strip_error_flag(body: JsonObject) -> None:
+    for item, _ in _result_items(body):
+        if item.pop("is_error", None) is not None:
+            return
+        resp = item.get("response")
+        if isinstance(resp, dict) and "error" in resp:
+            item["response"] = {"result": resp.pop("error")}
+            return
 
 
 def op_parse_response(msg: JsonObject) -> JsonObject:

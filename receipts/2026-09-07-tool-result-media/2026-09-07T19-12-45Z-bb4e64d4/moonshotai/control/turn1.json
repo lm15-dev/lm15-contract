@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-07T19-13-35Z",
+  "status": 200,
+  "latency_s": 5.63,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACR0lEQVR4nO3SsQnEQBAEQQWh/EP5cGQrhA/ijGZQQfu7DHU99zNdff+43z3dVe8HUI8AoOVqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLQCg8WoBAI1XCwBovFoAQOPVAgAarxYA0Hi1AIDGqwUANF4tAKDxagEAjVcLAGi8WgBA49UCABqvFgDQeLUAgMarBQA0Xi0AoPFqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLQCg8WoBAI1XCwBovFoAQOPVAgAarxYA0Hi1AIDGqwUANF4tAKDxagEAjVcLAGi8WgBA49UCABqvFgDQeLUAgMarBQA0Xi0AoPFqAQCNVwsAaLxaAEDj1QIAGq8WANB4tQCAxqsFADReLQCg8WoBAI1XCwBovFoAQOPVAgAarxYA0Hi1gHNA93Tvu12932kAAQTQcvV+ANUCAKpfAGg5gAACaLl6P4BqAQDVLwC0HEAAAbRcvR9AtQCA6hcAWg4ggABart4PoFoAQPULAC0HEEAALVfvB1AtAKD6BYCWAwgggJar9wOoFgBQ/QJAywEEEEDL1fsBVAsAqH4BoOUAAgig5er9AKoFAFS/ANByAAEE0HL1fgDVAgCqXwBoOYAAAmi5ej+AagEA1S8AtBxAAAG0XL0fQLUAgOoXAFoOIIAAWq7eD6BaAED1CwAtBxBAAC1X7wdQLQCg+gWAlgMIIICWq/cDqBYAUP0CQMsBBBBAy9X7AVQLAKh+AaDlAAIIoOXq/QCqBXwc0B9bAGgmfvWk6AAAAABJRU5ErkJggg=="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "055993dbc2fe48056b4c2e29b411da51ca38a1322fd132dfdba63c44bffbcf99",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

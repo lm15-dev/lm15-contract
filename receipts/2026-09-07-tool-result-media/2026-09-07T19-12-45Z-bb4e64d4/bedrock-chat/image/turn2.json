@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-09-07T19-16-53Z",
+  "status": 400,
+  "latency_s": 0.16,
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260907T191653Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "content": "\n\n<｜DSML｜function_calls",
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_994a41fa2948492facb98d18",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_994a41fa2948492facb98d18",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACYklEQVR4nO3SQQkAMRTE0Ir4/qWsnJ4rYUX0EEIDuQ8Mb8036va4o/dvW7iAAKkLUIACZI7eDxB+YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8RcGSB1/YYDU8Rc+DmjPVkfv33bOqAtQgAJkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwu47AeVh2gm077pDQAAAABJRU5ErkJggg=="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "6335bd9ce5b078a63108012a77f6a2b5051d56ba11dab156479286d6758e6c62",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "3af8a880-5328-4513-b0db-777434452e1e"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

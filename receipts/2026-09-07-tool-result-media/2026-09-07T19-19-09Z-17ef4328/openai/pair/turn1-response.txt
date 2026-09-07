@@ -1,0 +1,119 @@
+{
+  "id": "resp_08a94d3f93b0920a006a9f0e2e756487d28c5a5a76d1deca14",
+  "object": "response",
+  "created_at": 1788808750,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "completed_at": 1788808751,
+  "error": null,
+  "frequency_penalty": 0.0,
+  "incomplete_details": null,
+  "instructions": null,
+  "max_output_tokens": 1600,
+  "max_tool_calls": null,
+  "model": "gpt-5.4-2026-03-05",
+  "moderation": null,
+  "output": [
+    {
+      "id": "fc_08a94d3f93b0920a006a9f0e2f1f3087d2a3a718192994f566",
+      "type": "function_call",
+      "status": "completed",
+      "arguments": "{\"label\":\"A\"}",
+      "call_id": "call_WHRG20ILvcD7BrnwtdDYx06x",
+      "name": "fetch_panel"
+    },
+    {
+      "id": "fc_08a94d3f93b0920a006a9f0e2f1f4887d28666be01367fadfe",
+      "type": "function_call",
+      "status": "completed",
+      "arguments": "{\"label\":\"B\"}",
+      "call_id": "call_Z8UsZL4nwXZvfF1K4NvM0wqZ",
+      "name": "fetch_panel"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "presence_penalty": 0.0,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "prompt_cache_retention": "24h",
+  "reasoning": {
+    "context": "current_turn",
+    "effort": "none",
+    "mode": "standard",
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "auto",
+  "tool_usage": {
+    "image_gen": {
+      "input_tokens": 0,
+      "input_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "output_tokens": 0,
+      "output_tokens_details": {
+        "image_tokens": 0,
+        "text_tokens": 0
+      },
+      "total_tokens": 0
+    },
+    "web_search": {
+      "num_requests": 0
+    }
+  },
+  "tools": [
+    {
+      "type": "function",
+      "description": "Retrieve a visual panel by its label.",
+      "name": "fetch_panel",
+      "output_schema": null,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B"
+            ]
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "strict": true
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 0.98,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 159,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 48,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 207
+  },
+  "user": null,
+  "metadata": {}
+}

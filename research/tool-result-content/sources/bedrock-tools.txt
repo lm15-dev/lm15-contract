@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Client-side tool use - Amazon Bedrock</title><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="assets_root" content="/assets" /><meta name="target_state" content="tool-use-client-side" /><meta name="default_state" content="tool-use-client-side" /><link rel="icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="shortcut icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use-client-side.html" /><meta name="description" content="If you use the Responses API, Chat Completions API, Converse API, or InvokeModel API to send the request, then the model uses client-side tool calling. This means that in your code, you call the tool on the model's behalf. In this scenario, assume the tool implementation is an API. The tool could just as easily be a database, Lambda function, or some other software. You decide how you want to implement the tool. You then continue the conversation with the model by supplying a message with the result from the tool. Finally, the model generates a response for the original message that includes the tool results that you sent to the model." /><meta name="deployment_region" content="IAD" /><meta name="product" content="Amazon Bedrock" /><meta name="guide" content="User Guide" /><meta name="abstract" content="User Guide for the Amazon Bedrock service." /><meta name="guide-locale" content="en_us" /><meta name="tocs" content="toc-contents.json" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use-client-side.html" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/tool-use-client-side.html" hreflang="id-id" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/tool-use-client-side.html" hreflang="id" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/tool-use-client-side.html" hreflang="de-de" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/tool-use-client-side.html" hreflang="de" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use-client-side.html" hreflang="en-us" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use-client-side.html" hreflang="en" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/tool-use-client-side.html" hreflang="es-es" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/tool-use-client-side.html" hreflang="es" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/tool-use-client-side.html" hreflang="fr-fr" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/tool-use-client-side.html" hreflang="fr" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/tool-use-client-side.html" hreflang="it-it" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/tool-use-client-side.html" hreflang="it" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/tool-use-client-side.html" hreflang="ja-jp" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/tool-use-client-side.html" hreflang="ja" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/tool-use-client-side.html" hreflang="ko-kr" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/tool-use-client-side.html" hreflang="ko" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/tool-use-client-side.html" hreflang="pt-br" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/tool-use-client-side.html" hreflang="pt" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_cn/bedrock/latest/userguide/tool-use-client-side.html" hreflang="zh-cn" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_tw/bedrock/latest/userguide/tool-use-client-side.html" hreflang="zh-tw" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use-client-side.html" hreflang="x-default" /><meta name="feedback-folder" content="2d8c2a09-1dac-41bf-9893-c0333d272b2c" /><meta name="feedback-item" content="Bedrock" /><meta name="this_doc_product" content="Amazon Bedrock" /><meta name="this_doc_guide" content="User Guide" /><head xmlns="http://www.w3.org/1999/xhtml"> <script defer="" src="/assets/r/awsdocs-doc-page.2.0.0.js"></script><link href="/assets/r/awsdocs-doc-page.2.0.0.css" rel="stylesheet"/></head>
+<script defer="" id="awsc-panorama-bundle" type="text/javascript" src="https://prod.pa.cdn.uis.awsstatic.com/panorama-nav-init.js" data-config="{'appEntity':'aws-documentation','region':'us-east-1','service':'bedrock'}"></script><meta id="panorama-serviceSubSection" value="User Guide" /><meta id="panorama-serviceConsolePage" value="Client-side tool use" /></head><body class="awsdocs awsui"><div class="awsdocs-container"><p><a href="tool-use-client-side.md">View a markdown version of this page</a></p><awsdocs-header></awsdocs-header><awsui-app-layout id="app-layout" class="awsui-util-no-gutters" ng-controller="ContentController as $ctrl" header-selector="awsdocs-header" navigation-hide="false" navigation-width="$ctrl.navWidth" navigation-open="$ctrl.navOpen" navigation-change="$ctrl.onNavChange($event)" tools-hide="$ctrl.hideTools" tools-width="$ctrl.toolsWidth" tools-open="$ctrl.toolsOpen" tools-change="$ctrl.onToolsChange($event)"><div id="guide-toc" dom-region="navigation"><awsdocs-toc></awsdocs-toc></div><div id="main-column" dom-region="content" tabindex="-1"><awsdocs-view class="awsdocs-view"><div id="awsdocs-content"><head><title>Client-side tool use - Amazon Bedrock</title><meta name="pdf" content="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#tool-use-client-side" /><meta name="rss" content="bedrock-ug.rss" /><meta name="forums" content="https://repost.aws/tags/TAQeKlaPaNRQ2tWB6P7KrMag" /><meta name="feedback" content="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/tool-use-client-side.html" /><meta name="feedback-yes" content="feedbackyes.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/tool-use-client-side.html" /><meta name="feedback-no" content="feedbackno.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/tool-use-client-side.html" /><meta name="keywords" content="Amazon Bedrock,bedrock,Tool use,Function calling" /><link rel="alternate" type="text/markdown" href="tool-use-client-side.md" title="Markdown version" /><script type="application/ld+json">
+{
+    "@context" : "https://schema.org",
+    "@type" : "BreadcrumbList",
+    "itemListElement" : [
+      {
+        "@type" : "ListItem",
+        "position" : 1,
+        "name" : "AWS",
+        "item" : "https://aws.amazon.com"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 2,
+        "name" : "Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/index.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 3,
+        "name" : "User Guide",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 4,
+        "name" : "Build",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/build.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 5,
+        "name" : "Use a tool to complete an Amazon Bedrock model response",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 6,
+        "name" : "Client-side tool use",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/tool-use.html"
+      }
+    ]
+}
+</script></head><body><div id="main"><div style="display: none"><a href="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#tool-use-client-side" target="_blank" rel="noopener noreferrer" title="Open PDF"></a></div><div id="breadcrumbs" class="breadcrumb"><a href="/index.html">Documentation</a><a href="/bedrock/index.html">Amazon Bedrock</a><a href="what-is-bedrock.html">User Guide</a></div><div id="main-content" class="awsui-util-container"><div id="main-col-body"><awsdocs-language-banner data-service="$ctrl.pageService"></awsdocs-language-banner><h1 class="topictitle" id="tool-use-client-side">Client-side tool use</h1><div class="awsdocs-page-header-container"><awsdocs-page-header></awsdocs-page-header><awsdocs-filter-selector id="awsdocs-filter-selector"></awsdocs-filter-selector></div><p>If you use the Responses API, Chat Completions API, Converse API, or InvokeModel API to send the request, then the model uses client-side tool calling. This means that in your code, you call the tool on the model's behalf. In this scenario, assume the tool implementation is an API. The tool could just as easily be a database, Lambda function, or some other software. You decide how you want to implement the tool. You then continue the conversation with the model by supplying a message with the result from the tool. Finally, the model generates a response for the original message that includes the tool results that you sent to the model.</p><p>Let us define the tool we will use for tool use. The following Python examples show how to use a tool that returns the most popular song on a fictional radio station.</p><pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python ">def get_most_popular_song(station_name: str) -&gt; str:
+    stations = <span>{</span>
+        "Radio Free Mars": "Starman – David Bowie",
+        "Neo Tokyo FM": "Plastic Love – Mariya Takeuchi",
+        "Cloud Nine Radio": "Blinding Lights – The Weeknd",
+    }
+    return stations.get(station_name, "Unknown Station – No chart data available")</code></pre><p><b>Using Responses API for client-side tooling</b></p><p>You can use the <a href="https://platform.openai.com/docs/guides/function-calling" rel="noopener noreferrer" target="_blank"><span>Function calling</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a> feature provided by OpenAI to call this tool. Responses API is OpenAI's preferred API. Here is the Python code for Responses API for client-side tooling:</p><pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python ">from openai import OpenAI
+import json
+
+client = OpenAI()
+
+response = client.responses.create(
+    model="oss-gpt-120b",
+    input="What is the most popular song on Radio Free Mars?",
+    tools=[
+        <span>{</span>
+            "type": "function",
+            "name": "get_most_popular_song",
+            "description": "Returns the most popular song on a radio station",
+            "parameters": <span>{</span>
+                "type": "object",
+                "properties": <span>{</span>
+                    "station_name": <span>{</span>
+                        "type": "string",
+                        "description": "Name of the radio station"
+                    }
+                },
+                "required": ["station_name"]
+            }
+        }
+    ]
+)
+
+if response.output and response.output[0].content:
+    tool_call = response.output[0].content[0]
+    args = json.loads(tool_call["arguments"])
+    result = get_most_popular_song(args["station_name"])
+    
+    final_response = client.responses.create(
+        model="oss-gpt-120b",
+        input=[
+            <span>{</span>
+                "role": "tool",
+                "tool_call_id": tool_call["id"],
+                "content": result
+            }
+        ]
+    )
+    
+    print(final_response.output_text)</code></pre><p><b>Using Chat Completions API for client-side tooling</b></p><p>You can use the Chat Completions API also. Here is the Python code for using Chat Completions:</p><pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python ">
+    from openai import OpenAI
+import json
+
+client = OpenAI()
+
+completion = client.chat.completions.create(
+    model="oss-gpt-120b",
+    messages=[<span>{</span>"role": "user", "content": "What is the most popular song on Neo Tokyo FM?"}],
+    tools=[<span>{</span>
+        "type": "function",
+        "function": <span>{</span>
+            "name": "get_most_popular_song",
+            "description": "Returns the most popular song on a radio station",
+            "parameters": <span>{</span>
+                "type": "object",
+                "properties": <span>{</span>
+                   "station_name": <span>{</span>"type": "string", "description": "Name of the radio station"}
+                },
+                "required": ["station_name"]
+            }
+        }
+    }]
+)
+
+message = completion.choices[0].message
+
+if message.tool_calls:
+    tool_call = message.tool_calls[0]
+    args = json.loads(tool_call.function.arguments)
+    result = get_most_popular_song(args["station_name"])
+
+    followup = client.chat.completions.create(
+        model="oss-gpt-120b",
+        messages=[
+            <span>{</span>"role": "user", "content": "What is the most popular song on Neo Tokyo FM?"},
+            message,
+            <span>{</span>"role": "tool", "tool_call_id": tool_call.id, "content": result}
+        ]
+    )
+
+    print(followup.choices[0].message.content)
+    </code></pre><p>For more details on the using Function Calling on Responses API and Chat Completions API, see <a href="https://platform.openai.com/docs/guides/function-calling" rel="noopener noreferrer" target="_blank"><span>Function Calling</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a> in OpenAI.</p><p><b>Using Converse API for client-side tooling</b></p><p>You can use the <a href="bedrock/latest/userguide/conversation-inference.html" rel="noopener noreferrer" target="_blank">Converse API</a> to let a model use a tool in a conversation. The following Python examples show how to use a tool that returns the most popular song on a fictional radio station.</p><pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python "># Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+"""Shows how to use tools with the Converse API and the Cohere Command R model."""
+
+import logging
+import json
+import boto3
+from botocore.exceptions import ClientError
+
+
+class StationNotFoundError(Exception):
+    """Raised when a radio station isn't found."""
+    pass
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+
+def get_top_song(call_sign):
+    """Returns the most popular song for the requested station.
+
+    Args:
+        call_sign (str): The call sign for the station for which you want
+            the most popular song.
+
+    Returns:
+        response (json): The most popular song and artist.
+    """
+    song = ""
+    artist = ""
+
+    if call_sign == 'WZPZ':
+        song = "Elemental Hotel"
+        artist = "8 Storey Hike"
+    else:
+        raise StationNotFoundError(f"Station <span>{</span>call_sign} not found.")
+
+    return song, artist
+
+
+def generate_text(bedrock_client, model_id, tool_config, input_text):
+    """Generates text using the supplied Amazon Bedrock model. If necessary,
+    the function handles tool use requests and sends the result to the model.
+
+    Args:
+        bedrock_client: The Boto3 Bedrock runtime client.
+        model_id (str): The Amazon Bedrock model ID.
+        tool_config (dict): The tool configuration.
+        input_text (str): The input text.
+
+    Returns:
+        Nothing.
+    """
+    logger.info("Generating text with model %s", model_id)
+
+    # Create the initial message from the user input.
+    messages = [<span>{</span>"role": "user",
+                 "content": [<span>{</span>"text": input_text}]}]
+
+    response = bedrock_client.converse(modelId=model_id,
+                                       messages=messages,
+                                       toolConfig=tool_config)
+
+    output_message = response['output']['message']
+    messages.append(output_message)
+
+    stop_reason = response['stopReason']
+
+    if stop_reason == 'tool_use':
+        # Tool use requested. Call the tool and send the result to the model.
+        tool_requests = response['output']['message']['content']
+
+        for tool_request in tool_requests:
+            if 'toolUse' in tool_request:
+                tool = tool_request['toolUse']
+                logger.info("Requesting tool %s. Request: %s",
+                            tool['name'], tool['toolUseId'])
+
+                if tool['name'] == 'top_song':
+                    tool_result = <span>{</span>}
+                    try:
+                        song, artist = get_top_song(tool['input']['sign'])
+                        tool_result = <span>{</span>"toolUseId": tool['toolUseId'],
+                                       "content": [<span>{</span>"json": <span>{</span>"song": song, "artist": artist}}]}
+                    except StationNotFoundError as err:
+                        tool_result = <span>{</span>"toolUseId": tool['toolUseId'],
+                                       "content": [<span>{</span>"text": err.args[0]}],
+                                       "status": 'error'}
+
+                    tool_result_message = <span>{</span>"role": "user",
+                                           "content": [<span>{</span>"toolResult": tool_result}]}
+                    messages.append(tool_result_message)
+
+        # Send the tool result to the model.
+        response = bedrock_client.converse(modelId=model_id,
+                                           messages=messages,
+                                           toolConfig=tool_config)
+
+        output_message = response['output']['message']
+
+    # print the final response from the model.
+    for content in output_message['content']:
+        print(json.dumps(content, indent=4))
+
+
+def main():
+    """Entrypoint for tool use example."""
+    logging.basicConfig(level=logging.INFO,
+                        format="%(levelname)s: %(message)s")
+
+    model_id = "cohere.command-r-v1:0"
+    input_text = "What is the most popular song on WZPZ?"
+
+    tool_config = <span>{</span>
+        "tools": [
+            <span>{</span>
+                "toolSpec": <span>{</span>
+                    "name": "top_song",
+                    "description": "Get the most popular song played on a radio station.",
+                    "inputSchema": <span>{</span>
+                        "json": <span>{</span>
+                            "type": "object",
+                            "properties": <span>{</span>
+                                "sign": <span>{</span>
+                                    "type": "string",
+                                    "description": "The call sign for the radio station for which you want the most popular song. Example calls signs are WZPZ, and WKRP."
+                                }
+                            },
+                            "required": ["sign"]
+                        }
+                    }
+                }
+            }
+        ]
+    }
+
+    bedrock_client = boto3.client(service_name='bedrock-runtime')
+
+    try:
+        print(f"Question: <span>{</span>input_text}")
+        generate_text(bedrock_client, model_id, tool_config, input_text)
+    except ClientError as err:
+        message = err.response['Error']['Message']
+        logger.error("A client error occurred: %s", message)
+        print(f"A client error occured: <span>{</span>message}")
+    else:
+        print(f"Finished generating text with model <span>{</span>model_id}.")
+
+
+if __name__ == "__main__":
+    main()</code></pre><p><b>Using Invoke APIs for client-side tool use</b></p><p>It is possible to use tools with the base inference operations (<a href="bedrock/latest/APIReference/API_runtime_InvokeModel.html" rel="noopener noreferrer" target="_blank">InvokeModel</a> or <a href="bedrock/latest/APIReference/API_runtime_InvokeModelWithResponseStream.html" rel="noopener noreferrer" target="_blank">InvokeModelWithResponseStream</a>). To find the inference parameters that you pass in the request body, see the <a href="bedrock/latest/userguide/model-parameters.html" rel="noopener noreferrer" target="_blank">inference parameters</a> for the model that you want to use.</p><awsdocs-copyright class="copyright-print"></awsdocs-copyright><awsdocs-thumb-feedback right-edge="{{$ctrl.thumbFeedbackRightEdge}}"></awsdocs-thumb-feedback></div><noscript><div><div><div><div id="js_error_message"><p><img src="https://d1ge0kk1l5kms0.cloudfront.net/images/G/01/webservices/console/warning.png" alt="Warning" /> <strong>Javascript is disabled or is unavailable in your browser.</strong></p><p>To use the Amazon Web Services Documentation, Javascript must be enabled. Please refer to your browser's Help pages for instructions.</p></div></div></div></div></noscript><div id="main-col-footer" class="awsui-util-font-size-0"><div id="doc-conventions"><a target="_top" href="/general/latest/gr/docconventions.html">Document Conventions</a></div><div class="prev-next"><div id="previous" class="prev-link" accesskey="p" href="./tool-use.html">Tool use</div><div id="next" class="next-link" accesskey="n" href="./tool-use-server-side.html">Server-side</div></div></div><awsdocs-page-utilities></awsdocs-page-utilities></div><div id="quick-feedback-yes" style="display: none;"><div class="title">Did this page help you? - Yes</div><div class="content"><p>Thanks for letting us know we're doing a good job!</p><p>If you've got a moment, please tell us what we did right so we can do more of it.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/tool-use-client-side.html"></awsui-button></p></div></div><div id="quick-feedback-no" style="display: none;"><div class="title">Did this page help you? - No</div><div class="content"><p>Thanks for letting us know this page needs work. We're sorry we let you down.</p><p>If you've got a moment, please tell us how we can make the documentation better.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/tool-use-client-side.html"></awsui-button></p></div></div></div></body></div></awsdocs-view><div class="page-loading-indicator" id="page-loading-indicator"><awsui-spinner size="large"></awsui-spinner></div></div><div id="tools-panel" dom-region="tools"><awsdocs-tools-panel id="awsdocs-tools-panel"></awsdocs-tools-panel></div></awsui-app-layout><awsdocs-cookie-banner class="doc-cookie-banner"></awsdocs-cookie-banner></div></body></html>

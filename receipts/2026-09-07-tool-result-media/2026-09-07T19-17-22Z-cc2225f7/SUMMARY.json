@@ -1,0 +1,309 @@
+[
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "cyan",
+        "magenta",
+        "green",
+        "yellow",
+        "red",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "magenta",
+        "green",
+        "yellow",
+        "red",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"cyan\",\"magenta\",\"green\",\"yellow\",\"red\",\"blue\"]}",
+    "usage": {
+      "prompt_tokens": 272,
+      "completion_tokens": 20,
+      "total_tokens": 292,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 1.75
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_no_json_answer",
+    "answer": null,
+    "expected": {
+      "A": [
+        "green",
+        "blue",
+        "cyan",
+        "magenta",
+        "yellow",
+        "red"
+      ],
+      "B": [
+        "blue",
+        "magenta",
+        "cyan",
+        "red",
+        "yellow",
+        "green"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "prompt_tokens": 313,
+      "completion_tokens": 17,
+      "total_tokens": 330,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 2.04
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "pdf",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 400,
+    "outcome": "tool_result_rejected",
+    "detail": "{\n  \"error\": {\n    \"message\": \"Invalid value: 'file'. Supported values are: 'text', 'refusal', 'image_url', and 'input_audio'.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": \"messages[2].content[0]\",\n    \"code\": \"invalid_value\"\n  }\n}",
+    "wall_s": 1.24
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "cyan",
+        "blue",
+        "yellow",
+        "green",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"blue\",\"yellow\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 254,
+      "completion_tokens": 20,
+      "total_tokens": 274,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 3.74
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "error",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "error_acknowledged",
+    "answer": {
+      "A": null,
+      "note": "panel service unavailable (HTTP 503)"
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "red",
+        "cyan",
+        "green",
+        "blue",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":null,\"note\":\"panel service unavailable (HTTP 503)\"}",
+    "usage": {
+      "prompt_tokens": 271,
+      "completion_tokens": 19,
+      "total_tokens": 290,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 1.75
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "blue",
+        "red",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "green",
+        "yellow",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"blue\",\"red\",\"cyan\",\"blue\",\"red\"]}",
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 20,
+      "total_tokens": 122,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 1.59
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "magenta",
+        "blue",
+        "cyan",
+        "green",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"blue\",\"yellow\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 261,
+      "completion_tokens": 20,
+      "total_tokens": 281,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 6.28
+  }
+]

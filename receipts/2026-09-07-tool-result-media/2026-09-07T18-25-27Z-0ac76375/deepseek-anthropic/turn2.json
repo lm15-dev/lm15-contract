@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-09-07T18-25-37Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "The user wants me to call fetch_panel twice in this turn. Let me do that.",
+              "signature": "7a0c9d91-476b-4db2-a5e8-c120526f8be4"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_00_DMfrS6DuwORscz07yjPP9379",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            },
+            {
+              "type": "tool_use",
+              "id": "call_01_8gRuc1gws6AJBIQUftVs6043",
+              "name": "fetch_panel",
+              "input": {
+                "label": "B"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_00_DMfrS6DuwORscz07yjPP9379",
+              "content": [
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACbklEQVR4nO3SQQ3AQAzEwIIIfyiFc++D0HLIw7JkaQCsEj9njtq848afcOXhJxSQWQHR+BMWkBp/wgJS409YQGr8CQtIjT9hAanxJywgNf6EBaTGn7CA1PgTFpAaf8ICUuNPWEBq/AkLSI0/YQGp8ScsIDX+hAWkxp+wgNT4ExaQGn/CAlLjT1hAavwJC0iNP2EBqfEnLCA1/oQFpMafsIDU+BMWkBp/wgJS409YQGr8CQtIjT9hAanxJywgNf6EBaTGn7CA1PgTFpAaf8ICUuNPWEBq/AkLSI0/YQGp8ScsIDX+hAWkxp+wgNT4ExaQGn/CAlLjT1hAavwJC0iNP2EBqfEnLCA1/oQFpMafsIDU+BMWkBp/wgJS409YQGr8CQtIjT9hAanxJywgNf6EBaTGn7CA1PgTFpAaf8ICUuNPWEBq/AkLSI0/YQGp8SfcBXTvqP0fUOMX7BRQARWQGb+ggNT4BQWkxi8oIDV+QQGp8QsKSI1fUEBq/IICUuMXFJAav6CA1PgFBaTGLyggNX5BAanxCwpIjV9QQGr8ggJS4xcUkBq/oIDU+AUFpMYvKCA1fkEBqfELCkiNX1BAavyCAlLjFxSQGr+ggNT4BQWkxi8oIDV+QQGp8QsKSI1fUEBq/IICUuMXFJAav6CA1PgFBaTGLyggNX5BAanxCwpIjV9QQGr8ggJS4xcUkBq/oIDU+AUFpMYvKCA1fkEBqfELCkiNX1BAavyCAlLjFxSQGr+ggNT4BQWkxi8oIDV+QQGp8QsKSI1fUEBq/IICUuMXFJAav6CA1PgFBaTGLyggNX5BAanxCwpIjV+w8wFM8Ggm5l8uNwAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            },
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_01_8gRuc1gws6AJBIQUftVs6043",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel returned by the requested tool."
+                },
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACTUlEQVR4nO3SsQnEQBAEQQVx+Yfy4chWCB+EjGZQQfsLs3Xd54x3T1fff9tVvx+g7QACCKDl6vsA5RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF49IUDj1RMCNF494ccB9QDe9TxnuvPbDiCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQj+DLgP5WPGgmCRvBZwAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "7903443104bdef37da54e5ca16878e3bdf8304990d094b473748836dbbfeef8c",
+  "response_headers": {
+    "Content-Type": "application/json"
+  },
+  "provenance": "raw-body-patched; not proof of current SDK support"
+}

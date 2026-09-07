@@ -1,0 +1,183 @@
+{
+  "id": "moonshotai.tool_result_mixed",
+  "provider": "moonshotai",
+  "feature": "tool_result_mixed",
+  "description": "MAP-10: text then image in one tool result, order kept",
+  "base_url": "https://api.moonshot.ai/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants me to call fetch_panel with label \"A\", then inspect the result and return a JSON with the color names. Let me call the function first.",
+          "tool_calls": [
+            {
+              "id": "fetch_panel_0",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "fetch_panel_0",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel returned by the requested tool."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACTElEQVR4nO3SsQnEQBAEQQVx+Yfy4chWCB+EjGZQQfu7DHXd50xX33/bPd7VTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuYC3gJ7nTFcP+LrfmQ6guloAQLUAgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul4AQNP1AgCarhcA0HS9AICm6wUANF0vAKDpegEATdcLAGi6XgBA0/UCAJquFwDQdL0AgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul4AQNP1AgCarhcA0HS9AICm6wUANF0vAKDpegEATdcLAGi6XgBA0/UCAJquFwDQdL0AgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul7AtwH9AQJKaCbe6KL/AAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/moonshotai/mixed/exchange-2026-09-07T19-13-30Z-86248250891c40599d769583f01a5d90.json",
+    "evidence": "moonshotai 2026-09-07T19-13-30Z, kimi-k2.6, HTTP 200; tool-result-content matrix cell 'mixed' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/moonshotai.tool_result_mixed/2026-09-07T19-13-30Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/moonshotai/mixed/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].content — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[1].tool_calls[0].function.arguments — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[1].tool_calls[0].index — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "kimi-k2.6",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "The user wants me to call fetch_panel with label \"A\", then inspect the result and return a JSON with the color names. Let me call the function first."
+          },
+          {
+            "type": "tool_call",
+            "id": "fetch_panel_0",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "fetch_panel_0",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "Panel returned by the requested tool."
+              },
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACTElEQVR4nO3SsQnEQBAEQQVx+Yfy4chWCB+EjGZQQfu7DHXd50xX33/bPd7VTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuYC3gJ7nTFcP+LrfmQ6guloAQLUAgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul4AQNP1AgCarhcA0HS9AICm6wUANF0vAKDpegEATdcLAGi6XgBA0/UCAJquFwDQdL0AgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul4AQNP1AgCarhcA0HS9AICm6wUANF0vAKDpegEATdcLAGi6XgBA0/UCAJquFwDQdL0AgKbrBQA0XS8AoOl6AQBN1wsAaLpeAEDT9QIAmq4XANB0vQCApusFADRdLwCg6XoBAE3XCwBoul7AtwH9AQJKaCbe6KL/AAAAAElFTkSuQmCC"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell mixed); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-13-30Z.txt"
+}

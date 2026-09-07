@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-09-07T19-13-05Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                },
+                "id": "call_50605"
+              },
+              "thoughtSignature": "Er8BCrwBARFNMg+ND9Zv4yXmBNkHl7XxtIjZQusqc+3dUnlY78goxVe2a6Ro6Ma0lSun/+ajT9hN5qT9JwOD4l94m17uDpISuR9IMD/U8SU67ojOVDq2huJDR577zY6oybnwXrBoxBzg8vHqd4o4dTWDVU5IzktI1OBjjGGRatHwCyFkd6d2q2OkQOrmgpy9HLtQFj2bDtyPMtw4DZTYSwe6EG08mPHCu2iO93JX2MMygjFl0WZEUtmQmCoJLtY4JbE="
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {
+                  "result": "Panel returned by the requested tool."
+                },
+                "id": "call_50605",
+                "parts": [
+                  {
+                    "inlineData": {
+                      "mimeType": "image/png",
+                      "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACM0lEQVR4nO3SsQnEQBAEQQVx+Yfy4chWCB+EjGZQQfu7DHXd50xX33/bPd7VTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuQCA8hcAWq6+D1A+IUDLAQQQQMvlAgDKXwBoufo+QPmEAC0HEEAALZcLACh/AaDl6vsA5RMCtBxAAAG0XC4AoPwFgJar7wOUTwjQcgABBNByuYC3gOoH3vY8Z7rz2w4ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI8AoOFyAQD1CADaDSCAAFouFwBQjwCg4XIBAPUIANoNIIAAWi4XAFCPAKDhcgEA9QgA2g0ggABaLhcAUI/gy4D+9CtoJqc3YYAAAAAASUVORK5CYII="
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "5a8e48e426299d36e34e4b78b2d843f7ec824f50f3aa886364c14def2e601fbd",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b0a50146140b83f0855d6c833f5d2b0aa66b35fe658321b964b32a446cfa4ce6",
+  "response_bytes": 1408,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

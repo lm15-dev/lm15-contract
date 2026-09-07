@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-07T18-26-07Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "91523107617270fc8edfd24f0c15635a1d6369caff6608dd07085bc50cef2dfa",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "c7bf70b6-5635-4673-b736-13d9bac5b947"
+  },
+  "provenance": "adapter-built"
+}

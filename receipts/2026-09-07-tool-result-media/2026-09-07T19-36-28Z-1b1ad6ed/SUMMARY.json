@@ -1,0 +1,122 @@
+[
+  {
+    "provider": "gemini",
+    "model": "gemini-3.7-flash",
+    "dialect": "gemini",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "blue",
+        "yellow",
+        "cyan",
+        "red",
+        "green",
+        "magenta"
+      ],
+      "B": [
+        "yellow",
+        "magenta",
+        "green",
+        "red",
+        "cyan",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "blue",
+        "yellow",
+        "cyan",
+        "red",
+        "green",
+        "magenta"
+      ],
+      "B": [
+        "yellow",
+        "magenta",
+        "green",
+        "red",
+        "cyan",
+        "blue"
+      ]
+    },
+    "output": "{\"A\": [\"blue\", \"yellow\", \"cyan\", \"red\", \"green\", \"magenta\"], \"B\": [\"yellow\", \"magenta\", \"green\", \"red\", \"cyan\", \"blue\"]}",
+    "usage": {
+      "promptTokenCount": 2422,
+      "candidatesTokenCount": 42,
+      "totalTokenCount": 2695,
+      "promptTokensDetails": [
+        {
+          "modality": "IMAGE",
+          "tokenCount": 2160
+        },
+        {
+          "modality": "TEXT",
+          "tokenCount": 262
+        }
+      ],
+      "thoughtsTokenCount": 231,
+      "serviceTier": "standard"
+    },
+    "wall_s": 2.52
+  },
+  {
+    "provider": "gemini",
+    "model": "gemini-3.7-flash",
+    "dialect": "gemini",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "green",
+        "blue",
+        "yellow",
+        "red",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "green",
+        "blue",
+        "yellow",
+        "red",
+        "cyan"
+      ]
+    },
+    "output": "```json\n{\"A\": [\"magenta\", \"green\", \"blue\", \"yellow\", \"red\", \"cyan\"]}\n```",
+    "usage": {
+      "promptTokenCount": 1274,
+      "candidatesTokenCount": 26,
+      "totalTokenCount": 1430,
+      "promptTokensDetails": [
+        {
+          "modality": "IMAGE",
+          "tokenCount": 1080
+        },
+        {
+          "modality": "TEXT",
+          "tokenCount": 194
+        }
+      ],
+      "thoughtsTokenCount": 130,
+      "serviceTier": "standard"
+    },
+    "wall_s": 3.61
+  }
+]

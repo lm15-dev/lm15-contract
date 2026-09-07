@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-13-13Z",
+  "provider": "xai",
+  "status": 200,
+  "model": "grok-4.20",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $XAI_API_KEY"
+    },
+    "body": {
+      "model": "grok-4.20",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "87efd78d74cae84fe7cc11c2684e0ee3592a36add8274f347550548e9bdfba3a",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "4b6c132735e7fff89454471dfe750cc5fc4f83ffa09c44c9a47a3f807dba14d3",
+  "response_bytes": 1033,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

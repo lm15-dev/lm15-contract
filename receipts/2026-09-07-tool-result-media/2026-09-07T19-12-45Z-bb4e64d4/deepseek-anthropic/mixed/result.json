@@ -1,0 +1,33 @@
+{
+  "provider": "deepseek-anthropic",
+  "model": "deepseek-v4-flash",
+  "dialect": "anthropic",
+  "cell": "mixed",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "cost_usd": null,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "accepted_but_no_json_answer",
+  "answer": null,
+  "expected": {
+    "A": [
+      "blue",
+      "cyan",
+      "yellow",
+      "green",
+      "magenta",
+      "red"
+    ]
+  },
+  "output": "\nI called fetch_panel with label \"A\" as instructed, but the tool returned `[Unsupported Image]`, so I cannot actually see the colors in the panel. Since you asked me not to guess before receiving the panel, and I have not received any visible color data, I cannot honestly produce the six color names.\n\nI'll refrain from fabricating a result. If you can resend the panel in a viewable format, I'll read it left-to-right across the top row, then left-to-right across the bottom row, and return `{\"A\":[six color names]}`.",
+  "usage": {
+    "input_tokens": 151,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 384,
+    "output_tokens": 425,
+    "service_tier": "standard"
+  },
+  "wall_s": 4.51
+}

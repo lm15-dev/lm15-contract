@@ -1,0 +1,98 @@
+{
+  "id": "bedrock-chat.tool_result_text",
+  "provider": "bedrock-chat",
+  "feature": "tool_result_text",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260907T191649Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "content": "I'll fetch panel A for you now.\n\n<｜DSML｜function_calls",
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_b6da3c058bc0433a95016732",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b6da3c058bc0433a95016732",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel A colors in reading order: cyan, green, magenta, red, blue, yellow"
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "cyan",
+      "green",
+      "magenta",
+      "red",
+      "blue",
+      "yellow"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/bedrock-chat/text/exchange-2026-09-07T19-16-49Z-8f767dfec0844383ae6009dc67f9e4bc.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/bedrock-chat/text/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "python_body_matches_sent": false,
+  "canonical_or_build_error": "NotConfiguredError: bedrock-chat: setting 'region' is required and has no default; set AWS_REGION or AWS_DEFAULT_REGION\n\n  To fix:\n    - set AWS_REGION or AWS_DEFAULT_REGION\n"
+}

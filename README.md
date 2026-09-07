@@ -28,6 +28,7 @@ python3 tools/check_provenance.py
 python3 tools/check_secrecy.py
 python3 tools/audit.py
 python3 tools/spec_drift.py
+python3 tools/check_content_coverage.py
 python3 harness/selftest.py
 ```
 

@@ -1,0 +1,33 @@
+{
+  "canonical_response": {
+    "id": "202609080316218a4863481e614337",
+    "model": "glm-4.6v",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "I have received the image for panel A. It is a 3x2 grid of solid colors. I need to read the colors from left to right, top row first, then bottom row.\n\nTop row:\n- First cell: green\n- Second cell: blue\n- Third cell: magenta\n\nBottom row:\n- First cell: yellow\n- Second cell: red\n- Third cell: cyan\n\nNow I will format this into the required JSON."
+        },
+        {
+          "type": "text",
+          "text": "\n{\"A\":[\"green\", \"blue\", \"magenta\", \"yellow\", \"red\", \"cyan\"]}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 529,
+      "output_tokens": 120,
+      "total_tokens": 649,
+      "cache_read_tokens": 43,
+      "reasoning_tokens": 93
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-16-21Z.txt"
+  }
+}

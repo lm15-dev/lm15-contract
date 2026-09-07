@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-09-07T19-19-51Z",
+  "status": 400,
+  "latency_s": 0.08,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.8-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "id": "j19qf9nkz",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "j19qf9nkz",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel returned by the requested tool."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,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qfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0oOEOPqCkKnzoeSA8S4uoLQqfOh5AAxrq4gdOp8KDlAjKsrCJ06H0o/4kiCqyvZYOwAAAAASUVORK5CYII=",
+                "detail": "high"
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "52901f5d45eb80a8ef92ab3a6ae5cf99f26c5e272c4fb7a703c2c11bfbef35b7",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m1yn012ceb0bemvwy8bjvyxk"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

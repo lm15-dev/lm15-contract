@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-07T19-14-40Z",
+  "status": 200,
+  "latency_s": 0.32,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.8-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "978047b427494ccf8c18bd63c7b265f1349af6c86d3130e8055b28ce17f6b051",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m1ympj1vey3r1g7a7b99fkwx"
+  },
+  "provenance": "adapter-built"
+}

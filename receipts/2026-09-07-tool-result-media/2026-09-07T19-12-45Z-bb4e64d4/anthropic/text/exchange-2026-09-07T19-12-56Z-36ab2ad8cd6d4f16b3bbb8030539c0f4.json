@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-09-07T19-12-56Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "toolu_014bWNCp6Ee5ncBYV6hPGwLb",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              },
+              "caller": {
+                "type": "direct"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "toolu_014bWNCp6Ee5ncBYV6hPGwLb",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel A colors in reading order: blue, magenta, cyan, red, yellow, green"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "cc352f8314f442d99de5062b9431a0ffdf66e1ade8cca2a7151a980eacb39e76",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "1febec628369ba97353a086477c2402a2dcfa1da530948b7583dfc5508eb4434",
+  "response_bytes": 540,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

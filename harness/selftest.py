@@ -116,6 +116,18 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: check.expected_raise(c, "build_request") is not None,
             "build_maps_a_refused_cell (a request case that pins a refusal)")),
+        "tool_result_image_dropped": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: c.get("feature") == "tool_result_image",
+            "tool_result_image_dropped (a tool_result_image case)")),
+        "tool_result_ids_swapped": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: c.get("feature") == "tool_result_pair",
+            "tool_result_ids_swapped (a tool_result_pair case)")),
+        "tool_result_error_stripped": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: c.get("feature") == "tool_result_error",
+            "tool_result_error_stripped (a tool_result_error case)")),
         "bool_as_int": ("request", first(
             [(c, g) for c, g in cases],
             lambda c, g: "request" in c and _has_bool(check.expected_wire_request(c)["body"]),

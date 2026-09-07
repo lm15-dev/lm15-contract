@@ -1,0 +1,194 @@
+{
+  "id": "gemini.tool_result_image",
+  "provider": "gemini",
+  "feature": "tool_result_image",
+  "description": "MAP-10: an image-only tool result reaches the wire as a native block inside the result item (hidden-oracle visual check passed live)",
+  "base_url": "https://generativelanguage.googleapis.com/v1beta",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                },
+                "id": "call_96979"
+              },
+              "thoughtSignature": "ErABCq0BARFNMg+TxzsGbzBCSASBX9wTHv63vXrC1N778PPMCMbfJULCkZ1ie8BaifYgVTmnrGuojPJS9Vosar+UHf5fiXigTOf3pjdxKvSTx84z58haItKaWbjYz6w2aBmQYwaiawNYZN5psONoU+64hkNbGFp1w8/azetPX+pxs65ziwveY6+oSs5br9S+cK9LKlHDgNMXVsMVlVwwXkQo0WHjakX/rE8ejiUJHie398g="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {},
+                "id": "call_96979",
+                "parts": [
+                  {
+                    "inlineData": {
+                      "mimeType": "image/png",
+                      "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXklEQVR4nO3TQQ3AMAzF0IIIfyiD03MhbBx6sKxZMoEfvaw9W9084+6bYG7hAgKkLkB0tIAA0QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0v4OeAzhl1/Anvoh/wtgAFKEDmcAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIDLXlc3aCa+5zV6AAAAAElFTkSuQmCC"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-36-28Z-1b1ad6ed/gemini/image/exchange-2026-09-07T19-36-30Z-b5f8a618a4ff450885a753788162fcd0.json",
+    "evidence": "gemini 2026-09-07T19-36-30Z, gemini-3.7-flash, HTTP 200; tool-result-content matrix cell 'image' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/gemini.tool_result_image/2026-09-07T19-36-30Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-36-28Z-1b1ad6ed/gemini/image/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; identical to the sent wire; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "gemini-3.7-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_96979",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            },
+            "continuation": [
+              {
+                "provider": "gemini",
+                "kind": "thought_signature",
+                "data": {
+                  "value": "ErABCq0BARFNMg+TxzsGbzBCSASBX9wTHv63vXrC1N778PPMCMbfJULCkZ1ie8BaifYgVTmnrGuojPJS9Vosar+UHf5fiXigTOf3pjdxKvSTx84z58haItKaWbjYz6w2aBmQYwaiawNYZN5psONoU+64hkNbGFp1w8/azetPX+pxs65ziwveY6+oSs5br9S+cK9LKlHDgNMXVsMVlVwwXkQo0WHjakX/rE8ejiUJHie398g="
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_96979",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXklEQVR4nO3TQQ3AMAzF0IIIfyiD03MhbBx6sKxZMoEfvaw9W9084+6bYG7hAgKkLkB0tIAA0QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0v4OeAzhl1/Anvoh/wtgAFKEDmcAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIDLXlc3aCa+5zV6AAAAAElFTkSuQmCC"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell image); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-36-30Z.txt"
+}

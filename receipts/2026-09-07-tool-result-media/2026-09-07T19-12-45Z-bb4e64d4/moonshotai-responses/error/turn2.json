@@ -1,0 +1,86 @@
+{
+  "timestamp": "2026-09-07T19-13-55Z",
+  "status": 200,
+  "latency_s": 5.32,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_XthjZEMHqpPBJUinGNnouWit",
+          "status": "completed",
+          "summary": [
+            {
+              "type": "summary_text",
+              "text": "The user wants me to call fetch_panel with label \"A\", read the panel as a grid of 3 columns and 2 rows, and return JSON. Let me call the tool."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "id": "fc_ED4l9n4IW0LkcEjJx4qPRuPn",
+          "status": "completed",
+          "call_id": "fetch_panel_0",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "fetch_panel_0",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "2889b1552f2cb15d19df5895269b121683a3774449730c2707afc506bd40e7cc",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

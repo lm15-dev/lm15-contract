@@ -1,0 +1,197 @@
+{
+  "id": "meta-anthropic.tool_result_error",
+  "provider": "meta-anthropic",
+  "feature": "tool_result_error",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "data": "Q-PaDgHlDzFaORiUUmaN6cHTvR7DKzDjCX3lFG0uo4zMs5gT90ruPBSkoNEAKv_Q4CArLqD6I5uSYImQh6X1aYMUZvw28BwobPmPRjif2F1SIE8VuNQqq-lXvaklhyPYbjqGHuv690mWeUD3Oaj8g3JkH9fNQ6qJ9iRFxosNl96MgeUgyFsabty7w3eaU286fbR9jhnzrYNvh5xloGU01jDwdup8PlZVqEX-KmIDaMkf7674oAT0FBUV0hM2y_CmuLBZasPGF9Ol97PGrc2ipZm6PgCOxYO30H9ehyA85S0fxexlLx49lKdyTRMLw2fVboJ_pk4mfqhpIrzAyIXutF2pWxf6dL5GYyC9gwdnDVwHiMUUNiJ67yGFFB22O_ZsR2CAAedHU305FnS6JDujYZ6CCpp5SR8KSbbZ7ZpDH44qs5i1wJ1KUTA6p_zBjxJFS3bKn2Dni0B2kriE7T5tXVQEOg204wkFx3jzzzY_F2FmynX5kk77c2T00fG0999K5-hoVF1JE6hqSMDf3p03bRG_4s-DPSn7ZWpjN0evLXa5MtyVfCEV2cp2j1iuI8JtPYUHJ5PtVfr0EOyzd63A-N-cpDmaDNBqQZ5D2tfvjQwk3-uiH1CILqbTFP8PMLSCEuZ2csNmoUuimv_p5jGG5M3CErs7-itZtdUcrKH-i4iv1YEW-DL4AHupMkFOPxhaxTt7PZRW91WqM0ue_4cXNveRmvXamKUIvHdW-kexaVGFSxwTAS651VWPdLoeI7DMHvLOYR4UTHz11nxiZRzggHmg5WB2I4iii6OhHWuMH8-UqVUgx1UGnH9bAtm8NNTpjEZNc9wYVOhwjeRJRfds55pJhV4f2VL1B2cNrQlueABDYziChPbnHKLzGRF7CznQOcF2zczHaBnxXXSxYrcOCzXdc2bKotdWB5CdILTi45APjtmAV3kGc4ZXgY6XVur6UdfDbwD9s6mqIH3-3wRhJozZkGpoeCOB_MRMn-dE2hi2L4WFQg6sb6WPPhD8ddPKFxuIgJJGb4swJX1BzMgEthgE4Hilr-lRM2wPBuhr7ZyfRL8eym6MUqLf4xrpbQ_Q4mRmHsKWm5saxfHBFFKkBfcVREqOFXXTE0Uq0-FEXwMzWuoeF5_XJLVmhxMWcO9613qqgAVIkG6QAS2u1nBKxK8hkN1tNRsnA--SIY4ZI5XS91j_IceyqrKuGUT70zcTQF4vi0WPxNCbCTkJpNw79Fta6QUo7QU3BGMW8cseRNdDOnP_XJKDlpRI3y0ljRLckmKhboVwHIPg7pVcj5r2AT_1hDIyQMpxF6JS88aPDiuOLc5d0DuzowfzTkPjWQg-SVlzIe4t2z4vBTeIH6rr-bJY5KvUleXOjnwnCI_KmEjJ9IyNV-XRj8-D81WkO4dP_QCDHdC5pHY0aoUi0Q",
+              "type": "redacted_thinking"
+            },
+            {
+              "text": "I'll fetch panel A to read its six colors.",
+              "type": "text"
+            },
+            {
+              "id": "call_720a0377-d276-4853-8060-dc4f731b3c42",
+              "input": {
+                "label": "A"
+              },
+              "name": "fetch_panel",
+              "type": "tool_use"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_720a0377-d276-4853-8060-dc4f731b3c42",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "panel service unavailable (HTTP 503)"
+                }
+              ],
+              "is_error": true
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "cyan",
+      "yellow",
+      "magenta",
+      "red",
+      "green",
+      "blue"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/error/exchange-2026-09-07T19-14-30Z-a012470db76a4bb7ba660d53f6016291.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/error/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "",
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "redacted_thinking",
+                "data": {
+                  "data": "Q-PaDgHlDzFaORiUUmaN6cHTvR7DKzDjCX3lFG0uo4zMs5gT90ruPBSkoNEAKv_Q4CArLqD6I5uSYImQh6X1aYMUZvw28BwobPmPRjif2F1SIE8VuNQqq-lXvaklhyPYbjqGHuv690mWeUD3Oaj8g3JkH9fNQ6qJ9iRFxosNl96MgeUgyFsabty7w3eaU286fbR9jhnzrYNvh5xloGU01jDwdup8PlZVqEX-KmIDaMkf7674oAT0FBUV0hM2y_CmuLBZasPGF9Ol97PGrc2ipZm6PgCOxYO30H9ehyA85S0fxexlLx49lKdyTRMLw2fVboJ_pk4mfqhpIrzAyIXutF2pWxf6dL5GYyC9gwdnDVwHiMUUNiJ67yGFFB22O_ZsR2CAAedHU305FnS6JDujYZ6CCpp5SR8KSbbZ7ZpDH44qs5i1wJ1KUTA6p_zBjxJFS3bKn2Dni0B2kriE7T5tXVQEOg204wkFx3jzzzY_F2FmynX5kk77c2T00fG0999K5-hoVF1JE6hqSMDf3p03bRG_4s-DPSn7ZWpjN0evLXa5MtyVfCEV2cp2j1iuI8JtPYUHJ5PtVfr0EOyzd63A-N-cpDmaDNBqQZ5D2tfvjQwk3-uiH1CILqbTFP8PMLSCEuZ2csNmoUuimv_p5jGG5M3CErs7-itZtdUcrKH-i4iv1YEW-DL4AHupMkFOPxhaxTt7PZRW91WqM0ue_4cXNveRmvXamKUIvHdW-kexaVGFSxwTAS651VWPdLoeI7DMHvLOYR4UTHz11nxiZRzggHmg5WB2I4iii6OhHWuMH8-UqVUgx1UGnH9bAtm8NNTpjEZNc9wYVOhwjeRJRfds55pJhV4f2VL1B2cNrQlueABDYziChPbnHKLzGRF7CznQOcF2zczHaBnxXXSxYrcOCzXdc2bKotdWB5CdILTi45APjtmAV3kGc4ZXgY6XVur6UdfDbwD9s6mqIH3-3wRhJozZkGpoeCOB_MRMn-dE2hi2L4WFQg6sb6WPPhD8ddPKFxuIgJJGb4swJX1BzMgEthgE4Hilr-lRM2wPBuhr7ZyfRL8eym6MUqLf4xrpbQ_Q4mRmHsKWm5saxfHBFFKkBfcVREqOFXXTE0Uq0-FEXwMzWuoeF5_XJLVmhxMWcO9613qqgAVIkG6QAS2u1nBKxK8hkN1tNRsnA--SIY4ZI5XS91j_IceyqrKuGUT70zcTQF4vi0WPxNCbCTkJpNw79Fta6QUo7QU3BGMW8cseRNdDOnP_XJKDlpRI3y0ljRLckmKhboVwHIPg7pVcj5r2AT_1hDIyQMpxF6JS88aPDiuOLc5d0DuzowfzTkPjWQg-SVlzIe4t2z4vBTeIH6rr-bJY5KvUleXOjnwnCI_KmEjJ9IyNV-XRj8-D81WkO4dP_QCDHdC5pHY0aoUi0Q"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "I'll fetch panel A to read its six colors."
+          },
+          {
+            "type": "tool_call",
+            "id": "call_720a0377-d276-4853-8060-dc4f731b3c42",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_720a0377-d276-4853-8060-dc4f731b3c42",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": false
+}

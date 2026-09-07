@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-07T18-29-24Z",
+  "status": 400,
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260907T182924Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "xai.grok-4.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "4e652f4110d4fce00a45f5b7d6e5e408c8c0d2ad847816427106bd423c742220",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_sffqaq6ygdiqfqzdupcjbferuyo4o5s4cksxulmtcaa4tcmilsba"
+  },
+  "provenance": "adapter-built"
+}

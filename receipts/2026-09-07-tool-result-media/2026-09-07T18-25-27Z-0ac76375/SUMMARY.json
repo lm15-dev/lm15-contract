@@ -1,0 +1,834 @@
+[
+  {
+    "provider": "openai-chat",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "red",
+        "green",
+        "cyan",
+        "magenta",
+        "yellow",
+        "blue"
+      ],
+      "B": [
+        "yellow",
+        "green",
+        "magenta",
+        "blue",
+        "red",
+        "cyan"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "prompt_tokens": 219,
+      "completion_tokens": 44,
+      "total_tokens": 263,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    }
+  },
+  {
+    "provider": "claude-code",
+    "model": "claude-sonnet-5",
+    "dialect": "anthropic",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "green",
+        "cyan",
+        "red",
+        "magenta",
+        "yellow",
+        "blue"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "green",
+        "magenta",
+        "yellow",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "cyan",
+        "red",
+        "magenta",
+        "yellow",
+        "blue"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "green",
+        "magenta",
+        "yellow",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"green\",\"cyan\",\"red\",\"magenta\",\"yellow\",\"blue\"],\"B\":[\"cyan\",\"red\",\"green\",\"magenta\",\"yellow\",\"blue\"]}",
+    "usage": {
+      "input_tokens": 893,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 52,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available"
+    }
+  },
+  {
+    "provider": "groq",
+    "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 404,
+    "outcome": "first_call_rejected",
+    "detail": "{\"error\":{\"message\":\"The model `meta-llama/llama-4-scout-17b-16e-instruct` does not exist or you do not have access to it.\",\"type\":\"invalid_request_error\",\"code\":\"model_not_found\"}}\n"
+  },
+  {
+    "provider": "openai-codex",
+    "model": "gpt-5.4-mini",
+    "dialect": "openai-responses",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ValueError",
+    "detail": "First response must call fetch_panel exactly once for A and B; no synthetic replay or retry"
+  },
+  {
+    "provider": "openrouter",
+    "model": "openai/gpt-4.1-mini",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 401,
+    "outcome": "first_call_rejected",
+    "detail": "{\"error\":{\"message\":\"User not found.\",\"code\":401}}"
+  },
+  {
+    "provider": "xai",
+    "model": "grok-4.20",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "red",
+        "magenta",
+        "yellow",
+        "cyan",
+        "blue",
+        "green"
+      ],
+      "B": [
+        "cyan",
+        "yellow",
+        "green",
+        "blue",
+        "red",
+        "magenta"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "magenta",
+        "yellow",
+        "cyan",
+        "blue",
+        "green"
+      ],
+      "B": [
+        "cyan",
+        "yellow",
+        "green",
+        "blue",
+        "red",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"magenta\",\"yellow\",\"cyan\",\"blue\",\"green\"],\"B\":[\"cyan\",\"yellow\",\"green\",\"blue\",\"red\",\"magenta\"]}",
+    "usage": {
+      "prompt_tokens": 463,
+      "completion_tokens": 29,
+      "total_tokens": 766,
+      "prompt_tokens_details": {
+        "text_tokens": 415,
+        "audio_tokens": 0,
+        "image_tokens": 48,
+        "cached_tokens": 192
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 274,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "num_sources_used": 0,
+      "cost_in_usd_ticks": 11346500
+    }
+  },
+  {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "cyan",
+        "magenta"
+      ],
+      "B": [
+        "yellow",
+        "red",
+        "blue",
+        "cyan",
+        "magenta",
+        "green"
+      ]
+    },
+    "output": "I could not actually view the returned panels \u2014 both tool results came back as \"[Unsupported Image]\", so no color content was delivered to me in a readable form.\n\nI won't guess or fabricate color names, as instructed. Please re-send the panels in a supported image format, and I'll read them left-to-right across the top row, then left-to-right across the bottom row, and return the JSON as requested.",
+    "usage": {
+      "prompt_tokens": 585,
+      "completion_tokens": 309,
+      "total_tokens": 894,
+      "prompt_tokens_details": {
+        "cached_tokens": 512
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 221
+      },
+      "prompt_cache_hit_tokens": 512,
+      "prompt_cache_miss_tokens": 73
+    }
+  },
+  {
+    "provider": "zai",
+    "model": "glm-4.6v",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ValueError",
+    "detail": "First response must call fetch_panel exactly once for A and B; no synthetic replay or retry"
+  },
+  {
+    "provider": "deepseek-anthropic",
+    "model": "deepseek-v4-flash",
+    "dialect": "anthropic",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "magenta",
+        "green",
+        "cyan",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      "B": [
+        "red",
+        "magenta",
+        "cyan",
+        "blue",
+        "yellow",
+        "green"
+      ]
+    },
+    "output": "\nI was unable to inspect the panels: both tool results came back as `[Unsupported Image]`, so no color content was visible to me. Per your instruction not to guess, I will not fabricate the color sequences.\n\nReturning only valid JSON is not possible here without the visual data. Please re-send the panels in a supported image format and I'll provide the requested `{\"A\":[...],\"B\":[...]}` output.",
+    "usage": {
+      "input_tokens": 86,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 512,
+      "output_tokens": 290,
+      "service_tier": "standard"
+    }
+  },
+  {
+    "provider": "moonshotai",
+    "model": "kimi-k2.6",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "cyan",
+        "magenta",
+        "yellow",
+        "red",
+        "blue",
+        "green"
+      ],
+      "B": [
+        "yellow",
+        "green",
+        "red",
+        "cyan",
+        "blue",
+        "magenta"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "magenta",
+        "yellow",
+        "red",
+        "blue",
+        "green"
+      ],
+      "B": [
+        "yellow",
+        "green",
+        "red",
+        "cyan",
+        "blue",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\":[\"cyan\",\"magenta\",\"yellow\",\"red\",\"blue\",\"green\"],\"B\":[\"yellow\",\"green\",\"red\",\"cyan\",\"blue\",\"magenta\"]}",
+    "usage": {
+      "prompt_tokens": 418,
+      "completion_tokens": 150,
+      "total_tokens": 568,
+      "completion_tokens_details": {
+        "reasoning_tokens": 116
+      }
+    }
+  },
+  {
+    "provider": "moonshotai-responses",
+    "model": "kimi-k3",
+    "dialect": "openai-responses",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan",
+        "green",
+        "red"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "yellow",
+        "blue",
+        "green",
+        "magenta"
+      ]
+    },
+    "expected": {
+      "A": [
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan",
+        "green",
+        "red"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "yellow",
+        "blue",
+        "green",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\":[\"blue\",\"yellow\",\"magenta\",\"cyan\",\"green\",\"red\"],\"B\":[\"cyan\",\"red\",\"yellow\",\"blue\",\"green\",\"magenta\"]}",
+    "usage": {
+      "input_tokens": 551,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 256
+      },
+      "output_tokens": 102,
+      "output_tokens_details": {
+        "reasoning_tokens": 55
+      },
+      "total_tokens": 653
+    }
+  },
+  {
+    "provider": "moonshotai-anthropic",
+    "model": "kimi-k3",
+    "dialect": "anthropic",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "red",
+        "yellow",
+        "green",
+        "magenta",
+        "blue",
+        "cyan"
+      ],
+      "B": [
+        "blue",
+        "yellow",
+        "green",
+        "magenta",
+        "cyan",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "yellow",
+        "green",
+        "magenta",
+        "blue",
+        "cyan"
+      ],
+      "B": [
+        "blue",
+        "yellow",
+        "green",
+        "magenta",
+        "cyan",
+        "red"
+      ]
+    },
+    "output": "\n{\"A\":[\"red\",\"yellow\",\"green\",\"magenta\",\"blue\",\"cyan\"],\"B\":[\"blue\",\"yellow\",\"green\",\"magenta\",\"cyan\",\"red\"]}",
+    "usage": {
+      "input_tokens": 276,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 256,
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 102
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 532,
+      "cached_tokens": 256,
+      "completion_tokens": 149,
+      "total_tokens": 681
+    }
+  },
+  {
+    "provider": "meta",
+    "model": "muse-spark-1.3",
+    "dialect": "openai-responses",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "visual_match",
+    "answer": {
+      "A": [
+        "red",
+        "yellow",
+        "blue",
+        "magenta",
+        "green",
+        "cyan"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "green",
+        "magenta",
+        "yellow",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "yellow",
+        "blue",
+        "magenta",
+        "green",
+        "cyan"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "green",
+        "magenta",
+        "yellow",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"yellow\",\"blue\",\"magenta\",\"green\",\"cyan\"],\"B\":[\"cyan\",\"red\",\"green\",\"magenta\",\"yellow\",\"blue\"]}",
+    "usage": {
+      "input_tokens": 868,
+      "input_tokens_details": {
+        "cached_tokens": 625
+      },
+      "output_tokens": 735,
+      "output_tokens_details": {
+        "reasoning_tokens": 694
+      },
+      "total_tokens": 1603
+    }
+  },
+  {
+    "provider": "meta-chat",
+    "model": "muse-spark-1.3",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 400,
+    "outcome": "image_result_rejected",
+    "detail": "{\"error\":{\"code\":null,\"message\":\"`messages[2].content` did not match any supported type\",\"param\":\"messages[2].content\",\"type\":\"invalid_request_error\"}}"
+  },
+  {
+    "provider": "azure",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": {
+      "A": [
+        "red",
+        "yellow",
+        "green",
+        "magenta",
+        "red",
+        "green"
+      ],
+      "B": [
+        "magenta",
+        "green",
+        "magenta",
+        "green",
+        "magenta",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "magenta",
+        "green",
+        "cyan",
+        "blue",
+        "yellow"
+      ],
+      "B": [
+        "red",
+        "cyan",
+        "magenta",
+        "green",
+        "blue",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"yellow\",\"green\",\"magenta\",\"red\",\"green\"],\"B\":[\"magenta\",\"green\",\"magenta\",\"green\",\"magenta\",\"green\"]}",
+    "usage": {
+      "input_tokens": 274,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 37,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 311
+    }
+  },
+  {
+    "provider": "azure-anthropic",
+    "model": "claude-haiku-4-5",
+    "dialect": "anthropic",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 404,
+    "outcome": "first_call_rejected",
+    "detail": "{\"error\":{\"code\":\"DeploymentNotFound\",\"message\":\"The API deployment claude-haiku-4-5 does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.\",\"details\":\"The API deployment claude-haiku-4-5 does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.\"}}"
+  },
+  {
+    "provider": "azure-chat",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "yellow",
+        "magenta",
+        "red",
+        "blue",
+        "cyan",
+        "green"
+      ],
+      "B": [
+        "cyan",
+        "red",
+        "green",
+        "magenta",
+        "yellow",
+        "blue"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "completion_tokens": 45,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "latency_checkpoint": {
+        "engine_tbt_ms": 11,
+        "engine_ttft_ms": 64,
+        "engine_ttlt_ms": 567,
+        "pre_inference_ms": 210,
+        "service_tbt_ms": 11,
+        "service_ttft_ms": 512,
+        "service_ttlt_ms": 1007,
+        "user_visible_ttft_ms": 302
+      },
+      "prompt_tokens": 249,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cached_tokens": 0
+      },
+      "total_tokens": 294
+    }
+  },
+  {
+    "provider": "aws-anthropic",
+    "model": "claude-haiku-4-5",
+    "dialect": "anthropic",
+    "inference_calls": 0,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "NotConfiguredError",
+    "detail": "aws-anthropic: setting 'workspace' is required and has no default; set ANTHROPIC_AWS_WORKSPACE_ID\n\n  To fix:\n    - set ANTHROPIC_AWS_WORKSPACE_ID\n"
+  },
+  {
+    "provider": "bedrock-anthropic",
+    "model": "anthropic.claude-haiku-4-5",
+    "dialect": "anthropic",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 403,
+    "outcome": "first_call_rejected",
+    "detail": "{\"type\":\"error\",\"request_id\":\"req_igw56rawq6v7fhbrfe4i4ejicngtujosb5sm2fvgtx3vre6tn7ka\",\"error\":{\"type\":\"permission_error\",\"message\":\"anthropic.claude-haiku-4-5 is not available for this account. You can explore other available models on Amazon Bedrock. For additional access options, contact AWS Sales at https://aws.amazon.com/contact-us/sales-support/\"}}"
+  },
+  {
+    "provider": "bedrock-mantle-chat",
+    "model": "xai.grok-4-3",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 404,
+    "outcome": "first_call_rejected",
+    "detail": "{\"error\":{\"code\":\"not_found_error\",\"message\":\"The model 'xai.grok-4-3' does not exist\",\"param\":null,\"type\":\"invalid_request_error\"}}"
+  },
+  {
+    "provider": "meta-anthropic",
+    "model": "muse-spark-1.3",
+    "dialect": "anthropic",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_visual_check_failed",
+    "answer": null,
+    "expected": {
+      "A": [
+        "green",
+        "cyan",
+        "red",
+        "magenta",
+        "yellow",
+        "blue"
+      ],
+      "B": [
+        "magenta",
+        "yellow",
+        "cyan",
+        "green",
+        "blue",
+        "red"
+      ]
+    },
+    "output": "\nMissing panel A image, refetching A.\n",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 625,
+      "input_tokens": 480,
+      "output_tokens": 1002,
+      "output_tokens_details": {
+        "thinking_tokens": 933
+      }
+    }
+  },
+  {
+    "provider": "bedrock-chat",
+    "model": "deepseek.v3.2",
+    "dialect": "openai-chat",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 200,
+    "turn2_status": 400,
+    "outcome": "image_result_rejected",
+    "detail": "{\"error\":{\"message\":\"Failed to deserialize the JSON body into the target type: ?[2]: Invalid 'messages': Invalid 'content': value did not match any expected variant at line 1 column 1837\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":\"validation_error\"}}"
+  },
+  {
+    "provider": "vertex",
+    "model": "gemini-3.7-flash",
+    "dialect": "gemini",
+    "inference_calls": 0,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "AuthError",
+    "detail": "Google OAuth refresh: HTTP 400\n\n  To fix:\n    - Check that your API key is correct and not expired\n    - Set the provider API key in your environment\n"
+  },
+  {
+    "provider": "vertex-express",
+    "model": "gemini-3.7-flash",
+    "dialect": "gemini",
+    "inference_calls": 0,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "MissingCredentialError",
+    "detail": "no credential found for provider 'vertex-express'. Set GOOGLE_API_KEY in the environment, or pass RouterConfig(api_keys={'vertex-express': \"...\"}).\n\n  To fix:\n    - Set the provider API key in your environment: GOOGLE_API_KEY=...\n    - Configure credentials for vertex-express\n"
+  },
+  {
+    "provider": "vertex-anthropic",
+    "model": "claude-haiku-4-5",
+    "dialect": "anthropic",
+    "inference_calls": 0,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "AuthError",
+    "detail": "Google OAuth refresh: HTTP 400\n\n  To fix:\n    - Check that your API key is correct and not expired\n    - Set the provider API key in your environment\n"
+  },
+  {
+    "provider": "$LM15_CAPTURE_CREDENTIAL",
+    "model": "qwen2.5vl:7b",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "turn1_status": 404,
+    "outcome": "first_call_rejected",
+    "detail": "{\"error\":{\"message\":\"model 'qwen2.5vl:7b' not found\",\"type\":\"not_found_error\",\"param\":null,\"code\":null}}\n"
+  },
+  {
+    "provider": "vllm",
+    "model": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ConnectError",
+    "detail": "failed to connect to localhost:8000: [Errno 111] Connection refused"
+  },
+  {
+    "provider": "sglang",
+    "model": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "dialect": "openai-chat",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ConnectError",
+    "detail": "failed to connect to localhost:30000: [Errno 111] Connection refused"
+  }
+]

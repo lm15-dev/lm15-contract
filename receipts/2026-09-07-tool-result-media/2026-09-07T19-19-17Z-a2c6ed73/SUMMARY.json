@@ -1,0 +1,200 @@
+[
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "cyan",
+        "red",
+        "green",
+        "yellow",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "cyan",
+        "red",
+        "green",
+        "yellow",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"cyan\",\"red\",\"green\",\"yellow\",\"blue\"]}",
+    "usage": {
+      "prompt_tokens": 534,
+      "completion_tokens": 20,
+      "total_tokens": 554,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 0.91
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "blue",
+        "red",
+        "magenta",
+        "cyan",
+        "green"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"blue\",\"yellow\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 254,
+      "completion_tokens": 20,
+      "total_tokens": 274,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 2.04
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "yellow",
+        "red",
+        "blue",
+        "cyan",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"blue\",\"yellow\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 261,
+      "completion_tokens": 20,
+      "total_tokens": 281,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 1.74
+  },
+  {
+    "provider": "openai-chat",
+    "model": "gpt-5.4",
+    "dialect": "openai-chat",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_no_json_answer",
+    "answer": null,
+    "expected": {
+      "A": [
+        "yellow",
+        "magenta",
+        "red",
+        "green",
+        "blue",
+        "cyan"
+      ],
+      "B": [
+        "yellow",
+        "cyan",
+        "green",
+        "red",
+        "magenta",
+        "blue"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "prompt_tokens": 313,
+      "completion_tokens": 17,
+      "total_tokens": 330,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "audio_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "audio_tokens": 0,
+        "accepted_prediction_tokens": 0,
+        "rejected_prediction_tokens": 0
+      }
+    },
+    "wall_s": 2.13
+  }
+]

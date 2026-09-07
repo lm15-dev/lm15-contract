@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-09-07T19-14-14Z",
+  "provider": "meta",
+  "status": 200,
+  "model": "muse-spark-1.3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a9f0d062aee6d2f0a0941c0:rs_2c534d2f-4ec9-47c7-9f02-1a28f773cce9",
+          "summary": [],
+          "status": "completed"
+        },
+        {
+          "type": "message",
+          "id": "rs_d373b578-025f-4092-9352-60a176770198",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Your panel request is on the way — I'll fetch panel A and read its colors.",
+              "annotations": [],
+              "logprobs": []
+            }
+          ],
+          "phase": "commentary",
+          "status": "completed"
+        },
+        {
+          "type": "function_call",
+          "id": "fc_c60479eb-da48-458c-9ec1-f0051d7e73f3",
+          "call_id": "call_c60479eb-da48-458c-9ec1-f0051d7e73f3",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}",
+          "status": "completed"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_c60479eb-da48-458c-9ec1-f0051d7e73f3",
+          "output": [
+            {
+              "type": "input_file",
+              "filename": "panel.pdf",
+              "file_data": "data:application/pdf;base64,JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAoYmx1ZSByZWQgbWFnZW50YSB5ZWxsb3cgY3lhbiBncmVlbikgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "59221a0e63d9055cebcc4d2eb00f11bb77f85ad341d79faafbb7d8dd27fbd6a4",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "49b0d1c39cb4600aa576a68a48f49aeb5544b62ae9d9e913f2458a7cc021ce7b",
+  "response_bytes": 1213,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

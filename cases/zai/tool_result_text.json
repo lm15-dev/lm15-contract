@@ -1,0 +1,171 @@
+{
+  "id": "zai.tool_result_text",
+  "provider": "zai",
+  "feature": "tool_result_text",
+  "description": "MAP-10 rule 7: a text-only tool result stays a string",
+  "base_url": "https://api.z.ai/api/paas/v4",
+  "request": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": "\nI will now call the tool to fetch panel A.\n",
+          "reasoning_content": "The user wants me to call the fetch_panel tool with label \"A\" and then, after receiving the result, inspect the panel and return a JSON object with the color names in order.\n\nI need to follow these steps:\n1. Call the fetch_panel tool with label \"A\".\n2. Wait for the tool result.\n3. Inspect the panel (which is a 3x2 grid of colors).\n4. Read the colors left to right, top row then bottom row.\n5. Map the colors to the allowed names: red, green, blue, yellow, magenta, cyan.\n6. Format the output as a JSON object: {\"A\": [list of six color names]}.\n\nI will start by calling the tool.",
+          "tool_calls": [
+            {
+              "id": "call_-7288279057127438742",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288279057127438742",
+          "content": "Panel A colors in reading order: red, yellow, cyan, green, blue, magenta"
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/text/exchange-2026-09-07T19-16-11Z-3f5a059f7e4942faaa77c13c3a168718.json",
+    "evidence": "zai 2026-09-07T19-16-11Z, glm-4.6v, HTTP 200; tool-result-content matrix cell 'text' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/zai.tool_result_text/2026-09-07T19-16-11Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/text/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].tool_calls[0].function.arguments — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[1].tool_calls[0].index — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[2].content — text-only result: the probe sent a one-block array, the ratified cell is the string form; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "glm-4.6v",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "The user wants me to call the fetch_panel tool with label \"A\" and then, after receiving the result, inspect the panel and return a JSON object with the color names in order.\n\nI need to follow these steps:\n1. Call the fetch_panel tool with label \"A\".\n2. Wait for the tool result.\n3. Inspect the panel (which is a 3x2 grid of colors).\n4. Read the colors left to right, top row then bottom row.\n5. Map the colors to the allowed names: red, green, blue, yellow, magenta, cyan.\n6. Format the output as a JSON object: {\"A\": [list of six color names]}.\n\nI will start by calling the tool."
+          },
+          {
+            "type": "text",
+            "text": "\nI will now call the tool to fetch panel A.\n"
+          },
+          {
+            "type": "tool_call",
+            "id": "call_-7288279057127438742",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_-7288279057127438742",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "Panel A colors in reading order: red, yellow, cyan, green, blue, magenta"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell text); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-16-11Z.txt"
+}

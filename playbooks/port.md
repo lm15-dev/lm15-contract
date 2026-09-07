@@ -119,6 +119,16 @@ Shared decisions so ports look like one family:
    needed it.
 4. The public surface reviewed against `playbooks/api-family.md`
    (its "Reviewing against this page" section).
+5. **Probe outside the corpus.** The corpus pins what someone thought to
+   pin; its blind spots are the reviewer's job. Build at least ten
+   canonical requests the corpus does NOT contain — combinations of
+   fields and part kinds across messages (media inside a tool result,
+   a config knob on a dialect with no slot, a citation on replay, a
+   path-addressed part) — send each through both the reference and the
+   port, and file every difference and every silent drop as a finding
+   with the request attached. The 2026-09-07 Rust review found MAP-10
+   this way (`changes/2026-09-07-tool-result-content.md`); a green
+   harness had said nothing.
 
 (`harness/selftest.py` drives only the fake shim; it proves the
 comparator, not a port. A per-port mutation run is a stated gap.)

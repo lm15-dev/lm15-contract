@@ -1,0 +1,33 @@
+{
+  "canonical_response": {
+    "id": "20260908031632eecf7867c7e44438",
+    "model": "glm-4.6v",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "I have received the panel from the tool. Now I need to inspect it and read the colors left to right, top row then bottom row.\n\nThe panel is a grid of 3 columns and 2 rows.\nTop row, left to right:\n1. The first color is green.\n2. The second color is red.\n3. The third color is cyan.\n\nBottom row, left to right:\n1. The first color is yellow.\n2. The second color is blue.\n3. The third color is magenta.\n\nSo the colors in order are: green, red, cyan, yellow, blue, magenta.\n\nI need to return this as JSON with the key \"A\" and the colors in an array."
+        },
+        {
+          "type": "text",
+          "text": "\n{\"A\":[\"green\", \"red\", \"cyan\", \"yellow\", \"blue\", \"magenta\"]}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 444,
+      "output_tokens": 171,
+      "total_tokens": 615,
+      "cache_read_tokens": 276,
+      "reasoning_tokens": 146
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-16-32Z.txt"
+  }
+}

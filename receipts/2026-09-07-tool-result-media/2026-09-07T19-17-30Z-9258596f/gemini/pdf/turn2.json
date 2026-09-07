@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-09-07T19-17-33Z",
+  "status": 400,
+  "latency_s": 0.51,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                }
+              },
+              "thoughtSignature": "CpkEARFNMg8C3YX+M10lLqhM2sRjitrKgHhYZefzsrZ3w7mKVyA72AxQFjXbi43i7WDAoKIFhytdFOUKRrWo2NM08MViHIW1Qb24p4wPbKZ0aLN5+P49NdAcTu6KG1bJskV6iMdVs5UL5buyF3tkP6Ewhx+8i1MW9ONpFkvfoS1XyympCIdcZn3zp8RJoXg6mqFTqsTxpPVpRQT5DADh4PjcrcSRl5OpY2JKy7FY/v2RFh3UexkhU8bPQbGiTpVrGViC9n0WbMU/huR4PVVo8bLV4rnVqfaXpfu3WKFnMEDO42g6XT0NIdSb3j9dS94BxEwcXEkeFpXdrK/62Qq+3Hpw/sm9O2gz4GYCPnn8IzZKPPyFw3TiU23I1Ip3AXL7v9ng/8FxTRhgFoaIl8OUDgnAd40rDI9v6fwOgqKb/Pk6nE6/WXCrX7carUT1KQRym3MvxuD0KYya9pDQ0ZlyVitMlmjmf532JWq2/nilIhIxBMeh/65kSmTP9wXPbBkMdHTeM0AXbvOxOmUX/Y72OBGpEmyGKkYG0JvdkOXT7YouMRGcIvpE4PqWqF0poy7dxLaveAjxNAUFRuul1+vdHoAwkSGoBMBKvIRs7o2S6rTUK5bH2znn52XolWnV06Y19lJ91WH9fCVaZaIme8qBxcDxg5fT+2HWNDCkk14O8lkuqMZwZukT1f0La8CbngWBNT13wM+bBk6Lgc87"
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {
+                  "result": "see attached panel"
+                },
+                "parts": [
+                  {
+                    "inlineData": {
+                      "mimeType": "application/pdf",
+                      "data": "JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAoZ3JlZW4geWVsbG93IHJlZCBjeWFuIG1hZ2VudGEgYmx1ZSkgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "response_sha256": "b1a49d9f026e6c035c068bfabb7cd9346fa6ba004abd1cb54cb56f14ed73906d",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

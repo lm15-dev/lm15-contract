@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-09-07T19-17-27Z",
+  "provider": "openai-chat",
+  "status": 200,
+  "model": "gpt-5.4",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5.4",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACPklEQVR4nO3SMQ3EQADEwIA4/lAeTupAeBBXWCuNZAAu5nnPO935nem+b7snFwDQdAABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuQCAegQADZcLAKhHANBuAAEE0HK5AIB6BAANlwsAqEcA0G4AAQTQcrkAgHoEAA2XCwCoRwDQbgABBNByuYBbQDWA6852/cFdAAEE0HL9AUDT9QcATdcfADRdfwDQdP0BQNP1BwBN1x8ANF1/ANB0/QFA0/UHAE3XHwA0XX8A0HT9AUDT9QcATdcfADRdfwDQdP0BQNP1BwBN1x8ANF1/ANB0/QFA0/UHAE3XHwA0XX8A0HT9AUDT9QcATdcfADRdfwDQdP0BQNP1BwBN1x8ANF1/ANB0/QFA0/UHAE3XHwA0XX8A0HT9AUDT9QcATdcfADRdfwDQdP0BQNP1BwBN1x8ANF1/ANB0/QFA0/UHAE3XHwA0XX8A0HT9AUDT9QcATdcfADRdfwDQdP0BQNP1BwBN1x8ANF1/ANB0/QFA0/UHAE3XHwA0XX8A0HT9AUDT9Qd3/QHCFmgmqe4E8QAAAABJRU5ErkJggg=="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "request_sha256": "437790b01d2f86b1ca33546537629553b70264fd50017502a26dd4bcb0a9c3e2",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "44035f92dc618a13909c142a3a8335159526cca0389896bfb016e993b5f3a4ac",
+  "response_bytes": 834,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

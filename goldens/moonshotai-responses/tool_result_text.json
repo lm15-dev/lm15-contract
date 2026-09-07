@@ -1,0 +1,43 @@
+{
+  "canonical_response": {
+    "id": "resp_6a9f0ce81960f3f01886fada",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The tool returned the colors in reading order: blue, cyan, green, yellow, magenta, red. Now I return ONLY JSON {\"A\":[six color names]}.",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_RcmKJ7Oq1rRDZg6bSEocGf0J"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "{\"A\":[\"blue\",\"cyan\",\"green\",\"yellow\",\"magenta\",\"red\"]}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 399,
+      "output_tokens": 67,
+      "total_tokens": 466,
+      "cache_read_tokens": 256,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 35
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-13-42Z.txt"
+  }
+}

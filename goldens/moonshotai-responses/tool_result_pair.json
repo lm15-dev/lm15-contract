@@ -1,0 +1,43 @@
+{
+  "canonical_response": {
+    "id": "resp_6a9f0ceea105a43466b07b8b",
+    "model": "kimi-k3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "Panel A: top row left-to-right: blue, cyan, magenta. Bottom row: red, green, yellow.\nPanel B: top row: cyan, magenta, yellow. Bottom row: blue, red, green.\nReturn only JSON.",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_g7DdgiwvEc5VFK8kGObDfgZQ"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "{\"A\":[\"blue\",\"cyan\",\"magenta\",\"red\",\"green\",\"yellow\"],\"B\":[\"cyan\",\"magenta\",\"yellow\",\"blue\",\"red\",\"green\"]}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 552,
+      "output_tokens": 97,
+      "total_tokens": 649,
+      "cache_read_tokens": 256,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 50
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-13-46Z.txt"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-09-07T19-13-10Z",
+  "status": 200,
+  "latency_s": 2.38,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $XAI_API_KEY"
+    },
+    "body": {
+      "model": "grok-4.20",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The task is: Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top...",
+          "tool_calls": [
+            {
+              "id": "call-437f2d26-49cf-4fbf-bfff-879a88467070-0",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              },
+              "type": "function"
+            }
+          ],
+          "refusal": null
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call-437f2d26-49cf-4fbf-bfff-879a88467070-0",
+          "content": [
+            {
+              "type": "text",
+              "text": "Panel A colors in reading order: blue, magenta, red, cyan, green, yellow"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "325b25dc2675196242eede259747f41e478e79cca789732323b579c694bbafbb",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "1d44779b-6250-9ad0-81db-124a6b105c8a"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

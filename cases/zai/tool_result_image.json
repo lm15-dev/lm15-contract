@@ -1,0 +1,179 @@
+{
+  "id": "zai.tool_result_image",
+  "provider": "zai",
+  "feature": "tool_result_image",
+  "description": "MAP-10: an image-only tool result reaches the wire as a native block inside the result item (hidden-oracle visual check passed live)",
+  "base_url": "https://api.z.ai/api/paas/v4",
+  "request": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": "\nI will now call the tool to fetch panel A.\n",
+          "reasoning_content": "The user wants me to call the `fetch_panel` tool with label \"A\". After the tool returns the panel, I need to inspect it and describe the colors in a specific format.\n\nHere's the plan:\n1.  Call `fetch_panel` with label \"A\".\n2.  Wait for the tool's response.\n3.  Once the panel is received, I will examine it. The panel is a 3x2 grid of solid colors.\n4.  I will read the colors from left to right, top row first, then bottom row.\n5.  I will identify each color using only the names: red, green, blue, yellow, magenta, cyan.\n6.  I will format the output as a JSON object with a single key \"A\" and a value that is a list of the six color names.\n7.  I will not provide any other text, just the JSON.\n\nI will now proceed with step 1.",
+          "tool_calls": [
+            {
+              "id": "call_-7288278885328747704",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\":\"A\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288278885328747704",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACN0lEQVR4nO3SQQnEQABFsYoY/1JWTs+VsCLm8PgQiIQ853e2nXfaO+7pBwi0TCCBBFqWDxCoTyDQsnqAQPUAgZYJJJBAy/IBAvUJBFpWDxCoHiDQMoEEEmhZPkCgPoFAy+oBAtUDBFomkEACLcsHCNQnEGhZPUCgeoBAywQSSKBl+QCB+gQCLasHCFQPEGiZQAIJtCwfIFCfQKBl9QCB6gECLRNIIIGW5QME6hMItKweIFA9QKBlAgkk0LJ8gEB9AoGW1QMEqgcItEwggQRalg8QqE8g0LJ6gED1AIGWCSSQQMvyAQL1CQRaVg8QqB4g0DKBBBJoWT5AoD6BQMvqAQLVAwRaJpBAAi3LBwjUJxBoWT1AoHqAQMsEEkigZfmA20Dfd6b1Be7UAW4JJJBAy/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LB1z6AxO4aCb9v3c3AAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/image/exchange-2026-09-07T19-16-21Z-dc467e4e03f942b79e15d361f9f5e4cb.json",
+    "evidence": "zai 2026-09-07T19-16-21Z, glm-4.6v, HTTP 200; tool-result-content matrix cell 'image' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/zai.tool_result_image/2026-09-07T19-16-21Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/zai/image/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].tool_calls[0].function.arguments — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.messages[1].tool_calls[0].index — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "glm-4.6v",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "The user wants me to call the `fetch_panel` tool with label \"A\". After the tool returns the panel, I need to inspect it and describe the colors in a specific format.\n\nHere's the plan:\n1.  Call `fetch_panel` with label \"A\".\n2.  Wait for the tool's response.\n3.  Once the panel is received, I will examine it. The panel is a 3x2 grid of solid colors.\n4.  I will read the colors from left to right, top row first, then bottom row.\n5.  I will identify each color using only the names: red, green, blue, yellow, magenta, cyan.\n6.  I will format the output as a JSON object with a single key \"A\" and a value that is a list of the six color names.\n7.  I will not provide any other text, just the JSON.\n\nI will now proceed with step 1."
+          },
+          {
+            "type": "text",
+            "text": "\nI will now call the tool to fetch panel A.\n"
+          },
+          {
+            "type": "tool_call",
+            "id": "call_-7288278885328747704",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_-7288278885328747704",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACN0lEQVR4nO3SQQnEQABFsYoY/1JWTs+VsCLm8PgQiIQ853e2nXfaO+7pBwi0TCCBBFqWDxCoTyDQsnqAQPUAgZYJJJBAy/IBAvUJBFpWDxCoHiDQMoEEEmhZPkCgPoFAy+oBAtUDBFomkEACLcsHCNQnEGhZPUCgeoBAywQSSKBl+QCB+gQCLasHCFQPEGiZQAIJtCwfIFCfQKBl9QCB6gECLRNIIIGW5QME6hMItKweIFA9QKBlAgkk0LJ8gEB9AoGW1QMEqgcItEwggQRalg8QqE8g0LJ6gED1AIGWCSSQQMvyAQL1CQRaVg8QqB4g0DKBBBJoWT5AoD6BQMvqAQLVAwRaJpBAAi3LBwjUJxBoWT1AoHqAQMsEEkigZfmA20Dfd6b1Be7UAW4JJJBAy/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LB1z6AxO4aCb9v3c3AAAAAElFTkSuQmCC"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell image); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-16-21Z.txt"
+}

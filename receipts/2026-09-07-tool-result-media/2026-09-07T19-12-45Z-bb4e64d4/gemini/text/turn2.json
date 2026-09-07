@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-09-07T19-13-04Z",
+  "status": 200,
+  "latency_s": 1.24,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                },
+                "id": "call_71657"
+              },
+              "thoughtSignature": "EtYBCtMBARFNMg+yZuCHoP+qHAGckVIRdL8wqHp7fLBWwI9l/BPqCowsYSxfHKdTHBuFOu6ubxnOW694PctpzfbAAOpSy3jnRRrjfUAtimnKFKA/R8dZyMaxGqOqchJk65VkqNG4AJXVuw19skK13AsvzKY/iu7OXnuZnDasEDsYKWnxdbN+osKMcOJqRfURIlnbbtlU3+aAWcNVDlCX9qNcgEvrRZCND/Jg8Ggv3VsqjLYsdZJCPTipGSZSrLbn1v/jeqh99bu2O7ZUhSIbNrynZsHIXS01qg=="
+            }
+          ],
+          "role": "model"
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {
+                  "result": "Panel A colors in reading order: red, cyan, magenta, yellow, green, blue"
+                },
+                "id": "call_71657"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "response_sha256": "6ec386453e1c3c30c78d98614cc20056668ec7d5fcc325c3db34f10bda13949b",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

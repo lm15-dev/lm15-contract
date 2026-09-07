@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-09-07T19-16-51Z",
+  "status": 200,
+  "latency_s": 3.47,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+        },
+        {
+          "content": "\nI'll call the fetch_panel tool to retrieve panel A and then interpret the colors according to your instructions.\n",
+          "reasoning_content": "I need to call the fetch_panel tool with label \"A\" to get the visual panel. The user has specified that each panel is a grid of 3 columns and 2 rows of solid colors, and I should read it left to right across the top row, then left to right across the bottom row. The colors should be only from the list: red, green, blue, yellow, magenta, cyan.\n\nI'll call the fetch_panel tool with label \"A\" and then process the result according to the instructions.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_-7288278541731359539",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288278541731359539",
+          "content": [
+            {
+              "type": "text",
+              "text": "panel service unavailable (HTTP 503)"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "5b04cc069b492a43c1c87e7b0cdac9a6a93660cbacdbfb29c97001e6d2544bef",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "50184d83-e361-4b93-9ba6-f121f45f2b97"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

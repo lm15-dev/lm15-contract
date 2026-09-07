@@ -1,0 +1,188 @@
+{
+  "id": "gemini.tool_result_error",
+  "provider": "gemini",
+  "feature": "tool_result_error",
+  "description": "MAP-10 rule 5: is_error reaches the wire's own flag",
+  "base_url": "https://generativelanguage.googleapis.com/v1beta",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "fetch_panel",
+                "args": {
+                  "label": "A"
+                },
+                "id": "call_35571"
+              },
+              "thoughtSignature": "Er8BCrwBARFNMg+S0qUlU+Hja1AFUqZ3xV1FRp6MuKkYx60CjVO8zskwPnvvprTxuXhgjfP4/YtOOSNYdgyPhHTa2OIKnPUrvwokZ+tCKy6ZvkdXqzW9TEWf5yNaaotXYT627MI1Lo9mpwQPOkj55weer/awtL/UtqcUo617hYIcQDrVp1BDRvNPxqH86VLmfy6z81rx/hAFCi/lrLYGaeMdC0sDetQsG/gEPt4eoUivcFebapQXLKgqoT5jA4DYNVs="
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "fetch_panel",
+                "response": {
+                  "error": "panel service unavailable (HTTP 503)"
+                },
+                "id": "call_35571"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 1600
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "fetch_panel",
+              "description": "Retrieve a visual panel by its label.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": [
+                      "A",
+                      "B"
+                    ]
+                  }
+                },
+                "required": [
+                  "label"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/gemini/error/exchange-2026-09-07T19-13-07Z-00fd5513f24941c4b8e5c24fea59e732.json",
+    "evidence": "gemini 2026-09-07T19-13-07Z, gemini-3.7-flash, HTTP 200; tool-result-content matrix cell 'error' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/gemini.tool_result_error/2026-09-07T19-13-07Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/gemini/error/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; identical to the sent wire; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "gemini-3.7-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_35571",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            },
+            "continuation": [
+              {
+                "provider": "gemini",
+                "kind": "thought_signature",
+                "data": {
+                  "value": "Er8BCrwBARFNMg+S0qUlU+Hja1AFUqZ3xV1FRp6MuKkYx60CjVO8zskwPnvvprTxuXhgjfP4/YtOOSNYdgyPhHTa2OIKnPUrvwokZ+tCKy6ZvkdXqzW9TEWf5yNaaotXYT627MI1Lo9mpwQPOkj55weer/awtL/UtqcUo617hYIcQDrVp1BDRvNPxqH86VLmfy6z81rx/hAFCi/lrLYGaeMdC0sDetQsG/gEPt4eoUivcFebapQXLKgqoT5jA4DYNVs="
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_35571",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "panel service unavailable (HTTP 503)"
+              }
+            ],
+            "is_error": true
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell error); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-13-07Z.txt"
+}

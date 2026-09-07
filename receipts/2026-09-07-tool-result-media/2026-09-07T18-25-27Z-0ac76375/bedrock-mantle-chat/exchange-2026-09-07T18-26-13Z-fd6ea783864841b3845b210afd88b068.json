@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-07T18-26-13Z",
+  "provider": "bedrock-mantle-chat",
+  "status": 404,
+  "model": "xai.grok-4-3",
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260907T182613Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "xai.grok-4-3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel twice in this turn: once with label \"A\" and once with label \"B\". After both tool results arrive, inspect each image. Each is a grid of 3 columns and 2 rows. Return ONLY JSON {\"A\":[six color names],\"B\":[six color names]}, reading each image left to right across the top row, then left to right across the bottom row. Use names red, green, blue, yellow, magenta, cyan. Do not guess before receiving the images."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "7a91072291407f8f6da7db88e63aee4721cdaf7c6b75fd84217fe99308dc7e45",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "97225390f3f60d18ad3a6d441bd3e131d80d5ea84a776a8db4cddfd016929dfd",
+  "response_bytes": 132,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-09-07T19-14-28Z",
+  "status": 200,
+  "latency_s": 4.81,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "data": "Q-PaDgHyG0GkcyUX3FRk-dxi6IW5R6hP6X2_izfX8nPZMCOFsnuRY2tTNrYfGd6nOayuy_GO0vsxJmmTYU5BaYxfjAj6BmO_CbNwYV84ZSuYZjZ92eblAPbD-offpEzyUWeoAyoejlCGdtrdRK1o-3uYvJEjoeMB5Vyf7ZSxVmACRvlIt6Z3XvU-8Qfq4fLq4OILMkISGwjpD19TNvbYIE92IGdQ5n_5pgwOkwu8bKXJr2OemI9DOrPSfCZvl8HWyHnxVmU1jfCn-j2tZPc-2N_6xf_FmJ4Hbi_Xtggw8Y-MlraRv4mlJKgTCdG70iMfWmJ5rWN_rsPfm3b9HiRuP7MvaA9-NrOQRUCzzlCOnHwYJeRzg9UmxnxsnPv6oiwYUIge71FiJNWlV_UzawNuvU7d_sC1qqVGQglCPT9xgwW0Hip8LQxlE9pm3m41G9PxOKPUatVaBXWsLb7bajMxqZ2bzSsCDY4LSHOEwqKtmjMXbqXBNlfJ6b1g6-p3cWQs7NyU_8VUxxDwetlJEYkguCrovhxBnZ4kyGMjE40Bo5hjEmu7wlMfsOLrBhgxiR1sbkihF3m9w67snQWoLNXrLALeGknpuoFBcQCOtewFTyU6uRDhZTrOeZcaidwe_on3xJ4lLxaziJ7Pg3SQ8foeQKOOqz8CLAJkxXzg9ncw4pjYo0Qk_IPZAipGDchw4l2oQQNa6TR4Ana2EhUOQOnD5io9qTiEGOYrNVz5GVH21ODaSpx6jGvbGDPPQEGxUxcqAvC14bOeX-Y2WQp_rCzvh2mFE_-e-v66Hzz54MS8EK2v6znAzPnzlL4RMiK6pj5PkTZWt7jiYk1BEu688UkU55NMtAMOUpD3GFS2sH5LLMCj4igzLmz_x8jSCAKdd1oWDlVEdN7JY3DFaxAI5fHa_h_HTZy37TZ0mlLvOFTwWT9QFOdPRRVRfrS0jxZhHB0c7bY5Z8-yfWY9qhXAIoFMMqRhH-Svb2nv8UKMiYJUjJI4b8jnuDwV44peSqaXgLb7laWbYowA-8Z-ItCOsnC_ES_EN6NETkyDeIOG_Ja1VcurbY1wiZjTJ4UNAmAue0SKjg84TuFbxHLcDVs1tIivCcKKfdnxo5nbaT-31jkyl1-D9iUYbKAmUrZVGbincOOCSNt6zqJOIKdJhSxMU_p5K1G9VwTWxtRK1pQUDw_Jv4GnBllZU794HXGHXkLuRYlP8JGPF_jv93noNPXnBD_9WrXmViw9mA-YbkRn9oBKR_WhdIHsHiyrwfNqnu7bAwo5vR1_ReWP7yJknC30f-K4ZnX_2zl0Qa9ZvweD5Gcdli0V1fdz5-IP4tQhHQ3BS1ALBeIyNYHIHYGO2uWGdjSxmJ8LLbCae0iU1ae36v1I7mHuh0WaQmREpGCRDQghuBHYnig9n-9Vb1xfEkeE9Q",
+              "type": "redacted_thinking"
+            },
+            {
+              "text": "I'll fetch panel A to read its colors.",
+              "type": "text"
+            },
+            {
+              "id": "call_e3d471d4-58b0-4a53-a3ee-306bce649163",
+              "input": {
+                "label": "A"
+              },
+              "name": "fetch_panel",
+              "type": "tool_use"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_e3d471d4-58b0-4a53-a3ee-306bce649163",
+              "content": [
+                {
+                  "type": "document",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "application/pdf",
+                    "data": "JVBERi0xLjQKMSAwIG9iago8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4KZW5kb2JqCjIgMCBvYmoKPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4KZW5kb2JqCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA2MTIgNzkyXSAvQ29udGVudHMgNCAwIFIgL1Jlc291cmNlcyA8PCAvRm9udCA8PCAvRjEgNSAwIFIgPj4gPj4gPj4KZW5kb2JqCjQgMCBvYmoKPDwgL0xlbmd0aCA2NSA+PgpzdHJlYW0KQlQgL0YxIDI0IFRmIDQwIDcwMCBUZCAobWFnZW50YSBibHVlIHJlZCB5ZWxsb3cgY3lhbiBncmVlbikgVGogRVQKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8IC9UeXBlIC9Gb250IC9TdWJ0eXBlIC9UeXBlMSAvQmFzZUZvbnQgL0hlbHZldGljYSA+PgplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzNTYgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo0MjYKJSVFT0YK"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "18400c2c5376afbf54934caaa46f767da46e372557bd65adc4d444e0de4a4ac8",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "5f04064f-ab87-4f5c-80c8-b836b10b2cc8"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

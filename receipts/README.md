@@ -21,6 +21,7 @@ Rules:
 
 | Folder | Cited by |
 |---|---|
+| `2026-09-07-tool-result-media/` | `changes/2026-09-07-tool-result-content.md` (the MAP-10 design pass: ≈230 cells over 31 bindings, hidden-oracle visual checks, raw-wire probes, the fixture candidates behind `cases/*/tool_result_*.json`); superseded the same-day `changes/2026-09-07-tool-result-media-live.md` |
 | `2026-08-31-batch/` | `changes/2026-08-31-batch-lifecycle.md` |
 | `2026-08-31-files/` | `changes/2026-08-31-files-lifecycle.md` |
 | `2026-09-01-chat-builtin-tools/` | `changes/2026-09-01-chat-dialect-builtin-tools.md` |

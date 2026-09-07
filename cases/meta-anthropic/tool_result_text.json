@@ -1,0 +1,195 @@
+{
+  "id": "meta-anthropic.tool_result_text",
+  "provider": "meta-anthropic",
+  "feature": "tool_result_text",
+  "description": "MAP-10 rule 7: a text-only tool result stays a string",
+  "base_url": "https://api.meta.ai/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "redacted_thinking",
+              "data": "Q-PaDgEaJNpgf0Q2e0WQJDePj4p4P9gh21lejbje60Q6GK37Qb_j7oVMHSu2WK_oDOzGyvcNkVI0saegoRY7PqUxT-OH6-lhvSxvmMPM-Wn_0gePapS-H3ni5RWPn02-SL68EJ-8cfzdQn6WsjdwSBuH9tMA-LQSvs1FEJcYmmKRxI0WHnkFEd5-VISaKFdcpmg0fBv2J5nKjsV9J_3bUyqS9XLI2CJ5yDB0UcGaOS-85Rq03zazvatIAbTcOpSA_KTgQwgZzFe-01ExAngTIY1CBQfhCmVEtwiPOEJAMWmz3JOAMtPWnfHmnlRbHCT72bgjszqZ5L3h80Xw5VtpROwhB0pUKeYW5ZrbWIbOEabUmawU-EvLvHnuvHUbwMadGuxy5ofj8rG65q3-jNPKQFkCd65xiieQuJV-1hLVyn9_2W6H0o0xCcUHWPjSUyZ1EV6lIP5JInT6foGPssZ5is76rPgKbAp2g1mIHrF1C1Vlq_f-NZ-sS6X2azM63o9_ST1PfGZS2kd0pQ139dTA5hg05cPXzBg1jm-QPbgfln83GnxWj8xgEFiQpPU22sV-XONTdquLcW6dorhxQAWqNWfDaw7xVvb0gfb0DkTM1qFmgGePkVSIXk5XIA-hnEAJbQnawbnWlx-bS042gZlA8Bsoc9cpwAapANdCWPFQDzjCSPRVhL2BExGZvhAu1oSRpJ8inJa02KebS5IFbMLhzKPrBlLNG4hNmNUkvFhe9fjvVIoMOh_JGzSqzEwWuSzsL2sQ6-k8KwB8ce8K4ThSja_-dngTsiGckRMn0L2_HRHyMZBov4iQ-rSfADl_knPpBmvCt0KEYWYRN3y305s6MRMKOPewlOJl9Xstkf7ADgKTR4x8_wLTLfUsbsvnPOD0nIW4HxkOAwXSy8X8veb90Z79_HM3k-IyECQkhkTbUAjqvqabbFVYBvoAkWxcKtMdc2B-6D_yhxFXUkhGjmdX1zSKn6JNOsvQUa5UyVfUFahA6o1bcw7sKly_LweJu7h47qGsdOOa6HjT0mXb9WpM51wEF67_5nrQJYOy_Q3JFUqJJFTavy1pIivfma3MSK9R3u78GxrPeA5fsVeZN2TGqLABM1Rzc3Sbj1mlGdX-MZ1yGbxHMVfN_m3H7aY27znrH9lv24dlG90ejiUYYb5-gcHvKc540QowxHXydsIcW-J9H8D8B51R7yVQ07qibR9j5zD5al5Zk-elY4gnuPfZ3e1FxQC8ARrgL3bNmLuvwTMONht6kejfu-B2R1PvF8iUBKlcxexcR547tOo0MUPY9cgXTnOD4r1Wj1JPoBVg7XBKcCXp9fzTa1TjcB-sCrKgHSz6Qn_9TXxhKvjmhrObMeOws90u1DkFWAk87a-zFHgslMJKuvHpY4gTG8_QXK_BvkcpqHm4uwTm_w24_A"
+            },
+            {
+              "type": "text",
+              "text": "Your color grid request is on the way — fetching panel A now."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_a4dd5931-58dd-4230-9e98-0ff16d3b9b72",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_a4dd5931-58dd-4230-9e98-0ff16d3b9b72",
+              "content": "Panel A colors in reading order: yellow, magenta, green, red, blue, cyan"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/text/exchange-2026-09-07T19-14-24Z-1c08f8918a494f2d9671a00d415e2d65.json",
+    "evidence": "meta-anthropic 2026-09-07T19-14-24Z, muse-spark-1.3, HTTP 200; tool-result-content matrix cell 'text' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/meta-anthropic.tool_result_text/2026-09-07T19-14-24Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/text/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[2].content[0].content — text-only result: the probe sent a one-block array, the ratified cell is the string form; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "",
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "redacted_thinking",
+                "data": {
+                  "data": "Q-PaDgEaJNpgf0Q2e0WQJDePj4p4P9gh21lejbje60Q6GK37Qb_j7oVMHSu2WK_oDOzGyvcNkVI0saegoRY7PqUxT-OH6-lhvSxvmMPM-Wn_0gePapS-H3ni5RWPn02-SL68EJ-8cfzdQn6WsjdwSBuH9tMA-LQSvs1FEJcYmmKRxI0WHnkFEd5-VISaKFdcpmg0fBv2J5nKjsV9J_3bUyqS9XLI2CJ5yDB0UcGaOS-85Rq03zazvatIAbTcOpSA_KTgQwgZzFe-01ExAngTIY1CBQfhCmVEtwiPOEJAMWmz3JOAMtPWnfHmnlRbHCT72bgjszqZ5L3h80Xw5VtpROwhB0pUKeYW5ZrbWIbOEabUmawU-EvLvHnuvHUbwMadGuxy5ofj8rG65q3-jNPKQFkCd65xiieQuJV-1hLVyn9_2W6H0o0xCcUHWPjSUyZ1EV6lIP5JInT6foGPssZ5is76rPgKbAp2g1mIHrF1C1Vlq_f-NZ-sS6X2azM63o9_ST1PfGZS2kd0pQ139dTA5hg05cPXzBg1jm-QPbgfln83GnxWj8xgEFiQpPU22sV-XONTdquLcW6dorhxQAWqNWfDaw7xVvb0gfb0DkTM1qFmgGePkVSIXk5XIA-hnEAJbQnawbnWlx-bS042gZlA8Bsoc9cpwAapANdCWPFQDzjCSPRVhL2BExGZvhAu1oSRpJ8inJa02KebS5IFbMLhzKPrBlLNG4hNmNUkvFhe9fjvVIoMOh_JGzSqzEwWuSzsL2sQ6-k8KwB8ce8K4ThSja_-dngTsiGckRMn0L2_HRHyMZBov4iQ-rSfADl_knPpBmvCt0KEYWYRN3y305s6MRMKOPewlOJl9Xstkf7ADgKTR4x8_wLTLfUsbsvnPOD0nIW4HxkOAwXSy8X8veb90Z79_HM3k-IyECQkhkTbUAjqvqabbFVYBvoAkWxcKtMdc2B-6D_yhxFXUkhGjmdX1zSKn6JNOsvQUa5UyVfUFahA6o1bcw7sKly_LweJu7h47qGsdOOa6HjT0mXb9WpM51wEF67_5nrQJYOy_Q3JFUqJJFTavy1pIivfma3MSK9R3u78GxrPeA5fsVeZN2TGqLABM1Rzc3Sbj1mlGdX-MZ1yGbxHMVfN_m3H7aY27znrH9lv24dlG90ejiUYYb5-gcHvKc540QowxHXydsIcW-J9H8D8B51R7yVQ07qibR9j5zD5al5Zk-elY4gnuPfZ3e1FxQC8ARrgL3bNmLuvwTMONht6kejfu-B2R1PvF8iUBKlcxexcR547tOo0MUPY9cgXTnOD4r1Wj1JPoBVg7XBKcCXp9fzTa1TjcB-sCrKgHSz6Qn_9TXxhKvjmhrObMeOws90u1DkFWAk87a-zFHgslMJKuvHpY4gTG8_QXK_BvkcpqHm4uwTm_w24_A"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Your color grid request is on the way — fetching panel A now."
+          },
+          {
+            "type": "tool_call",
+            "id": "call_a4dd5931-58dd-4230-9e98-0ff16d3b9b72",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_a4dd5931-58dd-4230-9e98-0ff16d3b9b72",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "Panel A colors in reading order: yellow, magenta, green, red, blue, cyan"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell text); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-14-24Z.txt"
+}

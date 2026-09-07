@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-09-07T19-16-21Z",
+  "provider": "zai",
+  "status": 200,
+  "model": "glm-4.6v",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-4.6v",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "content": "\nI will now call the tool to fetch panel A.\n",
+          "reasoning_content": "The user wants me to call the `fetch_panel` tool with label \"A\". After the tool returns the panel, I need to inspect it and describe the colors in a specific format.\n\nHere's the plan:\n1.  Call `fetch_panel` with label \"A\".\n2.  Wait for the tool's response.\n3.  Once the panel is received, I will examine it. The panel is a 3x2 grid of solid colors.\n4.  I will read the colors from left to right, top row first, then bottom row.\n5.  I will identify each color using only the names: red, green, blue, yellow, magenta, cyan.\n6.  I will format the output as a JSON object with a single key \"A\" and a value that is a list of the six color names.\n7.  I will not provide any other text, just the JSON.\n\nI will now proceed with step 1.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"label\": \"A\"}",
+                "name": "fetch_panel"
+              },
+              "id": "call_-7288278885328747704",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_-7288278885328747704",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACN0lEQVR4nO3SQQnEQABFsYoY/1JWTs+VsCLm8PgQiIQ853e2nXfaO+7pBwi0TCCBBFqWDxCoTyDQsnqAQPUAgZYJJJBAy/IBAvUJBFpWDxCoHiDQMoEEEmhZPkCgPoFAy+oBAtUDBFomkEACLcsHCNQnEGhZPUCgeoBAywQSSKBl+QCB+gQCLasHCFQPEGiZQAIJtCwfIFCfQKBl9QCB6gECLRNIIIGW5QME6hMItKweIFA9QKBlAgkk0LJ8gEB9AoGW1QMEqgcItEwggQRalg8QqE8g0LJ6gED1AIGWCSSQQMvyAQL1CQRaVg8QqB4g0DKBBBJoWT5AoD6BQMvqAQLVAwRaJpBAAi3LBwjUJxBoWT1AoHqAQMsEEkigZfmA20Dfd6b1Be7UAW4JJJBAy/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LB1z6AxO4aCb9v3c3AAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "92e0c7d52b41cdf7f05c03b49aea3acc87a2b0a4bd6f2f1b2ad1c81e6b9256b4",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cb2ba6758909e8860f1bdbfde792a57d2affbd525a219589d262c24a0fa34b16",
+  "response_bytes": 865,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,89 @@
+{
+  "id": "deepseek-anthropic.tool_result_image_raise",
+  "provider": "deepseek-anthropic",
+  "feature": "tool_result_image_raise",
+  "description": "MAP-10: an image in a tool result RAISES on this preset (tool_result_media=reject) — HTTP 200 and the model reports [Unsupported Image] (silent degrade). There is no wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek-anthropic/image/exchange-2026-09-07T19-13-22Z-8e5bcbd22b4c494983ec87705c74f04f.json",
+    "evidence": "tool-result-content matrix cell 'image' on deepseek-v4-flash: HTTP 200 and the model reports [Unsupported Image] (silent degrade); receipt receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek-anthropic/image/ (turn1.json, turn2.json, turn2-response.txt, visual-oracle.json); ledger research/tool-result-content/20-results.md; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label A and describe the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_1",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_1",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgo="
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored with the case from the matrix cell it pins; the reference raises at build_request (lm15-python tests/test_tool_result_media.py)"
+  }
+}

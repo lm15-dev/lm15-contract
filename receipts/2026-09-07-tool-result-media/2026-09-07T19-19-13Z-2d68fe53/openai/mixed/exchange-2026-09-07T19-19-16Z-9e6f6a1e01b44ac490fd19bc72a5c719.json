@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-09-07T19-19-16Z",
+  "provider": "openai",
+  "status": 200,
+  "model": "gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "id": "fc_0cf9ef979e4f81f0006a9f0e32daac87d29d8dddf3ad892514",
+          "type": "function_call",
+          "status": "completed",
+          "arguments": "{\"label\":\"A\"}",
+          "call_id": "call_1JyYpFaRMq8M9JMZDNZOISVK",
+          "name": "fetch_panel"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_1JyYpFaRMq8M9JMZDNZOISVK",
+          "output": [
+            {
+              "type": "input_text",
+              "text": "Panel returned by the requested tool."
+            },
+            {
+              "type": "input_image",
+              "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAwAAAAIACAIAAAC6lJxtAAAURElEQVR4nO3WMQ3AQBADwQfx/KEETupACIwtPNIAuOa0Pve+MKu/AEovzDr9A0KnvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSgYgAxrb8ASn2EoGIAMa2/AEp9hKBiADGtvwBKfYSg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",
+              "detail": "high"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "0b1aa9fe7965f8c2889ba32105450ae8aa7be5042dc8ab34504e25a0e01c19bc",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "06f55a208277831eb624acbcf2dca4499b339e7cabef43806b445da3ef87d567",
+  "response_bytes": 2543,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

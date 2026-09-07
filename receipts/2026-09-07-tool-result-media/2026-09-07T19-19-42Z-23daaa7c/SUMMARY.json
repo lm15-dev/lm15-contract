@@ -1,0 +1,239 @@
+[
+  {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "unreadable"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "cyan",
+        "red"
+      ]
+    },
+    "output": "I cannot inspect the panel's contents because the image was returned as \"[Unsupported Image]\" and no color data was provided. I won't guess the colors.\n\n{\"A\": [\"unreadable\"]}",
+    "usage": {
+      "prompt_tokens": 525,
+      "completion_tokens": 113,
+      "total_tokens": 638,
+      "prompt_tokens_details": {
+        "cached_tokens": 384
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 71
+      },
+      "prompt_cache_hit_tokens": 384,
+      "prompt_cache_miss_tokens": 141
+    },
+    "wall_s": 2.77
+  },
+  {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_no_json_answer",
+    "answer": null,
+    "expected": {
+      "A": [
+        "blue",
+        "green",
+        "red",
+        "yellow",
+        "cyan",
+        "magenta"
+      ]
+    },
+    "output": "I could not read the panel: the tool returned \"[Unsupported Image]\", so no color data was accessible to me. Per your instruction not to guess, I won't fabricate the six colors. Please re-share the image in a supported format.",
+    "usage": {
+      "prompt_tokens": 531,
+      "completion_tokens": 155,
+      "total_tokens": 686,
+      "prompt_tokens_details": {
+        "cached_tokens": 512
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 103
+      },
+      "prompt_cache_hit_tokens": 512,
+      "prompt_cache_miss_tokens": 19
+    },
+    "wall_s": 3.23
+  },
+  {
+    "provider": "groq",
+    "model": "qwen/qwen3.8-27b",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 400,
+    "outcome": "tool_result_rejected",
+    "detail": "{\"error\":{\"message\":\"messages[2].content must be a string\",\"type\":\"invalid_request_error\",\"param\":\"messages[2].content\"}}\n",
+    "wall_s": 0.55
+  },
+  {
+    "provider": "groq",
+    "model": "qwen/qwen3.8-27b",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 400,
+    "outcome": "tool_result_rejected",
+    "detail": "{\"error\":{\"message\":\"messages[2].content must be a string\",\"type\":\"invalid_request_error\",\"param\":\"messages[2].content\"}}\n",
+    "wall_s": 0.54
+  },
+  {
+    "provider": "groq",
+    "model": "qwen/qwen3.8-27b",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "blue",
+        "green",
+        "yellow",
+        "red",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "blue",
+        "green",
+        "yellow",
+        "red",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\": [\"magenta\", \"blue\", \"green\", \"yellow\", \"red\", \"cyan\"]}",
+    "usage": {
+      "queue_time": 0.221578891,
+      "prompt_tokens": 1874,
+      "prompt_time": 0.158254024,
+      "completion_tokens": 23,
+      "completion_time": 0.045379012,
+      "total_tokens": 1897,
+      "total_time": 0.203633036
+    },
+    "wall_s": 0.98
+  },
+  {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "accepted_but_no_json_answer",
+    "answer": null,
+    "expected": {
+      "A": [
+        "magenta",
+        "blue",
+        "cyan",
+        "green",
+        "red",
+        "yellow"
+      ]
+    },
+    "output": "",
+    "usage": {
+      "prompt_tokens": 155,
+      "completion_tokens": 1600,
+      "total_tokens": 1755,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 1600
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 27
+    },
+    "wall_s": 13.02
+  },
+  {
+    "provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ReadTimeout",
+    "detail": "read timed out waiting for headers: timed out",
+    "wall_s": 60.07
+  },
+  {
+    "provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ReadTimeout",
+    "detail": "read timed out waiting for headers: timed out",
+    "wall_s": 100.83
+  },
+  {
+    "provider": "ollama",
+    "model": "qwen3.5:0.8b",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "blocked_or_inconclusive",
+    "error_type": "ReadTimeout",
+    "detail": "read timed out waiting for headers: timed out",
+    "wall_s": 124.48
+  }
+]

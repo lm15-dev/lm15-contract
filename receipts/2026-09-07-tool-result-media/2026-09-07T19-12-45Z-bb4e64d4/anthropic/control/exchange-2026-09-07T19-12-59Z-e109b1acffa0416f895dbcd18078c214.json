@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-09-07T19-12-59Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image",
+              "source": {
+                "type": "base64",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACUUlEQVR4nO3SMQ0AMQzAwIIIfygPp3MhPIgMliVLBuDhzsx1d93xB7sOLyBA5gIUoACZ4w8CpI4/CJA6/iBA6viDAKnjDwKkjj8IkDr+IEDq+IMAqeMPAqSOPwiQOv4gQOr4gwCp4w8CpI4/CJA6/iBA6viDAKnjDwKkjj8IkDr+IEDq+IMAqeMPAqSOPwiQOv4gQOr4gwCp4w8CpI4/CJA6/iBA6viDAKnjDwKkjj8IkDr+IEDq+IMAqeMPAqSOPwiQOv4gQOr4gwCp4w8CpI4/CJA6/iBA6viDAKnjDwKkjj8IkDr+IEDq+IMAqeMPAqSOPwiQOv4gQOr4gwCp4w8CpI4/CJA6/iBA6viDAKnjDwKkjj8IkDr+IEDq+IMAqeMPAqSOPwiQOv4gQOr4gwCp4w+2gL5RR/vd9p67AAUoQOZwAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gGU/fDVoJmTTA3cAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600
+    }
+  },
+  "request_sha256": "7e9b54063e85c8bba1c4de89387ecb4041458f1dc6d967eb87be79d48a815e1f",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ea36f9a4e8abb63c3a2d04b27662c522ac8ec978d13d0d9db2ad0e871422fe58",
+  "response_bytes": 540,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,32 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-6a9f0cdf790ba935d1215e1b",
+    "model": "kimi-k2.6",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "Now I need to inspect each panel. \n\nPanel A:\nTop row left to right: red, magenta (pink/purple), yellow\nBottom row left to right: blue, green, cyan (light blue/turquoise)\n\nWait, let me look carefully at panel A:\nTop left: red\nTop middle: magenta (bright pink/purple)\nTop right: yellow\nBottom left: blue\nBottom middle: green\nBottom right: cyan\n\nPanel B:\nTop row left to right: green, blue, cyan\nBottom row left to right: red, magenta, yellow\n\nLet me verify:\nPanel B top left: green\nPanel B top middle: blue\nPanel B top right: cyan\nPanel B bottom left: red\nPanel B bottom middle: magenta\nPanel B bottom right: yellow\n\nSo:\nA: [red, magenta, yellow, blue, green, cyan]\nB: [green, blue, cyan, red, magenta, yellow]\n\nThe user wants ONLY JSON. No extra text."
+        },
+        {
+          "type": "text",
+          "text": "{\"A\":[\"red\",\"magenta\",\"yellow\",\"blue\",\"green\",\"cyan\"],\"B\":[\"green\",\"blue\",\"cyan\",\"red\",\"magenta\",\"yellow\"]}"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 372,
+      "output_tokens": 241,
+      "total_tokens": 613,
+      "reasoning_tokens": 207
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-07",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-07T19-13-34Z.txt"
+  }
+}

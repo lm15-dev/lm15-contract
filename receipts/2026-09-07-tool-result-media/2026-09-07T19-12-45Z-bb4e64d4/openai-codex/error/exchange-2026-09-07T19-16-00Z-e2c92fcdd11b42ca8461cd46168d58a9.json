@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-09-07T19-16-00Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-5.4-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "41d3bdb8-3e3c-4f60-89ce-791d8e0846c3",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "gpt-5.4-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\". Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. If the tool result reports an error or gives you no panel, return ONLY JSON {\"A\":null,\"note\":\"<what the tool reported>\"}. Otherwise return ONLY JSON {\"A\":[six color names]}."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "14b1da3eb37f77d2dc7577959c3ec471e573427b6e74c996f88508cca72d6676",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "57e2a8747ff5de872995d292ab60773affcc8f1636d2176299fbbe3d732718c0",
+  "response_bytes": 7460,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

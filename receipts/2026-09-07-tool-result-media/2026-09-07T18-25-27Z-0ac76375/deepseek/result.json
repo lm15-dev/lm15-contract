@@ -1,0 +1,44 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "dialect": "openai-chat",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "accepted_but_visual_check_failed",
+  "answer": null,
+  "expected": {
+    "A": [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "cyan",
+      "magenta"
+    ],
+    "B": [
+      "yellow",
+      "red",
+      "blue",
+      "cyan",
+      "magenta",
+      "green"
+    ]
+  },
+  "output": "I could not actually view the returned panels — both tool results came back as \"[Unsupported Image]\", so no color content was delivered to me in a readable form.\n\nI won't guess or fabricate color names, as instructed. Please re-send the panels in a supported image format, and I'll read them left-to-right across the top row, then left-to-right across the bottom row, and return the JSON as requested.",
+  "usage": {
+    "prompt_tokens": 585,
+    "completion_tokens": 309,
+    "total_tokens": 894,
+    "prompt_tokens_details": {
+      "cached_tokens": 512
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 221
+    },
+    "prompt_cache_hit_tokens": 512,
+    "prompt_cache_miss_tokens": 73
+  }
+}

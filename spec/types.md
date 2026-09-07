@@ -217,6 +217,20 @@ Factory: `tool_call(id, name, input, *, continuation=None)`.
 
 Factory: `tool_result(id, content, *, name=None, is_error=False, continuation=None)` — `content` accepts a string, a single part, or a sequence (INV-021).
 
+**Content policy (MAP-10, 2026-09-07).** Every part in `content` reaches
+the wire as a native block inside the result item, or `build_request`
+RAISES `UnsupportedFeatureError` before any wire. No text rendering of a
+media part, no placeholder. The verdict per (preset, part kind) is the
+typed compat knob `tool_result_media` (`"native"` | `"reject"`) on the
+Chat, Responses and Anthropic compat tables; the Gemini dialect is
+`native` on every model (Gemini 2.5 answers HTTP 400 itself). `is_error`
+maps to the wire's flag where one exists (Anthropic `is_error`, Gemini
+`response.error`) and to an `[error] ` text prefix on Responses and Chat.
+Where a wire requires the function name on the result (Gemini),
+`name` is resolved from the matching `ToolCallPart` in the transcript
+when the caller gave none; never defaulted to `"tool"` (MAP-10.6).
+Presets measured 2026-09-07: `research/tool-result-content/30-model.md`.
+
 ## Messages
 
 ### Message

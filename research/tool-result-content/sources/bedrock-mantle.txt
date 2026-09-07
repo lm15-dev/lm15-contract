@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Responses API - Amazon Bedrock</title><meta name="viewport" content="width=device-width,initial-scale=1" /><meta name="assets_root" content="/assets" /><meta name="target_state" content="bedrock-mantle" /><meta name="default_state" content="bedrock-mantle" /><link rel="icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="shortcut icon" type="image/ico" href="/assets/images/favicon.ico" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html" /><meta name="description" content="Learn how to use the OpenAI Responses API on the bedrock-mantle endpoint. For new applications, we recommend the bedrock-runtime endpoint — see ." /><meta name="deployment_region" content="IAD" /><meta name="product" content="Amazon Bedrock" /><meta name="guide" content="User Guide" /><meta name="abstract" content="User Guide for the Amazon Bedrock service." /><meta name="guide-locale" content="en_us" /><meta name="tocs" content="toc-contents.json" /><link rel="canonical" href="https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/bedrock-mantle.html" hreflang="id-id" /><link rel="alternate" href="https://docs.aws.amazon.com/id_id/bedrock/latest/userguide/bedrock-mantle.html" hreflang="id" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/bedrock-mantle.html" hreflang="de-de" /><link rel="alternate" href="https://docs.aws.amazon.com/de_de/bedrock/latest/userguide/bedrock-mantle.html" hreflang="de" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html" hreflang="en-us" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html" hreflang="en" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/bedrock-mantle.html" hreflang="es-es" /><link rel="alternate" href="https://docs.aws.amazon.com/es_es/bedrock/latest/userguide/bedrock-mantle.html" hreflang="es" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/bedrock-mantle.html" hreflang="fr-fr" /><link rel="alternate" href="https://docs.aws.amazon.com/fr_fr/bedrock/latest/userguide/bedrock-mantle.html" hreflang="fr" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/bedrock-mantle.html" hreflang="it-it" /><link rel="alternate" href="https://docs.aws.amazon.com/it_it/bedrock/latest/userguide/bedrock-mantle.html" hreflang="it" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/bedrock-mantle.html" hreflang="ja-jp" /><link rel="alternate" href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/bedrock-mantle.html" hreflang="ja" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/bedrock-mantle.html" hreflang="ko-kr" /><link rel="alternate" href="https://docs.aws.amazon.com/ko_kr/bedrock/latest/userguide/bedrock-mantle.html" hreflang="ko" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/bedrock-mantle.html" hreflang="pt-br" /><link rel="alternate" href="https://docs.aws.amazon.com/pt_br/bedrock/latest/userguide/bedrock-mantle.html" hreflang="pt" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_cn/bedrock/latest/userguide/bedrock-mantle.html" hreflang="zh-cn" /><link rel="alternate" href="https://docs.aws.amazon.com/zh_tw/bedrock/latest/userguide/bedrock-mantle.html" hreflang="zh-tw" /><link rel="alternate" href="https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html" hreflang="x-default" /><meta name="feedback-folder" content="2d8c2a09-1dac-41bf-9893-c0333d272b2c" /><meta name="feedback-item" content="Bedrock" /><meta name="this_doc_product" content="Amazon Bedrock" /><meta name="this_doc_guide" content="User Guide" /><head xmlns="http://www.w3.org/1999/xhtml"> <script defer="" src="/assets/r/awsdocs-doc-page.2.0.0.js"></script><link href="/assets/r/awsdocs-doc-page.2.0.0.css" rel="stylesheet"/></head>
+<script defer="" id="awsc-panorama-bundle" type="text/javascript" src="https://prod.pa.cdn.uis.awsstatic.com/panorama-nav-init.js" data-config="{'appEntity':'aws-documentation','region':'us-east-1','service':'bedrock'}"></script><meta id="panorama-serviceSubSection" value="User Guide" /><meta id="panorama-serviceConsolePage" value="Responses API" /></head><body class="awsdocs awsui"><div class="awsdocs-container"><p><a href="bedrock-mantle.md">View a markdown version of this page</a></p><awsdocs-header></awsdocs-header><awsui-app-layout id="app-layout" class="awsui-util-no-gutters" ng-controller="ContentController as $ctrl" header-selector="awsdocs-header" navigation-hide="false" navigation-width="$ctrl.navWidth" navigation-open="$ctrl.navOpen" navigation-change="$ctrl.onNavChange($event)" tools-hide="$ctrl.hideTools" tools-width="$ctrl.toolsWidth" tools-open="$ctrl.toolsOpen" tools-change="$ctrl.onToolsChange($event)"><div id="guide-toc" dom-region="navigation"><awsdocs-toc></awsdocs-toc></div><div id="main-column" dom-region="content" tabindex="-1"><awsdocs-view class="awsdocs-view"><div id="awsdocs-content"><head><title>Responses API - Amazon Bedrock</title><meta name="pdf" content="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#bedrock-mantle" /><meta name="rss" content="bedrock-ug.rss" /><meta name="forums" content="https://repost.aws/tags/TAQeKlaPaNRQ2tWB6P7KrMag" /><meta name="feedback" content="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/bedrock-mantle.html" /><meta name="feedback-yes" content="feedbackyes.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/bedrock-mantle.html" /><meta name="feedback-no" content="feedbackno.html?topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/bedrock-mantle.html" /><meta name="keywords" content="Amazon Bedrock,bedrock,model inference,foundation models,prompts,text generation,embeddings,bedrock-runtime,Responses API,OpenAI API" /><link rel="alternate" type="text/markdown" href="bedrock-mantle.md" title="Markdown version" /><script type="application/ld+json">
+{
+    "@context" : "https://schema.org",
+    "@type" : "BreadcrumbList",
+    "itemListElement" : [
+      {
+        "@type" : "ListItem",
+        "position" : 1,
+        "name" : "AWS",
+        "item" : "https://aws.amazon.com"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 2,
+        "name" : "Amazon Bedrock",
+        "item" : "https://docs.aws.amazon.com/bedrock/index.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 3,
+        "name" : "User Guide",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 4,
+        "name" : "Build",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/build.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 5,
+        "name" : "Making inference requests",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/inference.html"
+      },
+      {
+        "@type" : "ListItem",
+        "position" : 6,
+        "name" : "Responses API",
+        "item" : "https://docs.aws.amazon.com/bedrock/latest/userguide/inference.html"
+      }
+    ]
+}
+</script></head><body><div id="main"><div style="display: none"><a href="/pdfs/bedrock/latest/userguide/bedrock-ug.pdf#bedrock-mantle" target="_blank" rel="noopener noreferrer" title="Open PDF"></a></div><div id="breadcrumbs" class="breadcrumb"><a href="/index.html">Documentation</a><a href="/bedrock/index.html">Amazon Bedrock</a><a href="what-is-bedrock.html">User Guide</a></div><div id="page-toc-src"><a href="#bedrock-mantle-supported">Supported Regions and Endpoints</a><a href="#bedrock-mantle-prereq">Prerequisites</a><a href="#bedrock-mantle-models">Models API</a><a href="#bedrock-mantle-responses">Responses API</a></div><div id="main-content" class="awsui-util-container"><div id="main-col-body"><awsdocs-language-banner data-service="$ctrl.pageService"></awsdocs-language-banner><h1 class="topictitle" id="bedrock-mantle">Responses API</h1><div class="awsdocs-page-header-container"><awsdocs-page-header></awsdocs-page-header><awsdocs-filter-selector id="awsdocs-filter-selector"></awsdocs-filter-selector></div><p>Amazon Bedrock provides the OpenAI Responses API on both the <code class="code">bedrock-runtime</code> and
+        <code class="code">bedrock-mantle</code> endpoints. The API lets you use familiar OpenAI SDKs and tools
+        with Amazon Bedrock models, so you can migrate existing applications with minimal code
+        changes—simply update your base URL and API key. For new applications, we recommend the
+        <code class="code">bedrock-runtime</code> endpoint.</p><p>The two endpoints don't have identical feature support. Requests on
+        <code class="code">bedrock-runtime</code> are always synchronous, server-side tools aren't available, and
+        only the default project is supported. For the full comparison, see <a href="./endpoints.html">Endpoints supported by Amazon Bedrock</a>,
+        and for the details of each difference, see <a href="#bedrock-mantle-responses-runtime">Using the Responses API on the bedrock-runtime endpoint</a>.</p><div class="awsdocs-note awsdocs-important"><div class="awsdocs-note-title"><awsui-icon name="status-warning" variant="error"></awsui-icon><h6>Important</h6></div><div class="awsdocs-note-text"><p>When using the OpenAI SDK with Amazon Bedrock, you must point it to the Amazon Bedrock endpoint, not the OpenAI endpoint. Set the following environment variables, choosing the base URL for the endpoint you want:</p><pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli ()--><code class=""># bedrock-runtime (recommended)
+OPENAI_BASE_URL="https://bedrock-runtime.&lt;your-region&gt;.amazonaws.com/openai/v1"
+
+# bedrock-mantle
+OPENAI_BASE_URL="https://bedrock-mantle.&lt;your-region&gt;.api.aws/v1"
+
+OPENAI_API_KEY="&lt;your Bedrock API key&gt;"</code></pre><p>Do not use your OpenAI API key or the OpenAI base URL (<code class="code">https://api.openai.com/v1</code>). Those connect to OpenAI directly, not to Amazon Bedrock. To create a Amazon Bedrock API key, see <a href="./api-keys.html">API keys</a>.</p></div></div><p>Key benefits include:</p><div class="itemizedlist">
+         
+         
+         
+         
+         
+    <ul class="itemizedlist"><li class="listitem">
+            <p><b>Asynchronous inference</b> – Support for
+                long-running inference workloads through the Responses API. Available on
+                <code class="code">bedrock-mantle</code> only.</p>
+        </li><li class="listitem">
+            <p><b>Stateful conversation management</b> –
+                Automatically rebuild context without manually passing conversation history with
+                each request</p>
+        </li><li class="listitem">
+            <p><b>Simplified tool use</b> – Streamlined
+                integration for agentic workflows</p>
+        </li><li class="listitem">
+            <p><b>Flexible response modes</b> – Support for both
+                streaming and non-streaming responses</p>
+        </li><li class="listitem">
+            <p><b>Easy migration</b> – Compatible with existing
+                OpenAI SDK codebases</p>
+        </li></ul></div><p>Each endpoint is governed by its own set of quotas. For Responses traffic on
+        <code class="code">bedrock-runtime</code>, the model's tokens-per-minute and tokens-per-day quotas apply, and
+        they're shared with the other inference APIs on that endpoint — see <a href="./quotas-runtime.html">Quotas for the bedrock-runtime endpoint</a>. For
+        <code class="code">bedrock-mantle</code>, see <a href="./quotas-mantle.html">Quotas for the bedrock-mantle endpoint</a>.</p>
+        <h2 id="bedrock-mantle-supported">Supported Regions and Endpoints</h2>
+
+        <p>On the <code class="code">bedrock-runtime</code> endpoint, the Responses API is available in every
+            AWS Region where that endpoint is available, including the AWS GovCloud (US) Regions.
+            For the list, see <a href="./endpoints-region-availability.html">Regional availability by endpoints</a>. Which models support the
+            API on each endpoint is listed in <a href="./models-endpoint-availability.html">Endpoint availability</a>.</p>
+
+        <p>The <code class="code">bedrock-mantle</code> endpoint is available in the following AWS Regions:</p>
+
+        <div class="table-container"><div class="table-contents"><table id="w625aac15c14c30c15b7"><thead>
+                    <tr>
+                        <th>Region Name</th>
+                        <th>Region</th>
+                        <th>Endpoint</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <td tabindex="-1">US East (Ohio)</td>
+                        <td tabindex="-1">us-east-2</td>
+                        <td tabindex="-1">bedrock-mantle.us-east-2.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">US East (N. Virginia)</td>
+                        <td tabindex="-1">us-east-1</td>
+                        <td tabindex="-1">bedrock-mantle.us-east-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">US West (Oregon)</td>
+                        <td tabindex="-1">us-west-2</td>
+                        <td tabindex="-1">bedrock-mantle.us-west-2.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Asia Pacific (Jakarta)</td>
+                        <td tabindex="-1">ap-southeast-3</td>
+                        <td tabindex="-1">bedrock-mantle.ap-southeast-3.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Asia Pacific (Mumbai)</td>
+                        <td tabindex="-1">ap-south-1</td>
+                        <td tabindex="-1">bedrock-mantle.ap-south-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Asia Pacific (Sydney)</td>
+                        <td tabindex="-1">ap-southeast-2</td>
+                        <td tabindex="-1">bedrock-mantle.ap-southeast-2.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Asia Pacific (Tokyo)</td>
+                        <td tabindex="-1">ap-northeast-1</td>
+                        <td tabindex="-1">bedrock-mantle.ap-northeast-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Europe (Frankfurt)</td>
+                        <td tabindex="-1">eu-central-1</td>
+                        <td tabindex="-1">bedrock-mantle.eu-central-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Europe (Ireland)</td>
+                        <td tabindex="-1">eu-west-1</td>
+                        <td tabindex="-1">bedrock-mantle.eu-west-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Europe (London)</td>
+                        <td tabindex="-1">eu-west-2</td>
+                        <td tabindex="-1">bedrock-mantle.eu-west-2.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Europe (Milan)</td>
+                        <td tabindex="-1">eu-south-1</td>
+                        <td tabindex="-1">bedrock-mantle.eu-south-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">Europe (Stockholm)</td>
+                        <td tabindex="-1">eu-north-1</td>
+                        <td tabindex="-1">bedrock-mantle.eu-north-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">South America (São Paulo)</td>
+                        <td tabindex="-1">sa-east-1</td>
+                        <td tabindex="-1">bedrock-mantle.sa-east-1.api.aws</td>
+                    </tr>
+                    <tr>
+                        <td tabindex="-1">AWS GovCloud (US-West)</td>
+                        <td tabindex="-1">us-gov-west-1</td>
+                        <td tabindex="-1">bedrock-mantle.us-gov-west-1.api.aws</td>
+                    </tr>
+                </table></div></div>
+     
+        <h2 id="bedrock-mantle-prereq">Prerequisites</h2>
+
+        <p>Before using OpenAI APIs, make sure you have the following:</p>
+
+        <div class="itemizedlist">
+             
+             
+             
+             
+        <ul class="itemizedlist"><li class="listitem">
+                <p><b>Authentication</b> – You can authenticate
+                    using:</p>
+                <div class="itemizedlist">
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p>Amazon Bedrock API key (required for OpenAI SDK)</p>
+                    </li><li class="listitem">
+                        <p>AWS credentials (supported for HTTP requests)</p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>OpenAI SDK</b> (optional) – Install the
+                    OpenAI Python SDK if using SDK-based requests.</p>
+            </li><li class="listitem">
+                <p><b>Environment variables</b> – Set the
+                    following environment variables:</p>
+                <div class="itemizedlist">
+                     
+                     
+                <ul class="itemizedlist"><li class="listitem">
+                        <p><code class="code">OPENAI_API_KEY</code> – Set to your Amazon Bedrock API key</p>
+                    </li><li class="listitem">
+                        <p><code class="code">OPENAI_BASE_URL</code> – Set to the Amazon Bedrock endpoint for your
+                            region (for example, <code class="code">https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1</code>
+                            or <code class="code">https://bedrock-mantle.us-east-1.api.aws/v1</code>)</p>
+                    </li></ul></div>
+            </li><li class="listitem">
+                <p><b>Permissions</b> – The actions you need
+                    depend on the endpoint. On <code class="code">bedrock-mantle</code>, inference authorizes
+                    <code class="code">bedrock-mantle:CreateInference</code>. On <code class="code">bedrock-runtime</code>, it
+                    authorizes <code class="code">bedrock:InvokeModel</code> on both the inference target and your
+                    account's default project, and managing stored responses authorizes
+                    <code class="code">bedrock:GetInvoke</code>, <code class="code">bedrock:CancelInvoke</code>, and
+                    <code class="code">bedrock:DeleteInvoke</code> on that project. For policy examples, see
+                    <a href="./inference-prereq.html">Prerequisites for running model inference</a>.</p>
+            </li></ul></div>
+     
+        <h2 id="bedrock-mantle-models">Models API</h2>
+
+        <p>The Models API allows you to discover available models in Amazon Bedrock powered by Mantle. Use this API to
+            retrieve a list of models you can use with the Responses API.
+            For complete API details, see the <a href="https://developers.openai.com/api/reference/resources/models" rel="noopener noreferrer" target="_blank"><span>OpenAI Models
+            documentation</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p>
+
+         
+            <h3 id="bedrock-mantle-models-list">List available models</h3>
+
+            <p>To list available models, choose the tab for your preferred method, and then follow the steps:</p>
+
+            <awsdocs-tabs><dl style="display: none">
+                <dt>OpenAI SDK (Python)</dt><dd tab-id="openai-sdk-(python)">
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python "># List all available models using the OpenAI SDK
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+from openai import OpenAI
+
+client = OpenAI()
+
+models = client.models.list()
+
+for model in models.data:
+    print(model.id)
+</code></pre>
+
+                    </dd>
+                <dt>HTTP request</dt><dd tab-id="http-request">
+
+                        <p>Make a GET request to <code class="code">/v1/models</code>:</p>
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (bash)--><code class="bash "># List all available models
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+curl -X GET $OPENAI_BASE_URL/models \
+   -H "Authorization: Bearer $OPENAI_API_KEY"
+</code></pre>
+
+                    </dd>
+            </dl></awsdocs-tabs>
+         
+     
+        <h2 id="bedrock-mantle-responses">Responses API</h2>
+
+        <p>The Responses API provides stateful conversation management with support for
+            streaming, background processing, and multi-turn interactions. For complete API details,
+            see the <a href="https://developers.openai.com/api/reference/resources/responses" rel="noopener noreferrer" target="_blank"><span>OpenAI
+            Responses documentation</span><awsui-icon class="awsdocs-link-icon" name="external"></awsui-icon></a>.</p>
+
+        <div class="awsdocs-note"><div class="awsdocs-note-title"><awsui-icon name="status-info" variant="link"></awsui-icon><h6>Note</h6></div><div class="awsdocs-note-text"><p>Not all models support the Responses API. To see which models support the Responses API, see <a href="./models-api-compatibility.html">API compatibility</a>.</p></div></div>
+
+         
+            <h3 id="bedrock-mantle-responses-state">How the Responses API stores conversation state</h3>
+
+            <p>The Responses API can use stored state to enable multi-turn conversations and let
+                you reference previous turns through the <code class="code">previous_response_id</code>
+                parameter. Storage is enabled by default but can be disabled per request through the
+                <code class="code">store</code> parameter. Stored responses are scoped by Project. A response
+                from one Project cannot be used as the previous response or read in a second
+                Project. For more information about Projects, see <a href="./projects.html">Projects (OpenAI-compatible)</a>.</p>
+
+            <div class="itemizedlist">
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p>When <code class="code">store</code> is <code class="code">true</code> (the default), Amazon Bedrock retains
+                        the response, including the input and output, for 30 days. During this window
+                        you can chain follow-up requests by passing
+                        <code class="code">previous_response_id</code> and retrieve the response with <code class="code">GET
+                        /v1/responses/<span>{</span>id}</code> on <code class="code">bedrock-mantle</code>, or <code class="code">GET
+                        /openai/v1/responses/<span>{</span>id}</code> on <code class="code">bedrock-runtime</code>. After 30
+                        days, the response is automatically deleted and is no longer
+                        retrievable.</p>
+                </li><li class="listitem">
+                    <p>When <code class="code">store</code> is <code class="code">false</code>, Amazon Bedrock does not retain any
+                        data from the request or response. The <code class="code">previous_response_id</code>
+                        parameter cannot be used to continue the conversation.</p>
+                </li></ul></div>
+
+            <p>The default value is <code class="code">true</code> to match the OpenAI Responses API
+                specification. Customers who do not want Amazon Bedrock to retain conversation data should
+                explicitly set <code class="code">store</code> to <code class="code">false</code> on every request, or set the
+                account's data retention mode to <code class="code">none</code>, which rejects an explicit
+                <code class="code">store=true</code> outright. For more information, see <a href="./data-retention.html">Data retention</a>.</p>
+
+            <p>Stored data is encrypted at rest and scoped to the calling AWS account's Project
+                resource. The data is stored solely to service your requests and is not used or
+                retained for any other purpose. On <code class="code">bedrock-mantle</code>, it is kept in the
+                AWS Region the request was sent to. On <code class="code">bedrock-runtime</code>, a request that
+                uses <a href="./cross-region-inference.html">cross-Region inference</a> can be
+                processed in another AWS Region, and the response is stored in the Region that
+                processed it — so a request that uses a global inference profile can store data
+                in any commercial Region that profile routes to. If you have data residency
+                requirements, use a geographic inference profile rather than a global one.</p>
+         
+
+         
+            <h3 id="bedrock-mantle-responses-create">Basic request</h3>
+
+            <p>To create a response, choose the tab for your preferred method, and then follow the steps:</p>
+
+            <awsdocs-tabs><dl style="display: none">
+                <dt>OpenAI SDK (Python)</dt><dd tab-id="openai-sdk-(python)">
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python "># Create a basic response using the OpenAI SDK
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+from openai import OpenAI
+
+client = OpenAI()
+
+response = client.responses.create(
+    model="openai.gpt-oss-120b",
+    input=[
+        <span>{</span>"role": "user", "content": "Hello! How can you help me today?"}
+    ]
+)
+
+print(response)
+</code></pre>
+
+                    </dd>
+                <dt>HTTP request</dt><dd tab-id="http-request">
+
+                        <p>Make a POST request to <code class="code">/v1/responses</code>:</p>
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (bash)--><code class="bash "># Create a basic response
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+curl -X POST $OPENAI_BASE_URL/responses \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer $OPENAI_API_KEY" \
+   -d '<span>{</span>
+    "model": "openai.gpt-oss-120b",
+    "input": [
+        <span>{</span>"role": "user", "content": "Hello! How can you help me today?"}
+    ]
+}'
+</code></pre>
+
+                    </dd>
+            </dl></awsdocs-tabs>
+         
+
+         
+            <h3 id="bedrock-mantle-responses-streaming">Stream responses</h3>
+
+            <p>To receive response events incrementally, choose the tab for your preferred method, and then follow the steps:</p>
+
+            <awsdocs-tabs><dl style="display: none">
+                <dt>OpenAI SDK (Python)</dt><dd tab-id="openai-sdk-(python)">
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (python)--><code class="python "># Stream response events incrementally using the OpenAI SDK
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+from openai import OpenAI
+
+client = OpenAI()
+
+stream = client.responses.create(
+    model="openai.gpt-oss-120b",
+    input=[<span>{</span>"role": "user", "content": "Tell me a story"}],
+    stream=True
+)
+
+for event in stream:
+    print(event)
+</code></pre>
+
+                    </dd>
+                <dt>HTTP request</dt><dd tab-id="http-request">
+
+                        <p>Make a POST request to <code class="code">/v1/responses</code> with <code class="code">stream</code>
+                            set to <code class="code">true</code>:</p>
+
+                        <pre class="programlisting"><div class="code-btn-container"><div class="btn-copy-code" title="Copy"><awsui-icon name="copy"></awsui-icon></div></div><!--DEBUG: cli (bash)--><code class="bash "># Stream response events incrementally
+# Requires OPENAI_API_KEY and OPENAI_BASE_URL environment variables
+
+curl -X POST $OPENAI_BASE_URL/responses \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer $OPENAI_API_KEY" \
+   -d '<span>{</span>
+    "model": "openai.gpt-oss-120b",
+    "input": [
+        <span>{</span>"role": "user", "content": "Tell me a story"}
+    ],
+    "stream": true
+}'
+</code></pre>
+
+                    </dd>
+            </dl></awsdocs-tabs>
+         
+
+         
+            <h3 id="bedrock-mantle-responses-runtime">Using the Responses API on the bedrock-runtime endpoint</h3>
+
+            <p>The Responses API on <code class="code">bedrock-runtime</code> uses the same request and response
+                format as on <code class="code">bedrock-mantle</code>, so the OpenAI SDK works against either one.
+                What changes is the base URL, the model IDs, the permissions, and a small number of
+                behaviors described in this section.</p>
+
+            <p><b>Base URL and paths</b></p>
+            <p>Set your base URL to
+                <code class="code">https://bedrock-runtime.<code class="replaceable">region</code>.amazonaws.com/openai/v1</code>.
+                The API is served on the following paths:</p>
+            <div class="itemizedlist">
+                 
+                 
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem"><p><code class="code">POST /openai/v1/responses</code> – create a response.</p></li><li class="listitem"><p><code class="code">GET /openai/v1/responses/<span>{</span>id}</code> – retrieve a stored response.</p></li><li class="listitem"><p><code class="code">POST /openai/v1/responses/<span>{</span>id}/cancel</code> – cancel a response that is still in progress.</p></li><li class="listitem"><p><code class="code">DELETE /openai/v1/responses/<span>{</span>id}</code> – delete a stored response.</p></li></ul></div>
+
+            <p><b>Model IDs</b></p>
+            <p>Name a cross-Region inference profile as the model, not a foundation model ID. The
+                OpenAI GPT models use the <code class="code">us.</code> and <code class="code">global.</code> profiles in the
+                commercial Regions and the <code class="code">us-gov.</code> profiles in the AWS GovCloud (US)
+                Regions — for example, <code class="code">us.openai.gpt-5.6-sol</code>. In-Region inference
+                isn't available for these models on this endpoint. For the profile ID of each model,
+                see its model card in <a href="./model-cards.html">Models at a glance</a>, and for how routing works, see
+                <a href="./cross-region-inference.html">Route model inference requests across AWS Regions with cross-Region inference</a>.</p>
+
+            <p><b>Permissions</b></p>
+            <p>Creating a response authorizes two resources: <code class="code">bedrock:InvokeModel</code> (or
+                <code class="code">bedrock:InvokeModelWithResponseStream</code>) on the inference target, as any
+                inference request does, and <code class="code">bedrock:InvokeModel</code> on your account's default
+                project. Retrieving, canceling, and deleting a stored response authorize
+                <code class="code">bedrock:GetInvoke</code>, <code class="code">bedrock:CancelInvoke</code>, and
+                <code class="code">bedrock:DeleteInvoke</code> respectively, each on the project. Individual
+                response IDs are not IAM resources.</p>
+            <p>Two condition keys let a policy on either resource constrain the other. The
+                inference-target authorization carries <code class="code">bedrock:ProjectArn</code>, and the project
+                authorization carries <code class="code">bedrock:ModelArn</code>, valued at the inference profile or
+                foundation model your request named — never the destination models that a
+                cross-Region profile routes to. For policy examples, see <a href="./inference-prereq.html">Prerequisites for running model inference</a>.</p>
+
+            <p><b>Behavior differences</b></p>
+            <div class="itemizedlist">
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+            <ul class="itemizedlist"><li class="listitem">
+                    <p><b>Requests are always synchronous.</b>
+                        <code class="code">background=true</code> is rejected with a 400 error. The
+                        <code class="code">store</code> parameter is unaffected and keeps its default of
+                        <code class="code">true</code>, so stored, multi-turn conversations work normally.</p>
+                </li><li class="listitem">
+                    <p><b><code class="code">model</code> is required on every
+                        request</b>, including one that supplies
+                        <code class="code">previous_response_id</code>. This differs from the OpenAI Responses
+                        API specification and from <code class="code">bedrock-mantle</code>, where the model can be
+                        omitted and inherited from the previous response. The model is part of what
+                        the request is authorized against, so it has to be named in the request
+                        itself.</p>
+                </li><li class="listitem">
+                    <p><b>Server-side tool use and pre-configured tools aren't
+                        available</b>, including <a href="./web-search.html">web search</a>.
+                        Client-side tool use works on both endpoints.</p>
+                </li><li class="listitem">
+                    <p><b>Only the default project is supported.</b> The
+                        <code class="code">OpenAI-Project</code> header is accepted only as <code class="code">default</code> or
+                        as your own default project ARN; any other value is rejected. See <a href="./projects.html">Projects (OpenAI-compatible)</a>.</p>
+                </li><li class="listitem">
+                    <p><b>Application inference profiles aren't
+                        supported.</b> A request that names one as its inference target is
+                        rejected with a 400 error. System, geographic, and global inference profiles
+                        work normally.</p>
+                </li><li class="listitem">
+                    <p><b><a href="./guardrails.html">Guardrails</a> don't
+                        apply to the Responses API.</b> To apply a guardrail to a GPT model on
+                        this endpoint, call the <a href="./conversation-inference.html">Converse
+                        API</a> instead.</p>
+                </li><li class="listitem">
+                    <p><b>A stored response belongs to the AWS Region that
+                        served it.</b> Retrieving, canceling, or deleting it, and continuing the
+                        conversation with <code class="code">previous_response_id</code>, are all handled by that
+                        Region. A response ID that can't be found — because it never existed,
+                        belongs to another account, or was never stored — returns the same 404
+                        error in every case.</p>
+                </li></ul></div>
+
+            <p><b>Monitoring and cost</b></p>
+            <p>Because every request is synchronous, CloudWatch metrics and model invocation logging work
+                for the Responses API the same way they do for the other inference APIs on this
+                endpoint, including for streaming requests. Usage is attributed to the inference
+                target, exactly as it is for Converse and InvokeModel — the default project is
+                never the billing anchor. See <a href="./cost-management.html">Track usage and costs in Amazon Bedrock</a>.</p>
+         
+    <awsdocs-copyright class="copyright-print"></awsdocs-copyright><awsdocs-thumb-feedback right-edge="{{$ctrl.thumbFeedbackRightEdge}}"></awsdocs-thumb-feedback></div><noscript><div><div><div><div id="js_error_message"><p><img src="https://d1ge0kk1l5kms0.cloudfront.net/images/G/01/webservices/console/warning.png" alt="Warning" /> <strong>Javascript is disabled or is unavailable in your browser.</strong></p><p>To use the Amazon Web Services Documentation, Javascript must be enabled. Please refer to your browser's Help pages for instructions.</p></div></div></div></div></noscript><div id="main-col-footer" class="awsui-util-font-size-0"><div id="doc-conventions"><a target="_top" href="/general/latest/gr/docconventions.html">Document Conventions</a></div><div class="prev-next"><div id="previous" class="prev-link" accesskey="p" href="./conversation-inference.html">Converse API</div><div id="next" class="next-link" accesskey="n" href="./inference-chat-completions-mantle.html">Chat Completions API</div></div></div><awsdocs-page-utilities></awsdocs-page-utilities></div><div id="quick-feedback-yes" style="display: none;"><div class="title">Did this page help you? - Yes</div><div class="content"><p>Thanks for letting us know we're doing a good job!</p><p>If you've got a moment, please tell us what we did right so we can do more of it.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/bedrock-mantle.html"></awsui-button></p></div></div><div id="quick-feedback-no" style="display: none;"><div class="title">Did this page help you? - No</div><div class="content"><p>Thanks for letting us know this page needs work. We're sorry we let you down.</p><p>If you've got a moment, please tell us how we can make the documentation better.</p><p><awsui-button id="fblink" rel="noopener noreferrer" target="_blank" text="Feedback" click="linkClick($event)" href="https://docs.aws.amazon.com/forms/aws-doc-feedback?feedback_destination_id=2d8c2a09-1dac-41bf-9893-c0333d272b2c&amp;topic_url=https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/bedrock-mantle.html"></awsui-button></p></div></div></div></body></div></awsdocs-view><div class="page-loading-indicator" id="page-loading-indicator"><awsui-spinner size="large"></awsui-spinner></div></div><div id="tools-panel" dom-region="tools"><awsdocs-tools-panel id="awsdocs-tools-panel"></awsdocs-tools-panel></div></awsui-app-layout><awsdocs-cookie-banner class="doc-cookie-banner"></awsdocs-cookie-banner></div></body></html>

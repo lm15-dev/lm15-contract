@@ -1,0 +1,200 @@
+{
+  "id": "meta-anthropic.tool_result_image",
+  "provider": "meta-anthropic",
+  "feature": "tool_result_image",
+  "status": "DRAFT; not an active corpus fixture",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "data": "Q-PaDgHJAYJ3n_lTo1Bmb7ycO1vwEUeEhDTvG1c1s2doNBlTs9BGQS4bR44mhm_RZ1yECnmJ8IxeiSIYA8UmpTJkJDCuMXdV24DCg1SdZqOZ1Vclqs-8ZoknXuMHulli7O2zNgYWjaC5Wty_KCRmrH9h2PQLFrA8OR8xDb3GDuLHHGiA08658LSoVJzFKLCbzas0N6CvprbGeK7htKBZDzue2WMNbCCh_i31_bI3jiNBXsbUVgtjxNRiWMLSV3AXhvag1nmbCVrJeyQQfVMJlhMBf6-lIlSMDm78bldiY_9hFaVd_xhnowfQV85NAfJzYAe9QmDltY6ZPfrf_6b_5Az0OGVn4plVYSyi1cDhmPxtjMBmr59xuUIizWg3Hi2N7QGFqFZzAwM8Ve8mYjiFuxwqcN5XWecR5GqPCEDu_ai9XosmQ9o4ObqVKUpE3Y2rZFhn0YkzIRyvzTj_B96f6dQZwGwHIzN2atPkOc6EA9Wh1zaAXsmIk5FQLnr9V9XyLfUiwP72NtvXMW3rTGH7c9AFm_ZvlVGaiCoqEYAK5UnA2ukOuT8pmNOOzggKK2K9vIsiE6-WFEIQ9C6ebh5Tf2-PUNquko4vB1GKZlcodc8Sw1TW3itd2zF8cY9DJtWdpxQxsH4BHpdxgfg-Ki8PShu7wwydtyYXXJ5aafOhwAtPlPTilhz4Yv7ab6GGdgXIGky_YY9adHDkmgkBRA8TnxwndAlDDP0vYuyWhmEkVoyM7iv6B3aC2AwztHZfii8JbwRum8U3jYLEKTuwM2JONo4tHeb0GCcoA7SAonk5Z-YFP8u_DV4P0Hh5Z6LZ-KquUAWK1qVFUXn_XtOhvImSXwMrup_L63w05UN52fg9OP6rO8dPK0hhbCOdR2oHyKZPD9BS8nsWkVI_IWpQk3UHE-I0kWP99I1dv7B3LunfEPjHdqv-dKv_o6MyIfTZCQCOHip-LOhaVutX6zkfdlyqp8FkQ5D-KGflHkYXIta_BbbjWVcaSYHQZLtrxJiSFE0JLmyAbrigiIElDz1aADqGzPAo253EeNDxoR0xiEvorE5YUKSAx3oTGSwhfZpPHfHqZXF51W15JUG7EDvhBbGY5lFYmhnFvcwQs-iAR3psI43K_yrsb6R4KocgtrpY5ej0L544rT3UhhbyWvn2AwjmEEir6AFFBzJgMKTEebnERJAk0BgBwCnufmsBrF9ETobOdpc5l987WuZDJem2OxEOVG2y34RBRBYv1VMt-HyZ4VjNthkIZlbDq9rIJw0HqIa-9yB2LOwOpiZyHZkCKov-Ha6IKqYTjrWvoW3wNgaS24QUbw5AX2V7CYCYFzxT9_LZ80RgLGO7wgQuhUq9EtN-HByGgSXng8x3unzlzMBpYL856VLc7zQg7tJ_95JmhBmM6G3yiNVqm4mSl5dhMA",
+              "type": "redacted_thinking"
+            },
+            {
+              "text": "I'll fetch panel A to read its colors.",
+              "type": "text"
+            },
+            {
+              "id": "call_ea5d2385-e53e-4cf4-a1fb-260bd7633f7e",
+              "input": {
+                "label": "A"
+              },
+              "name": "fetch_panel",
+              "type": "tool_use"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_ea5d2385-e53e-4cf4-a1fb-260bd7633f7e",
+              "content": [
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACbklEQVR4nO3SQQ3AMAzF0IIofyiD03MhbBxysKxZMoDk662zj7r9bHf8hKMWf0KAzAWIjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CWeAvg/U8RfMutddgAIUIHO4gADRFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxF/wb0AsJcWgmtHoa3AAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_artifact": "turn2-response.txt",
+  "expect": {
+    "status": 200
+  },
+  "oracle": {
+    "A": [
+      "magenta",
+      "green",
+      "cyan",
+      "blue",
+      "red",
+      "yellow"
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/image/exchange-2026-09-07T19-14-25Z-92191efafa47474497949478e5bbefc5.json",
+    "evidence": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta-anthropic/image/turn2.json; raw patched wire; visual-oracle.json"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "",
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "redacted_thinking",
+                "data": {
+                  "data": "Q-PaDgHJAYJ3n_lTo1Bmb7ycO1vwEUeEhDTvG1c1s2doNBlTs9BGQS4bR44mhm_RZ1yECnmJ8IxeiSIYA8UmpTJkJDCuMXdV24DCg1SdZqOZ1Vclqs-8ZoknXuMHulli7O2zNgYWjaC5Wty_KCRmrH9h2PQLFrA8OR8xDb3GDuLHHGiA08658LSoVJzFKLCbzas0N6CvprbGeK7htKBZDzue2WMNbCCh_i31_bI3jiNBXsbUVgtjxNRiWMLSV3AXhvag1nmbCVrJeyQQfVMJlhMBf6-lIlSMDm78bldiY_9hFaVd_xhnowfQV85NAfJzYAe9QmDltY6ZPfrf_6b_5Az0OGVn4plVYSyi1cDhmPxtjMBmr59xuUIizWg3Hi2N7QGFqFZzAwM8Ve8mYjiFuxwqcN5XWecR5GqPCEDu_ai9XosmQ9o4ObqVKUpE3Y2rZFhn0YkzIRyvzTj_B96f6dQZwGwHIzN2atPkOc6EA9Wh1zaAXsmIk5FQLnr9V9XyLfUiwP72NtvXMW3rTGH7c9AFm_ZvlVGaiCoqEYAK5UnA2ukOuT8pmNOOzggKK2K9vIsiE6-WFEIQ9C6ebh5Tf2-PUNquko4vB1GKZlcodc8Sw1TW3itd2zF8cY9DJtWdpxQxsH4BHpdxgfg-Ki8PShu7wwydtyYXXJ5aafOhwAtPlPTilhz4Yv7ab6GGdgXIGky_YY9adHDkmgkBRA8TnxwndAlDDP0vYuyWhmEkVoyM7iv6B3aC2AwztHZfii8JbwRum8U3jYLEKTuwM2JONo4tHeb0GCcoA7SAonk5Z-YFP8u_DV4P0Hh5Z6LZ-KquUAWK1qVFUXn_XtOhvImSXwMrup_L63w05UN52fg9OP6rO8dPK0hhbCOdR2oHyKZPD9BS8nsWkVI_IWpQk3UHE-I0kWP99I1dv7B3LunfEPjHdqv-dKv_o6MyIfTZCQCOHip-LOhaVutX6zkfdlyqp8FkQ5D-KGflHkYXIta_BbbjWVcaSYHQZLtrxJiSFE0JLmyAbrigiIElDz1aADqGzPAo253EeNDxoR0xiEvorE5YUKSAx3oTGSwhfZpPHfHqZXF51W15JUG7EDvhBbGY5lFYmhnFvcwQs-iAR3psI43K_yrsb6R4KocgtrpY5ej0L544rT3UhhbyWvn2AwjmEEir6AFFBzJgMKTEebnERJAk0BgBwCnufmsBrF9ETobOdpc5l987WuZDJem2OxEOVG2y34RBRBYv1VMt-HyZ4VjNthkIZlbDq9rIJw0HqIa-9yB2LOwOpiZyHZkCKov-Ha6IKqYTjrWvoW3wNgaS24QUbw5AX2V7CYCYFzxT9_LZ80RgLGO7wgQuhUq9EtN-HByGgSXng8x3unzlzMBpYL856VLc7zQg7tJ_95JmhBmM6G3yiNVqm4mSl5dhMA"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "I'll fetch panel A to read its colors."
+          },
+          {
+            "type": "tool_call",
+            "id": "call_ea5d2385-e53e-4cf4-a1fb-260bd7633f7e",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_ea5d2385-e53e-4cf4-a1fb-260bd7633f7e",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACbklEQVR4nO3SQQ3AMAzF0IIofyiD03MhbBxysKxZMoDk662zj7r9bHf8hKMWf0KAzAWIjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CQOkjp8wQOr4CWeAvg/U8RfMutddgAIUIHO4gADRFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxFwRIHX9BgNTxF/wb0AsJcWgmtHoa3AAAAABJRU5ErkJggg=="
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "python_body_matches_sent": true
+}

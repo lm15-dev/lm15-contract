@@ -1,0 +1,188 @@
+{
+  "id": "deepseek-anthropic.tool_result_text",
+  "provider": "deepseek-anthropic",
+  "feature": "tool_result_text",
+  "description": "MAP-10 rule 7: a text-only tool result stays a string",
+  "base_url": "https://api.deepseek.com/anthropic/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "The user wants me to fetch panel A and then read the colors. Let me call the tool.",
+              "signature": "040896fa-5af3-4587-9b8a-fa885bc368c5"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_00_LUvmHXKot3lFPV8poKUe2135",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_00_LUvmHXKot3lFPV8poKUe2135",
+              "content": "Panel A colors in reading order: cyan, magenta, yellow, green, blue, red"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek-anthropic/text/exchange-2026-09-07T19-13-21Z-74f4aa3278ef42e493723f4f791616b7.json",
+    "evidence": "deepseek-anthropic 2026-09-07T19-13-21Z, deepseek-v4-flash, HTTP 200; tool-result-content matrix cell 'text' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/deepseek-anthropic.tool_result_text/2026-09-07T19-13-21Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/deepseek-anthropic/text/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[2].content[0].content — text-only result: the probe sent a one-block array, the ratified cell is the string form; changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "deepseek-v4-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "The user wants me to fetch panel A and then read the colors. Let me call the tool.",
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "thinking_signature",
+                "data": {
+                  "signature": "040896fa-5af3-4587-9b8a-fa885bc368c5"
+                }
+              }
+            ]
+          },
+          {
+            "type": "tool_call",
+            "id": "call_00_LUvmHXKot3lFPV8poKUe2135",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_00_LUvmHXKot3lFPV8poKUe2135",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "text",
+                "text": "Panel A colors in reading order: cyan, magenta, yellow, green, blue, red"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell text); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-13-21Z.txt"
+}

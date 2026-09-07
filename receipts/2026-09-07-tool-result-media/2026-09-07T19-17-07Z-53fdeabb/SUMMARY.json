@@ -1,0 +1,340 @@
+[
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "yellow",
+        "green",
+        "cyan",
+        "red",
+        "blue",
+        "magenta"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "green",
+        "cyan",
+        "red",
+        "blue",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\":[\"yellow\",\"green\",\"cyan\",\"red\",\"blue\",\"magenta\"]}",
+    "usage": {
+      "input_tokens": 191,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 21,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 212
+    },
+    "wall_s": 2.26
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "blue",
+        "magenta",
+        "yellow",
+        "cyan",
+        "red",
+        "green"
+      ],
+      "B": [
+        "magenta",
+        "red",
+        "cyan",
+        "yellow",
+        "blue",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "blue",
+        "red",
+        "green",
+        "cyan",
+        "magenta",
+        "yellow"
+      ],
+      "B": [
+        "magenta",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\":[\"blue\",\"magenta\",\"yellow\",\"cyan\",\"red\",\"green\"],\"B\":[\"magenta\",\"red\",\"cyan\",\"yellow\",\"blue\",\"green\"]}",
+    "usage": {
+      "input_tokens": 296,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 37,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 333
+    },
+    "wall_s": 2.68
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "magenta",
+        "magenta",
+        "cyan",
+        "green",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "red",
+        "magenta",
+        "cyan",
+        "green",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"magenta\",\"magenta\",\"cyan\",\"green\",\"blue\"]}",
+    "usage": {
+      "input_tokens": 211,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 23,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 234
+    },
+    "wall_s": 2.73
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "red",
+        "blue",
+        "blue",
+        "cyan",
+        "yellow"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "green",
+        "magenta",
+        "blue",
+        "cyan",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"red\",\"blue\",\"blue\",\"cyan\",\"yellow\"]}",
+    "usage": {
+      "input_tokens": 103,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 21,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 124
+    },
+    "wall_s": 1.76
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "pdf",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "cyan",
+        "yellow",
+        "magenta",
+        "blue"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "green",
+        "cyan",
+        "yellow",
+        "magenta",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"cyan\",\"yellow\",\"magenta\",\"blue\"]}",
+    "usage": {
+      "input_tokens": 192,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 21,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 213
+    },
+    "wall_s": 2.28
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "error",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "error_acknowledged",
+    "answer": {
+      "A": null,
+      "note": "panel service unavailable (HTTP 503)"
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "red",
+        "cyan",
+        "magenta",
+        "blue",
+        "green"
+      ]
+    },
+    "output": "{\"A\":null,\"note\":\"panel service unavailable (HTTP 503)\"}",
+    "usage": {
+      "input_tokens": 190,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 20,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 210
+    },
+    "wall_s": 2.35
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-5.4",
+    "dialect": "openai-responses",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "yellow",
+        "yellow",
+        "cyan",
+        "cyan",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "magenta",
+        "blue",
+        "yellow",
+        "cyan",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"yellow\",\"yellow\",\"cyan\",\"cyan\",\"red\"]}",
+    "usage": {
+      "input_tokens": 205,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 21,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 226
+    },
+    "wall_s": 13.65
+  }
+]

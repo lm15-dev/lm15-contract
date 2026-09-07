@@ -1,0 +1,196 @@
+{
+  "id": "meta.tool_result_image",
+  "provider": "meta",
+  "feature": "tool_result_image",
+  "description": "MAP-10: an image-only tool result reaches the wire as a native block inside the result item (hidden-oracle visual check passed live)",
+  "base_url": "https://api.meta.ai/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a9f0d002715ef3143234f19:rs_8e0b63f2-55f7-4b3d-bfdf-b9ffff09f474",
+          "summary": []
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "I'll fetch panel A to read its colors."
+            }
+          ],
+          "phase": "commentary"
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+          "output": [
+            {
+              "type": "input_image",
+              "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACW0lEQVR4nO3SQQkAMRDAwIpY/1JOTt+VcCL6CKGBKAizzhl1M9vdN+oWLiBA6gJERwsIEC0gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAh4HtGfLwwlcxf+7K0ABCpA5/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/++uHwSsaCbVAo+5AAAAAElFTkSuQmCC"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "usage": {
+      "required": true
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-07",
+    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta/image/exchange-2026-09-07T19-14-09Z-20cb9227834f4dbe9f8527834bc4d28c.json",
+    "evidence": "meta 2026-09-07T19-14-09Z, muse-spark-1.3, HTTP 200; tool-result-content matrix cell 'image' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/meta.tool_result_image/2026-09-07T19-14-09Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/meta/image/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.input[1].status — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].content[0].annotations — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].content[0].logprobs — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].id — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].status — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[2].type — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[3].id — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); $.input[3].status — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); changes/2026-09-07-tool-result-content.md"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "",
+            "continuation": [
+              {
+                "provider": "openai",
+                "kind": "reasoning_item",
+                "data": {
+                  "id": "rs_6a9f0d002715ef3143234f19:rs_8e0b63f2-55f7-4b3d-bfdf-b9ffff09f474"
+                }
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "I'll fetch panel A to read its colors."
+          },
+          {
+            "type": "tool_call",
+            "id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+            "name": "fetch_panel",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACW0lEQVR4nO3SQQkAMRDAwIpY/1JOTt+VcCL6CKGBKAizzhl1M9vdN+oWLiBA6gJERwsIEC0gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAh4HtGfLwwlcxf+7K0ABCpA5/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/++uHwSsaCbVAo+5AAAAAElFTkSuQmCC"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1600
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "authored by research/providers/media_tool_results.py (cell image); the assistant turn is the model's own, parsed from turn-1"
+  },
+  "pinned_body": "2026-09-07T19-14-09Z.txt"
+}

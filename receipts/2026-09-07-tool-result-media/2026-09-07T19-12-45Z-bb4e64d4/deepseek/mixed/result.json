@@ -1,0 +1,43 @@
+{
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "dialect": "openai-chat",
+  "cell": "mixed",
+  "inference_calls": 2,
+  "kind": "raw-wire-discovery-probe",
+  "sdk_fixture": false,
+  "cost_usd": null,
+  "turn1_status": 200,
+  "turn2_status": 200,
+  "outcome": "accepted_but_content_not_received",
+  "answer": {
+    "A": [
+      "unreadable"
+    ]
+  },
+  "expected": {
+    "A": [
+      "blue",
+      "green",
+      "magenta",
+      "yellow",
+      "red",
+      "cyan"
+    ]
+  },
+  "output": "I couldn't read Panel A — the tool returned `[Unsupported Image]`, so no color content was available for inspection. I won't fabricate color values.\n\n```json\n{\"A\": [\"unreadable\"]}\n```",
+  "usage": {
+    "prompt_tokens": 535,
+    "completion_tokens": 215,
+    "total_tokens": 750,
+    "prompt_tokens_details": {
+      "cached_tokens": 384
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 167
+    },
+    "prompt_cache_hit_tokens": 384,
+    "prompt_cache_miss_tokens": 151
+  },
+  "wall_s": 3.09
+}

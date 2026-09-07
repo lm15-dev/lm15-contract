@@ -1,0 +1,205 @@
+[
+  {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "cyan",
+        "blue",
+        "magenta",
+        "yellow"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "green",
+        "cyan",
+        "blue",
+        "magenta",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"cyan\",\"blue\",\"magenta\",\"yellow\"]}",
+    "usage": {
+      "input_tokens": 699,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 18,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 717
+    },
+    "wall_s": 1.14
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "red",
+        "blue",
+        "magenta",
+        "cyan",
+        "yellow",
+        "green"
+      ],
+      "B": [
+        "blue",
+        "yellow",
+        "green",
+        "magenta",
+        "cyan",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "blue",
+        "magenta",
+        "cyan",
+        "yellow",
+        "green"
+      ],
+      "B": [
+        "blue",
+        "green",
+        "yellow",
+        "magenta",
+        "red",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"blue\",\"magenta\",\"cyan\",\"yellow\",\"green\"],\"B\":[\"blue\",\"yellow\",\"green\",\"magenta\",\"cyan\",\"red\"]}",
+    "usage": {
+      "input_tokens": 1450,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 35,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 1485
+    },
+    "wall_s": 2.85
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "blue",
+        "cyan",
+        "green",
+        "red",
+        "yellow"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "cyan",
+        "blue",
+        "green",
+        "red",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"blue\",\"cyan\",\"green\",\"red\",\"yellow\"]}",
+    "usage": {
+      "input_tokens": 786,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 19,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 805
+    },
+    "wall_s": 2.8
+  },
+  {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "dialect": "openai-responses",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "accepted_but_content_not_received",
+    "answer": {
+      "A": [
+        "blue",
+        "magenta",
+        "green",
+        "cyan",
+        "yellow",
+        "yellow"
+      ]
+    },
+    "expected": {
+      "A": [
+        "blue",
+        "red",
+        "magenta",
+        "green",
+        "cyan",
+        "yellow"
+      ]
+    },
+    "output": "{\"A\":[\"blue\",\"magenta\",\"green\",\"cyan\",\"yellow\",\"yellow\"]}",
+    "usage": {
+      "input_tokens": 792,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 19,
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "total_tokens": 811
+    },
+    "wall_s": 3.5
+  }
+]

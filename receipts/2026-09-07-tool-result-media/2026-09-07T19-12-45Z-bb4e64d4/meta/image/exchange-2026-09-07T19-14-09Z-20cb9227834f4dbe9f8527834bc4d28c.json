@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-09-07T19-14-09Z",
+  "provider": "meta",
+  "status": 200,
+  "model": "muse-spark-1.3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a9f0d002715ef3143234f19:rs_8e0b63f2-55f7-4b3d-bfdf-b9ffff09f474",
+          "summary": [],
+          "status": "completed"
+        },
+        {
+          "type": "message",
+          "id": "rs_713e8e5e-12dd-4697-91eb-9b22d1a5bbdd",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "I'll fetch panel A to read its colors.",
+              "annotations": [],
+              "logprobs": []
+            }
+          ],
+          "phase": "commentary",
+          "status": "completed"
+        },
+        {
+          "type": "function_call",
+          "id": "fc_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+          "call_id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+          "name": "fetch_panel",
+          "arguments": "{\"label\":\"A\"}",
+          "status": "completed"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_22d7b7a3-a04c-466a-b570-b5b9b98d24df",
+          "output": [
+            {
+              "type": "input_image",
+              "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACW0lEQVR4nO3SQQkAMRDAwIpY/1JOTt+VcCL6CKGBKAizzhl1M9vdN+oWLiBA6gJERwsIEC0gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAgKkjhcQIHW8gACp4wUESB0vIEDqeAEBUscLCJA6XkCA1PECAqSOFxAgdbyAAKnjBQRIHS8gQOp4AQFSxwsIkDpeQIDU8QICpI4XECB1vIAAqeMFBEgdLyBA6ngBAVLHCwiQOl5AgNTxAh4HtGfLwwlcxf+7K0ABCpA5/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/y9A6vh/AVLH/wuQOv5fgNTx/wKkjv8XIHX8vwCp4/8FSB3/L0Dq+H8BUsf/C5A6/l+A1PH/AqSO/xcgdfy/AKnj/wVIHf8vQOr4fwFSx/8LkDr+X4DU8f8CpI7/FyB1/L8AqeP/BUgd/++uHwSsaCbVAo+5AAAAAElFTkSuQmCC"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "e8d12c587457a17bfb39e15fa66551a8786db6ac17dc72ba598b6e919b2d4d45",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "7b170190a43250bd4c9db877e0a3bdd322f9f556cea596b4eb76017dda643797",
+  "response_bytes": 1214,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}
