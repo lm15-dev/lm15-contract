@@ -582,7 +582,7 @@ def compare_raise(case_id: str, reply: JsonObject, want: JsonObject,
         if got.get(key) != want.get(key):
             return CaseResult(
                 case_id, "fail",
-                diff={"path": f"$.error.{key}", "expected": want.get(key), "actual": got.get(key, "<absent>")},
+                diff=Diff(f"$.error.{key}", want.get(key), got.get(key, _ABSENT), "refusal class/code mismatch"),
             )
     for key in ("partial_response", "events"):
         if golden is None or key not in golden:

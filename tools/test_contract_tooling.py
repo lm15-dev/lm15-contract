@@ -395,3 +395,16 @@ class CaptureTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CompareRaiseTests(unittest.TestCase):
+    def test_wrong_refusal_class_is_a_reportable_diff(self):
+        # A wrong-class refusal used to build a plain dict where a Diff was
+        # expected; write_reports then crashed on .to_dict() (found by the
+        # Rust port's module-4 skeleton, 2026-09-07).
+        result = check.compare_raise(
+            "case", {"ok": False, "error": {"type": "UnsupportedModelError", "code": "unsupported_model"}},
+            {"type": "UnsupportedFeatureError", "code": "unsupported_feature"}, None, {})
+        self.assertEqual(result.status, "fail")
+        self.assertEqual(result.diff.to_dict()["path"], "$.error.type")
+        self.assertEqual(result.diff.to_dict()["actual"], "UnsupportedModelError")
