@@ -1,6 +1,7 @@
 # 2026-09-03 — One provider registry; DeepSeek is its first data-only provider
 
-Status: DRAFT, pending ratification.  The DeepSeek wire rows are declared
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+The DeepSeek wire rows are declared
 from provider documentation (AUTHORITY.md precedence 2) and await the
 live receipt; see § What is not yet evidenced.
 

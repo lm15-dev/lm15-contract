@@ -71,6 +71,15 @@ kind for the fact:
 Provenance is machine-enforced: `tools/check_provenance.py` fails CI when any
 fixture lacks its provenance block (source, date, evidence).
 
+A live-capture case dated on or after 2026-09-06 carries
+`provenance.exchange`: the path (relative to the contract root) of the
+exchange receipt written by the capture tool, which records
+`request_sha256` and `response_sha256` of the unredacted transport
+exchange. Captures dated earlier stand as live evidence without a hash
+(grandfathered, stated). `tools/check_provenance.py` enforces it: for
+`source: live-capture` with `date >= 2026-09-06`, `exchange` must exist,
+the file must exist, and it must contain both hashes.
+
 ## Scope and amendments
 
 These rules bind every repository in the lm15 organization, every agent
@@ -80,3 +89,4 @@ work-order, and the maintainer. Amendments to this document require a
 Ratified-by: Maxime Rivest, 2026-06-10 — rules read and assented to in session; transcribed at his request.
 Re-ratified: Maxime Rivest, 2026-06-11 — canonical-facts precedence amended to name the ratified spec/ files (session assent: "I ratified the spec"); transcribed.
 Re-ratified: Maxime Rivest, 2026-08-31 — canonical-facts precedence amended to add spec/auth.md (session assent: "I ratify"); transcribed.
+Re-ratified: Maxime Rivest, 2026-09-06 — evidence hashes; transcribed.

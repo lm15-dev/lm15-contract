@@ -1,6 +1,6 @@
 # API family — the public surface, one name per concept, four languages
 
-Status: DRAFT 2026-09-02, pending ratification. Companion to `port.md`.
+Status: RATIFIED 2026-09-06 (drafted 2026-09-02; ratified in session with the edits recorded in `changes/2026-09-06-ratification.md` D4). Companion to `port.md`.
 
 `port.md` makes four ports agree on the wire. This page makes them agree on what a user types. The harness cannot check any row here; the reviewer does (`port.md` § Reviewing a port). A port that deviates from a row writes the reason under "Stated deviations" in its README.
 
@@ -13,6 +13,8 @@ Goal: a person who knows lm15 in two of these languages opens the third and is a
 3. **The user builds a `Request`, gets a `Response`.** Every entry point takes the canonical types. No port adds a convenience layer that hides them (no `router.ask("text")` returning a string).
 4. **Async is the language's own.** Python ships both (`Async` prefix). TypeScript is async only. Go is sync with `context.Context`. Rust is async (tokio), with a `blocking` feature that mirrors the same names.
 5. **Zero dependencies where the language allows it.** Python stdlib, TypeScript `fetch` + `WebSocket`, Go `net/http` + `x/net/websocket` or `nhooyr` (state which). Rust uses `reqwest` + `tokio` + `serde`; zero-dep is not a Rust idiom, so this is a stated deviation for the whole port, once.
+6. **Positional layout is frozen at 1.0. Every field added later is keyword-only (or the language's equivalent: options struct / builder).**
+7. **Prefer `reject` to a new send-as value. A compat knob exists only when the wire has no other way, the goal is unreachable without it, and at least two providers need it. Otherwise it is an `extensions` passthrough.**
 
 ## The core loop
 
@@ -41,11 +43,16 @@ Goal: a person who knows lm15 in two of these languages opens the third and is a
 | Concept | Python | TypeScript | Go | Rust |
 |---|---|---|---|---|
 | Provider object | `OpenAILM()`, `AnthropicLM()`, `GeminiLM()`, `OpenAIChatLM()`, `XaiLM()`, `ClaudeCodeLM()`, `OpenAICodexLM()` | same class names | `lm15.NewOpenAILM(opts...)` etc. | `OpenAILM::new()` etc. |
-| Credential | `OpenAILM(api_key=...)` or zero-arg callable | `new OpenAILM({ apiKey })` or `() => string` | `lm15.WithAPIKey(s)` or `CredentialProvider` interface | `OpenAILM::builder().api_key(s)` or `impl CredentialProvider` |
+| Credential | `OpenAILM(api_key=...)` — a string, a credential value, or a zero-arg callable returning one | `new OpenAILM({ apiKey })` — a string, a credential value, or `() => Credential` | `lm15.WithAPIKey(s)` or `CredentialProvider` interface (one method returning the value) | `OpenAILM::builder().api_key(s)` or `impl CredentialProvider` (one method returning the value) |
+| Host settings | `settings=` on every provider constructor and `RouterConfig.settings` | `settings` option object | `lm15.WithSettings(map)` | `HostSettings` builder field |
 | Access policy (AUTH-10) | `AccessPolicy` value | same | `lm15.AccessPolicy` struct | `AccessPolicy` struct |
 | List models | `lm.list_models()` | `lm.listModels()` | `lm.ListModels(ctx)` | `lm.list_models().await` |
 
+A credential provider returns a credential value (`ApiKey`, `BearerToken`, `AwsCredentials`; AUTH-2); a plain string is the `ApiKey` shorthand. Python/TS/Julia: a zero-arg callable. Go/Rust: a single-method interface returning the value. Same in all four.
+
 The same `complete` / `stream` names exist on a provider object and on the router. A user who learned one has learned the other.
+
+**Marked for demotion.** `OpenAIResponsesCompat.edit_image_field` and `commentary_phase` are single-provider knobs (Meta). They stay in 1.0.0a; they move to `extensions` in the next alpha unless a second provider needs them (rule 7). Note only; no code change now.
 
 ## Tools
 

@@ -165,8 +165,23 @@ A credential is a closed sum, not a string (amended 2026-09-03):
 | Kind | Canonical JSON | Consumed by `auth_scheme` |
 |---|---|---|
 | `ApiKey` | `{"kind":"api_key","value"}` | `bearer`, `x-api-key`, `api-key`, `query-key` |
-| `BearerToken` | `{"kind":"bearer_token","value","expires_at"?}` | `bearer`; else `x-api-key` on a door that carries its tokens in the key header (`bedrock-anthropic`, `aws-anthropic`; amended 2026-09-04) |
+| `BearerToken` | `{"kind":"bearer_token","value","expires_at"?}` | `bearer`; else `x-api-key` (amended 2026-09-04, ratified 2026-09-06) |
 | `AwsCredentials` | `{"kind":"aws","access_key_id","secret_access_key","session_token"?,"expires_at"?}` | `sigv4` |
+
+Scheme selection (amended 2026-09-04, ratified 2026-09-06;
+changes/2026-09-04-bedrock-bearer.md, verify/DECISIONS-2026-09-06.md D1):
+
+- An `ApiKey` uses the policy's first header-carrying scheme in policy
+  order (`bearer`, `x-api-key`, `api-key`, `query-key`).
+- A `BearerToken` uses `bearer` if the policy lists it; else `x-api-key`
+  if the policy lists it; else the adapter raises `NotConfiguredError`
+  naming the accepted schemes.
+- `AwsCredentials` uses `sigv4` only; any other scheme raises.
+
+Cost, stated: a token given to a key-header-only door that does not take
+tokens (first-party `anthropic`) gets the provider's 401, not a local
+error. A harness wire pin lands with the first Bedrock Claude HTTP 200
+(account-gated today; stated, not absorbed).
 
 A provider returns one of these. An explicit `api_keys` entry may be a
 plain string (read as `ApiKey`), one of these values, or a provider.
@@ -446,13 +461,18 @@ rung kinds) — ratified in session ("i ratify"); see
 changes/2026-09-03-cloud-hosts.md.
 
 Amended 2026-09-04 (AUTH-2: a `BearerToken` may travel under `x-api-key`
-on a door that carries its tokens in the key header) — DRAFT, pending
-ratification; found offline: `AWS_BEARER_TOKEN_BEDROCK` set on the
-machine made `bedrock-anthropic` raise `NotConfiguredError`; see
-changes/2026-09-04-bedrock-bearer.md.
+when the policy lists it and not `bearer`) — ratified 2026-09-06 in
+session ("perfect, implement it all!"; verify/DECISIONS-2026-09-06.md
+D1); found offline: `AWS_BEARER_TOKEN_BEDROCK` set on the machine made
+`bedrock-anthropic` raise `NotConfiguredError`; see
+changes/2026-09-04-bedrock-bearer.md and
+changes/2026-09-06-ratification.md.
 
 Amended 2026-09-04 (AUTH-10: tenth host policy `bedrock-mantle-chat`) —
-DRAFT, pending ratification.  Live evidence that Bedrock's Chat
+ratified 2026-09-06 in session ("perfect, implement it all!";
+verify/DECISIONS-2026-09-06.md D2).  Live evidence that Bedrock's Chat
 Completions API is two hosts, not one: different URL, SigV4 service,
 model-id namespace, listing, and reasoning shape.  Not a rename of
-`bedrock-chat`.  See changes/2026-09-04-bedrock-mantle-chat-live.md.
+`bedrock-chat`.  One provider string, one wire.  See
+changes/2026-09-04-bedrock-mantle-chat-live.md and
+changes/2026-09-06-ratification.md.

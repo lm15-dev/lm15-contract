@@ -290,9 +290,11 @@ used in a model request yet. Deliberately NOT the provider wire words
 Provider folds (verified live 2026-08-31): Gemini `*PROCESSING` →
 `pending`, `*FAILED` → `failed`, `ACTIVE`/absent/unknown → `ready`
 (suffix match — the `BATCH_STATE_*`-vs-`JOB_STATE_*` drift precedent);
-OpenAI deprecated `status`: `uploaded` → `pending`, `error` → `failed`,
-`processed`/absent/unknown → `ready`; Anthropic reports no state →
-always `ready`.
+OpenAI-shaped `status` (amended 2026-09-06,
+changes/2026-09-06-ratification.md D6): `uploaded`/`pending` →
+`pending`, `error`/`failed` → `failed`, `processed`/absent/unknown →
+`ready` — the reference implements the same table in the shared
+OpenAI-shape file mapping; Anthropic reports no state → always `ready`.
 
 | Value | Meaning |
 |---|---|
@@ -382,7 +384,7 @@ replaces the two-value `AuthHeader`). How a credential travels
 | Value | Credential kind | Wire |
 |---|---|---|
 | `bearer` | `api_key`, `bearer_token` | `Authorization: Bearer …` |
-| `x-api-key` | `api_key` | `x-api-key: …` |
+| `x-api-key` | `api_key`, `bearer_token` | `x-api-key: …` |
 | `api-key` | `api_key` | `api-key: …` |
 | `query-key` | `api_key` | `?key=…` |
 | `sigv4` | `aws` | `Authorization: AWS4-HMAC-SHA256 …`, `x-amz-date`, `x-amz-security-token` |
@@ -475,3 +477,5 @@ AUTH-10 `host.model_in`.
 Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; canonical-facts authority now includes spec/ per AUTHORITY.md).
 
 Amended 2026-09-03 (AuthScheme, CredentialKind, CredentialPolicy, RungKind, AuthStepState, StreamFraming, ModelPlacement) — ratified in session; see changes/2026-09-03-cloud-hosts.md.
+
+Amended 2026-09-06 (AuthScheme `x-api-key` also carries `bearer_token`, D1; FileReadiness OpenAI-shaped `status` fold, D6) — ratified in session ("perfect, implement it all!"); see verify/DECISIONS-2026-09-06.md and changes/2026-09-06-ratification.md.

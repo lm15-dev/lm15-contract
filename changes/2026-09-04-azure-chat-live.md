@@ -1,6 +1,7 @@
 # 2026-09-04 — Azure OpenAI v1 over the Chat Completions wire (`azure-chat`), live-verified
 
-Status: DRAFT, pending ratification.  Same resource, same key, same lab
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+Same resource, same key, same lab
 as `changes/2026-09-04-azure-live.md` (read that entry first: the host,
 auth and quota findings are stated once, there).  Dossier:
 `research/providers/azure-chat/README.md`.

@@ -1,6 +1,7 @@
 # 2026-09-04 — Bedrock short-term keys: the bearer rung live, and an AUTH-2 fix it exposed
 
-Status: DRAFT, pending ratification.  Closes the bearer cells left open in
+Status: RATIFIED 2026-09-06 (AUTH-2 rule text as written in spec/auth.md; verify/DECISIONS-2026-09-06.md D1, changes/2026-09-06-ratification.md).
+Closes the bearer cells left open in
 `changes/2026-09-03-bedrock-chat-live.md`; touches AUTH-2 (one table
 cell) and the harness protocol (one rule).
 

@@ -247,7 +247,7 @@ rationale is the designed reason, ratified, not a guess.
   raise (`ValueError`). WHY: closed vocabularies; silent skipping would
   destroy content.
 - **INV-045 — from_dict restores defaults for omitted optional fields.**
-  `part_index` → 0, `is_error` → false, `redacted` → false, `turn_complete`
+  `part_index` → 0, `is_error` → false, `turn_complete`
   → true, ToolChoice `mode` → `"auto"`, `channels` → 1,
   `media_type` on live client audio/image → their constructor defaults,
   ErrorDetail `message` → `""`, continuation/`data` → `{}`,
@@ -327,6 +327,24 @@ rationale is the designed reason, ratified, not a guess.
   changes/2026-06-11-inv049-blessed-extensions.md and
   changes/2026-06-10-passthrough-rewrites.md (the original keep analysis).
 
+## Stream/complete parity
+
+- **INV-051 — Stream/complete parity.** The Response materialized from a
+  stream's events equals the Response the complete call produces for the
+  same body, except fields the wire withholds on one path. The withheld
+  fields are listed per dialect in MAP-9.6 (today: chat streams carry no
+  `id`). Continuation state is never withheld: state known at start is
+  emitted immediately after `start` as a message-level
+  `ContinuationDelta`; state known at a part's end is emitted at that
+  end. No dialect emits `openai:response_id`, `gemini:response_id`, or
+  `anthropic:message_id` continuation: `Response.id` (and
+  `StreamStartEvent.id`) carry the id. Server-side chaining knobs
+  (`previous_response_id`, `conversation`) stay `extensions` per INV-049.
+  WHY: the id already has one place, and nothing consumed those states
+  (verified 2026-09-06: no reader in lm15-python); a consumer must see
+  the same Response from either path, or the difference is stated here.
+  Ratified 2026-09-06; see changes/2026-09-06-ratification.md (D8).
+
 The serde kind strings accepted by the vet `serde_roundtrip`/`validate` ops
 are enumerated in harness/PROTOCOL.md (§ "Serde kinds").
 
@@ -340,3 +358,6 @@ knobs), inferred rationales re-derived/confirmed. See
 changes/2026-06-11-inv033-parameters-always-emitted.md,
 changes/2026-06-11-inv042-config-nests-reject.md,
 changes/2026-06-11-inv049-blessed-extensions.md.
+Amended 2026-09-06 (INV-045 loses `redacted`, D5; INV-051 stream/complete
+parity added, D8) — ratified in session ("perfect, implement it all!");
+see verify/DECISIONS-2026-09-06.md and changes/2026-09-06-ratification.md.

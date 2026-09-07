@@ -1,6 +1,7 @@
 # 2026-09-03 — Amazon Bedrock over the Chat Completions wire (`bedrock-chat`), live-verified
 
-Status: DRAFT, pending ratification.  First cloud door through the
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+First cloud door through the
 cloud-hosts pathway (`changes/2026-09-03-cloud-hosts.md`, ratified the
 same day); dossier at `research/providers/bedrock-chat/README.md`.
 

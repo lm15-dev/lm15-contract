@@ -16,7 +16,7 @@ first. Implementations must follow the contract, not change fixtures to pass.
 | `harness/` | Shared test protocol, runner, and comparator tests |
 | `tools/` | Provenance, secrecy, coverage, and spec checks |
 | `playbooks/port.md` | Port order, test gates, and review rules |
-| `playbooks/api-family.md` | Draft public API guide; approval remains pending |
+| `playbooks/api-family.md` | Public API guide (ratified 2026-09-06) |
 
 ## Check the contract
 
@@ -55,11 +55,13 @@ implementation changes. Publish the contract commit before dependent CI runs.
 - Keep failing port tests visible. Do not remove new fixtures to claim parity.
 - Documentation evidence is not a successful live capture. Check each provider's
   support row and change record, including partial captures.
-- The public API guide remains a draft. Passing wire tests does not approve it.
-- Two authentication amendments also await approval:
-  `changes/2026-09-04-bedrock-bearer.md` and
-  `changes/2026-09-04-bedrock-mantle-chat-live.md`.
-  A tested development snapshot does not ratify these changes.
+- The public API guide (`playbooks/api-family.md`) and the two
+  authentication amendments (`changes/2026-09-04-bedrock-bearer.md`,
+  `changes/2026-09-04-bedrock-mantle-chat-live.md`) were ratified
+  2026-09-06. See `changes/2026-09-06-ratification.md`.
+- The 88 new goldens (2026-09-03/04) stay `scribe-draft` until the
+  independent re-review adds their `reviewed` line. A green harness run
+  does not approve them.
 
 ## Migration history
 
