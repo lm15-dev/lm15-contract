@@ -373,6 +373,18 @@ What lm15 does mint: a missing `id` becomes `tool_call_<index>`. That is an
 lm15-owned correlator, stated, needed because Gemini sends no call ids; it
 is not a guess about what the model meant.
 
+**The complete path is the same rule** (2026-09-07,
+`changes/2026-09-07-complete-tool-call-no-guess.md`). A non-streaming body
+whose tool call carries no name — a Responses `function_call` item, a chat
+`tool_calls[i].function`, an Anthropic `tool_use` block, a Gemini
+`functionCall` part — is refused at `parse_response` with `ProviderError`
+(ErrorCode `provider`): the provider's reply is not actionable, and there
+is nothing to salvage from a body the caller never saw stream by. Before
+this date the reference substituted the literal `"tool"` — the guess the
+stream path had already refused, made on the complete path, so the same
+turn answered differently under `stream=True` (INV-051). Pinned by the
+four `<dialect>.tool_call_unnamed_complete` cases.
+
 **Assembly algorithm** (the same in every port; written down 2026-09-02
 after the independent review found it lived only in code):
 

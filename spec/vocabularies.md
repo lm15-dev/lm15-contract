@@ -152,7 +152,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `not_configured` | `NotConfiguredError` (and base `ConfigurationError`) | missing key/config |
 | `transport` | `TransportError` | network failure at the LM layer |
 | `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact (MAP-9: a tool call whose fragments never carried a name); carries `partial` (the Response assembled without the offending call) and `part_index` |
-| `provider` | `ProviderError` | catch-all; the code fallback |
+| `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
 Class hierarchy (ports must replicate the SHAPE; idiomatic error mechanisms
 allowed):

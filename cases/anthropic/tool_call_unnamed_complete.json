@@ -1,0 +1,104 @@
+{
+  "id": "anthropic.tool_call_unnamed_complete",
+  "provider": "anthropic",
+  "feature": "tool_call_unnamed_complete",
+  "description": "Degraded complete (non-streaming) reply: the tool_use block without name. Canonical outcome is a typed refusal at parse_response (MAP-9 extended to the complete path, changes/2026-09-07-complete-tool-call-no-guess.md), never a guessed name.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Montreal?"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get the current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "max_tokens": 1024,
+      "stream": false
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "parse_response",
+      "type": "ProviderError",
+      "code": "provider"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "SYNTHETIC degraded body, not a live capture: the pinned body of anthropic.tools (2026-04-13T14-49-20Z.txt) with the tool call's name removed and nothing else changed. Wire request copied from that case (the request side is unchanged). See changes/2026-09-07-complete-tool-call-no-guess.md"
+  },
+  "canonical_request": {
+    "model": "claude-sonnet-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Montreal?"
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get the current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 1024
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-07",
+    "evidence": "copied verbatim from anthropic.tools; see changes/2026-09-07-complete-tool-call-no-guess.md"
+  },
+  "pinned_body": "2026-09-07-hand-authored.txt"
+}
