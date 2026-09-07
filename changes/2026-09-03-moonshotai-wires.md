@@ -1,6 +1,7 @@
 # 2026-09-03 — Moonshot AI's Responses and Anthropic wires live-verified; four Anthropic-compat knobs from the wire
 
-Status: DRAFT, pending ratification.  Follows `changes/2026-09-03-moonshotai-live.md`
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+Follows `changes/2026-09-03-moonshotai-live.md`
 (the Chat Completions wire); dossier at `research/providers/moonshotai/README.md`
 (one dossier, three strings).  One provider string names one wire
 (`changes/2026-09-03-provider-registry.md`), so the two further wires are

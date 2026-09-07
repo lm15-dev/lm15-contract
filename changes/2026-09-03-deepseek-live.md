@@ -1,6 +1,7 @@
 # 2026-09-03 — DeepSeek live-verified: eleven cases, four error envelopes, six decisions closed
 
-Status: DRAFT, pending ratification.  Completes
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+Completes
 `changes/2026-09-03-provider-registry.md` § What is not yet evidenced.
 Every wire fact in that entry's `deepseek` rows now has a receipt.
 

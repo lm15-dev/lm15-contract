@@ -1,6 +1,7 @@
 # 2026-09-03 — Moonshot AI (Kimi) live-verified; the `kimi` thinking shape and a client-side effort allowlist
 
-Status: DRAFT, pending ratification.  A registry provider through the
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+A registry provider through the
 pathway of `changes/2026-09-03-provider-registry.md`; dossier at
 `research/providers/moonshotai/README.md`; scrapes at
 `scrapes/moonshotai/pages/` (61 native-Markdown pages).

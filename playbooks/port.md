@@ -28,7 +28,8 @@ when its direction is green with zero skips added, and stays green.
 |---|---|---|
 | 1 | canonical types + serde (`spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md`, `docs/serde-rules.md`) | `--direction serde` (every kind in PROTOCOL.md; `tools/audit.py` reports the count and any uncovered type); `validate` rejects what the invariants reject |
 | 2 | errors (`spec/vocabularies.md` ErrorCode, hierarchy shape) | `--direction error` |
-| 3 | auth (`spec/auth.md` AUTH-1..11: chains, doctor, credential values/providers, access policies, signing, token exchange) | `--direction auth`, `--direction token`; `auth/resolution.json`, `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
+| 3a | core auth (`spec/auth.md`: AUTH-1 `key`, `oauth`, `oauth-unless-explicit`; AUTH-2 credential values; AUTH-5; AUTH-7 doctor; AUTH-8 borrowed CLI files) | `--direction auth --auth-scope core` (the non-cloud cases); `auth/resolution.json` |
+| 3b | cloud chains (AUTH-1 cloud chains, AUTH-11 rung kinds, SigV4, RS256) | `--direction token`; `--direction auth --auth-scope cloud` (the cloud cases); `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
 | 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
 | 6 | model listing | `--direction models` |
@@ -36,8 +37,15 @@ when its direction is green with zero skips added, and stays green.
 | 8 | generation (image, speech) and video | `--direction generation`, `video` |
 | 9 | live (websocket transcripts) | `--direction live` |
 
-Modules 1–5 form the required core and gate the 1.0 tag for every language.
-Their exact scope follows the pinned contract, including ratified amendments.
+Modules 1, 2, 3a, 4 and 5 form the required core and gate the 1.0 tag for
+every language. Their exact scope follows the pinned contract, including
+ratified amendments. Module 3b does not gate 1.0: a port without 3b
+answers `NotConfiguredError` for cloud-chain providers and states it in
+its README. A cloud case is one whose provider's policy is a cloud chain
+(`aws-chain`, `azure-chain`, `gcp-chain`), determined from
+`spec/support-matrix.json`; `check.py --direction auth --auth-scope
+core|cloud|all` (default `all`) selects them (split 2026-09-06,
+changes/2026-09-06-ratification.md D14).
 Modules 6–9 ship where the language's ecosystem makes them reasonable;
 a port that does not implement one answers `ok: false` with
 `UnsupportedFeatureError` for its ops and declares it in its README.

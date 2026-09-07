@@ -1,6 +1,7 @@
 # 2026-09-03 — DeepSeek over the Anthropic wire: the registry's second dialect, live-verified
 
-Status: DRAFT, pending ratification.  Third provider through the registry
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+Third provider through the registry
 pathway; dossier `research/providers/deepseek-anthropic/README.md`.
 
 ## Why this one

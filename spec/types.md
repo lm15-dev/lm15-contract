@@ -77,10 +77,14 @@ Factory: `text(content, *, continuation=None) -> TextPart`.
 |---|---|---|---|---|---|
 | `type` | string `"thinking"` | — | `"thinking"` | always | discriminator |
 | `text` | string | shape | — (required arg) | always (even `""`) | empty allowed (INV-015) |
-| `redacted` | boolean | no | `false` | omit-default (only when `true`) | exactly bool |
 | `continuation` | array | no | `[]` | omit-empty | INV-005 |
 
-Factory: `thinking(content, *, redacted=False, continuation=None)`.
+Factory: `thinking(content, *, continuation=None)`.
+
+Hidden thinking is a ThinkingPart with empty `text` and continuation
+state (MAP-7 rule 11). The `redacted` field was removed 2026-09-06
+(changes/2026-09-06-ratification.md D5): there is no flag and no
+placeholder text.
 
 ### RefusalPart
 
@@ -243,7 +247,7 @@ ALL parts are TextPart, joined with `\n`).
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `provider` | string | yes | — | always | non-empty |
+| `provider` | string | yes | — | always | non-empty; dialect id, not the access-route provider string (MAP-7.8) |
 | `kind` | string | yes | — | always | non-empty (open string namespace, NOT a closed vocabulary) |
 | `data` | object (opaque) | no | `{}` | always | strict JSON object, required (may be empty) |
 
@@ -1034,3 +1038,7 @@ Amended 2026-06-11 by maintainer delegation: FunctionTool.parameters is
 required-with-shape (INV-033 resolution); Config read-side nest rule noted
 (INV-042 resolution). See changes/2026-06-11-inv033-parameters-always-emitted.md
 and changes/2026-06-11-inv042-config-nests-reject.md.
+Amended 2026-09-06 (ThinkingPart loses `redacted`, D5; ContinuationState
+`provider` is the dialect id, D7) — ratified in session ("perfect,
+implement it all!"); see verify/DECISIONS-2026-09-06.md and
+changes/2026-09-06-ratification.md.

@@ -1,6 +1,7 @@
 # 2026-09-04 — Azure OpenAI v1 over the Responses wire (`azure`), live-verified
 
-Status: DRAFT, pending ratification.  Second cloud door through the
+Status: RATIFIED 2026-09-06 (wire facts: cases, bodies, errors, receipts). Goldens: see changes/2026-09-06-ratification.md.
+Second cloud door through the
 cloud-hosts pathway (`changes/2026-09-03-cloud-hosts.md`); the sibling
 Chat Completions door is `changes/2026-09-04-azure-chat-live.md`.
 Dossier: `research/providers/azure/README.md`.
