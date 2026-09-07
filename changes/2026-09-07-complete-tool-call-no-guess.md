@@ -1,8 +1,14 @@
 # 2026-09-07 — A nameless tool call on the complete path is refused (MAP-9 extended)
 
-Ratification: PROPOSED 2026-09-07 — drafted after the Rust module 5 review
-found the reference guessing on the complete path what MAP-9 forbids on
-the stream path. Awaiting "i ratify".
+Ratification: RATIFIED 2026-09-07 — Maxime Rivest, in session ("i ratify"),
+after the entry was drafted with the four cases, the reference fixed and
+both shims green (response 302/0/1 each), and after the question "is this
+a big ratification?" was answered: one sentence of rule closing a gap in
+the 2026-09-02 rule, no golden changed, one judgment call (the class).
+Transcribed. The complete-path paragraph of MAP-9 and the four
+`<dialect>.tool_call_unnamed_complete` pins are normative from this date.
+Drafted after the Rust module 5 review found the reference guessing on
+the complete path what MAP-9 forbids on the stream path.
 
 ## What this changes
 
