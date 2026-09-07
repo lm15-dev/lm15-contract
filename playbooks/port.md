@@ -28,7 +28,7 @@ when its direction is green with zero skips added, and stays green.
 |---|---|---|
 | 1 | canonical types + serde (`spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md`, `docs/serde-rules.md`) | `--direction serde` (every kind in PROTOCOL.md; `tools/audit.py` reports the count and any uncovered type); `validate` rejects what the invariants reject |
 | 2 | errors (`spec/vocabularies.md` ErrorCode, hierarchy shape) | `--direction error` |
-| 3a | core auth (`spec/auth.md`: AUTH-1 `key`, `oauth`, `oauth-unless-explicit`; AUTH-2 credential values; AUTH-5; AUTH-7 doctor; AUTH-8 borrowed CLI files) | `--direction auth --auth-scope core` (the non-cloud cases); `auth/resolution.json` |
+| 3a | core auth (`spec/auth.md`: AUTH-1 `key`, `oauth`, `oauth-unless-explicit`; AUTH-2 credential values; AUTH-5; AUTH-7 doctor; AUTH-8 borrowed CLI files; AUTH-10 access policies) | `--direction auth --auth-scope core` (the non-cloud cases); `auth/resolution.json` |
 | 3b | cloud chains (AUTH-1 cloud chains, AUTH-11 rung kinds, SigV4, RS256) | `--direction token`; `--direction auth --auth-scope cloud` (the cloud cases); `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
 | 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
