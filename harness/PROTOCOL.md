@@ -129,7 +129,7 @@ Refusal (MAP-9, a tool call whose fragments never carried a name):
   canonical stream-event serde. `canonical_response` is the materialized
   final Response (same rules as parse_response).
 - `provider_data` on the `end` event (MAP-3, D9 of
-  `verify/DECISIONS-2026-09-06.md`) is an escape hatch, not a canonical
+  `changes/2026-09-06-decisions.md`) is an escape hatch, not a canonical
   fact: the harness compares it by presence and JSON type only, never by
   content — if the golden's `end` event has `provider_data`, the shim's
   `end` event must have it with the same JSON type; if the golden lacks it,
@@ -209,7 +209,7 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
 - The op performs no network I/O and no writes; file reads are limited to
   the harness-given `credentials_path` and sandbox `files` above.
 - `--auth-scope core|cloud|all` (default `all`; D14 of
-  `verify/DECISIONS-2026-09-06.md`, `playbooks/port.md` modules 3a/3b):
+  `changes/2026-09-06-decisions.md`, `playbooks/port.md` modules 3a/3b):
   `core` runs the cases of non-cloud providers only, `cloud` the cases of
   providers whose credential policy is `aws-chain`, `azure-chain` or
   `gcp-chain`. A port without module 3b runs `--direction auth --auth-scope
@@ -243,7 +243,7 @@ Out: `{"method": str, "url": str, "headers": {str: str}, "body": <JSON|str|null>
 In: `{"request": {"method": str, "url": str, "headers": {str: str|[str]}, "body": str}, "credential": <aws credential>, "region": str, "service": str, "now": str}`
 Out: `{"canonical_request": str, "string_to_sign": str, "authorization": str, "headers": {str: str}}`
 - (Added 2026-09-03; the complete 34-case suite 2026-09-06, D15 of
-  `verify/DECISIONS-2026-09-06.md`.) The AWS test suite
+  `changes/2026-09-06-decisions.md`.) The AWS test suite
   (`auth/sigv4-vectors.json`) through the port's signer, all three stages
   byte for byte. The harness passes the vector's request headers verbatim,
   including any pinned `host`, `x-amz-date` or `x-amz-security-token`; a

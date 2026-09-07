@@ -15,7 +15,7 @@ with the JSON path of the first difference — never papered over. This module
 imports NOTHING from lm15: stdlib only.
 
 - ``provider_data`` on ``end`` stream events compares by presence + JSON
-  type only (D9, verify/DECISIONS-2026-09-06.md); never by content.
+  type only (D9, changes/2026-09-06-decisions.md); never by content.
 
 Usage:
     python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|all]
@@ -219,7 +219,7 @@ def first_difference(
 
 def end_provider_data_rule(golden_events: Any, actual_events: Any,
                            segs: PathSegs = ("events",)) -> tuple[Any, Any, Diff | None]:
-    """D9 (verify/DECISIONS-2026-09-06.md): ``provider_data`` on ``end`` events.
+    """D9 (changes/2026-09-06-decisions.md): ``provider_data`` on ``end`` events.
 
     The field is the wire frame that supplied usage — an escape hatch, not
     a canonical fact — so it is compared by presence + JSON type only, never

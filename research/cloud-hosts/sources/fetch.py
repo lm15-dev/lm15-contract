@@ -147,7 +147,7 @@ SOURCES: dict[str, str] = {
 
 
 # AWS SigV4 test suite (vendored verbatim in botocore): the harness vectors.
-# The complete suite (D15, verify/DECISIONS-2026-09-06.md): every case
+# The complete suite (D15, changes/2026-09-06-decisions.md): every case
 # directory's .req/.creq/.sts/.authz, flat under aws-sigv4-suite/ (leaf
 # names are unique across the nested normalize-path/ and post-sts-token/
 # groups), plus the suite's LICENSE, NOTICE and the two group readmes.

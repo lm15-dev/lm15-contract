@@ -12,7 +12,7 @@ A provenance block is an object with:
   date     : YYYY-MM-DD
   evidence : non-empty pointer (commit, live receipt, changes/ entry)
 
-Further rules (verify/DECISIONS-2026-09-06.md, ratified 2026-09-06):
+Further rules (changes/2026-09-06-decisions.md, ratified 2026-09-06):
 - D11: a case under cases/ with source live-capture and date >= 2026-09-06
   carries "exchange": the path, relative to the contract root, of the
   exchange receipt the capture tool wrote (research/providers/_capture.py,
