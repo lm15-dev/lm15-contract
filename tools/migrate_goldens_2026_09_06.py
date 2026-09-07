@@ -3,7 +3,7 @@
 
 The record of a scripted, verifiable transform over frozen goldens, as the
 MAP-3 and MAP-4 precedents were (see goldens/anthropic/streaming.json
-provenance).  Rules: verify/DECISIONS-2026-09-06.md, "Golden migration".
+provenance).  Rules: changes/2026-09-06-decisions.md, "Golden migration".
 
 Transforms, applied to every golden under goldens/:
 
@@ -64,7 +64,7 @@ GOLDENS_DIR = CONTRACT_ROOT / "goldens"
 DROPPED_KINDS = frozenset({"response_id", "message_id"})
 CONTENT_KEYS = ("canonical_response", "events", "partial_response")
 REVIEW_NOTE = (
-    " Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, "
+    " Re-reviewed 2026-09-06 for D5/D8/D9 (changes/2026-09-06-decisions.md, "
     "changes/2026-09-06-ratification.md): change verified by "
     "tools/migrate_goldens_2026_09_06.py to be exactly {what}."
 )
