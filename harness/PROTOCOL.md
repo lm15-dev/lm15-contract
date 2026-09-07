@@ -59,7 +59,7 @@ op ("invented a fact") or when `type` or `code` differ.
 ## Ops
 
 All canonical JSON uses the canonical serde forms (see
-`lm15-python/docs/serde-rules.md`): one omission rule, opaque payloads
+`docs/serde-rules.md`): one omission rule, opaque payloads
 verbatim.
 
 ### capabilities

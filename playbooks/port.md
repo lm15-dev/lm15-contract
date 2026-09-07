@@ -9,8 +9,8 @@ that four ports converge instead of each inventing a shape.
 ## Inputs the agent receives
 
 1. `AUTHORITY.md`, `spec/*.md` (types, vocabularies, invariants, auth,
-   scope), `harness/PROTOCOL.md`, `lm15-python/docs/mapping-rules.md`
-   (MAP-1 to MAP-9), `lm15-python/docs/serde-rules.md`.
+   scope), `harness/PROTOCOL.md`, `docs/mapping-rules.md`
+   (MAP-1 to MAP-10), `docs/serde-rules.md`.
 2. This repository at the pinned commit, read-only. The shim is run by
    `harness/check.py --shim <lang>`; the entry in `harness/shims.json`.
 3. The idiom rules for the language (§ Idioms below) and the public

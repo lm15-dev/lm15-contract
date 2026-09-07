@@ -7,6 +7,7 @@ first. Implementations must follow the contract, not change fixtures to pass.
 |---|---|
 | `AUTHORITY.md` | Evidence rules and source precedence |
 | `spec/` | Canonical types, invariants, vocabularies, scope, and authentication |
+| `docs/` | Normative serde rules and mapping rules (MAP-1..MAP-10); moved here from lm15-python on 2026-09-07 |
 | `cases/`, `bodies/`, `errors/` | Provider requests and captured responses |
 | `goldens/` | Expected canonical responses and stream events |
 | `serde/canonical.json` | Canonical JSON vectors |

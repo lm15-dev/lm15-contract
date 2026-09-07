@@ -11,7 +11,7 @@ its output with one question: does every claim point at a receipt?
 
 ## Inputs the agent receives
 
-1. `AUTHORITY.md`, `spec/*.md`, `lm15-python/docs/mapping-rules.md`,
+1. `AUTHORITY.md`, `spec/*.md`, `docs/mapping-rules.md`,
    `lm15-dev/THEORY.md`.
 2. The current adapter code for the concept.
 3. Today's scrapes (run `scrapes/<provider>/update.sh`) and a fresh live

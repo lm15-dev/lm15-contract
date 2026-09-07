@@ -41,8 +41,10 @@ Precedence (highest wins):
 1. **Normative rules** — the written spec for the representation:
    `spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md` in this
    repository (ratified 2026-06-11) and `spec/auth.md` (ratified
-   2026-08-31), together with `lm15-python/docs/serde-rules.md` and
-   `docs/mapping-rules.md`.
+   2026-08-31), together with `docs/serde-rules.md` and
+   `docs/mapping-rules.md` in this repository (moved here from
+   `lm15-python/docs/` on 2026-09-07 so that a CONTRACT_PIN names every
+   normative document; the old paths forward here).
 2. **The contract fixture** (`serde/canonical.json`, `expect_lm15` blocks).
 3. **lm15-python** (the reference implementation).
 4. **The ports** (Go, Rust, TypeScript, Julia).
