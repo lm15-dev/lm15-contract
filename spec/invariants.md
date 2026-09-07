@@ -360,4 +360,4 @@ changes/2026-06-11-inv042-config-nests-reject.md,
 changes/2026-06-11-inv049-blessed-extensions.md.
 Amended 2026-09-06 (INV-045 loses `redacted`, D5; INV-051 stream/complete
 parity added, D8) — ratified in session ("perfect, implement it all!");
-see verify/DECISIONS-2026-09-06.md and changes/2026-09-06-ratification.md.
+see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.

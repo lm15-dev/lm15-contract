@@ -1040,5 +1040,5 @@ required-with-shape (INV-033 resolution); Config read-side nest rule noted
 and changes/2026-06-11-inv042-config-nests-reject.md.
 Amended 2026-09-06 (ThinkingPart loses `redacted`, D5; ContinuationState
 `provider` is the dialect id, D7) — ratified in session ("perfect,
-implement it all!"); see verify/DECISIONS-2026-09-06.md and
+implement it all!"); see changes/2026-09-06-decisions.md and
 changes/2026-09-06-ratification.md.

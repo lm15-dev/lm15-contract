@@ -1,7 +1,7 @@
 # 2026-09-06 — Ratification session: sixteen decisions, one record
 
 Status: RATIFIED 2026-09-06.  The decided text is
-`verify/DECISIONS-2026-09-06.md` (D1–D16); this entry is the record of
+`changes/2026-09-06-decisions.md` (D1–D16); this entry is the record of
 what it changed and where.  Workers transcribed; nothing here was
 re-decided.  Context: `changes/2026-09-06-contract-baseline-review.md`
 (the gaps this session closed) and

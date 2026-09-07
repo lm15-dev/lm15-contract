@@ -169,7 +169,7 @@ A credential is a closed sum, not a string (amended 2026-09-03):
 | `AwsCredentials` | `{"kind":"aws","access_key_id","secret_access_key","session_token"?,"expires_at"?}` | `sigv4` |
 
 Scheme selection (amended 2026-09-04, ratified 2026-09-06;
-changes/2026-09-04-bedrock-bearer.md, verify/DECISIONS-2026-09-06.md D1):
+changes/2026-09-04-bedrock-bearer.md, changes/2026-09-06-decisions.md D1):
 
 - An `ApiKey` uses the policy's first header-carrying scheme in policy
   order (`bearer`, `x-api-key`, `api-key`, `query-key`).
@@ -462,7 +462,7 @@ changes/2026-09-03-cloud-hosts.md.
 
 Amended 2026-09-04 (AUTH-2: a `BearerToken` may travel under `x-api-key`
 when the policy lists it and not `bearer`) — ratified 2026-09-06 in
-session ("perfect, implement it all!"; verify/DECISIONS-2026-09-06.md
+session ("perfect, implement it all!"; changes/2026-09-06-decisions.md
 D1); found offline: `AWS_BEARER_TOKEN_BEDROCK` set on the machine made
 `bedrock-anthropic` raise `NotConfiguredError`; see
 changes/2026-09-04-bedrock-bearer.md and
@@ -470,7 +470,7 @@ changes/2026-09-06-ratification.md.
 
 Amended 2026-09-04 (AUTH-10: tenth host policy `bedrock-mantle-chat`) —
 ratified 2026-09-06 in session ("perfect, implement it all!";
-verify/DECISIONS-2026-09-06.md D2).  Live evidence that Bedrock's Chat
+changes/2026-09-06-decisions.md D2).  Live evidence that Bedrock's Chat
 Completions API is two hosts, not one: different URL, SigV4 service,
 model-id namespace, listing, and reasoning shape.  Not a rename of
 `bedrock-chat`.  One provider string, one wire.  See

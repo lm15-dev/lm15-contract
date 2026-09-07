@@ -478,4 +478,4 @@ Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; can
 
 Amended 2026-09-03 (AuthScheme, CredentialKind, CredentialPolicy, RungKind, AuthStepState, StreamFraming, ModelPlacement) — ratified in session; see changes/2026-09-03-cloud-hosts.md.
 
-Amended 2026-09-06 (AuthScheme `x-api-key` also carries `bearer_token`, D1; FileReadiness OpenAI-shaped `status` fold, D6) — ratified in session ("perfect, implement it all!"); see verify/DECISIONS-2026-09-06.md and changes/2026-09-06-ratification.md.
+Amended 2026-09-06 (AuthScheme `x-api-key` also carries `bearer_token`, D1; FileReadiness OpenAI-shaped `status` fold, D6) — ratified in session ("perfect, implement it all!"); see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.

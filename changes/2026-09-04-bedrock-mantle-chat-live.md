@@ -1,6 +1,6 @@
 # 2026-09-04 — Amazon Bedrock Chat Completions on bedrock-mantle (`bedrock-mantle-chat`), live-verified
 
-Status: RATIFIED 2026-09-06 (verify/DECISIONS-2026-09-06.md D2, changes/2026-09-06-ratification.md).
+Status: RATIFIED 2026-09-06 (changes/2026-09-06-decisions.md D2, changes/2026-09-06-ratification.md).
 A tenth cloud door.  The original
 design named nine (`changes/2026-09-03-cloud-hosts.md`); this one was
 found live, not invented.  Dossier: `research/providers/bedrock-mantle-chat/`.
