@@ -236,7 +236,7 @@ provenance). Pipeline:
    difference is a finding: print it and stop; do not overwrite.
 3. Write final goldens = migrated content + (c). Provenance: keep every
    existing key; for frozen goldens append to `reviewed`: ` Re-reviewed
-   2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md,
+   2026-09-06 for D5/D8/D9 (changes/2026-09-06-decisions.md,
    changes/2026-09-06-ratification.md): change verified by
    tools/migrate_goldens_2026_09_06.py to be exactly {what changed}.` For
    draft goldens append the same sentence to `evidence`.
