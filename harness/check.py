@@ -14,9 +14,19 @@ The shim only transforms; the harness never trusts it. Failures are reported
 with the JSON path of the first difference — never papered over. This module
 imports NOTHING from lm15: stdlib only.
 
+- ``provider_data`` on ``end`` stream events compares by presence + JSON
+  type only (D9, verify/DECISIONS-2026-09-06.md); never by content.
+
 Usage:
     python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|all]
-                            [--case ID] [--report-dir harness/reports]
+                            [--case ID] [--auth-scope core|cloud|all] [--report-dir harness/reports]
+
+``--auth-scope`` applies to the auth direction only: ``core`` runs the cases
+of non-cloud providers (port playbook module 3a), ``cloud`` the cases of
+aws-chain/azure-chain/gcp-chain providers (module 3b), ``all`` (default)
+both. spec/support-matrix.json does not pin the credential policy, so the
+cloud providers are derived from auth/resolution.json (see
+``cloud_auth_providers``).
 """
 
 from __future__ import annotations
@@ -207,6 +217,50 @@ def first_difference(
     return None
 
 
+def end_provider_data_rule(golden_events: Any, actual_events: Any,
+                           segs: PathSegs = ("events",)) -> tuple[Any, Any, Diff | None]:
+    """D9 (verify/DECISIONS-2026-09-06.md): ``provider_data`` on ``end`` events.
+
+    The field is the wire frame that supplied usage — an escape hatch, not
+    a canonical fact — so it is compared by presence + JSON type only, never
+    by content. Rule: when the golden's ``end`` event carries
+    ``provider_data``, the shim's ``end`` event must carry it too, with the
+    same JSON type; when the golden lacks it, the shim's value is ignored.
+
+    Returns copies of both event lists with the field removed from ``end``
+    events (so the strict comparator never sees its content) and the first
+    presence/type Diff, if any. Non-list inputs pass through untouched: the
+    strict comparator reports the shape problem itself. Stream direction
+    only; never widened to other paths.
+    """
+    if not isinstance(golden_events, list) or not isinstance(actual_events, list):
+        return golden_events, actual_events, None
+    expected_out: list[Any] = []
+    actual_out: list[Any] = list(actual_events)
+    diff: Diff | None = None
+    for i, event in enumerate(golden_events):
+        if not (isinstance(event, dict) and event.get("type") == "end"):
+            expected_out.append(event)
+            continue
+        expected_out.append({k: v for k, v in event.items() if k != "provider_data"})
+        actual_event = actual_events[i] if i < len(actual_events) else _ABSENT
+        if not isinstance(actual_event, dict):
+            continue  # shape mismatch: left to the strict comparator
+        actual_out[i] = {k: v for k, v in actual_event.items() if k != "provider_data"}
+        if "provider_data" not in event or diff is not None:
+            continue
+        path = segs + (i, "provider_data")
+        if "provider_data" not in actual_event:
+            diff = Diff(render_path(path), event["provider_data"], _ABSENT,
+                        "end provider_data (D9): presence required")
+            continue
+        exp_t, act_t = json_type(event["provider_data"]), json_type(actual_event["provider_data"])
+        if exp_t != act_t:
+            diff = Diff(render_path(path), event["provider_data"], actual_event["provider_data"],
+                        f"end provider_data (D9): type mismatch {exp_t} != {act_t}")
+    return expected_out, actual_out, diff
+
+
 # ─── Shim subprocess ─────────────────────────────────────────────────
 
 class HarnessError(RuntimeError):
@@ -385,6 +439,47 @@ def load_auth_fixture() -> JsonObject:
     return json.loads(AUTH_FILE.read_text())
 
 
+AUTH_SCOPES = ("core", "cloud", "all")
+
+# The AUTH-1 rung kinds that exist only in the cloud chains (aws-chain,
+# azure-chain, gcp-chain; spec/auth.md; PROTOCOL.md explain_auth). A
+# provider whose explain_auth chain lists one of these is a cloud-chain
+# provider. spec/support-matrix.json pins auth schemes (`auth_modes`), not
+# the credential policy, so the policy is derived from auth/resolution.json:
+# every cloud-chain provider's pinned chain lists its cloud rungs.
+CLOUD_RUNG_KINDS = frozenset({
+    "assume-role", "web-identity", "sso", "shared-credentials-file", "login",
+    "credential_process", "config-file", "container", "imds",
+    "environment", "workload-identity", "managed-identity", "az", "pwsh", "azd",
+    "adc-env", "adc-file", "metadata", "gcloud",
+})
+
+
+def cloud_auth_providers(fixture: JsonObject) -> frozenset[str]:
+    """Providers whose credential policy is a cloud chain (D14).
+
+    Derived from the fixture: a provider is cloud-chain when any of its
+    cases pins a CLOUD_RUNG_KINDS step. Classification is per provider, so
+    every case of a cloud-chain provider is a cloud case even when the
+    selected rung is a plain environment key.
+    """
+    providers = set()
+    for case in fixture["cases"]:
+        steps = case.get("expect", {}).get("steps", [])
+        if any(isinstance(step, dict) and step.get("kind") in CLOUD_RUNG_KINDS for step in steps):
+            providers.add(case["provider"])
+    return frozenset(providers)
+
+
+def auth_case_in_scope(case: JsonObject, scope: str, cloud_providers: frozenset[str]) -> bool:
+    if scope not in AUTH_SCOPES:
+        raise ValueError(f"unknown auth scope {scope!r}; expected one of {AUTH_SCOPES}")
+    if scope == "all":
+        return True
+    is_cloud = case["provider"] in cloud_providers
+    return is_cloud if scope == "cloud" else not is_cloud
+
+
 def pinned_body(case: JsonObject) -> bytes:
     return (BODIES_DIR / case["id"] / case["pinned_body"]).read_bytes()
 
@@ -492,9 +587,12 @@ def compare_raise(case_id: str, reply: JsonObject, want: JsonObject,
     for key in ("partial_response", "events"):
         if golden is None or key not in golden:
             continue
-        diff = first_difference(
-            golden[key], got.get(key, _ABSENT), (key,), volatile=volatile, usage_int_float=True,
-        )
+        expected, actual = golden[key], got.get(key, _ABSENT)
+        if key == "events":
+            expected, actual, diff = end_provider_data_rule(expected, actual)
+            if diff is not None:
+                return CaseResult(case_id, "fail", diff=diff)
+        diff = first_difference(expected, actual, (key,), volatile=volatile, usage_int_float=True)
         if diff is not None:
             return CaseResult(case_id, "fail", diff=diff)
     return CaseResult(case_id, "pass")
@@ -938,10 +1036,14 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             usage_int_float=True,
         )
         if diff is None and want_stream and "events" in golden:
-            diff = first_difference(
-                golden["events"], result.get("events", _ABSENT), ("events",),
-                volatile=volatile, usage_int_float=True,
+            expected_events, actual_events, diff = end_provider_data_rule(
+                golden["events"], result.get("events", _ABSENT),
             )
+            if diff is None:
+                diff = first_difference(
+                    expected_events, actual_events, ("events",),
+                    volatile=volatile, usage_int_float=True,
+                )
         if diff is None:
             report.results.append(CaseResult(case_id, "pass"))
         else:
@@ -992,7 +1094,7 @@ def materialize_borrowed_file(case: JsonObject, tmp_dir: Path) -> str:
     return str(path)
 
 
-def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+def run_auth_direction(shim: Shim, case_filter: str | None, auth_scope: str = "all") -> DirectionReport:
     """AUTH-1 resolution chains through the shim's explain_auth (AUTH-7).
 
     The harness supplies EVERY input (env map, api_keys providers, borrowed
@@ -1001,15 +1103,22 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     enforced harness-side: the planted sentinel must not appear anywhere in
     the shim's reply, and ``report_text`` (the human rendering) must be a
     non-empty string so the secrecy check has a real surface to inspect.
+
+    ``auth_scope`` (D14, playbooks/port.md module 3a/3b): ``core`` runs the
+    cases of non-cloud providers only, ``cloud`` the cases of cloud-chain
+    providers only (see ``cloud_auth_providers``), ``all`` (default) both.
     """
     report = DirectionReport("auth")
     fixture = load_auth_fixture()
     sentinel = str(fixture["sentinel"])
+    cloud_providers = cloud_auth_providers(fixture)
     with tempfile.TemporaryDirectory(prefix="lm15-auth-") as tmp:
         tmp_dir = Path(tmp)
         for case in fixture["cases"]:
             case_id = case["id"]
             if case_filter and case_id != case_filter:
+                continue
+            if not auth_case_in_scope(case, auth_scope, cloud_providers):
                 continue
             fields: JsonObject = {
                 "provider": case["provider"],
@@ -1067,6 +1176,21 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
 
 # ─── Direction: token (SigV4 + RS256 + exchange vectors) ─────────────
 
+def sigv4_session_token(case: JsonObject) -> str | None:
+    """The session token the credential carries for one SigV4 vector.
+
+    The request's ``X-Amz-Security-Token`` header when the vector pins one
+    (``post-sts-header-before``); else the case-level ``session_token``
+    (``get-vanilla-with-session-token``: no request header, yet the
+    canonical request signs the token the credential supplies); else none.
+    """
+    headers = case["request"].get("headers", {})
+    if "X-Amz-Security-Token" in headers:
+        return headers["X-Amz-Security-Token"]
+    token = case.get("session_token")
+    return token if isinstance(token, str) else None
+
+
 def run_token_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """AUTH-11 signing and token-exchange vectors, byte for byte.
 
@@ -1084,12 +1208,13 @@ def run_token_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if case_filter and case_id != case_filter:
             continue
         req = case["request"]
+        token = sigv4_session_token(case)
         reply = shim.call(
             "sigv4_sign",
             request={"method": req["method"], "url": "https://example.amazonaws.com" + req["target"],
                      "headers": req.get("headers", {}), "body": req.get("body", "")},
             credential={"kind": "aws", "access_key_id": fixed["access_key_id"], "secret_access_key": fixed["secret_access_key"],
-                        **({"session_token": req["headers"]["X-Amz-Security-Token"]} if "X-Amz-Security-Token" in req.get("headers", {}) else {})},
+                        **({"session_token": token} if token is not None else {})},
             region=fixed["region"], service=fixed["service"], now=fixed["now"],
         )
         if not reply.get("ok"):
@@ -1657,7 +1782,8 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
 
 # ─── Main ────────────────────────────────────────────────────────────
 
-def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path) -> DirectionReport:
+def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path,
+                  auth_scope: str = "all") -> DirectionReport:
     if direction == "request":
         return run_request_direction(shim, case_filter)
     if direction == "serde":
@@ -1667,7 +1793,7 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
     if direction in ("response", "stream"):
         return run_parse_direction(shim, direction, case_filter)
     if direction == "auth":
-        return run_auth_direction(shim, case_filter)
+        return run_auth_direction(shim, case_filter, auth_scope)
     if direction == "token":
         return run_token_direction(shim, case_filter)
     if direction == "models":
@@ -1692,6 +1818,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shim", required=True, help="shim name from harness/shims.json")
     parser.add_argument("--direction", default="all", choices=DIRECTIONS + ("all",))
     parser.add_argument("--case", default=None, help="run only the case with this id")
+    parser.add_argument(
+        "--auth-scope", default="all", choices=AUTH_SCOPES,
+        help="auth direction only: 'core' runs the non-cloud cases (port playbook module 3a), "
+             "'cloud' the aws-chain/azure-chain/gcp-chain cases (module 3b), 'all' both",
+    )
     parser.add_argument(
         "--report-dir", default="harness/reports",
         help="report directory (relative paths resolve against the lm15-contract root)",
@@ -1723,12 +1854,13 @@ def main(argv: list[str] | None = None) -> int:
         if not shim.sandboxed:
             print("warning: unshare -rn unavailable — shim runs WITHOUT no-network enforcement", file=sys.stderr)
         for direction in directions:
-            report = run_direction(shim, direction, args.case, report_dir)
+            report = run_direction(shim, direction, args.case, report_dir, auth_scope=args.auth_scope)
             write_reports(report, shim, capabilities, report_dir)
             counts = report.counts
+            scope = f" [scope: {args.auth_scope}]" if direction == "auth" and args.auth_scope != "all" else ""
             print(
                 f"{direction:>8}: pass {counts['pass']:3d}  fail {counts['fail']:3d}  "
-                f"skip {counts['skip']:3d}  (report: {report_dir / (direction + '.json')})"
+                f"skip {counts['skip']:3d}  (report: {report_dir / (direction + '.json')}){scope}"
             )
             if counts["fail"]:
                 failed = True

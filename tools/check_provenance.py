@@ -12,6 +12,18 @@ A provenance block is an object with:
   date     : YYYY-MM-DD
   evidence : non-empty pointer (commit, live receipt, changes/ entry)
 
+Further rules (verify/DECISIONS-2026-09-06.md, ratified 2026-09-06):
+- D11: a case under cases/ with source live-capture and date >= 2026-09-06
+  carries "exchange": the path, relative to the contract root, of the
+  exchange receipt the capture tool wrote (research/providers/_capture.py,
+  receipts/<date>-<provider>/exchange-*.json). The file must exist and be
+  a JSON object with non-empty "request_sha256" and "response_sha256".
+  Captures dated earlier stand without a hash (grandfathered, stated in
+  AUTHORITY.md).
+- D12: when a golden carries "reviewed", it is a non-empty string that
+  starts with a YYYY-MM-DD date (the review date), as the existing frozen
+  goldens do. No new source value marks review state.
+
 Exit non-zero on any violation. See AUTHORITY.md for when provenance may
 change: wire fixtures only with a live-validation receipt, canonical
 fixtures only with a spec citation.
@@ -31,6 +43,14 @@ ALLOWED_SOURCES = {"live-capture", "migrated-apr29", "hand-authored"}
 # then (optionally) reviewed. Their source vocabulary is separate.
 GOLDEN_SOURCES = {"scribe-draft", "hand-authored"}
 REQUIRED_KEYS = {"source", "date", "evidence"}
+# D11: live captures dated on or after this day carry an exchange receipt path.
+EXCHANGE_REQUIRED_FROM = "2026-09-06"
+EXCHANGE_HASHES = ("request_sha256", "response_sha256")
+
+
+def _is_date(text: str) -> bool:
+    return (len(text) == 10 and text[4] == "-" and text[7] == "-"
+            and text[:4].isdigit() and text[5:7].isdigit() and text[8:].isdigit())
 
 
 def check_block(block, where: str, problems: list[str], allowed: set[str] = ALLOWED_SOURCES) -> None:
@@ -46,8 +66,54 @@ def check_block(block, where: str, problems: list[str], allowed: set[str] = ALLO
     if not str(block["evidence"]).strip():
         problems.append(f"{where}: provenance evidence is empty")
     date = str(block["date"])
-    if len(date) != 10 or date[4] != "-" or date[7] != "-":
+    if not _is_date(date):
         problems.append(f"{where}: provenance date {date!r} is not YYYY-MM-DD")
+
+
+def check_exchange(block: dict, where: str, root: Path, problems: list[str]) -> None:
+    """D11: a live capture dated >= 2026-09-06 names its exchange receipt."""
+    if block.get("source") != "live-capture":
+        return
+    date = str(block.get("date", ""))
+    if not _is_date(date) or date < EXCHANGE_REQUIRED_FROM:
+        return
+    exchange = block.get("exchange")
+    if not isinstance(exchange, str) or not exchange.strip():
+        problems.append(f"{where}: live-capture dated {date} lacks provenance.exchange "
+                        f"(required from {EXCHANGE_REQUIRED_FROM}; D11)")
+        return
+    rel = Path(exchange)
+    if rel.is_absolute() or ".." in rel.parts:
+        problems.append(f"{where}: provenance.exchange {exchange!r} must be a relative path inside the contract")
+        return
+    path = root / rel
+    if not path.is_file():
+        problems.append(f"{where}: provenance.exchange {exchange!r} does not exist")
+        return
+    try:
+        receipt = json.loads(path.read_text())
+    except Exception as exc:
+        problems.append(f"{where}: provenance.exchange {exchange!r} is unreadable JSON ({exc})")
+        return
+    if not isinstance(receipt, dict):
+        problems.append(f"{where}: provenance.exchange {exchange!r} is not a JSON object")
+        return
+    for key in EXCHANGE_HASHES:
+        value = receipt.get(key)
+        if not isinstance(value, str) or not value.strip():
+            problems.append(f"{where}: provenance.exchange {exchange!r} lacks a non-empty {key}")
+
+
+def check_reviewed(block: dict, where: str, problems: list[str]) -> None:
+    """D12: a golden's ``reviewed`` line is a non-empty string starting with YYYY-MM-DD."""
+    if "reviewed" not in block:
+        return
+    reviewed = block["reviewed"]
+    if not isinstance(reviewed, str) or not reviewed.strip():
+        problems.append(f"{where}: provenance.reviewed must be a non-empty string (D12)")
+        return
+    if not _is_date(reviewed[:10]):
+        problems.append(f"{where}: provenance.reviewed must start with a YYYY-MM-DD date (D12); got {reviewed[:20]!r}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -73,13 +139,18 @@ def main(argv: list[str] | None = None) -> int:
                 problems.append(f"{path.relative_to(root)}: unreadable JSON ({exc})")
                 continue
             block = data.get("provenance") if isinstance(data, dict) else None
+            where = str(path.relative_to(root))
             if sub == "goldens":
                 # Independent review 2026-09-02: 29 goldens had no block and
                 # this checker never looked. Goldens are fixtures under
                 # AUTHORITY.md; they carry provenance like everything else.
-                check_block(block, str(path.relative_to(root)), problems, allowed=GOLDEN_SOURCES)
+                check_block(block, where, problems, allowed=GOLDEN_SOURCES)
+                if isinstance(block, dict):
+                    check_reviewed(block, where, problems)
             else:
-                check_block(block, str(path.relative_to(root)), problems)
+                check_block(block, where, problems)
+                if sub == "cases" and isinstance(block, dict):
+                    check_exchange(block, where, root, problems)
 
     serde_path = root / "serde" / "canonical.json"
     if serde_path.is_file():

@@ -12,7 +12,8 @@ expectations) except for one injected mutation — and FAILS unless:
 
 The mutation classes pin the comparator's teeth: tool-name drift, text
 corruption, absent-vs-empty conflation, usage arithmetic, event loss,
-bool/int conflation, auth-chain state drift, and AUTH-5 sentinel leakage. A comparator weakened enough to miss any of them fails
+end-event provider_data loss (D9 presence rule), bool/int conflation,
+auth-chain state drift, and AUTH-5 sentinel leakage. A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
 
@@ -101,6 +102,12 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             streams,
             lambda c, g: len(g.get("events", [])) > 0 and "canonical_response" in g,
             "dropped_event (a stream golden with events)")),
+        "end_provider_data_dropped": ("stream", first(
+            streams,
+            lambda c, g: check.expected_raise(c, "replay_stream") is None and any(
+                isinstance(e, dict) and e.get("type") == "end" and "provider_data" in e
+                for e in g.get("events", [])),
+            "end_provider_data_dropped (a stream golden whose end event carries provider_data)")),
         "assembly_guesses_name": ("stream", first(
             streams,
             lambda c, g: check.expected_raise(c, "replay_stream") is not None,

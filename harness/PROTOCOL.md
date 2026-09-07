@@ -128,6 +128,12 @@ Refusal (MAP-9, a tool call whose fragments never carried a name):
 - `events` is the full canonical event trace, in order, serialized with the
   canonical stream-event serde. `canonical_response` is the materialized
   final Response (same rules as parse_response).
+- `provider_data` on the `end` event (MAP-3, D9 of
+  `verify/DECISIONS-2026-09-06.md`) is an escape hatch, not a canonical
+  fact: the harness compares it by presence and JSON type only, never by
+  content — if the golden's `end` event has `provider_data`, the shim's
+  `end` event must have it with the same JSON type; if the golden lacks it,
+  the shim's value is ignored.
 - `framing` (additive, 2026-09-03; phase-2 `bedrock` only): when a case
   declares `"framing": "aws-event-stream"`, the body is the raw binary
   event stream (base64 in `body_b64`) and the shim decodes it with its
@@ -202,6 +208,16 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
   inspect.
 - The op performs no network I/O and no writes; file reads are limited to
   the harness-given `credentials_path` and sandbox `files` above.
+- `--auth-scope core|cloud|all` (default `all`; D14 of
+  `verify/DECISIONS-2026-09-06.md`, `playbooks/port.md` modules 3a/3b):
+  `core` runs the cases of non-cloud providers only, `cloud` the cases of
+  providers whose credential policy is `aws-chain`, `azure-chain` or
+  `gcp-chain`. A port without module 3b runs `--direction auth --auth-scope
+  core`. `spec/support-matrix.json` pins auth schemes, not the policy, so
+  the harness derives the cloud providers from `auth/resolution.json`: a
+  provider whose pinned chain lists a cloud rung kind (the AUTH-1 rung names
+  above, `assume-role` … `gcloud`) is a cloud-chain provider, and every case
+  of that provider is a cloud case.
 
 ### token_exchange_build
 In: `{"provider": str, "input": <chain-rung input object>, "now": str, "settings": {…}, "rung": str}`
@@ -226,13 +242,20 @@ Out: `{"method": str, "url": str, "headers": {str: str}, "body": <JSON|str|null>
 ### sigv4_sign
 In: `{"request": {"method": str, "url": str, "headers": {str: str|[str]}, "body": str}, "credential": <aws credential>, "region": str, "service": str, "now": str}`
 Out: `{"canonical_request": str, "string_to_sign": str, "authorization": str, "headers": {str: str}}`
-- (Added 2026-09-03.) The AWS test suite (`auth/sigv4-vectors.json`)
-  through the port's signer, all three stages byte for byte. The harness
-  passes the vector's request headers verbatim, including any pinned
-  `host`, `x-amz-date` or `x-amz-security-token`; it also supplies the
-  fixed clock and credential (including the vector's session token).
-  The signer derives missing signing headers from those inputs.  Drives `--direction token` together with the two
-  `token_exchange_*` ops.
+- (Added 2026-09-03; the complete 34-case suite 2026-09-06, D15 of
+  `verify/DECISIONS-2026-09-06.md`.) The AWS test suite
+  (`auth/sigv4-vectors.json`) through the port's signer, all three stages
+  byte for byte. The harness passes the vector's request headers verbatim,
+  including any pinned `host`, `x-amz-date` or `x-amz-security-token`; a
+  header value given as a list is the same name repeated on the wire in
+  that order, and a value containing a newline is a folded multi-line
+  value. It also supplies the fixed clock and credential; the credential's
+  `session_token` is the request's `X-Amz-Security-Token` header when the
+  vector pins one, else the vector's case-level `session_token`
+  (`get-vanilla-with-session-token`: signed without a request header).
+  The signer derives missing signing headers from those inputs. Vectors
+  the reference fails are findings, never dropped. Drives
+  `--direction token` together with the two `token_exchange_*` ops.
 
 ### token_exchange_parse
 In: `{"provider": str, "rung": str, "status": int, "body": <JSON object or str>, "now": str}`
