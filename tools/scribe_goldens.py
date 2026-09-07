@@ -21,7 +21,14 @@ Bodies that are error bodies, parses that legitimately fail, and parses that
 trip the ``unmapped`` canary are recorded in ``goldens/_failures.json`` with
 the error — honest, never silently skipped (no golden is written for them).
 
-Usage: scribe_goldens.py [--shim python]
+``--out DIR`` (2026-09-06) re-scribes EVERY golden into a scratch directory
+laid out like ``goldens/`` (``DIR/<provider>/<feature>.json``, plus
+``DIR/_failures.json``), content only — no provenance block is written and
+nothing under ``goldens/`` is touched, reviewed or not.  It exists so a
+scripted migration can diff the reference's current output against the
+migrated goldens (tools/migrate_goldens_2026_09_06.py).
+
+Usage: scribe_goldens.py [--shim python] [--overwrite | --out DIR]
 """
 
 from __future__ import annotations
@@ -55,7 +62,7 @@ def draft_provenance(case: dict) -> dict:
     }
 
 
-def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int], list[dict]]:
+def scribe(shim: check.Shim, *, overwrite: bool = False, out_dir: Path | None = None) -> tuple[dict[str, int], list[dict]]:
     counts = {"drafted": 0, "kept": 0, "failed": 0, "no-body": 0, "no-canonical-request": 0}
     failures: list[dict] = []
     for case in check.load_wire_cases():
@@ -137,6 +144,13 @@ def scribe(shim: check.Shim, *, overwrite: bool = False) -> tuple[dict[str, int]
             golden = {"canonical_response": result["canonical_response"]}
             if streaming:
                 golden["events"] = result["events"]
+        if out_dir is not None:
+            # Scratch mode: content only, every golden, provenance untouched.
+            path = out_dir / str(case["provider"]) / f"{case['feature']}.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n")
+            counts["drafted"] += 1
+            continue
         golden["provenance"] = draft_provenance(case)
 
         path = check.golden_path(case)
@@ -162,21 +176,26 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--shim", default="python", help="shim name from harness/shims.json")
     parser.add_argument("--overwrite", action="store_true", help="redraft existing UNREVIEWED goldens (reviewed goldens are never rewritten)")
+    parser.add_argument("--out", metavar="DIR", default=None, help="scribe every golden, content only, into DIR (goldens/ and provenance untouched)")
     args = parser.parse_args(argv)
+    if args.out is not None and args.overwrite:
+        parser.error("--out and --overwrite are exclusive: --out never touches goldens/")
+    out_dir = Path(args.out).resolve() if args.out is not None else None
 
     shim = check.load_shim(args.shim)
     try:
         if not shim.sandboxed:
             print("warning: unshare -rn unavailable — shim runs WITHOUT no-network enforcement", file=sys.stderr)
-        counts, failures = scribe(shim, overwrite=args.overwrite)
+        counts, failures = scribe(shim, overwrite=args.overwrite, out_dir=out_dir)
     finally:
         try:
             shim.close()
         except Exception:
             pass
 
-    check.GOLDENS_DIR.mkdir(parents=True, exist_ok=True)
-    FAILURES_FILE.write_text(
+    failures_file = FAILURES_FILE if out_dir is None else out_dir / "_failures.json"
+    failures_file.parent.mkdir(parents=True, exist_ok=True)
+    failures_file.write_text(
         json.dumps(
             {
                 "_doc": "Cases whose pinned body could not be drafted into a golden "
@@ -193,7 +212,7 @@ def main(argv: list[str] | None = None) -> int:
     print(
         f"scribe_goldens: drafted {counts['drafted']}  kept {counts['kept']}  failed {counts['failed']}  "
         f"no-body {counts['no-body']}  no-canonical-request {counts['no-canonical-request']}  "
-        f"(failures: {FAILURES_FILE.relative_to(CONTRACT_ROOT)})"
+        f"(failures: {failures_file.relative_to(CONTRACT_ROOT) if out_dir is None else failures_file})"
     )
     return 0
 

@@ -197,6 +197,19 @@
         "input_tokens": 14,
         "output_tokens": 22,
         "total_tokens": 36
+      },
+      "provider_data": {
+        "id": "chatcmpl-849f13fc8c60043a",
+        "object": "chat.completion.chunk",
+        "created": 1781119913,
+        "model": "Qwen/Qwen3.5-0.8B",
+        "choices": [],
+        "usage": {
+          "prompt_tokens": 14,
+          "total_tokens": 36,
+          "completion_tokens": 22
+        },
+        "system_fingerprint": "vllm-0.22.1-c7e5ce9a"
       }
     }
   ],
@@ -205,6 +218,6 @@
     "date": "2026-08-31",
     "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-06-10T19-31-53Z.txt",
-    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle. Re-reviewed 2026-08-31 for MAP-4 (lm15-python/docs/mapping-rules.md): trace change verified to be exactly one synthesized StreamStartEvent prepended, carrying the request's model (id omitted per omit-empty); all other events and canonical_response byte-identical. See changes/2026-08-31-map4-stream-start.md"
+    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle. Re-reviewed 2026-08-31 for MAP-4 (lm15-python/docs/mapping-rules.md): trace change verified to be exactly one synthesized StreamStartEvent prepended, carrying the request's model (id omitted per omit-empty); all other events and canonical_response byte-identical. See changes/2026-08-31-map4-stream-start.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly end provider_data added."
   }
 }

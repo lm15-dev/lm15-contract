@@ -119,15 +119,6 @@
               "type": "text",
               "text": "Paris"
             }
-          ],
-          "continuation": [
-            {
-              "provider": "openai",
-              "kind": "response_id",
-              "data": {
-                "id": "resp_042bef270b694d2f006a961a2ab89487d29acd2781ec1ac348"
-              }
-            }
           ]
         },
         "finish_reason": "stop",
@@ -267,15 +258,6 @@
             {
               "type": "text",
               "text": "Tokyo"
-            }
-          ],
-          "continuation": [
-            {
-              "provider": "openai",
-              "kind": "response_id",
-              "data": {
-                "id": "resp_09b1350c4220b768006a961a2cd68087d2873e703e3da0025f"
-              }
             }
           ]
         },
@@ -488,6 +470,6 @@
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-02",
-    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the openai.batch surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md"
+    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the openai.batch surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 2 message-level openai:response_id continuations."
   }
 }

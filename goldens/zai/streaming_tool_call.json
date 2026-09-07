@@ -275,13 +275,40 @@
         "total_tokens": 206,
         "cache_read_tokens": 0,
         "reasoning_tokens": 28
+      },
+      "provider_data": {
+        "id": "202609030951426204143a950c4c50",
+        "created": 1788400302,
+        "object": "chat.completion.chunk",
+        "model": "glm-5.3-flash",
+        "choices": [
+          {
+            "index": 0,
+            "finish_reason": "tool_calls",
+            "delta": {
+              "role": "assistant",
+              "content": ""
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 166,
+          "completion_tokens": 40,
+          "total_tokens": 206,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 28
+          }
+        }
       }
     }
   ],
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-02",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly end provider_data added.",
     "pinned_body": "2026-09-03T01-51-42Z.txt"
   }
 }

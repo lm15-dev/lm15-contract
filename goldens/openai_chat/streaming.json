@@ -101,6 +101,24 @@
         "input_tokens": 37,
         "output_tokens": 10,
         "total_tokens": 47
+      },
+      "provider_data": {
+        "id": "chatcmpl-b5c8557b-08a0-4e64-a489-191d31c9d1d9",
+        "object": "chat.completion.chunk",
+        "created": 1781119103,
+        "model": "llama-3.1-8b-instant",
+        "system_fingerprint": "fp_020e283281",
+        "choices": [],
+        "usage": {
+          "queue_time": 0.03721534,
+          "prompt_tokens": 37,
+          "prompt_time": 0.007265427,
+          "completion_tokens": 10,
+          "completion_time": 0.009791944,
+          "total_tokens": 47,
+          "total_time": 0.017057371
+        },
+        "service_tier": "on_demand"
       }
     }
   ],
@@ -109,6 +127,6 @@
     "date": "2026-08-31",
     "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-06-10T19-18-23Z.txt",
-    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle. Re-reviewed 2026-08-31 for MAP-4 (lm15-python/docs/mapping-rules.md): trace change verified to be exactly one synthesized StreamStartEvent prepended, carrying the request's model (id omitted per omit-empty); all other events and canonical_response byte-identical. See changes/2026-08-31-map4-stream-start.md"
+    "reviewed": "2026-06-11 — batch freeze approved by Maxime Rivest in session ('the golden drafts is all good'); regression-pin drafts promoted to oracle. Re-reviewed 2026-08-31 for MAP-4 (lm15-python/docs/mapping-rules.md): trace change verified to be exactly one synthesized StreamStartEvent prepended, carrying the request's model (id omitted per omit-empty); all other events and canonical_response byte-identical. See changes/2026-08-31-map4-stream-start.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly end provider_data added."
   }
 }

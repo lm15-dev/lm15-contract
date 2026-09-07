@@ -9,15 +9,6 @@
           "type": "text",
           "text": "ok"
         }
-      ],
-      "continuation": [
-        {
-          "provider": "anthropic",
-          "kind": "message_id",
-          "data": {
-            "id": "msg_6a995ee247f92338f96849fb"
-          }
-        }
       ]
     },
     "finish_reason": "stop",
@@ -39,17 +30,6 @@
     {
       "type": "delta",
       "delta": {
-        "type": "continuation",
-        "provider": "anthropic",
-        "kind": "message_id",
-        "data": {
-          "id": "msg_6a995ee247f92338f96849fb"
-        }
-      }
-    },
-    {
-      "type": "delta",
-      "delta": {
         "type": "text",
         "part_index": 0,
         "text": "ok"
@@ -65,13 +45,29 @@
         "cache_read_tokens": 0,
         "cache_write_tokens": 0,
         "reasoning_tokens": 282
+      },
+      "provider_data": {
+        "delta": {
+          "stop_reason": "end_turn",
+          "stop_sequence": null
+        },
+        "type": "message_delta",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "input_tokens": 10,
+          "output_tokens": 293,
+          "output_tokens_details": {
+            "thinking_tokens": 282
+          }
+        }
       }
     }
   ],
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-03",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 1 message-level anthropic:message_id continuation and its 1 delta event; end provider_data added.",
     "pinned_body": "2026-09-03T11-49-52Z.txt"
   }
 }
