@@ -147,13 +147,33 @@ SOURCES: dict[str, str] = {
 
 
 # AWS SigV4 test suite (vendored verbatim in botocore): the harness vectors.
+# The complete suite (D15, verify/DECISIONS-2026-09-06.md): every case
+# directory's .req/.creq/.sts/.authz, flat under aws-sigv4-suite/ (leaf
+# names are unique across the nested normalize-path/ and post-sts-token/
+# groups), plus the suite's LICENSE, NOTICE and the two group readmes.
+# botocore's default branch is `develop` (there is no `main`).
 _SIGV4_BASE = "https://raw.githubusercontent.com/boto/botocore/develop/tests/unit/auth/aws4_testsuite"
-for _case in ("get-vanilla", "get-vanilla-query", "get-vanilla-query-order-key-case", "get-header-value-trim",
-              "get-utf8", "post-vanilla", "post-vanilla-query", "post-x-www-form-urlencoded",
-              "post-sts-token/post-sts-header-after", "post-sts-token/post-sts-header-before"):
+SIGV4_CASES = (
+    "get-header-key-duplicate", "get-header-value-multiline", "get-header-value-order",
+    "get-header-value-trim", "get-unreserved", "get-utf8", "get-vanilla-empty-query-key",
+    "get-vanilla-query-order-encoded", "get-vanilla-query-order-key-case",
+    "get-vanilla-query-order-key", "get-vanilla-query-order-value", "get-vanilla-query-unreserved",
+    "get-vanilla-query", "get-vanilla-utf8-query", "get-vanilla-with-session-token", "get-vanilla",
+    "normalize-path/get-relative-relative", "normalize-path/get-relative",
+    "normalize-path/get-slash-dot-slash", "normalize-path/get-slash-pointless-dot",
+    "normalize-path/get-slash", "normalize-path/get-slashes", "normalize-path/get-space",
+    "normalize-path/get-special-character",
+    "post-header-key-case", "post-header-key-sort", "post-header-value-case",
+    "post-sts-token/post-sts-header-after", "post-sts-token/post-sts-header-before",
+    "post-vanilla-empty-query-value", "post-vanilla-query", "post-vanilla",
+    "post-x-www-form-urlencoded-parameters", "post-x-www-form-urlencoded",
+)
+for _case in SIGV4_CASES:
     _leaf = _case.rsplit("/", 1)[-1]
     for _ext in ("req", "creq", "sts", "authz"):
         SOURCES[f"aws-sigv4-suite/{_leaf}.{_ext}"] = f"{_SIGV4_BASE}/{_case}/{_leaf}.{_ext}"
+for _doc in ("LICENSE", "NOTICE", "normalize-path/normalize-path.txt", "post-sts-token/readme.txt"):
+    SOURCES[f"aws-sigv4-suite/{_doc.rsplit('/', 1)[-1]}"] = f"{_SIGV4_BASE}/{_doc}"
 
 
 def html_to_text(raw: str) -> str:
@@ -186,23 +206,28 @@ def main() -> int:
     today = dt.date.today().isoformat()
     only = set(sys.argv[2:]) if len(sys.argv) > 2 and sys.argv[1] == "--only" else None
     previous = {}
+    previous_date = today
     if only and (HERE / "manifest.json").exists():
-        previous = {e["name"]: e for e in json.loads((HERE / "manifest.json").read_text())["entries"]}
+        manifest = json.loads((HERE / "manifest.json").read_text())
+        previous = {e["name"]: e for e in manifest["entries"]}
+        previous_date = manifest.get("date", today)
     entries = []
     failures = 0
     for name, url in SOURCES.items():
         if only and name not in only and name in previous:
-            entries.append(previous[name])
+            # Kept as fetched: the per-entry date is the manifest date of the
+            # run that fetched it (entries before 2026-09-07 carried none).
+            entries.append({**previous[name], "fetched": previous[name].get("fetched", previous_date)})
             continue
         status, body = fetch(url)
-        entry = {"name": name, "url": url, "status": status, "bytes": len(body), "used": False}
+        entry = {"name": name, "url": url, "status": status, "bytes": len(body), "used": False, "fetched": today}
         if status == "200" and body:
             is_md = url.endswith(".md") or "raw.githubusercontent.com" in url
             (HERE / name).parent.mkdir(parents=True, exist_ok=True)
             text = body.decode("utf-8", "replace")
             out = text if is_md else html_to_text(text)
             path = HERE / (name if "/" in name else f"{name}.md")
-            path.write_text(out)
+            path.write_text(out, encoding="utf-8")
             entry.update(used=True, sha256=hashlib.sha256(body).hexdigest(),
                          saved_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                          saved=f"sources/{path.name if '/' not in name else name}", lines=out.count("\n"))

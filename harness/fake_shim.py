@@ -40,6 +40,7 @@ MUTATIONS = (
     "absent_empty",         # parse: emit provider_data: {} where the golden has it ABSENT
     "usage_off_by_1000",    # parse: first integer usage field += 1000
     "dropped_event",        # replay_stream: last event dropped
+    "end_provider_data_dropped",  # replay_stream: provider_data removed from the end event (D9 presence rule)
     "bool_as_int",          # build_request: first boolean body leaf becomes 0/1
     "auth_state_flip",      # explain_auth: first step's state flipped
     "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
@@ -257,6 +258,15 @@ def op_replay_stream(msg: JsonObject) -> JsonObject:
         mutate_response(resp)
         if MUTATION == "dropped_event":
             events = events[:-1]
+        if MUTATION == "end_provider_data_dropped":
+            # D9: the end event's provider_data is compared by presence and
+            # type only, never by content. Dropping it entirely must still
+            # be caught when the golden carries it.
+            events = [
+                {k: v for k, v in e.items() if k != "provider_data"}
+                if isinstance(e, dict) and e.get("type") == "end" else e
+                for e in events
+            ]
     return {"events": events, "canonical_response": resp}
 
 
@@ -419,10 +429,16 @@ def op_sigv4_sign(msg: JsonObject) -> JsonObject:
     """Echo the pinned SigV4 triple for the vector whose request this is."""
     sig = json.loads(check.SIGV4_FILE.read_text(encoding="utf-8"))
     req = msg["request"]
+    token = (msg.get("credential") or {}).get("session_token")
     for case in sig["cases"]:
         pinned = case["request"]
-        if (pinned["method"], pinned["target"], pinned.get("headers", {}), pinned.get("body", "")) != (
-            req["method"], req["url"].removeprefix("https://example.amazonaws.com"), req.get("headers", {}), req.get("body", "")
+        # The session token is part of the identity: get-vanilla and
+        # get-vanilla-with-session-token share one request and differ only
+        # in the credential.
+        if (pinned["method"], pinned["target"], pinned.get("headers", {}), pinned.get("body", ""),
+                check.sigv4_session_token(case)) != (
+            req["method"], req["url"].removeprefix("https://example.amazonaws.com"), req.get("headers", {}),
+            req.get("body", ""), token,
         ):
             continue
         result = dict(case["expect"])
