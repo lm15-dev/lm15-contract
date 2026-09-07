@@ -17,15 +17,6 @@
             "city": "Paris"
           }
         }
-      ],
-      "continuation": [
-        {
-          "provider": "anthropic",
-          "kind": "message_id",
-          "data": {
-            "id": "chatcmpl-6a9972fdc81480fe670e570a"
-          }
-        }
       ]
     },
     "finish_reason": "tool_call",
@@ -43,17 +34,6 @@
       "type": "start",
       "id": "chatcmpl-6a9972fdc81480fe670e570a",
       "model": "kimi-k3"
-    },
-    {
-      "type": "delta",
-      "delta": {
-        "type": "continuation",
-        "provider": "anthropic",
-        "kind": "message_id",
-        "data": {
-          "id": "chatcmpl-6a9972fdc81480fe670e570a"
-        }
-      }
     },
     {
       "type": "delta",
@@ -371,13 +351,33 @@
         "cache_read_tokens": 175,
         "cache_write_tokens": 0,
         "reasoning_tokens": 34
+      },
+      "provider_data": {
+        "type": "message_delta",
+        "delta": {
+          "stop_reason": "tool_use",
+          "stop_sequence": null
+        },
+        "usage": {
+          "input_tokens": 0,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 175,
+          "output_tokens": 86,
+          "output_tokens_details": {
+            "thinking_tokens": 34
+          },
+          "prompt_tokens": 175,
+          "completion_tokens": 86,
+          "total_tokens": 261,
+          "cached_tokens": 175
+        }
       }
     }
   ],
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-03",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 1 message-level anthropic:message_id continuation and its 1 delta event; end provider_data added.",
     "pinned_body": "2026-09-03T13-15-39Z.txt"
   }
 }

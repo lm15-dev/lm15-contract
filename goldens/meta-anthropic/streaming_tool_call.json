@@ -7,7 +7,7 @@
       "parts": [
         {
           "type": "thinking",
-          "text": "[redacted]",
+          "text": "",
           "continuation": [
             {
               "provider": "anthropic",
@@ -20,7 +20,7 @@
         },
         {
           "type": "thinking",
-          "text": "[redacted]",
+          "text": "",
           "continuation": [
             {
               "provider": "anthropic",
@@ -37,15 +37,6 @@
           "name": "get_weather",
           "input": {
             "city": "Paris"
-          }
-        }
-      ],
-      "continuation": [
-        {
-          "provider": "anthropic",
-          "kind": "message_id",
-          "data": {
-            "id": "msg_6a995eed385cf0056b9044ee"
           }
         }
       ]
@@ -69,20 +60,9 @@
     {
       "type": "delta",
       "delta": {
-        "type": "continuation",
-        "provider": "anthropic",
-        "kind": "message_id",
-        "data": {
-          "id": "msg_6a995eed385cf0056b9044ee"
-        }
-      }
-    },
-    {
-      "type": "delta",
-      "delta": {
         "type": "thinking",
         "part_index": 0,
-        "text": "[redacted]"
+        "text": ""
       }
     },
     {
@@ -102,7 +82,7 @@
       "delta": {
         "type": "thinking",
         "part_index": 1,
-        "text": "[redacted]"
+        "text": ""
       }
     },
     {
@@ -145,13 +125,29 @@
         "cache_read_tokens": 497,
         "cache_write_tokens": 0,
         "reasoning_tokens": 121
+      },
+      "provider_data": {
+        "delta": {
+          "stop_reason": "tool_use",
+          "stop_sequence": null
+        },
+        "type": "message_delta",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 497,
+          "input_tokens": 48,
+          "output_tokens": 188,
+          "output_tokens_details": {
+            "thinking_tokens": 121
+          }
+        }
       }
     }
   ],
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-03",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 1 message-level anthropic:message_id continuation and its 1 delta event; rewrote 2 ThinkingDelta '[redacted]' texts to empty; rewrote 2 stream-materialized unflagged ThinkingPart '[redacted]' texts to empty (the fold of the delta rule); end provider_data added.",
     "pinned_body": "2026-09-03T11-50-05Z.txt"
   }
 }

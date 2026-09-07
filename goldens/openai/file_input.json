@@ -9,15 +9,6 @@
           "type": "text",
           "text": "Hello PDF"
         }
-      ],
-      "continuation": [
-        {
-          "provider": "openai",
-          "kind": "response_id",
-          "data": {
-            "id": "resp_00e8db984f5a0861006a2a10e30ccc81a183018c255ce3781b"
-          }
-        }
       ]
     },
     "finish_reason": "stop",
@@ -35,6 +26,6 @@
     "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python2 HEAD; DRAFT — not frozen, see AUTHORITY.md",
     "pinned_body": "2026-06-11T01-35-33Z.txt",
     "note": "supersedes the 2026-06-10 reviewed golden: pinned body replaced by the 2026-06-11 live recapture (OpenAI now requires filename with file_data); evidence in changes/2026-06-11-live-sweep.md. Response shape unchanged except volatile response id. UNREVIEWED draft until next freeze",
-    "reviewed": "2026-06-11 — release freeze approved by Maxime Rivest in session ('ship it'); live-evidence recaptures promoted to oracle"
+    "reviewed": "2026-06-11 — release freeze approved by Maxime Rivest in session ('ship it'); live-evidence recaptures promoted to oracle. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 1 message-level openai:response_id continuation."
   }
 }

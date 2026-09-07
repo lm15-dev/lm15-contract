@@ -135,13 +135,21 @@
       "kind": "part",
       "value": {
         "type": "thinking",
-        "text": "reasoning",
-        "redacted": true
+        "text": "",
+        "continuation": [
+          {
+            "provider": "anthropic",
+            "kind": "redacted_thinking",
+            "data": {
+              "data": "EqQBCkYIBRgCKkB2b3BhcXVl"
+            }
+          }
+        ]
       },
       "provenance": {
         "source": "migrated-apr29",
         "date": "2026-06-09",
-        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09; rewritten 2026-09-06: hidden thinking is empty text plus replay state, no `redacted` flag (verify/DECISIONS-2026-09-06.md D5, changes/2026-09-06-ratification.md, 2026-09-06)"
       }
     },
     {
@@ -231,9 +239,10 @@
         "continuation": [
           {
             "provider": "openai",
-            "kind": "response_id",
+            "kind": "reasoning_item",
             "data": {
-              "id": "resp_1"
+              "id": "rs_1",
+              "encrypted_content": "gAAAAABo"
             }
           }
         ]
@@ -241,7 +250,7 @@
       "provenance": {
         "source": "migrated-apr29",
         "date": "2026-06-09",
-        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09"
+        "evidence": "lm15-python2/conformance@812a2cb (consolidated corpus, live-validated 2026-04-29 via curl-fixtures pipeline); copied to lm15-contract 2026-06-09; rewritten 2026-09-06: message-level response_id continuation is dropped, the example carries a reasoning_item instead (verify/DECISIONS-2026-09-06.md D8, changes/2026-09-06-ratification.md, 2026-09-06)"
       }
     },
     {
@@ -1104,19 +1113,20 @@
       }
     },
     {
-      "id": "continuation_state.response-id",
+      "id": "continuation_state.reasoning-item",
       "kind": "continuation_state",
       "value": {
         "provider": "openai",
-        "kind": "response_id",
+        "kind": "reasoning_item",
         "data": {
-          "id": "resp_123"
+          "id": "rs_123",
+          "encrypted_content": "gAAAAABo"
         }
       },
       "provenance": {
         "source": "hand-authored",
         "date": "2026-06-10",
-        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md"
+        "evidence": "lm15-python2/docs/serde-rules.md (omission rule) + lm15-python2@60cc874 (cache_config/continuation_state serde, Config.cache wiring); canonical-only fixtures, no wire receipt required per AUTHORITY.md; rewritten 2026-09-06: response_id continuation is dropped, the vector carries a reasoning_item instead (verify/DECISIONS-2026-09-06.md D8, changes/2026-09-06-ratification.md, 2026-09-06)"
       }
     },
     {

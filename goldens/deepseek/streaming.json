@@ -149,13 +149,44 @@
         "total_tokens": 101,
         "cache_read_tokens": 0,
         "reasoning_tokens": 12
+      },
+      "provider_data": {
+        "id": "3912e277-1290-44ff-aa2b-5cdbea97b54c",
+        "object": "chat.completion.chunk",
+        "created": 1788397865,
+        "model": "deepseek-v4-flash",
+        "system_fingerprint": "a26a7955944dc5c60445bff77fac9c8e",
+        "choices": [
+          {
+            "index": 0,
+            "delta": {
+              "content": "",
+              "reasoning_content": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 86,
+          "completion_tokens": 15,
+          "total_tokens": 101,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 12
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 86
+        }
       }
     }
   ],
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-02",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (verify/DECISIONS-2026-09-06.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly end provider_data added.",
     "pinned_body": "2026-09-03T01-11-05Z.txt"
   }
 }
