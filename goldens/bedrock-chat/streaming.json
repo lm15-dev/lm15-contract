@@ -1,0 +1,57 @@
+{
+  "canonical_response": {
+    "model": "openai.gpt-oss-20b-1:0",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "<reasoning>The user simply says \"Say ok.\" We should respond with \"ok\". Probably just \"ok\". The conversation: user says \"Say ok.\" The assistant should respond with \"ok\".</reasoning>ok"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 70,
+      "output_tokens": 48,
+      "total_tokens": 118
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "openai.gpt-oss-20b-1:0"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "<reasoning>The user simply says \"Say ok.\" We should respond with \"ok\". Probably just \"ok\". The conversation: user says \"Say ok.\" The assistant should respond with \"ok\".</reasoning>"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "ok"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 70,
+        "output_tokens": 48,
+        "total_tokens": 118
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T16-47-38Z.txt"
+  }
+}

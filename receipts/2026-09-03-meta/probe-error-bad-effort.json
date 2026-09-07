@@ -1,0 +1,33 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": "Say ok.",
+      "max_output_tokens": 100,
+      "reasoning": {
+        "effort": "bogus"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "`reasoning.effort`: unknown variant `bogus`, expected one of `none`, `minimal`, `low`, `medium`, `high`, `xhigh`",
+      "param": "reasoning.effort",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-43-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "22024fcd-d5b4-4061-bce5-1ad3faf36cfe"
+  }
+}

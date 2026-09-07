@@ -1,0 +1,185 @@
+{
+  "id": "azure.batch",
+  "provider": "azure",
+  "feature": "batch",
+  "surface": "batch",
+  "description": "Azure OpenAI v1 Batch lifecycle (JSONL upload, submit, status, cancel, list)",
+  "base_url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1",
+  "settings": {
+    "resource": "lm15-oai-29d280ed6f8e"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com Batch lifecycle 2026-09-04 (batch-upload HTTP 201 2026-09-04T14-12-51Z; batch-submit HTTP 200 2026-09-04T14-12-51Z; batch-status HTTP 200 2026-09-04T14-12-55Z; batch-cancel HTTP 200 2026-09-04T14-12-55Z; batch-list HTTP 200 2026-09-04T14-12-56Z); GlobalBatch deployment gpt-4.1-mini-batch; a prior one-entry job entered in_progress after 120 seconds before cancellation; adapter-built wires; verbatim bodies at bodies/azure.batch/; changes/2026-09-04-azure-live.md"
+  },
+  "steps": [
+    {
+      "action": "upload",
+      "batch_request": {
+        "model": "gpt-4.1-mini-batch",
+        "requests": [
+          {
+            "model": "gpt-4.1-mini-batch",
+            "messages": [
+              {
+                "role": "user",
+                "parts": [
+                  {
+                    "type": "text",
+                    "text": "Say ok."
+                  }
+                ]
+              }
+            ],
+            "config": {
+              "max_tokens": 16
+            }
+          }
+        ],
+        "label": "lm15-azure-capture"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files",
+          "params": {},
+          "headers": {
+            "content-type": "multipart/form-data; boundary=lm15-167e07c6ec324e07b2a626f16c62ef16",
+            "api-key": "$AZURE_OPENAI_API_KEY"
+          },
+          "body": null,
+          "body_b64": "LS1sbTE1LTE2N2UwN2M2ZWMzMjRlMDdiMmE2MjZmMTZjNjJlZjE2DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InB1cnBvc2UiDQoNCmJhdGNoDQotLWxtMTUtMTY3ZTA3YzZlYzMyNGUwN2IyYTYyNmYxNmM2MmVmMTYNCkNvbnRlbnQtRGlzcG9zaXRpb246IGZvcm0tZGF0YTsgbmFtZT0iZmlsZSI7IGZpbGVuYW1lPSJsbTE1LWJhdGNoLmpzb25sIg0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29ubA0KDQp7ImN1c3RvbV9pZCI6IjAiLCJtZXRob2QiOiJQT1NUIiwidXJsIjoiL3YxL3Jlc3BvbnNlcyIsImJvZHkiOnsibW9kZWwiOiJncHQtNC4xLW1pbmktYmF0Y2giLCJpbnB1dCI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoiaW5wdXRfdGV4dCIsInRleHQiOiJTYXkgb2suIn1dfV0sInN0cmVhbSI6ZmFsc2UsIm1heF9vdXRwdXRfdG9rZW5zIjoxNn19Cg0KLS1sbTE1LTE2N2UwN2M2ZWMzMjRlMDdiMmE2MjZmMTZjNjJlZjE2LS0NCg=="
+        }
+      ],
+      "expect": {
+        "status": 201
+      }
+    },
+    {
+      "action": "submit",
+      "batch_request": {
+        "model": "gpt-4.1-mini-batch",
+        "requests": [
+          {
+            "model": "gpt-4.1-mini-batch",
+            "messages": [
+              {
+                "role": "user",
+                "parts": [
+                  {
+                    "type": "text",
+                    "text": "Say ok."
+                  }
+                ]
+              }
+            ],
+            "config": {
+              "max_tokens": 16
+            }
+          }
+        ],
+        "label": "lm15-azure-capture"
+      },
+      "requests": [
+        {
+          "method": "POST",
+          "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/batches",
+          "params": {},
+          "headers": {
+            "content-type": "application/json",
+            "api-key": "$AZURE_OPENAI_API_KEY"
+          },
+          "body": {
+            "input_file_id": "file-bca5529611d14df1883f4a8f2001a0b8",
+            "endpoint": "/v1/responses",
+            "completion_window": "24h",
+            "metadata": {
+              "label": "lm15-azure-capture"
+            }
+          }
+        }
+      ],
+      "upload_body": {
+        "status": "processed",
+        "bytes": 209,
+        "purpose": "batch",
+        "filename": "lm15-batch.jsonl",
+        "id": "file-bca5529611d14df1883f4a8f2001a0b8",
+        "created_at": 1788531171,
+        "object": "file"
+      },
+      "pinned_body": "azure-batch-submit.json",
+      "parse": "job",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "action": "status",
+      "batch_id": "batch_5fb77dc6-c5be-4515-b914-f0d5f0b359d3",
+      "requests": [
+        {
+          "method": "GET",
+          "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/batches/batch_5fb77dc6-c5be-4515-b914-f0d5f0b359d3",
+          "params": {},
+          "headers": {
+            "content-type": "application/json",
+            "api-key": "$AZURE_OPENAI_API_KEY"
+          },
+          "body": null
+        }
+      ],
+      "pinned_body": "azure-batch-status.json",
+      "parse": "job",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "action": "cancel",
+      "batch_id": "batch_5fb77dc6-c5be-4515-b914-f0d5f0b359d3",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/batches/batch_5fb77dc6-c5be-4515-b914-f0d5f0b359d3/cancel",
+          "params": {},
+          "headers": {
+            "content-type": "application/json",
+            "api-key": "$AZURE_OPENAI_API_KEY"
+          },
+          "body": null
+        }
+      ],
+      "pinned_body": "azure-batch-cancel.json",
+      "parse": "job",
+      "golden_key": "cancel",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "action": "list",
+      "limit": 20,
+      "requests": [
+        {
+          "method": "GET",
+          "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/batches",
+          "params": {
+            "limit": "20"
+          },
+          "headers": {
+            "content-type": "application/json",
+            "api-key": "$AZURE_OPENAI_API_KEY"
+          },
+          "body": null
+        }
+      ],
+      "pinned_body": "azure-batch-list.json",
+      "parse": "list",
+      "expect": {
+        "status": 200
+      }
+    }
+  ]
+}

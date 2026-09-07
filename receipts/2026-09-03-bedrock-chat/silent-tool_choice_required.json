@@ -1,0 +1,70 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260903T164748Z",
+      "authorization": "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20260903/us-east-1/bedrock/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=872dddb88f80a42524b4d89e52b77f1fa6ed561048b2cb2db327ad85edda8624"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b-1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "<reasoning>The user says: \"Say ok.\" They just want us to respond \"ok\". There's no need for tool calls.</reasoning>ok",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788453947,
+    "id": "chatcmpl-9e0ca900-9351-46d8-bca8-42f4231e627a",
+    "model": "openai.gpt-oss-20b-1:0",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 35,
+      "prompt_tokens": 123,
+      "total_tokens": 158
+    }
+  },
+  "note": "bedrock-runtime.us-east-1.amazonaws.com 2026-09-03, openai.gpt-oss-20b-1:0: tool_choice=required ignored (finish=stop, content 'ok', no tool_calls) \u2014 receipts/2026-09-03-bedrock-chat/silent-tool_choice_required.json (HTTP 200, verbatim body); refusal pinned per MAP-8 (a silent widen is worse than an error); evidenced on gpt-oss only, a Claude capture on this door may widen it; changes/2026-09-03-bedrock-chat-live.md"
+}

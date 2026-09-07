@@ -11,7 +11,9 @@
     "2026-09-03: zai pinned with live receipts (changes/2026-09-03-zai-live.md).",
     "2026-09-03: deepseek-anthropic pinned (the Messages wire of the same service; models=false \u2014 GET /models is 404 there). changes/2026-09-03-deepseek-anthropic-live.md",
     "2026-09-03: moonshotai (Kimi API Platform, Chat Completions wire) pinned with live receipts; env keys MOONSHOTAI_API_KEY then MOONSHOT_API_KEY (both vendor-named). Files and batches exist on the service (files are for content extraction and vision input; batches take JSONL) and are not registered yet; the Responses and Anthropic wires are separate provider strings to come. changes/2026-09-03-moonshotai-live.md",
-    "2026-09-03: moonshotai-responses (Responses wire; kimi-k3 documented, stateless, web_search built-in; the same GET /models) and moonshotai-anthropic (Messages wire, bearer token; GET /models is 404 on the /anthropic root) pinned with live receipts. changes/2026-09-03-moonshotai-wires.md"
+    "2026-09-03: moonshotai-responses (Responses wire; kimi-k3 documented, stateless, web_search built-in; the same GET /models) and moonshotai-anthropic (Messages wire, bearer token; GET /models is 404 on the /anthropic root) pinned with live receipts. changes/2026-09-03-moonshotai-wires.md",
+    "2026-09-04: bedrock-mantle-chat pinned with live receipts (GET /v1/models 200, 55 ids; gpt-oss and DeepSeek 200). A tenth cloud door; not a rename of bedrock-chat. changes/2026-09-04-bedrock-mantle-chat-live.md",
+    "2026-09-04: Azure completion pass extended: azure live=true, files=true, batches=true, speech=true; Realtime text WebSocket, Files pending lifecycle, Batch queue/cancel, WAV speech, gpt-5-mini reasoning, prompt cache hits, and both content-filter paths live-pinned. Images remain false pending gpt-image-1-mini quota; video deliberately excluded. azure-anthropic remains quota-blocked for successful inference, but x-api-key and all Entra paths are live-proven; documented api-key is refused. changes/2026-09-04-azure-live.md, changes/2026-09-04-azure-anthropic-partial.md"
   ],
   "providers": {
     "anthropic": {
@@ -34,6 +36,167 @@
       ],
       "env_keys": [
         "ANTHROPIC_API_KEY"
+      ]
+    },
+    "aws-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "sigv4",
+        "x-api-key"
+      ],
+      "env_keys": [
+        "ANTHROPIC_AWS_API_KEY"
+      ]
+    },
+    "azure": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": true,
+        "files": true,
+        "batches": true,
+        "images": false,
+        "speech": true,
+        "video": false,
+        "responses_api": true,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "api-key",
+        "entra-oauth"
+      ],
+      "env_keys": [
+        "AZURE_OPENAI_API_KEY"
+      ]
+    },
+    "azure-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "x-api-key",
+        "entra-oauth"
+      ],
+      "env_keys": [
+        "ANTHROPIC_FOUNDRY_API_KEY"
+      ]
+    },
+    "azure-chat": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "api-key",
+        "entra-oauth"
+      ],
+      "env_keys": [
+        "AZURE_OPENAI_API_KEY"
+      ]
+    },
+    "bedrock-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "sigv4",
+        "x-api-key"
+      ],
+      "env_keys": [
+        "AWS_BEARER_TOKEN_BEDROCK"
+      ]
+    },
+    "bedrock-chat": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "sigv4",
+        "bearer"
+      ],
+      "env_keys": [
+        "AWS_BEARER_TOKEN_BEDROCK"
+      ]
+    },
+    "bedrock-mantle-chat": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "sigv4",
+        "bearer"
+      ],
+      "env_keys": [
+        "AWS_BEARER_TOKEN_BEDROCK"
       ]
     },
     "claude-code": {
@@ -145,6 +308,141 @@
       ],
       "env_keys": [
         "GROQ_API_KEY"
+      ]
+    },
+    "meta": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": true,
+        "batches": false,
+        "images": true,
+        "speech": false,
+        "video": false,
+        "responses_api": true,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "META_API_KEY"
+      ]
+    },
+    "meta-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "META_API_KEY"
+      ]
+    },
+    "meta-chat": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "META_API_KEY"
+      ]
+    },
+    "moonshotai": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
+      ]
+    },
+    "moonshotai-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
+      ]
+    },
+    "moonshotai-responses": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": true,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "MOONSHOTAI_API_KEY",
+        "MOONSHOT_API_KEY"
       ]
     },
     "ollama": {
@@ -274,6 +572,68 @@
       ],
       "env_keys": []
     },
+    "vertex": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "google-oauth"
+      ],
+      "env_keys": []
+    },
+    "vertex-anthropic": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "google-oauth"
+      ],
+      "env_keys": []
+    },
+    "vertex-express": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": false,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "query-api-key"
+      ],
+      "env_keys": [
+        "GOOGLE_API_KEY"
+      ]
+    },
     "vllm": {
       "supports": {
         "complete": true,
@@ -337,75 +697,6 @@
       ],
       "env_keys": [
         "ZAI_API_KEY"
-      ]
-    },
-    "moonshotai": {
-      "supports": {
-        "complete": true,
-        "stream": true,
-        "live": false,
-        "files": false,
-        "batches": false,
-        "images": false,
-        "speech": false,
-        "video": false,
-        "responses_api": false,
-        "models": true,
-        "caches": false,
-        "extra": []
-      },
-      "auth_modes": [
-        "bearer"
-      ],
-      "env_keys": [
-        "MOONSHOTAI_API_KEY",
-        "MOONSHOT_API_KEY"
-      ]
-    },
-    "moonshotai-responses": {
-      "supports": {
-        "complete": true,
-        "stream": true,
-        "live": false,
-        "files": false,
-        "batches": false,
-        "images": false,
-        "speech": false,
-        "video": false,
-        "responses_api": true,
-        "models": true,
-        "caches": false,
-        "extra": []
-      },
-      "auth_modes": [
-        "bearer"
-      ],
-      "env_keys": [
-        "MOONSHOTAI_API_KEY",
-        "MOONSHOT_API_KEY"
-      ]
-    },
-    "moonshotai-anthropic": {
-      "supports": {
-        "complete": true,
-        "stream": true,
-        "live": false,
-        "files": false,
-        "batches": false,
-        "images": false,
-        "speech": false,
-        "video": false,
-        "responses_api": false,
-        "models": false,
-        "caches": false,
-        "extra": []
-      },
-      "auth_modes": [
-        "bearer"
-      ],
-      "env_keys": [
-        "MOONSHOTAI_API_KEY",
-        "MOONSHOT_API_KEY"
       ]
     }
   }

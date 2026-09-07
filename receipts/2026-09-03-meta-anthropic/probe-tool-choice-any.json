@@ -1,0 +1,67 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "any"
+      },
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "only `\"auto\"` is supported for `tool_choice`. `\"none\"`, `\"required\"`, and named function choices are not currently supported",
+      "type": "invalid_request_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "b59abd07-ca0b-40f0-87e1-097556876282"
+  }
+}

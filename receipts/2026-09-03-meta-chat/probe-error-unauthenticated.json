@@ -1,0 +1,35 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "code": "invalid_api_key",
+      "message": "Unauthorized",
+      "param": null,
+      "type": "authentication_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-49-38Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "56ae14c1-e504-4f51-89b8-b3d0b0ae58c6"
+  }
+}

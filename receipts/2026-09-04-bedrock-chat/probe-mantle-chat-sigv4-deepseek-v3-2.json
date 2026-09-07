@@ -1,0 +1,53 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T132855Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "Ok.",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788528536,
+    "id": "chatcmpl-5e31952d-e292-461d-8b53-78561aaa74f9",
+    "model": "deepseek.v3.2",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 3,
+      "prompt_tokens": 7,
+      "total_tokens": 10
+    }
+  },
+  "timestamp": "2026-09-04T13-28-55Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_ilppz3vueblnxjagjntywwflqnw6g4llfnz5nzmvxhz2x53jbzna"
+  }
+}

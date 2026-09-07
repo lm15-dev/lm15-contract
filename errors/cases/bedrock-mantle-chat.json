@@ -1,0 +1,121 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "bedrock-mantle.us-east-1.api.aws error envelopes captured verbatim 2026-09-04 by research/providers/bedrock-mantle-chat/capture.py; receipts/2026-09-04-bedrock-mantle-chat/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "bedrock-mantle-chat.invalid_signature",
+      "provider": "bedrock-mantle-chat",
+      "settings": {
+        "region": "us-east-1"
+      },
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "invalid_api_key",
+          "message": "The security token included in the request is invalid.",
+          "param": null,
+          "type": "permission_denied_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "bedrock-mantle-chat",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.us-east-1.api.aws HTTP 401 verbatim 2026-09-04T13-54-44Z — receipts/2026-09-04-bedrock-mantle-chat/probe-error-invalid-signature.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "bedrock-mantle-chat.model_not_found",
+      "provider": "bedrock-mantle-chat",
+      "settings": {
+        "region": "us-east-1"
+      },
+      "status": 404,
+      "body": {
+        "error": {
+          "code": "not_found_error",
+          "message": "The model 'lm15.no-such-model' does not exist",
+          "param": null,
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "bedrock-mantle-chat",
+        "provider_code": "not_found_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.us-east-1.api.aws HTTP 404 verbatim 2026-09-04T13-54-45Z — receipts/2026-09-04-bedrock-mantle-chat/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "bedrock-mantle-chat.bad_param",
+      "provider": "bedrock-mantle-chat",
+      "settings": {
+        "region": "us-east-1"
+      },
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "validation_error",
+          "message": "'max_completion_tokens' must be non-negative",
+          "param": null,
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "bedrock-mantle-chat",
+        "provider_code": "validation_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.us-east-1.api.aws HTTP 400 verbatim 2026-09-04T13-54-47Z — receipts/2026-09-04-bedrock-mantle-chat/probe-error-bad-param.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "bedrock-mantle-chat.claude_wrong_door",
+      "provider": "bedrock-mantle-chat",
+      "settings": {
+        "region": "us-east-1"
+      },
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "validation_error",
+          "message": "The model 'anthropic.claude-haiku-4-5' does not support the '/v1/chat/completions' API",
+          "param": null,
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "bedrock-mantle-chat",
+        "provider_code": "validation_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.us-east-1.api.aws HTTP 400 verbatim 2026-09-04T13-54-48Z — receipts/2026-09-04-bedrock-mantle-chat/probe-error-claude-wrong-door.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

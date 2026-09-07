@@ -1,0 +1,116 @@
+{
+  "id": "azure.files",
+  "provider": "azure",
+  "feature": "files",
+  "surface": "files",
+  "description": "Azure OpenAI v1 Files lifecycle (upload/get/list/download/delete)",
+  "base_url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1",
+  "settings": {
+    "resource": "lm15-oai-29d280ed6f8e"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com Files lifecycle 2026-09-04 (upload HTTP 201 2026-09-04T14-10-47Z; wait_ready terminal=ready; get HTTP 200 2026-09-04T14-10-50Z; list HTTP 200 2026-09-04T14-10-50Z; download HTTP 200 2026-09-04T14-10-50Z; delete HTTP 200 2026-09-04T14-10-50Z); upload/get/download/delete succeed after pending->processed; Azure list omits this user_data file but includes batch-purpose files; adapter-built wires (OpenAILM, compat+access 'azure'); verbatim bodies at bodies/azure.files/; changes/2026-09-04-azure-live.md"
+  },
+  "steps": [
+    {
+      "file_op": "upload",
+      "upload_request": {
+        "filename": "lm15-azure-proof.txt",
+        "bytes_data": "bG0xNSBBenVyZSBGaWxlcyBsaXZlIHByb29mIDIwMjYtMDktMDQuCg==",
+        "media_type": "text/plain"
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files",
+        "params": {},
+        "headers": {
+          "content-type": "multipart/form-data; boundary=lm15-3fd6a0de1a9340f7979edccb5822d896",
+          "api-key": "$AZURE_OPENAI_API_KEY"
+        },
+        "body": null,
+        "body_b64": "LS1sbTE1LTNmZDZhMGRlMWE5MzQwZjc5NzllZGNjYjU4MjJkODk2DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InB1cnBvc2UiDQoNCnVzZXJfZGF0YQ0KLS1sbTE1LTNmZDZhMGRlMWE5MzQwZjc5NzllZGNjYjU4MjJkODk2DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9ImZpbGUiOyBmaWxlbmFtZT0ibG0xNS1henVyZS1wcm9vZi50eHQiDQpDb250ZW50LVR5cGU6IHRleHQvcGxhaW4NCg0KbG0xNSBBenVyZSBGaWxlcyBsaXZlIHByb29mIDIwMjYtMDktMDQuCg0KLS1sbTE1LTNmZDZhMGRlMWE5MzQwZjc5NzllZGNjYjU4MjJkODk2LS0NCg=="
+      },
+      "pinned_body": "azure-upload.json",
+      "parse": "info",
+      "expect": {
+        "status": 201
+      }
+    },
+    {
+      "file_op": "get",
+      "file_id": "file-ab52117486e94ca695c508a51e7a22ac",
+      "request": {
+        "method": "GET",
+        "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files/file-ab52117486e94ca695c508a51e7a22ac",
+        "params": {},
+        "headers": {
+          "content-type": "application/json",
+          "api-key": "$AZURE_OPENAI_API_KEY"
+        },
+        "body": null
+      },
+      "pinned_body": "azure-get.json",
+      "parse": "info",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "list",
+      "limit": 20,
+      "request": {
+        "method": "GET",
+        "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files",
+        "params": {
+          "limit": "20"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "api-key": "$AZURE_OPENAI_API_KEY"
+        },
+        "body": null
+      },
+      "pinned_body": "azure-list.json",
+      "parse": "page",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "download",
+      "file_id": "file-ab52117486e94ca695c508a51e7a22ac",
+      "request": {
+        "method": "GET",
+        "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files/file-ab52117486e94ca695c508a51e7a22ac/content",
+        "params": {},
+        "headers": {
+          "content-type": "application/json",
+          "api-key": "$AZURE_OPENAI_API_KEY"
+        },
+        "body": null
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "delete",
+      "file_id": "file-ab52117486e94ca695c508a51e7a22ac",
+      "request": {
+        "method": "DELETE",
+        "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/files/file-ab52117486e94ca695c508a51e7a22ac",
+        "params": {},
+        "headers": {
+          "content-type": "application/json",
+          "api-key": "$AZURE_OPENAI_API_KEY"
+        },
+        "body": null
+      },
+      "expect": {
+        "status": 200
+      }
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "id": "meta.files",
+  "provider": "meta",
+  "feature": "files",
+  "surface": "files",
+  "description": "Meta Files lifecycle (POST/GET/LIST/DELETE /files; purpose user_data — files--upload.md; download of user_data is the finding)",
+  "base_url": "https://api.meta.ai/v1",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai Files lifecycle 2026-09-03 (upload HTTP 200 2026-09-03T11-42-50Z; get HTTP 200 2026-09-03T11-42-54Z; list HTTP 200 2026-09-03T11-42-54Z; download HTTP 200 2026-09-03T11-42-54Z; delete HTTP 200 2026-09-03T11-42-55Z); files--schemas.md: purpose user_data|batch only; status field deprecated; adapter-built wires (OpenAILM, compat+access 'meta'); verbatim bodies at bodies/meta.files/; changes/2026-09-03-meta-live.md"
+  },
+  "steps": [
+    {
+      "file_op": "upload",
+      "upload_request": {
+        "filename": "sample.txt",
+        "bytes_data": "VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZy4KbG0xNSBmaWxlcyBjYXB0dXJlIDIwMjYtMDktMDMuCg==",
+        "media_type": "text/plain"
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://api.meta.ai/v1/files",
+        "params": {},
+        "headers": {
+          "authorization": "Bearer $META_API_KEY",
+          "content-type": "multipart/form-data; boundary=lm15-84cb208a9bb84b2aada82c46554980b7"
+        },
+        "body": null,
+        "body_b64": "LS1sbTE1LTg0Y2IyMDhhOWJiODRiMmFhZGE4MmM0NjU1NDk4MGI3DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InB1cnBvc2UiDQoNCnVzZXJfZGF0YQ0KLS1sbTE1LTg0Y2IyMDhhOWJiODRiMmFhZGE4MmM0NjU1NDk4MGI3DQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9ImZpbGUiOyBmaWxlbmFtZT0ic2FtcGxlLnR4dCINCkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbg0KDQpUaGUgcXVpY2sgYnJvd24gZm94IGp1bXBzIG92ZXIgdGhlIGxhenkgZG9nLgpsbTE1IGZpbGVzIGNhcHR1cmUgMjAyNi0wOS0wMy4KDQotLWxtMTUtODRjYjIwOGE5YmI4NGIyYWFkYTgyYzQ2NTU0OTgwYjctLQ0K"
+      },
+      "pinned_body": "meta-upload.json",
+      "parse": "info",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "get",
+      "file_id": "file-28818861621033772",
+      "request": {
+        "method": "GET",
+        "url": "https://api.meta.ai/v1/files/file-28818861621033772",
+        "params": {},
+        "headers": {
+          "authorization": "Bearer $META_API_KEY",
+          "content-type": "application/json"
+        },
+        "body": null
+      },
+      "pinned_body": "meta-get.json",
+      "parse": "info",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "list",
+      "limit": 20,
+      "request": {
+        "method": "GET",
+        "url": "https://api.meta.ai/v1/files",
+        "params": {
+          "limit": "20"
+        },
+        "headers": {
+          "authorization": "Bearer $META_API_KEY",
+          "content-type": "application/json"
+        },
+        "body": null
+      },
+      "pinned_body": "meta-list.json",
+      "parse": "page",
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "download",
+      "file_id": "file-28818861621033772",
+      "request": {
+        "method": "GET",
+        "url": "https://api.meta.ai/v1/files/file-28818861621033772/content",
+        "params": {},
+        "headers": {
+          "authorization": "Bearer $META_API_KEY",
+          "content-type": "application/json"
+        },
+        "body": null
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "file_op": "delete",
+      "file_id": "file-28818861621033772",
+      "request": {
+        "method": "DELETE",
+        "url": "https://api.meta.ai/v1/files/file-28818861621033772",
+        "params": {},
+        "headers": {
+          "authorization": "Bearer $META_API_KEY",
+          "content-type": "application/json"
+        },
+        "body": null
+      },
+      "expect": {
+        "status": 200
+      }
+    }
+  ]
+}

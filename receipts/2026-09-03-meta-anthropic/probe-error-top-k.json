@@ -1,0 +1,48 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "top_k": 1,
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "`top_k` is not supported",
+      "type": "invalid_request_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-22Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "1baa7e4a-ade4-4a9d-88a5-be4eeb312c0e"
+  }
+}

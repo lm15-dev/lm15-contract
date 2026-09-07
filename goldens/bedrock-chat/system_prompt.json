@@ -1,0 +1,27 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-78b3b8c8-51c5-4dec-bd4e-f112b040de21",
+    "model": "openai.gpt-oss-20b-1:0",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "<reasoning>User says: \"Say ok.\" The system instruction: \"You answer in exactly two words.\" They want two word response: could be \"Sure, ok\" but that is three words? \"Alright, ok\" is two words? Actually \"Alright, ok\" counts as two words? It's word tokens: \"Alright,\" is one word, \"ok\" is second. So that's two words. So we can give \"Alright ok\". Could also answer \"Ok done\" - that's two words. \"Ok let's\" is two. But likely \"Sure ok\". So answer two words: \"Sure, ok\". Need punctuation? We can include comma, but comma not a word. So \"Sure ok\" is two words. That matches. So we reply with exactly two words.</reasoning>Sure, ok"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 81,
+      "output_tokens": 170,
+      "total_tokens": 251
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T16-47-52Z.txt"
+  }
+}

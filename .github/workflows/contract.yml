@@ -23,5 +23,7 @@ jobs:
         # a sibling (same convention as the python2 vet smoke test); full
         # teeth locally and in any cross-repo checkout.
         run: python3 tools/spec_drift.py
+      - name: Offline tooling regressions
+        run: python3 -m unittest discover -s tools -p 'test_*.py' -v
       - name: Mutation self-test (the comparator must catch every injected mutation)
         run: python3 harness/selftest.py

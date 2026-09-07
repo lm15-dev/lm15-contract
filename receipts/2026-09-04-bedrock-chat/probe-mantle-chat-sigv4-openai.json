@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T132825Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b-1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "code": "not_found_error",
+      "message": "The model 'openai.gpt-oss-20b-1:0' does not exist",
+      "param": null,
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-28-25Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_dd6vmfu2vwbcdwad5olcfkkiinw65ls4md7wipsiortuahywwbna"
+  }
+}

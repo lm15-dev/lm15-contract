@@ -1,0 +1,45 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 100,
+      "top_p": 0.0,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "`top_p` must be in the range (0, 1], got 0",
+      "param": "top_p",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-43-53Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "bbbafd6b-aecd-42e1-8500-51d55385a1ba"
+  }
+}

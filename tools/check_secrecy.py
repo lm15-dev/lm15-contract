@@ -23,6 +23,7 @@ Usage: check_secrecy.py [--root DIR]   (default: the repo containing this script
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -39,7 +40,10 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("google api key", re.compile(r"AIza[0-9A-Za-z_-]{35}")),
     ("github token", re.compile(r"gh[pousr]_[A-Za-z0-9]{36,}")),
     ("slack token", re.compile(r"xox[baprs]-[A-Za-z0-9-]{10,}")),
-    ("aws access key id", re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b")),
+    # AWS's own documentation ids end in EXAMPLE (AKIAIOSFODNN7EXAMPLE,
+    # AKIAI44QH8DHBEXAMPLE); they appear verbatim in frozen research sources
+    # (research/cloud-hosts/sources/, 2026-09-03) and are not material.
+    ("aws access key id", re.compile(r"\b(?!(?:AKIAIOSFODNN7EXAMPLE|AKIAI44QH8DHBEXAMPLE)\b)(?:AKIA|ASIA)[0-9A-Z]{16}\b")),
     # platform.deepseek.com keys: "sk-" + exactly 32 lowercase hex (observed
     # shape 2026-09-03); the exact length keeps it from matching prose.
     ("deepseek api key", re.compile(r"\bsk-[0-9a-f]{32}\b")),
@@ -48,9 +52,62 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     # platform.kimi.ai keys: "sk-" + exactly 48 mixed-case alphanumerics
     # (observed shape 2026-09-03); the exact length keeps it from prose.
     ("moonshot api key", re.compile(r"\bsk-[A-Za-z0-9]{48}\b")),
+    # dev.meta.ai keys: authentication.md documents "LLM|<numeric team id>|
+    # <secret>" (example LLM|607358788850350|nx9.....LJY); a key issued
+    # 2026-09-03 is LLM_<15 digits>_<27 alphanumerics>.  Both separators;
+    # the 16-char floor keeps the docs' 11-char example from matching.
+    ("meta model api key", re.compile(r"\bLLM[|_]\d{6,}[|_][A-Za-z0-9._-]{16,}")),
+    # Cloud hosts (changes/2026-09-03-cloud-hosts.md, AUTH-5): any PEM
+    # private key block; the AWS test-suite pair (AKIDEXAMPLE) is not
+    # AKIA-shaped and is expected in fixtures.
+    ("pem private key", re.compile(r"-----BEGIN (?:RSA |EC |ENCRYPTED |)PRIVATE KEY-----")),
+    # AWS secret access key: 40 chars of base64 alphabet right after the
+    # `aws_secret_access_key` / AWS_SECRET_ACCESS_KEY setting, excluding the
+    # two documented example secrets (…EXAMPLEKEY).
+    ("aws secret access key", re.compile(r"(?i)aws_secret_access_key\W{1,4}(?![A-Za-z0-9/+]{30}EXAMPLEKEY\b)[A-Za-z0-9/+]{40}\b")),
+    # Google OAuth access tokens.
+    ("google access token", re.compile(r"\bya29\.[0-9A-Za-z_-]{30,}")),
+    # Amazon Bedrock short-term API keys (first capture 2026-09-04): the
+    # base64 of a SigV4 presigned CallWithBearerToken URL. Only the frozen
+    # test-vector file is exempt, not arbitrary tokens with a test-id prefix
+    # (which could still contain a real session token).
+    ("bedrock api key", re.compile(r"bedrock-api-key-[A-Za-z0-9+/]{120,}={0,2}")),
+    # Azure OpenAI / Foundry key shapes are added at first live capture
+    # (as deepseek and z.ai were), never from memory: a guessed 84-char
+    # pattern matched base64 image payloads on 2026-09-03 and was removed.
+    # Signed JWTs (three base64url segments, header starting {"alg").  A
+    # JWT is a bearer-equivalent for its lifetime (AUTH-5).  Fixture JWTs
+    # signed with the corpus test key live only under auth/token-vectors.json.
+    ("signed jwt", re.compile(r"\beyJ[0-9A-Za-z_-]{10,}\.[0-9A-Za-z_-]{10,}\.[0-9A-Za-z_-]{20,}\b")),
 )
 
-SCANNED_SUFFIXES = {".json", ".txt", ".md", ".sse"}
+# The one place a private key may live: the corpus test key (AUTH-11), and
+# the one place a signed JWT may live: token vectors signed with that key.
+PATH_ALLOWLIST: dict[str, frozenset[str]] = {
+    "auth/test-keys/rsa-2048-test-only.pem": frozenset({"pem private key"}),
+    "auth/token-vectors.json": frozenset({"signed jwt"}),
+    "research/providers/_aws_bearer.py": frozenset({"bedrock api key"}),
+    # Google's own documentation examples, frozen verbatim (research sources
+    # are never edited): a sample ya29 token and a sample RS256 JWT.
+    "research/cloud-hosts/sources/aws-sts-assume-role.md": frozenset({"aws access key id"}),
+    "research/cloud-hosts/sources/gcp-metadata-token.md": frozenset({"google access token"}),
+    "research/cloud-hosts/sources/gcp-service-account-oauth.md": frozenset({"signed jwt"}),
+}
+
+# Pin reviewed content as well as its path: replacing a test key or adding
+# a live JWT at an exempt path must fail. Refresh these only after review
+# of the changed test material, never to silence a new secret finding.
+ALLOWLIST_SHA256 = {
+    "auth/test-keys/rsa-2048-test-only.pem": "6e3e52ed07726dfd0d08091e1560ceffbb45cc92a01caea9980bd77fac6f942f",
+    "auth/token-vectors.json": "a826e661c0489ece0f5e3560f0ba52708da00ca94cb0f100514e50ad59d81950",
+    "research/providers/_aws_bearer.py": "da773e1a03e6a2d74da75bbfc0ce46177682c6d7a1f1c1324373200d6c7499d1",
+    "research/cloud-hosts/sources/aws-sts-assume-role.md": "de00601cf1c5c813f6ca4fad2f6067f6ed10c81923ffc644b82cdfdcdb85f607",
+    "research/cloud-hosts/sources/gcp-metadata-token.md": "3982907f85cd097a6c8a611015617737458f5fa08807fdde3a58158ed1e49a80",
+    "research/cloud-hosts/sources/gcp-service-account-oauth.md": "65500ac616ef4e1089fc8aba161e8bb748d93f47563852d347b7a8323884fa76",
+}
+
+SCANNED_SUFFIXES = {".json", ".jsonl", ".txt", ".md", ".sse", ".pem", ".py", ".sh",
+                    ".req", ".creq", ".sts", ".authz"}
 SKIPPED_PARTS = {".git", "__pycache__", "node_modules"}
 
 
@@ -85,13 +142,19 @@ def main(argv: list[str] | None = None) -> int:
             continue
         relative = str(path.relative_to(root))
         try:
-            text = path.read_text(encoding="utf-8", errors="replace")
+            raw = path.read_bytes()
+            text = raw.decode("utf-8", errors="replace")
         except OSError as exc:
             problems.append(f"{relative}: unreadable ({exc})")
             continue
         scanned += 1
 
+        allowed = (PATH_ALLOWLIST.get(relative, frozenset())
+                   if hashlib.sha256(raw).hexdigest() == ALLOWLIST_SHA256.get(relative)
+                   else frozenset())
         for label, pattern in LIVE_SECRET_PATTERNS:
+            if label in allowed:
+                continue
             match = pattern.search(text)
             if match:
                 # Never echo the secret itself; name the shape and location.

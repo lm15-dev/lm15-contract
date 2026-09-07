@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135442Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "zai.glm-4.7-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\":\"Beijing\"}",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-b8d114eed0e33aec",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788530082,
+    "id": "chatcmpl-9a2d5077-454b-491c-be7f-2da4b9dbeab6",
+    "model": "zai.glm-4.7-flash",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 17,
+      "prompt_tokens": 164,
+      "total_tokens": 181
+    }
+  },
+  "timestamp": "2026-09-04T13-54-42Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_phy3w256n6xqhzes3ig64aixxnarm4zlpy2i5ljzotnysve2lfvq"
+  }
+}

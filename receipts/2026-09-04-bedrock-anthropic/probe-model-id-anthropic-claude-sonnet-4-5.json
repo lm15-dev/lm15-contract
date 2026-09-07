@@ -1,0 +1,44 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T121243Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "type": "error",
+    "request_id": "req_psgbyujicyborw7wsisfug6shxvnfyuqidxbdcsxrr555b7ceidq",
+    "error": {
+      "type": "not_found_error",
+      "message": "The model 'anthropic.claude-sonnet-4-5' does not exist"
+    }
+  },
+  "timestamp": "2026-09-04T12-12-43Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_psgbyujicyborw7wsisfug6shxvnfyuqidxbdcsxrr555b7ceidq"
+  }
+}

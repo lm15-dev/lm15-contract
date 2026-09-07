@@ -1,0 +1,150 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "max_output_tokens": 300,
+      "reasoning": {
+        "effort": "low"
+      },
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "type": "message",
+          "role": "assistant",
+          "phase": "commentary",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Let me check the weather first."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_probe1",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_probe1",
+          "output": "Sunny, 22°C"
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "service_tier": "auto",
+    "model": "muse-spark-1.3",
+    "reasoning": {
+      "effort": "low"
+    },
+    "background": false,
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ],
+          "type": "object"
+        }
+      }
+    ],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6a995d6da6ea669fecac413e",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1788435821.0,
+    "completed_at": 1788435821.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_6a995d6da6ea669fecac413e:rs_dcf9417a-7e40-4465-a016-67a7d5f10763",
+        "summary": [],
+        "status": "completed"
+      },
+      {
+        "type": "message",
+        "id": "msg_f2b725c9-d039-4f2e-9937-cb48987d7842",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "The weather in Paris is **Sunny, 22°C**.",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 634,
+      "input_tokens_details": {
+        "cached_tokens": 497
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "reasoning_tokens": 103
+      },
+      "total_tokens": 760
+    },
+    "parallel_tool_calls": true,
+    "store": true,
+    "max_output_tokens": 300
+  },
+  "timestamp": "2026-09-03T11-43-40Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "ea6721c0-e1a3-4dea-abb6-659a543910a1"
+  }
+}

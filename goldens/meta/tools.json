@@ -1,0 +1,59 @@
+{
+  "canonical_response": {
+    "id": "resp_6a995d1833aa13d94d464c1a",
+    "model": "muse-spark-1.3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_6a995d1833aa13d94d464c1a:rs_680b3218-aa6c-4543-85ef-a180c3ea3a18"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "I'll check the weather in Paris for you."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ],
+      "continuation": [
+        {
+          "provider": "openai",
+          "kind": "response_id",
+          "data": {
+            "id": "resp_6a995d1833aa13d94d464c1a"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 545,
+      "output_tokens": 138,
+      "total_tokens": 683,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 70
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T11-42-14Z.txt"
+  }
+}

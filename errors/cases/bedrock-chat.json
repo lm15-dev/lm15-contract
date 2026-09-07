@@ -1,0 +1,93 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "bedrock-runtime.us-east-1.amazonaws.com error envelopes captured verbatim 2026-09-03 by research/providers/bedrock-chat/capture.py; receipts/2026-09-03-bedrock-chat/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "bedrock-chat.invalid_signature",
+      "provider": "bedrock-chat",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "The security token included in the request is invalid.",
+          "type": "permission_denied_error",
+          "param": null,
+          "code": "invalid_api_key"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "bedrock-chat",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "bedrock-runtime.us-east-1.amazonaws.com HTTP 401 verbatim 2026-09-03T16-49-40Z — receipts/2026-09-03-bedrock-chat/probe-error-invalid-signature.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      },
+      "settings": {
+        "region": "us-east-1"
+      }
+    },
+    {
+      "id": "bedrock-chat.model_not_found",
+      "provider": "bedrock-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The provided model identifier is invalid.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "validation_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "bedrock-chat",
+        "provider_code": "validation_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "bedrock-runtime.us-east-1.amazonaws.com HTTP 400 verbatim 2026-09-03T16-49-42Z — receipts/2026-09-03-bedrock-chat/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      },
+      "settings": {
+        "region": "us-east-1"
+      }
+    },
+    {
+      "id": "bedrock-chat.bad_param",
+      "provider": "bedrock-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "'max_completion_tokens' must be non-negative",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "validation_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "bedrock-chat",
+        "provider_code": "validation_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "bedrock-runtime.us-east-1.amazonaws.com HTTP 400 verbatim 2026-09-03T16-49-43Z — receipts/2026-09-03-bedrock-chat/probe-error-bad-param.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      },
+      "settings": {
+        "region": "us-east-1"
+      }
+    }
+  ]
+}

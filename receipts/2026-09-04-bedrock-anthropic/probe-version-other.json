@@ -1,0 +1,44 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "anthropic-version": "2024-01-01",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T121242Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 10
+    }
+  },
+  "status": 403,
+  "body": {
+    "type": "error",
+    "request_id": "req_nhnsoe6ifkvdkzeaxnqsy5mwzavkr265xst5cmbfq5jpsgreovwa",
+    "error": {
+      "type": "permission_error",
+      "message": "anthropic.claude-haiku-4-5 is not available for this account. You can explore other available models on Amazon Bedrock. For additional access options, contact AWS Sales at https://aws.amazon.com/contact-us/sales-support/"
+    }
+  },
+  "timestamp": "2026-09-04T12-12-42Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_nhnsoe6ifkvdkzeaxnqsy5mwzavkr265xst5cmbfq5jpsgreovwa"
+  }
+}

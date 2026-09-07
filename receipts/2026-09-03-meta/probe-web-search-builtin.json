@@ -1,0 +1,133 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "In one sentence: what is today's date according to a web search?"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 800,
+      "tools": [
+        {
+          "type": "web_search"
+        }
+      ],
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "service_tier": "auto",
+    "model": "muse-spark-1.3",
+    "reasoning": {
+      "effort": "low"
+    },
+    "background": false,
+    "tools": [
+      {
+        "type": "web_search"
+      }
+    ],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6a99632cca5337acc49a4dc6",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1788437292.0,
+    "completed_at": 1788437297.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_6a99632cca5337acc49a4dc6:rs_025df5d2-68d8-4376-93d6-db3c8af211ac",
+        "summary": [],
+        "status": "completed"
+      },
+      {
+        "type": "message",
+        "id": "rs_61789ce4-f99c-4eb3-8233-3ec66fd5a483",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "I'll search the web for today's date.",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "phase": "commentary",
+        "status": "completed"
+      },
+      {
+        "type": "web_search_call",
+        "id": "ws_call_50967185-6eca-4a3f-91f3-78014ca2b333",
+        "status": "completed",
+        "action": {
+          "type": "search",
+          "query": "today's date"
+        }
+      },
+      {
+        "type": "reasoning",
+        "id": "rs_6a99632cca5337acc49a4dc6:rs_8bc38143-007a-4148-a67e-4807d722a5e2",
+        "summary": [],
+        "status": "completed"
+      },
+      {
+        "type": "message",
+        "id": "msg_02cb5e45-df52-4f19-8b17-0dd654a3e2ac",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "According to a web search, today's date is Thursday, September 3, 2026.",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 1290,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 439,
+      "output_tokens_details": {
+        "reasoning_tokens": 322
+      },
+      "total_tokens": 1729
+    },
+    "parallel_tool_calls": true,
+    "store": true,
+    "max_output_tokens": 800
+  },
+  "timestamp": "2026-09-03T12-08-12Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "a49e6533-ae58-42a8-b0f9-8056545aa3b7"
+  }
+}

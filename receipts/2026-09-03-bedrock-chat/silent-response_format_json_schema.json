@@ -1,0 +1,72 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260903T164750Z",
+      "authorization": "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20260903/us-east-1/bedrock/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=c31a28bb7f21bf644d9ee02f27465808dc62498406f6e075fd330a338b34f54d"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b-1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower?"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "<reasoning>User asks: \"Where is the Eiffel Tower?\" Simple: It's in Paris, France. But maybe nuance: Where in Paris: Champ de Mars, 5th arrondissement, near Seine. Provide coordinates and answer. Probably they just want location. Mention coordinates: 48.8584\u00b0 N, 2.2945\u00b0 E. Provide explanation. Let's answer.</reasoning>The Eiffel Tower is{\"city\":\"Paris\",\"country\":\"France\"}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788454070,
+    "id": "chatcmpl-8fa2df55-8fac-43a4-bb53-35a5af97b8c7",
+    "model": "openai.gpt-oss-20b-1:0",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 97,
+      "prompt_tokens": 73,
+      "total_tokens": 170
+    }
+  },
+  "note": "bedrock-runtime.us-east-1.amazonaws.com 2026-09-03, openai.gpt-oss-20b-1:0: response_format json_schema not enforced (content = '<reasoning>\u2026</reasoning>The Eiffel Tower is{\"city\":\u2026}') \u2014 receipts/2026-09-03-bedrock-chat/silent-response_format_json_schema.json (HTTP 200, verbatim body); refusal pinned per MAP-8; evidenced on gpt-oss only; changes/2026-09-03-bedrock-chat-live.md"
+}

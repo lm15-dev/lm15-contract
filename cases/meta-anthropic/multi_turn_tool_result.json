@@ -1,0 +1,215 @@
+{
+  "id": "meta-anthropic.multi_turn_tool_result",
+  "provider": "meta-anthropic",
+  "feature": "multi_turn_tool_result",
+  "description": "Meta Muse Spark over the Anthropic wire: the live turn-1 message (thinking + tool_use) replayed with a tool_result",
+  "base_url": "https://api.meta.ai/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "redacted_thinking",
+              "data": "Q-PaDgH5DB66xnQOxB5BaWpjIlLBJ1CirSxZjsU3JFJiOTLx7Ol7hV2qgDK2kl_MJH9FxYwVtlkAwhCikyJl6HCG_Mv4TWxPsdScq1x9ftGY1F5gQeHNaM2wxmLEzWyGsQjm6A1wH90pXTxv3lLqM0rScXIxwxk6ylevkn-YhRp-jp8A2hs1Fjekt3j80m6ocFQM2mC9eAy4siWeGIKtSFKoyjnMntaWbiFofwvsbnTBCiWqTPMgC7y0Rpczvxb3cdmY9Ouvz3QMW97thLjz3JYTv0PVxdWOvjzUe0cdrJa3acAXyHWvkkLVhjnPHpD4cML_2Xb3FkI2W1vW6AxKFLYUK6P7V_uy4tgGIID4MtvowjLOo02SLPBCfSrPTaB2NvvVHirya4kXdvg8ocwVREngV05x-sXU8GVI2r9RsLgY_M7Ze-YFm7L0XpiVB0yVZ-MTNobccZjAHTnKx0UGzEDYzq1Byesc7L7iTEE9645aZgtkTkyuauw7bLySi_wgJ7Xzr_lBzIUfIHLSbMf-Zt4zBrE2YEnC4WLD0FeKq5Cav_nZtjnAFTXITSjzK6FVqCfVs91kGmP8SWrLO5rsJn_kpnQp8D4EtK0uqeHkn_gw_8J1Uf9IwwSQwtx8qMI5a3x2GlfDldGq0pk1rQDgPDShBS8jD72OLQsVqfmUC1JWDbwA6YrT2RiCiIM1mBoUKBvC1JVNA02ZuBNgFbUtZJCmisRaaqZsafVkROaNaM0KAFrDI0dxnhY7B56d6IBLdPZZ3lmpROb-Tbw2fqbs_F-Hy17WLjSyAomh2ViHSxTdiG-MnGmKBiwP8F8uZ-qE3lIH89-ifIHlPHL6Dt8i4bttAcYYp6L0MS29Z4BmdtQMDttW2xDMJFa0z3QlEZA_OUvZgtc9ilYO33t_mu-6qNVgo606OD9oBM4pWMpVK4T11htMsTRcI3OtAVy_3aBXUdAHy1BGyyxOGbkmTMTjfjc1QYn0-N3f40al9GaGrX57tW3DJ1EU3p0YAPL8ENiw7xKObzgSZflrPIPsfNlyeOwZMhCgBkUJ_4LV6eu5XPZndFGfZZIQ04Rtgl9sLQqGJuTJ34C71vobauDpKGM6ko233dv-gBEspK27FBMmzsNSXdyhHtEL1QKu9zE8cRDUZOgBFVCzGDZ1i8Mofq27RSu8OkYTYSpOERLJgsV-vF7woRlt9UrTaGJHu2Uq5-ilVPLav8htTOY3uL1rGEqdytGMrhoifhOn7W7hqcPFmK8qZSTmRnnkKVOo5Q_V-GD9pkATSuQRL5jTVirF5hjuvDrYuT1ec5CNjNAGQNkvA0u5YtadaUAzHFod0q4WNjVID3uk2pt7711sfEhEBScsyS8cg8irQ_ZHsnEHTif2VMcyHYFNU9xmNRb61UW0YmKa2EJTZ7X9KW9HeUNS4g"
+            },
+            {
+              "type": "redacted_thinking",
+              "data": "Q-PaDgHbCXtG1GIDHdmEAr7ud32n1o5yBSUUqha64O-Ch2MtZNmYA7zZkROiRDfv6mW9PEqUDh1m4JrFOmpYUYCZQ2Ns5-NNW8XjhY07fvlfqcP4AJseImkii3QY7pIXrPSjOHb6OjweSAL1SHh_bh8sonnUY40gs1Ni3_GaVf1zgqAT7SLHDbWalOkEIbMQ2B0zJvHVKllAK1sh5fo6cCLBn-Q_ydXr1uT1fxwIJ_hMrnV3WJ183QnwAQ95SnXSaF4j37AXk6XRbhvpdcd-4qZKQMafkUbmOvzNPUb_e9o4KPmjGTDhjhYRNXVOJTyV1mpxJffYwCAVpPDCqws1UOooJgexEw4D_aOkNgHq_cyLnNq8MvGgs4_ldRfIB1FtRA_Z6A8eb-xlVJgKPSjqmGB-EU3dzW3xE6c2FBVxKYB8p0WHY2wsp2HtB82xVhKYc19TeDitTHnl-muUhExhC6t3c4RU5fCkjV7HchsCPE2-jLW0-qH6jWsUhN0uSGrgVDLRt1u7WbGgVRCHFSc8C7PXxUsyATPjPXgNF_YOlofUvSjCDCdKru8iGltmXnKjBHJDWv_6QACEjuXYGczaiwv-iwBRTJS-oGD70kklJnfR2mZuVczDuRoh5f2ywJgOSmdUcJBbaC89Cko9xcgrIWNk0jFKshPDAeTBZFxF5tGcdETCh8Aq3v3ndf2GbUgazeHIIAOnNU2wEXUuXaKREWpRsrGbsbEA9NgY0MfHPgNfed7MRgA3qjGo66Bx_o5weG4p-EhV4Mm-OyrS3eK-W4G5Lwb_AUCiD2wKKXBTv0v-n0DhxB7CIq_gC9OQQDT9kdIX9TfXzxfYhkM4RJR2V3H0eJJUWimnmzqX3Gtim1nYaSgohH9e6i8eZk9ht3UaUEqHSpFhcMge1Vx8JPqgU5TuZIO_e6iEon-k9qlNXMRFH6UyKFXtgn6Fst6mFuwQGiZuY5P9hJsX_YPA7nCLhvwqkxXMvxCx1WwQSHY8Ke7YJ_QqhYAgu8EstJSZSvF1BPuauwXcRCOq_0nNzUFAfAX8sujFNMoUQTZwngbsfHGm0IrRD27eYndGGnw3P75z3lrDjJEInK6-hoiL5dMIaZiKoptNF20_woC-pXV3QIVIsaa7yPJtzioMjxU8uW6bgqO8UcZeAvoOjABSQMIJ3vdVCfyuxJqXZKIIEPnBH5lJ92R02gAov4et_UtN1vMX3a9Iwlv8onWMI5SWe7mQAZxM3PnmHajnj-L3UK-MTJ__Ui-PiwKzsOTc64XVq6SWXrNzxsOWWMQTohJSKe_eDPFctIpk-GgFMac3sDPXV-oB_w76jNRQN2fsJH8O-hBlqqA3nZVbcQUUmGITTr7GcEdXMLcX2-S_RSXFL3MFdNE0cz2RkgWC_T0VuUS2BY1ZvU-ekbrCajz6uZWe4w"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_01a0671adb6f7781b3ad2fb9d7453d9f",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_01a0671adb6f7781b3ad2fb9d7453d9f",
+              "content": "Sunny, 22°C"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai/v1/messages 2026-09-03T11-50-08Z, muse-spark-1.3, HTTP 200; turn-1 call get_weather {'city': 'Paris'}, 2 thinking part(s) replayed as thinking blocks; adapter-built wire (AnthropicLM, compat+access 'meta-anthropic'); verbatim body at bodies/meta-anthropic.multi_turn_tool_result/2026-09-03T11-50-08Z.txt; changes/2026-09-03-meta-live.md"
+  },
+  "canonical_request": {
+    "model": "muse-spark-1.3",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Paris? Use the tool."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "thinking",
+            "text": "[redacted]",
+            "redacted": true,
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "redacted_thinking",
+                "data": {
+                  "data": "Q-PaDgH5DB66xnQOxB5BaWpjIlLBJ1CirSxZjsU3JFJiOTLx7Ol7hV2qgDK2kl_MJH9FxYwVtlkAwhCikyJl6HCG_Mv4TWxPsdScq1x9ftGY1F5gQeHNaM2wxmLEzWyGsQjm6A1wH90pXTxv3lLqM0rScXIxwxk6ylevkn-YhRp-jp8A2hs1Fjekt3j80m6ocFQM2mC9eAy4siWeGIKtSFKoyjnMntaWbiFofwvsbnTBCiWqTPMgC7y0Rpczvxb3cdmY9Ouvz3QMW97thLjz3JYTv0PVxdWOvjzUe0cdrJa3acAXyHWvkkLVhjnPHpD4cML_2Xb3FkI2W1vW6AxKFLYUK6P7V_uy4tgGIID4MtvowjLOo02SLPBCfSrPTaB2NvvVHirya4kXdvg8ocwVREngV05x-sXU8GVI2r9RsLgY_M7Ze-YFm7L0XpiVB0yVZ-MTNobccZjAHTnKx0UGzEDYzq1Byesc7L7iTEE9645aZgtkTkyuauw7bLySi_wgJ7Xzr_lBzIUfIHLSbMf-Zt4zBrE2YEnC4WLD0FeKq5Cav_nZtjnAFTXITSjzK6FVqCfVs91kGmP8SWrLO5rsJn_kpnQp8D4EtK0uqeHkn_gw_8J1Uf9IwwSQwtx8qMI5a3x2GlfDldGq0pk1rQDgPDShBS8jD72OLQsVqfmUC1JWDbwA6YrT2RiCiIM1mBoUKBvC1JVNA02ZuBNgFbUtZJCmisRaaqZsafVkROaNaM0KAFrDI0dxnhY7B56d6IBLdPZZ3lmpROb-Tbw2fqbs_F-Hy17WLjSyAomh2ViHSxTdiG-MnGmKBiwP8F8uZ-qE3lIH89-ifIHlPHL6Dt8i4bttAcYYp6L0MS29Z4BmdtQMDttW2xDMJFa0z3QlEZA_OUvZgtc9ilYO33t_mu-6qNVgo606OD9oBM4pWMpVK4T11htMsTRcI3OtAVy_3aBXUdAHy1BGyyxOGbkmTMTjfjc1QYn0-N3f40al9GaGrX57tW3DJ1EU3p0YAPL8ENiw7xKObzgSZflrPIPsfNlyeOwZMhCgBkUJ_4LV6eu5XPZndFGfZZIQ04Rtgl9sLQqGJuTJ34C71vobauDpKGM6ko233dv-gBEspK27FBMmzsNSXdyhHtEL1QKu9zE8cRDUZOgBFVCzGDZ1i8Mofq27RSu8OkYTYSpOERLJgsV-vF7woRlt9UrTaGJHu2Uq5-ilVPLav8htTOY3uL1rGEqdytGMrhoifhOn7W7hqcPFmK8qZSTmRnnkKVOo5Q_V-GD9pkATSuQRL5jTVirF5hjuvDrYuT1ec5CNjNAGQNkvA0u5YtadaUAzHFod0q4WNjVID3uk2pt7711sfEhEBScsyS8cg8irQ_ZHsnEHTif2VMcyHYFNU9xmNRb61UW0YmKa2EJTZ7X9KW9HeUNS4g"
+                }
+              }
+            ]
+          },
+          {
+            "type": "thinking",
+            "text": "[redacted]",
+            "redacted": true,
+            "continuation": [
+              {
+                "provider": "anthropic",
+                "kind": "redacted_thinking",
+                "data": {
+                  "data": "Q-PaDgHbCXtG1GIDHdmEAr7ud32n1o5yBSUUqha64O-Ch2MtZNmYA7zZkROiRDfv6mW9PEqUDh1m4JrFOmpYUYCZQ2Ns5-NNW8XjhY07fvlfqcP4AJseImkii3QY7pIXrPSjOHb6OjweSAL1SHh_bh8sonnUY40gs1Ni3_GaVf1zgqAT7SLHDbWalOkEIbMQ2B0zJvHVKllAK1sh5fo6cCLBn-Q_ydXr1uT1fxwIJ_hMrnV3WJ183QnwAQ95SnXSaF4j37AXk6XRbhvpdcd-4qZKQMafkUbmOvzNPUb_e9o4KPmjGTDhjhYRNXVOJTyV1mpxJffYwCAVpPDCqws1UOooJgexEw4D_aOkNgHq_cyLnNq8MvGgs4_ldRfIB1FtRA_Z6A8eb-xlVJgKPSjqmGB-EU3dzW3xE6c2FBVxKYB8p0WHY2wsp2HtB82xVhKYc19TeDitTHnl-muUhExhC6t3c4RU5fCkjV7HchsCPE2-jLW0-qH6jWsUhN0uSGrgVDLRt1u7WbGgVRCHFSc8C7PXxUsyATPjPXgNF_YOlofUvSjCDCdKru8iGltmXnKjBHJDWv_6QACEjuXYGczaiwv-iwBRTJS-oGD70kklJnfR2mZuVczDuRoh5f2ywJgOSmdUcJBbaC89Cko9xcgrIWNk0jFKshPDAeTBZFxF5tGcdETCh8Aq3v3ndf2GbUgazeHIIAOnNU2wEXUuXaKREWpRsrGbsbEA9NgY0MfHPgNfed7MRgA3qjGo66Bx_o5weG4p-EhV4Mm-OyrS3eK-W4G5Lwb_AUCiD2wKKXBTv0v-n0DhxB7CIq_gC9OQQDT9kdIX9TfXzxfYhkM4RJR2V3H0eJJUWimnmzqX3Gtim1nYaSgohH9e6i8eZk9ht3UaUEqHSpFhcMge1Vx8JPqgU5TuZIO_e6iEon-k9qlNXMRFH6UyKFXtgn6Fst6mFuwQGiZuY5P9hJsX_YPA7nCLhvwqkxXMvxCx1WwQSHY8Ke7YJ_QqhYAgu8EstJSZSvF1BPuauwXcRCOq_0nNzUFAfAX8sujFNMoUQTZwngbsfHGm0IrRD27eYndGGnw3P75z3lrDjJEInK6-hoiL5dMIaZiKoptNF20_woC-pXV3QIVIsaa7yPJtzioMjxU8uW6bgqO8UcZeAvoOjABSQMIJ3vdVCfyuxJqXZKIIEPnBH5lJ92R02gAov4et_UtN1vMX3a9Iwlv8onWMI5SWe7mQAZxM3PnmHajnj-L3UK-MTJ__Ui-PiwKzsOTc64XVq6SWXrNzxsOWWMQTohJSKe_eDPFctIpk-GgFMac3sDPXV-oB_w76jNRQN2fsJH8O-hBlqqA3nZVbcQUUmGITTr7GcEdXMLcX2-S_RSXFL3MFdNE0cz2RkgWC_T0VuUS2BY1ZvU-ekbrCajz6uZWe4w"
+                }
+              }
+            ]
+          },
+          {
+            "type": "tool_call",
+            "id": "call_01a0671adb6f7781b3ad2fb9d7453d9f",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            }
+          }
+        ],
+        "continuation": [
+          {
+            "provider": "anthropic",
+            "kind": "message_id",
+            "data": {
+              "id": "msg_6a995ef0a128ceaa123042fb"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_01a0671adb6f7781b3ad2fb9d7453d9f",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sunny, 22°C"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 600,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-03",
+    "evidence": "authored with the case (research/providers/meta-anthropic/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-03T11-50-08Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  }
+}

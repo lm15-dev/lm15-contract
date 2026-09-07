@@ -1,0 +1,37 @@
+{
+  "id": "meta.image_gen",
+  "provider": "meta",
+  "feature": "image_gen",
+  "surface": "generation",
+  "kind": "image",
+  "description": "Meta Muse Image generation (POST /images/generations; b64_json default; output_format echoes webp when omitted — images--schemas.md)",
+  "base_url": "https://api.meta.ai/v1",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai 2026-09-03T11-42-41Z, muse-image-1.0, HTTP 200; $0.01 per image (pricing-rate-limits.md); usage carries token counts for reference only; adapter-built wire (OpenAILM, compat+access 'meta'); verbatim body at bodies/meta.image_gen/2026-09-03T11-42-41Z.json; changes/2026-09-03-meta-live.md"
+  },
+  "generation_request": {
+    "model": "muse-image-1.0",
+    "prompt": "A simple flat red circle centered on a white background",
+    "size": "1024x1024"
+  },
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/images/generations",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-image-1.0",
+      "prompt": "A simple flat red circle centered on a white background",
+      "size": "1024x1024"
+    }
+  },
+  "pinned_body": "2026-09-03T11-42-41Z.json",
+  "expect": {
+    "status": 200
+  }
+}

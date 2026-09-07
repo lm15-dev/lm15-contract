@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-09-04T15:04:42.334121+00:00",
+  "embeddings": {
+    "status": 200,
+    "wire": "/openai/v1/embeddings",
+    "deployment": "text-embedding-3-small",
+    "count": 1,
+    "dimensions": 1536,
+    "usage": {
+      "prompt_tokens": 5,
+      "total_tokens": 5
+    }
+  },
+  "transcription": {
+    "status": 200,
+    "wire": "/openai/deployments/{deployment}/audio/transcriptions?api-version=2025-04-01-preview",
+    "deployment": "gpt-4o-mini-transcribe",
+    "input_media_type": "audio/wav",
+    "input_bytes": 69644,
+    "response": {
+      "text": "Hello from Willem XV.",
+      "usage": {
+        "type": "tokens",
+        "total_tokens": 21,
+        "input_tokens": 14,
+        "input_token_details": {
+          "text_tokens": 0,
+          "audio_tokens": 14
+        },
+        "output_tokens": 7
+      }
+    },
+    "v1_result": "404 DeploymentNotFound despite deployment; this resource serves transcription only on the deployment-scoped API-version route"
+  },
+  "finding": "service reachability proof only: lm15 has no canonical embedding or transcription surface"
+}

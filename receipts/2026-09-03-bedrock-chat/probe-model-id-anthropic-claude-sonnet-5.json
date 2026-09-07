@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T121304Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-sonnet-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 403,
+  "body": {
+    "error": {
+      "message": "anthropic.claude-sonnet-5 is not available for this account. You can explore other available models on Amazon Bedrock. For additional access options, contact AWS Sales at https://aws.amazon.com/contact-us/sales-support/",
+      "type": "permission_denied_error",
+      "param": null,
+      "code": "access_denied"
+    }
+  },
+  "timestamp": "2026-09-04T12-13-04Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "f51fc44a-aa29-445a-a04b-322c12af8c33"
+  }
+}

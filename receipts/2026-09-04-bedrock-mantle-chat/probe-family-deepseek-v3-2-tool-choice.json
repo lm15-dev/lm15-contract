@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135427Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "deepseek.v3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{ \"city\": \"ok\" } ",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-a9dfe6716445173b",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788530067,
+    "id": "chatcmpl-c76d7f6e-bf49-4f1d-8885-2b55781dc205",
+    "model": "deepseek.v3.2",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 24,
+      "prompt_tokens": 307,
+      "total_tokens": 331
+    }
+  },
+  "timestamp": "2026-09-04T13-54-27Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_6mouqeksj4nlclihjxwrnrbnfpve6d4ntniyay3cyfc3appiqxiq"
+  }
+}

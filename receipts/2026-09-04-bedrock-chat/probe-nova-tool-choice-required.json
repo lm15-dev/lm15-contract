@@ -1,0 +1,62 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132605Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #: extraneous key [tools] is not permitted, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "20065d1e-b533-458c-92d7-0d0149059649"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "model": "deepseek.v3.2",
+  "sent": {
+    "model": "deepseek.v3.2",
+    "max_completion_tokens": 60,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say ok."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      }
+    ],
+    "tool_choice": "required"
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\n            \"city\": \"any\"\n        }\n     ",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-8613fe5c7ac5a7dd",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788523461,
+    "id": "chatcmpl-76325409-ebd4-492c-9886-58b0ac1b48b8",
+    "model": "deepseek.v3.2",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 30,
+      "prompt_tokens": 307,
+      "total_tokens": 337
+    }
+  },
+  "timestamp": "2026-09-04T12-04-21Z"
+}

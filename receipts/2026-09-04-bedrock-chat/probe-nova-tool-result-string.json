@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132606Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "Weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": "Sunny, 22°C"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #/messages/2/content: expected type: JSONArray, found: String, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "2d26608c-817e-4ffa-943e-689a346a5c62"
+  }
+}

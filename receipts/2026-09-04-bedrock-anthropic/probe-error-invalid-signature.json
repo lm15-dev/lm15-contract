@@ -1,0 +1,44 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.ap-northeast-1.api.aws/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "host": "bedrock-mantle.ap-northeast-1.api.aws",
+      "x-amz-date": "20260904T122753Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "type": "error",
+    "request_id": "req_helnddyo3rbgqp2khf6qm6rr6r75mdfspfrbbqrrxsm754igk67q",
+    "error": {
+      "type": "authentication_error",
+      "message": "The security token included in the request is invalid."
+    }
+  },
+  "timestamp": "2026-09-04T12-27-53Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_helnddyo3rbgqp2khf6qm6rr6r75mdfspfrbbqrrxsm754igk67q"
+  }
+}

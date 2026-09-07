@@ -1,0 +1,285 @@
+{
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-03",
+  "evidence": "changes/2026-09-03-cloud-hosts.md; spec/auth.md AUTH-11 (jwt-rs256) and AUTH-1 (gcp-chain service_account, azure-chain environment certificate). Claim sets and lifetimes from the resolver sources frozen under research/cloud-hosts/sources/: google-auth service_account.py:393-420 (iat, exp=iat+3600, iss, aud=https://oauth2.googleapis.com/token, scope) and jwt.py:75-107 (header typ/alg/kid); MSAL assertion.py:99-118 (aud, iss, sub, exp=iat+600, iat, jti; x5t header = base64url SHA-1 of the DER certificate); Google doc gcp-service-account-oauth.md:240-333 (RS256 is the only algorithm; grant_type jwt-bearer); Entra doc entra-client-credentials.md:151-168 (client_assertion form). Signed with auth/test-keys/rsa-2048-test-only.pem via openssl dgst -sha256 -sign (RSASSA-PKCS1-v1_5)."
+ },
+ "description": "RS256 assertion and token-exchange vectors (--direction token). lm15 pins ONE JWT serialization: header and payload as compact JSON (no spaces) with keys in the order shown, base64url without padding, RSASSA-PKCS1-v1_5/SHA-256 over '<header>.<payload>'. The servers accept any valid JSON (RFC 7519); the pinned order is lm15's canonical fact so that four ports produce identical bytes. Every value here is fake: the key is the corpus test key, the tenant/client/project ids are placeholders, the response tokens are plain marker strings. 'now' is the fixed clock the shim must use. A value of the form {\"$file\": <repo path>, \"strip_comment_lines\"?: true} is expanded by the HARNESS to that file's contents (dropping lines that start with '#' when asked) before the op is sent; the shim never reads the repository.",
+ "now": "2026-09-03T12:00:00Z",
+ "test_key": {
+  "private_key_path": "auth/test-keys/rsa-2048-test-only.pem",
+  "certificate_path": "auth/test-keys/rsa-2048-test-only.cert.pem",
+  "x5t": "R9rMoNGqSMT-5Is4b6lgdOaNcW0"
+ },
+ "cases": [
+  {
+   "id": "gcp-service-account.build",
+   "provider": "vertex",
+   "rung": "adc-env",
+   "input": {
+    "credential_file": {
+     "type": "service_account",
+     "project_id": "lm15-test-project",
+     "private_key_id": "lm15testkeyid0001",
+     "private_key": {
+      "$file": "auth/test-keys/rsa-2048-test-only.pem",
+      "strip_comment_lines": true
+     },
+     "client_email": "lm15-test@lm15-test-project.iam.gserviceaccount.com",
+     "client_id": "100000000000000000001",
+     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+     "token_uri": "https://oauth2.googleapis.com/token",
+     "universe_domain": "googleapis.com"
+    },
+    "scope": "https://www.googleapis.com/auth/cloud-platform"
+   },
+   "expect": {
+    "jwt": {
+     "header": {
+      "alg": "RS256",
+      "typ": "JWT",
+      "kid": "lm15testkeyid0001"
+     },
+     "payload": {
+      "iat": 1788436800,
+      "exp": 1788440400,
+      "iss": "lm15-test@lm15-test-project.iam.gserviceaccount.com",
+      "aud": "https://oauth2.googleapis.com/token",
+      "scope": "https://www.googleapis.com/auth/cloud-platform"
+     },
+     "compact": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxtMTV0ZXN0a2V5aWQwMDAxIn0.eyJpYXQiOjE3ODg0MzY4MDAsImV4cCI6MTc4ODQ0MDQwMCwiaXNzIjoibG0xNS10ZXN0QGxtMTUtdGVzdC1wcm9qZWN0LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLCJzY29wZSI6Imh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvY2xvdWQtcGxhdGZvcm0ifQ.bhhPzzBMvjuFVDE87H4hzlkqjOJv40cubzqKs_lIoq6m8opHNlYd3BPzgmtxqnl7NwggKGb9AzOvKvkveYexjSYDOBKh3BGZdK0CO8DGOWIZ6xpDL8IQ6DWtWQ-GKNU2cVppfgRxIPlQonzwCbYMR4Ny3issyBMwHCQjYAhHN_gAaYVMQ07wsGe5TenWfagYIzZTDpFS0pfGZrAP-CEsmrJeRGR_hOKzxk3DHovipyKmspGqN8yTop5ciW2SX4MBpR2KlLH-8kRZ6bLwANx1p9SEH1E-c_7XkRx3-3ppduOdHNDPrQ5HRBZ_iCgpLgMrVp4PsDEKN54Ooo1-YUw-eQ"
+    },
+    "request": {
+     "method": "POST",
+     "url": "https://oauth2.googleapis.com/token",
+     "headers": {
+      "content-type": "application/x-www-form-urlencoded"
+     },
+     "body_encoding": "form",
+     "body": {
+      "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      "assertion": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImxtMTV0ZXN0a2V5aWQwMDAxIn0.eyJpYXQiOjE3ODg0MzY4MDAsImV4cCI6MTc4ODQ0MDQwMCwiaXNzIjoibG0xNS10ZXN0QGxtMTUtdGVzdC1wcm9qZWN0LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLCJzY29wZSI6Imh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL2F1dGgvY2xvdWQtcGxhdGZvcm0ifQ.bhhPzzBMvjuFVDE87H4hzlkqjOJv40cubzqKs_lIoq6m8opHNlYd3BPzgmtxqnl7NwggKGb9AzOvKvkveYexjSYDOBKh3BGZdK0CO8DGOWIZ6xpDL8IQ6DWtWQ-GKNU2cVppfgRxIPlQonzwCbYMR4Ny3issyBMwHCQjYAhHN_gAaYVMQ07wsGe5TenWfagYIzZTDpFS0pfGZrAP-CEsmrJeRGR_hOKzxk3DHovipyKmspGqN8yTop5ciW2SX4MBpR2KlLH-8kRZ6bLwANx1p9SEH1E-c_7XkRx3-3ppduOdHNDPrQ5HRBZ_iCgpLgMrVp4PsDEKN54Ooo1-YUw-eQ"
+     }
+    }
+   }
+  },
+  {
+   "id": "gcp-service-account.parse",
+   "provider": "vertex",
+   "rung": "adc-env",
+   "input": {
+    "status": 200,
+    "body": {
+     "access_token": "TOKEN-VECTOR-GCP-NOT-A-SECRET",
+     "expires_in": 3599,
+     "token_type": "Bearer"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "bearer_token",
+     "value": "TOKEN-VECTOR-GCP-NOT-A-SECRET",
+     "expires_at": "2026-09-03T12:59:59Z"
+    }
+   }
+  },
+  {
+   "id": "azure-certificate.build",
+   "provider": "azure",
+   "rung": "environment",
+   "input": {
+    "env": {
+     "AZURE_TENANT_ID": "11111111-2222-3333-4444-555555555555",
+     "AZURE_CLIENT_ID": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+     "AZURE_CLIENT_CERTIFICATE_PATH": "auth/test-keys/rsa-2048-test-only.pem"
+    },
+    "certificate_pem": {
+     "$file": "auth/test-keys/rsa-2048-test-only.cert.pem"
+    },
+    "jti": "0f0f0f0f-0000-4000-8000-0f0f0f0f0f0f",
+    "settings": {
+     "authority_host": "https://login.microsoftonline.com",
+     "scope": "https://ai.azure.com/.default"
+    }
+   },
+   "expect": {
+    "jwt": {
+     "header": {
+      "alg": "RS256",
+      "typ": "JWT",
+      "x5t": "R9rMoNGqSMT-5Is4b6lgdOaNcW0"
+     },
+     "payload": {
+      "aud": "https://login.microsoftonline.com/11111111-2222-3333-4444-555555555555/oauth2/v2.0/token",
+      "iss": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "sub": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "exp": 1788437400,
+      "iat": 1788436800,
+      "jti": "0f0f0f0f-0000-4000-8000-0f0f0f0f0f0f"
+     },
+     "compact": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsIng1dCI6IlI5ck1vTkdxU01ULTVJczRiNmxnZE9hTmNXMCJ9.eyJhdWQiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vMTExMTExMTEtMjIyMi0zMzMzLTQ0NDQtNTU1NTU1NTU1NTU1L29hdXRoMi92Mi4wL3Rva2VuIiwiaXNzIjoiYWFhYWFhYWEtYmJiYi1jY2NjLWRkZGQtZWVlZWVlZWVlZWVlIiwic3ViIjoiYWFhYWFhYWEtYmJiYi1jY2NjLWRkZGQtZWVlZWVlZWVlZWVlIiwiZXhwIjoxNzg4NDM3NDAwLCJpYXQiOjE3ODg0MzY4MDAsImp0aSI6IjBmMGYwZjBmLTAwMDAtNDAwMC04MDAwLTBmMGYwZjBmMGYwZiJ9.OD2c_WCLC8RvG_F556KoKWsMZO8ecX5aSkkoMc4OIy204_Qinz7BX8oFJoL_w0WeqsXcEALfMdp3DbQVP0aq8ocp1CAYhUP-cJD3zfbvo58e-NNHrKg59QJ0jRDRjQsgb6VHx56RIf2vOLNlGdo3ASKhl70zTFVEkuGdLRiE2odquK2DpOCnNXNIRuIYJbwy9iJhFfUJPyxiAHMzxV4mLF0lWge8vGyit-PrJOp-xh-m4qVUOE08FGG5CWRjUqnOEPIZ2gb11vBCOtz0fZ0zQ0F1IUE_BraFT-FKf3NAaS4xVCdPy09cyfh_mhVgeFOk12bpg9rOsfdXO0CWz19H5w"
+    },
+    "request": {
+     "method": "POST",
+     "url": "https://login.microsoftonline.com/11111111-2222-3333-4444-555555555555/oauth2/v2.0/token",
+     "headers": {
+      "content-type": "application/x-www-form-urlencoded"
+     },
+     "body_encoding": "form",
+     "body": {
+      "client_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "scope": "https://ai.azure.com/.default",
+      "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+      "client_assertion": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsIng1dCI6IlI5ck1vTkdxU01ULTVJczRiNmxnZE9hTmNXMCJ9.eyJhdWQiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vMTExMTExMTEtMjIyMi0zMzMzLTQ0NDQtNTU1NTU1NTU1NTU1L29hdXRoMi92Mi4wL3Rva2VuIiwiaXNzIjoiYWFhYWFhYWEtYmJiYi1jY2NjLWRkZGQtZWVlZWVlZWVlZWVlIiwic3ViIjoiYWFhYWFhYWEtYmJiYi1jY2NjLWRkZGQtZWVlZWVlZWVlZWVlIiwiZXhwIjoxNzg4NDM3NDAwLCJpYXQiOjE3ODg0MzY4MDAsImp0aSI6IjBmMGYwZjBmLTAwMDAtNDAwMC04MDAwLTBmMGYwZjBmMGYwZiJ9.OD2c_WCLC8RvG_F556KoKWsMZO8ecX5aSkkoMc4OIy204_Qinz7BX8oFJoL_w0WeqsXcEALfMdp3DbQVP0aq8ocp1CAYhUP-cJD3zfbvo58e-NNHrKg59QJ0jRDRjQsgb6VHx56RIf2vOLNlGdo3ASKhl70zTFVEkuGdLRiE2odquK2DpOCnNXNIRuIYJbwy9iJhFfUJPyxiAHMzxV4mLF0lWge8vGyit-PrJOp-xh-m4qVUOE08FGG5CWRjUqnOEPIZ2gb11vBCOtz0fZ0zQ0F1IUE_BraFT-FKf3NAaS4xVCdPy09cyfh_mhVgeFOk12bpg9rOsfdXO0CWz19H5w",
+      "grant_type": "client_credentials"
+     }
+    }
+   }
+  },
+  {
+   "id": "azure-certificate.parse",
+   "provider": "azure",
+   "rung": "environment",
+   "input": {
+    "status": 200,
+    "body": {
+     "token_type": "Bearer",
+     "expires_in": 3599,
+     "ext_expires_in": 3599,
+     "access_token": "TOKEN-VECTOR-AZURE-NOT-A-SECRET"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "bearer_token",
+     "value": "TOKEN-VECTOR-AZURE-NOT-A-SECRET",
+     "expires_at": "2026-09-03T12:59:59Z"
+    }
+   }
+  },
+  {
+   "id": "azure-secret.build",
+   "provider": "azure",
+   "rung": "environment",
+   "input": {
+    "env": {
+     "AZURE_TENANT_ID": "11111111-2222-3333-4444-555555555555",
+     "AZURE_CLIENT_ID": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+     "AZURE_CLIENT_SECRET": "CLIENT-SECRET-VECTOR-NOT-A-SECRET"
+    },
+    "settings": {
+     "authority_host": "https://login.microsoftonline.com",
+     "scope": "https://ai.azure.com/.default"
+    }
+   },
+   "expect": {
+    "request": {
+     "method": "POST",
+     "url": "https://login.microsoftonline.com/11111111-2222-3333-4444-555555555555/oauth2/v2.0/token",
+     "headers": {
+      "content-type": "application/x-www-form-urlencoded"
+     },
+     "body_encoding": "form",
+     "body": {
+      "client_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "scope": "https://ai.azure.com/.default",
+      "client_secret": "CLIENT-SECRET-VECTOR-NOT-A-SECRET",
+      "grant_type": "client_credentials"
+     }
+    }
+   }
+  },
+  {
+   "id": "azure-msi-imds.parse",
+   "provider": "azure",
+   "rung": "managed-identity",
+   "input": {
+    "status": 200,
+    "body": {
+     "access_token": "TOKEN-VECTOR-MSI-NOT-A-SECRET",
+     "expires_in": "3599",
+     "expires_on": "1788440399",
+     "resource": "https://ai.azure.com/",
+     "token_type": "Bearer"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "bearer_token",
+     "value": "TOKEN-VECTOR-MSI-NOT-A-SECRET",
+     "expires_at": "2026-09-03T12:59:59Z"
+    }
+   }
+  },
+  {
+   "id": "gcp-metadata.parse",
+   "provider": "vertex",
+   "rung": "metadata",
+   "input": {
+    "status": 200,
+    "body": {
+     "access_token": "TOKEN-VECTOR-GCE-NOT-A-SECRET",
+     "expires_in": 3599,
+     "token_type": "Bearer"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "bearer_token",
+     "value": "TOKEN-VECTOR-GCE-NOT-A-SECRET",
+     "expires_at": "2026-09-03T12:59:59Z"
+    }
+   }
+  },
+  {
+   "id": "aws-credential-process.parse",
+   "provider": "bedrock-anthropic",
+   "rung": "credential_process",
+   "input": {
+    "status": 0,
+    "body": {
+     "Version": 1,
+     "AccessKeyId": "AKIDEXAMPLE",
+     "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "SessionToken": "SESSION-VECTOR-NOT-A-SECRET",
+     "Expiration": "2026-09-03T13:00:00Z"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "aws",
+     "access_key_id": "AKIDEXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "session_token": "SESSION-VECTOR-NOT-A-SECRET",
+     "expires_at": "2026-09-03T13:00:00Z"
+    }
+   }
+  },
+  {
+   "id": "aws-imds.parse",
+   "provider": "bedrock-anthropic",
+   "rung": "imds",
+   "input": {
+    "status": 200,
+    "body": {
+     "Code": "Success",
+     "LastUpdated": "2026-09-03T11:55:00Z",
+     "Type": "AWS-HMAC",
+     "AccessKeyId": "AKIDEXAMPLE",
+     "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "Token": "SESSION-VECTOR-NOT-A-SECRET",
+     "Expiration": "2026-09-03T18:00:00Z"
+    }
+   },
+   "expect": {
+    "credential": {
+     "kind": "aws",
+     "access_key_id": "AKIDEXAMPLE",
+     "secret_access_key": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "session_token": "SESSION-VECTOR-NOT-A-SECRET",
+     "expires_at": "2026-09-03T18:00:00Z"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,96 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "auto",
+        "disable_parallel_tool_use": true
+      },
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "content": [
+      {
+        "data": "Q-PaDgEiZkgEtLidt_rFiXawTYZVHyzUOQsDHl7FXX7mGQxBUMnt0PYUP7dPDGcJP0DzzFuhAXxP8mbHG6JJmv1fQ9h7Cug_xefuizREFfJV-pT56sbBKfu1GsRTxJb2Ew-CLktN2jyYukGyZH0Ojap6rSwzTN7JNBFLVAeIxI8hyVXTD3dUEesDgmVOtIxoQfhxlCEkg6srhIF_rgVtlLDblafx5hPwy9kj3_-41s9i8ot9kafZXiZ0VKQBqY9TobIHn9CoSWcU0RVWDMRYqV_0h5Ybk7LFHVfwtt5t7Y9rgKMjJO9lbuKOF4w59N_UrAd9ciFDQ0i39ftnnmaO5XNGvHIkLs1JKOXEIZ52FBieALSQLjY8qTPI4IelrdOhdY8GqKZGM1RUdUeDr2LJ197YxUEfzwJ9MgQH8Aooi2byRThH4dSQKvmGNAkIJbWUBAtQ37wW7TTeLBQc4UJ6HvcCh1V3FAL0aUyd6qM2DGdDG2O0ddyrvCOcP4-cMxAz1NziO3DjfdndBsU5buvJpmH4hsJOL4h5OM5i_dwch0tkPuhPN6lGesOtkaWgolw0hYK_LeJ5A_eCYdtGQLFPFnrBPduiPKsNJO1Q7641ATlkLFHsXO-GDA_2F6cVDtLvqrhvKcKW5efidi8xVZaaftrmoxEWxIX7PdSb8yz2yRsKE2PCVgh_o8cil1tfapgYC8oeX2UH5A0yxYb1zarZKVKXzfpTCNpOP2y1DUIBAiJXADJ0vCAwCmGoHnW9zIWvwZKFF6GoAch5asjR1x_zkKSi9IxBcuJ8lbdb6kgK2iNahQeXR7wEeZlyufg4kwQ09hxND6Pbh-Q04NnRR7pMBPNmZ7C_khS0KPdQgOjWldtk-vz7K_sX52KuarhfHwbCtvxK5zeRJmKExTNvoURiUkptKpl29iMZcKpPJpjAHb4ARuyQRYzLtCsIIrBx1hiy87FS8srHoN9P_ae_H1AGGSrh8NjH537xk8Urs5dKVp_iH00eSLRXqgjsJn9EWr5cl3geAW7OG_N_qPQlMZH833uAf9osR20fN4500BEsxM4M2dlN7hC_Dodet_21bUVEAllVA65-JkLsPjhQ5MEutBpyC4NK4nVRArhBGHoQJIkIBv5DzyL1yhbscDzZzgWuolZ1FSnF1w56-UM9sKKJTGsTcW_LJ-Bsrq1R8N9334dbfBs-sjhwxYOJsf8ZbYgeOq-ARgdn5M29abhPAD_eS5F8z3uIAI-o9Eyr6LQBuqQwcKEmlDZQx_4PeL8lAvPcS5iBotaWI1DaSXJtSWrUh8kpjx9avpqmc5dxyJ-GkO_hAs81Co1LP7L_uBZ7Kt49tsfOTQfpZDw0CkRu5knRdIoUUrFUD7yiMAiOkbam6TJV2gCRe2HvlTYfjJG0z2x_Y7gKgNOPZTLVHhm91g",
+        "type": "redacted_thinking"
+      },
+      {
+        "data": "Q-PaDgHeXfvA0CUHViY7fXc5gvthE2ERrQZwBY8pyRhPk1EomQa5-QJzxUsOZ8r_-GpxWezN-O-hJHb9QPiyGrnEZKW5jHXtBRW8IpEYarcAYBVkhRH6sfHdm6xOqeJH81dJbLisVCV8fsp8fBuuwAlCTz8O15vAOoDfN0cquTbCxNxNqXOYO5gI-raA1GemFu0DxGxkTXLhmWg6uUSy3xeIR4fHmhj_di0-XHyrkRGRL8FSktx6Sy6Im39TIDtdQW9Nf7kx6pi607RoNOZZa-pMzzS198YS15sYjZpFz80EOWxT0277HyV--HxkOrMUHUR696HKhCL7E0CJ40dx_gnuG_z3PC-HDIJu15ZVBkSwqAkzGCBseDB5-KTBaiZBehP75tZMoSg1-pUl7P3x3dswiUk7e-bUxBGgYR_L0xrQM2M5wFKdoBSyM_NOmnZNOVnHuTThgbKdSf-_z9t2NMhunWrKBk4q_EhEd0HzT3Smr70EWqGbVh2ljiOMhYBG7V18UYk5I1PZqtf-eCJ-rp1rD80Zt__2aqWiUxiTK0wwNPQpIVKXXPvfAF-y5AIWB6Iy4OVlyjeY6OTthmcnakfh5oXcz0VYTlDmtldF651f7Z-xtxDILDAr34CmG254ar-qv-lzW4K44na8OUwF-IVCl7bnwp67DCrCInY4IpBPUDqufzPgt_DEGQ_9cDkgD6_i8cDSWrEDTHMidZJaqzFMxyNWzaehI52BHmT1_BlkA974XGwtWwZOYyET02ZS58jOcsc8T8ATxDkZDrdux3Kq8J6Z0AiySlQ_F4sbTuCCMwYbivP2SNyFZxUc6a0tk5kLldLabKMGqbi614m58F2HqTxx90KCRAlLUi5JRR4GDt1gR7ymrXe3Rc8X5rE5f-uDh7991MEQF7f-ShdY-iI48czmmK6aMyNf8ctEK8umiL8P06KIom4H30NapqN-npn3Id1CWZ9vBfzGzTorSd-Oui-bSoYMx0ALoo3ed7JZeXNxSElu-BT0G1ukF60v71JpxkfqukOPVfmFyvcDmIoEddqOOihRqoxYwWfeVG0SCGAHRjKkp0zoiymvPSBBE0ftLtCOPfgwtsq9UmQtoLg4tIOPvRXMZm9jXTJj0vzJyXuz7hIX9HCYiPFPH1OYqV_5JY4nr58H7V5N4i_DpspSOy456m3Igu4-pyA2a3pkNVt5pVN4msaKRN4aiN1mkUlba8TLSu5omZuqLbBBioQ-GUX8jKA-aE9slk0CB6x-fVzT39e4aKTnsdNfuWzPBcR7nFVLnAg__3P_UkHwPTSifPAbhuxhScdjB43pYlAwqCHTL33YTK_tUKp44Q6QitZ4b0SkwyyMvD8D9liCRpZoNMY_fIm4PJwv_xC-DACLF_XLgP6URV7QvnR1N97Zug1cXldQskBnkoWfmw",
+        "type": "redacted_thinking"
+      },
+      {
+        "id": "call_01a0671bf5b47c92ba87c96c30d02a5b",
+        "input": {
+          "city": "Paris"
+        },
+        "name": "get_weather",
+        "type": "tool_use"
+      }
+    ],
+    "id": "msg_6a995f381e823bb502044e5c",
+    "model": "muse-spark-1.3",
+    "role": "assistant",
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "type": "message",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 497,
+      "input_tokens": 48,
+      "output_tokens": 105,
+      "output_tokens_details": {
+        "thinking_tokens": 36
+      }
+    }
+  },
+  "timestamp": "2026-09-03T11-51-20Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "6ea668e0-eded-4351-ba90-a78e24f20d29"
+  }
+}

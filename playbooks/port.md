@@ -28,15 +28,16 @@ when its direction is green with zero skips added, and stays green.
 |---|---|---|
 | 1 | canonical types + serde (`spec/types.md`, `spec/vocabularies.md`, `spec/invariants.md`, `docs/serde-rules.md`) | `--direction serde` (every kind in PROTOCOL.md; `tools/audit.py` reports the count and any uncovered type); `validate` rejects what the invariants reject |
 | 2 | errors (`spec/vocabularies.md` ErrorCode, hierarchy shape) | `--direction error` |
-| 3 | auth (`spec/auth.md` AUTH-1..10: chain, doctor, credential providers, access policies) | `--direction auth`; `auth_resolution.json` |
-| 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (143 cases incl. build-time raises) |
+| 3 | auth (`spec/auth.md` AUTH-1..11: chains, doctor, credential values/providers, access policies, signing, token exchange) | `--direction auth`, `--direction token`; `auth/resolution.json`, `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
+| 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
 | 6 | model listing | `--direction models` |
 | 7 | files, batch, cache surfaces | `--direction files`, `batch`, `cache` |
 | 8 | generation (image, speech) and video | `--direction generation`, `video` |
 | 9 | live (websocket transcripts) | `--direction live` |
 
-Modules 1–5 are the frozen core and gate the 1.0 tag for every language.
+Modules 1–5 form the required core and gate the 1.0 tag for every language.
+Their exact scope follows the pinned contract, including ratified amendments.
 Modules 6–9 ship where the language's ecosystem makes them reasonable;
 a port that does not implement one answers `ok: false` with
 `UnsupportedFeatureError` for its ops and declares it in its README.
@@ -84,8 +85,10 @@ Shared decisions so ports look like one family:
   equivalent) obeying the omission rule; constructors validate the
   invariants (INV-*), so serde input gets the same checks.
 - Credential provider: zero-arg callable (Python/TS/Julia), single-method
-  interface (Go/Rust). Invoked at request-build time, never cached by the
-  adapter (AUTH-2).
+  interface (Go/Rust). It returns an AUTH-2 credential value (`ApiKey`,
+  `BearerToken`, or `AwsCredentials`); a string is the API-key shorthand.
+  The adapter invokes it at request-build time and never caches its result.
+  A chain provider owns token caching under AUTH-3.
 - Access policy (AUTH-10): a value; the dialect consults it at the named
   points; subscription "adapters" are constructors that bind a policy.
 - Errors: the class hierarchy SHAPE is replicated; the mechanism is

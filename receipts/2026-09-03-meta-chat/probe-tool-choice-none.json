@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none",
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "only `\"auto\"` is supported for `tool_choice`. `\"none\"`, `\"required\"`, and named function choices are not currently supported",
+      "param": "tool_choice",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-49-30Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "46389a3c-19ab-4f97-8b7b-6e28b049f0dc"
+  }
+}

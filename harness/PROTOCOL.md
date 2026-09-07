@@ -86,6 +86,30 @@ Shims that predate this field treat unknown fields per JSON convention
 (ignore), so the addition is backward compatible only for cases that do not
 declare it — cases that DO declare `base_url` require a shim that honors it.
 
+`credential`, `now`, `settings` (additive, 2026-09-03,
+changes/2026-09-03-cloud-hosts.md): on every op that today takes
+`api_key`, the harness MAY instead send `credential`, a spec/auth.md
+AUTH-2 value — `{"kind":"api_key","value"}`,
+`{"kind":"bearer_token","value","expires_at"?}`, or
+`{"kind":"aws","access_key_id","secret_access_key","session_token"?}`.
+`api_key: str` remains as shorthand for the first form. `now` (RFC 3339,
+UTC) is the clock the shim MUST use for every time-dependent byte
+(`x-amz-date`, JWT `iat`/`exp`, credential scope); a shim that reads the
+wall clock fails the cloud-host cases. `settings` is
+`{"region"?, "workspace"?, "project"?, "location"?, "resource"?,
+"authority_host"?, "scope"?}` (AUTH-10); the shim constructs the adapter
+with exactly these and reads no environment. For `sigv4` the harness
+compares `authorization`, `x-amz-date`, and `x-amz-security-token`
+exactly; the fixed keys are the AWS test-suite pair
+`AKIDEXAMPLE` / `wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY`
+(`auth/sigv4-vectors.json`). When a case pins a string-kind `credential`
+(`api_key` / `bearer_token`; first case 2026-09-04,
+`bedrock-chat.bearer_basic_text`), the harness sends that value and
+compares the auth header byte for byte — no rewrite to the injected
+`api_key` — so the scheme the credential kind selects (AUTH-2 table:
+`bearer` vs the door's key header) is what the case pins. When both
+`api_key` and `credential` arrive, `credential` wins.
+
 ### parse_response
 In: `{"provider": str, "canonical_request": <Request JSON>, "status": int, "body_b64": str}`
 Out: `{"canonical_response": <Response JSON>}`
@@ -104,6 +128,11 @@ Refusal (MAP-9, a tool call whose fragments never carried a name):
 - `events` is the full canonical event trace, in order, serialized with the
   canonical stream-event serde. `canonical_response` is the materialized
   final Response (same rules as parse_response).
+- `framing` (additive, 2026-09-03; phase-2 `bedrock` only): when a case
+  declares `"framing": "aws-event-stream"`, the body is the raw binary
+  event stream (base64 in `body_b64`) and the shim decodes it with its
+  event-stream decoder before the dialect sees the events. Absent means
+  SSE.
 
 ### normalize_error
 In: `{"provider": str, "status": int, "body_text": str}`
@@ -149,15 +178,68 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
     `oauth-unless-explicit` providers such as xai), with the sentinel as
     every secret value.
 - `steps` carries the language-neutral `kind` vocabulary of the fixture
-  (`api_keys`, `env:<VAR>`, `placeholder`, `oauth-file`) and the AUTH-7
-  states (`selected`, `shadowed`, `absent`), in chain order.
+  (`api_keys`, `env:<VAR>`, `placeholder`, `oauth-file`, and for cloud
+  chains the AUTH-1 rung names: `assume-role`, `web-identity`, `sso`,
+  `shared-credentials-file`, `login`, `credential_process`, `config-file`,
+  `container`, `imds`, `environment`, `workload-identity`,
+  `managed-identity`, `az`, `pwsh`, `azd`, `adc-env`, `adc-file`,
+  `metadata`, `gcloud`) and the AUTH-7 states (`selected`, `shadowed`,
+  `absent`, `unprobed`), in chain order.
+- `files` (additive, 2026-09-03): `{"<path>": "<content>"}` materialized by
+  the HARNESS under a sandbox HOME before the op (`~/.aws/config`,
+  `~/.aws/credentials`, `~/.aws/sso/cache/<name>.json`,
+  `~/.config/gcloud/application_default_credentials.json`, …), with the
+  sentinel as every secret value. Every key must begin with `~/` and stay
+  inside the sandbox HOME (absolute paths and traversal are rejected); the
+  harness passes that HOME in `env.HOME`. The shim reads only paths named
+  here or derived from `env`; it never touches the real home directory.
+- `settings` (additive, 2026-09-03): as on `build_request`; the report
+  renders the resolved host settings by name and value (AUTH-7).
 - `report_text` is the implementation's full human rendering of the report
   (every rendered surface concatenated). It must be a non-empty string: the
   harness enforces AUTH-5 by asserting the sentinel appears nowhere in the
   ENTIRE reply, and an empty rendering would give that check nothing to
   inspect.
-- The op performs no network I/O and no writes; reading the harness-given
-  `credentials_path` is the only file access.
+- The op performs no network I/O and no writes; file reads are limited to
+  the harness-given `credentials_path` and sandbox `files` above.
+
+### token_exchange_build
+In: `{"provider": str, "input": <chain-rung input object>, "now": str, "settings": {…}, "rung": str}`
+Out: `{"method": str, "url": str, "headers": {str: str}, "body": <JSON|str|null>, "body_encoding": "json"|"form"}`
+- (Added 2026-09-03.) The exact request a rung of kind
+  `http-token-exchange`, `sigv4-sts`, `unsigned-sts`, or `jwt-rs256`
+  would send, under the fixed clock `now`. For `jwt-rs256` the input
+  carries the credential file contents (`service_account` JSON with the
+  corpus test key, or `{"tenant_id","client_id","certificate_pem"}`), and
+  the JWT in the body is compared byte for byte (RS256 is deterministic).
+  Drives `--direction token`; fixtures in `auth/token-vectors.json`.
+  Fixture values of the form `{"$file": "<repo path>", "strip_comment_lines"?: true}`
+  are expanded by the harness to the file's contents before the op is
+  sent. Paths must be relative, stay inside the contract (including after
+  symlink resolution), and cannot name environment files. The corpus test
+  key lives at one path, `auth/test-keys/`, and is never duplicated into a
+  JSON fixture. For certificate vectors the harness also supplies
+  `input.private_key_pem` from the corpus test key. lm15 pins one JWT serialization:
+  compact JSON, keys in the fixture's order, base64url unpadded — a
+  canonical fact, so four ports emit identical bytes.
+
+### sigv4_sign
+In: `{"request": {"method": str, "url": str, "headers": {str: str|[str]}, "body": str}, "credential": <aws credential>, "region": str, "service": str, "now": str}`
+Out: `{"canonical_request": str, "string_to_sign": str, "authorization": str, "headers": {str: str}}`
+- (Added 2026-09-03.) The AWS test suite (`auth/sigv4-vectors.json`)
+  through the port's signer, all three stages byte for byte. The harness
+  passes the vector's request headers verbatim, including any pinned
+  `host`, `x-amz-date` or `x-amz-security-token`; it also supplies the
+  fixed clock and credential (including the vector's session token).
+  The signer derives missing signing headers from those inputs.  Drives `--direction token` together with the two
+  `token_exchange_*` ops.
+
+### token_exchange_parse
+In: `{"provider": str, "rung": str, "status": int, "body": <JSON object or str>, "now": str}`
+Out: `{"ok": true, "credential": <AUTH-2 value>}` or `{"ok": false, "error": {"class": str, "code": str}}`
+- (Added 2026-09-03.) The credential a rung produces from a pinned
+  response body (`access_token`/`expires_in`, STS XML/JSON, IMDS JSON,
+  `credential_process` JSON…). `expires_at` is derived from `now`.
 
 ### build_models_request
 In: `{"provider": str, "api_key": str, "base_url"?: str}`
@@ -311,9 +393,10 @@ match this list, not the other way around). An unknown kind is an
 `image_generation_request`, `image_generation_response`,
 `speech_generation_request`, `speech_generation_response`,
 `video_generation_request`, `video_job`, `audio_format`, `live_config`,
-`live_client_event`, `live_server_event`
+`live_client_event`, `live_server_event`, `credential`
 
-(35 kinds as of 2026-09-02; tools/audit.py fails when this list and the vectors disagree. The list had drifted to 25 while the reference
+(36 kinds as of 2026-09-03 — `credential` added for the AUTH-2 sum type,
+changes/2026-09-03-cloud-hosts.md; 35 as of 2026-09-02; tools/audit.py fails when this list and the vectors disagree. The list had drifted to 25 while the reference
 grew the generation, video, cache, and logprob kinds; synced with
 `changes/2026-09-02-serde-coverage.md`. `tools/audit.py` maps every kind to
 the types and enums it covers and reports any public type covered by none.)

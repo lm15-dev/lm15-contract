@@ -1,0 +1,35 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-dd595615-f710-4068-bca0-1b6310fef5c8",
+    "model": "openai.gpt-oss-20b-1:0",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "<reasoning>User asks weather for Paris. Must call tool.</reasoning>"
+        },
+        {
+          "type": "tool_call",
+          "id": "chatcmpl-tool-9e257385bfed954a",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 131,
+      "output_tokens": 34,
+      "total_tokens": 165
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T16-47-43Z.txt"
+  }
+}

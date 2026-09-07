@@ -1,0 +1,62 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-fdy-29d280ed6f8e.services.ai.azure.com error envelopes captured verbatim 2026-09-04 by research/providers/azure-anthropic/capture.py; receipts/2026-09-04-azure-anthropic/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "azure-anthropic.unauthenticated",
+      "provider": "azure-anthropic",
+      "settings": {
+        "resource": "lm15-fdy-29d280ed6f8e"
+      },
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "401",
+          "message": "Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource."
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "azure-anthropic",
+        "provider_code": "401",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-fdy-29d280ed6f8e.services.ai.azure.com HTTP 401 verbatim 2026-09-04T13-46-15Z — receipts/2026-09-04-azure-anthropic/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure-anthropic.deployment_not_found",
+      "provider": "azure-anthropic",
+      "settings": {
+        "resource": "lm15-fdy-29d280ed6f8e"
+      },
+      "status": 404,
+      "body": {
+        "error": {
+          "code": "DeploymentNotFound",
+          "message": "The API deployment lm15-no-such-deployment does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.",
+          "details": "The API deployment lm15-no-such-deployment does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again."
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "azure-anthropic",
+        "provider_code": "DeploymentNotFound",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-fdy-29d280ed6f8e.services.ai.azure.com HTTP 404 verbatim 2026-09-04T13-46-16Z — receipts/2026-09-04-azure-anthropic/probe-error-deployment-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

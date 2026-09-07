@@ -1,0 +1,31 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "lm15-no-such-deployment",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 16
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "type": "invalid_request_error",
+      "code": "DeploymentNotFound",
+      "message": "The API deployment for this resource does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again."
+    }
+  },
+  "timestamp": "2026-09-04T14-15-52Z",
+  "response_headers": {}
+}

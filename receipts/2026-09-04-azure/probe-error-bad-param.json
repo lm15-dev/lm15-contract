@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": "Say ok.",
+      "max_output_tokens": -1
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got -1 instead.",
+      "type": "invalid_request_error",
+      "param": "max_output_tokens",
+      "code": "integer_below_min_value"
+    }
+  },
+  "timestamp": "2026-09-04T14-15-45Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "e767b834-6565-44bf-9f46-ecf690cf690c"
+  }
+}

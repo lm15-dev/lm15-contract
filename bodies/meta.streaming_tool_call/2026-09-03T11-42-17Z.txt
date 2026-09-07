@@ -1,0 +1,47 @@
+event: response.created
+data: {"response":{"background":false,"created_at":1788435738.0,"error":null,"id":"resp_6a995d1a81a9da7f11864982","incomplete_details":null,"instructions":null,"max_output_tokens":600,"model":"muse-spark-1.3","object":"response","output":[],"parallel_tool_calls":true,"reasoning":{"effort":"low"},"service_tier":"auto","status":"in_progress","store":true,"temperature":1.0,"tool_choice":"auto","tools":[{"description":"Get current weather for a city","name":"get_weather","parameters":{"properties":{"city":{"type":"string"}},"required":["city"],"type":"object"},"type":"function"}],"top_logprobs":0,"top_p":1.0,"truncation":"disabled"},"sequence_number":0,"type":"response.created"}
+
+event: response.in_progress
+data: {"response":{"background":false,"created_at":1788435738.0,"error":null,"id":"resp_6a995d1a81a9da7f11864982","incomplete_details":null,"instructions":null,"max_output_tokens":600,"model":"muse-spark-1.3","object":"response","output":[],"parallel_tool_calls":true,"reasoning":{"effort":"low"},"service_tier":"auto","status":"in_progress","store":true,"temperature":1.0,"tool_choice":"auto","tools":[{"description":"Get current weather for a city","name":"get_weather","parameters":{"properties":{"city":{"type":"string"}},"required":["city"],"type":"object"},"type":"function"}],"top_logprobs":0,"top_p":1.0,"truncation":"disabled"},"sequence_number":1,"type":"response.in_progress"}
+
+event: response.output_item.added
+data: {"item":{"id":"rs_6a995d1a81a9da7f11864982:rs_01a06713ade378f1977b31d81102b9c6","status":"in_progress","summary":[],"type":"reasoning"},"output_index":0,"sequence_number":2,"type":"response.output_item.added"}
+
+event: response.output_item.done
+data: {"item":{"id":"rs_6a995d1a81a9da7f11864982:rs_01a06713ade378f1977b31d81102b9c6","status":"completed","summary":[],"type":"reasoning"},"output_index":0,"sequence_number":3,"type":"response.output_item.done"}
+
+event: response.output_item.added
+data: {"item":{"content":[],"id":"rs_01a06713b22274d3b929f89f14666e4f","phase":"commentary","role":"assistant","status":"in_progress","type":"message"},"output_index":1,"sequence_number":4,"type":"response.output_item.added"}
+
+event: response.content_part.added
+data: {"content_index":0,"item_id":"rs_01a06713b22274d3b929f89f14666e4f","output_index":1,"part":{"annotations":[],"logprobs":[],"text":"","type":"output_text"},"sequence_number":5,"type":"response.content_part.added"}
+
+event: response.output_text.delta
+data: {"content_index":0,"delta":"I'll check the current weather in Paris for you.","item_id":"rs_01a06713b22274d3b929f89f14666e4f","logprobs":[],"output_index":1,"sequence_number":6,"type":"response.output_text.delta"}
+
+event: response.output_text.done
+data: {"content_index":0,"item_id":"rs_01a06713b22274d3b929f89f14666e4f","logprobs":[],"output_index":1,"sequence_number":7,"text":"I'll check the current weather in Paris for you.","type":"response.output_text.done"}
+
+event: response.content_part.done
+data: {"content_index":0,"item_id":"rs_01a06713b22274d3b929f89f14666e4f","output_index":1,"part":{"annotations":[],"logprobs":[],"text":"I'll check the current weather in Paris for you.","type":"output_text"},"sequence_number":8,"type":"response.content_part.done"}
+
+event: response.output_item.done
+data: {"item":{"content":[{"annotations":[],"logprobs":[],"text":"I'll check the current weather in Paris for you.","type":"output_text"}],"id":"rs_01a06713b22274d3b929f89f14666e4f","phase":"commentary","role":"assistant","status":"completed","type":"message"},"output_index":1,"sequence_number":9,"type":"response.output_item.done"}
+
+event: response.output_item.added
+data: {"item":{"arguments":"","call_id":"call_01a06713b25871d3b30b6a8a49c270a9","id":"fc_01a06713b25871d3b30b6a8a49c270a9","name":"get_weather","status":"in_progress","type":"function_call"},"output_index":2,"sequence_number":10,"type":"response.output_item.added"}
+
+event: response.function_call_arguments.delta
+data: {"delta":"{\"city\":\"Paris\"}","item_id":"fc_01a06713b25871d3b30b6a8a49c270a9","output_index":2,"sequence_number":11,"type":"response.function_call_arguments.delta"}
+
+event: response.function_call_arguments.done
+data: {"arguments":"{\"city\":\"Paris\"}","item_id":"fc_01a06713b25871d3b30b6a8a49c270a9","name":"get_weather","output_index":2,"sequence_number":12,"type":"response.function_call_arguments.done"}
+
+event: response.output_item.done
+data: {"item":{"arguments":"{\"city\":\"Paris\"}","call_id":"call_01a06713b25871d3b30b6a8a49c270a9","id":"fc_01a06713b25871d3b30b6a8a49c270a9","name":"get_weather","status":"completed","type":"function_call"},"output_index":2,"sequence_number":13,"type":"response.output_item.done"}
+
+event: response.completed
+data: {"response":{"background":false,"completed_at":1788435739.0,"created_at":1788435738.0,"error":null,"id":"resp_6a995d1a81a9da7f11864982","incomplete_details":null,"instructions":null,"max_output_tokens":600,"model":"muse-spark-1.3","object":"response","output":[{"id":"rs_6a995d1a81a9da7f11864982:rs_01a06713ade378f1977b31d81102b9c6","status":"completed","summary":[],"type":"reasoning"},{"content":[{"annotations":[],"logprobs":[],"text":"I'll check the current weather in Paris for you.","type":"output_text"}],"id":"rs_01a06713b22274d3b929f89f14666e4f","phase":"commentary","role":"assistant","status":"completed","type":"message"},{"arguments":"{\"city\":\"Paris\"}","call_id":"call_01a06713b25871d3b30b6a8a49c270a9","id":"fc_01a06713b25871d3b30b6a8a49c270a9","name":"get_weather","status":"completed","type":"function_call"}],"parallel_tool_calls":true,"reasoning":{"effort":"low"},"service_tier":"auto","status":"completed","store":true,"temperature":1.0,"tool_choice":"auto","tools":[{"description":"Get current weather for a city","name":"get_weather","parameters":{"properties":{"city":{"type":"string"}},"required":["city"],"type":"object"},"type":"function"}],"top_logprobs":0,"top_p":1.0,"truncation":"disabled","usage":{"input_tokens":545,"input_tokens_details":{"cached_tokens":497},"output_tokens":306,"output_tokens_details":{"reasoning_tokens":237},"total_tokens":851}},"sequence_number":14,"type":"response.completed"}
+
+data: [DONE]
+

@@ -1,0 +1,45 @@
+{
+  "id": "azure.speech_gen",
+  "provider": "azure",
+  "feature": "speech_gen",
+  "surface": "generation",
+  "kind": "speech",
+  "description": "Azure OpenAI v1 text-to-speech (raw WAV body)",
+  "base_url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1",
+  "settings": {
+    "resource": "lm15-oai-29d280ed6f8e"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 200 raw speech body (69644 bytes, audio/wav) 2026-09-04T14-08-11Z; deployment gpt-4o-mini-tts 2025-03-20 GlobalStandard; AudioPart bytes hash checked separately; verbatim at bodies/azure.speech_gen/azure-speech-2026-09-04T14-08-11Z.bin; changes/2026-09-04-azure-live.md"
+  },
+  "generation_request": {
+    "model": "gpt-4o-mini-tts",
+    "prompt": "Hello from lm15.",
+    "voice": "alloy",
+    "format": "wav"
+  },
+  "request": {
+    "method": "POST",
+    "url": "https://lm15-oai-29d280ed6f8e.openai.azure.com/openai/v1/audio/speech",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "api-key": "$AZURE_OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4o-mini-tts",
+      "input": "Hello from lm15.",
+      "voice": "alloy",
+      "response_format": "wav"
+    }
+  },
+  "pinned_body": "azure-speech-2026-09-04T14-08-11Z.bin",
+  "expect": {
+    "status": 200
+  },
+  "response_headers": {
+    "content-type": "audio/wav"
+  }
+}

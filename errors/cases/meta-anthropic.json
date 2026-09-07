@@ -1,0 +1,153 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai/v1/messages error envelopes captured verbatim 2026-09-03 by research/providers/meta-anthropic/capture.py; receipts/2026-09-03-meta-anthropic/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "meta-anthropic.unauthenticated",
+      "provider": "meta-anthropic",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "Unauthorized",
+          "type": "authentication_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "meta-anthropic",
+        "provider_code": "authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 401 verbatim 2026-09-03T11-51-24Z — receipts/2026-09-03-meta-anthropic/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-anthropic.model_not_found",
+      "provider": "meta-anthropic",
+      "status": 404,
+      "body": {
+        "error": {
+          "message": "Model not found or access denied",
+          "type": "not_found_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "meta-anthropic",
+        "provider_code": "not_found_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 404 verbatim 2026-09-03T11-51-25Z — receipts/2026-09-03-meta-anthropic/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-anthropic.thinking_disabled",
+      "provider": "meta-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "`thinking.type: \"disabled\"` is not supported with this model.",
+          "type": "invalid_request_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 400 verbatim 2026-09-03T11-50-54Z — receipts/2026-09-03-meta-anthropic/probe-error-thinking-disabled.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-anthropic.tool_choice_named",
+      "provider": "meta-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "named `tool_choice` is not supported",
+          "type": "invalid_request_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 400 verbatim 2026-09-03T11-51-18Z — receipts/2026-09-03-meta-anthropic/probe-error-tool-choice-named.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-anthropic.top_k",
+      "provider": "meta-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "`top_k` is not supported",
+          "type": "invalid_request_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 400 verbatim 2026-09-03T11-51-22Z — receipts/2026-09-03-meta-anthropic/probe-error-top-k.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-anthropic.stop_sequence",
+      "provider": "meta-anthropic",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "`stop_sequences` is not supported",
+          "type": "invalid_request_error"
+        },
+        "type": "error"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai/v1/messages HTTP 400 verbatim 2026-09-03T11-51-23Z — receipts/2026-09-03-meta-anthropic/probe-error-stop-sequence.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132608Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "Where is the Eiffel Tower?"
+            }
+          ]
+        }
+      ],
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #: extraneous key [model] is not permitted, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-08Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "88bcad38-dcca-4b66-9705-9e197a471981"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "Unauthorized",
+      "type": "authentication_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "50eed653-2cf9-4b00-93a3-946c16a71402"
+  }
+}

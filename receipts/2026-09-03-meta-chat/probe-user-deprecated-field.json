@@ -1,0 +1,58 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "reasoning_effort": "low",
+      "user": "lm15-probe"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-01a0671a-3210-7480-b229-7f81e8bc99bc",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "ok",
+          "refusal": null,
+          "role": "assistant"
+        },
+        "logprobs": null
+      }
+    ],
+    "created": 1788436165,
+    "model": "muse-spark-1.3",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 201,
+      "prompt_tokens": 10,
+      "total_tokens": 211,
+      "completion_tokens_details": {
+        "reasoning_tokens": 190
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-09-03T11-49-23Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "cb76423d-45fb-4eaf-8b6c-3548428d2e4d"
+  }
+}

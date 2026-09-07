@@ -1,0 +1,53 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132601Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "My name is Ada."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": "Hello Ada."
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "What is my name?"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #/messages/1/content: expected type: JSONArray, found: String, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-01Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "e15c1fee-e7a0-41b3-8ab8-45c2e0efb5ac"
+  }
+}

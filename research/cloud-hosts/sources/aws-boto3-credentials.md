@@ -1,0 +1,323 @@
+Credentials¶
+
+Overview¶
+
+Boto3 credentials can be configured in multiple ways. Regardless of the source or sources that you choose, you must have both AWS credentials and an AWS Region set in order to make requests.
+
+Interactive configuration¶
+
+If you have the AWS CLI, then you can use its interactive configure command to set up your credentials and default region:
+
+aws configure
+
+Follow the prompts and it will generate configuration files in the correct locations for you.
+
+Configuring credentials¶
+
+There are two types of configuration data in Boto3: credentials and non-credentials. Credentials include items such as aws_access_key_id, aws_secret_access_key, and aws_session_token. Non-credential configuration includes items such as which region to use or which addressing style to use for Amazon S3. For more information on how to configure non-credential configurations, see the Configuration guide.
+
+Boto3 will look in several locations when searching for credentials. The mechanism in which Boto3 looks for credentials is to search through a list of possible locations and stop as soon as it finds credentials. The order in which Boto3 searches for credentials is:
+
+Passing credentials as parameters in the boto3.client() method
+
+Passing credentials as parameters when creating a Session object
+
+Environment variables
+
+Assume role provider
+
+Assume role with web identity provider
+
+AWS IAM Identity Center credential provider
+
+Shared credential file (~/.aws/credentials)
+
+Login with console credentials
+
+AWS config file (~/.aws/config)
+
+Boto2 config file (/etc/boto.cfg and ~/.boto)
+
+Container credential provider
+
+Instance metadata service on an Amazon EC2 instance that has an IAM role configured.
+
+Each of those locations is discussed in more detail below.
+
+Passing credentials as parameters¶
+
+There are valid use cases for providing credentials to the client() method and Session object, these include:
+
+Retrieving temporary credentials using AWS STS (such as sts.get_session_token()).
+
+Loading credentials from some external location, e.g the OS keychain.
+
+The first option for providing credentials to Boto3 is passing them as parameters when creating clients:
+
+import boto3
+
+client = boto3.client(
+    's3',
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
+    aws_session_token=SESSION_TOKEN
+)
+
+The second option for providing credentials to Boto3 is passing them as parameters when creating a Session object:
+
+import boto3
+
+session = boto3.Session(
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
+    aws_session_token=SESSION_TOKEN
+)
+
+ Warning
+ACCESS_KEY, SECRET_KEY, and SESSION_TOKEN are variables that contain your access key, secret key, and optional session token. Note that the examples above do not have hard coded credentials. We do not recommend hard coding credentials in your source code.
+
+Environment variables¶
+
+Boto3 will check these environment variables for credentials:
+
+AWS_ACCESS_KEY_ID - The access key for your AWS account.
+
+AWS_SECRET_ACCESS_KEY - The secret key for your AWS account.
+
+AWS_SESSION_TOKEN - The session key for your AWS account. This is only needed when you are using temporary credentials. The AWS_SECURITY_TOKEN environment variable can also be used, but is only supported for backwards compatibility purposes. AWS_SESSION_TOKEN is supported by multiple AWS SDKs besides python.
+
+Assume role provider¶
+
+ Note
+This is a different set of credentials configuration than using IAM roles for EC2 instances, which is discussed in a section below.
+
+Within the ~/.aws/config file, you can also configure a profile to indicate that Boto3 should assume a role. When you do this, Boto3 will automatically make the corresponding AssumeRole calls to AWS STS on your behalf. It will handle in-memory caching as well as refreshing credentials as needed.
+
+You can specify the following configuration values for configuring an IAM role in Boto3. For more information about a particular setting, see the Configuration section.
+
+role_arn - The ARN of the role you want to assume.
+
+source_profile - The boto3 profile that contains credentials we should use for the initial AssumeRole call.
+
+credential_source - The resource (Amazon EC2 instance profile, Amazon ECS container role, or environment variable) that contains the credentials to use for the initial AssumeRole call.
+
+external_id - A unique identifier that is used by third parties to assume a role in their customers’ accounts. This maps to the ExternalId parameter in the AssumeRole operation. This is an optional parameter.
+
+mfa_serial - The identification number of the MFA device to use when assuming a role. This is an optional parameter. Specify this value if the trust policy of the role being assumed includes a condition that requires MFA authentication. The value is either the serial number for a hardware device (such as GAHT12345678) or an Amazon Resource Name (ARN) for a virtual device (such as arn:aws:iam::123456789012:mfa/user).
+
+role_session_name - The name applied to this assume-role session. This value affects the assumed role user ARN (such as arn:aws:sts::123456789012:assumed-role/role_name/role_session_name). This maps to the RoleSessionName parameter in the AssumeRole operation. This is an optional parameter. If you do not provide this value, a session name will be automatically generated.
+
+duration_seconds - The length of time in seconds of the role session.
+
+If MFA authentication is not enabled then you only need to specify a role_arn and a source_profile.
+
+When you specify a profile that has an IAM role configuration, Boto3 will make an AssumeRole call to retrieve temporary credentials. Subsequent Boto3 API calls will use the cached temporary credentials until they expire, in which case Boto3 will then automatically refresh the credentials.
+
+Please note that Boto3 does not write these temporary credentials to disk. This means that temporary credentials from the AssumeRole calls are only cached in-memory within a single session. All clients created from that session will share the same temporary credentials.
+
+If you specify mfa_serial, then the first time an AssumeRole call is made, you will be prompted to enter the MFA code. Program execution will block until you enter the MFA code. You’ll need to keep this in mind if you have an mfa_serial device configured, but would like to use Boto3 in an automated script.
+
+Below is an example configuration for the minimal amount of configuration needed to configure an assume role profile:
+
+# In ~/.aws/credentials:
+[development]
+aws_access_key_id=foo
+aws_access_key_id=bar
+
+# In ~/.aws/config
+[profile crossaccount]
+role_arn=arn:aws:iam:...
+source_profile=development
+
+See Using IAM Roles for general information on IAM roles.
+
+Assume Role With Web Identity Provider¶
+
+Within the ~/.aws/config file, you can also configure a profile to indicate that Boto3 should assume a role. When you do this, Boto3 will automatically make the corresponding AssumeRoleWithWebIdentity calls to AWS STS on your behalf. It will handle in-memory caching as well as refreshing credentials, as needed.
+
+You can specify the following configuration values for configuring an IAM role in Boto3:
+
+role_arn - The ARN of the role you want to assume.
+
+web_identity_token_file - The path to a file which contains an OAuth 2.0 access token or OpenID Connect ID token that is provided by the identity provider. The contents of this file will be loaded and passed as the WebIdentityToken argument to the AssumeRoleWithWebIdentity operation.
+
+role_session_name - The name applied to this assume-role session. This value affects the assumed role user ARN (such as arn:aws:sts::123456789012:assumed-role/role_name/role_session_name). This maps to the RoleSessionName parameter in the AssumeRoleWithWebIdentity operation. This is an optional parameter. If you do not provide this value, a session name will be automatically generated.
+
+Below is an example configuration for the minimal amount of configuration needed to configure an assume role with web identity profile:
+
+# In ~/.aws/config
+[profile web-identity]
+role_arn=arn:aws:iam:...
+web_identity_token_file=/path/to/a/token
+
+This provider can also be configured via environment variables:
+
+AWS_ROLE_ARN - The ARN of the role you want to assume.
+
+AWS_WEB_IDENTITY_TOKEN_FILE - The path to the web identity token file.
+
+AWS_ROLE_SESSION_NAME - The name applied to this assume-role session.
+
+ Note
+These environment variables currently only apply to the assume role with web identity provider and do not apply to the general assume role provider configuration.
+
+AWS IAM Identity Center¶
+
+Support for the AWS IAM Identity Center (successor to AWS Single Sign-On)
+credential provider was added in 1.14.0. The IAM Identity Center provides
+support for single sign-on (SSO) credentials.
+
+To begin using the IAM Identity Center credential provider, start by using the AWS CLI (v2) to configure and manage your SSO profiles and login sessions.
+For detailed instructions on the configuration and login process see the AWS CLI User Guide for SSO.
+Once completed you will have one or many profiles in the shared configuration file with the following settings:
+
+# In ~/.aws/config
+[profile my-sso-profile]
+sso_start_url = https://my-sso-portal.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 123456789011
+sso_role_name = readOnly
+
+sso_start_url - The URL that points to the organization’s IAM Identity Center user portal.
+
+sso_region - The AWS Region that contains the IAM Identity Center portal host. This is separate from the default AWS CLI Region parameter, and can also be a different Region.
+
+sso_account_id - The AWS account ID that contains the IAM role that you want to use with this profile.
+
+sso_role_name - The name of the IAM role that defines the user’s permissions when using this profile.
+
+You can then specify the profile name via the AWS_PROFILE environment variable or the profile_name argument when creating a Session.
+For example, we can create a Session using the my-sso-profile profile and any clients created from this session will use the my-sso-profile credentials:
+
+import boto3
+
+session = boto3.Session(profile_name='my-sso-profile')
+s3_client = session.client('s3')
+
+Shared credentials file¶
+
+The shared credentials file has a default location of ~/.aws/credentials. You can change the location of the shared credentials file by setting the AWS_SHARED_CREDENTIALS_FILE environment variable.
+
+This file is an INI formatted file with section names corresponding to profiles. With each section, the three configuration variables shown above can be specified: aws_access_key_id, aws_secret_access_key, aws_session_token. These are the only supported values in the shared credential file.
+
+Below is a minimal example of the shared credentials file:
+
+[default]
+aws_access_key_id=foo
+aws_secret_access_key=bar
+aws_session_token=baz
+
+The shared credentials file also supports the concept of profiles. Profiles represent logical groups of configuration. The shared credential file can have multiple profiles:
+
+[default]
+aws_access_key_id=foo
+aws_secret_access_key=bar
+
+[dev]
+aws_access_key_id=foo2
+aws_secret_access_key=bar2
+
+[prod]
+aws_access_key_id=foo3
+aws_secret_access_key=bar3
+
+You can then specify a profile name via the AWS_PROFILE environment variable or the profile_name argument when creating a Session. For example, we can create a Session using the “dev” profile and any clients created from this session will use the “dev” credentials:
+
+import boto3
+
+session = boto3.Session(profile_name='dev')
+dev_s3_client = session.client('s3')
+
+Login with console credentials¶
+
+You can use your existing AWS Management Console sign-in credentials for programmatic
+access to AWS services with Boto3. After a browser-based authentication flow using the
+AWS CLI, temporary credentials are generated that Boto3 can automatically use. This
+approach enhances security by eliminating the need to store long-term credentials locally.
+
+Prerequisites¶
+
+AWS CLI version 2.32.0 or later. See Installing or updating to the latest version of the AWS CLI for more information.
+
+Boto3 version 1.41.0 or later with AWS Common Runtime (CRT). See Using the AWS Common Runtime (CRT) for installation instructions.
+
+Access to sign into the AWS Management Console as a root user, IAM user, or through federation with IAM. If you use IAM Identity Center, go to Login with IAM Identity Center credentials instead.
+
+Ensure the IAM identity has the appropriate permissions. Attach the SignInLocalDevelopmentAccess managed policy to your IAM user, role, or group. If you sign in as a root user, no additional permissions are required.
+
+Configuration¶
+
+Use the AWS CLI aws login command to authenticate and configure your profile.
+You can use the --profile option to configure a named profile, or omit it to use the default profile.
+See the AWS CLI documentation for detailed login instructions.
+
+Once configured, the profile in your ~/.aws/config file will contain:
+
+[default]
+login_session = arn:aws:iam::123456789012:user/username
+region = us-east-1
+
+Usage with Boto3¶
+
+Boto3 automatically uses the login session credentials when you specify the profile:
+
+import boto3
+
+# Use default profile with login session
+session = boto3.Session()
+s3_client = session.client('s3')
+
+# Use named profile with login session
+session = boto3.Session(profile_name='dev-profile')
+s3_client = session.client('s3')
+
+Boto3 automatically refreshes cached credentials as needed.
+Sessions are valid for up to 12 hours, after which you must run aws login again.
+
+AWS config file¶
+
+Boto3 can also load credentials from ~/.aws/config. You can change this default location by setting the AWS_CONFIG_FILE environment variable. The config file is an INI format, with the same keys supported by the shared credentials file. The only difference is that profile sections must have the format of [profile profile-name], except for the default profile:
+
+[default]
+aws_access_key_id=foo
+aws_secret_access_key=bar
+
+[profile dev]
+aws_access_key_id=foo2
+aws_secret_access_key=bar2
+
+[profile prod]
+aws_access_key_id=foo3
+aws_secret_access_key=bar3
+
+The reason that section names must start with profile in the ~/.aws/config file is because there are other sections in this file that are permitted that aren’t profile configurations.
+
+Boto2 configuration file support¶
+
+Boto3 will attempt to load credentials from the Boto2 config file. It first checks the file pointed to by BOTO_CONFIG if set, otherwise it will check /etc/boto.cfg and ~/.boto. Note that only the [Credentials] section of the boto config file is used. All other configuration data in the boto config file is ignored.
+
+# Example ~/.boto file
+[Credentials]
+aws_access_key_id = foo
+aws_secret_access_key = bar
+
+ Note
+This credential provider is primarily for backwards compatibility purposes with Boto2.
+
+Container credential provider¶
+
+If you are using Amazon Elastic Container Service (Amazon ECS) or Amazon Elastic Kubernetes Service (Amazon EKS), you can obtain credentials by specifying an HTTP endpoint as an environment variable.  The SDK will request credentials from the specified endpoint.  For more information, see Container credential provider in the Amazon SDKs and Tools Reference Guide.
+
+IAM roles¶
+
+If you are running on Amazon EC2 and no credentials have been found by any of the providers above, Boto3 will try to load credentials from the instance metadata service. In order to take advantage of this feature, you must have specified an IAM role to use when you launched your EC2 instance.
+
+For more information on how to configure IAM roles on EC2 instances, see the IAM Roles for Amazon EC2 guide.
+
+Note that if you’ve launched an EC2 instance with an IAM role configured, there’s no explicit configuration you need to set in Boto3 to use these credentials. Boto3 will automatically use IAM role credentials if it does not find credentials in any of the other places listed previously.
+
+Best practices for configuring credentials¶
+
+If you’re running on an EC2 instance, use AWS IAM roles. See the IAM Roles for Amazon EC2 guide for more information on how to set this up.
+
+If you want to interoperate with multiple AWS SDKs (e.g Java, JavaScript, Ruby, PHP, .NET, AWS CLI, Go, C++), use the shared credentials file (~/.aws/credentials). By using the shared credentials file, you can use a single file for credentials that will work in all AWS SDKs.

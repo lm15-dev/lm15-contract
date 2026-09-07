@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135431Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower?"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "The Eiffel Tower is{\"city\":\"Paris\",\"country\":\"France\"}",
+          "reasoning": "The user asks \"Where is the Eiffel Tower?\" Likely a location question. They might expect an answer that says it's in Paris, France, specifically at Champ de Mars. It refers the user to location details. We answer succinctly. Probably mention coordinates. Provide a short answer.",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788530071,
+    "id": "chatcmpl-659a2e96-e8ae-4afb-8afb-7988ad1b3280",
+    "model": "openai.gpt-oss-20b",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 83,
+      "prompt_tokens": 73,
+      "total_tokens": 156
+    }
+  },
+  "timestamp": "2026-09-04T13-54-31Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_ugnr75wl7ttgig7hagbyueidvh5x4zxj244eyra2ic4vppnx3luq"
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai error envelopes captured verbatim 2026-09-03 by research/providers/meta-chat/capture.py; receipts/2026-09-03-meta-chat/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "meta-chat.unauthenticated",
+      "provider": "meta-chat",
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "invalid_api_key",
+          "message": "Unauthorized",
+          "param": null,
+          "type": "authentication_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "meta-chat",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 401 verbatim 2026-09-03T11-49-38Z — receipts/2026-09-03-meta-chat/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-chat.model_not_found",
+      "provider": "meta-chat",
+      "status": 404,
+      "body": {
+        "error": {
+          "code": "model_not_found",
+          "message": "The requested model was not found.",
+          "param": null,
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "meta-chat",
+        "provider_code": "model_not_found",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 404 verbatim 2026-09-03T11-49-39Z — receipts/2026-09-03-meta-chat/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-chat.reasoning_none",
+      "provider": "meta-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "\"reasoning_effort\" does not support \"none\" with this model.",
+          "param": "reasoning_effort",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-chat",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-49-13Z — receipts/2026-09-03-meta-chat/probe-error-reasoning-none.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-chat.logprobs",
+      "provider": "meta-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`logprobs` cannot be true when `reasoning_effort` is `low`. logprobs is not supported with reasoning.",
+          "param": "logprobs",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-chat",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-49-20Z — receipts/2026-09-03-meta-chat/probe-error-logprobs.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-chat.stop",
+      "provider": "meta-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`stop` is not supported",
+          "param": "stop",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-chat",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-49-21Z — receipts/2026-09-03-meta-chat/probe-error-stop.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta-chat.n_2",
+      "provider": "meta-chat",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`n` must be 1, got 2",
+          "param": "n",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta-chat",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-49-22Z — receipts/2026-09-03-meta-chat/probe-error-n-2.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

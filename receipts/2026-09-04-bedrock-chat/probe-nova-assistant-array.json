@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132602Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "My name is Ada."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "text": "Hello Ada."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "What is my name?"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #: extraneous key [model] is not permitted, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-02Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "4145aa82-d416-44a0-904a-3d970e11a57a"
+  }
+}

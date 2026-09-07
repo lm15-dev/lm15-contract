@@ -1,0 +1,39 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-fdy-29d280ed6f8e.services.ai.azure.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_FOUNDRY_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "code": "401",
+      "message": "Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource."
+    }
+  },
+  "timestamp": "2026-09-04T13-46-15Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

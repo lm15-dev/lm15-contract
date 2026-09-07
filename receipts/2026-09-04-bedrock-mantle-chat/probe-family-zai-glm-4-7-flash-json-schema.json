@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135443Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "zai.glm-4.7-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is the Eiffel Tower?"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{ \"city\": \"Paris\", \"country\": \"France\" }",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788530083,
+    "id": "chatcmpl-fc9f610f-8b70-41aa-a9f2-f28fba776e46",
+    "model": "zai.glm-4.7-flash",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 15,
+      "prompt_tokens": 13,
+      "total_tokens": 28
+    }
+  },
+  "timestamp": "2026-09-04T13-54-43Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_3me7byqayjlhygdn6iwb6upinh6n4ik6jwb24hay4dahfqinu74q"
+  }
+}

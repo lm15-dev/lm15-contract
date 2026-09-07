@@ -113,6 +113,11 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, g) for c, g in cases],
             lambda c, g: "request" in c and _has_bool(check.expected_wire_request(c)["body"]),
             "bool_as_int (a wire fixture with a boolean body leaf)")),
+        "pinned_credential_scheme_drift": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: isinstance(c.get("credential"), dict) and c["credential"].get("kind") == "bearer_token"
+                         and "authorization" in check.expected_wire_request(c)["headers"],
+            "pinned_credential_scheme_drift (a request case pinning a bearer_token credential)")),
     }
 
     auth_cases = check.load_auth_fixture()["cases"]
@@ -248,6 +253,20 @@ def pick_targets() -> dict[str, tuple[str, str]]:
                          "status golden and a URL-delivered part golden)")
     targets["video_status_vocab_drift"] = ("video", f"{video_vocab}[done.parse]")
     targets["video_part_url_drift"] = ("video", f"{video_url}[part.parse]")
+
+    sigv4_cases = json.loads(check.SIGV4_FILE.read_text(encoding="utf-8"))["cases"]
+    token_cases = json.loads(check.TOKEN_FILE.read_text(encoding="utf-8"))["cases"]
+    parse_target = next((c["id"] for c in token_cases if c["id"].endswith(".parse")), None)
+    if not sigv4_cases or parse_target is None:
+        raise SystemExit("selftest: token corpus too thin to self-test (need a SigV4 vector "
+                         "and a token-exchange parse vector)")
+    targets["sigv4_signature_drift"] = ("token", f"sigv4.{sigv4_cases[0]['id']}")
+    targets["token_credential_drift"] = ("token", f"token.{parse_target}")
+    assertion_target = next((c["id"] for c in token_cases if c["id"].endswith(".build")
+                             and "assertion" in c["expect"]["request"].get("body", {})), None)
+    if assertion_target is None:
+        raise SystemExit("selftest: token corpus needs a signed assertion build vector")
+    targets["token_assertion_drift"] = ("token", f"token.{assertion_target}")
     return targets
 
 

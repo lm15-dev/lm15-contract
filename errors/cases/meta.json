@@ -1,0 +1,184 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai error envelopes captured verbatim 2026-09-03 by research/providers/meta/capture.py; receipts/2026-09-03-meta/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "meta.unauthenticated",
+      "provider": "meta",
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "invalid_api_key",
+          "message": "Unauthorized",
+          "param": null,
+          "type": "authentication_error"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "meta",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 401 verbatim 2026-09-03T11-43-55Z — receipts/2026-09-03-meta/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.model_not_found",
+      "provider": "meta",
+      "status": 404,
+      "body": {
+        "error": {
+          "code": "model_not_found",
+          "message": "The requested model was not found.",
+          "param": null,
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "meta",
+        "provider_code": "model_not_found",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 404 verbatim 2026-09-03T11-43-56Z — receipts/2026-09-03-meta/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.reasoning_none",
+      "provider": "meta",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "\"reasoning.effort\" does not support \"none\" with this model.",
+          "param": "reasoning.effort",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-42-58Z — receipts/2026-09-03-meta/probe-error-reasoning-none.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.logprobs",
+      "provider": "meta",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`message.output_text.logprobs` cannot be included when `reasoning.effort` is `low`. logprobs is not supported with reasoning.",
+          "param": "logprobs",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-43-07Z — receipts/2026-09-03-meta/probe-error-logprobs.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.bad_effort",
+      "provider": "meta",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`reasoning.effort`: unknown variant `bogus`, expected one of `none`, `minimal`, `low`, `medium`, `high`, `xhigh`",
+          "param": "reasoning.effort",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-43-06Z — receipts/2026-09-03-meta/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.top_p_zero",
+      "provider": "meta",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`top_p` must be in the range (0, 1], got 0",
+          "param": "top_p",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-43-53Z — receipts/2026-09-03-meta/probe-error-top-p-zero.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "meta.max_tokens_below_16",
+      "provider": "meta",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": null,
+          "message": "`max_output_tokens` The number must be `>= 16`.",
+          "param": "max_output_tokens",
+          "type": "invalid_request_error"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "meta",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-03",
+        "evidence": "api.meta.ai HTTP 400 verbatim 2026-09-03T11-43-54Z — receipts/2026-09-03-meta/probe-error-max-tokens-below-16.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

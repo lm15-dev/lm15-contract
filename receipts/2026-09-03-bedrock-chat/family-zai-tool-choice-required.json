@@ -1,0 +1,70 @@
+{
+  "model": "zai.glm-4.7-flash",
+  "sent": {
+    "model": "zai.glm-4.7-flash",
+    "max_completion_tokens": 60,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say ok."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      }
+    ],
+    "tool_choice": "required"
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\": \"New York\"}",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-9a3d412096327b77",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788523467,
+    "id": "chatcmpl-1d4bd052-1124-4b58-9617-60ce0c6f4af9",
+    "model": "zai.glm-4.7-flash",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 20,
+      "prompt_tokens": 164,
+      "total_tokens": 184
+    }
+  },
+  "timestamp": "2026-09-04T12-04-27Z"
+}

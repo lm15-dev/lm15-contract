@@ -1,0 +1,62 @@
+{
+  "model": "qwen.qwen3-32b-v1:0",
+  "sent": {
+    "model": "qwen.qwen3-32b-v1:0",
+    "max_completion_tokens": 120,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Where is the Eiffel Tower?"
+      }
+    ],
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "place",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city",
+            "country"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788523465,
+    "id": "chatcmpl-d3aed675-8e3f-4e4b-b2f2-622446504295",
+    "model": "qwen.qwen3-32b-v1:0",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 17,
+      "prompt_tokens": 20,
+      "total_tokens": 37
+    }
+  },
+  "timestamp": "2026-09-04T12-04-24Z"
+}

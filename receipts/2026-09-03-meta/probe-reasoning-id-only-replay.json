@@ -1,0 +1,117 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Pick a colour and say only its name."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a995e188e4dc0f09a4e4b3c:rs_c9724db4-c841-40fa-b404-daaf11f160b5",
+          "summary": []
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Blue"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say the same colour again."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 300,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "service_tier": "auto",
+    "model": "muse-spark-1.3",
+    "reasoning": {
+      "effort": "low"
+    },
+    "background": false,
+    "tools": [],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6a995e1cbb6782127f1d4586",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1788435996.0,
+    "completed_at": 1788435996.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_6a995e1cbb6782127f1d4586:rs_1f3db9d5-e1b8-4e70-a9f1-11e0b1d54b4c",
+        "summary": [],
+        "status": "completed"
+      },
+      {
+        "type": "message",
+        "id": "msg_17ec5a25-b09c-4015-84e1-187202dd2e20",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "Blue",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 39,
+      "input_tokens_details": {
+        "cached_tokens": 35
+      },
+      "output_tokens": 218,
+      "output_tokens_details": {
+        "reasoning_tokens": 207
+      },
+      "total_tokens": 257
+    },
+    "parallel_tool_calls": true,
+    "store": true,
+    "max_output_tokens": 300
+  },
+  "timestamp": "2026-09-03T11-46-32Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "a4cda021-c81e-4ed3-8ff6-3421fcb8c831"
+  }
+}

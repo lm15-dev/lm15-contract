@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $AWS_BEARER_TOKEN_BEDROCK"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b-1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "<reasoning>The user says \"Say ok.\" The instruction: The assistant has to comply with the instruction only if it does not conflict with policies. There's no conflict. So we respond with \"ok\".</reasoning>ok",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788527510,
+    "id": "chatcmpl-1df4aa7d-360c-4f7a-981d-f38ce45518df",
+    "model": "openai.gpt-oss-20b-1:0",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 49,
+      "prompt_tokens": 70,
+      "total_tokens": 119
+    }
+  },
+  "timestamp": "2026-09-04T13-11-49Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "4405e409-ae2a-4ab6-9c2e-0d03f25d3265"
+  }
+}

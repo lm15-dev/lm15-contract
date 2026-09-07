@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "\"reasoning_effort\" does not support \"none\" with this model.",
+      "param": "reasoning_effort",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-49-13Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "783c751a-f3eb-4bb9-8ba5-b8a5c7a142af"
+  }
+}

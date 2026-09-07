@@ -1,0 +1,67 @@
+{
+  "canonical_response": {
+    "model": "openai.gpt-oss-20b",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user asks for weather in Paris. We have a tool to get current weather for a city. We'll invoke the tool."
+        },
+        {
+          "type": "tool_call",
+          "id": "chatcmpl-tool-aa3a53230bbea273",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 131,
+      "output_tokens": 49,
+      "total_tokens": 180
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "openai.gpt-oss-20b"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The user asks for weather in Paris. We have a tool to get current weather for a city. We'll invoke the tool."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\"Paris\"}",
+        "id": "chatcmpl-tool-aa3a53230bbea273",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 131,
+        "output_tokens": 49,
+        "total_tokens": 180
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-04",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-04T13-55-54Z.txt"
+  }
+}

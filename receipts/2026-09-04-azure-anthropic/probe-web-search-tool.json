@@ -1,0 +1,40 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://lm15-fdy-29d280ed6f8e.services.ai.azure.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_FOUNDRY_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is today's date?"
+        }
+      ],
+      "tools": [
+        {
+          "type": "web_search_20250305",
+          "name": "web_search"
+        }
+      ]
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "code": "DeploymentNotFound",
+      "message": "The API deployment claude-haiku-4-5 does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again.",
+      "details": "The API deployment claude-haiku-4-5 does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again."
+    }
+  },
+  "timestamp": "2026-09-04T13-46-14Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

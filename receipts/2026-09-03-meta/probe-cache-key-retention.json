@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 300,
+      "reasoning": {
+        "effort": "low"
+      },
+      "prompt_cache_key": "lm15-probe",
+      "prompt_cache_retention": "24h"
+    }
+  },
+  "status": 200,
+  "body": {
+    "top_logprobs": 0,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "prompt_cache_key": "lm15-probe",
+    "service_tier": "auto",
+    "model": "muse-spark-1.3",
+    "reasoning": {
+      "effort": "low"
+    },
+    "background": false,
+    "tools": [],
+    "tool_choice": "auto",
+    "truncation": "disabled",
+    "id": "resp_6a996352089ef4df313640b6",
+    "object": "response",
+    "status": "completed",
+    "created_at": 1788437330.0,
+    "completed_at": 1788437330.0,
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_6a996352089ef4df313640b6:rs_8b14b933-31cb-4bbc-9176-8a8af3fa49b4",
+        "summary": [],
+        "status": "completed"
+      },
+      {
+        "type": "message",
+        "id": "msg_22d06012-e567-44aa-ab22-2d53749c26bf",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "ok",
+            "annotations": [],
+            "logprobs": []
+          }
+        ],
+        "status": "completed"
+      }
+    ],
+    "instructions": null,
+    "usage": {
+      "input_tokens": 10,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 218,
+      "output_tokens_details": {
+        "reasoning_tokens": 207
+      },
+      "total_tokens": 228
+    },
+    "parallel_tool_calls": true,
+    "store": true,
+    "max_output_tokens": 300
+  },
+  "timestamp": "2026-09-03T12-08-46Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "ba4c4d28-76e7-48dc-b644-3b85b657e36d"
+  }
+}

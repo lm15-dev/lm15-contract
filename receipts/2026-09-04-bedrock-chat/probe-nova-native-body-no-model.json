@@ -1,0 +1,47 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132648Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "system": [
+        {
+          "text": "Answer in two words."
+        }
+      ],
+      "inferenceConfig": {
+        "maxTokens": 50
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "One or more required parameters in the request are missing. Retry your request with all required values specified.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-48Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "96b8f421-150e-4643-a8cb-319a0977fc50"
+  }
+}

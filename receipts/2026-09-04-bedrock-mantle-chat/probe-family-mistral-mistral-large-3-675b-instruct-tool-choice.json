@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135436Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "mistral.mistral-large-3-675b-instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\": \"London\"}",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-9e2bfafa17fcfb56",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788530076,
+    "id": "chatcmpl-5f1ffb07-6cb6-435e-83ad-e705d66b9641",
+    "model": "mistral.mistral-large-3-675b-instruct",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 22,
+      "prompt_tokens": 67,
+      "total_tokens": 89
+    }
+  },
+  "timestamp": "2026-09-04T13-54-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_6a7o4wcqtoqicy32ymvpt5zruxtc5h7nljjxxlq634fw7vhsqwjq"
+  }
+}

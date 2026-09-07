@@ -60,6 +60,10 @@ MUTATIONS = (
     "cache_model_drop",         # cache_op_build create: the model field dropped from the body
     "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
     "build_maps_a_refused_cell", # build_request: a pinned refusal answered with a wire request (a silent cell)
+    "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
+    "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
+    "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
+    "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
 )
 
 MUTATION = "none"
@@ -210,6 +214,13 @@ def op_build_request(msg: JsonObject) -> JsonObject:
     result = check.expected_wire_request(case)
     if MUTATION == "bool_as_int" and targeted(case):
         mutate_first_bool(result["body"])
+    if MUTATION == "pinned_credential_scheme_drift" and targeted(case):
+        # The AUTH-2 scheme-selection drift: the pinned token lands in the
+        # key header.  Only a verbatim header compare (PROTOCOL.md
+        # 2026-09-04) can see this; a harness that rewrites auth values
+        # to its injected key would pass it.
+        value = result["headers"].pop("authorization")
+        result["headers"]["x-api-key"] = value.removeprefix("Bearer ")
     return result
 
 
@@ -357,14 +368,31 @@ def op_replay_live(msg: JsonObject) -> JsonObject:
     return {"setup_frames": setup, "client_frames": client_frames, "events": events}
 
 
+def _case_env_matches(case: JsonObject, msg: JsonObject) -> bool:
+    """Cloud-chain cases (``files`` present) get their env rewritten by the
+    harness: ``~/`` becomes the harness-owned home and ``HOME`` is added
+    (check.run_auth_direction).  Undo that before comparing."""
+    expected = dict(case.get("env", {}))
+    actual = dict(msg.get("env", {}))
+    if "files" in case:
+        home = actual.pop("HOME", None)
+        if home is not None:
+            expected = {k: v.replace("~/", f"{home}/") if isinstance(v, str) else v for k, v in expected.items()}
+    return expected == actual
+
+
 def op_explain_auth(msg: JsonObject) -> JsonObject:
     fixture = check.load_auth_fixture()
     for case in fixture["cases"]:
         if case["provider"] != msg["provider"]:
             continue
-        if case.get("env", {}) != msg.get("env", {}):
+        if not _case_env_matches(case, msg):
             continue
         if case.get("api_keys_providers", []) != msg.get("api_keys_providers", []):
+            continue
+        if ("files" in case) != ("files" in msg):
+            continue
+        if case.get("settings") != msg.get("settings"):
             continue
         has_borrowed = "borrowed_file" in case
         if has_borrowed != ("credentials_path" in msg):
@@ -383,6 +411,57 @@ def op_explain_auth(msg: JsonObject) -> JsonObject:
                 report_text += f"\nkey: {msg['sentinel']}"
         return {"configured": expect["configured"], "steps": steps, "report_text": report_text}
     raise LookupError("no auth fixture matches this (provider, env, api_keys_providers, borrowed state)")
+
+
+# ─── Direction: token (SigV4 + token-exchange vectors) ───────────────
+
+def op_sigv4_sign(msg: JsonObject) -> JsonObject:
+    """Echo the pinned SigV4 triple for the vector whose request this is."""
+    sig = json.loads(check.SIGV4_FILE.read_text(encoding="utf-8"))
+    req = msg["request"]
+    for case in sig["cases"]:
+        pinned = case["request"]
+        if (pinned["method"], pinned["target"], pinned.get("headers", {}), pinned.get("body", "")) != (
+            req["method"], req["url"].removeprefix("https://example.amazonaws.com"), req.get("headers", {}), req.get("body", "")
+        ):
+            continue
+        result = dict(case["expect"])
+        if MUTATION == "sigv4_signature_drift" and targeted({"id": f"sigv4.{case['id']}"}):
+            head, _, signature = result["authorization"].rpartition("Signature=")
+            result["authorization"] = head + "Signature=" + "0" * len(signature)
+        return result
+    raise LookupError("no sigv4 vector matches this request")
+
+
+def _token_cases(msg: JsonObject, suffix: str) -> list[JsonObject]:
+    tok = json.loads(check.TOKEN_FILE.read_text(encoding="utf-8"))
+    return [c for c in tok["cases"]
+            if c["id"].endswith(suffix) and c["provider"] == msg["provider"] and c["rung"] == msg["rung"]]
+
+
+def op_token_exchange_build(msg: JsonObject) -> JsonObject:
+    """Echo the pinned exchange request.  The harness adds ``private_key_pem``
+    to the input it sends (check.run_token_direction); strip it before matching."""
+    sent = {k: v for k, v in msg["input"].items() if k != "private_key_pem"}
+    for case in _token_cases(msg, ".build"):
+        if check.expand_files(case["input"]) == sent:
+            result = dict(case["expect"]["request"])
+            if MUTATION == "token_assertion_drift" and targeted({"id": f"token.{case['id']}"}):
+                result["body"] = {**result["body"], "assertion": result["body"]["assertion"] + "x"}
+            return result
+    raise LookupError("no token-exchange build vector matches this input")
+
+
+def op_token_exchange_parse(msg: JsonObject) -> JsonObject:
+    for case in _token_cases(msg, ".parse"):
+        pinned = check.expand_files(case["input"])
+        if (pinned["status"], pinned["body"]) != (msg["status"], msg["body"]):
+            continue
+        credential = dict(case["expect"]["credential"])
+        if MUTATION == "token_credential_drift" and targeted({"id": f"token.{case['id']}"}):
+            credential["expires_at"] = "1970-01-01T00:00:00Z"
+        return {"ok": True, "credential": credential}
+    raise LookupError("no token-exchange parse vector matches this response")
 
 
 # ─── Endpoint surfaces: files / batch / generation ───────────────────
@@ -577,6 +656,9 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "batch_op_parse": op_batch_op_parse,
     "cache_op_build": op_cache_op_build,
     "cache_op_parse": op_cache_op_parse,
+    "sigv4_sign": op_sigv4_sign,
+    "token_exchange_build": op_token_exchange_build,
+    "token_exchange_parse": op_token_exchange_parse,
 }
 
 

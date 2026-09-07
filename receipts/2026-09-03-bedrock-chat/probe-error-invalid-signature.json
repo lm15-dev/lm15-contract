@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260903T164940Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b-1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "The security token included in the request is invalid.",
+      "type": "permission_denied_error",
+      "param": null,
+      "code": "invalid_api_key"
+    }
+  },
+  "timestamp": "2026-09-03T16-49-40Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "b03e3086-b491-4ec7-805a-6cef59264d85"
+  }
+}

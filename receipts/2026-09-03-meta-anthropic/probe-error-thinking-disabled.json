@@ -1,0 +1,44 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100,
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "`thinking.type: \"disabled\"` is not supported with this model.",
+      "type": "invalid_request_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-50-54Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "c916cf84-bb49-4deb-8242-dac72c21c343"
+  }
+}

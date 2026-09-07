@@ -1,0 +1,49 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Compute 2+2 with code."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 300,
+      "tools": [
+        {
+          "type": "code_execution"
+        }
+      ],
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "`tools[0]` did not match any supported type",
+      "param": "tools[0]",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T12-08-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "312ca742-4db4-430a-962b-bccc2753a154"
+  }
+}

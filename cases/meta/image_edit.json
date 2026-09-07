@@ -1,0 +1,40 @@
+{
+  "id": "meta.image_edit",
+  "provider": "meta",
+  "feature": "image_edit",
+  "surface": "generation",
+  "kind": "image",
+  "description": "Meta Muse Image edit (POST /images/edits multipart image[] — the OpenAI SDK shape; images--edit.md)",
+  "base_url": "https://api.meta.ai/v1",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-03",
+    "evidence": "api.meta.ai 2026-09-03T11-46-21Z, muse-image-1.0, HTTP 200; input image is a 64x64 solid red PNG built by the capture script; adapter-built wire (OpenAILM, compat+access 'meta'); verbatim body at bodies/meta.image_edit/2026-09-03T11-46-21Z.json; changes/2026-09-03-meta-live.md"
+  },
+  "generation_request": {
+    "model": "muse-image-1.0",
+    "prompt": "Add one small solid blue square in the bottom-right corner. Keep everything else exactly the same.",
+    "images": [
+      {
+        "type": "image",
+        "media_type": "image/png",
+        "data": "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQkAAAgEsEty/UMZxgi+hcEKLNO+FgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQGBywLPLIEA68ZURwAAAABJRU5ErkJggg=="
+      }
+    ]
+  },
+  "request": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/images/edits",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "multipart/form-data; boundary=lm15-527146c6cbdd4cb698376dc53b03566e"
+    },
+    "body": null,
+    "body_b64": "LS1sbTE1LTUyNzE0NmM2Y2JkZDRjYjY5ODM3NmRjNTNiMDM1NjZlDQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9Im1vZGVsIg0KDQptdXNlLWltYWdlLTEuMA0KLS1sbTE1LTUyNzE0NmM2Y2JkZDRjYjY5ODM3NmRjNTNiMDM1NjZlDQpDb250ZW50LURpc3Bvc2l0aW9uOiBmb3JtLWRhdGE7IG5hbWU9InByb21wdCINCg0KQWRkIG9uZSBzbWFsbCBzb2xpZCBibHVlIHNxdWFyZSBpbiB0aGUgYm90dG9tLXJpZ2h0IGNvcm5lci4gS2VlcCBldmVyeXRoaW5nIGVsc2UgZXhhY3RseSB0aGUgc2FtZS4NCi0tbG0xNS01MjcxNDZjNmNiZGQ0Y2I2OTgzNzZkYzUzYjAzNTY2ZQ0KQ29udGVudC1EaXNwb3NpdGlvbjogZm9ybS1kYXRhOyBuYW1lPSJpbWFnZVswXSI7IGZpbGVuYW1lPSJpbWFnZS0wIg0KQ29udGVudC1UeXBlOiBpbWFnZS9wbmcNCg0KiVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAT0lEQVR42u3PQQkAAAgEsEty/UMZxgi+hcEKLNO+FgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQGBywLPLIEA68ZURwAAAABJRU5ErkJggg0KLS1sbTE1LTUyNzE0NmM2Y2JkZDRjYjY5ODM3NmRjNTNiMDM1NjZlLS0NCg=="
+  },
+  "pinned_body": "2026-09-03T11-46-21Z.json",
+  "expect": {
+    "status": 200
+  }
+}

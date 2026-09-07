@@ -1,0 +1,62 @@
+{
+  "model": "deepseek.v3.2",
+  "sent": {
+    "model": "deepseek.v3.2",
+    "max_completion_tokens": 120,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Where is the Eiffel Tower?"
+      }
+    ],
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "place",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city",
+            "country"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\"city\": \"Paris\", \"country\": \"France\"}",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788523462,
+    "id": "chatcmpl-cc412073-9fcb-4f95-b526-62e4c3afd1aa",
+    "model": "deepseek.v3.2",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 14,
+      "prompt_tokens": 12,
+      "total_tokens": 26
+    }
+  },
+  "timestamp": "2026-09-04T12-04-22Z"
+}

@@ -7,7 +7,16 @@
       "parts": [
         {
           "type": "thinking",
-          "text": "The user explicitly wants me to use the tool. Need call get_weather for Paris. Then summarize result. Ensure no extra unneeded. After tool result, respond concise."
+          "text": "The user explicitly wants me to use the tool. Need call get_weather for Paris. Then summarize result. Ensure no extra unneeded. After tool result, respond concise.",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_uWD3y5lP6WsXJ6nxiFQ0M4Ky"
+              }
+            }
+          ]
         },
         {
           "type": "tool_call",
@@ -34,6 +43,14 @@
       "type": "start",
       "id": "resp_6a99732e660f064c84f90ed3",
       "model": "kimi-k3"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": ""
+      }
     },
     {
       "type": "delta",
@@ -318,6 +335,18 @@
     {
       "type": "delta",
       "delta": {
+        "type": "continuation",
+        "part_index": 0,
+        "provider": "openai",
+        "kind": "reasoning_item",
+        "data": {
+          "id": "rs_uWD3y5lP6WsXJ6nxiFQ0M4Ky"
+        }
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
         "type": "tool_call",
         "part_index": 1,
         "input": "",
@@ -460,7 +489,7 @@
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-03",
-    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md; reasoning-state correction independently derived from the pinned body under MAP-7.8–9 and MAP-9.2–4, changes/2026-09-06-streamed-reasoning-state.md",
     "pinned_body": "2026-09-03T13-16-28Z.txt"
   }
 }

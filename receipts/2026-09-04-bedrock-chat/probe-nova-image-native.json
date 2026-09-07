@@ -1,0 +1,49 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T132614Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "text": "What colour is this?"
+            },
+            {
+              "image": {
+                "format": "png",
+                "source": {
+                  "bytes": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Malformed input request: #: extraneous key [model] is not permitted, reformat your input and try again.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-26-14Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "4aa5fd0b-fcef-4afd-ab23-d48d9f88b016"
+  }
+}

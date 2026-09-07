@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Count from 1 to 10, separated by commas."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "stop_sequences": [
+        "5"
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "`stop_sequences` is not supported",
+      "type": "invalid_request_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-23Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "72546df2-58a1-4ca0-a7b8-5e4b6c78eca1"
+  }
+}

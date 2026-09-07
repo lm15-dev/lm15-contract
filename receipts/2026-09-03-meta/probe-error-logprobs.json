@@ -1,0 +1,48 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 100,
+      "top_logprobs": 2,
+      "include": [
+        "message.output_text.logprobs"
+      ],
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": null,
+      "message": "`message.output_text.logprobs` cannot be included when `reasoning.effort` is `low`. logprobs is not supported with reasoning.",
+      "param": "logprobs",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-43-07Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "a0e8220b-d48e-4ba7-bf0c-1c5112d38bcf"
+  }
+}

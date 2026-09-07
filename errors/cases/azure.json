@@ -1,0 +1,155 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com error envelopes captured verbatim 2026-09-04 by research/providers/azure/capture.py; receipts/2026-09-04-azure/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "azure.unauthenticated",
+      "provider": "azure",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "401",
+          "message": "Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource."
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "azure",
+        "provider_code": "401",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 401 verbatim 2026-09-04T14-15-42Z — receipts/2026-09-04-azure/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure.deployment_not_found",
+      "provider": "azure",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 404,
+      "body": {
+        "error": {
+          "type": "invalid_request_error",
+          "code": "DeploymentNotFound",
+          "message": "The API deployment for this resource does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again."
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "azure",
+        "provider_code": "DeploymentNotFound",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 404 verbatim 2026-09-04T14-15-44Z — receipts/2026-09-04-azure/probe-error-deployment-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure.bad_param",
+      "provider": "azure",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got -1 instead.",
+          "type": "invalid_request_error",
+          "param": "max_output_tokens",
+          "code": "integer_below_min_value"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "azure",
+        "provider_code": "integer_below_min_value",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 400 verbatim 2026-09-04T14-15-45Z — receipts/2026-09-04-azure/probe-error-bad-param.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure.content_filter",
+      "provider": "azure",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The response was filtered due to the prompt triggering Azure OpenAI’s content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766",
+          "type": "invalid_request_error",
+          "param": "prompt",
+          "code": "content_filter",
+          "content_filters": [
+            {
+              "blocked": true,
+              "source_type": "prompt",
+              "content_filter_raw": [],
+              "content_filter_results": {
+                "hate": {
+                  "filtered": false,
+                  "severity": "safe"
+                },
+                "sexual": {
+                  "filtered": false,
+                  "severity": "safe"
+                },
+                "violence": {
+                  "filtered": false,
+                  "severity": "safe"
+                },
+                "self_harm": {
+                  "filtered": true,
+                  "severity": "medium"
+                },
+                "jailbreak": {
+                  "detected": false,
+                  "filtered": false
+                }
+              },
+              "content_filter_offsets": {
+                "start_offset": 0,
+                "end_offset": 183,
+                "check_offset": 0
+              }
+            }
+          ],
+          "innererror": {
+            "code": "ContentFiltered"
+          }
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "azure",
+        "provider_code": "content_filter",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 400 verbatim 2026-09-04T14-15-46Z — receipts/2026-09-04-azure/probe-error-content-filter.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

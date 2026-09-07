@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-nonexistent",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "message": "Model not found or access denied",
+      "type": "not_found_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-25Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "8422eb24-568d-4eea-ae80-829427e52576"
+  }
+}

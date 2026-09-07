@@ -373,6 +373,94 @@ Runtime mirror: `CACHE_PREFIXES`. Added 2026-09-01 (MAP-6, changes/2026-09-01-ca
 | `usage` | added 2026-09-02: billed tokens of a response that does not end the turn (function-call response, cancelled response); a session's bill is the sum of `usage` + `turn_end` events; never a turn boundary |
 | `error` |
 
+## AuthScheme
+
+Runtime mirror: `AUTH_SCHEMES` (added 2026-09-03, changes/2026-09-03-cloud-hosts.md;
+replaces the two-value `AuthHeader`). How a credential travels
+(spec/auth.md AUTH-10).
+
+| Value | Credential kind | Wire |
+|---|---|---|
+| `bearer` | `api_key`, `bearer_token` | `Authorization: Bearer …` |
+| `x-api-key` | `api_key` | `x-api-key: …` |
+| `api-key` | `api_key` | `api-key: …` |
+| `query-key` | `api_key` | `?key=…` |
+| `sigv4` | `aws` | `Authorization: AWS4-HMAC-SHA256 …`, `x-amz-date`, `x-amz-security-token` |
+
+## CredentialKind
+
+Runtime mirror: `CREDENTIAL_KINDS` (added 2026-09-03). The `kind`
+discriminator of a credential value (spec/auth.md AUTH-2).
+
+| Value |
+|---|
+| `api_key` |
+| `bearer_token` |
+| `aws` |
+
+## CredentialPolicy
+
+Runtime mirror: `CREDENTIAL_POLICIES` (pinned here 2026-09-03; the first
+three exist since 2026-09-01). spec/auth.md AUTH-1.
+
+| Value |
+|---|
+| `key` |
+| `oauth` |
+| `oauth-unless-explicit` |
+| `aws-chain` |
+| `azure-chain` |
+| `gcp-chain` |
+
+## RungKind
+
+Runtime mirror: `RUNG_KINDS` (added 2026-09-03). spec/auth.md AUTH-11.
+
+| Value |
+|---|
+| `env` |
+| `ini-profile` |
+| `json-file` |
+| `subprocess` |
+| `http-metadata` |
+| `http-token-exchange` |
+| `sigv4-sts` |
+| `unsigned-sts` |
+| `jwt-rs256` |
+| `file-cache` |
+
+## AuthStepState
+
+Runtime mirror: `AUTH_STEP_STATES` (pinned here 2026-09-03; `unprobed`
+added the same day). spec/auth.md AUTH-7.
+
+| Value |
+|---|
+| `selected` |
+| `shadowed` |
+| `absent` |
+| `unprobed` |
+
+## StreamFraming
+
+Runtime mirror: `STREAM_FRAMINGS` (added 2026-09-03). spec/auth.md
+AUTH-10 `host.stream_framing`.
+
+| Value |
+|---|
+| `sse` |
+| `aws-event-stream` |
+
+## ModelPlacement
+
+Runtime mirror: `MODEL_PLACEMENTS` (added 2026-09-03). spec/auth.md
+AUTH-10 `host.model_in`.
+
+| Value |
+|---|
+| `body` |
+| `path` |
+
 ## Open string namespaces (NOT vocabularies)
 
 - `ContinuationKind` — provider-owned, opaque, any non-empty string.
@@ -385,3 +473,5 @@ Runtime mirror: `CACHE_PREFIXES`. Added 2026-09-01 (MAP-6, changes/2026-09-01-ca
 ---
 
 Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; canonical-facts authority now includes spec/ per AUTHORITY.md).
+
+Amended 2026-09-03 (AuthScheme, CredentialKind, CredentialPolicy, RungKind, AuthStepState, StreamFraming, ModelPlacement) — ratified in session; see changes/2026-09-03-cloud-hosts.md.

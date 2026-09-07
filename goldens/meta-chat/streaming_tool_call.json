@@ -1,0 +1,79 @@
+{
+  "canonical_response": {
+    "model": "muse-spark-1.3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "I'll fetch the current weather in Paris."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_01a06719bef975d3912c2f61c4f598e7",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 545,
+      "output_tokens": 89,
+      "total_tokens": 634,
+      "cache_read_tokens": 497,
+      "reasoning_tokens": 22
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "muse-spark-1.3"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "I'll fetch the current weather in Paris."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "call_01a06719bef975d3912c2f61c4f598e7",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\"Paris\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 545,
+        "output_tokens": 89,
+        "total_tokens": 634,
+        "cache_read_tokens": 497,
+        "reasoning_tokens": 22
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-03",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-03T11-48-54Z.txt"
+  }
+}

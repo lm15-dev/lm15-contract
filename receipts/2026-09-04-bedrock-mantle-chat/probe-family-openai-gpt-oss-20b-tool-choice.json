@@ -1,0 +1,75 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T135430Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "openai.gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "ok.",
+          "reasoning": "User wants: \"Say ok.\" Probably respond with \"ok.\" That's it.",
+          "refusal": null,
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1788530070,
+    "id": "chatcmpl-cb40878c-f3a7-432f-8920-7944381e3f15",
+    "model": "openai.gpt-oss-20b",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 28,
+      "prompt_tokens": 123,
+      "total_tokens": 151
+    }
+  },
+  "timestamp": "2026-09-04T13-54-30Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_nhqhgul4p2smqh6vvut2psjnzjh6eltfy6hjs3voq27zmjtdh5ba"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "model": "qwen.qwen3-32b-v1:0",
+  "sent": {
+    "model": "qwen.qwen3-32b-v1:0",
+    "max_completion_tokens": 60,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say ok."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      }
+    ],
+    "tool_choice": "required"
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\": \"Amsterdam\"}",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-89d2885d4c438a97",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788523464,
+    "id": "chatcmpl-444a340c-1af7-41d0-8e02-2bf37af1220d",
+    "model": "qwen.qwen3-32b-v1:0",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 20,
+      "prompt_tokens": 157,
+      "total_tokens": 177
+    }
+  },
+  "timestamp": "2026-09-04T12-04-24Z"
+}

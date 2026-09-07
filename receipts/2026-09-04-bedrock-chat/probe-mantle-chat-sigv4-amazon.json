@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T132824Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-2-lite-v1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "code": "not_found_error",
+      "message": "The model 'amazon.nova-2-lite-v1:0' does not exist",
+      "param": null,
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-04T13-28-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_zkn2w3ypwvdotrkhq2eje3n3gtmut2hlxw7rwilfiug2qpujnp2a"
+  }
+}

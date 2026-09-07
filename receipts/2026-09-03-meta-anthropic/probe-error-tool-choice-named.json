@@ -1,0 +1,68 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/messages",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "tool",
+        "name": "get_weather"
+      },
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "named `tool_choice` is not supported",
+      "type": "invalid_request_error"
+    },
+    "type": "error"
+  },
+  "timestamp": "2026-09-03T11-51-18Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "04a06b54-a209-4589-872d-5d6afca942b3"
+  }
+}

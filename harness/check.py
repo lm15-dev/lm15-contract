@@ -46,7 +46,9 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "models", "live", "files", "batch", "generation", "video", "cache")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache")
+SIGV4_FILE = CONTRACT_ROOT / "auth" / "sigv4-vectors.json"
+TOKEN_FILE = CONTRACT_ROOT / "auth" / "token-vectors.json"
 
 # The api_key the harness injects into build_request; PROTOCOL.md requires the
 # shim to use it verbatim and never read environment keys.
@@ -56,7 +58,7 @@ API_KEY = "test-key-123"
 # $VAR placeholder / REDACTED), so these are the ONLY headers compared by
 # format: the fixture supplies the shape (e.g. "Bearer <anything>"), the
 # harness supplies the key. Everything else is verbatim.
-AUTH_HEADERS = frozenset({"authorization", "x-api-key", "x-goog-api-key"})
+AUTH_HEADERS = frozenset({"authorization", "x-api-key", "x-goog-api-key", "api-key"})
 
 # Transport noise dropped from BOTH sides before header comparison. This list
 # is fixed; widening it weakens the oracle.
@@ -588,12 +590,19 @@ def expected_wire_request(case: JsonObject) -> JsonObject:
     if isinstance(req.get("params"), dict):
         params.update({str(k): str(v) for k, v in req["params"].items()})
 
+    # A case that pins a string-kind credential (api_key / bearer_token,
+    # PROTOCOL.md 2026-09-04) expects its auth header byte for byte, the way
+    # a SigV4 case expects its signature: the harness sends that credential,
+    # not the injected api_key, and does not rewrite.
+    pinned_string_credential = isinstance(case.get("credential"), dict) and case["credential"].get("kind") in ("api_key", "bearer_token")
     headers: dict[str, str] = {}
     for name, value in req.get("headers", {}).items():
         lower = str(name).lower()
         if lower in DROP_HEADERS:
             continue
-        if lower in AUTH_HEADERS:
+        if lower in AUTH_HEADERS and not str(value).startswith("AWS4-HMAC-SHA256 ") and not pinned_string_credential:
+            # A SigV4 signature is reproduced from the case's fixed credential
+            # and clock (PROTOCOL.md 2026-09-03), never rewritten.
             value = f"Bearer {API_KEY}" if str(value).startswith("Bearer ") else API_KEY
         headers[lower] = value
 
@@ -623,6 +632,39 @@ def actual_wire_request(result: JsonObject) -> JsonObject:
     return out
 
 
+def expand_files(value: Any) -> Any:
+    """PROTOCOL.md: ``{"$file": <repo path>, "strip_comment_lines"?: true}``
+    is replaced by that file's contents before the op is sent.  The corpus
+    test key lives at one path and is never duplicated into a fixture."""
+    if isinstance(value, dict):
+        if "$file" in value:
+            relative = Path(str(value["$file"]))
+            root = CONTRACT_ROOT.resolve()
+            target = (root / relative).resolve()
+            if (relative.is_absolute() or not target.is_relative_to(root)
+                    or any(part == ".env" or part.endswith(".env") or part.startswith(".env.")
+                           for part in target.parts)):
+                raise ValueError("$file must name a non-secret file inside the contract")
+            text = target.read_text(encoding="utf-8")
+            if value.get("strip_comment_lines"):
+                text = "\n".join(line for line in text.splitlines() if not line.startswith("#")) + "\n"
+            return text
+        return {k: expand_files(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [expand_files(v) for v in value]
+    return value
+
+
+def host_fields(case: JsonObject) -> JsonObject:
+    """``credential`` / ``now`` / ``settings`` a cloud-host case pins
+    (PROTOCOL.md, 2026-09-03); absent on every pre-existing case."""
+    out: JsonObject = {}
+    for key in ("credential", "now", "settings"):
+        if key in case:
+            out[key] = expand_files(case[key])
+    return out
+
+
 def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     report = DirectionReport("request")
     for case in load_wire_cases():
@@ -639,6 +681,7 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
             stream=bool(case.get("stream", False)),
             api_key=API_KEY,
             **case_base_url(case),
+            **host_fields(case),
         )
         raises = expected_raise(case, "build_request")
         if raises is not None:
@@ -793,7 +836,7 @@ def run_error_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         body = case["body"]
         body_text = body if isinstance(body, str) else json.dumps(body)
         reply = shim.call(
-            "normalize_error", provider=case["provider"], status=int(case["status"]), body_text=body_text
+            "normalize_error", provider=case["provider"], status=int(case["status"]), body_text=body_text, **host_fields(case)
         )
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
@@ -852,6 +895,7 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             reply = shim.call(
                 "replay_stream",
                 provider=case["provider"],
+                **host_fields(case),
                 canonical_request=case["canonical_request"],
                 body_b64=body_b64,
                 **case_base_url(case),
@@ -860,6 +904,7 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             reply = shim.call(
                 "parse_response",
                 provider=case["provider"],
+                **host_fields(case),
                 canonical_request=case["canonical_request"],
                 status=int(case.get("expect", {}).get("status", 200)),
                 body_b64=body_b64,
@@ -974,6 +1019,24 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
             }
             if "borrowed_file" in case:
                 fields["credentials_path"] = materialize_borrowed_file(case, tmp_dir)
+            if "files" in case:
+                # Cloud-chain cases: the harness owns the home directory too.
+                home = Path(tempfile.mkdtemp(prefix="home-", dir=tmp_dir))
+                fields["env"] = {k: v.replace("~/", f"{home}/") if isinstance(v, str) else v for k, v in fields["env"].items()}
+                fields["env"]["HOME"] = str(home)
+                fields["files"] = {}
+                for rel, content in case["files"].items():
+                    text = expand_files(content)
+                    if not rel.startswith("~/"):
+                        raise ValueError("auth fixture files must be relative to sandbox HOME (~/)")
+                    target = (home / rel[2:]).resolve()
+                    if not target.is_relative_to(home.resolve()):
+                        raise ValueError("auth fixture file escapes sandbox HOME")
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_text(text, encoding="utf-8")
+                    fields["files"][str(target)] = text
+            if "settings" in case:
+                fields["settings"] = case["settings"]
             reply = shim.call("explain_auth", **fields)
             if not reply.get("ok"):
                 report.results.append(shim_reply_failure(case_id, reply))
@@ -999,6 +1062,73 @@ def run_auth_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
                 report.results.append(CaseResult(case_id, "pass"))
             else:
                 report.results.append(CaseResult(case_id, "fail", diff=diff))
+    return report
+
+
+# ─── Direction: token (SigV4 + RS256 + exchange vectors) ─────────────
+
+def run_token_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """AUTH-11 signing and token-exchange vectors, byte for byte.
+
+    ``auth/sigv4-vectors.json`` (the AWS test suite) through ``sigv4_sign``;
+    ``auth/token-vectors.json`` through ``token_exchange_build`` (the exact
+    request, including the RS256 JWT) and ``token_exchange_parse`` (the
+    credential a pinned response yields).  Every input is fixed: keys,
+    clock, ids.  A shim that reads the wall clock or its environment fails.
+    """
+    report = DirectionReport("token")
+    sig = json.loads(SIGV4_FILE.read_text(encoding="utf-8"))
+    fixed = sig["fixed"]
+    for case in sig["cases"]:
+        case_id = f"sigv4.{case['id']}"
+        if case_filter and case_id != case_filter:
+            continue
+        req = case["request"]
+        reply = shim.call(
+            "sigv4_sign",
+            request={"method": req["method"], "url": "https://example.amazonaws.com" + req["target"],
+                     "headers": req.get("headers", {}), "body": req.get("body", "")},
+            credential={"kind": "aws", "access_key_id": fixed["access_key_id"], "secret_access_key": fixed["secret_access_key"],
+                        **({"session_token": req["headers"]["X-Amz-Security-Token"]} if "X-Amz-Security-Token" in req.get("headers", {}) else {})},
+            region=fixed["region"], service=fixed["service"], now=fixed["now"],
+        )
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        expect = case["expect"]
+        actual = {key: reply["result"].get(key, _ABSENT) for key in expect}
+        diff = first_difference(expect, actual)
+        report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+
+    tok = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
+    now = tok["now"]
+    for case in tok["cases"]:
+        case_id = f"token.{case['id']}"
+        if case_filter and case_id != case_filter:
+            continue
+        inputs = expand_files(case["input"])
+        if case["id"].endswith(".build"):
+            if "certificate_pem" in inputs:
+                inputs["private_key_pem"] = expand_files({"$file": tok["test_key"]["private_key_path"], "strip_comment_lines": True})
+            reply = shim.call("token_exchange_build", provider=case["provider"], rung=case["rung"], input=inputs, now=now,
+                              settings=inputs.get("settings", {}))
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            expect = case["expect"]["request"]
+            actual = {key: reply["result"].get(key, _ABSENT) for key in expect}
+            diff = first_difference(expect, actual)
+        else:
+            reply = shim.call("token_exchange_parse", provider=case["provider"], rung=case["rung"],
+                              status=inputs["status"], body=inputs["body"], now=now)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            result = reply["result"]
+            expect = {"ok": True, "credential": case["expect"]["credential"]}
+            actual = {key: result.get(key, _ABSENT) for key in expect}
+            diff = first_difference(expect, actual)
+        report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
     return report
 
 
@@ -1033,7 +1163,7 @@ def run_live_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
             server_frames_b64=[
                 base64.b64encode(live_server_frame_bytes(e)).decode("ascii") for e in server_entries
             ],
-            **case_base_url(case),
+            **host_fields(case), **case_base_url(case),
         )
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
@@ -1123,7 +1253,7 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
         if case_filter and case_id != case_filter:
             continue
 
-        reply = shim.call("build_models_request", provider=case["provider"],
+        reply = shim.call("build_models_request", provider=case["provider"], **host_fields(case),
                           api_key=API_KEY, **case_base_url(case))
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(f"{case_id}[build]", reply))
@@ -1140,7 +1270,7 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
             continue
         golden = json.loads(golden_file.read_text())
         body = pinned_body(case)
-        reply = shim.call("parse_models_response", provider=case["provider"],
+        reply = shim.call("parse_models_response", provider=case["provider"], **host_fields(case),
                           status=int(case.get("expect", {}).get("status", 200)),
                           body_b64=base64.b64encode(body).decode("ascii"),
                           **case_base_url(case))
@@ -1261,7 +1391,8 @@ def run_files_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         for step in case["steps"]:
             op = step["file_op"]
             label = f"{case_id}[{op}]"
-            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY,
+                                  **host_fields(case), **case_base_url(case)}
             for key in ("upload_request", "file_id", "limit", "cursor"):
                 if key in step:
                     fields[key] = step[key]
@@ -1274,7 +1405,7 @@ def run_files_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
                 "file_op_parse", provider=case["provider"], kind=kind,
                 status=int(step.get("expect", {}).get("status", 200)),
                 body_b64=base64.b64encode(_step_body(case, step["pinned_body"])).decode("ascii"),
-                **case_base_url(case),
+                **host_fields(case), **case_base_url(case),
             )
             if not reply.get("ok"):
                 report.results.append(shim_reply_failure(parse_label, reply))
@@ -1340,7 +1471,8 @@ def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         for step in case["steps"]:
             action = step["action"]
             label = f"{case_id}[{action}]"
-            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY, **case_base_url(case)}
+            fields: JsonObject = {"provider": case["provider"], "api_key": API_KEY,
+                                  **host_fields(case), **case_base_url(case)}
             for key in ("batch_request", "batch_id", "limit", "upload_body"):
                 if key in step:
                     fields[key] = step[key]
@@ -1374,7 +1506,8 @@ def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
                 continue
             kind = step["parse"]
             parse_label = f"{case_id}[{action}.parse]"
-            parse_fields: JsonObject = {"provider": case["provider"], "kind": kind, **case_base_url(case)}
+            parse_fields: JsonObject = {"provider": case["provider"], "kind": kind,
+                                        **host_fields(case), **case_base_url(case)}
             if kind == "entries":
                 parse_fields["status_body"] = json.loads(_step_body(case, step["status_body_from"]).decode("utf-8"))
                 parse_fields["fetched_b64"] = [
@@ -1488,7 +1621,7 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
             continue
         reply = shim.call("generation_build", provider=case["provider"], kind=case["kind"],
                           api_key=API_KEY, generation_request=case["generation_request"],
-                          **case_base_url(case))
+                          **host_fields(case), **case_base_url(case))
         _compare_build(report, f"{case_id}[build]", case, reply)
 
         golden_file = golden_path(case)
@@ -1501,7 +1634,7 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
             status=int(case.get("expect", {}).get("status", 200)),
             headers=case.get("response_headers", {}),
             body_b64=base64.b64encode(pinned_body(case)).decode("ascii"),
-            **case_base_url(case),
+            **host_fields(case), **case_base_url(case),
         )
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(parse_label, reply))
@@ -1535,6 +1668,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_parse_direction(shim, direction, case_filter)
     if direction == "auth":
         return run_auth_direction(shim, case_filter)
+    if direction == "token":
+        return run_token_direction(shim, case_filter)
     if direction == "models":
         return run_models_direction(shim, case_filter)
     if direction == "files":

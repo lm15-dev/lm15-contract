@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17 times 23?"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-01a0671a-1a33-7562-89d1-6e993b139561",
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "17 times 23 is **391**!",
+          "refusal": null,
+          "role": "assistant"
+        },
+        "logprobs": null
+      }
+    ],
+    "created": 1788436158,
+    "model": "muse-spark-1.3",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 228,
+      "prompt_tokens": 15,
+      "total_tokens": 243,
+      "completion_tokens_details": {
+        "reasoning_tokens": 209
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-09-03T11-49-14Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "599ce84a-06c7-4b3d-9870-a68415c5adcf"
+  }
+}

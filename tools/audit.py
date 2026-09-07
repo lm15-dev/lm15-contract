@@ -89,6 +89,21 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "file_upload_request": (("FileUploadRequest",), ()),
     "file_info": (("FileInfo",), ("FileReadiness", "FILE_READINESS_VALUES")),
     "file_page": (("FilePage",), ()),
+    # AUTH-2 credential values: canonical JSON with a `kind` discriminator
+    # (changes/2026-09-03-cloud-hosts.md).
+    "credential": (("ApiKey", "BearerToken", "AwsCredentials"), ("CredentialKind", "CREDENTIAL_KINDS")),
+}
+
+# Policy vocabularies are not canonical serde values. Check their complete
+# value sets against the spec separately, rather than claiming that token
+# vectors cover stream framing/model placement or every cloud-chain rung.
+POLICY_ENUMS: dict[str, str] = {
+    "AuthScheme": "AuthScheme", "AUTH_SCHEMES": "AuthScheme",
+    "CredentialPolicy": "CredentialPolicy", "CREDENTIAL_POLICIES": "CredentialPolicy",
+    "RungKind": "RungKind", "RUNG_KINDS": "RungKind",
+    "AuthStepState": "AuthStepState", "AUTH_STEP_STATES": "AuthStepState",
+    "StreamFraming": "StreamFraming", "STREAM_FRAMINGS": "StreamFraming",
+    "ModelPlacement": "ModelPlacement", "MODEL_PLACEMENTS": "ModelPlacement",
 }
 
 
@@ -384,7 +399,20 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
                    for pattern in KIND_COVERS[kind][column])
 
     gap_types = sorted(t for t in surface.get("types", {}) if not covered(t, 0) and t not in NON_WIRE_TYPES)
-    gap_enums = sorted(e for e in surface.get("enums", {}) if not covered(e, 1))
+    gap_enums = sorted(e for e in surface.get("enums", {}) if not covered(e, 1) and e not in POLICY_ENUMS)
+    vocab_path = root / "spec" / "vocabularies.md"
+    vocab_text = vocab_path.read_text() if vocab_path.is_file() else ""
+    policy_count = 0
+    for name, values in surface.get("enums", {}).items():
+        if name not in POLICY_ENUMS:
+            continue
+        policy_count += 1
+        heading = POLICY_ENUMS[name]
+        section = re.search(rf"(?ms)^## {re.escape(heading)}\n(.*?)(?=^## |\Z)", vocab_text)
+        documented = set(re.findall(r"(?m)^\| `([^`]+)` \|", section[1])) if section else set()
+        if set(values) != documented:
+            problems.append(f"SURFACE policy enum {name} differs from spec/vocabularies.md {heading} "
+                            f"(missing={sorted(set(values) - documented)}, extra={sorted(documented - set(values))})")
     for name in gap_types:
         problems.append(f"SURFACE type {name} covered by no serde kind — add vectors under a kind in serde/canonical.json")
     for name in gap_enums:
@@ -407,7 +435,8 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
     for k in missing_in_vectors:
         problems.append(f"SURFACE serde kind {k!r} is listed in harness/PROTOCOL.md but serde/canonical.json has no vector for it")
     return (f"surface coverage: {len(gap_types)} type(s) and {len(gap_enums)} enum(s) uncovered; "
-            f"{len(kinds_present)} serde kind(s) in vectors, {len(listed)} listed in PROTOCOL.md")
+            f"{len(kinds_present)} serde kind(s) in vectors, {len(listed)} listed in PROTOCOL.md; "
+            f"{policy_count} policy enum(s) checked against spec separately (not serde/runtime coverage)")
 
 
 # ─── main ────────────────────────────────────────────────────────────

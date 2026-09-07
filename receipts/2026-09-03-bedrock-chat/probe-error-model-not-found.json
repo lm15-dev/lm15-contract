@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260903T164942Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "lm15.no-such-model-v1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "The provided model identifier is invalid.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "validation_error"
+    }
+  },
+  "timestamp": "2026-09-03T16-49-42Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "8a742e08-950a-4704-9f78-ada98391b00d"
+  }
+}

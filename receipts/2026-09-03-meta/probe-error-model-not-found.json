@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "authorization": "Bearer $META_API_KEY",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "muse-nonexistent",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 100
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "code": "model_not_found",
+      "message": "The requested model was not found.",
+      "param": null,
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-09-03T11-43-56Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "d95803a9-e41b-4030-ae65-1885fa266307"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "model": "mistral.mistral-large-3-675b-instruct",
+  "sent": {
+    "model": "mistral.mistral-large-3-675b-instruct",
+    "max_completion_tokens": 60,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say ok."
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      }
+    ],
+    "tool_choice": "required"
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": null,
+          "refusal": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"city\": \"Ok\"}",
+                "name": "get_weather"
+              },
+              "id": "chatcmpl-tool-a202d1f6accd44ff",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1788523462,
+    "id": "chatcmpl-b692c81b-fdfe-491c-bb2b-4824828e5119",
+    "model": "mistral.mistral-large-3-675b-instruct",
+    "object": "chat.completion",
+    "service_tier": "default",
+    "usage": {
+      "completion_tokens": 20,
+      "prompt_tokens": 67,
+      "total_tokens": 87
+    }
+  },
+  "timestamp": "2026-09-04T12-04-22Z"
+}

@@ -1,0 +1,144 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com error envelopes captured verbatim 2026-09-04 by research/providers/azure-chat/capture.py; receipts/2026-09-04-azure-chat/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "azure-chat.unauthenticated",
+      "provider": "azure-chat",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 401,
+      "body": {
+        "error": {
+          "code": "401",
+          "message": "Access denied due to invalid subscription key or wrong API endpoint. Make sure to provide a valid key for an active subscription and use a correct regional API endpoint for your resource."
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "azure-chat",
+        "provider_code": "401",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 401 verbatim 2026-09-04T14-15-51Z — receipts/2026-09-04-azure-chat/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure-chat.deployment_not_found",
+      "provider": "azure-chat",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 404,
+      "body": {
+        "error": {
+          "type": "invalid_request_error",
+          "code": "DeploymentNotFound",
+          "message": "The API deployment for this resource does not exist. If you created the deployment within the last 5 minutes, please wait a moment and try again."
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "azure-chat",
+        "provider_code": "DeploymentNotFound",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 404 verbatim 2026-09-04T14-15-52Z — receipts/2026-09-04-azure-chat/probe-error-deployment-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure-chat.rate_limited",
+      "provider": "azure-chat",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 429,
+      "body": {
+        "error": {
+          "message": "Your requests to gpt-4.1-mini for gpt-4.1-mini in eastus2 have exceeded rate limit.",
+          "type": "too_many_requests",
+          "param": null,
+          "code": "rate_limit_exceeded"
+        }
+      },
+      "expected": {
+        "class": "RateLimitError",
+        "code": "rate_limit",
+        "provider": "azure-chat",
+        "provider_code": "rate_limit_exceeded",
+        "status": 429
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 429 verbatim 2026-09-04T14-15-53Z — receipts/2026-09-04-azure-chat/probe-error-rate-limited.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "azure-chat.content_filter",
+      "provider": "azure-chat",
+      "settings": {
+        "resource": "lm15-oai-29d280ed6f8e"
+      },
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766",
+          "type": null,
+          "param": "prompt",
+          "code": "content_filter",
+          "status": 400,
+          "innererror": {
+            "code": "ResponsibleAIPolicyViolation",
+            "content_filter_result": {
+              "hate": {
+                "filtered": false,
+                "severity": "safe"
+              },
+              "jailbreak": {
+                "detected": false,
+                "filtered": false
+              },
+              "self_harm": {
+                "filtered": true,
+                "severity": "medium"
+              },
+              "sexual": {
+                "filtered": false,
+                "severity": "safe"
+              },
+              "violence": {
+                "filtered": false,
+                "severity": "safe"
+              }
+            }
+          }
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "azure-chat",
+        "provider_code": "content_filter",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "lm15-oai-29d280ed6f8e.openai.azure.com HTTP 400 verbatim 2026-09-04T14-15-56Z — receipts/2026-09-04-azure-chat/probe-error-content-filter.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

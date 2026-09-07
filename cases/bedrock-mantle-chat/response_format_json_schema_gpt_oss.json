@@ -1,0 +1,64 @@
+{
+  "id": "bedrock-mantle-chat.response_format_json_schema_gpt_oss",
+  "provider": "bedrock-mantle-chat",
+  "feature": "response_format_json_schema_gpt_oss",
+  "description": "MAP-8: json_schema raises FOR gpt-oss on bedrock-mantle-chat. Live 2026-09-04: HTTP 200, prose + a JSON object in content, not a pure document.",
+  "settings": {
+    "region": "us-east-1"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "receipts/2026-09-04-bedrock-mantle-chat/probe-family-openai-gpt-oss-20b-json-schema.json; changes/2026-09-04-bedrock-mantle-chat-live.md"
+  },
+  "canonical_request": {
+    "model": "openai.gpt-oss-20b",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Where is the Eiffel Tower?"
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "name": "place",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city",
+            "country"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-04",
+    "evidence": "authored with the case (research/providers/bedrock-mantle-chat/capture.py); live-validated (receipt above)"
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  }
+}

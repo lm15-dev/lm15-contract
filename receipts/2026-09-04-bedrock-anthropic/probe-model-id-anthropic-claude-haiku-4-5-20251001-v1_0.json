@@ -1,0 +1,44 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-mantle.us-east-1.api.aws/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "host": "bedrock-mantle.us-east-1.api.aws",
+      "x-amz-date": "20260904T121246Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "anthropic.claude-haiku-4-5-20251001-v1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "type": "error",
+    "request_id": "req_ib4csn5uci2snv4yllgxtognqfpaueaud7ar6wvhm6xwmfcts7pq",
+    "error": {
+      "type": "not_found_error",
+      "message": "The model 'anthropic.claude-haiku-4-5-20251001-v1:0' does not exist"
+    }
+  },
+  "timestamp": "2026-09-04T12-12-46Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_ib4csn5uci2snv4yllgxtognqfpaueaud7ar6wvhm6xwmfcts7pq"
+  }
+}

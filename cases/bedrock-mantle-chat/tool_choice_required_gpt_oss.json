@@ -1,0 +1,64 @@
+{
+  "id": "bedrock-mantle-chat.tool_choice_required_gpt_oss",
+  "provider": "bedrock-mantle-chat",
+  "feature": "tool_choice_required_gpt_oss",
+  "description": "MAP-8: tool_choice beyond auto raises FOR gpt-oss on bedrock-mantle-chat (preset bedrock-mantle, openai.gpt-oss → reject). Live 2026-09-04: HTTP 200, finish=stop, content 'ok.', no tool_calls.",
+  "settings": {
+    "region": "us-east-1"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "receipts/2026-09-04-bedrock-mantle-chat/probe-family-openai-gpt-oss-20b-tool-choice.json; Gemma honours the same knob on this door; changes/2026-09-04-bedrock-mantle-chat-live.md"
+  },
+  "canonical_request": {
+    "model": "openai.gpt-oss-20b",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 400,
+      "tool_choice": {
+        "mode": "required"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-04",
+    "evidence": "authored with the case (research/providers/bedrock-mantle-chat/capture.py); live-validated (receipt above)"
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  }
+}

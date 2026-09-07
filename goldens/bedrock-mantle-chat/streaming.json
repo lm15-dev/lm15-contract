@@ -1,0 +1,77 @@
+{
+  "canonical_response": {
+    "model": "openai.gpt-oss-20b",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user said: \"Say ok.\" They want the assistant to respond \"ok\" presumably. Or \"Ok.\" Probably a single word. Should we respond \"Ok.\"?\n\nGiven the instruction: \"Say ok.\" The simplest is to respond \"ok.\" However, sometimes polite endings: \"Okay.\" The instruction is just \"Say ok.\" There's no additional context. I'll reply \"ok.\""
+        },
+        {
+          "type": "text",
+          "text": "ok."
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 70,
+      "output_tokens": 90,
+      "total_tokens": 160
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "openai.gpt-oss-20b"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The user said: \"Say ok.\" They want the assistant to respond \"ok\" presumably. Or \"Ok.\" Probably a single word. Should we"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " respond \"Ok.\"?\n\nGiven the instruction: \"Say ok.\" The simplest is to respond \"ok.\" However, sometimes polite endings: \"Okay.\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " The instruction is just \"Say ok.\" There's no additional context. I'll reply \"ok.\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "ok."
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 70,
+        "output_tokens": 90,
+        "total_tokens": 160
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-04",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-04T13-55-49Z.txt"
+  }
+}

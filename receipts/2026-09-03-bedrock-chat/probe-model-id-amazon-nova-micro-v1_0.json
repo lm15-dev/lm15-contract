@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "host": "bedrock-runtime.us-east-1.amazonaws.com",
+      "x-amz-date": "20260904T121305Z",
+      "authorization": "<redacted: signed with the real key>"
+    },
+    "body": {
+      "model": "amazon.nova-micro-v1:0",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "message": "The model doesn't exist or doesn't support this API. Retry your request with a different model ID.",
+      "type": "not_found_error",
+      "param": null,
+      "code": "model_not_found"
+    }
+  },
+  "timestamp": "2026-09-04T12-13-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "f114cc21-869d-456e-a930-617501d279a6"
+  }
+}

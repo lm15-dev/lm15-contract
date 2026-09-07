@@ -1,0 +1,93 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-04",
+    "evidence": "bedrock-mantle.ap-northeast-1.api.aws error envelopes captured verbatim 2026-09-04 by research/providers/bedrock-anthropic/capture.py; receipts/2026-09-04-bedrock-anthropic/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "bedrock-anthropic.invalid_signature",
+      "provider": "bedrock-anthropic",
+      "settings": {
+        "region": "ap-northeast-1"
+      },
+      "status": 401,
+      "body": {
+        "type": "error",
+        "request_id": "req_helnddyo3rbgqp2khf6qm6rr6r75mdfspfrbbqrrxsm754igk67q",
+        "error": {
+          "type": "authentication_error",
+          "message": "The security token included in the request is invalid."
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "bedrock-anthropic",
+        "provider_code": "authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.ap-northeast-1.api.aws HTTP 401 verbatim 2026-09-04T12-27-53Z — receipts/2026-09-04-bedrock-anthropic/probe-error-invalid-signature.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "bedrock-anthropic.model_not_found",
+      "provider": "bedrock-anthropic",
+      "settings": {
+        "region": "ap-northeast-1"
+      },
+      "status": 404,
+      "body": {
+        "type": "error",
+        "request_id": "req_youafp5kokfdb7qwagxubekhkw3oa3h2z5tkxerfh2f6hqsrcpza",
+        "error": {
+          "type": "not_found_error",
+          "message": "The model 'anthropic.claude-no-such-model' does not exist"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "bedrock-anthropic",
+        "provider_code": "not_found_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.ap-northeast-1.api.aws HTTP 404 verbatim 2026-09-04T12-28-05Z — receipts/2026-09-04-bedrock-anthropic/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "bedrock-anthropic.model_gated",
+      "provider": "bedrock-anthropic",
+      "settings": {
+        "region": "us-east-1"
+      },
+      "status": 403,
+      "body": {
+        "type": "error",
+        "request_id": "req_hr2w4d4lqjzhbq6fufgof2lecbpersq5awlingelwavrgccpsxiq",
+        "error": {
+          "type": "permission_error",
+          "message": "anthropic.claude-haiku-4-5 is not available for this account. You can explore other available models on Amazon Bedrock. For additional access options, contact AWS Sales at https://aws.amazon.com/contact-us/sales-support/"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "bedrock-anthropic",
+        "provider_code": "permission_error",
+        "status": 403
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-04",
+        "evidence": "bedrock-mantle.us-east-1.api.aws HTTP 403 verbatim 2026-09-04T13-15-08Z — receipts/2026-09-04-bedrock-anthropic/probe-error-model-gated.json; the account gate on every Claude id on this door (same body under SigV4 and under a short-term key as x-api-key; probe-bearer-*.json); expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}
