@@ -125,7 +125,7 @@ def main(argv: list[str] | None = None) -> int:
     problems: list[str] = []
     scanned = 0
 
-    for sub in ("cases", "errors", "auth", "goldens"):
+    for sub in ("cases", "errors", "auth", "router", "goldens"):
         base = root / sub
         if not base.is_dir():
             continue

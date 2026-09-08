@@ -65,6 +65,10 @@ MUTATIONS = (
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
+    "router_class_drift",       # resolve_model: ambiguous_model collapsed to the parent class
+    "router_resolves_instead_of_refusing",  # resolve_model: an unknown string routed anyway
+    "router_provider_underscore",  # resolve_model: the underscore spelling as an OUTPUT value
+    "router_alias_not_resolved",   # resolve_model: a catalog alias sent on the wire unresolved
 )
 
 MUTATION = "none"
@@ -283,10 +287,44 @@ def _strip_error_flag(body: JsonObject) -> None:
 def op_parse_response(msg: JsonObject) -> JsonObject:
     case = find_parse_case(msg)
     golden = json.loads(check.golden_path(case).read_text())
+    raises = check.expected_raise(case, "parse_response")
+    if raises is not None:
+        # A complete-path refusal (MAP-9, 2026-09-07): the golden carries
+        # provenance only; the reply is the pinned ok=false.
+        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal"})
     resp = golden["canonical_response"]
     if targeted(case):
         mutate_response(resp)
     return {"canonical_response": resp}
+
+
+def op_resolve_model(msg: JsonObject) -> JsonObject:
+    fixture = check.load_router_fixture()
+    for case in fixture["cases"]:
+        if case["model"] != msg["model"] or case.get("catalog") != msg.get("catalog"):
+            continue
+        expect = case["expect"]
+        if "error" in expect:
+            error = dict(expect["error"])
+            error["type"] = error.pop("class")
+            error["message"] = "pinned refusal"
+            if targeted(case):
+                if MUTATION == "router_class_drift":
+                    # The pre-2026-09-08 port: every routing failure is the
+                    # parent class, the distinction lost.
+                    error["type"], error["code"] = "ConfigurationError", "not_configured"
+                    error.pop("providers", None)
+                elif MUTATION == "router_resolves_instead_of_refusing":
+                    return {"provider": "openai", "model": msg["model"], "source": "rule"}
+            raise PinnedRaise(error)
+        result = dict(expect)
+        if targeted(case):
+            if MUTATION == "router_provider_underscore":
+                result["provider"] = result["provider"].replace("-", "_")
+            elif MUTATION == "router_alias_not_resolved":
+                result["model"] = msg["model"]
+        return result
+    raise LookupError("no router fixture matches this (model, catalog)")
 
 
 def op_replay_stream(msg: JsonObject) -> JsonObject:
@@ -714,6 +752,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "normalize_error": op_normalize_error,
     "serde_roundtrip": op_serde_roundtrip,
     "explain_auth": op_explain_auth,
+    "resolve_model": op_resolve_model,
     "build_models_request": op_build_models_request,
     "parse_models_response": op_parse_models_response,
     "replay_live": op_replay_live,

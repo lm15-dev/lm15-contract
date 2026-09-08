@@ -1,0 +1,263 @@
+{
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "changes/2026-09-08-router-error-codes.md (ratified 2026-09-08); spec/vocabularies.md § ErrorCode (unknown_model, ambiguous_model) and § Open string namespaces (provider spelling); playbooks/api-family.md § The core loop (the router's three rungs: prefix, catalog, rule). Expected values derived from the reference's lm15.router after the fix and confirmed against the Rust port's lm15-vet; both shims green at authoring."
+  },
+  "description": "Model-string resolution fixtures exercised through each implementation's resolve_model op (PROTOCOL.md). The harness supplies the model string and, when the case carries one, an explicit catalog of canonical ModelInfo values; it always supplies an empty env so no real environment leaks in. resolve is pure: no network, no credential lookup. A pass compares Resolution.provider / model / source strictly, or — for an error case — the failure reply's error class, code and the payload fields the vocabulary pins (model; providers for ambiguous_model). Source values: prefix (rung 1), catalog (rung 2), rule (rung 3).",
+  "cases": [
+    {
+      "id": "prefix-routes",
+      "model": "anthropic:claude-sonnet-4-5",
+      "expect": {
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "prefix-first-colon-only",
+      "model": "openai:ft:gpt-4.1:org:suffix",
+      "expect": {
+        "provider": "openai",
+        "model": "ft:gpt-4.1:org:suffix",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "prefix-underscore-alias-is-input-only",
+      "model": "openai_chat:llama-3.1-8b-instant",
+      "expect": {
+        "provider": "openai-chat",
+        "model": "llama-3.1-8b-instant",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "prefix-bound-provider",
+      "model": "groq:llama-3.3-70b-versatile",
+      "expect": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "rule-gpt-family",
+      "model": "gpt-4.1-mini",
+      "expect": {
+        "provider": "openai",
+        "model": "gpt-4.1-mini",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-claude-family",
+      "model": "claude-haiku-4-5",
+      "expect": {
+        "provider": "anthropic",
+        "model": "claude-haiku-4-5",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-gemini-family",
+      "model": "gemini-2.5-flash",
+      "expect": {
+        "provider": "gemini",
+        "model": "gemini-2.5-flash",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-grok-family",
+      "model": "grok-4",
+      "expect": {
+        "provider": "xai",
+        "model": "grok-4",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "catalog-exact-id",
+      "model": "llama-3.3-70b-versatile",
+      "catalog": [
+        {"id": "llama-3.3-70b-versatile", "provider": "groq", "api_family": "openai_chat"}
+      ],
+      "expect": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "source": "catalog"
+      }
+    },
+    {
+      "id": "catalog-alias-resolves-to-canonical-id",
+      "model": "llama3.3",
+      "catalog": [
+        {"id": "llama-3.3-70b-versatile", "provider": "groq", "api_family": "openai_chat", "aliases": ["llama3.3"]}
+      ],
+      "expect": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "source": "catalog"
+      }
+    },
+    {
+      "id": "catalog-exact-id-beats-alias",
+      "model": "shared-name",
+      "catalog": [
+        {"id": "other-model", "provider": "groq", "api_family": "openai_chat", "aliases": ["shared-name"]},
+        {"id": "shared-name", "provider": "groq", "api_family": "openai_chat"}
+      ],
+      "expect": {
+        "provider": "groq",
+        "model": "shared-name",
+        "source": "catalog"
+      }
+    },
+    {
+      "id": "catalog-beats-rule",
+      "model": "gpt-4.1-mini",
+      "catalog": [
+        {"id": "gpt-4.1-mini", "provider": "azure", "api_family": "openai_responses"}
+      ],
+      "expect": {
+        "provider": "azure",
+        "model": "gpt-4.1-mini",
+        "source": "catalog"
+      }
+    },
+    {
+      "id": "prefix-beats-catalog",
+      "model": "openai:gpt-4.1-mini",
+      "catalog": [
+        {"id": "gpt-4.1-mini", "provider": "azure", "api_family": "openai_responses"}
+      ],
+      "expect": {
+        "provider": "openai",
+        "model": "gpt-4.1-mini",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "ambiguous-two-providers",
+      "model": "shared-model",
+      "catalog": [
+        {"id": "shared-model", "provider": "groq", "api_family": "openai_chat"},
+        {"id": "shared-model", "provider": "deepseek", "api_family": "openai_chat"}
+      ],
+      "expect": {
+        "error": {
+          "class": "AmbiguousModelError",
+          "code": "ambiguous_model",
+          "model": "shared-model",
+          "providers": ["groq", "deepseek"]
+        }
+      }
+    },
+    {
+      "id": "ambiguous-alias-under-two-providers",
+      "model": "fast",
+      "catalog": [
+        {"id": "groq-fast-1", "provider": "groq", "api_family": "openai_chat", "aliases": ["fast"]},
+        {"id": "gemini-fast-1", "provider": "gemini", "api_family": "gemini_generate_content", "aliases": ["fast"]}
+      ],
+      "expect": {
+        "error": {
+          "class": "AmbiguousModelError",
+          "code": "ambiguous_model",
+          "model": "fast",
+          "providers": ["groq", "gemini"]
+        }
+      }
+    },
+    {
+      "id": "ambiguous-alias-under-one-provider",
+      "model": "fast",
+      "catalog": [
+        {"id": "groq-fast-1", "provider": "groq", "api_family": "openai_chat", "aliases": ["fast"]},
+        {"id": "groq-fast-2", "provider": "groq", "api_family": "openai_chat", "aliases": ["fast"]}
+      ],
+      "expect": {
+        "error": {
+          "class": "AmbiguousModelError",
+          "code": "ambiguous_model",
+          "model": "fast",
+          "providers": ["groq"]
+        }
+      }
+    },
+    {
+      "id": "unknown-nothing-matches",
+      "model": "totally-unknown-model",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "totally-unknown-model"
+        }
+      }
+    },
+    {
+      "id": "unknown-empty-string",
+      "model": "",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": ""
+        }
+      }
+    },
+    {
+      "id": "unknown-unroutable-prefix",
+      "model": "nope:some-model",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "nope:some-model"
+        }
+      }
+    },
+    {
+      "id": "unknown-prefix-with-empty-rest",
+      "model": "anthropic:",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "anthropic:"
+        }
+      }
+    },
+    {
+      "id": "unknown-catalog-miss-no-rule",
+      "model": "totally-unknown-model",
+      "catalog": [
+        {"id": "some-other-model", "provider": "groq", "api_family": "openai_chat"}
+      ],
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "totally-unknown-model"
+        }
+      }
+    },
+    {
+      "id": "unknown-catalog-names-unroutable-provider",
+      "model": "mystery-model",
+      "catalog": [
+        {"id": "mystery-model", "provider": "no-such-provider", "api_family": "openai_chat"}
+      ],
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "mystery-model"
+        }
+      }
+    }
+  ]
+}

@@ -18,7 +18,7 @@ imports NOTHING from lm15: stdlib only.
   type only (D9, changes/2026-09-06-decisions.md); never by content.
 
 Usage:
-    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|all]
+    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|router|all]
                             [--case ID] [--auth-scope core|cloud|all] [--report-dir harness/reports]
 
 ``--auth-scope`` applies to the auth direction only: ``core`` runs the cases
@@ -56,7 +56,8 @@ SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache")
+ROUTER_FILE = CONTRACT_ROOT / "router" / "resolution.json"
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router")
 SIGV4_FILE = CONTRACT_ROOT / "auth" / "sigv4-vectors.json"
 TOKEN_FILE = CONTRACT_ROOT / "auth" / "token-vectors.json"
 
@@ -437,6 +438,10 @@ def load_serde_cases() -> list[JsonObject]:
 
 def load_auth_fixture() -> JsonObject:
     return json.loads(AUTH_FILE.read_text())
+
+
+def load_router_fixture() -> JsonObject:
+    return json.loads(ROUTER_FILE.read_text())
 
 
 AUTH_SCOPES = ("core", "cloud", "all")
@@ -1174,6 +1179,56 @@ def run_auth_direction(shim: Shim, case_filter: str | None, auth_scope: str = "a
     return report
 
 
+# ─── Direction: router (model-string resolution) ─────────────────────
+
+def run_router_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """Model-string resolution through the shim's resolve_model (PROTOCOL.md).
+
+    The harness supplies the model string, an always-empty env (so the
+    real process environment never leaks in) and, when the case carries
+    one, an explicit catalog of canonical ModelInfo values. ``resolve`` is
+    pure: no network, no credential lookup. A resolution case compares
+    ``provider`` / ``model`` / ``source`` strictly; an error case compares
+    the failure reply's ``error`` against ``expect.error`` key by key
+    (class, code, and the payload fields spec/vocabularies.md pins for
+    ``unknown_model`` / ``ambiguous_model``: ``model``, ``providers``).
+    """
+    report = DirectionReport("router")
+    fixture = load_router_fixture()
+    for case in fixture["cases"]:
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        fields: JsonObject = {"model": case["model"], "env": {}}
+        if "catalog" in case:
+            fields["catalog"] = case["catalog"]
+        reply = shim.call("resolve_model", **fields)
+        expect = case["expect"]
+        if "error" in expect:
+            if reply.get("ok"):
+                report.results.append(CaseResult(
+                    case_id, "fail",
+                    reason=f"expected {expect['error'].get('class')} but the shim resolved: {json.dumps(reply.get('result'))}",
+                ))
+                continue
+            error = reply.get("error") or {}
+            # The vet failure envelope spells the class ``type``; PROTOCOL.md.
+            actual = {key: (error.get("type", _ABSENT) if key == "class" else error.get(key, _ABSENT)) for key in expect["error"]}
+            diff = first_difference(expect["error"], actual)
+        else:
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            result = reply["result"]
+            actual = {key: result.get(key, _ABSENT) for key in expect}
+            diff = first_difference(expect, actual)
+        if diff is None:
+            report.results.append(CaseResult(case_id, "pass"))
+        else:
+            report.results.append(CaseResult(case_id, "fail", diff=diff))
+    return report
+
+
 # ─── Direction: token (SigV4 + RS256 + exchange vectors) ─────────────
 
 def sigv4_session_token(case: JsonObject) -> str | None:
@@ -1810,6 +1865,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_live_direction(shim, case_filter)
     if direction == "cache":
         return run_cache_direction(shim, case_filter)
+    if direction == "router":
+        return run_router_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

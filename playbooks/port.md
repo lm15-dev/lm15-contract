@@ -32,13 +32,14 @@ when its direction is green with zero skips added, and stays green.
 | 3b | cloud chains (AUTH-1 cloud chains, AUTH-11 rung kinds, SigV4, RS256) | `--direction token`; `--direction auth --auth-scope cloud` (the cloud cases); `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
 | 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
+| 5c | the router (`playbooks/api-family.md` § The core loop; AUTH-1 resolution order; `changes/2026-09-08-router-error-codes.md`) | `--direction router` (`router/resolution.json`: the three rungs, their precedence, `unknown_model` / `ambiguous_model` with payload) |
 | 6 | model listing | `--direction models` |
 | 7 | files, batch, cache surfaces | `--direction files`, `batch`, `cache` |
 | 8 | generation (image, speech) and video | `--direction generation`, `video` |
 | 9 | live (websocket transcripts) | `--direction live` |
 
-Modules 1, 2, 3a, 4 and 5 form the required core and gate the 1.0 tag for
-every language. Their exact scope follows the pinned contract, including
+Modules 1, 2, 3a, 4, 5 and 5c form the required core and gate the 1.0 tag
+for every language. Their exact scope follows the pinned contract, including
 ratified amendments. Module 3b does not gate 1.0: a port without 3b
 answers `NotConfiguredError` for cloud-chain providers and states it in
 its README. A cloud case is one whose provider's policy is a cloud chain

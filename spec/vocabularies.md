@@ -150,6 +150,8 @@ CLASS name, `code` is the ErrorCode literal.
 | `unsupported_model` | `UnsupportedModelError` | subclass of InvalidRequestError |
 | `unsupported_feature` | `UnsupportedFeatureError` (and base `CapabilityError`) | local adapter capability |
 | `not_configured` | `NotConfiguredError` (and base `ConfigurationError`) | missing key/config |
+| `unknown_model` | `UnknownModelError` | subclass of ConfigurationError (2026-09-08); the router: the model string routes nowhere — no routable provider prefix, no catalog match, no rule. Local and pre-network: no provider was asked (that is `unsupported_model`). Carries `model` (the string as requested) |
+| `ambiguous_model` | `AmbiguousModelError` | subclass of ConfigurationError (2026-09-08); the router: the catalog matches the string under more than one provider, or under more than one entry of one provider. The fix is an explicit prefix. Carries `model` and `providers` (every candidate provider, catalog order, deduplicated) |
 | `transport` | `TransportError` | network failure at the LM layer |
 | `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact (MAP-9: a tool call whose fragments never carried a name); carries `partial` (the Response assembled without the offending call) and `part_index` |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
@@ -162,7 +164,9 @@ LM15Error
 ├── TransportError
 ├── StreamAssemblyError
 ├── ConfigurationError
-│   └── NotConfiguredError
+│   ├── NotConfiguredError
+│   ├── UnknownModelError
+│   └── AmbiguousModelError
 ├── CapabilityError
 │   └── UnsupportedFeatureError
 └── ProviderError
@@ -179,7 +183,10 @@ LM15Error
 Error metadata fields (every class): `message`, `code`, `provider`,
 `provider_code`, `status`, `request_id`, `retry_after` (float-typed; int
 coerces per the Number rule). `StreamAssemblyError` adds `partial`
-(Response or absent) and `part_index` (int or absent). Retryable set: RateLimitError, TimeoutError,
+(Response or absent) and `part_index` (int or absent). `UnknownModelError`
+adds `model`; `AmbiguousModelError` adds `model` and `providers`. There is
+no router-wide code or class: a code names a failure the caller can act
+on, not the component that raised it (2026-09-08). Retryable set: RateLimitError, TimeoutError,
 ServerError, TransportError. HTTP mapping: unmatched status → `ProviderError`.
 Code mapping is most-specific-class-first; unknown code →
 `ProviderError`.
@@ -465,6 +472,16 @@ AUTH-10 `host.model_in`.
 
 ## Open string namespaces (NOT vocabularies)
 
+- Provider strings (`ModelInfo.provider`, `Resolution.provider`, error
+  `provider`, `AccessPolicy.provider`) — the registry declares them
+  (`spec/support-matrix.json`); open, but one spelling: hyphenated
+  (`openai-chat`, `meta-chat`, `bedrock-mantle-chat`). The underscore form
+  is a permanent INPUT alias (`canonical_provider` maps `_` to `-`) and
+  never an output value. `api_family` is a different namespace — the wire
+  dialect, underscore-spelled (`openai_chat`, `openai_responses`,
+  `anthropic_messages`, `gemini_generate_content`) — and the two must not
+  be confused: `openai_chat` names a wire, `openai-chat` names a door
+  (2026-09-08).
 - `ContinuationKind` — provider-owned, opaque, any non-empty string.
 - `ImagePart.detail` — constrained to `low`/`high`/`auto` but defined inline
   on the field (no module-level vocabulary).
@@ -479,3 +496,5 @@ Status: RATIFIED — Maxime Rivest, 2026-06-11 (session assent, transcribed; can
 Amended 2026-09-03 (AuthScheme, CredentialKind, CredentialPolicy, RungKind, AuthStepState, StreamFraming, ModelPlacement) — ratified in session; see changes/2026-09-03-cloud-hosts.md.
 
 Amended 2026-09-06 (AuthScheme `x-api-key` also carries `bearer_token`, D1; FileReadiness OpenAI-shaped `status` fold, D6) — ratified in session ("perfect, implement it all!"); see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.
+
+Amended 2026-09-08 (ErrorCode `unknown_model`, `ambiguous_model` under ConfigurationError; no router-wide code; provider-string spelling rule) — ratified in session ("i ratify, go!"); see changes/2026-09-08-router-error-codes.md and changes/2026-09-08-openai-chat-provider-spelling.md.

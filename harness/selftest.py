@@ -69,8 +69,10 @@ def _has_bool(node) -> bool:
 def pick_targets() -> dict[str, tuple[str, str]]:
     """mutation -> (direction, target case id); fails loudly if any target is missing."""
     cases = golden_cases()
-    responses = [(c, g) for c, g in cases if not check.is_stream_case(c)]
-    streams = [(c, g) for c, g in cases if check.is_stream_case(c)]
+    # A pinned-raise golden (expect_lm15.raises; e.g. tool_call_unnamed_complete,
+    # 2026-09-07) carries provenance only — nothing to mutate; skip it.
+    responses = [(c, g) for c, g in cases if not check.is_stream_case(c) and "canonical_response" in g]
+    streams = [(c, g) for c, g in cases if check.is_stream_case(c) and "events" in g]
 
     def first(pairs, predicate, what: str) -> str:
         for case, golden in pairs:
@@ -272,6 +274,19 @@ def pick_targets() -> dict[str, tuple[str, str]]:
                          "status golden and a URL-delivered part golden)")
     targets["video_status_vocab_drift"] = ("video", f"{video_vocab}[done.parse]")
     targets["video_part_url_drift"] = ("video", f"{video_url}[part.parse]")
+
+    router_cases = check.load_router_fixture()["cases"]
+    ambiguous_target = next((c["id"] for c in router_cases if c["expect"].get("error", {}).get("code") == "ambiguous_model"), None)
+    unknown_target = next((c["id"] for c in router_cases if c["expect"].get("error", {}).get("code") == "unknown_model"), None)
+    hyphen_target = next((c["id"] for c in router_cases if "-" in c["expect"].get("provider", "")), None)
+    alias_target = next((c["id"] for c in router_cases if "catalog" in c and c["expect"].get("model") not in (None, c["model"])), None)
+    if None in (ambiguous_target, unknown_target, hyphen_target, alias_target):
+        raise SystemExit("selftest: router corpus too thin to self-test (need an ambiguous_model case, "
+                         "an unknown_model case, a hyphenated provider, and an alias resolution)")
+    targets["router_class_drift"] = ("router", ambiguous_target)
+    targets["router_resolves_instead_of_refusing"] = ("router", unknown_target)
+    targets["router_provider_underscore"] = ("router", hyphen_target)
+    targets["router_alias_not_resolved"] = ("router", alias_target)
 
     sigv4_cases = json.loads(check.SIGV4_FILE.read_text(encoding="utf-8"))["cases"]
     token_cases = json.loads(check.TOKEN_FILE.read_text(encoding="utf-8"))["cases"]

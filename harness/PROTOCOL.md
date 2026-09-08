@@ -536,3 +536,25 @@ In: `{"provider": str, "kind": "info"|"page", "status": int, "body_b64": str, "b
 Out: `{"cache": <CacheInfo JSON>}` for `info`, `{"page": <CachePage JSON>}` for `page`.
 - `CacheInfo.provider_data` is the wire object verbatim; the harness digests
   long strings as for files.
+
+### resolve_model
+In: `{"model": str, "env": {str: str}, "catalog"?: [<ModelInfo JSON>]}`
+Out: `{"provider": str, "model": str, "source": "prefix"|"catalog"|"rule"}`
+- (Added 2026-09-08; `changes/2026-09-08-router-error-codes.md`.) The
+  router's `resolve` over harness-supplied inputs only: `env` is the whole
+  environment (always passed, empty in every current case, so the process
+  environment never leaks in); `catalog`, when present, is the explicit
+  model catalog (canonical `model_info` serde) and replaces any discovery
+  the port would otherwise do. Built-in rules are the port's copy of
+  `DEFAULT_RULES`. Pure: no network, no credential lookup, no adapter
+  construction.
+- `provider` is the canonical (hyphenated) provider string; `model` the
+  id that would go on the wire (prefix stripped, alias resolved); `source`
+  the rung that answered.
+- A routing failure is the ordinary failure envelope with `error.type`
+  `UnknownModelError` / `AmbiguousModelError` and `error.code`
+  `unknown_model` / `ambiguous_model` (spec/vocabularies.md § ErrorCode),
+  plus the payload the vocabulary pins: `error.model` on both,
+  `error.providers` (every candidate, catalog order, deduplicated) on
+  `AmbiguousModelError`. Drives `--direction router`
+  (`router/resolution.json`).
