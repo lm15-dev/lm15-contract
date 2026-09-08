@@ -528,6 +528,41 @@ Measured verdicts (2026-09-07; the ledger is
 Stated deviation: Gemini's documented `$ref`-by-`displayName` interleave is
 not emitted; lm15 puts text in `response` and media in `parts`, in order.
 
+## MAP-11 — A provider id placed in a URL path is percent-encoded
+
+An id the provider handed back (`FileInfo.id`, `BatchJobInfo.id`,
+`CacheInfo.id`, `VideoJobInfo.id`) is an opaque string. When an adapter
+places it in a URL path (`…/files/{id}`, `…/batches/{id}/cancel`,
+`…/videos/{id}/content`, `…/{resource}:download`), it is percent-encoded
+per RFC 3986 over its UTF-8 bytes: every byte outside the unreserved set
+(`A–Z a–z 0–9 - . _ ~`) becomes `%XX` (uppercase hex).
+
+1. **Resource-name dialects keep `/`.** Where the wire's ids are resource
+   names whose segments are part of the route (Gemini: `files/abc`,
+   `cachedContents/abc`, `batches/abc`, `models/m/operations/abc`), `/` is
+   left literal and everything else is encoded (the reference's
+   `quote(id, safe="/")`). A `:` inside such an id is encoded: the
+   dialect appends its own `:download` / `:cancel` after the id.
+2. **Flat-id dialects encode `/` too** (OpenAI, Anthropic, xAI:
+   `quote(id, safe="")`). A literal slash there would turn one operation
+   into another on the same route table — `file_get("x/content")` would
+   download `x`.
+3. **Never decode first.** An id is sent as given; a provider that returned
+   a pre-encoded id would be double-encoded and answer 404 — loud. The
+   alternative, sending reserved bytes raw, misroutes silently (`?` starts
+   a query string, `#` a fragment). Every failure mode of this rule is
+   loud; that is the point.
+4. **Server-provided URLs are not ids.** A full URL the provider returned
+   (Anthropic's `results_url`, a Gemini file `uri`, a Sora content URL) is
+   used verbatim; only the id-to-path placement encodes.
+5. Ids in JSON bodies (`input_file_id`, a batch `custom_id`) and in query
+   parameters are JSON / query-encoded by the ordinary rules; MAP-11 is
+   about the path.
+
+Pinned by one hand-authored case per surface and dialect
+(`cases/<provider>/{files,batch,cache,video}_id_escaping.json`): an id
+carrying a space, `?`, `#`, `%` and, on the resource-name dialect, a `:`.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -551,3 +586,6 @@ MAP-9.6 withheld-field list with INV-051
 MAP-10 was written on 2026-09-07 from the tool-result-content design pass
 after the Rust port review probed a cell the corpus did not cover
 (`lm15-contract/changes/2026-09-07-tool-result-content.md`).
+MAP-11 was written on 2026-09-08 after the Rust port's surfaces probe found
+both implementations interpolating ids raw into paths
+(`lm15-contract/changes/2026-09-08-id-path-escaping.md`).

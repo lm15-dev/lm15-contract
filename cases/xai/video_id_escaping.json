@@ -1,0 +1,30 @@
+{
+  "id": "xai.video_id_escaping",
+  "provider": "xai",
+  "feature": "video_id_escaping",
+  "surface": "video",
+  "description": "MAP-11: a provider id with reserved characters is percent-encoded when placed in the URL path",
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "changes/2026-09-08-id-path-escaping.md (ratified 2026-09-08); docs/mapping-rules.md MAP-11. The id carries a space, '?', '#', '%' (and ':' on the resource-name dialect); the expected URL is quote(id, safe) applied by hand per MAP-11 rules 1-2 over the surface's pinned route (cases/<provider>/<surface>.json). No wire exchange: a provider has never returned such an id; the rule exists so that if one does, the request is loud, never misrouted."
+  },
+  "steps": [
+    {
+      "action": "status",
+      "video_id": "odd id?x=1#frag%25",
+      "requests": [
+        {
+          "method": "GET",
+          "url": "https://api.x.ai/v1/videos/odd%20id%3Fx%3D1%23frag%2525",
+          "params": {},
+          "headers": {
+            "authorization": "Bearer $XAI_API_KEY",
+            "content-type": "application/json"
+          },
+          "body": null
+        }
+      ]
+    }
+  ]
+}

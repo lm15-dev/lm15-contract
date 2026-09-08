@@ -242,8 +242,12 @@ credential responses: each is a bearer-equivalent for its lifetime.
   ``run `codex login` ``).
 - Expired-and-unrefreshable or provider-rejected credentials → `AuthError`
   equivalent, same hint discipline.
-- Lock contention → a local timeout error type, deliberately **not** an
-  `AuthError`: nothing is wrong with the credential.
+- Lock contention → `LockTimeoutError` (ErrorCode `lock_timeout`,
+  spec/vocabularies.md; named 2026-09-08), a root-level, retryable class
+  deliberately **not** an `AuthError`: nothing is wrong with the
+  credential. It carries `path` and `lock_path`. A language with a native
+  timeout type may additionally subtype it (the reference's
+  `CredentialLockTimeout` is both), never instead.
 
 ## AUTH-7 — Explainability (doctor)
 

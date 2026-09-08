@@ -618,16 +618,39 @@ def op_generation_parse(msg: JsonObject) -> JsonObject:
     return result
 
 
-def find_files_case(msg: JsonObject) -> JsonObject:
-    for case in check.load_surface_cases("files"):
-        if case["provider"] == msg["provider"]:
+_SURFACE_ID_KEYS = ("file_id", "batch_id", "cache_id", "video_id")
+
+
+def find_surface_step(surface: str, msg: JsonObject, op_key: str) -> tuple[JsonObject, JsonObject]:
+    """The (case, step) a build op echoes: same provider, same op, and the
+    same id where the step names one — a provider may have several cases
+    on a surface (the lifecycle and, since MAP-11, an id-escaping case)."""
+    for case in check.load_surface_cases(surface):
+        if case["provider"] != msg["provider"]:
+            continue
+        for step in case["steps"]:
+            if step.get(op_key) != msg.get(op_key):
+                continue
+            if all(step.get(k) == msg.get(k) for k in _SURFACE_ID_KEYS if k in step or k in msg):
+                return case, step
+    raise LookupError(f"no {surface} step for this (provider, {op_key}, id)")
+
+
+def find_surface_case_with_golden(surface: str, msg: JsonObject) -> JsonObject:
+    """The provider's case that pins parses (has a golden); build-only
+    cases carry no golden by design."""
+    for case in check.load_surface_cases(surface):
+        if case["provider"] == msg["provider"] and check.golden_path(case).exists():
             return case
-    raise LookupError("no files case for this provider")
+    raise LookupError(f"no {surface} case with a golden for this provider")
+
+
+def find_files_case(msg: JsonObject) -> JsonObject:
+    return find_surface_case_with_golden("files", msg)
 
 
 def op_file_op_build(msg: JsonObject) -> JsonObject:
-    case = find_files_case(msg)
-    step = next(s for s in case["steps"] if s["file_op"] == msg["file_op"])
+    case, step = find_surface_step("files", msg, "file_op")
     result = _echo_wire(step)
     if MUTATION == "file_param_drop" and targeted(case) and result["params"]:
         result["params"].pop(sorted(result["params"])[0])
@@ -647,15 +670,11 @@ def op_file_op_parse(msg: JsonObject) -> JsonObject:
 
 
 def find_batch_case(msg: JsonObject) -> JsonObject:
-    for case in check.load_surface_cases("batch"):
-        if case["provider"] == msg["provider"]:
-            return case
-    raise LookupError("no batch case for this provider")
+    return find_surface_case_with_golden("batch", msg)
 
 
 def op_batch_op_build(msg: JsonObject) -> JsonObject:
-    case = find_batch_case(msg)
-    step = next(s for s in case["steps"] if s["action"] == msg["action"])
+    _case, step = find_surface_step("batch", msg, "action")
     return {"requests": [_echo_wire({"request": spec}) for spec in step.get("requests", [])]}
 
 
@@ -682,15 +701,11 @@ def op_batch_op_parse(msg: JsonObject) -> JsonObject:
 
 
 def find_cache_case(msg: JsonObject) -> JsonObject:
-    for case in check.load_surface_cases("cache"):
-        if case["provider"] == msg["provider"]:
-            return case
-    raise LookupError("no cache case for this provider")
+    return find_surface_case_with_golden("cache", msg)
 
 
 def op_cache_op_build(msg: JsonObject) -> JsonObject:
-    case = find_cache_case(msg)
-    step = next(s for s in case["steps"] if s["cache_op"] == msg["cache_op"])
+    case, step = find_surface_step("cache", msg, "cache_op")
     result = _echo_wire(step)
     if MUTATION == "cache_model_drop" and targeted(case) and isinstance(result.get("body"), dict):
         result["body"] = {k: v for k, v in result["body"].items() if k != "model"}
@@ -710,15 +725,11 @@ def op_cache_op_parse(msg: JsonObject) -> JsonObject:
 
 
 def find_video_case(msg: JsonObject) -> JsonObject:
-    for case in check.load_surface_cases("video"):
-        if case["provider"] == msg["provider"]:
-            return case
-    raise LookupError("no video case for this provider")
+    return find_surface_case_with_golden("video", msg)
 
 
 def op_video_op_build(msg: JsonObject) -> JsonObject:
-    case = find_video_case(msg)
-    step = next(s for s in case["steps"] if s["action"] == msg["action"])
+    _case, step = find_surface_step("video", msg, "action")
     return {"requests": [_echo_wire({"request": spec}) for spec in step.get("requests", [])]}
 
 

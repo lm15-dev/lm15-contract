@@ -153,6 +153,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `unknown_model` | `UnknownModelError` | subclass of ConfigurationError (2026-09-08); the router: the model string routes nowhere — no routable provider prefix, no catalog match, no rule. Local and pre-network: no provider was asked (that is `unsupported_model`). Carries `model` (the string as requested) |
 | `ambiguous_model` | `AmbiguousModelError` | subclass of ConfigurationError (2026-09-08); the router: the catalog matches the string under more than one provider, or under more than one entry of one provider. The fix is an explicit prefix. Carries `model` and `providers` (every candidate provider, catalog order, deduplicated) |
 | `transport` | `TransportError` | network failure at the LM layer |
+| `lock_timeout` | `LockTimeoutError` | (2026-09-08) the credential-file lock (spec/auth.md AUTH-4) could not be taken within the timeout: another lm15 process is refreshing the same credential. Local and transient — a root-level class beside `TransportError`, never under `ProviderError` (no provider was asked) nor `ConfigurationError` (nothing is misconfigured), and never an `AuthError` (nothing is wrong with the credential, AUTH-6). Retryable. Carries `path` (the guarded file) and `lock_path` |
 | `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact (MAP-9: a tool call whose fragments never carried a name); carries `partial` (the Response assembled without the offending call) and `part_index` |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
@@ -162,6 +163,7 @@ allowed):
 ```
 LM15Error
 ├── TransportError
+├── LockTimeoutError
 ├── StreamAssemblyError
 ├── ConfigurationError
 │   ├── NotConfiguredError
@@ -184,10 +186,11 @@ Error metadata fields (every class): `message`, `code`, `provider`,
 `provider_code`, `status`, `request_id`, `retry_after` (float-typed; int
 coerces per the Number rule). `StreamAssemblyError` adds `partial`
 (Response or absent) and `part_index` (int or absent). `UnknownModelError`
-adds `model`; `AmbiguousModelError` adds `model` and `providers`. There is
+adds `model`; `AmbiguousModelError` adds `model` and `providers`;
+`LockTimeoutError` adds `path` and `lock_path`. There is
 no router-wide code or class: a code names a failure the caller can act
 on, not the component that raised it (2026-09-08). Retryable set: RateLimitError, TimeoutError,
-ServerError, TransportError. HTTP mapping: unmatched status → `ProviderError`.
+ServerError, TransportError, LockTimeoutError. HTTP mapping: unmatched status → `ProviderError`.
 Code mapping is most-specific-class-first; unknown code →
 `ProviderError`.
 
@@ -498,3 +501,5 @@ Amended 2026-09-03 (AuthScheme, CredentialKind, CredentialPolicy, RungKind, Auth
 Amended 2026-09-06 (AuthScheme `x-api-key` also carries `bearer_token`, D1; FileReadiness OpenAI-shaped `status` fold, D6) — ratified in session ("perfect, implement it all!"); see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.
 
 Amended 2026-09-08 (ErrorCode `unknown_model`, `ambiguous_model` under ConfigurationError; no router-wide code; provider-string spelling rule) — ratified in session ("i ratify, go!"); see changes/2026-09-08-router-error-codes.md and changes/2026-09-08-openai-chat-provider-spelling.md.
+
+Amended 2026-09-08 (ErrorCode `lock_timeout`, root-level `LockTimeoutError`, retryable) — ratified in session ("i ratify, go!", second session of the day); see changes/2026-09-08-lock-timeout-code.md.

@@ -194,8 +194,12 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                         if not (bodies / str(case_id) / str(name)).is_file():
                             problems.append(f"ORPHANS {case_id}: step {i} references missing body {name!r}")
             golden = root / "goldens" / str(data.get("provider")) / f"{data.get('feature')}.json"
-            if not golden.is_file():
-                problems.append(f"ORPHANS {case_id}: {data.get('surface')}-surface case has no golden")
+            # A golden pins parses; a case whose steps pin wire requests only
+            # (MAP-11 id escaping, 2026-09-08) has nothing to golden.
+            has_parse = any("pinned_body" in step or "fetched_from" in step for step in steps)
+            if has_parse and not golden.is_file():
+                problems.append(f"ORPHANS {case_id}: {data.get('surface')}-surface case pins a parse "
+                                "but has no golden")
         if data.get("surface") == "models":
             for key in ("request", "pinned_body", "entries_key"):
                 if key not in data:
