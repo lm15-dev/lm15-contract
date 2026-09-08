@@ -51,7 +51,7 @@ evolution, but breaking changes in a 1.x release are permitted with a
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
 - **Chat Completions ingest** — `request_from_openai_chat` (MAP-12,
-  drafted 2026-09-08, pending ratification;
+  ratified 2026-09-08;
   changes/2026-09-08-openai-chat-ingest.md): a chat request body read INTO
   a canonical Request under one preset's spellings, with a verdict per
   wire key (`tools/openai-chat-ingest-verdicts.json`) and the harness

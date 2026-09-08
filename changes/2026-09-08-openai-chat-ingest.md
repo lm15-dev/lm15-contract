@@ -1,9 +1,9 @@
 # 2026-09-08 — MAP-12: a Chat Completions request body reads into a canonical Request
 
-Ratification: **PENDING** — drafted 2026-09-08 in session (Maxime Rivest
-directing; the two design choices below were put to him before drafting
-and are restated here for assent). Nothing in this entry is an oracle
-until the ratification line is written.
+Ratification: RATIFIED 2026-09-08 — Maxime Rivest, in session ("i
+ratify, go do it in rust and typescript"), after the two design choices
+below, the trade-offs and the evidence were put to him. Transcribed.
+Drafted the same day in session.
 
 ## What this adds
 
@@ -200,11 +200,10 @@ beside module 4). Go and Julia when they reach module 4.
 - The reference's full pytest suite and the other harness directions:
   green (recorded in the lm15-python commit).
 
-## What ratification means here
+## What ratification covers
 
-Assent to MAP-12 as written (rules 1–8), to the verdict registry as the
-enforced source of "decided", to the three lossy classes, and to the
-`ingest` op and direction. On assent: this entry's status line is
-rewritten, `lm15-python/CONTRACT_PIN` moves to the ratified commit in the
-same change as the reference implementation, and the DSPy typed-LM
+MAP-12 as written (rules 1–8), the verdict registry as the enforced
+source of "decided", the three lossy classes, and the `ingest` op and
+direction. `lm15-python/CONTRACT_PIN` moves to the ratified commit; the
+Rust and TypeScript ports implement module 4b next; the DSPy typed-LM
 branch may depend on the pinned function.

@@ -566,9 +566,8 @@ carrying a space, `?`, `#`, `%` and, on the resource-name dialect, a `:`.
 
 ## MAP-12 — A Chat Completions request body reads into a canonical Request, or refuses
 
-Status: PENDING RATIFICATION (drafted 2026-09-08,
-`changes/2026-09-08-openai-chat-ingest.md`). Provisional surface
-(`spec/SCOPE.md`).
+Status: RATIFIED 2026-09-08 (`changes/2026-09-08-openai-chat-ingest.md`).
+Provisional surface (`spec/SCOPE.md`).
 
 MAP-1..11 map lm15's canonical types OUT to a wire and a wire's response
 back IN. This rule is the one place lm15 reads a *foreign request* — the

@@ -544,7 +544,7 @@ Out: `{"cache": <CacheInfo JSON>}` for `info`, `{"page": <CachePage JSON>}` for 
 In: `{"provider": str, "body": <Chat Completions request JSON object>, "base_url"?: str, "settings"?: {…}}`
 Out: `{"canonical_request": <Request JSON>}`
 - (Added 2026-09-08; `changes/2026-09-08-openai-chat-ingest.md`, MAP-12;
-  pending ratification.) The reverse of `build_request`'s body for the
+  ratified 2026-09-08.) The reverse of `build_request`'s body for the
   Chat Completions dialect: the JSON object a client would POST to
   `/chat/completions`, read into a canonical Request under the compat
   policy the case's `provider` binds (the same adapter `build_request`

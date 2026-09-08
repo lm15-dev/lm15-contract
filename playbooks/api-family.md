@@ -52,7 +52,7 @@ A credential provider returns a credential value (`ApiKey`, `BearerToken`, `AwsC
 
 The same `complete` / `stream` names exist on a provider object and on the router. A user who learned one has learned the other.
 
-## Ingest (MAP-12, provisional; drafted 2026-09-08, pending ratification)
+## Ingest (MAP-12, provisional; ratified 2026-09-08)
 
 | Concept | Python | TypeScript | Go | Rust |
 |---|---|---|---|---|
