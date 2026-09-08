@@ -1,0 +1,48 @@
+{
+  "id": "groq.ingest_groq_builtin_tool",
+  "provider": "groq",
+  "feature": "ingest_groq_builtin_tool",
+  "surface": "ingest",
+  "description": "On the groq preset (compat.builtin_tools=groq) a {type: browser_search} tool reads as BuiltinTool(web_search): the inverse of the preset's server-executed tool map. On any other preset the type is refused.",
+  "body": {
+    "model": "openai/gpt-oss-20b",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Latest news?"
+      }
+    ],
+    "tools": [
+      {
+        "type": "browser_search"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Latest news?"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "builtin",
+          "name": "web_search"
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

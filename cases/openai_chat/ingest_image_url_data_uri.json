@@ -1,0 +1,55 @@
+{
+  "id": "openai_chat.ingest_image_url_data_uri",
+  "provider": "openai_chat",
+  "feature": "ingest_image_url_data_uri",
+  "surface": "ingest",
+  "description": "An image_url block carrying a base64 data URI with detail. Inverse of _chat_image_block: the URI's media type and payload become ImagePart.data / media_type; detail rides along.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe."
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+              "detail": "low"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Describe."
+            },
+            {
+              "type": "image",
+              "media_type": "image/png",
+              "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+              "detail": "low"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "openai_chat.ingest_dspy_chat_adapter",
+  "provider": "openai_chat",
+  "feature": "ingest_dspy_chat_adapter",
+  "surface": "ingest",
+  "description": "The exact messages dspy.ChatAdapter().format(QA, demos=[one example], inputs=...) produced on 2026-09-08 (dspy-rc @ 29f393cdb, signature QA(question -> answer) with docstring 'Answer the question.'), with the kwargs dspy.LM('openai/gpt-4o-mini', temperature=0.7, max_tokens=1000) carries. The first consumer of MAP-12: this body must read into exactly this Request.",
+  "body": {
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer the question."
+      },
+      {
+        "role": "user",
+        "content": "[[ ## question ## ]]\n1+1?"
+      },
+      {
+        "role": "assistant",
+        "content": "[[ ## answer ## ]]\n2\n\n[[ ## completed ## ]]\n"
+      },
+      {
+        "role": "user",
+        "content": "[[ ## question ## ]]\nWhat is 2+2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`."
+      }
+    ],
+    "temperature": 0.7,
+    "max_tokens": 1000
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-4o-mini",
+      "system": "Your input fields are:\n1. `question` (str):\nYour output fields are:\n1. `answer` (str):\nAll interactions will be structured in the following way, with the appropriate values filled in.\n\n[[ ## question ## ]]\n{question}\n\n[[ ## answer ## ]]\n{answer}\n\n[[ ## completed ## ]]\nIn adhering to this structure, your objective is: \n        Answer the question.",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "[[ ## question ## ]]\n1+1?"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "[[ ## answer ## ]]\n2\n\n[[ ## completed ## ]]\n"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "[[ ## question ## ]]\nWhat is 2+2?\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "max_tokens": 1000,
+        "temperature": 0.7
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters and DSPy's adapter output as stated in the description; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

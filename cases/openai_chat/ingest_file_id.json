@@ -1,0 +1,53 @@
+{
+  "id": "openai_chat.ingest_file_id",
+  "provider": "openai_chat",
+  "feature": "ingest_file_id",
+  "surface": "ingest",
+  "description": "A file block addressed by file_id becomes a DocumentPart(file_id) with the default document media type (the wire carries none).",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Summarize the attached."
+          },
+          {
+            "type": "file",
+            "file": {
+              "file_id": "file-abc123"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Summarize the attached."
+            },
+            {
+              "type": "document",
+              "media_type": "application/pdf",
+              "file_id": "file-abc123"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

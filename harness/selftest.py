@@ -301,6 +301,19 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     if assertion_target is None:
         raise SystemExit("selftest: token corpus needs a signed assertion build vector")
     targets["token_assertion_drift"] = ("token", f"token.{assertion_target}")
+
+    ingest_cases = check.load_ingest_cases()
+    config_target = next(
+        (c["id"] for c in ingest_cases
+         if check.ingest_expectation(c)[0] == "canonical" and check.ingest_expectation(c)[1].get("config")),
+        None,
+    )
+    refusal_target = next((c["id"] for c in ingest_cases if check.ingest_expectation(c)[0] == "raises"), None)
+    if config_target is None or refusal_target is None:
+        raise SystemExit("selftest: ingest corpus too thin to self-test (need a body with generation "
+                         "knobs and a pinned refusal)")
+    targets["ingest_drops_config"] = ("ingest", config_target)
+    targets["ingest_maps_a_refused_key"] = ("ingest", refusal_target)
     return targets
 
 

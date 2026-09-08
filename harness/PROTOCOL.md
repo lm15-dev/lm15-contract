@@ -43,7 +43,8 @@ pin a refusal and what survived it:
 **Pinned raises.** A case whose canonical outcome at one op is a typed
 refusal declares
 `"expect_lm15": {"raises": {"op": <vet op>, "type": <class>, "code": <ErrorCode>}}`,
-where `op` is `build_request`, `parse_response`, or `replay_stream`. The
+where `op` is `build_request`, `parse_response`, `replay_stream`, or
+`ingest_openai_chat`. The
 case is the declaration; the message is never pinned (ports word their
 own). The harness fails the case when the shim answers `ok: true` at that
 op ("invented a fact") or when `type` or `code` differ.
@@ -51,6 +52,8 @@ op ("invented a fact") or when `type` or `code` differ.
 - `op: build_request` — no wire `request`, no body, no golden: the case is
   the whole pin. The response/stream directions do not run it. First
   cases: the four MAP-8 refusals (2026-09-02).
+- `op: ingest_openai_chat` (2026-09-08, MAP-12) — an ingest-surface case
+  whose body a canonical Request cannot carry; the case is the whole pin.
 - `op: replay_stream` / `parse_response` — the case carries its wire
   request and pinned body as usual; the golden holds only what the refusal
   salvaged: `{"partial_response"?, "events"?}`, compared exactly. First
@@ -536,6 +539,34 @@ In: `{"provider": str, "kind": "info"|"page", "status": int, "body_b64": str, "b
 Out: `{"cache": <CacheInfo JSON>}` for `info`, `{"page": <CachePage JSON>}` for `page`.
 - `CacheInfo.provider_data` is the wire object verbatim; the harness digests
   long strings as for files.
+
+### ingest_openai_chat
+In: `{"provider": str, "body": <Chat Completions request JSON object>, "base_url"?: str, "settings"?: {…}}`
+Out: `{"canonical_request": <Request JSON>}`
+- (Added 2026-09-08; `changes/2026-09-08-openai-chat-ingest.md`, MAP-12;
+  pending ratification.) The reverse of `build_request`'s body for the
+  Chat Completions dialect: the JSON object a client would POST to
+  `/chat/completions`, read into a canonical Request under the compat
+  policy the case's `provider` binds (the same adapter `build_request`
+  constructs, per-model overrides applied). Pure: no credential is read
+  (the shim constructs the adapter with its parse-only key), no network.
+  `body` is the case's recorded `request.body` (a wire case: the round
+  trip) or the case's own `body` (an ingest-surface case: a foreign shape).
+- A refusal (MAP-12 rule 2: `n`, the deprecated `functions` shape, a
+  per-message `name`, a spelling another server owns, a content block
+  with no canonical part, …) is the ordinary failure envelope with
+  `error.type` `UnsupportedFeatureError` and `error.code`
+  `unsupported_feature`; the case pins it as
+  `expect_lm15.raises {"op": "ingest_openai_chat", ...}`. Malformed input
+  (a wrong JSON type, an unparsable tool-call arguments string) is a
+  native error the contract does not pin (MAP-12 rule 6).
+- A provider that does not speak the Chat Completions wire (anthropic,
+  gemini, openai) answers `ok: false`; the harness never asks.
+- Drives `--direction ingest`: every chat-dialect wire case with a
+  `canonical_request` and no build-time refusal (compared against
+  `canonical_request`, or against `ingest.canonical_request` when the
+  case declares a MAP-12 lossy class under `ingest.lossy`), plus every
+  `surface: "ingest"` case.
 
 ### resolve_model
 In: `{"model": str, "env": {str: str}, "catalog"?: [<ModelInfo JSON>]}`

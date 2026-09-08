@@ -1,0 +1,61 @@
+{
+  "id": "openai_chat.ingest_dspy_image_field",
+  "provider": "openai_chat",
+  "feature": "ingest_dspy_image_field",
+  "surface": "ingest",
+  "description": "The user row dspy.ChatAdapter produces for a dspy.Image input field (text, image_url, text), bytes as produced on 2026-09-08 (dspy-rc @ 29f393cdb). The image URL has no extension, so the media type is the ImagePart default.",
+  "body": {
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "[[ ## image ## ]]\n"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/a.png"
+            }
+          },
+          {
+            "type": "text",
+            "text": "\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`."
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "[[ ## image ## ]]\n"
+            },
+            {
+              "type": "image",
+              "media_type": "image/png",
+              "url": "https://example.com/a.png"
+            },
+            {
+              "type": "text",
+              "text": "\n\nRespond with the corresponding output fields, starting with the field `[[ ## answer ## ]]`, and then ending with the marker for `[[ ## completed ## ]]`."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters and DSPy's adapter output as stated in the description; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

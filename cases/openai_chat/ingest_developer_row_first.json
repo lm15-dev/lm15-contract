@@ -1,0 +1,42 @@
+{
+  "id": "openai_chat.ingest_developer_row_first",
+  "provider": "openai_chat",
+  "feature": "ingest_developer_row_first",
+  "surface": "ingest",
+  "description": "A leading developer row reads as Request.system: the builder writes Request.system under compat.instruction_role (system OR developer), so the wire cannot distinguish the two (lossy class leading_developer_as_system, stated in MAP-12).",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "developer",
+        "content": "Answer in French."
+      },
+      {
+        "role": "user",
+        "content": "Hello"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "system": "Answer in French.",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Hello"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

@@ -15,7 +15,7 @@ first. Implementations must follow the contract, not change fixtures to pass.
 | `receipts/`, `changes/` | Capture evidence and change records |
 | `spec/support-matrix.json` | Provider support and evidence status |
 | `harness/` | Shared test protocol, runner, and comparator tests |
-| `tools/` | Provenance, secrecy, coverage, and spec checks |
+| `tools/` | Provenance, secrecy, coverage, and spec checks; the verdict registries (`extensions-verdicts.json`, INV-049; `openai-chat-ingest-verdicts.json`, MAP-12) |
 | `playbooks/port.md` | Port order, test gates, and review rules |
 | `playbooks/api-family.md` | Public API guide (ratified 2026-09-06) |
 

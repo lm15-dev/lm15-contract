@@ -163,5 +163,82 @@
     "date": "2026-09-07",
     "evidence": "authored by research/providers/media_tool_results.py (cell text); the assistant turn is the model's own, parsed from turn-1"
   },
-  "pinned_body": "2026-09-07T19-13-30Z.txt"
+  "pinned_body": "2026-09-07T19-13-30Z.txt",
+  "ingest": {
+    "lossy": [
+      "tool_result_name_omitted"
+    ],
+    "rule": "MAP-12 (docs/mapping-rules.md): the classes named in lossy are wire-determined; this block pins what ingest_openai_chat produces for this body. Added 2026-09-08 with changes/2026-09-08-openai-chat-ingest.md.",
+    "canonical_request": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "thinking",
+              "text": "The user wants me to call fetch_panel with label \"A\", inspect the result, and return a JSON with the six color names read left-to-right across the top row, then left-to-right across the bottom row. I should not guess before receiving the panel. Let me call the function."
+            },
+            {
+              "type": "tool_call",
+              "id": "fetch_panel_0",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "parts": [
+            {
+              "type": "tool_result",
+              "id": "fetch_panel_0",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel A colors in reading order: red, cyan, blue, green, magenta, yellow"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ],
+      "config": {
+        "max_tokens": 1600
+      }
+    }
+  }
 }

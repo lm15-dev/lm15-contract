@@ -1,0 +1,35 @@
+{
+  "id": "openai_chat.ingest_unknown_content_block_refused",
+  "provider": "openai_chat",
+  "feature": "ingest_unknown_content_block_refused",
+  "surface": "ingest",
+  "description": "A content block with no canonical part (here a video_url block some servers accept) is refused: a part is not a knob, there is no extensions door for content (MAP-10 rule 1 in reverse).",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "video_url",
+            "video_url": {
+              "url": "https://example.com/a.mp4"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "ingest_openai_chat",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference message: openai-chat: messages[0].content[0] of type 'video_url' in a user message cannot be carried by a canonical Request — no canonical part for that block on this wire (a part is not a knob: there is no extensions door for content))"
+  }
+}

@@ -128,7 +128,7 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
     orphans = {data.get("id", str(path.relative_to(root)))
                for path, data in cases
                if "canonical_request" not in data
-               and data.get("surface") not in ("models", "live", "files", "batch", "generation", "video", "cache")}
+               and data.get("surface") not in ("models", "live", "files", "batch", "generation", "video", "cache", "ingest")}
     case_ids = {data.get("id") for _, data in cases}
 
     for case_id in sorted(orphans - allowlist):
@@ -210,6 +210,29 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                 problems.append(f"ORPHANS {case_id}: models-surface case has no golden at "
                                 f"goldens/{data.get('provider')}/{data.get('feature')}.json — "
                                 "the parse phase would silently skip")
+        if data.get("surface") == "ingest":
+            # MAP-12: the body is the input; the expectation is a canonical
+            # request or a pinned refusal at ingest_openai_chat — exactly one.
+            if not isinstance(data.get("body"), dict):
+                problems.append(f"ORPHANS {case_id}: ingest-surface case has no body object")
+            expect = data.get("expect_lm15") or {}
+            has_canon = isinstance(expect.get("canonical_request"), dict)
+            raises = expect.get("raises")
+            has_raise = isinstance(raises, dict) and raises.get("op") == "ingest_openai_chat"
+            if has_canon == has_raise:
+                problems.append(f"ORPHANS {case_id}: ingest-surface case pins exactly one of "
+                                "expect_lm15.canonical_request / expect_lm15.raises{op: ingest_openai_chat}")
+        ingest = data.get("ingest")
+        if ingest is not None:
+            # A lossy declaration on a wire case pins what ingest produces; a
+            # declaration whose pin equals canonical_request is stale.
+            if data.get("surface") == "ingest" or "canonical_request" not in data:
+                problems.append(f"ORPHANS {case_id}: an `ingest` block belongs on a chat-dialect WIRE case only")
+            elif not isinstance(ingest, dict) or not isinstance(ingest.get("lossy"), list) or not ingest["lossy"]:
+                problems.append(f"ORPHANS {case_id}: ingest.lossy must be a non-empty list of MAP-12 lossy classes")
+            elif ingest.get("canonical_request") == data.get("canonical_request"):
+                problems.append(f"ORPHANS {case_id}: ingest.canonical_request equals canonical_request — "
+                                "the lossy declaration is stale; delete the block (the round trip is exact)")
         if data.get("surface") == "live":
             for key in ("live_config", "pinned_body"):
                 if key not in data:
@@ -323,6 +346,119 @@ def check_extensions_verdicts(root: Path, cases: list[tuple[Path, dict]],
             f"{len(blessed & smugglers if isinstance(blessed, set) else set(blessed) & smugglers)} blessed permanent (INV-049), "
             f"{len(set(deferred) & smugglers)} deferred to named design passes, "
             f"{len(undecided)} undecided")
+
+
+# ─── 3b. INGEST VERDICTS (hard: every wire key the corpus or OpenAI documents has one) ─
+
+INGEST_VERDICTS = ("map", "extensions", "refuse", "call-mode", "default")
+
+
+def _chat_bodies(cases: list[tuple[Path, dict]]) -> list[tuple[str, dict]]:
+    out: list[tuple[str, dict]] = []
+    for path, data in cases:
+        case_id = str(data.get("id", path))
+        if data.get("surface") == "ingest" and isinstance(data.get("body"), dict):
+            out.append((case_id, data["body"]))
+            continue
+        req = data.get("request") or {}
+        url = str(req.get("url", "")).split("?", 1)[0]
+        if url.endswith("/chat/completions") and isinstance(req.get("body"), dict):
+            out.append((case_id, req["body"]))
+    return out
+
+
+def _documented_chat_params(root: Path) -> set[str]:
+    """Top-level body parameters of the scraped Chat Completions reference
+    (the ``- `name: type` `` lines of § Body Parameters)."""
+    page = root / "scrapes" / "openai" / "pages" / "chat--create.md"
+    if not page.is_file():
+        return set()
+    names: set[str] = set()
+    in_body = False
+    for line in page.read_text().splitlines():
+        if line.startswith("### "):
+            in_body = line.strip() == "### Body Parameters"
+            continue
+        if in_body:
+            m = re.match(r"^- `([a-z_]+): ", line)
+            if m:
+                names.add(m.group(1))
+    return names
+
+
+def check_ingest_verdicts(root: Path, cases: list[tuple[Path, dict]], problems: list[str]) -> str:
+    """MAP-12: every top-level key, content-block type, tool type and
+    tool_choice form that a chat-dialect body in the corpus carries has a
+    verdict in tools/openai-chat-ingest-verdicts.json, and so does every
+    top-level body parameter the scraped OpenAI reference documents. An
+    unlisted key is a mapping nobody decided — hard violation. Verdict
+    words are closed; an `ingest.lossy` class must be in the registry's
+    lossy vocabulary."""
+    registry_path = root / "tools" / "openai-chat-ingest-verdicts.json"
+    if not registry_path.is_file():
+        problems.append(f"INGEST {registry_path}: verdict registry missing")
+        return "ingest-verdicts: registry missing"
+    registry = json.loads(registry_path.read_text())
+    body_v = registry.get("body", {})
+    rows_v = registry.get("messages_rows", {})
+    blocks_v = registry.get("content_blocks", {})
+    tools_v = registry.get("tool_types", {})
+    choice_v = registry.get("tool_choice_forms", {})
+    lossy_v = registry.get("lossy", {})
+    for table_name, table in (("body", body_v), ("messages_rows", rows_v), ("content_blocks", blocks_v),
+                              ("tool_types", tools_v), ("tool_choice_forms", choice_v)):
+        for key, row in table.items():
+            if not isinstance(row, dict) or row.get("verdict") not in INGEST_VERDICTS:
+                problems.append(f"INGEST verdicts.{table_name}.{key}: verdict must be one of {INGEST_VERDICTS}")
+
+    seen_keys: set[str] = set()
+    seen_blocks: set[str] = set()
+    seen_tools: set[str] = set()
+    seen_choice: set[str] = set()
+    for case_id, body in _chat_bodies(cases):
+        for key in body:
+            seen_keys.add(key)
+            if key not in body_v:
+                problems.append(f"INGEST {case_id}: body key {key!r} has no verdict in tools/openai-chat-ingest-verdicts.json")
+        for row in body.get("messages") or []:
+            if not isinstance(row, dict):
+                continue
+            role = str(row.get("role"))
+            if role not in rows_v:
+                problems.append(f"INGEST {case_id}: message role {role!r} has no verdict")
+            content = row.get("content")
+            if isinstance(content, list):
+                for block in content:
+                    if isinstance(block, dict):
+                        kind = str(block.get("type"))
+                        seen_blocks.add(kind)
+                        if kind not in blocks_v:
+                            problems.append(f"INGEST {case_id}: content block type {kind!r} has no verdict")
+        for tool in body.get("tools") or []:
+            if isinstance(tool, dict):
+                kind = str(tool.get("type"))
+                seen_tools.add(kind)
+                if kind not in tools_v:
+                    problems.append(f"INGEST {case_id}: tool type {kind!r} has no verdict")
+        choice = body.get("tool_choice")
+        if choice is not None:
+            form = choice if isinstance(choice, str) else str((choice or {}).get("type")) if isinstance(choice, dict) else "?"
+            seen_choice.add(form)
+            if form not in choice_v:
+                problems.append(f"INGEST {case_id}: tool_choice form {form!r} has no verdict")
+    for path, data in cases:
+        ingest = data.get("ingest")
+        if isinstance(ingest, dict):
+            for cls in ingest.get("lossy") or []:
+                if cls not in lossy_v:
+                    problems.append(f"INGEST {data.get('id')}: ingest.lossy class {cls!r} is not in the registry's lossy vocabulary")
+
+    documented = _documented_chat_params(root)
+    for name in sorted(documented - set(body_v)):
+        problems.append(f"INGEST scrapes/openai/pages/chat--create.md documents body parameter {name!r} with no verdict")
+    return (f"ingest-verdicts: {len(body_v)} body keys ({len(documented)} documented by OpenAI, all covered), "
+            f"{len(seen_keys)} distinct keys / {len(seen_blocks)} block types / {len(seen_tools)} tool types / "
+            f"{len(seen_choice)} tool_choice forms seen in chat-dialect bodies, all with verdicts")
 
 
 # ─── 4. SURFACE COVERAGE (report-only) ───────────────────────────────
@@ -482,6 +618,7 @@ def main(argv: list[str] | None = None) -> int:
         check_orphans(root, cases, allowlist, body_dir_allowlist, problems),
         check_volatile(root, cases, problems),
         check_extensions_verdicts(root, cases, problems),
+        check_ingest_verdicts(root, cases, problems),
         check_surface_coverage(root, python2, problems),
         check_support_matrix(root, python2, problems),
     ]

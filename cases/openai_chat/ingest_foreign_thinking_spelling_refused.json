@@ -1,0 +1,31 @@
+{
+  "id": "openai_chat.ingest_foreign_thinking_spelling_refused",
+  "provider": "openai_chat",
+  "feature": "ingest_foreign_thinking_spelling_refused",
+  "surface": "ingest",
+  "description": "DeepSeek's thinking: {type: disabled} on the OpenAI preset is refused: this server spells its dial reasoning_effort, and another server's spelling would be sent and ignored (a silent paid no-op, MAP-5). The same body on provider deepseek reads as Reasoning(off) — pinned by deepseek.reasoning_off's round trip.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hi"
+      }
+    ],
+    "thinking": {
+      "type": "disabled"
+    }
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "ingest_openai_chat",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference message: openai-chat: 'thinking' cannot be carried by a canonical Request — this server's reasoning dial is spelled ['reasoning_effort']; another server's spelling would be sent and ignored)"
+  }
+}

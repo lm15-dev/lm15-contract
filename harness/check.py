@@ -18,7 +18,7 @@ imports NOTHING from lm15: stdlib only.
   type only (D9, changes/2026-09-06-decisions.md); never by content.
 
 Usage:
-    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|router|all]
+    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|router|ingest|all]
                             [--case ID] [--auth-scope core|cloud|all] [--report-dir harness/reports]
 
 ``--auth-scope`` applies to the auth direction only: ``core`` runs the cases
@@ -57,7 +57,11 @@ CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
 ROUTER_FILE = CONTRACT_ROOT / "router" / "resolution.json"
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest")
+
+# Surfaces with their own loader and direction; a case carrying one of these
+# is not a chat-surface wire case (no canonical_request / pinned_body pair).
+OWN_SURFACES = ("models", "live", "files", "batch", "generation", "video", "cache", "ingest")
 SIGV4_FILE = CONTRACT_ROOT / "auth" / "sigv4-vectors.json"
 TOKEN_FILE = CONTRACT_ROOT / "auth" / "token-vectors.json"
 
@@ -397,9 +401,16 @@ def load_shim(name: str) -> Shim:
 # ─── Corpus loading ──────────────────────────────────────────────────
 
 def load_wire_cases() -> list[JsonObject]:
-    """Chat-surface wire cases; models/live surfaces have their own loaders."""
+    """Chat-surface wire cases; models/live/ingest surfaces have their own loaders."""
     cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
-    return [case for case in cases if case.get("surface") not in ("models", "live", "files", "batch", "generation", "video", "cache")]
+    return [case for case in cases if case.get("surface") not in OWN_SURFACES]
+
+
+def is_chat_dialect_case(case: JsonObject) -> bool:
+    """A wire case whose recorded request is a Chat Completions body (the
+    input MAP-12 ingests), whatever door it was captured on."""
+    url = str((case.get("request") or {}).get("url", ""))
+    return url.split("?", 1)[0].endswith("/chat/completions")
 
 
 def load_model_cases() -> list[JsonObject]:
@@ -555,7 +566,7 @@ class DirectionReport:
         return counts
 
 
-RAISE_OPS = ("build_request", "parse_response", "replay_stream")
+RAISE_OPS = ("build_request", "parse_response", "replay_stream", "ingest_openai_chat")
 
 
 def expected_raise(case: JsonObject, op: str | None = None) -> JsonObject | None:
@@ -1530,6 +1541,92 @@ def load_surface_cases(surface: str) -> list[JsonObject]:
     return [case for case in cases if case.get("surface") == surface]
 
 
+# ─── Direction: ingest (MAP-12: Chat Completions body → canonical Request) ─
+
+INGEST_LOSSY_CLASSES = frozenset({"thinking_as_text", "tool_result_name_omitted", "leading_developer_as_system"})
+
+
+def ingest_expectation(case: JsonObject) -> tuple[str, Any]:
+    """What ``ingest_openai_chat`` must answer for a case: ``("raises", decl)``,
+    or ``("canonical", request)``.
+
+    A chat-dialect WIRE case is a round trip: the recorded body was built
+    from ``canonical_request``, and reading it back must give that request
+    exactly — unless the case declares one of MAP-12's lossy classes under
+    ``ingest.lossy``, in which case it pins what ingest DOES produce under
+    ``ingest.canonical_request`` (a pin, never a skip: drift in the lossy
+    cells is caught too). An ingest-surface case pins ``expect_lm15``
+    directly: ``canonical_request`` or ``raises``.
+    """
+    raises = expected_raise(case, "ingest_openai_chat")
+    if raises is not None:
+        return "raises", raises
+    if case.get("surface") == "ingest":
+        expect = case.get("expect_lm15") or {}
+        if "canonical_request" not in expect:
+            raise ValueError(f"{case.get('id')}: an ingest-surface case pins expect_lm15.canonical_request or expect_lm15.raises")
+        return "canonical", expect["canonical_request"]
+    ingest = case.get("ingest")
+    if isinstance(ingest, dict):
+        lossy = ingest.get("lossy")
+        if not isinstance(lossy, list) or not lossy or any(c not in INGEST_LOSSY_CLASSES for c in lossy):
+            raise ValueError(f"{case.get('id')}: ingest.lossy must be a non-empty list of MAP-12 lossy classes {sorted(INGEST_LOSSY_CLASSES)}; got {lossy!r}")
+        if "canonical_request" not in ingest:
+            raise ValueError(f"{case.get('id')}: a lossy ingest declaration pins ingest.canonical_request")
+        return "canonical", ingest["canonical_request"]
+    return "canonical", case["canonical_request"]
+
+
+def ingest_body(case: JsonObject) -> Any:
+    if case.get("surface") == "ingest":
+        return case["body"]
+    return case["request"]["body"]
+
+
+def load_ingest_cases() -> list[JsonObject]:
+    """Every case the ingest direction runs: chat-dialect wire cases with a
+    canonical request and no build-time refusal (their body exists because
+    the build succeeded), plus the ingest-surface cases."""
+    out: list[JsonObject] = []
+    for case in load_wire_cases():
+        if not is_chat_dialect_case(case) or "canonical_request" not in case:
+            continue
+        if expected_raise(case, "build_request") is not None:
+            continue
+        out.append(case)
+    out.extend(load_surface_cases("ingest"))
+    return out
+
+
+def run_ingest_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    report = DirectionReport("ingest")
+    for case in load_ingest_cases():
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        kind, want = ingest_expectation(case)
+        reply = shim.call(
+            "ingest_openai_chat",
+            provider=case["provider"],
+            body=ingest_body(case),
+            **case_base_url(case),
+            **host_fields(case),
+        )
+        if kind == "raises":
+            report.results.append(compare_raise(case_id, reply, want, None, {}))
+            continue
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        actual = (reply.get("result") or {}).get("canonical_request", _ABSENT)
+        diff = first_difference(want, actual, ("canonical_request",))
+        if diff is None:
+            report.results.append(CaseResult(case_id, "pass"))
+        else:
+            report.results.append(CaseResult(case_id, "fail", diff=diff))
+    return report
+
+
 def _compare_build(report: DirectionReport, label: str, spec: JsonObject, reply: JsonObject) -> None:
     if not reply.get("ok"):
         report.results.append(shim_reply_failure(label, reply))
@@ -1867,6 +1964,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_cache_direction(shim, case_filter)
     if direction == "router":
         return run_router_direction(shim, case_filter)
+    if direction == "ingest":
+        return run_ingest_direction(shim, case_filter)
     raise ValueError(f"unknown direction: {direction}")
 
 

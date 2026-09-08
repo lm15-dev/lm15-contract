@@ -1,0 +1,56 @@
+{
+  "id": "openai_chat.ingest_image_url_https",
+  "provider": "openai_chat",
+  "feature": "ingest_image_url_https",
+  "surface": "ingest",
+  "description": "An image_url block with an https URL. The wire carries no media type for a URL; MAP-12 guesses it from the path (.jpg -> image/jpeg) and falls back to the ImagePart default otherwise.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/cat.jpg"
+            }
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/blob"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "image",
+              "media_type": "image/jpeg",
+              "url": "https://example.com/cat.jpg"
+            },
+            {
+              "type": "image",
+              "media_type": "image/png",
+              "url": "https://example.com/blob"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

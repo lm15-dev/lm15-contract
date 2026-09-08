@@ -83,5 +83,32 @@
     "usage": {
       "required": true
     }
+  },
+  "ingest": {
+    "lossy": [
+      "leading_developer_as_system"
+    ],
+    "rule": "MAP-12 (docs/mapping-rules.md): the classes named in lossy are wire-determined; this block pins what ingest_openai_chat produces for this body. Added 2026-09-08 with changes/2026-09-08-openai-chat-ingest.md.",
+    "canonical_request": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "system": "You answer in exactly two words.",
+      "config": {
+        "max_tokens": 100,
+        "reasoning": {
+          "effort": "off"
+        }
+      }
+    }
   }
 }

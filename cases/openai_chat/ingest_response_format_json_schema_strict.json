@@ -1,0 +1,75 @@
+{
+  "id": "openai_chat.ingest_response_format_json_schema_strict",
+  "provider": "openai_chat",
+  "feature": "ingest_response_format_json_schema_strict",
+  "surface": "ingest",
+  "description": "The json_schema shape the OpenAI SDK / litellm produce from a pydantic model (name, schema, strict: true) reads into the INV-050 canonical shape with name and strict kept. A name of exactly 'response' would read as absent (the builder's default label); 'Out' is kept.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Answer."
+      }
+    ],
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "Out",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "answer": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "answer"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Answer."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "answer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "answer"
+            ],
+            "additionalProperties": false
+          },
+          "name": "Out",
+          "strict": true
+        }
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

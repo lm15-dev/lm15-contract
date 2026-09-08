@@ -69,6 +69,8 @@ MUTATIONS = (
     "router_resolves_instead_of_refusing",  # resolve_model: an unknown string routed anyway
     "router_provider_underscore",  # resolve_model: the underscore spelling as an OUTPUT value
     "router_alias_not_resolved",   # resolve_model: a catalog alias sent on the wire unresolved
+    "ingest_drops_config",         # ingest_openai_chat: the body's generation knobs read back as no config (a silent drop)
+    "ingest_maps_a_refused_key",   # ingest_openai_chat: a pinned refusal answered with a Request (n, functions, ... absorbed)
 )
 
 MUTATION = "none"
@@ -325,6 +327,31 @@ def op_resolve_model(msg: JsonObject) -> JsonObject:
                 result["model"] = msg["model"]
         return result
     raise LookupError("no router fixture matches this (model, catalog)")
+
+
+def find_ingest_case(msg: JsonObject) -> JsonObject:
+    body = msg.get("body")
+    for case in check.load_ingest_cases():
+        if case.get("provider") != msg.get("provider") or case.get("base_url") != msg.get("base_url"):
+            continue
+        if check.ingest_body(case) == body:
+            return case
+    raise LookupError("no ingest case matches this body")
+
+
+def op_ingest_openai_chat(msg: JsonObject) -> JsonObject:
+    case = find_ingest_case(msg)
+    kind, want = check.ingest_expectation(case)
+    if kind == "raises":
+        if MUTATION == "ingest_maps_a_refused_key" and targeted(case):
+            # The absorbed key: a Request produced where MAP-12 pins a refusal.
+            return {"canonical_request": {"model": "invented", "messages": [{"role": "user", "parts": [{"type": "text", "text": ""}]}]}}
+        raise PinnedRaise({"type": want["type"], "code": want["code"], "message": "pinned refusal"})
+    result = json.loads(json.dumps(want))
+    if MUTATION == "ingest_drops_config" and targeted(case):
+        # The pre-MAP-12 failure: knobs the body carried never reach the Request.
+        result.pop("config", None)
+    return {"canonical_request": result}
 
 
 def op_replay_stream(msg: JsonObject) -> JsonObject:
@@ -758,6 +785,7 @@ def op_video_op_parse(msg: JsonObject) -> JsonObject:
 HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "capabilities": op_capabilities,
     "build_request": op_build_request,
+    "ingest_openai_chat": op_ingest_openai_chat,
     "parse_response": op_parse_response,
     "replay_stream": op_replay_stream,
     "normalize_error": op_normalize_error,

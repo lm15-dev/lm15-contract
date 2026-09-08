@@ -1,0 +1,54 @@
+{
+  "id": "openai_chat.ingest_input_audio",
+  "provider": "openai_chat",
+  "feature": "ingest_input_audio",
+  "surface": "ingest",
+  "description": "An input_audio block (wav). It has a canonical part (AudioPart with inline data, media type audio/wav); the chat builder cannot carry it back out on any current preset (MAP-10), so the Request is faithful and the SEND raises loudly — ingest is not where a wire gap is hidden.",
+  "body": {
+    "model": "gpt-4o-audio-preview",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Transcribe."
+          },
+          {
+            "type": "input_audio",
+            "input_audio": {
+              "data": "UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=",
+              "format": "wav"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-4o-audio-preview",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Transcribe."
+            },
+            {
+              "type": "audio",
+              "media_type": "audio/wav",
+              "data": "UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA="
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

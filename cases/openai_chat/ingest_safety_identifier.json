@@ -1,0 +1,45 @@
+{
+  "id": "openai_chat.ingest_safety_identifier",
+  "provider": "openai_chat",
+  "feature": "ingest_safety_identifier",
+  "surface": "ingest",
+  "description": "safety_identifier (the field OpenAI documents as superseding user) reads as Config.user_id, as user does.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hi"
+      }
+    ],
+    "safety_identifier": "u-42",
+    "service_tier": "flex",
+    "store": false
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Hi"
+            }
+          ]
+        }
+      ],
+      "config": {
+        "service_tier": "flex",
+        "user_id": "u-42",
+        "store": false
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

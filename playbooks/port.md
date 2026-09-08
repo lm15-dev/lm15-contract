@@ -33,6 +33,7 @@ when its direction is green with zero skips added, and stays green.
 | 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
 | 5c | the router (`playbooks/api-family.md` § The core loop; AUTH-1 resolution order; `changes/2026-09-08-router-error-codes.md`) | `--direction router` (`router/resolution.json`: the three rungs, their precedence, `unknown_model` / `ambiguous_model` with payload) |
+| 4b | Chat Completions ingest (MAP-12: a chat request body → canonical Request, one preset's spellings; `tools/openai-chat-ingest-verdicts.json`) | `--direction ingest` (the round trip over every chat-dialect wire case, lossy cells pinned per case; the ingest-surface refusals). Provisional; does not gate 1.0 |
 | 6 | model listing | `--direction models` |
 | 7 | files, batch, cache surfaces | `--direction files`, `batch`, `cache` |
 | 8 | generation (image, speech) and video | `--direction generation`, `video` |
@@ -63,8 +64,9 @@ a port that does not implement one answers `ok: false` with
    pin and fails if the working tree is dirty.
 2. **Copy tables as data.** Mapping tables in the reference (reasoning
    grading table, model-class detectors, access policies, compat presets,
-   finish-reason maps, error-code maps) are data. Port them as data; do
-   not re-derive them from provider docs or memory.
+   finish-reason maps, error-code maps, the MAP-12 ingest verdicts) are
+   data. Port them as data; do not re-derive them from provider docs or
+   memory.
 3. **Raise where the reference raises.** Every `expect_lm15.raises` case
    is a refusal the port must make at the same op with the same class and
    ErrorCode. Never map a refused cell to "something reasonable".

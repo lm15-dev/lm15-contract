@@ -2,7 +2,8 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content). Companion to `serde-rules.md` (which governs the JSON wire
+side of message content; MAP-12 the reverse direction, a foreign request
+body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
 
@@ -563,6 +564,141 @@ Pinned by one hand-authored case per surface and dialect
 (`cases/<provider>/{files,batch,cache,video}_id_escaping.json`): an id
 carrying a space, `?`, `#`, `%` and, on the resource-name dialect, a `:`.
 
+## MAP-12 — A Chat Completions request body reads into a canonical Request, or refuses
+
+Status: PENDING RATIFICATION (drafted 2026-09-08,
+`changes/2026-09-08-openai-chat-ingest.md`). Provisional surface
+(`spec/SCOPE.md`).
+
+MAP-1..11 map lm15's canonical types OUT to a wire and a wire's response
+back IN. This rule is the one place lm15 reads a *foreign request* — the
+JSON object a client would POST to `/chat/completions`, the format every
+litellm / OpenAI-SDK caller, log file and framework adapter already holds —
+into a canonical `Request`. It exists so that migration to lm15 has one
+correct converter with stated refusals instead of one lossy converter per
+caller.
+
+1. **One function, one preset.** `request_from_openai_chat(body, compat)`
+   (`playbooks/api-family.md`) reads the spellings of ONE Chat Completions
+   dialect: the same resolved compat policy the dialect adapter writes
+   with (`OpenAIChatCompat` preset, per-model overrides applied). On the
+   adapter, `lm.request_from_openai_chat(body)` is the same function under
+   that adapter's policy. Another server's spelling of a knob (DeepSeek's
+   `thinking` on the OpenAI preset, `user_id` where the server spells it
+   `user`) is REFUSED: it would be sent and ignored, the silent paid no-op
+   MAP-5 forbids.
+2. **Every key has exactly one verdict**, recorded as data in
+   `tools/openai-chat-ingest-verdicts.json` and enforced two ways by
+   `tools/audit.py` (every key, content-block type, tool type and
+   tool_choice form in a chat-dialect case body has a row; every top-level
+   body parameter the scraped OpenAI reference documents has a row):
+   - **map** — reads into the named canonical field.
+   - **extensions** — passes verbatim into `config.extensions[key]`
+     (`seed`, `logit_bias`, `presence_penalty`, `frequency_penalty`,
+     `metadata`, `verbosity`, `moderation`, OpenRouter's `provider`):
+     generation knobs the wire documents, no canonical field expresses,
+     and a chat server receives unchanged. The builder re-emits
+     `extensions` verbatim, so they round-trip.
+   - **refuse** — `UnsupportedFeatureError` (`unsupported_feature`) naming
+     the key and what the canonical model cannot carry: `n` (lm15 reads one
+     choice; the others would be lost silently), the deprecated
+     `functions` / `function_call` / `role: function` shape, `audio`,
+     `modalities`, `prediction`, `web_search_options`, `top_k`, a
+     per-message `name`, a `custom` tool, `strict: true` on a tool, a
+     content block with no canonical part. A key with NO verdict is
+     refused too: lm15 never drops a key it did not decide about.
+   - **call-mode** — `stream` and `stream_options` say HOW a request is
+     sent, not WHAT is asked; a `Request` has no stream flag
+     (`stream=` is an argument of `complete()` / `stream()`). They are
+     read and dropped. This bucket is closed at these two keys and is
+     the only drop this rule makes.
+   - **default** — a value equal to the wire's default reads as absent
+     because the bytes an adapter would send are identical:
+     `response_format {type: text}`, `function.strict: false`,
+     `logprobs: false`, and a `json_schema.name` of exactly `"response"`
+     (the builder's default label for an unnamed schema, MAP-8 rule 5).
+3. **Rows.** The first row, when `system` or `developer`, is
+   `Request.system` (a lone text block reads as the string form); a later
+   `system` / `developer` row is a `developer` Message at that position.
+   Consecutive `tool` rows form ONE tool Message (the builder writes one
+   row per `ToolResultPart`; this is its inverse). An assistant row's parts
+   come out in a fixed order — `reasoning_content` (ThinkingPart, a typed
+   field, read on every preset), `content` (text / refusal blocks),
+   `refusal`, `tool_calls` — and an assistant row with `content: null` and
+   nothing else is one empty TextPart (MAP-2, applied to history).
+   `tool_calls[].function.arguments` is `json.loads`-ed exactly; a string
+   that is not a JSON object is malformed (the lenient parse of provider
+   output, MAP-9's `parse_json_object`, is not used on caller input).
+4. **Content blocks.** `text` → TextPart; `image_url` → ImagePart (a
+   data URI becomes inline data with the URI's media type; another URL
+   stays a URL with the media type guessed from its path, else the
+   default — the wire carries none); `input_audio` → AudioPart
+   (`audio/wav` | `audio/mpeg`); `file` → DocumentPart by `file_id` or by
+   the `file_data` data URI (`filename` refused: no slot); `refusal` →
+   RefusalPart. A `prompt_cache_breakpoint` on the system row's text
+   block is `CacheConfig(prefix="stable")`; on the last text block of
+   message N it is `prefix_until_index=N`; anywhere else it is malformed
+   (the builder places it nowhere else). A block whose canonical part the
+   chat BUILDER cannot carry back out (`input_audio`, MAP-10) still reads
+   in: the Request is faithful and the SEND raises loudly — ingest is not
+   where a wire gap is hidden.
+5. **Nothing is parsed out of prose.** MAP-7 rule 12 applies in this
+   direction too: a `[error] ` prefix on a tool row (MAP-10 rule 5) reads
+   back as text with `is_error=false`; a `<think>` block reads back as
+   text. Reversing a prose marker would be a guess.
+6. **Malformed is not unsupported.** A wrong JSON type, a missing required
+   key, an unparsable arguments string, two spellings of one knob that
+   disagree (`max_tokens` ≠ `max_completion_tokens`; `user` next to
+   `safety_identifier`) raise `ValueError` / `TypeError`, as serde does
+   (INV-046). The contract pins refusals (rule 2) across ports; malformed
+   input is a reference-test concern and its exception class is not pinned.
+7. **The round trip is the test, and its lossy cells are pinned, not
+   skipped.** For every chat-dialect wire case in the corpus (118 on
+   2026-09-08, across ten doors), the harness `ingest` direction reads the
+   recorded body back and requires `canonical_request` exactly — except
+   where the WIRE lost information on the way out, in which case the case
+   declares the class under `ingest.lossy` and pins what ingest DOES
+   produce under `ingest.canonical_request`. The closed lossy vocabulary,
+   each class wire-determined:
+   - `thinking_as_text` — `compat.thinking_replay="as_text"` (decision G,
+     MAP-7 rule 8) folds a ThinkingPart into assistant text; it reads back
+     as a TextPart (rule 5).
+   - `tool_result_name_omitted` — `compat.tool_result_name="omit"` drops
+     `ToolResultPart.name`; the wire has no other slot.
+   - `leading_developer_as_system` — the builder writes `Request.system`
+     and a leading developer Message to the same instruction row; it
+     reads back as `Request.system`.
+   21 of the 118 cases carry a declaration (17 one class, 4 two — the xai
+   tool-result cases). Adding a class is an additive change to this rule
+   and to the registry's `lossy` table; `tools/audit.py` fails a
+   declaration whose pin equals `canonical_request` (stale).
+8. **Foreign shapes are pinned by ingest-surface cases**
+   (`cases/<door>/ingest_*.json`, `surface: "ingest"`): the body, and
+   either the hand-authored canonical request or the pinned refusal
+   (`expect_lm15.raises {op: ingest_openai_chat}`). 38 on 2026-09-08,
+   including the exact bodies DSPy's `ChatAdapter` produces (the first
+   consumer).
+
+**What this rule does not do.** It does not read a Chat Completions
+*response* body into a `Response` for serving purposes (lm15 already
+parses provider responses; a `Response → chat response dict` encoder for
+proxies is a separate, later row). It does not read the Responses API,
+Anthropic or Gemini request formats; each would be its own rule with its
+own verdict table if ever wanted. It does not add a `Request.from_*`
+constructor: the canonical type stays vendor-free; the converter is a
+dialect-module function (`playbooks/api-family.md` rule 3).
+
+**Why.** The DSPy integration (2026-09-08) needed `LMRequest.from_call(
+model, messages, **kwargs)` — OpenAI-format messages in, canonical request
+out — and every other litellm migration needs the same thing. Written in
+DSPy it would be one converter per caller, each deciding silently what to
+do with `n`, `name`, `input_audio` and a stray `thinking`; written once
+here it is data-checked in every port. The verdict-registry pattern is
+INV-049's (`tools/extensions-verdicts.json`): a mapping nobody decided is
+an audit failure, not a hope.
+
+---
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -589,3 +725,7 @@ after the Rust port review probed a cell the corpus did not cover
 MAP-11 was written on 2026-09-08 after the Rust port's surfaces probe found
 both implementations interpolating ids raw into paths
 (`lm15-contract/changes/2026-09-08-id-path-escaping.md`).
+MAP-12 was drafted on 2026-09-08 when the DSPy integration needed
+OpenAI-format messages read into a canonical Request and the alternative
+was one silent converter per caller
+(`lm15-contract/changes/2026-09-08-openai-chat-ingest.md`, pending).

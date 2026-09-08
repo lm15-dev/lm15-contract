@@ -50,6 +50,15 @@ evolution, but breaking changes in a 1.x release are permitted with a
   conversation with the arrow reversed.
 - **Live sessions** — `LiveConfig` and the live client/server event types;
   the live surface has no harness direction yet.
+- **Chat Completions ingest** — `request_from_openai_chat` (MAP-12,
+  drafted 2026-09-08, pending ratification;
+  changes/2026-09-08-openai-chat-ingest.md): a chat request body read INTO
+  a canonical Request under one preset's spellings, with a verdict per
+  wire key (`tools/openai-chat-ingest-verdicts.json`) and the harness
+  `ingest` direction. Provisional because the verdict table follows a
+  wire lm15 does not own: a key OpenAI adds tomorrow needs a row, and a
+  lossy class may be added when a new preset loses new information. No
+  canonical type changes.
 - **Cache resources** — the stored tier of MAP-6 (`CacheInfo`, `CachePage`,
   `CachedPrefix`, the `cache_*` verbs, the `cache` harness direction),
   added 2026-09-02 (changes/2026-09-01-caching-design.md). Provider-

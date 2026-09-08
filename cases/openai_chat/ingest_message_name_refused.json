@@ -1,0 +1,29 @@
+{
+  "id": "openai_chat.ingest_message_name_refused",
+  "provider": "openai_chat",
+  "feature": "ingest_message_name_refused",
+  "surface": "ingest",
+  "description": "A per-message participant name has no canonical slot and is refused rather than dropped (the model would have seen it).",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "name": "alice",
+        "content": "Hi"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "ingest_openai_chat",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference message: openai-chat: messages[0].name cannot be carried by a canonical Request — a per-message participant name has no canonical slot)"
+  }
+}

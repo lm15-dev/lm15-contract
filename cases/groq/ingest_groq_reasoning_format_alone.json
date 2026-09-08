@@ -1,0 +1,43 @@
+{
+  "id": "groq.ingest_groq_reasoning_format_alone",
+  "provider": "groq",
+  "feature": "ingest_groq_reasoning_format_alone",
+  "surface": "ingest",
+  "description": "reasoning_format: parsed with no reasoning_effort is the documented extensions door on Groq (MAP-7 rule 7: the Qwen dial has no levels) and lands in config.extensions verbatim; next to an effort it would read as Reasoning.summary=auto.",
+  "body": {
+    "model": "qwen/qwen3-32b",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hi"
+      }
+    ],
+    "reasoning_format": "parsed"
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "qwen/qwen3-32b",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Hi"
+            }
+          ]
+        }
+      ],
+      "config": {
+        "extensions": {
+          "reasoning_format": "parsed"
+        }
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

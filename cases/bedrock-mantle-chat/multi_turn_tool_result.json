@@ -164,5 +164,78 @@
     "usage": {
       "required": true
     }
+  },
+  "ingest": {
+    "lossy": [
+      "thinking_as_text"
+    ],
+    "rule": "MAP-12 (docs/mapping-rules.md): the classes named in lossy are wire-determined; this block pins what ingest_openai_chat produces for this body. Added 2026-09-08 with changes/2026-09-08-openai-chat-ingest.md.",
+    "canonical_request": {
+      "model": "openai.gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "We need to call get_weather with city \"Paris\"."
+            },
+            {
+              "type": "tool_call",
+              "id": "chatcmpl-tool-9a5d23de93c2412d",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "parts": [
+            {
+              "type": "tool_result",
+              "id": "chatcmpl-tool-9a5d23de93c2412d",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sunny, 22°C"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "config": {
+        "max_tokens": 400
+      }
+    }
   }
 }

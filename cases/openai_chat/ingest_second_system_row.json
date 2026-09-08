@@ -1,0 +1,68 @@
+{
+  "id": "openai_chat.ingest_second_system_row",
+  "provider": "openai_chat",
+  "feature": "ingest_second_system_row",
+  "surface": "ingest",
+  "description": "A system row that is not first (some litellm callers re-inject instructions mid-transcript) reads as a developer Message at that position; only the first row is Request.system.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Be brief."
+      },
+      {
+        "role": "user",
+        "content": "Hello"
+      },
+      {
+        "role": "system",
+        "content": "Now answer in French."
+      },
+      {
+        "role": "user",
+        "content": "Bye"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "system": "Be brief.",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Hello"
+            }
+          ]
+        },
+        {
+          "role": "developer",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Now answer in French."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Bye"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}

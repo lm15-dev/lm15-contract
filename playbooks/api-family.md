@@ -52,6 +52,22 @@ A credential provider returns a credential value (`ApiKey`, `BearerToken`, `AwsC
 
 The same `complete` / `stream` names exist on a provider object and on the router. A user who learned one has learned the other.
 
+## Ingest (MAP-12, provisional; drafted 2026-09-08, pending ratification)
+
+| Concept | Python | TypeScript | Go | Rust |
+|---|---|---|---|---|
+| A Chat Completions request body → `Request` | `request_from_openai_chat(body, compat=None)` (module function; also `lm.request_from_openai_chat(body)` on `OpenAIChatLM`) | `requestFromOpenAIChat(body, { compat })`; `lm.requestFromOpenAIChat(body)` | `lm15.RequestFromOpenAIChat(body, opts...)`; `lm.RequestFromOpenAIChat(body)` | `request_from_openai_chat(&body, compat)` in the dialect module; `lm.request_from_openai_chat(&body)` |
+
+One word for one concept: the function is named after the format it reads,
+never `from_openai`, `parse_chat`, `import_messages`. It is a dialect-module
+function, not a `Request` constructor: the canonical type stays vendor-free
+(rule 3 — the user still gets a `Request`; nothing is hidden). `body` is the
+JSON object a client would POST (`model`, `messages`, …), never a
+`(model, messages, **kwargs)` spread — one shape in every language. `compat`
+is the preset name or policy the dialect adapter takes; the method form uses
+the adapter's own. Refusals are `UnsupportedFeatureError` with the key named;
+malformed input is the language's own error (MAP-12 rule 6).
+
 **Marked for demotion.** `OpenAIResponsesCompat.edit_image_field` and `commentary_phase` are single-provider knobs (Meta). They stay in 1.0.0a; they move to `extensions` in the next alpha unless a second provider needs them (rule 7). Note only; no code change now.
 
 ## Tools
@@ -92,7 +108,7 @@ The class NAME and the ErrorCode are the family. The mechanism is the language's
 
 These identifiers are the same string in all four, casing aside:
 
-`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
+`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `request_from_openai_chat`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
 
 ## Reviewing against this page
 

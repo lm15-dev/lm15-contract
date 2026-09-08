@@ -1,0 +1,43 @@
+{
+  "id": "openai_chat.ingest_stop_string",
+  "provider": "openai_chat",
+  "feature": "ingest_stop_string",
+  "surface": "ingest",
+  "description": "stop as a bare string reads as a one-element tuple (INV-020); the builder always writes the array.",
+  "body": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Count."
+      }
+    ],
+    "stop": "\n"
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Count."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "stop": [
+          "\n"
+        ]
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, pending ratification)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+  }
+}
