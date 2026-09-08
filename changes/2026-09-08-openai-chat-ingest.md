@@ -64,7 +64,7 @@ One rule, one op, one direction, one registry, no canonical type change:
    the stream flag, `safety_identifier`, `reasoning_effort: none`, a
    breakpoint on a user message, Groq's builtin tool and
    `reasoning_format` door, and the EXACT bodies DSPy's `ChatAdapter`
-   produces (text and image) — plus 11 pinned refusals (`n`, `functions`,
+   produces (text and image) — plus 10 pinned refusals (`n`, `functions`,
    a message `name`, a `custom` tool, `strict: true`, `top_k`, a foreign
    `thinking` spelling, `web_search_options`, an unknown content block,
    `prompt_cache_key` on a preset without cache control). The expected

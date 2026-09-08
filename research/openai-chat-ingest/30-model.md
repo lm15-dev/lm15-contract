@@ -37,6 +37,6 @@ preset.
 ## Coverage
 
 - 118 recorded chat-dialect bodies round-trip (97 exact, 21 pinned lossy).
-- 38 hand-authored foreign shapes, 11 of them refusals.
+- 38 hand-authored foreign shapes, 10 of them refusals.
 - 37 of 37 OpenAI-documented top-level parameters have a verdict; 8 more
   rows cover the spellings lm15's presets write for other servers.
