@@ -1,0 +1,68 @@
+{
+  "id": "openai_chat.ingest_sdk_message_object_in_history",
+  "provider": "openai_chat",
+  "feature": "ingest_sdk_message_object_in_history",
+  "surface": "ingest",
+  "description": "The OpenAI SDK's ChatCompletionMessage.model_dump() (openai 2.x, captured 2026-09-08) appended back into history — the first thing every chat loop does. Its null-valued keys (refusal, audio, function_call, tool_calls) read as absent and its empty annotations list is nothing; the row is one TextPart.",
+  "body": {
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Say ok"
+      },
+      {
+        "content": "Ok! How can I help?",
+        "refusal": null,
+        "role": "assistant",
+        "annotations": [],
+        "audio": null,
+        "function_call": null,
+        "tool_calls": null
+      },
+      {
+        "role": "user",
+        "content": "again"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Say ok"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Ok! How can I help?"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "again"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 addendum (changes/2026-09-08-openai-chat-response-door.md (MAP-12 addendum: message objects dumped into history; pending ratification)); the body is the client library's model_dump() output as stated in the description, captured 2026-09-08; the expectation was written by hand and checked against the reference shim (reference agrees with the hand-authored canonical request)"
+  }
+}

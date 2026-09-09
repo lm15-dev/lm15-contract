@@ -1,0 +1,39 @@
+{
+  "id": "openai_chat.ingest_litellm_nonempty_object_field_refused",
+  "provider": "openai_chat",
+  "feature": "ingest_litellm_nonempty_object_field_refused",
+  "surface": "ingest",
+  "description": "litellm's provider_specific_fields carrying a value (here a refusal string) is refused: a client library's own field with no canonical part; only its empty form reads as absent.",
+  "body": {
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "x"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "provider_specific_fields": {
+          "refusal": "I cannot help with that."
+        }
+      },
+      {
+        "role": "user",
+        "content": "y"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "raises": {
+      "op": "ingest_openai_chat",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 addendum (changes/2026-09-08-openai-chat-response-door.md (MAP-12 addendum: message objects dumped into history; pending ratification)); the body is the client library's model_dump() output as stated in the description, captured 2026-09-08; the expectation was written by hand and checked against the reference shim (reference message: openai-chat: messages[1].provider_specific_fields cannot be carried by a canonical Request — a client library's own field with no canonical part; only its empty form reads as absent)"
+  }
+}

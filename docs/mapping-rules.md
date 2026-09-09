@@ -674,9 +674,13 @@ caller.
 8. **Foreign shapes are pinned by ingest-surface cases**
    (`cases/<door>/ingest_*.json`, `surface: "ingest"`): the body, and
    either the hand-authored canonical request or the pinned refusal
-   (`expect_lm15.raises {op: ingest_openai_chat}`). 38 on 2026-09-08,
+   (`expect_lm15.raises {op: ingest_openai_chat}`). 42 on 2026-09-08,
    including the exact bodies DSPy's `ChatAdapter` produces (the first
-   consumer).
+   consumer) and the OpenAI SDK's and litellm's message objects dumped
+   back into history (rule 3: their null-valued keys and empty
+   `annotations` read as absent; non-empty `annotations` are
+   CitationParts; litellm's own `provider_specific_fields` /
+   `thinking_blocks` / `images` read as absent only when empty).
 
 9. **The reading side is the adapter's own reader, exposed** (added
    2026-09-08, `changes/2026-09-08-openai-chat-response-door.md`).

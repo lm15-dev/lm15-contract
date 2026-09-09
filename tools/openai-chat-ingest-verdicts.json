@@ -32,88 +32,345 @@
     "closed list the code must cover."
   ],
   "body": {
-    "model": {"verdict": "map", "to": "Request.model"},
-    "messages": {"verdict": "map", "to": "Request.system + Request.messages (see messages_rows)"},
-    "tools": {"verdict": "map", "to": "Request.tools (see tool_types)"},
-    "tool_choice": {"verdict": "map", "to": "Config.tool_choice (see tool_choice_forms)"},
-    "parallel_tool_calls": {"verdict": "map", "to": "Config.tool_choice.parallel (a ToolChoice(mode=auto) is created when tool_choice is absent)"},
-    "max_completion_tokens": {"verdict": "map", "to": "Config.max_tokens", "note": "both spellings are read on every preset; both present and unequal is malformed (ValueError)"},
-    "max_tokens": {"verdict": "map", "to": "Config.max_tokens", "note": "see max_completion_tokens"},
-    "temperature": {"verdict": "map", "to": "Config.temperature"},
-    "top_p": {"verdict": "map", "to": "Config.top_p"},
-    "stop": {"verdict": "map", "to": "Config.stop (a bare string becomes a 1-tuple, INV-020)"},
-    "logprobs": {"verdict": "map", "to": "Config.logprobs (true -> 0, or top_logprobs when given); false is 'default' and reads as absent"},
-    "top_logprobs": {"verdict": "map", "to": "Config.logprobs = n; without logprobs: true it is malformed (ValueError)"},
-    "response_format": {"verdict": "map", "to": "Config.response_format (INV-050): json_object; json_schema {name, schema, strict}; {type: text} is 'default' and reads as absent; name 'response' is the builder's default label and reads as absent; description is refused (no slot)"},
-    "service_tier": {"verdict": "map", "to": "Config.service_tier"},
-    "store": {"verdict": "map", "to": "Config.store"},
-    "user": {"verdict": "map", "to": "Config.user_id", "note": "one end-user identifier only: user, safety_identifier and user_id together is malformed (ValueError)"},
-    "safety_identifier": {"verdict": "map", "to": "Config.user_id"},
-    "user_id": {"verdict": "map", "to": "Config.user_id", "when": "compat.user_field == 'user_id' (DeepSeek); refused elsewhere - not an OpenAI field"},
-    "reasoning_effort": {"verdict": "map", "to": "Config.reasoning.effort ('none' -> effort 'off')", "when": "compat.thinking_format in (reasoning_effort, deepseek, kimi); refused where the server spells its dial otherwise or has none"},
-    "reasoning": {"verdict": "map", "to": "Config.reasoning: {effort} -> effort; {enabled: false} -> off", "when": "compat.thinking_format == 'openrouter'; refused elsewhere"},
-    "thinking": {"verdict": "map", "to": "Config.reasoning: {type: disabled} -> off; {type: enabled} needs reasoning_effort beside it (refused alone: lm15's dial is a level, MAP-7)", "when": "compat.thinking_format in (deepseek, kimi); refused elsewhere"},
-    "enable_thinking": {"verdict": "map", "to": "Config.reasoning: false -> off; true is refused (no level on this wire)", "when": "compat.thinking_format == 'qwen'; refused elsewhere"},
-    "chat_template_kwargs": {"verdict": "map", "to": "Config.reasoning: {enable_thinking: false} -> off; true is refused (no level)", "when": "compat.thinking_format == 'qwen_chat_template'; refused elsewhere"},
-    "reasoning_format": {"verdict": "map", "to": "Reasoning.summary = 'auto' when an effort is present (MAP-7 rule 7); alone it is the documented extensions door and lands in config.extensions verbatim; any value but 'parsed' is refused", "when": "compat.builtin_tools == 'groq'; refused elsewhere"},
-    "prompt_cache_key": {"verdict": "map", "to": "Config.cache.key", "when": "compat.cache_control in (openai, openai_implicit); refused elsewhere"},
-    "prompt_cache_retention": {"verdict": "map", "to": "Config.cache.retention = 'long' for '24h'; 'in_memory' is refused (no canonical value)", "when": "compat.cache_control in (openai, openai_implicit); refused elsewhere"},
-    "prompt_cache_options": {"verdict": "map", "to": "Config.cache: {mode: explicit} with no breakpoint -> mode 'off' (MAP-6 rule 2); with a breakpoint -> the breakpoint decides prefix / prefix_until_index; mode 'implicit' and ttl are refused", "when": "compat.cache_control == 'openai'; refused elsewhere"},
-    "seed": {"verdict": "extensions", "reason": "sampling determinism knob; no canonical field; harmless verbatim"},
-    "logit_bias": {"verdict": "extensions", "reason": "per-token bias map; no canonical field"},
-    "presence_penalty": {"verdict": "extensions", "reason": "sampling penalty; no canonical field"},
-    "frequency_penalty": {"verdict": "extensions", "reason": "sampling penalty; no canonical field"},
-    "metadata": {"verdict": "extensions", "reason": "free-form request tags for OpenAI's stored-response dashboard (INV-049 blesses openai.metadata on the Responses dialect for the same reason)"},
-    "verbosity": {"verdict": "extensions", "reason": "OpenAI-only output-length preference; no canonical field"},
-    "moderation": {"verdict": "extensions", "reason": "OpenAI-only moderation policy object; no canonical field"},
-    "provider": {"verdict": "extensions", "reason": "OpenRouter's routing preferences object (the preset's compat.routing writes the same key); no canonical field"},
-    "n": {"verdict": "refuse", "reason": "lm15 reads one choice per response; n > 1 would silently lose choices. Fan out in the caller"},
-    "functions": {"verdict": "refuse", "reason": "the deprecated function-calling shape; declare tools as {type: function, function: {...}}"},
-    "function_call": {"verdict": "refuse", "reason": "the deprecated function-calling shape; use tool_choice"},
-    "audio": {"verdict": "refuse", "reason": "audio OUTPUT parameters (voice, format) have no canonical slot on the chat surface"},
-    "modalities": {"verdict": "refuse", "reason": "output modality selection has no canonical slot on the chat surface"},
-    "prediction": {"verdict": "refuse", "reason": "predicted-output content has no canonical slot"},
-    "web_search_options": {"verdict": "refuse", "reason": "a server-executed search the chat dialect cannot map to parts (MAP-1); the Responses dialect carries web_search as a BuiltinTool"},
-    "top_k": {"verdict": "refuse", "reason": "not an OpenAI field and the wire has no slot (the builder raises on Config.top_k, port.md rule 4); litellm forwards it from Anthropic/Gemini-shaped callers - a server that takes it does so through extensions"},
-    "stream": {"verdict": "call-mode", "reason": "stream=... is an argument of complete()/stream(), not a field of Request"},
-    "stream_options": {"verdict": "call-mode", "reason": "stream-frame mechanics (include_usage, include_obfuscation); the adapter sets them from its own compat when it streams"}
+    "model": {
+      "verdict": "map",
+      "to": "Request.model"
+    },
+    "messages": {
+      "verdict": "map",
+      "to": "Request.system + Request.messages (see messages_rows)"
+    },
+    "tools": {
+      "verdict": "map",
+      "to": "Request.tools (see tool_types)"
+    },
+    "tool_choice": {
+      "verdict": "map",
+      "to": "Config.tool_choice (see tool_choice_forms)"
+    },
+    "parallel_tool_calls": {
+      "verdict": "map",
+      "to": "Config.tool_choice.parallel (a ToolChoice(mode=auto) is created when tool_choice is absent)"
+    },
+    "max_completion_tokens": {
+      "verdict": "map",
+      "to": "Config.max_tokens",
+      "note": "both spellings are read on every preset; both present and unequal is malformed (ValueError)"
+    },
+    "max_tokens": {
+      "verdict": "map",
+      "to": "Config.max_tokens",
+      "note": "see max_completion_tokens"
+    },
+    "temperature": {
+      "verdict": "map",
+      "to": "Config.temperature"
+    },
+    "top_p": {
+      "verdict": "map",
+      "to": "Config.top_p"
+    },
+    "stop": {
+      "verdict": "map",
+      "to": "Config.stop (a bare string becomes a 1-tuple, INV-020)"
+    },
+    "logprobs": {
+      "verdict": "map",
+      "to": "Config.logprobs (true -> 0, or top_logprobs when given); false is 'default' and reads as absent"
+    },
+    "top_logprobs": {
+      "verdict": "map",
+      "to": "Config.logprobs = n; without logprobs: true it is malformed (ValueError)"
+    },
+    "response_format": {
+      "verdict": "map",
+      "to": "Config.response_format (INV-050): json_object; json_schema {name, schema, strict}; {type: text} is 'default' and reads as absent; name 'response' is the builder's default label and reads as absent; description is refused (no slot)"
+    },
+    "service_tier": {
+      "verdict": "map",
+      "to": "Config.service_tier"
+    },
+    "store": {
+      "verdict": "map",
+      "to": "Config.store"
+    },
+    "user": {
+      "verdict": "map",
+      "to": "Config.user_id",
+      "note": "one end-user identifier only: user, safety_identifier and user_id together is malformed (ValueError)"
+    },
+    "safety_identifier": {
+      "verdict": "map",
+      "to": "Config.user_id"
+    },
+    "user_id": {
+      "verdict": "map",
+      "to": "Config.user_id",
+      "when": "compat.user_field == 'user_id' (DeepSeek); refused elsewhere - not an OpenAI field"
+    },
+    "reasoning_effort": {
+      "verdict": "map",
+      "to": "Config.reasoning.effort ('none' -> effort 'off')",
+      "when": "compat.thinking_format in (reasoning_effort, deepseek, kimi); refused where the server spells its dial otherwise or has none"
+    },
+    "reasoning": {
+      "verdict": "map",
+      "to": "Config.reasoning: {effort} -> effort; {enabled: false} -> off",
+      "when": "compat.thinking_format == 'openrouter'; refused elsewhere"
+    },
+    "thinking": {
+      "verdict": "map",
+      "to": "Config.reasoning: {type: disabled} -> off; {type: enabled} needs reasoning_effort beside it (refused alone: lm15's dial is a level, MAP-7)",
+      "when": "compat.thinking_format in (deepseek, kimi); refused elsewhere"
+    },
+    "enable_thinking": {
+      "verdict": "map",
+      "to": "Config.reasoning: false -> off; true is refused (no level on this wire)",
+      "when": "compat.thinking_format == 'qwen'; refused elsewhere"
+    },
+    "chat_template_kwargs": {
+      "verdict": "map",
+      "to": "Config.reasoning: {enable_thinking: false} -> off; true is refused (no level)",
+      "when": "compat.thinking_format == 'qwen_chat_template'; refused elsewhere"
+    },
+    "reasoning_format": {
+      "verdict": "map",
+      "to": "Reasoning.summary = 'auto' when an effort is present (MAP-7 rule 7); alone it is the documented extensions door and lands in config.extensions verbatim; any value but 'parsed' is refused",
+      "when": "compat.builtin_tools == 'groq'; refused elsewhere"
+    },
+    "prompt_cache_key": {
+      "verdict": "map",
+      "to": "Config.cache.key",
+      "when": "compat.cache_control in (openai, openai_implicit); refused elsewhere"
+    },
+    "prompt_cache_retention": {
+      "verdict": "map",
+      "to": "Config.cache.retention = 'long' for '24h'; 'in_memory' is refused (no canonical value)",
+      "when": "compat.cache_control in (openai, openai_implicit); refused elsewhere"
+    },
+    "prompt_cache_options": {
+      "verdict": "map",
+      "to": "Config.cache: {mode: explicit} with no breakpoint -> mode 'off' (MAP-6 rule 2); with a breakpoint -> the breakpoint decides prefix / prefix_until_index; mode 'implicit' and ttl are refused",
+      "when": "compat.cache_control == 'openai'; refused elsewhere"
+    },
+    "seed": {
+      "verdict": "extensions",
+      "reason": "sampling determinism knob; no canonical field; harmless verbatim"
+    },
+    "logit_bias": {
+      "verdict": "extensions",
+      "reason": "per-token bias map; no canonical field"
+    },
+    "presence_penalty": {
+      "verdict": "extensions",
+      "reason": "sampling penalty; no canonical field"
+    },
+    "frequency_penalty": {
+      "verdict": "extensions",
+      "reason": "sampling penalty; no canonical field"
+    },
+    "metadata": {
+      "verdict": "extensions",
+      "reason": "free-form request tags for OpenAI's stored-response dashboard (INV-049 blesses openai.metadata on the Responses dialect for the same reason)"
+    },
+    "verbosity": {
+      "verdict": "extensions",
+      "reason": "OpenAI-only output-length preference; no canonical field"
+    },
+    "moderation": {
+      "verdict": "extensions",
+      "reason": "OpenAI-only moderation policy object; no canonical field"
+    },
+    "provider": {
+      "verdict": "extensions",
+      "reason": "OpenRouter's routing preferences object (the preset's compat.routing writes the same key); no canonical field"
+    },
+    "n": {
+      "verdict": "refuse",
+      "reason": "lm15 reads one choice per response; n > 1 would silently lose choices. Fan out in the caller"
+    },
+    "functions": {
+      "verdict": "refuse",
+      "reason": "the deprecated function-calling shape; declare tools as {type: function, function: {...}}"
+    },
+    "function_call": {
+      "verdict": "refuse",
+      "reason": "the deprecated function-calling shape; use tool_choice"
+    },
+    "audio": {
+      "verdict": "refuse",
+      "reason": "audio OUTPUT parameters (voice, format) have no canonical slot on the chat surface"
+    },
+    "modalities": {
+      "verdict": "refuse",
+      "reason": "output modality selection has no canonical slot on the chat surface"
+    },
+    "prediction": {
+      "verdict": "refuse",
+      "reason": "predicted-output content has no canonical slot"
+    },
+    "web_search_options": {
+      "verdict": "refuse",
+      "reason": "a server-executed search the chat dialect cannot map to parts (MAP-1); the Responses dialect carries web_search as a BuiltinTool"
+    },
+    "top_k": {
+      "verdict": "refuse",
+      "reason": "not an OpenAI field and the wire has no slot (the builder raises on Config.top_k, port.md rule 4); litellm forwards it from Anthropic/Gemini-shaped callers - a server that takes it does so through extensions"
+    },
+    "stream": {
+      "verdict": "call-mode",
+      "reason": "stream=... is an argument of complete()/stream(), not a field of Request"
+    },
+    "stream_options": {
+      "verdict": "call-mode",
+      "reason": "stream-frame mechanics (include_usage, include_obfuscation); the adapter sets them from its own compat when it streams"
+    }
   },
   "messages_rows": {
-    "system": {"verdict": "map", "to": "first row: Request.system (a lone text block becomes the string form); a later row: a developer Message"},
-    "developer": {"verdict": "map", "to": "as system: the builder writes Request.system under compat.instruction_role, so the wire cannot tell a system prompt from a leading developer message (lossy class leading_developer_as_system)"},
-    "user": {"verdict": "map", "to": "a user Message"},
-    "assistant": {"verdict": "map", "to": "an assistant Message; parts in the fixed order reasoning_content (thinking), content (text / refusal blocks), refusal, tool_calls; content null with nothing else is one empty TextPart (MAP-2 applied to history)"},
-    "tool": {"verdict": "map", "to": "consecutive tool rows form ONE tool Message (the builder writes one row per ToolResultPart); tool_call_id -> id; name -> ToolResultPart.name"},
-    "function": {"verdict": "refuse", "reason": "the deprecated function-calling shape; use a tool row with tool_call_id"},
-    "*.name": {"verdict": "refuse", "reason": "a per-message participant name has no canonical slot (a tool row's name is the result's function name and maps)"},
-    "assistant.audio": {"verdict": "refuse", "reason": "an assistant audio reference has no canonical part"},
-    "assistant.function_call": {"verdict": "refuse", "reason": "the deprecated shape; use tool_calls"},
-    "assistant.reasoning_content": {"verdict": "map", "to": "ThinkingPart (a typed wire field, MAP-7 rule 12); read on every preset"},
-    "assistant.refusal": {"verdict": "map", "to": "RefusalPart"},
-    "assistant.tool_calls": {"verdict": "map", "to": "ToolCallPart(id, function.name, json.loads(function.arguments)); a non-JSON-object arguments string is malformed (ValueError); type custom is refused"}
+    "system": {
+      "verdict": "map",
+      "to": "first row: Request.system (a lone text block becomes the string form); a later row: a developer Message"
+    },
+    "developer": {
+      "verdict": "map",
+      "to": "as system: the builder writes Request.system under compat.instruction_role, so the wire cannot tell a system prompt from a leading developer message (lossy class leading_developer_as_system)"
+    },
+    "user": {
+      "verdict": "map",
+      "to": "a user Message"
+    },
+    "assistant": {
+      "verdict": "map",
+      "to": "an assistant Message; parts in the fixed order reasoning_content (thinking), content (text / refusal blocks), refusal, tool_calls; content null with nothing else is one empty TextPart (MAP-2 applied to history)"
+    },
+    "tool": {
+      "verdict": "map",
+      "to": "consecutive tool rows form ONE tool Message (the builder writes one row per ToolResultPart); tool_call_id -> id; name -> ToolResultPart.name"
+    },
+    "function": {
+      "verdict": "refuse",
+      "reason": "the deprecated function-calling shape; use a tool row with tool_call_id"
+    },
+    "*.name": {
+      "verdict": "refuse",
+      "reason": "a per-message participant name has no canonical slot (a tool row's name is the result's function name and maps)"
+    },
+    "assistant.audio": {
+      "verdict": "refuse",
+      "reason": "an assistant audio reference has no canonical part"
+    },
+    "assistant.function_call": {
+      "verdict": "refuse",
+      "reason": "the deprecated shape; use tool_calls"
+    },
+    "assistant.reasoning_content": {
+      "verdict": "map",
+      "to": "ThinkingPart (a typed wire field, MAP-7 rule 12); read on every preset"
+    },
+    "assistant.refusal": {
+      "verdict": "map",
+      "to": "RefusalPart"
+    },
+    "assistant.tool_calls": {
+      "verdict": "map",
+      "to": "ToolCallPart(id, function.name, json.loads(function.arguments)); a non-JSON-object arguments string is malformed (ValueError); type custom is refused"
+    },
+    "assistant.annotations": {
+      "verdict": "map",
+      "to": "CitationPart per url_citation entry (url, title, text = the content span start_index..end_index); an empty list is nothing. The key the OpenAI SDK's and litellm's ChatCompletionMessage objects carry when dumped back into history (added 2026-09-08 after the first real message object was refused on it)"
+    },
+    "assistant.provider_specific_fields": {
+      "verdict": "default",
+      "reason": "litellm's object model, not the wire: null, {} or a dict whose every value is null/empty reads as absent; a non-empty one is refused (no canonical part)"
+    },
+    "assistant.thinking_blocks": {
+      "verdict": "default",
+      "reason": "litellm's object model: [] reads as absent; non-empty refused"
+    },
+    "assistant.images": {
+      "verdict": "default",
+      "reason": "litellm's object model: [] reads as absent; non-empty refused"
+    },
+    "*.null-valued keys": {
+      "verdict": "default",
+      "reason": "a key whose value is null reads as absent everywhere (the SDK's model_dump() writes audio: null, function_call: null, refusal: null on every assistant message)"
+    }
   },
   "content_blocks": {
-    "text": {"verdict": "map", "to": "TextPart"},
-    "image_url": {"verdict": "map", "to": "ImagePart: a data URI -> inline data with the URI's media type; any other URL -> url (media type guessed from the path, else the ImagePart default; the wire carries none). detail -> detail. Admitted in user and tool rows"},
-    "input_audio": {"verdict": "map", "to": "AudioPart(data, media_type audio/wav | audio/mpeg). Admitted in user rows. The chat builder cannot carry it back out on any current preset (MAP-10): the Request is faithful and the send raises loudly"},
-    "file": {"verdict": "map", "to": "DocumentPart(file_id) or DocumentPart(data, media type from the file_data data URI); filename is refused (no slot). Admitted in user rows"},
-    "refusal": {"verdict": "map", "to": "RefusalPart. Admitted in assistant rows"},
-    "video_url": {"verdict": "refuse", "reason": "not in the OpenAI reference; a vLLM / DashScope convention with no receipt that any preset's server receives it. A VideoPart mapping waits for that receipt (the chat builder raises on VideoPart today, MAP-10)"},
-    "*.prompt_cache_breakpoint": {"verdict": "map", "to": "CacheConfig: on the system row's text block -> prefix 'stable'; on the last text block of message N -> prefix_until_index N; anywhere else is malformed (the builder places it nowhere else)"}
+    "text": {
+      "verdict": "map",
+      "to": "TextPart"
+    },
+    "image_url": {
+      "verdict": "map",
+      "to": "ImagePart: a data URI -> inline data with the URI's media type; any other URL -> url (media type guessed from the path, else the ImagePart default; the wire carries none). detail -> detail. Admitted in user and tool rows"
+    },
+    "input_audio": {
+      "verdict": "map",
+      "to": "AudioPart(data, media_type audio/wav | audio/mpeg). Admitted in user rows. The chat builder cannot carry it back out on any current preset (MAP-10): the Request is faithful and the send raises loudly"
+    },
+    "file": {
+      "verdict": "map",
+      "to": "DocumentPart(file_id) or DocumentPart(data, media type from the file_data data URI); filename is refused (no slot). Admitted in user rows"
+    },
+    "refusal": {
+      "verdict": "map",
+      "to": "RefusalPart. Admitted in assistant rows"
+    },
+    "video_url": {
+      "verdict": "refuse",
+      "reason": "not in the OpenAI reference; a vLLM / DashScope convention with no receipt that any preset's server receives it. A VideoPart mapping waits for that receipt (the chat builder raises on VideoPart today, MAP-10)"
+    },
+    "*.prompt_cache_breakpoint": {
+      "verdict": "map",
+      "to": "CacheConfig: on the system row's text block -> prefix 'stable'; on the last text block of message N -> prefix_until_index N; anywhere else is malformed (the builder places it nowhere else)"
+    }
   },
   "tool_types": {
-    "function": {"verdict": "map", "to": "FunctionTool(name, description, parameters); strict true is refused (no per-tool slot; compat.strict_tools is a preset policy), strict false is 'default'"},
-    "custom": {"verdict": "refuse", "reason": "custom (free-form) tools have no canonical form"},
-    "browser_search": {"verdict": "map", "to": "BuiltinTool(web_search, config = the remaining keys)", "when": "compat.builtin_tools == 'groq'; refused elsewhere (the base wire has no such tool type)"},
-    "code_interpreter": {"verdict": "map", "to": "BuiltinTool(code_execution, config = the remaining keys)", "when": "compat.builtin_tools == 'groq'; refused elsewhere"}
+    "function": {
+      "verdict": "map",
+      "to": "FunctionTool(name, description, parameters); strict true is refused (no per-tool slot; compat.strict_tools is a preset policy), strict false is 'default'"
+    },
+    "custom": {
+      "verdict": "refuse",
+      "reason": "custom (free-form) tools have no canonical form"
+    },
+    "browser_search": {
+      "verdict": "map",
+      "to": "BuiltinTool(web_search, config = the remaining keys)",
+      "when": "compat.builtin_tools == 'groq'; refused elsewhere (the base wire has no such tool type)"
+    },
+    "code_interpreter": {
+      "verdict": "map",
+      "to": "BuiltinTool(code_execution, config = the remaining keys)",
+      "when": "compat.builtin_tools == 'groq'; refused elsewhere"
+    }
   },
   "tool_choice_forms": {
-    "none": {"verdict": "map", "to": "ToolChoice(mode=none)"},
-    "auto": {"verdict": "map", "to": "ToolChoice(mode=auto)"},
-    "required": {"verdict": "map", "to": "ToolChoice(mode=required)"},
-    "function": {"verdict": "map", "to": "ToolChoice(mode=required, allowed=(function.name,)); INV-031 then requires the name among Request.tools"},
-    "allowed_tools": {"verdict": "map", "to": "ToolChoice(mode=allowed_tools.mode, allowed=the function names)"},
-    "custom": {"verdict": "refuse", "reason": "custom tools have no canonical form"}
+    "none": {
+      "verdict": "map",
+      "to": "ToolChoice(mode=none)"
+    },
+    "auto": {
+      "verdict": "map",
+      "to": "ToolChoice(mode=auto)"
+    },
+    "required": {
+      "verdict": "map",
+      "to": "ToolChoice(mode=required)"
+    },
+    "function": {
+      "verdict": "map",
+      "to": "ToolChoice(mode=required, allowed=(function.name,)); INV-031 then requires the name among Request.tools"
+    },
+    "allowed_tools": {
+      "verdict": "map",
+      "to": "ToolChoice(mode=allowed_tools.mode, allowed=the function names)"
+    },
+    "custom": {
+      "verdict": "refuse",
+      "reason": "custom tools have no canonical form"
+    }
   },
   "lossy": {
     "thinking_as_text": "compat.thinking_replay == 'as_text' folds a ThinkingPart into the assistant text (MAP-7 rule 8, decision G); the wire carries no thinking field, and lm15 never parses delimiters out of text (MAP-7 rule 12), so it reads back as a TextPart",

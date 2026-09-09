@@ -1,0 +1,80 @@
+{
+  "id": "openai_chat.ingest_annotations_url_citation",
+  "provider": "openai_chat",
+  "feature": "ingest_annotations_url_citation",
+  "surface": "ingest",
+  "description": "A non-empty annotations list (OpenAI's url_citation, as web-search answers carry) on an assistant history row reads as CitationParts after the text: url, title, and the content span the indexes name.",
+  "body": {
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Why is the sky blue?"
+      },
+      {
+        "role": "assistant",
+        "content": "The sky is blue because of Rayleigh scattering.",
+        "annotations": [
+          {
+            "type": "url_citation",
+            "url_citation": {
+              "url": "https://en.wikipedia.org/wiki/Rayleigh_scattering",
+              "title": "Rayleigh scattering",
+              "start_index": 27,
+              "end_index": 46
+            }
+          }
+        ]
+      },
+      {
+        "role": "user",
+        "content": "Thanks"
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Why is the sky blue?"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "The sky is blue because of Rayleigh scattering."
+            },
+            {
+              "type": "citation",
+              "url": "https://en.wikipedia.org/wiki/Rayleigh_scattering",
+              "title": "Rayleigh scattering",
+              "text": "Rayleigh scattering"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Thanks"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-08",
+    "evidence": "MAP-12 addendum (changes/2026-09-08-openai-chat-response-door.md (MAP-12 addendum: message objects dumped into history; pending ratification)); the body is the client library's model_dump() output as stated in the description, captured 2026-09-08; the expectation was written by hand and checked against the reference shim (reference agrees with the hand-authored canonical request)"
+  }
+}

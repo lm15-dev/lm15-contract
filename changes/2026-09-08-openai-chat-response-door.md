@@ -40,6 +40,40 @@ side; refusing it on the read side is the same rule. No recorded body
 in the corpus carries several choices; `--direction response` and
 `--direction stream` are unchanged (302 / 0, 40 / 0).
 
+## Addendum, same session: message objects dumped back into history
+
+The first real chat loop tried against ingest failed: every loop appends
+`response.choices[0].message` — a pydantic object — to `messages`, and
+its `model_dump()` carries `annotations: []`, `audio: null`,
+`function_call: null`, `refusal: null` (OpenAI SDK 2.x) or
+`provider_specific_fields: {"refusal": null}` (litellm). Ingest refused
+the row on `annotations`. Five verdict rows added
+(`tools/openai-chat-ingest-verdicts.json` § messages_rows):
+
+- `assistant.annotations` → **map**: OpenAI's `url_citation` entries
+  become `CitationPart(url, title, text = the content span)`; an empty
+  list is nothing.
+- `assistant.provider_specific_fields`, `thinking_blocks`, `images` →
+  **default**: litellm's object model, not the wire; null / empty reads
+  as absent, non-empty is refused with the key named.
+- null-valued keys read as absent everywhere (already the reference's
+  behaviour; now stated).
+
+Four ingest-surface cases pin it: the SDK's and litellm's dumped
+message objects verbatim (captured 2026-09-08), a non-empty
+`url_citation`, and litellm's `provider_specific_fields` carrying a
+refusal string (refused). `--direction ingest`: 160 / 0.
+
+**Finding, not decided here:** the chat BUILDER silently drops a
+`CitationPart` on an assistant history row (`_build_messages` renders
+text, refusal and thinking only; the request wire has no `annotations`
+slot). That is a MAP-10-class cell — a part that reaches no wire and
+raises nothing — that predates this entry and now becomes reachable
+from a real input. Options are raise (MAP-10 rule 1 as written), or
+state citations as presentation-only on replay (as `Response.text`
+already treats them). The maintainer decides; a probe case should pin
+whichever.
+
 ## Considered and rejected
 
 - **A verdict registry for response keys**, as the request side has. The
