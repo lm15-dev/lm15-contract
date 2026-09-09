@@ -76,8 +76,23 @@ name); a bare name by the router's rules except that an OpenAI model takes
 the `openai-chat` door — the endpoint both libraries were using — where
 `router.complete` would take Responses. Client keywords (`api_key`,
 `api_base`, `timeout`, `num_retries`, `headers`, `cache`, `drop_params`,
-…) are refused with the `RouterConfig` place named. `stream=True` is
-refused on `complete_from_...`; `stream_from_...` is its twin.
+…) are refused with the `RouterConfig` place named.
+
+Python amendment (ratified 2026-09-09; `changes/2026-09-09-python-migration-ux.md`):
+`complete_from_openai_chat(..., stream=True)` returns a lazy `ResponseStream`;
+`False` or omission returns `Response`. Only booleans are accepted. Iterate
+for text, use `.events()` for canonical events, and `.response` to consume
+any remainder and obtain the assembled answer. `close()` / context-manager
+exit releases the source without draining it; closing before completion
+cannot produce a completed response. The async helper is awaited in both
+modes, returning `Response` or `AsyncResponseStream`; use `async for`,
+`await result.response()`, and `aclose()` / `async with`. Overloads expose
+the return-type distinction. The native `complete(Request)` remains
+single-return-type. `stream_from_...` remains the raw-event alternative.
+
+Python's `explain_auth` also accepts a `Resolution` as its provider input.
+It reads only that object's provider identity; `config=router.config` supplies
+the actual router configuration. A resolution never embeds credentials.
 
 One word for one concept: the function is named after the format it reads,
 never `from_openai`, `parse_chat`, `import_messages`. They are dialect-module

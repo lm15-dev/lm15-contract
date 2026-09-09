@@ -41,11 +41,40 @@ For a `key` provider constructed through the router, the credential
 resolves in exactly this order; the first hit wins and later rungs are
 dead:
 
-1. an explicit `api_keys` entry for the provider (static value or
-   credential-provider callable);
+1. an explicit `api_keys` entry for the provider, selected by the shared-key
+   rule below (static value or credential-provider callable);
 2. the provider's declared environment keys, in declared order, first
    non-empty value;
 3. for local-server presets only: the preset's placeholder key.
+
+### Shared explicit keys (ratified 2026-09-09)
+
+Select an exact provider entry first, accepting the standard underscore
+alias. Without one, select the single configured provider whose declared
+`env_keys` tuple is identical to the target's **non-empty** tuple (including
+order). Derive this from provider declarations, never a second family-name
+table. Thus `openai` supplies `openai-chat`, but `gemini` does not supply
+`vertex-express`: overlapping lists are not identical. Empty lists do not
+join local servers, OAuth stores or GCP chains.
+
+An exact entry wins regardless of other shared candidates. Multiple shared
+candidates without an exact entry raise `not_configured`; never choose by
+map order, compare secrets, or invoke credential providers to test equality.
+The diagnostic names only configuration keys and the target. Duplicate
+spellings for the same explicit provider are refused, not resolved by order.
+An empty explicit credential is a configuration failure, not permission to
+fall back to ambient credentials.
+
+The selected shared entry is still the explicit rung, ahead of every later
+credential source. AUTH-7 shows the source configuration key when it differs
+from the target; it remains kind `api_keys`. This does not claim the key is
+valid for the selected host/account: provider authentication still decides.
+URLs and host settings remain exact-provider configuration; this rule never
+shares endpoints, settings, stored OAuth credentials, or an implicit login.
+The `oauth` policy remains local-store-only.
+
+See `changes/2026-09-09-python-migration-ux.md`. Implementation rollout is
+Python first; other languages are follow-up, not claimed aligned here.
 
 For an `oauth-unless-explicit` provider the order is: the explicit
 `api_keys` entry; the stored local OAuth credential (AUTH-8 store paths)
