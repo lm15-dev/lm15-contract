@@ -59,6 +59,26 @@ The same `complete` / `stream` names exist on a provider object and on the route
 | A Chat Completions request body → `Request` | `request_from_openai_chat(body, compat=None)` (module function; also `lm.request_from_openai_chat(body)` on `OpenAIChatLM`) | `requestFromOpenAIChat(body, { compat })`; `lm.requestFromOpenAIChat(body)` | `lm15.RequestFromOpenAIChat(body, opts...)`; `lm.RequestFromOpenAIChat(body)` | `request_from_openai_chat(&body, compat)` in the dialect module; `lm.request_from_openai_chat(&body)` |
 | A Chat Completions response body → `Response` (MAP-12 rule 9, 2026-09-08) | `response_from_openai_chat(body, model=None, choice=None)`; `lm.response_from_openai_chat(body, ...)` | `responseFromOpenAIChat(body, { model, choice })`; `lm.responseFromOpenAIChat(body, ...)` | `lm15.ResponseFromOpenAIChat(body, opts...)`; `lm.ResponseFromOpenAIChat(body, ...)` | `response_from_openai_chat(&body, model, choice)`; `lm.response_from_openai_chat(&body, ...)` |
 
+| The other libraries' call, as-is (2026-09-08, pending) | `router.complete_from_openai_chat(model, messages, **kwargs)`; `stream_from_openai_chat`; `request_from_openai_chat(model, messages, **kwargs) → (Request, lm)`; `openai_chat_model_string(model)` | `router.completeFromOpenAIChat(model, messages, opts)`; `streamFromOpenAIChat`; `requestFromOpenAIChat`; `openaiChatModelString` | `router.CompleteFromOpenAIChat(ctx, model, messages, opts)`; `StreamFromOpenAIChat`; `RequestFromOpenAIChat`; `lm15.OpenAIChatModelString` | `router.complete_from_openai_chat(model, &messages, opts)`; `stream_from_openai_chat`; `request_from_openai_chat`; `openai_chat_model_string` |
+
+**The stated exception to rule 3.** `complete_from_openai_chat` is the one
+entry point that does not take the canonical types: it takes the OpenAI
+SDK's / litellm's call — `(model, messages, **kwargs)` — because that call
+is what a migrating codebase holds, and a converter the user must find and
+wire is a door half the users never open. It hides nothing: the result is
+a canonical `Response`, `router.request_from_openai_chat(...)` returns the
+`Request` it built and the LM it routes to, and every keyword goes through
+MAP-12 (map / extensions / refuse by name). The model string is read by
+`openai_chat_model_string`: an lm15 `provider:model` as-is; litellm's
+`provider/model` through `LITELLM_PROVIDER_PREFIXES` (data; only the first
+segment; an unlisted or two-door prefix such as `bedrock/` is refused by
+name); a bare name by the router's rules except that an OpenAI model takes
+the `openai-chat` door — the endpoint both libraries were using — where
+`router.complete` would take Responses. Client keywords (`api_key`,
+`api_base`, `timeout`, `num_retries`, `headers`, `cache`, `drop_params`,
+…) are refused with the `RouterConfig` place named. `stream=True` is
+refused on `complete_from_...`; `stream_from_...` is its twin.
+
 One word for one concept: the function is named after the format it reads,
 never `from_openai`, `parse_chat`, `import_messages`. They are dialect-module
 functions, not `Request` / `Response` constructors: the canonical types stay vendor-free

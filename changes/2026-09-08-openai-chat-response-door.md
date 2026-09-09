@@ -74,6 +74,36 @@ state citations as presentation-only on replay (as `Response.text`
 already treats them). The maintainer decides; a probe case should pin
 whichever.
 
+## Addendum 2, same session: `complete_from_openai_chat` — the other libraries' call, as-is
+
+The maintainer asked whether `router.complete(model=..., messages=...,
+max_completion_tokens=...)` could be made to work. Overloading `complete`
+was rejected (one method, two meanings of `messages`); a named method
+was chosen, and it takes both libraries' model strings as written. The
+api-family page gains the row and the stated exception to rule 3. Design:
+
+- `openai_chat_model_string`: lm15 `provider:model` as-is; litellm
+  `provider/model` via `LITELLM_PROVIDER_PREFIXES` (data: openai →
+  openai-chat, anthropic, gemini, groq, openrouter, deepseek, xai,
+  ollama, ollama_chat, hosted_vllm → vllm, moonshot → moonshotai,
+  azure → azure-chat); only the first segment is the provider
+  (`groq/openai/gpt-oss-20b`); an unlisted prefix, or one litellm maps
+  to two lm15 doors (`bedrock/`, `vertex_ai/`), is `UnknownModelError`
+  naming it — never routed by rule. A bare name goes by the router's
+  rules, except an OpenAI model takes the `openai-chat` door.
+- The body is read with the DESTINATION door's compat when it speaks
+  the chat wire (`deepseek/…` reads `thinking`), else OpenAI's.
+- Client keywords are refused with the `RouterConfig` place named;
+  `stream=True` refused on `complete_from_...` (`stream_from_...` exists).
+
+Trade-offs stated: the same bare `gpt-4o-mini` reaches a different door
+through this method than through `router.complete` (Chat vs Responses)
+— deliberate, documented, visible on `lm.provider`; the litellm prefix
+table is data that rots as litellm adds providers (unknown → refused).
+Verified live 2026-09-08 through all four doors (OpenAI chat, Anthropic,
+Gemini, Groq streamed) with strings exactly as the two libraries write
+them. Ports follow the row. The general router's `/` refusal stands.
+
 ## Considered and rejected
 
 - **A verdict registry for response keys**, as the request side has. The
