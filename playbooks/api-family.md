@@ -57,16 +57,21 @@ The same `complete` / `stream` names exist on a provider object and on the route
 | Concept | Python | TypeScript | Go | Rust |
 |---|---|---|---|---|
 | A Chat Completions request body → `Request` | `request_from_openai_chat(body, compat=None)` (module function; also `lm.request_from_openai_chat(body)` on `OpenAIChatLM`) | `requestFromOpenAIChat(body, { compat })`; `lm.requestFromOpenAIChat(body)` | `lm15.RequestFromOpenAIChat(body, opts...)`; `lm.RequestFromOpenAIChat(body)` | `request_from_openai_chat(&body, compat)` in the dialect module; `lm.request_from_openai_chat(&body)` |
+| A Chat Completions response body → `Response` (MAP-12 rule 9, 2026-09-08) | `response_from_openai_chat(body, model=None, choice=None)`; `lm.response_from_openai_chat(body, ...)` | `responseFromOpenAIChat(body, { model, choice })`; `lm.responseFromOpenAIChat(body, ...)` | `lm15.ResponseFromOpenAIChat(body, opts...)`; `lm.ResponseFromOpenAIChat(body, ...)` | `response_from_openai_chat(&body, model, choice)`; `lm.response_from_openai_chat(&body, ...)` |
 
 One word for one concept: the function is named after the format it reads,
-never `from_openai`, `parse_chat`, `import_messages`. It is a dialect-module
-function, not a `Request` constructor: the canonical type stays vendor-free
+never `from_openai`, `parse_chat`, `import_messages`. They are dialect-module
+functions, not `Request` / `Response` constructors: the canonical types stay vendor-free
 (rule 3 — the user still gets a `Request`; nothing is hidden). `body` is the
 JSON object a client would POST (`model`, `messages`, …), never a
 `(model, messages, **kwargs)` spread — one shape in every language. `compat`
 is the preset name or policy the dialect adapter takes; the method form uses
-the adapter's own. Refusals are `UnsupportedFeatureError` with the key named;
-malformed input is the language's own error (MAP-12 rule 6).
+the adapter's own. The response door takes no compat (the response shape does
+not vary by server), `model` for a body that carries none, and `choice` to
+name one of several choices (unnamed, several is refused). Refusals are
+`UnsupportedFeatureError` with the key named; malformed input is the
+language's own error (MAP-12 rule 6). Ports implement the response door by
+exposing their existing `parse_response` reader, never by a second reader.
 
 **Marked for demotion.** `OpenAIResponsesCompat.edit_image_field` and `commentary_phase` are single-provider knobs (Meta). They stay in 1.0.0a; they move to `extensions` in the next alpha unless a second provider needs them (rule 7). Note only; no code change now.
 
@@ -108,7 +113,7 @@ The class NAME and the ErrorCode are the family. The mechanism is the language's
 
 These identifiers are the same string in all four, casing aside:
 
-`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `request_from_openai_chat`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
+`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `request_from_openai_chat`, `response_from_openai_chat`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
 
 ## Reviewing against this page
 

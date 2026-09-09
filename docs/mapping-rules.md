@@ -678,14 +678,38 @@ caller.
    including the exact bodies DSPy's `ChatAdapter` produces (the first
    consumer).
 
-**What this rule does not do.** It does not read a Chat Completions
-*response* body into a `Response` for serving purposes (lm15 already
-parses provider responses; a `Response → chat response dict` encoder for
-proxies is a separate, later row). It does not read the Responses API,
-Anthropic or Gemini request formats; each would be its own rule with its
-own verdict table if ever wanted. It does not add a `Request.from_*`
-constructor: the canonical type stays vendor-free; the converter is a
-dialect-module function (`playbooks/api-family.md` rule 3).
+9. **The reading side is the adapter's own reader, exposed** (added
+   2026-09-08, `changes/2026-09-08-openai-chat-response-door.md`).
+   `response_from_openai_chat(body, model=None, choice=None)` reads a Chat
+   Completions *response* body — a server's, or a client library's
+   imitation of one (litellm's `ModelResponse.model_dump()`, a cache
+   entry) — into a canonical `Response` with the SAME reader
+   `OpenAIChatLM.parse_response` runs on provider traffic. It therefore
+   needs no verdict table and no new direction: what it maps and what it
+   records as unmapped (`_lm15_unmapped`) are already pinned by the
+   `response` direction over every recorded chat body, and the reference
+   test suite requires the door and `parse_response` to agree byte for
+   byte on each of them. The whole body is `provider_data`; a key the
+   reader does not know is neither refused nor lost. An error envelope
+   raises the typed provider error. `model` fills `Response.model` when
+   the body carries none. **A body with more than one choice is refused
+   unless `choice` names one** — a `Response` is one message, and reading
+   `choices[0]` of three silently is the loss rule 2 refuses on the
+   request side as `n`. This applies to `parse_response` too: before this
+   date a caller who smuggled `n` through `config.extensions` got the
+   first choice silently; now the adapter refuses at parse time. No
+   `compat` parameter: the response shape does not vary by server the
+   way the request shape does, and a parameter with no effect would
+   misdescribe the function.
+
+**What this rule does not do.** It does not turn a `Response` back into
+a Chat Completions response body for serving behind an OpenAI-compatible
+endpoint (a separate, later row, when a server on lm15 exists to need
+it). It does not read streaming chunks. It does not read the Responses
+API, Anthropic or Gemini formats; each would be its own rule with its
+own verdict table if ever wanted. It does not add a `Request.from_*` or
+`Response.from_*` constructor: the canonical types stay vendor-free; the
+converters are dialect-module functions (`playbooks/api-family.md` rule 3).
 
 **Why.** The DSPy integration (2026-09-08) needed `LMRequest.from_call(
 model, messages, **kwargs)` — OpenAI-format messages in, canonical request
