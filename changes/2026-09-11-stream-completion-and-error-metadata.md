@@ -1,13 +1,15 @@
 # 2026-09-11 — Stream completion is strict; a complete Response is never withheld; HTTP error metadata from headers
 
-Ratification: PENDING — drafted 2026-09-11 from three Python commits that
-landed on `main` this week without a contract entry (`9cac603`, `acb8090`,
-`9d764b2`, and their correction in the commit that cites this file). The
-maintainer's direction in session: "go implement your plan most
-excellently", after the review that found one of the three behaviours
-wrong (below, § 2). Python is the reference for all of it; Rust and
-TypeScript are ported in the same batch. Nothing here is a provider wire
-fact; it is consumer-side behaviour the family must share.
+Ratification: RATIFIED 2026-09-11 — Maxime Rivest, in session ("i
+ratify"), after the review of the week's Python-only changes found one of
+the three behaviours wrong (§ 2) and the correction was implemented in
+Python, then ported to Rust and TypeScript, before the record was put to
+him. Transcribed. Drafted from three Python commits that landed on `main`
+without a contract entry (`9cac603`, `acb8090`, `9d764b2`) and their
+correction (`lm15-python` b45c5cf). Python is the reference for all of it;
+Rust (`lm15-rs` fef3d69) and TypeScript (`lm15-ts` f7e2c11) implement the
+same rules at pin 68f7c61. Nothing here is a provider wire fact; it is
+consumer-side behaviour the family must share.
 
 ## What this changes
 
@@ -72,6 +74,17 @@ raised), with nothing warned. This is pinned by
 **Cleanup on a stream that is closed unfinished** (the caller's
 `close()`/`aclose()` on a stream with no Response yet) is unchanged: a
 `close()` that raises propagates to the caller, who asked for it.
+
+**A stream the caller closed before its end event** has, afterwards, no
+Response: its `response` accessor raises `StreamAssemblyError` ("closed
+before its end event", `partial` = what had arrived). It is the same fact
+as § 1's "ended without an end event" — no finish reason, no usage — so it
+is the same code, inside the family. Applied after ratification (same
+session): the reference raised a bare `RuntimeError` here and the
+TypeScript port a `TransportError`, both deviations from "every failure
+lm15 produces is an `LM15Error` with a code a caller can switch on"
+(api-family § Errors), fixed in `lm15-python` and `lm15-ts` in the commits
+that cite this paragraph.
 
 ### 3. HTTP error metadata: headers fill what the body did not say
 

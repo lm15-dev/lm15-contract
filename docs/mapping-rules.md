@@ -91,8 +91,9 @@ lm15-contract/changes/2026-09-06-ratification.md D9.)
 `changes/2026-09-11-stream-completion-and-error-metadata.md`).** The
 stream-to-Response wrappers (`materialize_response`, `ResponseStream`,
 async mirrors) hold the stream to this rule: a stream that is exhausted
-without an end event, and a stream that yields anything after its end
-event, raise `StreamAssemblyError` with `partial`. Neither is returned as a
+without an end event (or closed by the caller before it), and a stream
+that yields anything after its end event, raise `StreamAssemblyError` with
+`partial`. Neither is returned as a
 Response. Conversely, once the end event has been yielded the Response is
 complete and is never withheld: a source that raises while being drained,
 or a `close()` that raises, is reported on the language's warning channel
