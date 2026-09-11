@@ -154,7 +154,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `ambiguous_model` | `AmbiguousModelError` | subclass of ConfigurationError (2026-09-08); the router: the catalog matches the string under more than one provider, or under more than one entry of one provider. The fix is an explicit prefix. Carries `model` and `providers` (every candidate provider, catalog order, deduplicated) |
 | `transport` | `TransportError` | network failure at the LM layer |
 | `lock_timeout` | `LockTimeoutError` | (2026-09-08) the credential-file lock (spec/auth.md AUTH-4) could not be taken within the timeout: another lm15 process is refreshing the same credential. Local and transient — a root-level class beside `TransportError`, never under `ProviderError` (no provider was asked) nor `ConfigurationError` (nothing is misconfigured), and never an `AuthError` (nothing is wrong with the credential, AUTH-6). Retryable. Carries `path` (the guarded file) and `lock_path` |
-| `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact (MAP-9: a tool call whose fragments never carried a name); carries `partial` (the Response assembled without the offending call) and `part_index` |
+| `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact: a tool call whose fragments never carried a name (MAP-9); the stream ended without an end event; an event arrived after the end event (MAP-3, 2026-09-11). Carries `partial` (the Response assembled without the offending material) and `part_index` (MAP-9 only). NOT raised for a failure that follows the end event without being an event (a drain read error, a `close()` that raises): the complete Response is returned and the failure is reported on the language's warning channel (`changes/2026-09-11-stream-completion-and-error-metadata.md`) |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
 Class hierarchy (ports must replicate the SHAPE; idiomatic error mechanisms
@@ -184,7 +184,15 @@ LM15Error
 
 Error metadata fields (every class): `message`, `code`, `provider`,
 `provider_code`, `status`, `request_id`, `retry_after` (float-typed; int
-coerces per the Number rule). `StreamAssemblyError` adds `partial`
+coerces per the Number rule). On every path that turns an HTTP reply into
+a `ProviderError` (complete, stream, and the auxiliary endpoints), headers
+fill what the body did not say (2026-09-11): `request_id` from the first
+present of `x-request-id`, `request-id`, `x-amzn-requestid`,
+`x-amz-request-id`, `x-ms-request-id`; `retry_after` from `Retry-After`
+(delta-seconds or an HTTP-date measured from now) when the body gave no
+finite non-negative value. A hint that is not finite, is negative, or does
+not parse is dropped, never stored. A body value is never replaced;
+absent in both stays absent. `StreamAssemblyError` adds `partial`
 (Response or absent) and `part_index` (int or absent). `UnknownModelError`
 adds `model`; `AmbiguousModelError` adds `model` and `providers`;
 `LockTimeoutError` adds `path` and `lock_path`. There is

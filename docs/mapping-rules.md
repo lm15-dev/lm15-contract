@@ -87,6 +87,21 @@ payload's `response` object, as today). Gemini: the last chunk. xAI: same
 as its wire. (Ratified 2026-09-06,
 lm15-contract/changes/2026-09-06-ratification.md D9.)
 
+**The consumer side of "final" (2026-09-11,
+`changes/2026-09-11-stream-completion-and-error-metadata.md`).** The
+stream-to-Response wrappers (`materialize_response`, `ResponseStream`,
+async mirrors) hold the stream to this rule: a stream that is exhausted
+without an end event, and a stream that yields anything after its end
+event, raise `StreamAssemblyError` with `partial`. Neither is returned as a
+Response. Conversely, once the end event has been yielded the Response is
+complete and is never withheld: a source that raises while being drained,
+or a `close()` that raises, is reported on the language's warning channel
+(Python `StreamCleanupWarning`, recorded on `ResponseStream.cleanup_errors`),
+not raised from the response accessor. The boundary is the *yielded* end
+event: the coalescer emits it only after the raw source is exhausted, so a
+raw read failure — even after a finish-reason frame — is before completion
+and keeps its own class (a retryable `TransportError`).
+
 **Usage counters at the wire boundary (INV-029).** An adapter never invents
 `0` for a counter the provider did not send; absent stays `None` and
 `Usage` auto-sums `total_tokens` only when both primaries are present. One
