@@ -112,6 +112,31 @@ exposing their existing `parse_response` reader, never by a second reader.
 
 **Marked for demotion.** `OpenAIResponsesCompat.edit_image_field` and `commentary_phase` are single-provider knobs (Meta). They stay in 1.0.0a; they move to `extensions` in the next alpha unless a second provider needs them (rule 7). Note only; no code change now.
 
+## Beyond chat: job handles and live turns (2026-09-11, pending ratification)
+
+| Concept | Python | TypeScript | Go | Rust |
+|---|---|---|---|---|
+| Submit a batch, get a handle | `lm.batch(requests)` → `BatchJob` | `await lm.batch(requests)` → `BatchJob` | `lm.Batch(ctx, reqs)` → `*BatchJob` | `lm.batch(&requests).await?` → `BatchJob` |
+| Re-attach by id; list | `lm.batch_job(id)`, `lm.batches()` | `lm.batchJob(id)`, `lm.batches()` | `lm.BatchJob(ctx, id)`, `lm.Batches(ctx)` | `lm.batch_job(&id)`, `lm.batches()` |
+| Submit a video, get a handle | `lm.video_generate(req)` → `VideoJob` | `await lm.videoGenerate(req)` → `VideoJob` | `lm.VideoGenerate(ctx, req)` | `lm.video_generate(&req).await?` |
+| Re-attach by id; list | `lm.video_job(id)`, `lm.video_jobs()` | `lm.videoJob(id)`, `lm.videoJobs()` | same pattern | `lm.video_job(&id)`, `lm.video_jobs()` |
+| The handle | `job.info`, `.id`, `.status`, `.done`, `.refresh()`, `.wait(poll_every=, timeout=)`, `.results()` / `.result()`, `.cancel()` (batch) | same names, camelCase; `wait({ pollEveryMs, timeoutMs })` | same names | same names; `wait(WaitOptions)` → `Result<&mut Self, WaitError>` |
+| Wait past its deadline | builtin `TimeoutError` | `DOMException` named `TimeoutError` | `context.DeadlineExceeded` | `WaitError::Elapsed` |
+| One live turn | `session.turn()` → iterate events; `.result()` → `Turn` | `session.turn()` → `for await`; `await turn.result()` | `session.Turn(ctx)` | `session.turn()` → `Stream`; `.result().await` |
+| The turn | `Turn.ended_by` (`turn_end` / `interrupted` / `error` / `tool_call`), `.ok`, `.text`, `.audio`, `.audio_media_type`, `.tool_calls`, `.usage`, `.error`, `.events` | same, camelCase | same | same |
+
+The pure operations (`batch_submit` … `video_list`; the session's event
+iterator) stay public and are what the harness pins; the handles are the
+family's idiom over them. `wait` is the only thing that waits; reading a
+property never contacts the provider. The turn's boundary and bill are
+rules LIVE-1 and LIVE-2 (`changes/2026-09-11-job-handles-live-turns-profiles.md`).
+
+**Not family surface, stated:** `ProviderProfile` / `EndpointProfile`
+(Python; deprecated there, never ported — the same facts are `compat=` +
+`base_url=` and the request-level compat hatch). A loopback OAuth
+callback listener is shipped by a port when a login flow it owns needs
+one; `generate_pkce` is the primitive every port has.
+
 ## Tools
 
 | Concept | Python | TypeScript | Go | Rust |
@@ -150,7 +175,7 @@ The class NAME and the ErrorCode are the family. The mechanism is the language's
 
 These identifiers are the same string in all four, casing aside:
 
-`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `request_from_openai_chat`, `response_from_openai_chat`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
+`LMRouter`, `Request`, `Response`, `Message`, `Config`, `Usage`, `Tool`, `FunctionTool`, `BuiltinTool`, `ToolChoice`, `Reasoning`, `CacheConfig`, `ContinuationState`, every `*Part`, every `*Delta`, every `Stream*Event`, every `*LM` provider, every error class, `ResponseStream`, `ModelInfo`, `AccessPolicy`, `complete`, `stream`, `list_models`, `request_from_openai_chat`, `response_from_openai_chat`, `BatchJob`, `VideoJob`, `Turn`, `batch`, `batch_job`, `batches`, `video_generate`, `video_job`, `video_jobs`, `turn`, `wait`, `refresh`, `user`, `assistant`, `tool`, `text`, `tool_calls`, `usage`, `finish_reason`, `message`.
 
 ## Reviewing against this page
 

@@ -1023,6 +1023,16 @@ pinned frame does today). Never a turn boundary: dispatch loops that
 break on `turn_end`/`interrupted`/`error` ignore it. A session's bill is
 the sum over every `usage` and `turn_end` event.
 
+**A turn, as every implementation materializes it** (LIVE-1, LIVE-2;
+`changes/2026-09-11-job-handles-live-turns-profiles.md`, pending): the
+turn's iterator ends after `turn_end` / `interrupted` / `error`; a
+`tool_call` is yielded mid-turn and does not end iteration, but the
+materialized `Turn` returns at it (`ended_by = tool_call`) because the
+caller must answer. `Turn.usage` is the field-wise sum of every `usage`
+and `turn_end` the turn saw, absent-on-either-side stays absent
+(INV-029); a tool-call response's `usage` lands on the continuation turn
+it opens, a cancelled response's on the interrupted turn.
+
 ### LiveServerErrorEvent
 
 | Field | JSON type | Req | Default | Omission |
