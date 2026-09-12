@@ -1,0 +1,43 @@
+{
+  "id": "ollama.reasoning_effort_refused",
+  "provider": "ollama",
+  "feature": "reasoning_effort_refused",
+  "description": "MAP-5 / MAP-7: an explicit reasoning dial on a server whose compat has no reasoning field (thinking_format='none': ollama, LM Studio) raises at build time. Before this date the reference and the TypeScript port sent the request with the dial silently omitted; the Rust port refused. A dial the caller set and the wire cannot carry is a raise, never an omission. No wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-11",
+    "evidence": "the ollama preset's thinking_format is 'none' (lm15-python lm15/compat.py, OPENAI_CHAT_PRESETS['ollama']; the TypeScript and Rust tables are copies); docs/mapping-rules.md MAP-5 (a setting the dialect cannot carry raises) and MAP-7 rule 2 (an effort word with no native level raises client-side rather than downgrading silently); found by lm15-ts/tests/provider_examples.test.ts building the same request in three languages (Rust refused, the others did not); changes/2026-09-11-reasoning-dial-without-a-field.md"
+  },
+  "canonical_request": {
+    "model": "qwen3.5:0.8b",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 64,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-11",
+    "evidence": "the smallest request that sets the dial on the keyless local preset; the refusal is the pinned outcome (lm15-rs src/dialects/openai_chat/payload.rs already raised it; lm15-python and lm15-ts corrected in the same change)"
+  }
+}
