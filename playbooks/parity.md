@@ -3,7 +3,8 @@
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 Started 2026-09-11 from a file-by-file comparison of `lm15-python` 8bafafa,
 `lm15-ts` 17a521e (+ uncommitted browser work), `lm15-rs` c81ad74, all at
-contract pin 42d8040. The harness proves the rows marked *corpus*; the
+contract pin 42d8040; updated the same day after the four OPEN rows were
+decided (`changes/2026-09-11-job-handles-live-turns-profiles.md`). The harness proves the rows marked *corpus*; the
 rest were read from the code and the ports' READMEs ("Stated deviations",
 "Not implemented, stated") and are only as true as those.
 
@@ -27,7 +28,7 @@ Three verdicts, one per row:
 | Spelling aliases (`lm-studio`, `z.ai`, `dashscope_qwen`, `responses`, …) | ✓ | ✓ | ✓ | ✓ | SAME |
 | Preset → address tables; refuse a named server with no address | ✓ | ✓ | ✓ | ✓ | SAME (api-family 2026-09-11, pending ratification) |
 | Naming a preset on a direct adapter | `compat="groq"` | `{ compat: "groq" }` | same | `LmBuilder::preset("groq")` (2026-09-11) | SAME |
-| `ProviderProfile` / `EndpointProfile` layering (`lm15/profiles.py`) | ✓ | ✗ | ✗ | ✗ | OPEN — Python ergonomic layer over compat; Rust README lists it under "not implemented, stated"; no api-family row. Decide: port, or declare Python-only. |
+| `ProviderProfile` / `EndpointProfile` layering (`lm15/profiles.py`) | deprecated (rc2; removed 1.0.0) | ✗ | ✗ | ✗ | NEVER — a second configuration-resolution system beside the adapter's and the router's; the same facts are `compat=` + `base_url=` and the request hatch (`changes/2026-09-11-job-handles-live-turns-profiles.md` § 3) |
 
 ## Chat core and streaming
 
@@ -51,7 +52,7 @@ Three verdicts, one per row:
 | Stored logins: Claude Code, Codex (AUTH-8), refresh under the lock (AUTH-3/4) | ✓ | ✓ | ✗ (no filesystem) | ✓ | SAME on Node/Rust; browser NEVER |
 | AUTH-4 lock: platforms | POSIX `fcntl` + Windows `msvcrt` | **Linux only**, needs util-linux `flock` on PATH; elsewhere fails closed | n/a | std `File::try_lock` (cross-platform) | BEHIND (TS): macOS/Windows cannot refresh a stored login; explicit keys still work. Recorded as a stated deviation. Fix: a native lock (N-API or `fs.open` + `flock` via a small addon) or accept and document. |
 | xAI device-code login (AUTH-9), PKCE S256, RFC 8628 polling | ✓ | ✓ (`login`, `loginXai`, `generatePkce`) | PKCE only | ✓ | SAME |
-| `OAuthCallbackListener` (loopback redirect listener) | ✓ (`authkit`) | ✗ | ✗ (a page *is* the redirect target) | ✗ | OPEN — Rust README: "built when a flow needs it; a listener is a server with its own attack surface". No flow lm15 owns uses it today. Decide: port on demand, or declare Python-only. |
+| `OAuthCallbackListener` (loopback redirect listener) | ✓ (`authkit`) | ✗ | ✗ (a page *is* the redirect target) | ✗ | ON DEMAND — a port ships one when a login flow it owns needs one; PKCE is the primitive every port has (§ 4). Not a gap. |
 | `CredentialFileStore` (lm15-owned multi-provider store, `mutate`) | ✓ | ✓ | ✗ | partial (xAI entry only, inside `login.rs`) | BEHIND (Rust): no general store API; only the one lm15-owned login writes. Small. |
 | Cloud chains: AWS (env, profile, SSO, process, STS, IMDS), Azure (env, cli, MSI, cert), GCP (ADC, SA, impersonation, metadata), SigV4, RS256 | ✓ | ✓ | ✗ (explicit `BearerToken`; SigV4 has no Web Crypto impl) | ✓ (`aws-lc-rs` RS256) | SAME on Node/Rust (corpus: `auth` cloud, `token` 43/43, SigV4 34 vectors); browser NEVER except `Platform.signSigV4` extension point |
 | Cloud-chain rungs nobody has: `aws login` DPoP refresh, Azure Service Fabric MI, GCP `external_account` with AWS source, `external_account_authorized_user`, `gdch_service_account` | ✗ | ✗ | ✗ | ✗ | SAME gap — each is a typed `NotConfiguredError` naming the fix, in all three |
@@ -63,9 +64,9 @@ Three verdicts, one per row:
 | Row | Python | TS / Node | TS / browser | Rust | Verdict |
 |---|---|---|---|---|---|
 | Files, batches, caches, image, speech, video (submit/status/result/list), model listing | ✓ | ✓ | ✓ (bytes you supply; no paths) | ✓ | SAME (corpus: `files`, `batch`, `cache`, `generation`, `video`, `models`) |
-| `VideoJob` handle sugar (`video_generate` → poll → result on one object) | ✓ | ✗ (four verbs) | ✗ | ✗ (four verbs; README: "out of contract scope") | OPEN — api-family names no row for it. Decide: sugar in every port, or Python-only. |
+| `BatchJob` / `VideoJob` handles (`batch` / `batch_job` / `batches`, `video_generate` / `video_job` / `video_jobs`; `wait` bounded, `failed` returns) | ✓ | ✓ | ✓ | ✓ | SAME (api-family § Beyond chat, 2026-09-11; wait past its deadline is each language's own timeout type by rule) |
 | Live sessions (Gemini Live, OpenAI Realtime): codec, send/receive, close | ✓ | ✓ | ✓ where the provider's WebSocket needs no request header (OpenAI's does → refused by name) | ✓ (`tokio-tungstenite`) | SAME (corpus: `live` 24/24); browser limit is the platform's |
-| Live `turn()` view / pending-queue mechanics | ✓ | ✗ | ✗ | ✗ (README: not reproduced) | OPEN — same decision as `VideoJob`. |
+| Live `turn()` → `Turn` (LIVE-1 boundary, LIVE-2 bill) | ✓ | ✓ | ✓ | ✓ | SAME (rules written 2026-09-11; each port pins them over a scripted socket — Rust replays the recorded `openai/live_tools` transcript) |
 | `aws-event-stream` framing (Bedrock Converse, "phase 2") | ✗ | ✗ | ✗ | ✗ | SAME gap — no declared door uses it; refused by name everywhere |
 | Async mirror | `Async*` classes | native | native | native + `blocking` feature | SAME (api-family rule 4) |
 
@@ -86,7 +87,6 @@ Three verdicts, one per row:
   this week (shared keys, the OpenAI-shaped door, MAP-12 rule 9, stream
   completion, error metadata, `lmstudio`). What is left is one platform
   gap (the TS lock), two Rust guards, and a store API.
-- The OPEN rows are one decision, not four: *does the family mirror
-  Python's ergonomic sugar* (`ProviderProfile`, `VideoJob`, live `turn()`,
-  the loopback listener) *or is that sugar Python's alone?* The
-  api-family playbook is silent; it should say.
+- The four OPEN rows were decided 2026-09-11 (job handles and live turns:
+  family surface; profiles: never, Python deprecates; the loopback
+  listener: on demand). No OPEN row remains.
