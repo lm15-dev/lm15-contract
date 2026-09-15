@@ -2158,6 +2158,97 @@
         "date": "2026-09-03",
         "evidence": "spec/auth.md AUTH-2 (amended 2026-09-03): a credential is a closed sum with a `kind` discriminator; absent fields omitted, never null; expires_at RFC 3339 UTC. changes/2026-09-03-cloud-hosts.md. Values are fake markers, not secrets."
       }
+    },
+    {
+      "id": "response.with_adaptations",
+      "kind": "response",
+      "value": {
+        "id": "resp_2",
+        "model": "m",
+        "message": {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "hello"
+            }
+          ]
+        },
+        "finish_reason": "stop",
+        "usage": {
+          "input_tokens": 1,
+          "output_tokens": 1,
+          "total_tokens": 2
+        },
+        "adaptations": [
+          {
+            "field": "config.seed",
+            "action": "dropped",
+            "reason": "the Messages API has no seed field",
+            "asked": 7
+          },
+          {
+            "field": "config.temperature",
+            "action": "clamped",
+            "reason": "the Messages API accepts temperature in [0, 1]",
+            "asked": 1.5,
+            "applied": 1.0
+          },
+          {
+            "field": "config.max_tokens",
+            "action": "defaulted",
+            "reason": "the Messages API requires max_tokens and none was set",
+            "applied": 16384
+          },
+          {
+            "field": "config.store",
+            "action": "satisfied",
+            "reason": "nothing retrievable is kept",
+            "asked": false
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-14",
+        "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14); spec/types.md § Adaptation"
+      }
+    },
+    {
+      "id": "stream.start_with_adaptations",
+      "kind": "stream_event",
+      "value": {
+        "type": "start",
+        "model": "m",
+        "adaptations": [
+          {
+            "field": "config.top_k",
+            "action": "dropped",
+            "reason": "the Responses wire has no top_k",
+            "asked": 3
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-14",
+        "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14); spec/types.md § Adaptation"
+      }
+    },
+    {
+      "id": "config.sampling_promoted",
+      "kind": "config",
+      "value": {
+        "seed": 0,
+        "frequency_penalty": 0.0,
+        "presence_penalty": -1.5,
+        "temperature": 2.0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-14",
+        "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14); spec/types.md § Adaptation §3f: seed 0 and a 0.0 penalty are data, emitted"
+      }
     }
   ]
 }

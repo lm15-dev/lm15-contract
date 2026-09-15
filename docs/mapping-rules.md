@@ -742,6 +742,75 @@ an audit failure, not a hope.
 
 ---
 
+## MAP-13 — Adapt freely, never invisibly; refuse only when a guess could hurt
+
+Ratified in session 2026-09-14 ("brilliant, I agree so");
+`changes/2026-09-14-adapt-visibly.md` holds the audit that applied it to
+every refusal in the reference and the mechanism's types. It ranks the
+two promises lm15 makes: **first**, change the model or provider string
+and the program keeps working; **second**, never change what the caller
+asked for. The second is subordinate and is satisfied by VISIBILITY, not
+refusal. It supersedes the refusal sentences of MAP-5, MAP-7 and MAP-8
+where those refusals fail the test below; the findings behind them (a
+billed silent no-op) stand and are what the record makes visible.
+
+1. **The question is intent, not field names.** For every canonical
+   setting the adapter asks: what did the caller mean, and can this
+   provider deliver it? Not: does this wire have a field with this name?
+2. **Translate silently.** Delivering the same meaning under a different
+   spelling (`stop` → `stop_sequences`, effort → budget by the MAP-7
+   table) is the adapter's ordinary job and is never recorded.
+3. **Adapt and record.** When the wire cannot take the setting as asked,
+   the adapter does the obvious thing and records it: `dropped` (a hint
+   with no home: `seed` on Anthropic), `clamped` (a dial to its nearest
+   level: `temperature=1.5` → `1.0` on Anthropic, `effort=xhigh` →
+   `high`), `substituted` (the closest spelling: `summary=concise` →
+   `auto`), `client_side` (lm15 does it after the wire: `stop` on the
+   Responses wire — streamed and closed at the cut, on a plain call too,
+   so nothing past it is billed and usage is then not reported;
+   `tool_choice.allowed` by sending only those tools),
+   `satisfied` (the provider's default already is what was asked:
+   `store=False` on Anthropic), `defaulted` (the wire requires a value the
+   caller did not set: Anthropic `max_tokens`). Never rescale a number;
+   clamp it.
+4. **Refuse only under one of four conditions**, and name it in the
+   message: (a) a real choice is needed — two reasonable answers, and
+   picking one is presumptuous; (b) the program depends on it —
+   continuing fails later, further from the cause (a part with no wire
+   slot, MAP-10; a stored cache object absent here; a builtin tool the
+   wire cannot run; `n > 1`); (c) no sensible adaptation exists; (d) a
+   wrong guess would cost money, leak data, or be hard to notice (an
+   unbounded `max_tokens`; a lost privacy setting). A refusal is
+   `UnsupportedFeatureError` before the wire with `feature` = the config
+   path (`config.top_k`, `messages[0].parts[1]`), so the caller's own
+   policy layer can act without parsing prose.
+5. **The record.** `Adaptation(field, action, asked, applied, reason)`,
+   carried as `Response.adaptations` and `StreamStartEvent.adaptations`
+   (omitted when empty). `plan(request)` returns what a call WOULD
+   record, with no network, and raises what the call would raise.
+6. **The switch.** `adaptations="note"` (default), `"silent"` (adapt,
+   record nothing), `"refuse"` (every deviation — `dropped`, `clamped`,
+   `substituted`, `client_side` — is a refusal, the pre-2026-09-14
+   behaviour; `satisfied` and `defaulted` change nothing the caller asked
+   for and are recorded, not refused). Nothing prints, on any port, ever; a
+   consumer that logs adaptations logs each distinct one once per
+   process. A server known to swallow a setting silently is handled by
+   this rule, not by a special refusal: the adapter omits the setting
+   and records `dropped` with the server fact as the reason.
+7. **A preset field without a receipt is a hypothesis.** No refusal, no
+   `raises` case and no `changes/` decision may rest on a compat-preset
+   value that lacks a live receipt cited in the case (`tools/audit.py`
+   fails such a case). The 2026-09-11 ollama refusal was ratified on
+   "no reasoning dial (no receipt)"; Ollama has one
+   (`research/tool-result-content/sources/ollama.txt:536`).
+
+**Why:** the 2026-09-13 DSPy gauntlet (`cmpnd-ai/breaka-your-lm`) listed
+lm15's refusals as "engine parity gaps": `seed`, `top_k`, `store=False`,
+`logprobs`, a summary level, a cache hint — each crashed a program on a
+model switch to protect it from a change it did not depend on. The
+first promise is the reason lm15 exists; the second is kept by the
+record, and by `"refuse"` for those who want the old strictness.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -772,3 +841,7 @@ MAP-12 was drafted on 2026-09-08 when the DSPy integration needed
 OpenAI-format messages read into a canonical Request and the alternative
 was one silent converter per caller
 (`lm15-contract/changes/2026-09-08-openai-chat-ingest.md`, pending).
+MAP-13 was written on 2026-09-14 after the DSPy gauntlet and a
+first-principles review reranked the two promises; it reversed roughly
+twenty refusals into recorded adaptations
+(`lm15-contract/changes/2026-09-14-adapt-visibly.md`).

@@ -40,6 +40,19 @@ pin a refusal and what survived it:
 - `error.events`: for `replay_stream`, the full canonical event trace that
   parsed before assembly refused.
 
+**Pinned adaptations (MAP-13, 2026-09-14).** `build_request` answers an
+extra `adaptations` key when the build recorded any: a list of
+`{"field", "action", "asked"?, "applied"?}` (the adapter's `reason` is
+its own wording and is not sent). A case whose build adapts declares
+`"expect_lm15": {"adaptations": [...]}` with exactly those records
+(order-insensitive); a build that records something the case does not
+pin fails ("adapted without a pin"), and a pinned record the shim does
+not produce fails. A chat-dialect case that adapts declares
+`ingest.lossy: ["adapted"]` with the post-adaptation request, since the
+wire read back is not the canonical request. A refusal's `error.feature`
+(the config path) is compared when the case pins
+`expect_lm15.raises.feature`.
+
 **Pinned raises.** A case whose canonical outcome at one op is a typed
 refusal declares
 `"expect_lm15": {"raises": {"op": <vet op>, "type": <class>, "code": <ErrorCode>}}`,

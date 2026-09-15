@@ -154,20 +154,20 @@
       "when": "compat.cache_control == 'openai'; refused elsewhere"
     },
     "seed": {
-      "verdict": "extensions",
-      "reason": "sampling determinism knob; no canonical field; harmless verbatim"
+      "verdict": "map",
+      "to": "Config.seed (promoted 2026-09-14, MAP-13 audit §3f)"
     },
     "logit_bias": {
       "verdict": "extensions",
       "reason": "per-token bias map; no canonical field"
     },
     "presence_penalty": {
-      "verdict": "extensions",
-      "reason": "sampling penalty; no canonical field"
+      "verdict": "map",
+      "to": "Config.presence_penalty (promoted 2026-09-14)"
     },
     "frequency_penalty": {
-      "verdict": "extensions",
-      "reason": "sampling penalty; no canonical field"
+      "verdict": "map",
+      "to": "Config.frequency_penalty (promoted 2026-09-14)"
     },
     "metadata": {
       "verdict": "extensions",
@@ -190,12 +190,12 @@
       "reason": "lm15 reads one choice per response; n > 1 would silently lose choices. Fan out in the caller"
     },
     "functions": {
-      "verdict": "refuse",
-      "reason": "the deprecated function-calling shape; declare tools as {type: function, function: {...}}"
+      "verdict": "map",
+      "to": "Request.tools (the deprecated function-calling shape, translated 2026-09-14 — a spelling change, MAP-13)"
     },
     "function_call": {
-      "verdict": "refuse",
-      "reason": "the deprecated function-calling shape; use tool_choice"
+      "verdict": "map",
+      "to": "Config.tool_choice ('none' / 'auto' / {name} → the tool_choice forms; translated 2026-09-14)"
     },
     "audio": {
       "verdict": "refuse",
@@ -206,16 +206,16 @@
       "reason": "output modality selection has no canonical slot on the chat surface"
     },
     "prediction": {
-      "verdict": "refuse",
-      "reason": "predicted-output content has no canonical slot"
+      "verdict": "extensions",
+      "reason": "predicted-output content: a latency hint with no canonical slot; harmless verbatim on OpenAI (decision 2026-09-14 §4.9)"
     },
     "web_search_options": {
       "verdict": "refuse",
       "reason": "a server-executed search the chat dialect cannot map to parts (MAP-1); the Responses dialect carries web_search as a BuiltinTool"
     },
     "top_k": {
-      "verdict": "refuse",
-      "reason": "not an OpenAI field and the wire has no slot (the builder raises on Config.top_k, port.md rule 4); litellm forwards it from Anthropic/Gemini-shaped callers - a server that takes it does so through extensions"
+      "verdict": "map",
+      "to": "Config.top_k (2026-09-14; the chat builder drops it with a recorded adaptation, MAP-13 — litellm forwards it from Anthropic/Gemini-shaped callers)"
     },
     "stream": {
       "verdict": "call-mode",
@@ -375,6 +375,7 @@
   "lossy": {
     "thinking_as_text": "compat.thinking_replay == 'as_text' folds a ThinkingPart into the assistant text (MAP-7 rule 8, decision G); the wire carries no thinking field, and lm15 never parses delimiters out of text (MAP-7 rule 12), so it reads back as a TextPart",
     "tool_result_name_omitted": "compat.tool_result_name == 'omit' drops ToolResultPart.name from the tool row; the wire has no other slot for it",
-    "leading_developer_as_system": "the builder writes Request.system and a leading developer Message to the same instruction row; ingest reads that row as Request.system"
+    "leading_developer_as_system": "the builder writes Request.system and a leading developer Message to the same instruction row; ingest reads that row as Request.system",
+    "adapted": "MAP-13 (2026-09-14): the build adapted the request (expect_lm15.adaptations pins what) — a dropped hint, a clamped dial, an allowlist applied by sending only those tools — so the wire carries the request AFTER the adaptation; reading it back gives that request, not the canonical one"
   }
 }

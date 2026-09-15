@@ -1,0 +1,64 @@
+{
+  "id": "anthropic.max_tokens_defaulted",
+  "provider": "anthropic",
+  "feature": "max_tokens_defaulted",
+  "description": "MAP-13 `defaulted` (decision 2026-09-14 §4.8): the Messages API requires max_tokens; when Config.max_tokens is absent the class ceiling is sent (16384 for the 4.x class and any unknown name; 8192 for claude-3-5; 4096 for claude-3-haiku/opus/sonnet) and RECORDED. Until 2026-09-14 the default was a silent 1024, which cut ordinary answers off with nothing said — a user switching from OpenAI saw truncated text. A value above a model's real ceiling is a loud 400 naming it, never a silent truncation. Consumer-side; no live wire.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "x-api-key": "$ANTHROPIC_API_KEY",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16384
+    }
+  },
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.max_tokens",
+        "action": "defaulted",
+        "applied": 16384
+      }
+    ]
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-14",
+    "evidence": "changes/2026-09-14-adapt-visibly.md §3a (MAP-13, ratified 2026-09-14); ceilings from Anthropic's models table (4.x: ≥32k output; 3.5: 8192; 3: 4096)"
+  },
+  "canonical_request": {
+    "model": "claude-sonnet-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-14",
+    "evidence": "the smallest request with no max_tokens"
+  }
+}

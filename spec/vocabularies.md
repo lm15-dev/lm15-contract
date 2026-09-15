@@ -184,7 +184,12 @@ LM15Error
 
 Error metadata fields (every class): `message`, `code`, `provider`,
 `provider_code`, `status`, `request_id`, `retry_after` (float-typed; int
-coerces per the Number rule). On every path that turns an HTTP reply into
+coerces per the Number rule). `CapabilityError` (and so
+`UnsupportedFeatureError`) adds `feature` (2026-09-14, MAP-13): the config
+path the refusal is about (`config.top_k`, `messages[*].parts[image]`,
+`tools[name]`), absent when the refusal is not about one addressable
+field; the vet protocol reports it as `error.feature` and a case pins it
+with `expect_lm15.raises.feature`. On every path that turns an HTTP reply into
 a `ProviderError` (complete, stream, and the auxiliary endpoints), headers
 fill what the body did not say (2026-09-11): `request_id` from the first
 present of `x-request-id`, `request-id`, `x-amzn-requestid`,
@@ -367,6 +372,29 @@ Runtime mirror: `CACHE_PREFIXES`. Added 2026-09-01 (MAP-6, changes/2026-09-01-ca
 |---|
 | `stable` |
 | `history` |
+
+## AdaptationAction
+
+Runtime mirror: `ADAPTATION_ACTIONS` (added 2026-09-14, MAP-13).
+
+| Value | Meaning |
+|---|---|
+| `dropped` | a setting with no home on this wire was omitted (`seed` on Anthropic) |
+| `clamped` | a dial was moved to its nearest level (`temperature` 1.5 → 1.0 on Anthropic; `effort` `xhigh` → `high`) |
+| `substituted` | the closest spelling went instead (`summary` `concise` → `auto`; `reasoning=off` → the lowest level where no off switch exists) |
+| `client_side` | lm15 does it after the wire (`stop` on the Responses wire; a tool allowlist sent as only those tools) |
+| `satisfied` | the provider's default already is what was asked (`store=false` on Anthropic); nothing sent, nothing lost |
+| `defaulted` | the wire requires a value the caller did not set (Anthropic `max_tokens`) |
+
+## AdaptationPolicy
+
+Runtime mirror: `ADAPTATION_POLICIES` (added 2026-09-14, MAP-13). The value of `adaptations=` on every LM constructor and on `RouterConfig`.
+
+| Value | Meaning |
+|---|---|
+| `note` | default: adapt and record on the response |
+| `silent` | adapt and record nothing |
+| `refuse` | every deviation (`dropped`, `clamped`, `substituted`, `client_side`) is an `UnsupportedFeatureError` before the wire, carrying `feature` = the config path (the pre-2026-09-14 behaviour); `satisfied` and `defaulted` change nothing the caller asked for and are recorded, not refused |
 
 ## LiveClientEventType
 

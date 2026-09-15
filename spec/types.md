@@ -363,6 +363,7 @@ Method: `to_state() -> ContinuationState`.
 | `type` | string `"start"` | — | `"start"` | always |
 | `id` | string | no | `null` | omit-empty |
 | `model` | string | no | `null` | omit-empty |
+| `adaptations` | array of Adaptation | no | `[]` | omit-empty | MAP-13 (2026-09-14): what the wire got that differs from what was asked, known before the first byte and carried by the first event; the coalesced Response carries the same list |
 
 ### StreamDeltaEvent
 
@@ -541,18 +542,21 @@ has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
 | `max_tokens` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007) |
-| `temperature` | float | no | `null` | omit-empty | `>= 0`; int-coerced (INV-008) |
+| `temperature` | float | no | `null` | omit-empty | in `[0, 2]` (the canonical range, 2026-09-14: OpenAI's and Gemini's); int-coerced (INV-008). A wire whose ceiling is 1 (Anthropic) CLAMPS a value above it to 1.0 and records it (MAP-13) — never rescales: both scales default to 1.0 and 0–1 is the same cool half |
 | `top_p` | float | no | `null` | omit-empty | in `[0, 1]`; int-coerced |
-| `top_k` | int | no | `null` | omit-empty | `> 0`; float-coerced |
+| `top_k` | int | no | `null` | omit-empty | `> 0`; float-coerced. Anthropic `top_k`, Gemini `topK`; the OpenAI wires have no field and DROP it with a record (MAP-13) |
 | `stop` | array of string | no | `[]` | omit-empty | non-empty strings; bare string coerced to 1-tuple (INV-020) |
 | `response_format` | object (opaque) | no | `null` | omit-empty | strict JSON object; exactly two shapes (INV-050): `{"type": "json_object"}` or `{"type": "json_schema", "schema", "name"?, "strict"?}`. Mapping (MAP-8): OpenAI Responses `text.format` (`name` defaults to `response`); chat dialect/xAI/Groq `response_format.json_schema`; Anthropic `output_config.format` (`json_object` RAISES: no any-JSON mode; `strict` satisfied, `name` dropped as a label); Gemini `responseMimeType` + `responseJsonSchema`/`responseSchema` |
 | `tool_choice` | object (ToolChoice) | no | `null` | omit-empty | |
 | `reasoning` | object (Reasoning) | no | `null` | omit-empty | |
 | `cache` | object (CacheConfig) | no | `null` | omit-empty | |
-| `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`; Gemini `unspecified`/`standard`/`flex`/`priority` → top-level `serviceTier`, echoed in `usageMetadata.serviceTier`, live-captured 2026-09-01) |
-| `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini RAISES |
-| `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic RAISES |
-| `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic RAISES; xAI RAISES (grok-4.20+ silently ignore the field on the wire — docs.x.ai, verified live 2026-09-01). Provider caps (currently 0–20) are provider-owned, not encoded |
+| `seed` | int | no | `null` | omit-empty EXCEPT `0` (0 is a seed) | float-coerced; best-effort sampling determinism. Promoted from extensions 2026-09-14 (MAP-13 audit §3f). openai_chat dialect and every OpenAI-compatible preset `seed`; Gemini `generationConfig.seed`; OpenAI Responses and Anthropic have no field and DROP it with a record |
+| `frequency_penalty` | float | no | `null` | omit-empty EXCEPT `0` (0.0 is "explicitly none") | in `[-2, 2]`; int-coerced. openai_chat dialect `frequency_penalty`; Gemini `generationConfig.frequencyPenalty`; OpenAI Responses and Anthropic DROP with a record |
+| `presence_penalty` | float | no | `null` | omit-empty EXCEPT `0` | in `[-2, 2]`; int-coerced. openai_chat dialect `presence_penalty`; Gemini `generationConfig.presencePenalty`; OpenAI Responses and Anthropic DROP with a record |
+| `service_tier` | string | no | `null` | omit-empty | non-empty; OPEN namespace — the tier concept is canonical, the value vocabulary provider-owned (OpenAI `default`/`flex`/`priority`/`auto`; Anthropic `auto`/`standard_only`; Gemini `unspecified`/`standard`/`flex`/`priority` → top-level `serviceTier`, echoed in `usageMetadata.serviceTier`, live-captured 2026-09-01). A wire without the field DROPS it with a record (MAP-13) |
+| `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini has no field and DROPS it with a record (MAP-13, 2026-09-14; was a raise) |
+| `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic has no stored-response object: `false` is SATISFIED by construction and `true` is DROPPED, both recorded (MAP-13, 2026-09-14; was a raise) |
+| `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic and xAI (grok-4.20+ silently ignore the field — docs.x.ai, live 2026-09-01) have no logprobs and DROP the request with a record; `Response.logprobs` is then absent (MAP-13, 2026-09-14; was a raise). Provider caps (currently 0–20) are provider-owned, not encoded |
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
@@ -623,6 +627,22 @@ provider string on the `Response` can.
 | `usage` | object (Usage) | yes | — | omit-empty (when `{}`) | |
 | `logprobs` | array of TokenLogprob | no | `null` | omit-empty | `null` = provider did not report (the Usage convention); never `[]` on parse |
 | `provider_data` | object (opaque) | no | `null` | never by default (`response_to_dict` emits it only with `include_provider_data=True`; the vet protocol serializes WITHOUT it, surfacing only the `_lm15_unmapped` canary) | strict JSON object |
+| `adaptations` | array of Adaptation | no | `[]` | omit-empty | MAP-13 (2026-09-14): what the wire got that differs from what was asked — a dropped hint, a clamped dial, a client-side stop, a defaulted required field. Empty when the request went out as written. Data, never printed; under `adaptations="silent"` always empty |
+
+### Adaptation
+
+One record of MAP-13 (`docs/mapping-rules.md`): the wire got something
+other than what was asked, and this says what.  Produced by request
+building; `plan(request)` returns the list with no network.  Translations
+(the adapter's ordinary job) are never recorded.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `field` | string | yes | — | always | the config path: `config.seed`, `config.reasoning.summary`, `config.tool_choice.allowed`, `config.max_tokens`, `label` |
+| `action` | string (AdaptationAction) | yes | — | always | closed vocabulary |
+| `reason` | string | yes | — | always | one sentence naming the provider fact; the adapter's own wording — never pinned by a case (ports word their own) |
+| `asked` | any JSON | no | `null` | omit-empty | what the caller set; absent for `defaulted` |
+| `applied` | any JSON | no | `null` | omit-empty | what went to the wire; absent for `dropped` and `satisfied` |
 
 `logprobs` is decoding telemetry — the same category as `usage` and
 `finish_reason`, never re-sent in history. Per-block provider lists

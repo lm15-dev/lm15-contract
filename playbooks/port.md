@@ -67,11 +67,18 @@ a port that does not implement one answers `ok: false` with
    finish-reason maps, error-code maps, the MAP-12 ingest verdicts) are
    data. Port them as data; do not re-derive them from provider docs or
    memory.
-3. **Raise where the reference raises.** Every `expect_lm15.raises` case
-   is a refusal the port must make at the same op with the same class and
-   ErrorCode. Never map a refused cell to "something reasonable".
-4. **No silent drops.** A canonical field with no wire slot is a raise or a
-   documented `extensions` door, never omission (MAP-5..8 rationale).
+3. **Raise where the reference raises; adapt where it adapts.** Every
+   `expect_lm15.raises` case is a refusal the port must make at the same
+   op with the same class, ErrorCode and `feature` path; every
+   `expect_lm15.adaptations` case is a record the port must produce
+   field-for-field. Never map a refused cell to "something reasonable",
+   and never turn an adapted cell into a refusal or a silence.
+4. **No invisible drops.** A canonical field the wire cannot take as
+   asked is adapted and RECORDED (`Response.adaptations`, MAP-13), or
+   refused under one of MAP-13's four conditions — never omitted with
+   nothing said. Copy the reference's adaptation table as data (rule 2);
+   the `adaptations` switch (`note` / `silent` / `refuse`) exists on
+   every port with the same default. Nothing prints.
 5. **Absent is not zero, not empty, not null.** Serde follows
    `docs/serde-rules.md` exactly; the vectors pin omit-empty per field.
 6. **Skips are monotonic.** A port keeps a skip list only for directions

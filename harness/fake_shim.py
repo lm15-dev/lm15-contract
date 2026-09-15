@@ -62,6 +62,7 @@ MUTATIONS = (
     "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
     "build_maps_a_refused_cell", "tool_result_image_dropped", "tool_result_ids_swapped", "tool_result_error_stripped", # build_request: a pinned refusal answered with a wire request (a silent cell)
     "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
+    "adaptation_unrecorded",    # build_request: the pinned adaptation happened on the wire but was not recorded (MAP-13: the invisible drop)
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -219,6 +220,10 @@ def op_build_request(msg: JsonObject) -> JsonObject:
             return {"method": "POST", "url": "https://invented/", "params": {}, "headers": {}, "body": {}}
         raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal"})
     result = check.expected_wire_request(case)
+    pinned = check.expected_adaptations(case)
+    if pinned and not (MUTATION == "adaptation_unrecorded" and targeted(case)):
+        # MAP-13: the wire request AND the record of what it adapted.
+        result["adaptations"] = [dict(a) for a in pinned]
     if MUTATION == "bool_as_int" and targeted(case):
         mutate_first_bool(result["body"])
     if MUTATION == "tool_result_image_dropped" and targeted(case):

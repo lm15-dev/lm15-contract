@@ -2,18 +2,53 @@
   "id": "moonshotai-anthropic.reasoning_effort_medium",
   "provider": "moonshotai-anthropic",
   "feature": "reasoning_effort_medium",
-  "description": "MAP-7 rule 2: an effort word with no native level on kimi-k3 raises client-side. Receipt: output_config.effort=medium answered HTTP 200 (12 thinking tokens) and output_config.effort=bogus answered HTTP 200 (70 thinking tokens) — the server validates nothing here, unlike its Responses wire. Documented levels: low, high, max. No wire request.",
-  "expect_lm15": {
-    "raises": {
-      "op": "build_request",
-      "type": "UnsupportedFeatureError",
-      "code": "unsupported_feature"
+  "request": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "output_config": {
+        "effort": "low"
+      }
     }
+  },
+  "description": "MAP-13 (2026-09-14, was a MAP-7 rule 2 refusal): the server accepts low|high|max and would have taken `medium` silently (live 2026-09-03: 200 to `medium` and to `bogus`). The word is CLAMPED to the nearest declared level — a tie goes to the lower — and recorded.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.reasoning.effort",
+        "action": "clamped",
+        "asked": "medium",
+        "applied": "low"
+      }
+    ]
   },
   "provenance": {
     "source": "live-capture",
     "date": "2026-09-03",
-    "evidence": "api.moonshot.ai/anthropic/v1/messages 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai-anthropic/probe-error-effort-medium.json and receipts/2026-09-03-moonshotai-anthropic/probe-error-effort-bogus.json (both HTTP 200); messages--create.md output_config.effort enum low|high|max; refusal pinned per MAP-7 rule 2 via AnthropicCompat.reasoning_efforts; changes/2026-09-03-moonshotai-wires.md"
+    "evidence": "api.moonshot.ai/anthropic/v1/messages 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai-anthropic/probe-error-effort-medium.json and receipts/2026-09-03-moonshotai-anthropic/probe-error-effort-bogus.json (both HTTP 200); messages--create.md output_config.effort enum low|high|max; refusal pinned per MAP-7 rule 2 via AnthropicCompat.reasoning_efforts; changes/2026-09-03-moonshotai-wires.md",
+    "amended": {
+      "date": "2026-09-14",
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged)"
+    }
   },
   "canonical_request": {
     "model": "kimi-k3",

@@ -2,18 +2,52 @@
   "id": "moonshotai-anthropic.temperature",
   "provider": "moonshotai-anthropic",
   "feature": "temperature",
-  "description": "MAP-8: config.temperature raises before the wire. Receipt: temperature=0.5 answered HTTP 200 on this wire while the same server's Chat Completions wire answers 400 'only 1 is allowed for this model' — the model's sampling is fixed and the field is swallowed silently here. messages--create.md lists no temperature/top_p/top_k. No wire request.",
-  "expect_lm15": {
-    "raises": {
-      "op": "build_request",
-      "type": "UnsupportedFeatureError",
-      "code": "unsupported_feature"
+  "request": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 300,
+      "output_config": {
+        "effort": "low"
+      }
     }
+  },
+  "description": "MAP-13 (2026-09-14, was a refusal): this server swallows sampling parameters silently (live 2026-09-03: temperature 0.5 is HTTP 200 with the model's fixed sampling). temperature is DROPPED and recorded — the record supplies the visibility the refusal existed for.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.temperature",
+        "action": "dropped",
+        "asked": 0.5
+      }
+    ]
   },
   "provenance": {
     "source": "live-capture",
     "date": "2026-09-03",
-    "evidence": "api.moonshot.ai/anthropic/v1/messages 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai-anthropic/probe-error-temperature.json (HTTP 200) and receipts/2026-09-03-moonshotai-anthropic/probe-error-top-k.json (HTTP 200) against errors/cases/moonshotai.json moonshotai.temperature (HTTP 400 on the chat wire); refusal pinned per MAP-8 §2 via AnthropicCompat.sampling_params; changes/2026-09-03-moonshotai-wires.md"
+    "evidence": "api.moonshot.ai/anthropic/v1/messages 2026-09-03, kimi-k3: receipts/2026-09-03-moonshotai-anthropic/probe-error-temperature.json (HTTP 200) and receipts/2026-09-03-moonshotai-anthropic/probe-error-top-k.json (HTTP 200) against errors/cases/moonshotai.json moonshotai.temperature (HTTP 400 on the chat wire); refusal pinned per MAP-8 §2 via AnthropicCompat.sampling_params; changes/2026-09-03-moonshotai-wires.md",
+    "amended": {
+      "date": "2026-09-14",
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged)"
+    }
   },
   "canonical_request": {
     "model": "kimi-k3",

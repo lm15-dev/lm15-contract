@@ -584,6 +584,31 @@ def expected_raise(case: JsonObject, op: str | None = None) -> JsonObject | None
     return raises
 
 
+def expected_adaptations(case: JsonObject) -> list:
+    """``expect_lm15.adaptations`` (MAP-13): the records a build must
+    produce — ``[{"field", "action", "asked"?, "applied"?}]``.  ``reason``
+    is never pinned (ports word their own).  Absent means: the build
+    records nothing, and a shim that records something adapted without
+    a pin."""
+    value = (case.get("expect_lm15") or {}).get("adaptations")
+    if value is None:
+        return []
+    if not isinstance(value, list) or not all(isinstance(v, dict) and "field" in v and "action" in v for v in value):
+        raise ValueError(f"{case.get('id')}: expect_lm15.adaptations must be a list of {{field, action, asked?, applied?}}")
+    return value
+
+
+def compare_adaptations(case: JsonObject, actual: Any) -> "Diff | None":
+    want = sorted(expected_adaptations(case), key=lambda a: (a["field"], a["action"]))
+    got = sorted(
+        [{k: v for k, v in a.items() if k != "reason"} for a in (actual or [])],
+        key=lambda a: (a.get("field", ""), a.get("action", "")),
+    )
+    if not want and got:
+        return Diff("$.adaptations", _ABSENT, got, "the build adapted the request with no expect_lm15.adaptations pin (MAP-13)")
+    return first_difference(want, got, ("adaptations",), volatile={})
+
+
 def compare_raise(case_id: str, reply: JsonObject, want: JsonObject,
                   golden: JsonObject | None, volatile: JsonObject) -> CaseResult:
     """The case declares the refusal (`want` = expect_lm15.raises); the golden,
@@ -594,7 +619,9 @@ def compare_raise(case_id: str, reply: JsonObject, want: JsonObject,
             reason=f"expected raise {want.get('type', '?')} ({want.get('code', '?')}); shim returned a response",
         )
     got = reply.get("error") or {}
-    for key in ("type", "code"):
+    for key in ("type", "code", "feature"):
+        if key == "feature" and "feature" not in want:
+            continue  # MAP-13: pinned only when the case names the path
         if got.get(key) != want.get(key):
             return CaseResult(
                 case_id, "fail",
@@ -810,7 +837,10 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
         expected = expected_wire_request(case)
         actual = actual_wire_request(reply["result"])
         volatile = case.get("volatile") or {}
-        diff = None
+        diff = compare_adaptations(case, actual.pop("adaptations", None))
+        if diff is not None:
+            report.results.append(CaseResult(case_id, "fail", diff=diff))
+            continue
         for key in ("method", "url", "params", "headers", "body"):
             diff = first_difference(
                 expected.get(key, _ABSENT), actual.get(key, _ABSENT), (key,), volatile=volatile
@@ -1543,7 +1573,9 @@ def load_surface_cases(surface: str) -> list[JsonObject]:
 
 # ─── Direction: ingest (MAP-12: Chat Completions body → canonical Request) ─
 
-INGEST_LOSSY_CLASSES = frozenset({"thinking_as_text", "tool_result_name_omitted", "leading_developer_as_system"})
+INGEST_LOSSY_CLASSES = frozenset({"thinking_as_text", "tool_result_name_omitted", "leading_developer_as_system",
+                                  # MAP-13: the wire carries the request AFTER a recorded adaptation
+                                  "adapted"})
 
 
 def ingest_expectation(case: JsonObject) -> tuple[str, Any]:

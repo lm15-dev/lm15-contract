@@ -2,18 +2,55 @@
   "id": "deepseek-anthropic.reasoning_thinking_budget",
   "provider": "deepseek-anthropic",
   "feature": "reasoning_thinking_budget",
-  "description": "budget_tokens is documented as ignored on this endpoint; a Reasoning.thinking_budget would be a silent no-op, so lm15 raises before the wire (thinking_format=deepseek takes effort only). No wire request.",
-  "expect_lm15": {
-    "raises": {
-      "op": "build_request",
-      "type": "UnsupportedFeatureError",
-      "code": "unsupported_feature"
+  "request": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 100,
+      "thinking": {
+        "type": "enabled"
+      },
+      "output_config": {
+        "effort": "low"
+      }
     }
+  },
+  "description": "MAP-13 (2026-09-14, was a MAP-7 refusal): this server ignores budget_tokens; effort carries the intent (MAP-7 rule 5). The budget is DROPPED and recorded; effort goes to output_config.effort as before.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.reasoning.thinking_budget",
+        "action": "dropped",
+        "asked": 4096
+      }
+    ]
   },
   "provenance": {
     "source": "live-capture",
     "date": "2026-09-03",
-    "evidence": "guide--anthropic-api.md: thinking 'Supported (budget_tokens is ignored)'; receipts/2026-09-03-deepseek-anthropic/discovery-lm15-manual-class-budget.json (the plain Anthropic manual-class wire with budget_tokens=2048: HTTP 200, 18 output tokens — the budget did nothing); changes/2026-09-03-deepseek-anthropic-live.md"
+    "evidence": "guide--anthropic-api.md: thinking 'Supported (budget_tokens is ignored)'; receipts/2026-09-03-deepseek-anthropic/discovery-lm15-manual-class-budget.json (the plain Anthropic manual-class wire with budget_tokens=2048: HTTP 200, 18 output tokens — the budget did nothing); changes/2026-09-03-deepseek-anthropic-live.md",
+    "amended": {
+      "date": "2026-09-14",
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged)"
+    }
   },
   "canonical_request": {
     "model": "deepseek-v4-flash",

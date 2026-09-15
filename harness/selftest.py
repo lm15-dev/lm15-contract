@@ -118,6 +118,10 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: check.expected_raise(c, "build_request") is not None,
             "build_maps_a_refused_cell (a request case that pins a refusal)")),
+        "adaptation_unrecorded": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: bool(check.expected_adaptations(c)),
+            "adaptation_unrecorded (a request case that pins an adaptation, MAP-13)")),
         "tool_result_image_dropped": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: c.get("feature") == "tool_result_image",

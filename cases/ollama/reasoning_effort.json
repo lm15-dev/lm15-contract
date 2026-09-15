@@ -1,0 +1,55 @@
+{
+  "id": "ollama.reasoning_effort",
+  "provider": "ollama",
+  "feature": "reasoning_effort",
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:11434/v1/chat/completions",
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $API_KEY"
+    },
+    "body": {
+      "model": "qwen3.5:0.8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": "low"
+    }
+  },
+  "description": "Ollama's OpenAI endpoint takes reasoning_effort (and `reasoning: {effort}`) and maps it to `think` (openai/openai.go thinkFromReasoningEffort: none→false, minimal→low, low|medium|high|max verbatim, xhigh→max; an unknown word is a 400) — research/tool-result-content/sources/ollama.txt:536-560. Until 2026-09-14 this case pinned a REFUSAL on the preset line thinking_format='none', written without a receipt (THEORY.md §3.17); the 2026-09-11 decision it recorded is reversed. A plain translation: no adaptation. Source receipt; live receipt still owed.",
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-14",
+    "evidence": "research/tool-result-content/sources/ollama.txt:536-560 (openai/openai.go thinkFromReasoningEffort, fromChatRequest); changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14); replaces reasoning_effort_refused.json (hand-authored 2026-09-11 on an unreceipted preset line)"
+  },
+  "canonical_request": {
+    "model": "qwen3.5:0.8b",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 64,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-11",
+    "evidence": "the smallest request that sets the dial on the keyless local preset; the refusal is the pinned outcome (lm15-rs src/dialects/openai_chat/payload.rs already raised it; lm15-python and lm15-ts corrected in the same change)"
+  }
+}

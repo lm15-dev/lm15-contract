@@ -2,18 +2,67 @@
   "id": "xai.tool_choice_allowed",
   "provider": "xai",
   "feature": "tool_choice_allowed",
-  "description": "MAP-8 rule 1: an allowlist subset on xAI raises. Receipt: api.x.ai ignored allowed_tools — with only lookup allowed and weather asked, grok-4.6 called weather. There is no wire request: the canonical outcome is UnsupportedFeatureError at build time.",
-  "expect_lm15": {
-    "raises": {
-      "op": "build_request",
-      "type": "UnsupportedFeatureError",
-      "code": "unsupported_feature"
+  "request": {
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions",
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $API_KEY"
+    },
+    "body": {
+      "model": "grok-4.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Gatineau?"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "lookup",
+            "description": "Look up a fact.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "q": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "q"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
     }
+  },
+  "description": "MAP-13 (2026-09-14, was a MAP-8 rule 1 refusal): api.x.ai accepts allowed_tools and ignores it (live 2026-09-02: with {lookup} allowed and weather asked, it called weather). The allowlist is applied CLIENT-SIDE — only the allowed tools are sent, which is what the allowlist means — and recorded; tool_choice goes as auto.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.tool_choice.allowed",
+        "action": "client_side",
+        "asked": [
+          "lookup"
+        ],
+        "applied": [
+          "lookup"
+        ]
+      }
+    ]
   },
   "provenance": {
     "source": "live-capture",
     "date": "2026-09-02",
-    "evidence": "MAP-8 design pass (changes/2026-09-02-tool-choice-structured-output.md, ratified 2026-09-02). The refusal is pinned because the live cell was silent or a server 400: research/tool-choice/receipts/xai__grok-4.6__tc:allow-lookup-ask-weather/2026-09-02T13-11-18Z.txt (HTTP 200, calls=[weather]); matrix research/tool-choice/20-results.json."
+    "evidence": "MAP-8 design pass (changes/2026-09-02-tool-choice-structured-output.md, ratified 2026-09-02). The refusal is pinned because the live cell was silent or a server 400: research/tool-choice/receipts/xai__grok-4.6__tc:allow-lookup-ask-weather/2026-09-02T13-11-18Z.txt (HTTP 200, calls=[weather]); matrix research/tool-choice/20-results.json.",
+    "amended": {
+      "date": "2026-09-14",
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged)"
+    }
   },
   "canonical_request": {
     "model": "grok-4.6",
@@ -75,5 +124,48 @@
     "source": "hand-authored",
     "date": "2026-09-02",
     "evidence": "authored with the case from the MAP-8 experiment cell it pins; the reference raises at build_request (lm15-python tests/test_tool_choice_structured_output.py); see changes/2026-09-02-map8-raises-pinned.md"
+  },
+  "ingest": {
+    "lossy": [
+      "adapted"
+    ],
+    "canonical_request": {
+      "model": "grok-4.6",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "What is the weather in Gatineau?"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "name": "lookup",
+          "description": "Look up a fact.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q"
+            ]
+          }
+        }
+      ],
+      "config": {
+        "tool_choice": {
+          "mode": "auto"
+        }
+      }
+    },
+    "note": "MAP-13: reading the wire back gives the request AFTER the recorded adaptation (expect_lm15.adaptations); the adaptation is lossy by design"
   }
 }

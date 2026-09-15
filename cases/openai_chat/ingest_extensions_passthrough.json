@@ -3,7 +3,7 @@
   "provider": "openai_chat",
   "feature": "ingest_extensions_passthrough",
   "surface": "ingest",
-  "description": "seed, presence_penalty, frequency_penalty and logit_bias have no canonical field and pass verbatim into config.extensions (verdict 'extensions'); the builder re-emits extensions verbatim, so they round-trip.",
+  "description": "seed, presence_penalty and frequency_penalty are canonical Config fields (promoted 2026-09-14: OpenAI, Gemini and every OpenAI-compatible server carry them); logit_bias has no canonical field (token ids are model-specific) and passes verbatim into config.extensions (verdict 'extensions'). The builder emits the fields and re-emits extensions verbatim, so all four round-trip.",
   "body": {
     "model": "gpt-5-mini",
     "messages": [
@@ -34,10 +34,10 @@
         }
       ],
       "config": {
+        "seed": 7,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.5,
         "extensions": {
-          "seed": 7,
-          "presence_penalty": 0.5,
-          "frequency_penalty": 0,
           "logit_bias": {
             "1234": -100
           }
@@ -48,6 +48,10 @@
   "provenance": {
     "source": "hand-authored",
     "date": "2026-09-08",
-    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, ratified 2026-09-08)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)"
+    "evidence": "MAP-12 design (changes/2026-09-08-openai-chat-ingest.md (MAP-12, ratified 2026-09-08)); the body follows scrapes/openai/pages/chat--create.md § Body Parameters; the expectation was written by hand and checked against the reference shim on 2026-09-08 (reference agrees with the hand-authored canonical request)",
+    "amended": {
+      "date": "2026-09-14",
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14) §3f: seed / frequency_penalty / presence_penalty promoted from extensions"
+    }
   }
 }
