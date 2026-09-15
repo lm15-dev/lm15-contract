@@ -24,23 +24,7 @@
         }
       ],
       "stream": false,
-      "max_tokens": 200,
-      "output_config": {
-        "format": {
-          "type": "json_schema",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "city": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "city"
-            ]
-          }
-        }
-      }
+      "max_tokens": 200
     }
   },
   "description": "MAP-13 (2026-09-14, was a MAP-8 refusal): this server accepts output_config.format and does not apply it (live 2026-09-03). The setting is DROPPED and recorded; the caller describes the shape in the prompt. The receipts that showed the silent no-op are unchanged; the remedy moved from refusal to a recorded adaptation.",
@@ -74,7 +58,7 @@
     "evidence": "receipts/2026-09-03-deepseek-anthropic/discovery-output-config-format.json (HTTP 200, keys the schema never named); guide--anthropic-api.md: output_config 'Only effort is supported'; changes/2026-09-03-deepseek-anthropic-live.md",
     "amended": {
       "date": "2026-09-14",
-      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged)"
+      "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14): the refusal became a recorded adaptation; the wire request is the reference build (consumer-side, no live wire needed — the receipts above are unchanged); 2026-09-15: the pinned body once still carried output_config.format after recording the drop (greptile on dspy#10409) — a dropped setting is not sent"
     }
   },
   "canonical_request": {
