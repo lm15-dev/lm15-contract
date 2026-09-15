@@ -244,8 +244,9 @@ flags any case whose refusal rests on a preset field whose comment says
   call pays it per call. Cacheable by request hash if it matters.
 - **Client-side `stop` streams under the hood, on `complete()` too, and
   closes the connection at the cut** (decision in session 2026-09-14,
-  "ok, we do that"): generation stops, nothing past the sequence is
-  billed. The price is the usage report, which rides only the final
+  "ok, we do that"). Whether the provider stops generating on a closed
+  connection is its own behaviour (review of dspy#10409 caught the
+  overclaim "nothing past it is billed"). The price is the usage report, which rides only the final
   frame: it is "not reported" on a cut call, never estimated (the exact
   alternatives — the count-tokens endpoint for input, logprob entries for
   output text tokens — cost a call or constrain the request, and neither

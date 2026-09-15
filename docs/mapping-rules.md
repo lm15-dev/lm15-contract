@@ -766,8 +766,9 @@ billed silent no-op) stand and are what the record makes visible.
    level: `temperature=1.5` → `1.0` on Anthropic, `effort=xhigh` →
    `high`), `substituted` (the closest spelling: `summary=concise` →
    `auto`), `client_side` (lm15 does it after the wire: `stop` on the
-   Responses wire — streamed and closed at the cut, on a plain call too,
-   so nothing past it is billed and usage is then not reported;
+   Responses wire — streamed and closed at the cut, on a plain call too;
+   usage is then not reported, and whether the provider stops generating
+   on a closed connection is its own behaviour;
    `tool_choice.allowed` by sending only those tools),
    `satisfied` (the provider's default already is what was asked:
    `store=False` on Anthropic), `defaulted` (the wire requires a value the
@@ -796,7 +797,10 @@ billed silent no-op) stand and are what the record makes visible.
    consumer that logs adaptations logs each distinct one once per
    process. A server known to swallow a setting silently is handled by
    this rule, not by a special refusal: the adapter omits the setting
-   and records `dropped` with the server fact as the reason.
+   and records `dropped` with the server fact as the reason.  `"silent"`
+   hides the record and changes nothing else: what goes to the wire and
+   what lm15 does after it are decided from the full record under every
+   policy; `plan()` returns the full record under every policy.
 7. **A preset field without a receipt is a hypothesis.** No refusal, no
    `raises` case and no `changes/` decision may rest on a compat-preset
    value that lacks a live receipt cited in the case (`tools/audit.py`
