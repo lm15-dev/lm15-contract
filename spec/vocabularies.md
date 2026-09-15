@@ -155,6 +155,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `transport` | `TransportError` | network failure at the LM layer |
 | `lock_timeout` | `LockTimeoutError` | (2026-09-08) the credential-file lock (spec/auth.md AUTH-4) could not be taken within the timeout: another lm15 process is refreshing the same credential. Local and transient — a root-level class beside `TransportError`, never under `ProviderError` (no provider was asked) nor `ConfigurationError` (nothing is misconfigured), and never an `AuthError` (nothing is wrong with the credential, AUTH-6). Retryable. Carries `path` (the guarded file) and `lock_path` |
 | `stream_assembly` | `StreamAssemblyError` | a stream cannot become a Response without inventing a fact: a tool call whose fragments never carried a name (MAP-9); the stream ended without an end event, or was closed by the caller before it; an event arrived after the end event (MAP-3, ratified 2026-09-11). Carries `partial` (the Response assembled without the offending material) and `part_index` (MAP-9 only). NOT raised for a failure that follows the end event without being an event (a drain read error, a `close()` that raises): the complete Response is returned and the failure is reported on the language's warning channel (`changes/2026-09-11-stream-completion-and-error-metadata.md`) |
+| `collection_limit` | `CollectionLimitError` | Local collector byte/event budget reached, not a provider failure; non-retryable. Accepted events and any received-but-rejected event remain available. No synthetic end event or automatic session cancellation. Ratified 2026-09-15 in `changes/2026-09-15-live-collection-limits.md` |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
 Class hierarchy (ports must replicate the SHAPE; idiomatic error mechanisms
@@ -508,6 +509,30 @@ AUTH-10 `host.model_in`.
 |---|
 | `body` |
 | `path` |
+
+## Connection budget
+
+Ratified by Maxime Rivest on 2026-09-15; see
+`changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md` A1.
+These are client/transport settings, not fields in canonical Request or Config.
+Ports expose idiomatic equivalents of:
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `connect` | 10 seconds | establishing a connection |
+| `read` | 600 seconds | waiting for the next reply bytes |
+| `write` | 600 seconds | sending request bytes |
+| `pool` | 600 seconds | waiting for a free connection slot |
+| `max_connections` | 100 | connection concurrency cap |
+
+Timeouts apply per operation, not to total request duration. Caller-selected
+settings take precedence over library/provider defaults. An explicit per-request
+transport override may override the client setting; a provider builder's fixed
+number is not an explicit caller choice. Ordinary inference builders inherit the
+configured transport setting. Without a caller choice, shared defaults apply.
+The longer read default accommodates slow models but also delays failure on a
+stalled server. This ratification does not add transport fields to Request,
+a live-turn memory limit, or a universal connection-lifecycle implementation.
 
 ## Open string namespaces (NOT vocabularies)
 

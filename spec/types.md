@@ -283,12 +283,16 @@ empty strings ARE emitted, and `part_index` is always emitted (exception:
 | `text` | string | yes | — | always (even `""`) |
 | `part_index` | int | no | `0` | always |
 | `logprobs` | array of TokenLogprob | no | `[]` | omit-empty |
+| `logprobs_complete` | bool | no | `true` | omit when true; emit false |
 
 `logprobs` carries the token logprobs for exactly the tokens in this
 fragment, when requested via `Config.logprobs` and streamed per chunk by
 the provider (verified live for OpenAI Responses 2026-09-01).
 Materialization concatenates fragment logprobs in arrival order into
-`Response.logprobs`.
+`Response.logprobs`. `logprobs_complete=false` means local text editing left
+retained text without corresponding original scores. Materialization ANDs this
+flag across text events; a later true never erases false. True does not promise
+that the provider supplied scores. See Response below for the cut rule.
 
 ### ThinkingDelta
 
@@ -625,7 +629,8 @@ provider string on the `Response` can.
 | `message` | object (Message) | yes | — | always | role MUST be `assistant`; never empty (MAP-2) |
 | `finish_reason` | string (FinishReason) | yes | — | always | closed vocabulary |
 | `usage` | object (Usage) | yes | — | omit-empty (when `{}`) | |
-| `logprobs` | array of TokenLogprob | no | `null` | omit-empty | `null` = provider did not report (the Usage convention); never `[]` on parse |
+| `logprobs` | array of TokenLogprob | no | `null` | omit-empty | `null` = provider did not report, or local editing removed all usable scores (`logprobs_complete=false`); never `[]` on parse |
+| `logprobs_complete` | bool | no | `true` | omit when true; emit false | false means local editing left retained text without corresponding original scores; true does not promise that the provider supplied scores |
 | `provider_data` | object (opaque) | no | `null` | never by default (`response_to_dict` emits it only with `include_provider_data=True`; the vet protocol serializes WITHOUT it, surfacing only the `_lm15_unmapped` canary) | strict JSON object |
 | `adaptations` | array of Adaptation | no | `[]` | omit-empty | MAP-13 (2026-09-14): what the wire got that differs from what was asked — a dropped hint, a clamped dial, a client-side stop, a defaulted required field. Empty when the request went out as written. Data, never printed; under `adaptations="silent"` always empty |
 
@@ -652,6 +657,20 @@ document order; the block boundary survives in the stream
 
 Convenience: `.text` (text + citation/thinking treated as metadata),
 `.tool_calls`, `.citations`, `.parse_json(default=...)`, `.json`.
+
+#### Scores after a client-side stop
+
+Ratified 2026-09-15; see `changes/2026-09-15-stop-filter-score-preservation.md`.
+Keep original scores for whole tokens entirely before the stop. If the stop
+cuts inside a token, preserve the visible text prefix but omit that token's
+score and set `logprobs_complete=false`. Never invent a score for shortened
+text. Use token bytes for alignment, or token spellings only when their UTF-8
+bytes exactly reconstruct the original text. If alignment cannot be established,
+omit scores for the shortened event and mark coverage incomplete. Unmatched
+stops preserve original events and their fields. False survives canonical JSON
+serialization even with no scores. Response-to-events conversion carries the
+flag on the first text delta; without a TextPart it refuses rather than losing
+false. This adds no score requirement for providers that report none.
 
 ### TokenLogprob
 

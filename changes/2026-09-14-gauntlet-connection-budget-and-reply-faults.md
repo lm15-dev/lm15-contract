@@ -1,6 +1,12 @@
 # 2026-09-14 — What the DSPy gauntlet found: what is fixed, what needs a decision
 
-Ratification: PENDING — drafted in session from a reading of
+Ratification: PARTIAL — A1's shared timeout defaults, connection cap, and
+explicit-caller-setting precedence were ratified by Maxime Rivest on 2026-09-15
+in session (“I'm seeing the two items that you're mentioning. Yeah, this is
+fine.”). See spec/vocabularies.md § Connection budget. This assent does not
+ratify the remaining proposals in this document.
+
+Originally drafted in session from a reading of
 `cmpnd-ai/breaka-your-lm` (Drew Breunig, 2026-09-13; DSPy 3.4.0b1 with
 lm15 1.0.0a1 vendored) and of the reference code it exercised. Part A is
 implemented in lm15-python and needs ratification to become a rule every
@@ -25,8 +31,9 @@ aiohttp norm, and a provider's rate limit, not the pool, is the practical
 ceiling. Every timeout is per operation (the next byte), never per
 request, so a stream that keeps trickling never trips it.
 
-Rule text proposed for `spec/vocabularies.md` (new section "Connection
-budget"): every port exposes the four timeouts and the connection cap
+A1 defaults and precedence are now recorded in `spec/vocabularies.md`
+("Connection budget"). The original broader rule proposal follows; lifecycle
+claims are not newly ratified by the defaults assent: every port exposes the four timeouts and the connection cap
 under those names and defaults; a read timeout's message states it is the
 client's limit and names the knob (a user who cannot tell a client
 timeout from a dead server retries the wrong thing); a router or client

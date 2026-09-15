@@ -1,0 +1,59 @@
+{
+  "description": "Consumer-side live turn collection limits; not a provider wire exchange. Cases exercise iteration, not result()'s earlier tool-call boundary.",
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-15",
+    "evidence": "changes/2026-09-15-live-collection-limits.md: shared collection rules and collection_limit error code ratified 2026-09-15"
+  },
+  "defaults": {"max_bytes": 16777216, "max_events": 10000},
+  "cases": [
+    {
+      "id": "exact-byte-and-event-boundaries",
+      "limits": {"max_bytes": 47, "max_events": 2},
+      "events": [{"type": "text", "text": "abc"}, {"type": "turn_end"}],
+      "expect": {"accepted": 2, "reads": 2, "retained_bytes": 47, "limit": null, "rejected_index": null}
+    },
+    {
+      "id": "terminal-event-must-fit-byte-budget",
+      "limits": {"max_bytes": 46, "max_events": 2},
+      "events": [{"type": "text", "text": "abc"}, {"type": "turn_end"}],
+      "expect": {"accepted": 1, "reads": 2, "retained_bytes": 28, "limit": "max_bytes", "rejected_index": 1}
+    },
+    {
+      "id": "oversized-first-event",
+      "limits": {"max_bytes": 27, "max_events": 10},
+      "events": [{"type": "text", "text": "abc"}, {"type": "turn_end"}],
+      "expect": {"accepted": 0, "reads": 1, "retained_bytes": 0, "limit": "max_bytes", "rejected_index": 0}
+    },
+    {
+      "id": "count-cap-does-not-consume-next-event",
+      "limits": {"max_bytes": 1000, "max_events": 1},
+      "events": [{"type": "text", "text": "abc"}, {"type": "turn_end"}],
+      "expect": {"accepted": 1, "reads": 1, "retained_bytes": 28, "limit": "max_events", "rejected_index": null}
+    },
+    {
+      "id": "empty-events-still-count",
+      "limits": {"max_bytes": 1000, "max_events": 2},
+      "events": [{"type": "text", "text": ""}, {"type": "text", "text": ""}, {"type": "text", "text": ""}],
+      "expect": {"accepted": 2, "reads": 2, "retained_bytes": 50, "limit": "max_events", "rejected_index": null}
+    },
+    {
+      "id": "unicode-is-ascii-json-escaped",
+      "limits": {"max_bytes": 50, "max_events": 2},
+      "events": [{"type": "text", "text": "é"}, {"type": "turn_end"}],
+      "expect": {"accepted": 2, "reads": 2, "retained_bytes": 50, "limit": null, "rejected_index": null}
+    },
+    {
+      "id": "audio-counts-encoded-data-and-metadata",
+      "limits": {"max_bytes": 30, "max_events": 10},
+      "events": [{"type": "audio", "data": "UENNMQ==", "media_type": "audio/pcm;rate=24000"}],
+      "expect": {"accepted": 0, "reads": 1, "retained_bytes": 0, "limit": "max_bytes", "rejected_index": 0}
+    },
+    {
+      "id": "tool-input-is-not-free",
+      "limits": {"max_bytes": 40, "max_events": 10},
+      "events": [{"type": "tool_call", "id": "c", "name": "lookup", "input": {"query": "a long query"}}],
+      "expect": {"accepted": 0, "reads": 1, "retained_bytes": 0, "limit": "max_bytes", "rejected_index": 0}
+    }
+  ]
+}

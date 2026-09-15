@@ -2236,6 +2236,50 @@
       }
     },
     {
+      "id": "delta.text-incomplete-logprobs",
+      "kind": "delta",
+      "value": {
+        "type": "text",
+        "text": "pre",
+        "part_index": 0,
+        "logprobs_complete": false
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-15",
+        "evidence": "spec/types.md TextDelta and Response: false is emitted even when no token scores remain; changes/2026-09-15-stop-filter-score-preservation.md, ratified 2026-09-15"
+      }
+    },
+    {
+      "id": "response.incomplete-logprobs",
+      "kind": "response",
+      "value": {
+        "model": "m",
+        "message": {
+          "role": "assistant",
+          "parts": [{"type": "text", "text": "hi pre"}]
+        },
+        "finish_reason": "stop",
+        "logprobs": [{"token": "hi ", "logprob": -0.25}],
+        "logprobs_complete": false
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-15",
+        "evidence": "spec/types.md Response, Scores after a client-side stop: preserve whole-token scores and serialize incomplete coverage without provider_data; changes/2026-09-15-stop-filter-score-preservation.md, ratified 2026-09-15"
+      }
+    },
+    {
+      "id": "error.collection-limit",
+      "kind": "error_detail",
+      "value": {"code": "collection_limit", "message": "Live turn collection reached its configured budget"},
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-15",
+        "evidence": "spec/vocabularies.md ErrorCode; changes/2026-09-15-live-collection-limits.md: local non-retryable collection limit, ratified 2026-09-15"
+      }
+    },
+    {
       "id": "config.sampling_promoted",
       "kind": "config",
       "value": {

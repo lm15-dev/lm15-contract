@@ -42,8 +42,11 @@ or serde types. Full-duplex clients retain session.recv / raw iteration.
   seals the view at tool_call so it cannot deadlock waiting for the caller.
   Following events, including late usage, stay for the next view. Tool-call
   fragments are not actionable until a complete tool_call event exists.
-- Views retain all events they consumed, including those already yielded to
-  the caller. result after partial/full iteration includes them, and repeated
+- Views retain all admitted events, including those already yielded to
+  the caller. The configurable collection budget and overflow recovery are
+  specified by the 2026-09-15 amendment in
+  `changes/2026-09-15-live-collection-limits.md` (ratified 2026-09-15).
+  result after partial/full iteration includes them, and repeated
   result returns the same materialized turn without further reads. A view
   has one active reader. close/drop of a view does not close the live session.
 - Turn contains ended_by, text, decoded audio bytes, audio_media_type,
@@ -61,8 +64,8 @@ or serde types. Full-duplex clients retain session.recv / raw iteration.
   EOF before a boundary raises TransportError; transport/decoding errors keep
   their identity. snapshot remains available for salvage. No fabricated terminal
   event. Cancellation is not an error event and propagates to the caller.
-- Collecting a turn buffers events/audio. Raw session iteration is the unbuffered
-  alternative. Stop one reader before starting another. Blocking consumers must
+- Collecting a turn buffers events/audio within the view's collection budget.
+  Raw session iteration is the unbuffered alternative. Stop one reader before starting another. Blocking consumers must
   use transport/session timeouts; async callers can use cancellation/deadlines.
 
 ## Profiles
