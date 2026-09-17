@@ -1,0 +1,144 @@
+{
+  "id": "typesafe.tools_refused",
+  "provider": "typesafe",
+  "feature": "judgments",
+  "description": "Tools have no wire slot on systemone → refuse (condition b)",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature",
+      "feature": "tools"
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-17",
+    "evidence": "changes/2026-09-17-judgments.md D8 (MAP-13 condition b: Jev cannot generate / has no wire slot)"
+  },
+  "canonical_request": {
+    "model": "jev-latest",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "lookup",
+        "parameters": {}
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant - the note is mostly criticism"
+                },
+                {
+                  "const": 1,
+                  "title": "barely_ok",
+                  "description": "Barely acceptable - drinkable, nothing to recommend it"
+                },
+                {
+                  "const": 2,
+                  "title": "simple",
+                  "description": "Simple and sound - correct, plain, forgettable"
+                },
+                {
+                  "const": 3,
+                  "title": "everyday",
+                  "description": "Pleasant everyday wine - some appeal, little depth"
+                },
+                {
+                  "const": 4,
+                  "title": "good",
+                  "description": "Good - clear varietal character, well made"
+                },
+                {
+                  "const": 5,
+                  "title": "very_good",
+                  "description": "Very good - balanced, with something to say"
+                },
+                {
+                  "const": 6,
+                  "title": "excellent",
+                  "description": "Excellent - complex and structured"
+                },
+                {
+                  "const": 7,
+                  "title": "outstanding",
+                  "description": "Outstanding - depth and length, built to age"
+                },
+                {
+                  "const": 8,
+                  "title": "superb",
+                  "description": "Superb - among the best of its type"
+                },
+                {
+                  "const": 9,
+                  "title": "profound",
+                  "description": "Profound - the note treats it as exceptional"
+                }
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described?",
+              "anyOf": [
+                {
+                  "const": "fruit",
+                  "description": "Fruit-forward"
+                },
+                {
+                  "const": "oak",
+                  "description": "Oak-driven"
+                },
+                {
+                  "const": "mineral",
+                  "description": "Mineral, savoury"
+                },
+                {
+                  "const": "other"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          }
+        }
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-17",
+    "evidence": "authored with the case; changes/2026-09-17-judgments.md D8"
+  }
+}

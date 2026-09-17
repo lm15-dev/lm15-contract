@@ -1,0 +1,41 @@
+{
+  "captured": "2026-09-17T15:32:01.643604+00:00",
+  "method": "POST",
+  "url": "https://api.typesafe.ai/v1/systemone",
+  "request_body": {
+    "state": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+    "model": "jev-latest",
+    "questions": {
+      "q": {
+        "type": "choice",
+        "instructions": "x"
+      }
+    }
+  },
+  "request_sha256": "8a16ce83c6828423",
+  "status": 422,
+  "response_headers": {
+    "content-type": "application/json",
+    "x-typesafe-request-id": "req_01a0afff07a579e3a2c003820f56090b"
+  },
+  "response_body": {
+    "detail": [
+      {
+        "type": "missing",
+        "loc": [
+          "body",
+          "questions",
+          "q",
+          "choice",
+          "criteria"
+        ],
+        "msg": "Field required",
+        "input": {
+          "type": "choice",
+          "instructions": "x"
+        }
+      }
+    ]
+  },
+  "seconds": 0.235
+}

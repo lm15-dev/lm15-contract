@@ -52,13 +52,13 @@ NON_WIRE_TYPES = {
 }
 
 KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
-    "part": (("*Part",), ("PartType", "PART_TYPES")),
+    "part": (("*Part",), ("PartType", "PART_TYPES", "JudgmentMethod", "JUDGMENT_METHODS")),
     "message": (("Message",), ("Role", "ROLE_VALUES")),
     "tool": (("FunctionTool", "BuiltinTool"), ()),
     "tool_choice": (("ToolChoice",), ("ToolChoiceMode", "TOOL_CHOICE_MODES")),
     "reasoning": (("Reasoning",), ("ReasoningEffort", "REASONING_EFFORTS",
                                    "ReasoningSummary", "REASONING_SUMMARIES")),
-    "config": (("Config",), ()),
+    "config": (("Config",), ("ProbabilityPolicy", "PROBABILITY_POLICIES")),
     "cache_config": (("CacheConfig",), ("CacheMode", "CACHE_MODES",
                                          "CacheRetention", "CACHE_RETENTIONS",
                                          "CachePrefix", "CACHE_PREFIXES")),

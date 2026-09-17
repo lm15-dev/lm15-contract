@@ -814,6 +814,73 @@ lm15's refusals as "engine parity gaps": `seed`, `top_k`, `store=False`,
 model switch to protect it from a change it did not depend on. The
 first promise is the reason lm15 exists; the second is kept by the
 record, and by `"refuse"` for those who want the old strictness.
+## MAP-14 — Judgments: declared keys in, a distribution out, the method on the number
+
+Ratified 2026-09-17 (`changes/2026-09-17-judgments.md`). A judgment is a
+question whose answer is one of a set of keys the caller declared, with
+optionally a probability per key. The request is an ordinary
+`json_schema` `response_format`; the answer is a `DataPart`.
+
+1. **What the schema declares** (the convention; plain JSON Schema). A
+   top-level property of the schema is a judgment when it is:
+   - `{"type": "boolean"}` — a yes/no judgment; keys `true`, `false`;
+   - a string `enum`, or `anyOf` of `{"const": <string>, "description"?,
+     "title"?}` (the property may carry `type: string`) — a choice; keys
+     are the strings, descriptions are the option descriptions;
+   - an integer `enum` `[0, …, n-1]` or `anyOf` of `{"const": <int>,
+     "title"?, "description"?}` in that order — an **ordered** judgment
+     (levels); keys `"0"…"n-1"`, `title` is the level name, `description`
+     the level description.
+   The property's own `description` is the question. Any other property
+   is ordinary structured output: it is answered, never scored. A schema
+   with no judgment property is not a judgment request and answers with a
+   `TextPart` as before.
+2. **Per wire.** typesafe: boolean → `noul`, string → `choice`
+   (`criteria` = key → description or null), ordered → `score`
+   (`criteria` = the descriptions in order; `title` is not sent); the
+   property description is `instructions` (a missing one is `defaulted`
+   to the property name); every question in one call over the state of
+   D6. openai (both dialects): the schema goes verbatim (receipted:
+   `strict` honours `anyOf`/`const`/`title`). anthropic: a judgment
+   property carrying both `type` and `anyOf` has its `type` moved into
+   every branch (the wire 400s on the combination; receipted). gemini: a
+   judgment property is sent as `enum` of its keys with the descriptions
+   folded into the property description as `key = description; …` (the
+   wire ignores `const` and answered `"Bordeaux-blend"`; receipted, thinking
+   off). These two rewrites are the INV-050 exception and are
+   translations (MAP-13 rule 2), not adaptations.
+3. **The answer.** `DataPart.value` is the model's JSON object (typesafe:
+   `{name: key | level index | bool}` assembled from the answers).
+   `probabilities` and `method` follow `config.probabilities`: typesafe
+   always delivers `provider_classification` (a noul becomes
+   `{"true": p, "false": 1-p}`); a wire that measures nothing delivers
+   none — `if_available` records `dropped` on `config.probabilities`,
+   `required` refuses before the wire (condition b). Jev's `confidence`
+   and `score` stay verbatim in `provider_data.typesafe.answers`; the
+   expected level is Σ p·i and is computed, never stored.
+4. **Candidate-sequence likelihood** (openai-chat on a server that
+   honours `logprob_token_ids`: vLLM ≥ 0.29 receipted; SGLang's native
+   `token_ids_logprob` exists but its OpenAI-compatible spelling is
+   unreceipted, so its preset stays `token_scoring="none"` — §3.17). For each judgment,
+   every key is rendered as the assistant's answer after a prefill
+   (`continue_final_message`) and tokenized by the server's `/tokenize`
+   so the chat template is honoured; the terminator token is appended so
+   the paths are prefix-free. Every trie node with children is one prompt
+   of ONE batched `/v1/completions` call (`max_tokens: 1`,
+   `logprob_token_ids` = union of child tokens, `return_tokens_as_token_ids`).
+   Raw log-probs sum along each path; one normalisation over the key set;
+   `coverage` (raw mass on the key set) goes to `provider_data`. A 200
+   whose `top_logprobs` lack a requested id means the server dropped the
+   field (receipted on vLLM 0.25.1): `required` → refuse, `if_available`
+   → `dropped`. Questions are scored independently; on the generated-JSON
+   wires (rule 2) they are answered jointly — documented, not recorded.
+5. **What is never done.** No one-hot from a pick; no number the model
+   wrote in prose; no repeated sampling behind the caller's back; no
+   silent fallback from a distribution to a pick under `required`.
+
+Evidence: `receipts/2026-09-17-judgments/`; measurements in
+`lm15-dev/architecture-review/jev-judgments-2026-09-17/`.
+
 
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review

@@ -277,10 +277,28 @@ rationale is the designed reason, ratified, not a guess.
   {...}}`, a bare schema) belong in `extensions`. `schema` is an opaque
   payload (INV-002): adapters never rewrite a keyword, drop `minimum`, or
   flip `additionalProperties` to make a request pass — the provider's
-  400 is the contract. WHY: the 2026-09-02 pass found four adapter
+  400 is the contract. ONE exception, added 2026-09-17 (MAP-14 §2,
+  changes/2026-09-17-judgments.md D5): a property the schema declares as a
+  judgment may be rewritten to the equivalent form its wire honours
+  (Anthropic: `type` moved into `anyOf` branches; Gemini: `anyOf`/`const`
+  → `enum` with descriptions folded into the property description),
+  receipted per wire; every other keyword stays verbatim. WHY: the 2026-09-02 pass found four adapter
   heuristics accepting several spellings for one intent, with the wire
   deciding which; two canonical spellings for one intent violates
   principle 2 of types.py (MAP-8, changes/2026-09-02-tool-choice-structured-output.md).
+
+## Data parts
+
+- **INV-052 — A DataPart's distributions belong to the assistant.**
+  `probabilities` and `method` are accepted only on a DataPart inside an
+  `assistant` message; in any other role the part carries `value` alone
+  (structured input has no measurement). `method` is present iff
+  `probabilities` is. Every inner map of `probabilities` is non-empty,
+  its keys are strings, its values floats in `[0, 1]`. The sum is not
+  validated (providers round). WHY: a distribution is a claim about an
+  answer; letting it ride on input would let a transcript replay a
+  measurement as if the next model had made it
+  (changes/2026-09-17-judgments.md D2).
 
 ## Blessed provider-only extension knobs
 

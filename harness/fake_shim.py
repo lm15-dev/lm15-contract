@@ -218,7 +218,8 @@ def op_build_request(msg: JsonObject) -> JsonObject:
             # The silent cell: a wire request produced where the receipts
             # say the provider ignores or drops the intent.
             return {"method": "POST", "url": "https://invented/", "params": {}, "headers": {}, "body": {}}
-        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal"})
+        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal",
+                           **({"feature": raises["feature"]} if raises.get("feature") else {})})
     result = check.expected_wire_request(case)
     pinned = check.expected_adaptations(case)
     if pinned and not (MUTATION == "adaptation_unrecorded" and targeted(case)):
@@ -298,7 +299,8 @@ def op_parse_response(msg: JsonObject) -> JsonObject:
     if raises is not None:
         # A complete-path refusal (MAP-9, 2026-09-07): the golden carries
         # provenance only; the reply is the pinned ok=false.
-        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal"})
+        raise PinnedRaise({"type": raises["type"], "code": raises["code"], "message": "pinned refusal",
+                           **({"feature": raises["feature"]} if raises.get("feature") else {})})
     resp = golden["canonical_response"]
     if targeted(case):
         mutate_response(resp)

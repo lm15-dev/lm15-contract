@@ -1,0 +1,226 @@
+{
+  "id": "gemini.judgments",
+  "provider": "gemini",
+  "feature": "judgments",
+  "description": "Judgment properties go as enum with descriptions folded into the property description: responseJsonSchema ignores anyOf/const (answered 'Bordeaux-blend' and 'Fruit-forward' for a const set, receipts/…/gemini-judgment-schema.json and -notype.json); DataPart from the text part; probabilities dropped (if_available)",
+  "request": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "headers": {
+      "Content-Type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 2000,
+        "responseMimeType": "application/json",
+        "responseJsonSchema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note? Levels: 0 = faulty: Faulty or unpleasant - the note is mostly criticism; 1 = barely_ok: Barely acceptable - drinkable, nothing to recommend it; 2 = simple: Simple and sound - correct, plain, forgettable; 3 = everyday: Pleasant everyday wine - some appeal, little depth; 4 = good: Good - clear varietal character, well made; 5 = very_good: Very good - balanced, with something to say; 6 = excellent: Excellent - complex and structured; 7 = outstanding: Outstanding - depth and length, built to age; 8 = superb: Superb - among the best of its type; 9 = profound: Profound - the note treats it as exceptional",
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described? Options: fruit = Fruit-forward; oak = Oak-driven; mineral = Mineral, savoury; other",
+              "enum": [
+                "fruit",
+                "oak",
+                "mineral",
+                "other"
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          }
+        },
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    },
+    "adaptations": [
+      {
+        "field": "config.probabilities",
+        "action": "dropped",
+        "asked": "if_available"
+      }
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-17",
+    "evidence": "generativelanguage.googleapis.com 2026-09-17T15:34:35.974465+00:00, gemini-2.5-flash, thinkingBudget 0, HTTP 200, request sha256 f0970f394c839747; content '{\"quality\": 6, \"style\": \"fruit\", \"ageing\": true}' (enum honoured); changes/2026-09-17-judgments.md D5, INV-050 exception",
+    "captured_by": "lm15-python reference adapter (build_request → live send), schema rewritten per MAP-14 §2",
+    "exchange": "receipts/2026-09-17-judgments/exchange-2026-09-17T15-34-35Z-gemini.json"
+  },
+  "canonical_request": {
+    "model": "gemini-2.5-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 2000,
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant - the note is mostly criticism"
+                },
+                {
+                  "const": 1,
+                  "title": "barely_ok",
+                  "description": "Barely acceptable - drinkable, nothing to recommend it"
+                },
+                {
+                  "const": 2,
+                  "title": "simple",
+                  "description": "Simple and sound - correct, plain, forgettable"
+                },
+                {
+                  "const": 3,
+                  "title": "everyday",
+                  "description": "Pleasant everyday wine - some appeal, little depth"
+                },
+                {
+                  "const": 4,
+                  "title": "good",
+                  "description": "Good - clear varietal character, well made"
+                },
+                {
+                  "const": 5,
+                  "title": "very_good",
+                  "description": "Very good - balanced, with something to say"
+                },
+                {
+                  "const": 6,
+                  "title": "excellent",
+                  "description": "Excellent - complex and structured"
+                },
+                {
+                  "const": 7,
+                  "title": "outstanding",
+                  "description": "Outstanding - depth and length, built to age"
+                },
+                {
+                  "const": 8,
+                  "title": "superb",
+                  "description": "Superb - among the best of its type"
+                },
+                {
+                  "const": 9,
+                  "title": "profound",
+                  "description": "Profound - the note treats it as exceptional"
+                }
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described?",
+              "anyOf": [
+                {
+                  "const": "fruit",
+                  "description": "Fruit-forward"
+                },
+                {
+                  "const": "oak",
+                  "description": "Oak-driven"
+                },
+                {
+                  "const": "mineral",
+                  "description": "Mineral, savoury"
+                },
+                {
+                  "const": "other"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          }
+        }
+      },
+      "probabilities": "if_available",
+      "reasoning": {
+        "effort": "off"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-17",
+    "evidence": "authored with the case; changes/2026-09-17-judgments.md"
+  },
+  "pinned_body": "2026-09-17T15-34-35Z.txt"
+}

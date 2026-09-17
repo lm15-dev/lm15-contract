@@ -1,0 +1,91 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-17",
+    "evidence": "api.typesafe.ai error envelopes captured verbatim 2026-09-17 by research/providers/typesafe/capture.py; receipts/2026-09-17-typesafe/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "typesafe.unauthenticated",
+      "provider": "typesafe",
+      "status": 401,
+      "body": {
+        "detail": {
+          "error_type": "authentication_error",
+          "message": "Cannot authenticate with the server. Please check your API key and try again."
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "typesafe",
+        "provider_code": "authentication_error",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-17",
+        "evidence": "api.typesafe.ai HTTP 401 verbatim 2026-09-17T15-56-51Z — receipts/2026-09-17-typesafe/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "typesafe.unknown_model",
+      "provider": "typesafe",
+      "status": 400,
+      "body": {
+        "detail": {
+          "error_type": "api_usage_error",
+          "message": "Unknown model: no-such-model"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "typesafe",
+        "provider_code": "api_usage_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-17",
+        "evidence": "api.typesafe.ai HTTP 400 verbatim 2026-09-17T15-56-52Z — receipts/2026-09-17-typesafe/probe-error-unknown-model.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "typesafe.validation",
+      "provider": "typesafe",
+      "status": 422,
+      "body": {
+        "detail": [
+          {
+            "type": "missing",
+            "loc": [
+              "body",
+              "questions",
+              "q",
+              "choice",
+              "criteria"
+            ],
+            "msg": "Field required",
+            "input": {
+              "type": "choice",
+              "instructions": "x"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "typesafe",
+        "provider_code": null,
+        "status": 422
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-17",
+        "evidence": "api.typesafe.ai HTTP 422 verbatim 2026-09-17T15-56-53Z — receipts/2026-09-17-typesafe/probe-error-validation.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

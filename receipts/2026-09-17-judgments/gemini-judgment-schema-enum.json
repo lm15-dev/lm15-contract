@@ -1,0 +1,106 @@
+{
+  "captured": "2026-09-17T15:34:35.974465+00:00",
+  "provider": "gemini",
+  "model": "gemini-2.5-flash",
+  "variant": "enum",
+  "reasoning": "off",
+  "method": "POST",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=<redacted>",
+  "headers": {
+    "Content-Type": "application/json",
+    "x-goog-api-key": "<redacted>"
+  },
+  "request_body": {
+    "contents": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "generationConfig": {
+      "maxOutputTokens": 2000,
+      "responseMimeType": "application/json",
+      "responseJsonSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "quality",
+          "style",
+          "ageing"
+        ],
+        "properties": {
+          "quality": {
+            "type": "integer",
+            "description": "How good is this wine, according to the note? Levels: 0 = faulty: Faulty or unpleasant - the note is mostly criticism; 1 = barely_ok: Barely acceptable - drinkable, nothing to recommend it; 2 = simple: Simple and sound - correct, plain, forgettable; 3 = everyday: Pleasant everyday wine - some appeal, little depth; 4 = good: Good - clear varietal character, well made; 5 = very_good: Very good - balanced, with something to say; 6 = excellent: Excellent - complex and structured; 7 = outstanding: Outstanding - depth and length, built to age; 8 = superb: Superb - among the best of its type; 9 = profound: Profound - the note treats it as exceptional",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          },
+          "style": {
+            "type": "string",
+            "description": "What is the dominant style described? Options: fruit = Fruit-forward; oak = Oak-driven; mineral = Mineral, savoury; other",
+            "enum": [
+              "fruit",
+              "oak",
+              "mineral",
+              "other"
+            ]
+          },
+          "ageing": {
+            "type": "boolean",
+            "description": "Does the note say the wine will improve with age?"
+          }
+        }
+      },
+      "thinkingConfig": {
+        "thinkingBudget": 0
+      }
+    }
+  },
+  "request_sha256": "f0970f394c839747",
+  "status": 200,
+  "response_body": {
+    "candidates": [
+      {
+        "content": {
+          "parts": [
+            {
+              "text": "{\"quality\":6,\"style\":\"fruit\",\"ageing\":true}"
+            }
+          ],
+          "role": "model"
+        },
+        "finishReason": "STOP",
+        "index": 0
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 48,
+      "candidatesTokenCount": 14,
+      "totalTokenCount": 62,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 48
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "responseId": "iwisat-SItSo_PUPhuXSsAQ"
+  },
+  "seconds": 0.548
+}

@@ -1,0 +1,58 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+      "questions": {
+        "quality": {
+          "type": "score",
+          "instructions": "How good is this wine, according to the note?",
+          "criteria": [
+            "Faulty or unpleasant - the note is mostly criticism",
+            "Barely acceptable - drinkable, nothing to recommend it",
+            "Simple and sound - correct, plain, forgettable",
+            "Pleasant everyday wine - some appeal, little depth",
+            "Good - clear varietal character, well made",
+            "Very good - balanced, with something to say",
+            "Excellent - complex and structured",
+            "Outstanding - depth and length, built to age",
+            "Superb - among the best of its type",
+            "Profound - the note treats it as exceptional"
+          ]
+        },
+        "style": {
+          "type": "choice",
+          "instructions": "What is the dominant style described?",
+          "criteria": {
+            "fruit": "Fruit-forward",
+            "oak": "Oak-driven",
+            "mineral": "Mineral, savoury",
+            "other": null
+          }
+        },
+        "ageing": {
+          "type": "noul",
+          "instructions": "Does the note say the wine will improve with age?"
+        }
+      }
+    }
+  },
+  "status": 401,
+  "body": {
+    "detail": {
+      "error_type": "authentication_error",
+      "message": "Cannot authenticate with the server. Please check your API key and try again."
+    }
+  },
+  "timestamp": "2026-09-17T15-56-51Z",
+  "response_headers": {
+    "content-type": "application/json"
+  }
+}

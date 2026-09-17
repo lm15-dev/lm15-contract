@@ -69,10 +69,12 @@ Runtime mirror: `PART_TYPES` (dispatch table, value → Part class).
 | `thinking` |
 | `refusal` |
 | `citation` |
+| `data` |
 
 Streamable partition (must stay exact — INV-035): streamable = `text`,
 `thinking`, `image`, `audio`, `tool_call`, `citation`; non-streamable =
-`video`, `document`, `binary`, `tool_result`, `refusal`.
+`video`, `document`, `binary`, `tool_result`, `refusal`, `data` (added
+2026-09-17, changes/2026-09-17-judgments.md).
 
 ## DeltaType
 
@@ -396,6 +398,25 @@ Runtime mirror: `ADAPTATION_POLICIES` (added 2026-09-14, MAP-13). The value of `
 | `note` | default: adapt and record on the response |
 | `silent` | adapt and record nothing |
 | `refuse` | every deviation (`dropped`, `clamped`, `substituted`, `client_side`) is an `UnsupportedFeatureError` before the wire, carrying `feature` = the config path (the pre-2026-09-14 behaviour); `satisfied` and `defaulted` change nothing the caller asked for and are recorded, not refused |
+
+## ProbabilityPolicy
+
+Runtime mirror: `PROBABILITY_POLICIES` (added 2026-09-17, changes/2026-09-17-judgments.md D3). The value of `Config.probabilities`.
+
+| Value | Meaning |
+|---|---|
+| `off` | default (`null`): adapters spend nothing extra; a provider that returns distributions anyway still delivers them |
+| `if_available` | a wire that cannot measure a distribution over the declared keys records `dropped` on `config.probabilities`; the DataPart then carries no `probabilities` |
+| `required` | such a wire refuses before sending: `UnsupportedFeatureError`, `feature="config.probabilities"` (MAP-13 condition b) |
+
+## JudgmentMethod
+
+Runtime mirror: `JUDGMENT_METHODS` (added 2026-09-17, D5). How a `DataPart.probabilities` distribution was measured; travels with the numbers so a model switch cannot silently change their meaning. None implies calibration on the caller's data.
+
+| Value | Meaning |
+|---|---|
+| `provider_classification` | the provider's own decision interface returned the distribution (TypeSafe Jev) |
+| `candidate_sequence_likelihood` | lm15 scored every declared key as a token path (terminator included) from the model's token log-probabilities and normalised once over the key set (MAP-14 §3); `provider_data.coverage` holds the raw mass on the key set |
 
 ## LiveClientEventType
 

@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-17T15-56-52Z",
+  "provider": "typesafe",
+  "status": 400,
+  "model": "no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "no-such-model",
+      "state": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+      "questions": {
+        "quality": {
+          "type": "score",
+          "instructions": "How good is this wine, according to the note?",
+          "criteria": [
+            "Faulty or unpleasant - the note is mostly criticism",
+            "Barely acceptable - drinkable, nothing to recommend it",
+            "Simple and sound - correct, plain, forgettable",
+            "Pleasant everyday wine - some appeal, little depth",
+            "Good - clear varietal character, well made",
+            "Very good - balanced, with something to say",
+            "Excellent - complex and structured",
+            "Outstanding - depth and length, built to age",
+            "Superb - among the best of its type",
+            "Profound - the note treats it as exceptional"
+          ]
+        },
+        "style": {
+          "type": "choice",
+          "instructions": "What is the dominant style described?",
+          "criteria": {
+            "fruit": "Fruit-forward",
+            "oak": "Oak-driven",
+            "mineral": "Mineral, savoury",
+            "other": null
+          }
+        },
+        "ageing": {
+          "type": "noul",
+          "instructions": "Does the note say the wine will improve with age?"
+        }
+      }
+    }
+  },
+  "request_sha256": "201bf6c13f35e53df47828b44e02e6b3f67f6588f91bde1e2ab38df07ca82391",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "bbe1043b93576618ee322fe2109cad8317909331b58c199c6346d63241b9113b",
+  "response_bytes": 84,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

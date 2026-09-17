@@ -2257,10 +2257,20 @@
         "model": "m",
         "message": {
           "role": "assistant",
-          "parts": [{"type": "text", "text": "hi pre"}]
+          "parts": [
+            {
+              "type": "text",
+              "text": "hi pre"
+            }
+          ]
         },
         "finish_reason": "stop",
-        "logprobs": [{"token": "hi ", "logprob": -0.25}],
+        "logprobs": [
+          {
+            "token": "hi ",
+            "logprob": -0.25
+          }
+        ],
         "logprobs_complete": false
       },
       "provenance": {
@@ -2272,7 +2282,10 @@
     {
       "id": "error.collection-limit",
       "kind": "error_detail",
-      "value": {"code": "collection_limit", "message": "Live turn collection reached its configured budget"},
+      "value": {
+        "code": "collection_limit",
+        "message": "Live turn collection reached its configured budget"
+      },
       "provenance": {
         "source": "hand-authored",
         "date": "2026-09-15",
@@ -2292,6 +2305,121 @@
         "source": "hand-authored",
         "date": "2026-09-14",
         "evidence": "changes/2026-09-14-adapt-visibly.md (MAP-13, ratified 2026-09-14); spec/types.md § Adaptation §3f: seed 0 and a 0.0 penalty are data, emitted"
+      }
+    },
+    {
+      "id": "part.data_input",
+      "kind": "part",
+      "value": {
+        "type": "data",
+        "value": {
+          "tasting_note": "Ripe blackberry.",
+          "producer": null
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-17",
+        "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
+      }
+    },
+    {
+      "id": "part.data_null_value_kept",
+      "kind": "part",
+      "value": {
+        "type": "data",
+        "value": null
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-17",
+        "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
+      }
+    },
+    {
+      "id": "part.data_answer",
+      "kind": "part",
+      "value": {
+        "type": "data",
+        "value": {
+          "quality": 7,
+          "style": "fruit",
+          "ageing": true
+        },
+        "probabilities": {
+          "quality": {
+            "6": 0.01,
+            "7": 0.97,
+            "8": 0.02
+          },
+          "style": {
+            "fruit": 1.0,
+            "oak": 0.0,
+            "mineral": 0.0,
+            "other": 0.0
+          },
+          "ageing": {
+            "true": 0.98,
+            "false": 0.02
+          }
+        },
+        "method": "provider_classification"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-17",
+        "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
+      }
+    },
+    {
+      "id": "config.probabilities",
+      "kind": "config",
+      "value": {
+        "response_format": {
+          "type": "json_schema",
+          "name": "j",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "probabilities": "required"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-17",
+        "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
+      }
+    },
+    {
+      "id": "message.assistant_data",
+      "kind": "message",
+      "value": {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "data",
+            "value": {
+              "ok": true
+            },
+            "probabilities": {
+              "ok": {
+                "true": 0.9,
+                "false": 0.1
+              }
+            },
+            "method": "candidate_sequence_likelihood"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-17",
+        "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
       }
     }
   ]

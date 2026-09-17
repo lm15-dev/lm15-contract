@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-17T15-56-50Z",
+  "provider": "typesafe",
+  "status": 200,
+  "model": "jev-latest",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": {
+        "system": "You triage support tickets.",
+        "messages": [
+          {
+            "role": "user",
+            "content": "I was charged twice for order A-104."
+          },
+          {
+            "role": "assistant",
+            "content": "I am checking the charges."
+          },
+          {
+            "role": "user",
+            "content": "Please refund the duplicate today."
+          }
+        ]
+      },
+      "questions": {
+        "refund_requested": {
+          "type": "noul",
+          "instructions": "refund_requested"
+        },
+        "department": {
+          "type": "choice",
+          "instructions": "Which team should handle this?",
+          "criteria": {
+            "billing": null,
+            "technical": null,
+            "sales": null
+          }
+        }
+      }
+    }
+  },
+  "request_sha256": "06e8fb12b98168b8502afda9f999421c92e1342b78dd3ce5dc940613c6c9f122",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "0c4d5dd549f673879c365e710686ee0c4867b6e8ad0fd835fbf422815e998754",
+  "response_bytes": 256,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

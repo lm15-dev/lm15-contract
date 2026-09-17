@@ -88,3 +88,12 @@ which stripped empties inside opaque payloads at the request/response level
 but not at the part level — the same value had two wire forms depending on
 entry point, and user data was silently destroyed. The rule above replaces
 that behavior.
+
+## Data parts (2026-09-17)
+
+`{"type": "data", "value": <json>}` — `value` is an opaque payload and is
+ALWAYS emitted, whatever it is (`null`, `""`, `{}`, `[]` are values, not
+emptiness; the cleaner never looks inside). `probabilities` and `method`
+follow the omission rule at the part's top level; inside `probabilities`
+the nested maps are canonical data, emitted verbatim with floats always
+as JSON floats (`1.0`, never `1`). changes/2026-09-17-judgments.md, INV-052.

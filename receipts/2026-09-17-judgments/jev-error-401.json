@@ -1,0 +1,54 @@
+{
+  "captured": "2026-09-17T15:32:01.896329+00:00",
+  "method": "POST",
+  "url": "https://api.typesafe.ai/v1/systemone",
+  "request_body": {
+    "state": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+    "model": "jev-latest",
+    "questions": {
+      "quality": {
+        "type": "score",
+        "instructions": "How good is this wine, according to the note?",
+        "criteria": [
+          "Faulty or unpleasant - the note is mostly criticism",
+          "Barely acceptable - drinkable, nothing to recommend it",
+          "Simple and sound - correct, plain, forgettable",
+          "Pleasant everyday wine - some appeal, little depth",
+          "Good - clear varietal character, well made",
+          "Very good - balanced, with something to say",
+          "Excellent - complex and structured",
+          "Outstanding - depth and length, built to age",
+          "Superb - among the best of its type",
+          "Profound - the note treats it as exceptional"
+        ]
+      },
+      "style": {
+        "type": "choice",
+        "instructions": "What is the dominant style described?",
+        "criteria": {
+          "fruit": "Fruit-forward",
+          "oak": "Oak-driven",
+          "mineral": "Mineral, savoury",
+          "other": null
+        }
+      },
+      "ageing": {
+        "type": "noul",
+        "instructions": "Does the note say the wine will improve with age?"
+      }
+    }
+  },
+  "request_sha256": "ad2a32a806ce8954",
+  "status": 401,
+  "response_headers": {
+    "content-type": "application/json",
+    "x-typesafe-request-id": "req_01a0afff08aa7982ad8f93e18d449a89"
+  },
+  "response_body": {
+    "detail": {
+      "error_type": "authentication_error",
+      "message": "Cannot authenticate with the server. Please check your API key and try again."
+    }
+  },
+  "seconds": 0.252
+}

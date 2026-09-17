@@ -1,0 +1,192 @@
+{
+  "id": "typesafe.judgments",
+  "provider": "typesafe",
+  "feature": "judgments",
+  "description": "Three judgments (10-level ordered, choice with descriptions, yes/no) from one json_schema request → one systemone call; string state from the single user text part (D6); answers → DataPart with probabilities, method provider_classification",
+  "base_url": "https://api.typesafe.ai",
+  "request": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+      "questions": {
+        "quality": {
+          "type": "score",
+          "instructions": "How good is this wine, according to the note?",
+          "criteria": [
+            "Faulty or unpleasant - the note is mostly criticism",
+            "Barely acceptable - drinkable, nothing to recommend it",
+            "Simple and sound - correct, plain, forgettable",
+            "Pleasant everyday wine - some appeal, little depth",
+            "Good - clear varietal character, well made",
+            "Very good - balanced, with something to say",
+            "Excellent - complex and structured",
+            "Outstanding - depth and length, built to age",
+            "Superb - among the best of its type",
+            "Profound - the note treats it as exceptional"
+          ]
+        },
+        "style": {
+          "type": "choice",
+          "instructions": "What is the dominant style described?",
+          "criteria": {
+            "fruit": "Fruit-forward",
+            "oak": "Oak-driven",
+            "mineral": "Mineral, savoury",
+            "other": null
+          }
+        },
+        "ageing": {
+          "type": "noul",
+          "instructions": "Does the note say the wine will improve with age?"
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-17",
+    "evidence": "api.typesafe.ai 2026-09-17T15-56-47Z, jev-latest, HTTP 200; MAP-14 §2 mapping (boolean→noul, string→choice, ordered→score); changes/2026-09-17-judgments.md D5/D6; adapter-built wire (TypeSafeLM, compat+access 'typesafe'); verbatim body at bodies/typesafe.judgments/2026-09-17T15-56-47Z.txt; changes/2026-09-17-judgments.md",
+    "exchange": "receipts/2026-09-17-typesafe/exchange-2026-09-17T15-56-47Z-93fd13f1e63b448599a845c2d1b0f864.json"
+  },
+  "canonical_request": {
+    "model": "jev-latest",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant - the note is mostly criticism"
+                },
+                {
+                  "const": 1,
+                  "title": "barely_ok",
+                  "description": "Barely acceptable - drinkable, nothing to recommend it"
+                },
+                {
+                  "const": 2,
+                  "title": "simple",
+                  "description": "Simple and sound - correct, plain, forgettable"
+                },
+                {
+                  "const": 3,
+                  "title": "everyday",
+                  "description": "Pleasant everyday wine - some appeal, little depth"
+                },
+                {
+                  "const": 4,
+                  "title": "good",
+                  "description": "Good - clear varietal character, well made"
+                },
+                {
+                  "const": 5,
+                  "title": "very_good",
+                  "description": "Very good - balanced, with something to say"
+                },
+                {
+                  "const": 6,
+                  "title": "excellent",
+                  "description": "Excellent - complex and structured"
+                },
+                {
+                  "const": 7,
+                  "title": "outstanding",
+                  "description": "Outstanding - depth and length, built to age"
+                },
+                {
+                  "const": 8,
+                  "title": "superb",
+                  "description": "Superb - among the best of its type"
+                },
+                {
+                  "const": 9,
+                  "title": "profound",
+                  "description": "Profound - the note treats it as exceptional"
+                }
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described?",
+              "anyOf": [
+                {
+                  "const": "fruit",
+                  "description": "Fruit-forward"
+                },
+                {
+                  "const": "oak",
+                  "description": "Oak-driven"
+                },
+                {
+                  "const": "mineral",
+                  "description": "Mineral, savoury"
+                },
+                {
+                  "const": "other"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          },
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "probabilities": "if_available"
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-17",
+    "evidence": "authored with the case (research/providers/typesafe/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-17T15-56-47Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  }
+}

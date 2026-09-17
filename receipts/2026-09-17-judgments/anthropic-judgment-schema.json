@@ -1,0 +1,136 @@
+{
+  "captured": "2026-09-17T15:33:28.250839+00:00",
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5",
+  "method": "POST",
+  "url": "https://api.anthropic.com/v1/messages",
+  "headers": {
+    "anthropic-version": "2023-06-01",
+    "content-type": "application/json",
+    "x-api-key": "<redacted>"
+  },
+  "request_body": {
+    "model": "claude-haiku-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "stream": false,
+    "max_tokens": 400,
+    "output_config": {
+      "format": {
+        "type": "json_schema",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant - the note is mostly criticism"
+                },
+                {
+                  "const": 1,
+                  "title": "barely_ok",
+                  "description": "Barely acceptable - drinkable, nothing to recommend it"
+                },
+                {
+                  "const": 2,
+                  "title": "simple",
+                  "description": "Simple and sound - correct, plain, forgettable"
+                },
+                {
+                  "const": 3,
+                  "title": "everyday",
+                  "description": "Pleasant everyday wine - some appeal, little depth"
+                },
+                {
+                  "const": 4,
+                  "title": "good",
+                  "description": "Good - clear varietal character, well made"
+                },
+                {
+                  "const": 5,
+                  "title": "very_good",
+                  "description": "Very good - balanced, with something to say"
+                },
+                {
+                  "const": 6,
+                  "title": "excellent",
+                  "description": "Excellent - complex and structured"
+                },
+                {
+                  "const": 7,
+                  "title": "outstanding",
+                  "description": "Outstanding - depth and length, built to age"
+                },
+                {
+                  "const": 8,
+                  "title": "superb",
+                  "description": "Superb - among the best of its type"
+                },
+                {
+                  "const": 9,
+                  "title": "profound",
+                  "description": "Profound - the note treats it as exceptional"
+                }
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described?",
+              "anyOf": [
+                {
+                  "const": "fruit",
+                  "description": "Fruit-forward"
+                },
+                {
+                  "const": "oak",
+                  "description": "Oak-driven"
+                },
+                {
+                  "const": "mineral",
+                  "description": "Mineral, savoury"
+                },
+                {
+                  "const": "other"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          }
+        }
+      }
+    }
+  },
+  "request_sha256": "2c84eb12654f744c",
+  "status": 400,
+  "response_body": {
+    "type": "error",
+    "error": {
+      "type": "invalid_request_error",
+      "message": "output_config.format.schema: For 'anyOf', 'type' is not supported"
+    },
+    "request_id": "req_011Cf9FjuCj7XkAgqTCiN3io"
+  },
+  "seconds": 0.294
+}

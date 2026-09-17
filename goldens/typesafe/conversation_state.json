@@ -1,0 +1,41 @@
+{
+  "canonical_response": {
+    "model": "jev-1.13.0",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "data",
+          "value": {
+            "refund_requested": true,
+            "department": "billing"
+          },
+          "probabilities": {
+            "refund_requested": {
+              "true": 0.97,
+              "false": 0.030000000000000027
+            },
+            "department": {
+              "billing": 1.0,
+              "technical": 0.0,
+              "sales": 0.0
+            }
+          },
+          "method": "provider_classification"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 396,
+      "output_tokens": 55,
+      "total_tokens": 451
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-17",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-17T15-56-50Z.txt"
+  }
+}

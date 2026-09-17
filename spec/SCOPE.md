@@ -59,6 +59,14 @@ evolution, but breaking changes in a 1.x release are permitted with a
   wire lm15 does not own: a key OpenAI adds tomorrow needs a row, and a
   lossy class may be added when a new preset loses new information. No
   canonical type changes.
+- **Judgments** — `DataPart`, `Config.probabilities`, the MAP-14 schema
+  convention, and the `typesafe` provider (TypeSafe Jev, 2026-09-17,
+  changes/2026-09-17-judgments.md). In by the same test that kept media
+  generation: the answer is a Part that the chat surface also accepts as
+  input (structured data in, structured data out). Provisional because
+  one provider measures natively and the candidate-likelihood path
+  depends on a server feature (`logprob_token_ids`) whose harness
+  direction is deferred.
 - **Cache resources** — the stored tier of MAP-6 (`CacheInfo`, `CachePage`,
   `CachedPrefix`, the `cache_*` verbs, the `cache` harness direction),
   added 2026-09-02 (changes/2026-09-01-caching-design.md). Provider-

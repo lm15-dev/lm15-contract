@@ -1,0 +1,104 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "quality",
+    "style",
+    "ageing"
+  ],
+  "properties": {
+    "quality": {
+      "description": "How good is this wine, according to the note?",
+      "anyOf": [
+        {
+          "const": 0,
+          "title": "faulty",
+          "description": "Faulty or unpleasant - the note is mostly criticism",
+          "type": "integer"
+        },
+        {
+          "const": 1,
+          "title": "barely_ok",
+          "description": "Barely acceptable - drinkable, nothing to recommend it",
+          "type": "integer"
+        },
+        {
+          "const": 2,
+          "title": "simple",
+          "description": "Simple and sound - correct, plain, forgettable",
+          "type": "integer"
+        },
+        {
+          "const": 3,
+          "title": "everyday",
+          "description": "Pleasant everyday wine - some appeal, little depth",
+          "type": "integer"
+        },
+        {
+          "const": 4,
+          "title": "good",
+          "description": "Good - clear varietal character, well made",
+          "type": "integer"
+        },
+        {
+          "const": 5,
+          "title": "very_good",
+          "description": "Very good - balanced, with something to say",
+          "type": "integer"
+        },
+        {
+          "const": 6,
+          "title": "excellent",
+          "description": "Excellent - complex and structured",
+          "type": "integer"
+        },
+        {
+          "const": 7,
+          "title": "outstanding",
+          "description": "Outstanding - depth and length, built to age",
+          "type": "integer"
+        },
+        {
+          "const": 8,
+          "title": "superb",
+          "description": "Superb - among the best of its type",
+          "type": "integer"
+        },
+        {
+          "const": 9,
+          "title": "profound",
+          "description": "Profound - the note treats it as exceptional",
+          "type": "integer"
+        }
+      ]
+    },
+    "style": {
+      "description": "What is the dominant style described?",
+      "anyOf": [
+        {
+          "const": "fruit",
+          "description": "Fruit-forward",
+          "type": "string"
+        },
+        {
+          "const": "oak",
+          "description": "Oak-driven",
+          "type": "string"
+        },
+        {
+          "const": "mineral",
+          "description": "Mineral, savoury",
+          "type": "string"
+        },
+        {
+          "const": "other",
+          "type": "string"
+        }
+      ]
+    },
+    "ageing": {
+      "type": "boolean",
+      "description": "Does the note say the wine will improve with age?"
+    }
+  }
+}

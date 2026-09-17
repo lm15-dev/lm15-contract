@@ -1,0 +1,392 @@
+{
+  "id": "openai_chat.judgments",
+  "provider": "openai_chat",
+  "feature": "judgments",
+  "description": "Chat dialect (api.openai.com): judgment schema verbatim under strict; DataPart from message.content; probabilities dropped (if_available)",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "judgments",
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "quality",
+              "style",
+              "ageing"
+            ],
+            "properties": {
+              "quality": {
+                "type": "integer",
+                "description": "How good is this wine, according to the note?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant - the note is mostly criticism"
+                  },
+                  {
+                    "const": 1,
+                    "title": "barely_ok",
+                    "description": "Barely acceptable - drinkable, nothing to recommend it"
+                  },
+                  {
+                    "const": 2,
+                    "title": "simple",
+                    "description": "Simple and sound - correct, plain, forgettable"
+                  },
+                  {
+                    "const": 3,
+                    "title": "everyday",
+                    "description": "Pleasant everyday wine - some appeal, little depth"
+                  },
+                  {
+                    "const": 4,
+                    "title": "good",
+                    "description": "Good - clear varietal character, well made"
+                  },
+                  {
+                    "const": 5,
+                    "title": "very_good",
+                    "description": "Very good - balanced, with something to say"
+                  },
+                  {
+                    "const": 6,
+                    "title": "excellent",
+                    "description": "Excellent - complex and structured"
+                  },
+                  {
+                    "const": 7,
+                    "title": "outstanding",
+                    "description": "Outstanding - depth and length, built to age"
+                  },
+                  {
+                    "const": 8,
+                    "title": "superb",
+                    "description": "Superb - among the best of its type"
+                  },
+                  {
+                    "const": 9,
+                    "title": "profound",
+                    "description": "Profound - the note treats it as exceptional"
+                  }
+                ]
+              },
+              "style": {
+                "type": "string",
+                "description": "What is the dominant style described?",
+                "anyOf": [
+                  {
+                    "const": "fruit",
+                    "description": "Fruit-forward"
+                  },
+                  {
+                    "const": "oak",
+                    "description": "Oak-driven"
+                  },
+                  {
+                    "const": "mineral",
+                    "description": "Mineral, savoury"
+                  },
+                  {
+                    "const": "other"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does the note say the wine will improve with age?"
+              }
+            }
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    },
+    "adaptations": [
+      {
+        "field": "config.probabilities",
+        "action": "dropped",
+        "asked": "if_available"
+      }
+    ]
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-17",
+    "evidence": "api.openai.com 2026-09-17T15:33:27.955547+00:00, gpt-5-mini, HTTP 200, request sha256 3571873082bc49e0; content '{\"quality\":7,\"style\":\"fruit\",\"ageing\":true}'; receipts/2026-09-17-judgments/openai-chat-judgment-schema.json; changes/2026-09-17-judgments.md D5",
+    "captured_by": "lm15-python reference adapter (build_request → live send)",
+    "exchange": "receipts/2026-09-17-judgments/exchange-2026-09-17T15-33-27Z-openai_chat.json"
+  },
+  "canonical_request": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 400,
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "quality",
+            "style",
+            "ageing"
+          ],
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is this wine, according to the note?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant - the note is mostly criticism"
+                },
+                {
+                  "const": 1,
+                  "title": "barely_ok",
+                  "description": "Barely acceptable - drinkable, nothing to recommend it"
+                },
+                {
+                  "const": 2,
+                  "title": "simple",
+                  "description": "Simple and sound - correct, plain, forgettable"
+                },
+                {
+                  "const": 3,
+                  "title": "everyday",
+                  "description": "Pleasant everyday wine - some appeal, little depth"
+                },
+                {
+                  "const": 4,
+                  "title": "good",
+                  "description": "Good - clear varietal character, well made"
+                },
+                {
+                  "const": 5,
+                  "title": "very_good",
+                  "description": "Very good - balanced, with something to say"
+                },
+                {
+                  "const": 6,
+                  "title": "excellent",
+                  "description": "Excellent - complex and structured"
+                },
+                {
+                  "const": 7,
+                  "title": "outstanding",
+                  "description": "Outstanding - depth and length, built to age"
+                },
+                {
+                  "const": 8,
+                  "title": "superb",
+                  "description": "Superb - among the best of its type"
+                },
+                {
+                  "const": 9,
+                  "title": "profound",
+                  "description": "Profound - the note treats it as exceptional"
+                }
+              ]
+            },
+            "style": {
+              "type": "string",
+              "description": "What is the dominant style described?",
+              "anyOf": [
+                {
+                  "const": "fruit",
+                  "description": "Fruit-forward"
+                },
+                {
+                  "const": "oak",
+                  "description": "Oak-driven"
+                },
+                {
+                  "const": "mineral",
+                  "description": "Mineral, savoury"
+                },
+                {
+                  "const": "other"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does the note say the wine will improve with age?"
+            }
+          }
+        }
+      },
+      "probabilities": "if_available"
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-17",
+    "evidence": "authored with the case; changes/2026-09-17-judgments.md"
+  },
+  "pinned_body": "2026-09-17T15-33-27Z.txt",
+  "ingest": {
+    "lossy": [
+      "adapted"
+    ],
+    "canonical_request": {
+      "model": "gpt-5-mini",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "max_tokens": 400,
+        "response_format": {
+          "type": "json_schema",
+          "name": "judgments",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "quality",
+              "style",
+              "ageing"
+            ],
+            "properties": {
+              "quality": {
+                "type": "integer",
+                "description": "How good is this wine, according to the note?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant - the note is mostly criticism"
+                  },
+                  {
+                    "const": 1,
+                    "title": "barely_ok",
+                    "description": "Barely acceptable - drinkable, nothing to recommend it"
+                  },
+                  {
+                    "const": 2,
+                    "title": "simple",
+                    "description": "Simple and sound - correct, plain, forgettable"
+                  },
+                  {
+                    "const": 3,
+                    "title": "everyday",
+                    "description": "Pleasant everyday wine - some appeal, little depth"
+                  },
+                  {
+                    "const": 4,
+                    "title": "good",
+                    "description": "Good - clear varietal character, well made"
+                  },
+                  {
+                    "const": 5,
+                    "title": "very_good",
+                    "description": "Very good - balanced, with something to say"
+                  },
+                  {
+                    "const": 6,
+                    "title": "excellent",
+                    "description": "Excellent - complex and structured"
+                  },
+                  {
+                    "const": 7,
+                    "title": "outstanding",
+                    "description": "Outstanding - depth and length, built to age"
+                  },
+                  {
+                    "const": 8,
+                    "title": "superb",
+                    "description": "Superb - among the best of its type"
+                  },
+                  {
+                    "const": 9,
+                    "title": "profound",
+                    "description": "Profound - the note treats it as exceptional"
+                  }
+                ]
+              },
+              "style": {
+                "type": "string",
+                "description": "What is the dominant style described?",
+                "anyOf": [
+                  {
+                    "const": "fruit",
+                    "description": "Fruit-forward"
+                  },
+                  {
+                    "const": "oak",
+                    "description": "Oak-driven"
+                  },
+                  {
+                    "const": "mineral",
+                    "description": "Mineral, savoury"
+                  },
+                  {
+                    "const": "other"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does the note say the wine will improve with age?"
+              }
+            }
+          }
+        }
+      }
+    },
+    "note": "config.probabilities is dropped on this wire (MAP-14 §3); the wire read back carries no trace of it"
+  }
+}

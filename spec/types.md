@@ -40,6 +40,7 @@ emitted even when empty:
 - `ThinkingPart.text` — same: `{"type": "thinking", "text": ""}`.
 - `RefusalPart.text` — always emitted (and non-empty by INV-016 anyway).
 - `ToolCallPart.input` — always emitted, `{}` when empty (opaque payload).
+- `DataPart.value` — always emitted, whatever the JSON value (opaque payload; `null` is a value).
 - `FunctionTool.parameters` — always emitted; an explicit `{}` round-trips
   verbatim as `{}` (opaque JSON-Schema payload — INV-033).
 - `ToolResultPart.id` and `ToolResultPart.content` — always emitted;
@@ -230,6 +231,26 @@ Where a wire requires the function name on the result (Gemini),
 `name` is resolved from the matching `ToolCallPart` in the transcript
 when the caller gave none; never defaulted to `"tool"` (MAP-10.6).
 Presets measured 2026-09-07: `research/tool-result-content/30-model.md`.
+
+### DataPart
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `type` | string `"data"` | — | `"data"` | always | discriminator |
+| `value` | any JSON value (opaque) | yes | — | always (even `null`, `""`, `{}`) | strict JSON, verbatim (INV-002); the part's shape |
+| `probabilities` | object `{field: {key: float}}` | no | `null` | omit-empty | assistant messages only (INV-052); inner keys are declared answer keys as strings; each inner map sums to 1 within the provider's rounding; floats in `[0, 1]` |
+| `method` | string (JudgmentMethod) | no | `null` | omit-empty | assistant messages only (INV-052); present iff `probabilities` is |
+| `continuation` | array | no | `[]` | omit-empty | INV-005 |
+
+Factory: `data(value, *, probabilities=None, method=None, continuation=None)`.
+
+Non-streamable. Added 2026-09-17 (changes/2026-09-17-judgments.md, D2). In
+a `user`/`system` message it is structured input: a JSON object the
+provider reads as such (TypeSafe's state) or as JSON text on wires that
+take only text. In an `assistant` message it is the answer to a
+`json_schema` request whose schema declares at least one judgment
+(MAP-14); a `json_schema` request without judgments still answers with a
+`TextPart`, unchanged.
 
 ## Messages
 
@@ -561,6 +582,7 @@ has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md
 | `user_id` | string | no | `null` | omit-empty | non-empty; opaque end-user identifier for abuse attribution — OpenAI `safety_identifier`, openai_chat dialect `user`, Anthropic `metadata.user_id`; Gemini has no field and DROPS it with a record (MAP-13, 2026-09-14; was a raise) |
 | `store` | bool | no | `null` | omit-empty EXCEPT `false` (false is the opt-out, data not emptiness) | provider-side response storage opt-in/out — OpenAI and Gemini `store` verbatim; Anthropic has no stored-response object: `false` is SATISFIED by construction and `true` is DROPPED, both recorded (MAP-13, 2026-09-14; was a raise) |
 | `logprobs` | int | no | `null` | omit-empty EXCEPT `0` (0 is data: chosen tokens only) | `>= 0`; float-coerced; `null` = do not request, `0` = chosen-token logprobs only, `n > 0` = also top-n alternatives per position. OpenAI Responses → `top_logprobs` + `include: ["message.output_text.logprobs"]`; openai_chat dialect → `logprobs: true` (+ `top_logprobs` when `n > 0`); Gemini → `responseLogprobs` (+ `logprobs` when `n > 0`, doc-based — every currently served model rejects it live); Anthropic and xAI (grok-4.20+ silently ignore the field — docs.x.ai, live 2026-09-01) have no logprobs and DROP the request with a record; `Response.logprobs` is then absent (MAP-13, 2026-09-14; was a raise). Provider caps (currently 0–20) are provider-owned, not encoded |
+| `probabilities` | string (ProbabilityPolicy) | no | `null` | omit-empty | `null` = off. `off`: spend nothing extra; `if_available`: a wire that cannot measure a distribution over declared keys records `dropped`; `required`: such a wire refuses before sending (`UnsupportedFeatureError`, `feature="config.probabilities"`). Only meaningful with a `json_schema` `response_format` that declares judgments (MAP-14). Added 2026-09-17 |
 | `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; `{}` normalized to `null` (INV-004) |
 
 An all-default `Config` serializes to `{}` and is omitted from the enclosing
