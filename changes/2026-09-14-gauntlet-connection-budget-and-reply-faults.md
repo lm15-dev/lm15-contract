@@ -1,10 +1,33 @@
 # 2026-09-14 — What the DSPy gauntlet found: what is fixed, what needs a decision
 
-Ratification: PARTIAL — A1's shared timeout defaults, connection cap, and
-explicit-caller-setting precedence were ratified by Maxime Rivest on 2026-09-15
-in session (“I'm seeing the two items that you're mentioning. Yeah, this is
-fine.”). See spec/vocabularies.md § Connection budget. This assent does not
-ratify the remaining proposals in this document.
+Ratification: RATIFIED — in two steps. A1's shared timeout defaults,
+connection cap, and explicit-caller-setting precedence were ratified by
+Maxime Rivest on 2026-09-15 in session (“I'm seeing the two items that
+you're mentioning. Yeah, this is fine.”); see spec/vocabularies.md
+§ Connection budget. The remainder — A2, A3, A4 as contract rules for
+every port, and B3–B7 as recommended in each cell — was ratified by Maxime
+Rivest on 2026-09-18 in session (“I ratify all three questions. The gzip
+thing, non-JSON, lone surrogate … I ratify the leftover list”). B1 is
+superseded by `changes/2026-09-14-adapt-visibly.md` (seed → dropped,
+penalties promoted, `top_k` canonical); B2 is a Python/DSPy ergonomics
+question and is not a contract rule. The rules live in
+spec/invariants.md § Reply faults (INV-053..055) and the retryable set in
+spec/vocabularies.md; B4 and B5 become rules only once each provider's
+receipt exists (a pattern without a receipt is a hypothesis, § 5 of the
+adapt-visibly entry).
+
+Resolved on 2026-09-18:
+
+| Item | Decision |
+|---|---|
+| A2 | Rule. A port decodes `gzip`/`x-gzip`/`deflate` with its standard library; `br`/`zstd` and any other coding raise a transport `ProtocolError` naming the coding. Encoded bytes never reach a parser. Requests keep sending `Accept-Encoding: identity`. |
+| A3 | Rule. A `200` whose body is not JSON is `ProviderError` (code `provider`, with status, content-type, the first 200 bytes, request id). Never `ServerError` (bound to 5xx). |
+| A4 | Rule. Text holding an unpaired U+D800..U+DFFF is refused before the wire as a local input error (`ValueError` in Python; each port's input-error type), naming the code point. |
+| B3 | Not retryable. The caller cannot know the request was not served and billed. |
+| B4 | Yes: one `UnsupportedModelError` across providers, by a body-pattern rule per provider in `docs/mapping-rules.md`, each cell added with its receipt. Anthropic first (`invalid_request_error`, message starting `model:`). Until the receipt is on file the current mapping stands. |
+| B5 | Yes: `ContextLengthError` for LM Studio, Ollama and vLLM wordings, per preset, each with its receipt. Until then `InvalidRequestError` stands. |
+| B6 | (a): no transport fields on `Request`/`Config`. A caller with one long call builds a second router. Revisit only on a real consumer's ask. |
+| B7 | The honest minimum: detect `gevent.monkey` patching and raise `ConfigurationError` pointing at the sync path. Not promised for 1.0. Python-only. |
 
 Originally drafted in session from a reading of
 `cmpnd-ai/breaka-your-lm` (Drew Breunig, 2026-09-13; DSPy 3.4.0b1 with

@@ -207,6 +207,8 @@ adds `model`; `AmbiguousModelError` adds `model` and `providers`;
 no router-wide code or class: a code names a failure the caller can act
 on, not the component that raised it (2026-09-08). Retryable set: RateLimitError, TimeoutError,
 ServerError, TransportError, LockTimeoutError. HTTP mapping: unmatched status → `ProviderError`.
+A `2xx` with a non-JSON body is `ProviderError` and stays outside the
+retryable set (INV-054, ratified 2026-09-18).
 Code mapping is most-specific-class-first; unknown code →
 `ProviderError`.
 

@@ -300,6 +300,29 @@ rationale is the designed reason, ratified, not a guess.
   measurement as if the next model had made it
   (changes/2026-09-17-judgments.md D2).
 
+## Reply faults
+
+Ratified 2026-09-18; see
+changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
+
+- **INV-053 — Encoded bytes never reach a parser.** A reply that arrives
+  `Content-Encoding: gzip`, `x-gzip` or `deflate` is inflated (incrementally
+  on a stream) before any decoding; `br`, `zstd` or any other coding raises
+  a transport `ProtocolError` naming the coding. Requests keep advertising
+  `Accept-Encoding: identity` (a compressed SSE body buffers in proxies).
+  WHY: a gzip 200 once surfaced as `'utf-8' codec can't decode byte 0x8b`.
+- **INV-054 — A non-JSON success is a provider fault, not retryable.** A
+  `2xx` whose body does not parse as JSON is `ProviderError` (code
+  `provider`) carrying the status, content-type, the first 200 bytes and
+  the request id. Never `ServerError` (bound to 5xx: inventing a 5xx from a
+  200 invents a fact) and never retried by lm15 (the request may have been
+  served and billed).
+- **INV-055 — An unpaired surrogate is refused before the wire.** Text
+  holding a lone U+D800..U+DFFF has no UTF-8 form; the port's JSON encoder
+  raises its local input-error type (Python `ValueError`) naming the code
+  point. It is an input error like `Request(model="")`, never a transport
+  or provider error.
+
 ## Blessed provider-only extension knobs
 
 - **INV-049 — Blessed provider-only extension knobs.** Some
@@ -379,3 +402,5 @@ changes/2026-06-11-inv049-blessed-extensions.md.
 Amended 2026-09-06 (INV-045 loses `redacted`, D5; INV-051 stream/complete
 parity added, D8) — ratified in session ("perfect, implement it all!");
 see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.
+Amended 2026-09-18 (INV-053..055 reply faults) — ratified in session; see
+changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
