@@ -229,7 +229,15 @@ expert defaults over further questions; each may change with a
 - `openai-codex` and `xai` are first-class upstreams (D11).
 - Default port `4315`; URL shape `/t/<tag>/<provider>/<provider path>`;
   untagged `/<provider>/<provider path>` accepted.
-- The binary lives at `lm15-go/cmd/lm15-gateway` until it needs
-  dependencies the SDK module should not carry (the scanner's
-  `gopsutil` is the first candidate); at that point it moves to its own
-  repository depending on `lm15-go`.
+- The binary lives in its own repository, `lm15-gateway` (module
+  `github.com/lm15-dev/lm15-gateway`), depending on `lm15-go` as a
+  tagged dependency; a local `go.work` joins the two checkouts during
+  development. Not in `lm15-go/cmd/`: `lm15-go` has zero dependencies
+  (checked 2026-09-19: `go.mod` lists none) and a frozen, contract-pinned
+  surface, while the gateway needs `gopsutil` from stage 1 and will
+  version weekly at 0.x. In Go one module is one version and one
+  dependency set, so sharing the module would hand every SDK importer
+  the gateway's dependencies and tie two release cadences together.
+  Corrected in session from an earlier "until it needs dependencies"
+  default, on Maxime's question ("I'm not convinced that lm15-go should
+  mix the gateway and the SDK").
