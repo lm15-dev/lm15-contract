@@ -245,9 +245,12 @@ Presets measured 2026-09-07: `research/tool-result-content/30-model.md`.
 Factory: `data(value, *, probabilities=None, method=None, continuation=None)`.
 
 Non-streamable. Added 2026-09-17 (changes/2026-09-17-judgments.md, D2). In
-a `user`/`system` message it is structured input: a JSON object the
-provider reads as such (TypeSafe's state) or as JSON text on wires that
-take only text. In an `assistant` message it is the answer to a
+a `user`/`system` message it is structured input: a JSON value the
+provider reads as such (TypeSafe's `state`, verbatim — 2026-09-19 D1) or,
+on a wire that takes only text, its compact canonical JSON in a text slot
+(Responses `input_text`, Chat `text`, Anthropic `text`, Gemini `text`;
+2026-09-19 D3, receipted `cases/*/data_part_text.json`). Nothing is added
+around it. In an `assistant` message it is the answer to a
 `json_schema` request whose schema declares at least one judgment
 (MAP-14); a `json_schema` request without judgments still answers with a
 `TextPart`, unchanged.

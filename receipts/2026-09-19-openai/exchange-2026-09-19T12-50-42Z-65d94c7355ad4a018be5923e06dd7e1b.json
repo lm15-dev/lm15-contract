@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-09-19T12-50-42Z",
+  "provider": "openai",
+  "status": 200,
+  "model": "gpt-5-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "{\"note\":\"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\",\"price_eur\":48}"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "text": {
+        "format": {
+          "type": "json_schema",
+          "name": "judgments",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "type": "integer",
+                "description": "How good is the wine in `note`?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant"
+                  },
+                  {
+                    "const": 1,
+                    "title": "simple",
+                    "description": "Simple and sound"
+                  },
+                  {
+                    "const": 2,
+                    "title": "good",
+                    "description": "Good, well made"
+                  },
+                  {
+                    "const": 3,
+                    "title": "excellent",
+                    "description": "Excellent, complex and structured"
+                  },
+                  {
+                    "const": 4,
+                    "title": "profound",
+                    "description": "Profound, exceptional"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does `note` say the wine will improve with age?"
+              }
+            },
+            "required": [
+              "quality",
+              "ageing"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "request_sha256": "52322230b396ae00e097a0d4637b502978f240ebaf3d5ef46dd8811ba9900c80",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e041d98a70a4bcc70741823de030e3baa5e69680fd1047c5f35deac3194e9d06",
+  "response_bytes": 6315,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,183 @@
+{
+  "id": "openai.data_part_text",
+  "provider": "openai",
+  "feature": "data_part_text",
+  "description": "A user data part reaches this wire as its compact JSON in a input_text slot (D3), and the model answers the declared judgments about the object's keys; probabilities are recorded dropped where the wire measures none",
+  "base_url": "https://api.openai.com/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-5-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "{\"note\":\"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\",\"price_eur\":48}"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "text": {
+        "format": {
+          "type": "json_schema",
+          "name": "judgments",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "type": "integer",
+                "description": "How good is the wine in `note`?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant"
+                  },
+                  {
+                    "const": 1,
+                    "title": "simple",
+                    "description": "Simple and sound"
+                  },
+                  {
+                    "const": 2,
+                    "title": "good",
+                    "description": "Good, well made"
+                  },
+                  {
+                    "const": 3,
+                    "title": "excellent",
+                    "description": "Excellent, complex and structured"
+                  },
+                  {
+                    "const": 4,
+                    "title": "profound",
+                    "description": "Profound, exceptional"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does `note` say the wine will improve with age?"
+              }
+            },
+            "required": [
+              "quality",
+              "ageing"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-19",
+    "evidence": "api.openai.com 2026-09-19T12-50-42Z, gpt-5-mini, HTTP 200; changes/2026-09-19-jev-state.md D3; types.md §DataPart ('JSON text on wires that take only text'); adapter-built wire (OpenAILM, compat+access 'openai'); verbatim body at bodies/openai.data_part_text/2026-09-19T12-50-42Z.txt; changes/2026-09-19-jev-state.md",
+    "exchange": "receipts/2026-09-19-openai/exchange-2026-09-19T12-50-42Z-65d94c7355ad4a018be5923e06dd7e1b.json"
+  },
+  "canonical_request": {
+    "model": "gpt-5-mini",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "data",
+            "value": {
+              "note": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+              "price_eur": 48
+            }
+          }
+        ]
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is the wine in `note`?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant"
+                },
+                {
+                  "const": 1,
+                  "title": "simple",
+                  "description": "Simple and sound"
+                },
+                {
+                  "const": 2,
+                  "title": "good",
+                  "description": "Good, well made"
+                },
+                {
+                  "const": 3,
+                  "title": "excellent",
+                  "description": "Excellent, complex and structured"
+                },
+                {
+                  "const": 4,
+                  "title": "profound",
+                  "description": "Profound, exceptional"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does `note` say the wine will improve with age?"
+            }
+          },
+          "required": [
+            "quality",
+            "ageing"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "probabilities": "if_available"
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-19",
+    "evidence": "authored with the case (research/providers/openai/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-19T12-50-42Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "adaptations": [
+      {
+        "field": "config.probabilities",
+        "action": "dropped",
+        "asked": "if_available"
+      }
+    ]
+  }
+}

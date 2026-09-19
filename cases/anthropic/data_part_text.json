@@ -1,0 +1,192 @@
+{
+  "id": "anthropic.data_part_text",
+  "provider": "anthropic",
+  "feature": "data_part_text",
+  "description": "A user data part reaches this wire as its compact JSON in a text slot (D3), and the model answers the declared judgments about the object's keys; probabilities are recorded dropped where the wire measures none",
+  "base_url": "https://api.anthropic.com/v1",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"note\":\"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\",\"price_eur\":48}"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16384,
+      "output_config": {
+        "format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "description": "How good is the wine in `note`?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 1,
+                    "title": "simple",
+                    "description": "Simple and sound",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 2,
+                    "title": "good",
+                    "description": "Good, well made",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 3,
+                    "title": "excellent",
+                    "description": "Excellent, complex and structured",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 4,
+                    "title": "profound",
+                    "description": "Profound, exceptional",
+                    "type": "integer"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does `note` say the wine will improve with age?"
+              }
+            },
+            "required": [
+              "quality",
+              "ageing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-19",
+    "evidence": "api.anthropic.com 2026-09-19T12-50-50Z, claude-haiku-4-5, HTTP 200; changes/2026-09-19-jev-state.md D3; types.md §DataPart ('JSON text on wires that take only text'); adapter-built wire (AnthropicLM, compat+access 'anthropic'); verbatim body at bodies/anthropic.data_part_text/2026-09-19T12-50-50Z.txt; changes/2026-09-19-jev-state.md",
+    "exchange": "receipts/2026-09-19-anthropic/exchange-2026-09-19T12-50-50Z-e4de055a0d6749318206120b54fd6f85.json"
+  },
+  "canonical_request": {
+    "model": "claude-haiku-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "data",
+            "value": {
+              "note": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+              "price_eur": 48
+            }
+          }
+        ]
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is the wine in `note`?",
+              "anyOf": [
+                {
+                  "const": 0,
+                  "title": "faulty",
+                  "description": "Faulty or unpleasant"
+                },
+                {
+                  "const": 1,
+                  "title": "simple",
+                  "description": "Simple and sound"
+                },
+                {
+                  "const": 2,
+                  "title": "good",
+                  "description": "Good, well made"
+                },
+                {
+                  "const": 3,
+                  "title": "excellent",
+                  "description": "Excellent, complex and structured"
+                },
+                {
+                  "const": 4,
+                  "title": "profound",
+                  "description": "Profound, exceptional"
+                }
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does `note` say the wine will improve with age?"
+            }
+          },
+          "required": [
+            "quality",
+            "ageing"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "probabilities": "if_available"
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-19",
+    "evidence": "authored with the case (research/providers/anthropic/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-19T12-50-50Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "adaptations": [
+      {
+        "field": "config.max_tokens",
+        "action": "defaulted",
+        "applied": 16384
+      },
+      {
+        "field": "config.probabilities",
+        "action": "dropped",
+        "asked": "if_available"
+      }
+    ]
+  }
+}

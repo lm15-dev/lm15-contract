@@ -171,7 +171,8 @@ class Capture:
         hashed = {"method": treq.method, "url": treq.url, "headers": list(treq.headers),
                   "body_b64": base64.b64encode(treq.body or b"").decode("ascii")}
         sent = self.wire_block(treq)
-        self.write_receipt(f"exchange-{ts}-{uuid.uuid4().hex}.json", {
+        self.last_exchange = f"exchange-{ts}-{uuid.uuid4().hex}.json"
+        self.write_receipt(self.last_exchange, {
             "timestamp": ts, "provider": self.provider, "status": status,
             "model": sent["body"].get("model") if isinstance(sent["body"], dict) else None,
             "sent": sent,
@@ -259,6 +260,8 @@ class Capture:
                 "evidence": f"{self.host} {ts}, {request.model}, HTTP {status}; {evidence_note}; adapter-built wire "
                             f"({type(adapter).__name__}, compat+access '{self.provider}'); verbatim body at bodies/{self.provider}.{feature}/{body_name}; "
                             f"{self.change_entry}",
+                # tools/check_provenance.py requires the exchange receipt of every live capture (D11, from 2026-09-06).
+                "exchange": str(self.receipts.relative_to(CONTRACT) / self.last_exchange),
             },
             "canonical_request": serde.request_to_dict(request),
             "canonical_request_provenance": {
@@ -414,6 +417,8 @@ class Capture:
                 "evidence": f"{self.host} {ts}, {request.model}, HTTP {status}; {evidence_note}; adapter-built wire "
                             f"({type(adapter).__name__}, compat+access '{self.provider}'); verbatim body at bodies/{self.provider}.{feature}/{body_name}; "
                             f"{self.change_entry}",
+                # tools/check_provenance.py requires the exchange receipt of every live capture (D11, from 2026-09-06).
+                "exchange": str(self.receipts.relative_to(CONTRACT) / self.last_exchange),
             },
             "generation_request": serde.image_generation_request_to_dict(request),
             "request": wire,

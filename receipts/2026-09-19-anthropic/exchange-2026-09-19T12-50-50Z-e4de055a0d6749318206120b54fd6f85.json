@@ -1,0 +1,91 @@
+{
+  "timestamp": "2026-09-19T12-50-50Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"note\":\"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\",\"price_eur\":48}"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16384,
+      "output_config": {
+        "format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "quality": {
+                "description": "How good is the wine in `note`?",
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "title": "faulty",
+                    "description": "Faulty or unpleasant",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 1,
+                    "title": "simple",
+                    "description": "Simple and sound",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 2,
+                    "title": "good",
+                    "description": "Good, well made",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 3,
+                    "title": "excellent",
+                    "description": "Excellent, complex and structured",
+                    "type": "integer"
+                  },
+                  {
+                    "const": 4,
+                    "title": "profound",
+                    "description": "Profound, exceptional",
+                    "type": "integer"
+                  }
+                ]
+              },
+              "ageing": {
+                "type": "boolean",
+                "description": "Does `note` say the wine will improve with age?"
+              }
+            },
+            "required": [
+              "quality",
+              "ageing"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "request_sha256": "045d6de9e4868c89d0c5af8e3d3c4b020ca81509bc680a190c0c28bad803398a",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5cfe5ae42b39f7c074dc8fa3128e5dfb6dbf31433550d4d5cbfb650f71315652",
+  "response_bytes": 506,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

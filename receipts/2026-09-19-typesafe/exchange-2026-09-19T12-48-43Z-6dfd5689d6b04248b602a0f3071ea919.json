@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-09-19T12-48-43Z",
+  "provider": "typesafe",
+  "status": 200,
+  "model": "jev-latest",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": [
+        "Hi",
+        "My customer number is TS1337.",
+        "My card was charged twice for order A-104."
+      ],
+      "questions": {
+        "refund_requested": {
+          "type": "noul",
+          "instructions": "Does the customer ask for a refund?"
+        },
+        "department": {
+          "type": "choice",
+          "instructions": "Which team should handle this?",
+          "criteria": {
+            "billing": "Payment or subscription issues",
+            "technical": "Bugs or integration problems",
+            "sales": "Pricing or account questions"
+          }
+        }
+      }
+    }
+  },
+  "request_sha256": "2549faf8271a708f57dacbf7dbcc163567e82e61ebe2bd440073747b2c2957b3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9443e3a52fb979ee41e09a8728b52ccfd9f94d066f5c1b52d23c859852cd3e4f",
+  "response_bytes": 256,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -683,6 +683,9 @@ caller.
    - `leading_developer_as_system` — the builder writes `Request.system`
      and a leading developer Message to the same instruction row; it
      reads back as `Request.system`.
+   - `data_part_as_text` — a user DataPart goes out as its compact JSON
+     in a text slot (changes/2026-09-19-jev-state.md D3); the wire has no
+     data marker, so it reads back as a TextPart holding that JSON.
    21 of the 118 cases carry a declaration (17 one class, 4 two — the xai
    tool-result cases). Adding a class is an additive change to this rule
    and to the registry's `lossy` table; `tools/audit.py` fails a
@@ -839,8 +842,12 @@ optionally a probability per key. The request is an ordinary
    (`criteria` = key → description or null), ordered → `score`
    (`criteria` = the descriptions in order; `title` is not sent); the
    property description is `instructions` (a missing one is `defaulted`
-   to the property name); every question in one call over the state of
-   D6. openai (both dialects): the schema goes verbatim (receipted:
+   to the property name); every question in one call over the state,
+   which is the one user part verbatim — a text's string or a data
+   part's value (object, array, scalar); a `system`, a second message
+   or a second part is refused with the native place named
+   (changes/2026-09-19-jev-state.md D1/D2; the 09-17 `{system,
+   messages}` wrapper is withdrawn). openai (both dialects): the schema goes verbatim (receipted:
    `strict` honours `anyOf`/`const`/`title`). anthropic: a judgment
    property carrying both `type` and `anyOf` has its `type` moved into
    every branch (the wire 400s on the combination; receipted). gemini: a

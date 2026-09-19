@@ -376,6 +376,7 @@
     "thinking_as_text": "compat.thinking_replay == 'as_text' folds a ThinkingPart into the assistant text (MAP-7 rule 8, decision G); the wire carries no thinking field, and lm15 never parses delimiters out of text (MAP-7 rule 12), so it reads back as a TextPart",
     "tool_result_name_omitted": "compat.tool_result_name == 'omit' drops ToolResultPart.name from the tool row; the wire has no other slot for it",
     "leading_developer_as_system": "the builder writes Request.system and a leading developer Message to the same instruction row; ingest reads that row as Request.system",
-    "adapted": "MAP-13 (2026-09-14): the build adapted the request (expect_lm15.adaptations pins what) — a dropped hint, a clamped dial, an allowlist applied by sending only those tools — so the wire carries the request AFTER the adaptation; reading it back gives that request, not the canonical one"
+    "adapted": "MAP-13 (2026-09-14): the build adapted the request (expect_lm15.adaptations pins what) — a dropped hint, a clamped dial, an allowlist applied by sending only those tools — so the wire carries the request AFTER the adaptation; reading it back gives that request, not the canonical one",
+    "data_part_as_text": "2026-09-19 D3 (changes/2026-09-19-jev-state.md): a user DataPart goes out as its compact JSON in a text slot; the wire has no data marker, so it reads back as a TextPart holding that JSON"
   }
 }

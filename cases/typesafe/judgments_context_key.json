@@ -1,8 +1,8 @@
 {
-  "id": "typesafe.judgments",
+  "id": "typesafe.judgments_context_key",
   "provider": "typesafe",
-  "feature": "judgments",
-  "description": "Three judgments (10-level ordered, choice with descriptions, yes/no) from one json_schema request → one systemone call; string state from the single user text part (D6); answers → DataPart with probabilities, method provider_classification",
+  "feature": "judgments_context_key",
+  "description": "A user data object is the state verbatim (D1): the caller's context rides as a named key beside the content, and questions point at keys with backtick paths — Jev's own idiom for what a system prompt would carry",
   "base_url": "https://api.typesafe.ai",
   "request": {
     "method": "POST",
@@ -14,11 +14,15 @@
     },
     "body": {
       "model": "jev-latest",
-      "state": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+      "state": {
+        "instructions": "These are tasting notes written by a sommelier. Judge the wine described, not the writing.",
+        "note": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+        "price_eur": 48
+      },
       "questions": {
         "quality": {
           "type": "score",
-          "instructions": "How good is this wine, according to the note?",
+          "instructions": "How good is the wine in `note`, for its `price_eur`, read as `instructions` says?",
           "criteria": [
             "Faulty or unpleasant - the note is mostly criticism",
             "Barely acceptable - drinkable, nothing to recommend it",
@@ -32,19 +36,9 @@
             "Profound - the note treats it as exceptional"
           ]
         },
-        "style": {
-          "type": "choice",
-          "instructions": "What is the dominant style described?",
-          "criteria": {
-            "fruit": "Fruit-forward",
-            "oak": "Oak-driven",
-            "mineral": "Mineral, savoury",
-            "other": null
-          }
-        },
         "ageing": {
           "type": "noul",
-          "instructions": "Does the note say the wine will improve with age?"
+          "instructions": "Does `note` say the wine will improve with age?"
         }
       }
     }
@@ -55,8 +49,8 @@
   "provenance": {
     "source": "live-capture",
     "date": "2026-09-19",
-    "evidence": "api.typesafe.ai 2026-09-19T12-48-39Z, jev-latest, HTTP 200; MAP-14 §2 mapping (boolean→noul, string→choice, ordered→score); changes/2026-09-17-judgments.md D5/D6; adapter-built wire (TypeSafeLM, compat+access 'typesafe'); verbatim body at bodies/typesafe.judgments/2026-09-19T12-48-39Z.txt; changes/2026-09-19-judgments.md",
-    "exchange": "receipts/2026-09-19-typesafe/exchange-2026-09-19T12-48-39Z-f72e8abbacc14f9686ea7e66bd04099c.json"
+    "evidence": "api.typesafe.ai 2026-09-19T12-48-42Z, jev-latest, HTTP 200; changes/2026-09-19-jev-state.md D1/D2; docs.typesafe.ai/primitives 'Reference specific fields'; adapter-built wire (TypeSafeLM, compat+access 'typesafe'); verbatim body at bodies/typesafe.judgments_context_key/2026-09-19T12-48-42Z.txt; changes/2026-09-19-judgments.md",
+    "exchange": "receipts/2026-09-19-typesafe/exchange-2026-09-19T12-48-42Z-974f1670ded14488af2a65978b4e98fc.json"
   },
   "canonical_request": {
     "model": "jev-latest",
@@ -65,8 +59,12 @@
         "role": "user",
         "parts": [
           {
-            "type": "text",
-            "text": "Tasting note:\nRipe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar."
+            "type": "data",
+            "value": {
+              "instructions": "These are tasting notes written by a sommelier. Judge the wine described, not the writing.",
+              "note": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+              "price_eur": 48
+            }
           }
         ]
       }
@@ -81,7 +79,7 @@
           "properties": {
             "quality": {
               "type": "integer",
-              "description": "How good is this wine, according to the note?",
+              "description": "How good is the wine in `note`, for its `price_eur`, read as `instructions` says?",
               "anyOf": [
                 {
                   "const": 0,
@@ -135,35 +133,13 @@
                 }
               ]
             },
-            "style": {
-              "type": "string",
-              "description": "What is the dominant style described?",
-              "anyOf": [
-                {
-                  "const": "fruit",
-                  "description": "Fruit-forward"
-                },
-                {
-                  "const": "oak",
-                  "description": "Oak-driven"
-                },
-                {
-                  "const": "mineral",
-                  "description": "Mineral, savoury"
-                },
-                {
-                  "const": "other"
-                }
-              ]
-            },
             "ageing": {
               "type": "boolean",
-              "description": "Does the note say the wine will improve with age?"
+              "description": "Does `note` say the wine will improve with age?"
             }
           },
           "required": [
             "quality",
-            "style",
             "ageing"
           ],
           "additionalProperties": false
@@ -177,7 +153,7 @@
     "date": "2026-09-19",
     "evidence": "authored with the case (research/providers/typesafe/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
   },
-  "pinned_body": "2026-09-19T12-48-39Z.txt",
+  "pinned_body": "2026-09-19T12-48-42Z.txt",
   "expect_lm15": {
     "parts": {
       "data": {

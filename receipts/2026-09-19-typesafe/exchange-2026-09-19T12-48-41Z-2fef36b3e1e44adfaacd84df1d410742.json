@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-19T12-48-41Z",
+  "provider": "typesafe",
+  "status": 200,
+  "model": "jev-latest",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": {
+        "tasting_note": "Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.",
+        "producer": "unknown"
+      },
+      "questions": {
+        "ageing": {
+          "type": "noul",
+          "instructions": "Does `tasting_note` say the wine will improve with age?"
+        }
+      }
+    }
+  },
+  "request_sha256": "54632ac83c3c002ab69836ffdfd18809d4d2012c46a1c97881a9b58cf290e145",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "6d2419f62caef89e9f2afd13c687c94a9d22531ad819d9cd35c29370f9f7bcc5",
+  "response_bytes": 119,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

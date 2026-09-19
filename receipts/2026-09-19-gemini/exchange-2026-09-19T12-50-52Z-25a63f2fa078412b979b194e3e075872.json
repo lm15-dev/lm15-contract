@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-09-19T12-50-52Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "{\"note\":\"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\",\"price_eur\":48}"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "responseMimeType": "application/json",
+        "responseJsonSchema": {
+          "type": "object",
+          "properties": {
+            "quality": {
+              "type": "integer",
+              "description": "How good is the wine in `note`? Levels: 0 = faulty: Faulty or unpleasant; 1 = simple: Simple and sound; 2 = good: Good, well made; 3 = excellent: Excellent, complex and structured; 4 = profound: Profound, exceptional",
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "ageing": {
+              "type": "boolean",
+              "description": "Does `note` say the wine will improve with age?"
+            }
+          },
+          "required": [
+            "quality",
+            "ageing"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "request_sha256": "c33faa450d485f4030ec48dd0658a13dfd258551a02a2cf354610523717fd8be",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9e6de206bfff7bb43f0a284c48e22e269d47a07f56225731477bfd5e98af8561",
+  "response_bytes": 606,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

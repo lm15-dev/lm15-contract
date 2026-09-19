@@ -1575,7 +1575,9 @@ def load_surface_cases(surface: str) -> list[JsonObject]:
 
 INGEST_LOSSY_CLASSES = frozenset({"thinking_as_text", "tool_result_name_omitted", "leading_developer_as_system",
                                   # MAP-13: the wire carries the request AFTER a recorded adaptation
-                                  "adapted"})
+                                  "adapted",
+                                  # 2026-09-19 D3: a user data part went out as JSON text; it reads back as a text part
+                                  "data_part_as_text"})
 
 
 def ingest_expectation(case: JsonObject) -> tuple[str, Any]:

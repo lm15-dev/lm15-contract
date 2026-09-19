@@ -6,10 +6,11 @@ Machinery: ``research/providers/_capture.py``.  Receipts: ``receipts/<date>-type
     TYPESAFE_API_KEY=… python3 research/providers/typesafe/capture.py [--dry-run] [--only a,b] [--force]
 
 Model default ``jev-latest`` (resolves to jev-1.13.0, 2026-09-17).  The
-cases are the three D6 state shapes over the MAP-14 judgment convention
-(changes/2026-09-17-judgments.md); the error probes are the documented
-envelopes (401 authentication_error, 400 api_usage_error unknown model,
-422 pydantic detail list).
+cases are the state shapes of changes/2026-09-19-jev-state.md D1 — a
+string, an object (with a named context key and backtick paths), an
+array — over the MAP-14 judgment convention (changes/2026-09-17-judgments.md);
+the error probes are the documented envelopes (401 authentication_error,
+400 api_usage_error unknown model, 422 pydantic detail list).
 """
 from __future__ import annotations
 
@@ -72,25 +73,35 @@ def cases(model: str, force: bool, want) -> list[dict]:
             expect_lm15=DATA_OK,
             evidence_note="changes/2026-09-17-judgments.md D2/D6",
             force=force))
-    if want("conversation_state"):
+    if want("judgments_context_key"):
+        # What a system prompt becomes on Jev (2026-09-19 D2): a named key of the state, written by the caller.
         rows.append(cap.write_case(
-            "conversation_state",
-            Request(model=model, system="You triage support tickets.",
-                    messages=(Message.user("I was charged twice for order A-104."),
-                              Message.assistant("I am checking the charges."),
-                              Message.user("Please refund the duplicate today.")),
-                    config=Config(response_format={"type": "json_schema", "name": "triage", "schema": {
-                        "type": "object",
-                        "properties": {"refund_requested": {"type": "boolean"},
-                                       "department": {"type": "string", "description": "Which team should handle this?",
-                                                      "enum": ["billing", "technical", "sales"]}},
-                        "required": ["refund_requested", "department"], "additionalProperties": False}})),
+            "judgments_context_key",
+            Request(model=model, messages=(Message.user(data({
+                "instructions": "These are tasting notes written by a sommelier. Judge the wine described, not the writing.",
+                "note": NOTE, "price_eur": 48})),),
+                    config=Config(response_format=judgments(
+                        quality=score("How good is the wine in `note`, for its `price_eur`, read as `instructions` says?", LEVELS),
+                        ageing=yes_no("Does `note` say the wine will improve with age?")),
+                        probabilities="if_available")),
             stream=False,
-            description="System prompt plus two messages → the D6 state object {system, messages:[{role, content}]}; "
-                        "a missing question description is defaulted to the property name (recorded)",
-            expect_lm15={**DATA_OK, "adaptations": [{"field": "config.response_format.schema.properties.refund_requested.description",
-                                                     "action": "defaulted", "applied": "refund_requested"}]},
-            evidence_note="changes/2026-09-17-judgments.md D6/D8",
+            description="A user data object is the state verbatim (D1): the caller's context rides as a named key beside the content, "
+                        "and questions point at keys with backtick paths — Jev's own idiom for what a system prompt would carry",
+            expect_lm15=DATA_OK,
+            evidence_note="changes/2026-09-19-jev-state.md D1/D2; docs.typesafe.ai/primitives 'Reference specific fields'",
+            force=force))
+    if want("judgments_array_state"):
+        rows.append(cap.write_case(
+            "judgments_array_state",
+            Request(model=model, messages=(Message.user(data(["Hi", "My customer number is TS1337.", "My card was charged twice for order A-104."])),),
+                    config=Config(response_format=judgments(
+                        refund_requested=yes_no("Does the customer ask for a refund?"),
+                        department=choice("Which team should handle this?", {"billing": "Payment or subscription issues", "technical": "Bugs or integration problems", "sales": "Pricing or account questions"})),
+                        probabilities="if_available")),
+            stream=False,
+            description="A user data array is the state verbatim (D1): a sequence of messages as docs.typesafe.ai/concepts/state shows it",
+            expect_lm15=DATA_OK,
+            evidence_note="changes/2026-09-19-jev-state.md D1",
             force=force))
     if want("models"):
         rows.append(cap.models_case(force))
