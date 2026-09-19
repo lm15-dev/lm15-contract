@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lm15.dev/contract/gateway/capture-v1.json",
+  "title": "lm15 gateway capture record, version 1",
+  "description": "One row of one of the four daily JSONL streams the lm15 gateway writes (exchanges, events, scan, decoded). Ratified 2026-09-19: changes/2026-09-19-capture-record.md. Writers and fixtures validate against the stream's row schema under $defs; readers MUST ignore fields they do not know (C9) — additionalProperties:false here is for writers and fixtures, never a reader's rule. Times are UTC, millisecond precision, RFC 3339 with a Z suffix, so rows sort as strings.",
+  "oneOf": [
+    { "$ref": "#/$defs/exchange" },
+    { "$ref": "#/$defs/event" },
+    { "$ref": "#/$defs/scan" },
+    { "$ref": "#/$defs/decoded" }
+  ],
+  "$defs": {
+    "version": {
+      "description": "Capture schema version. Bumped only for a change a v=1 reader would misread (C9).",
+      "const": 1
+    },
+    "ulid": {
+      "type": "string",
+      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$",
+      "description": "ULID, Crockford base32, upper case: the first 10 characters encode the millisecond the exchange began, so ids sort by time."
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$",
+      "description": "UTC, millisecond precision, RFC 3339 with Z. Never a local offset."
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "tag": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$",
+      "description": "The /t/<tag>/ segment of the base URL, lower-cased by the gateway so 'Pi' and 'pi' are one ledger line. The cost-center / program label."
+    },
+    "provider": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Provider door, hyphen-spelled per spec/vocabularies.md 'Open string namespaces' (openai-codex, bedrock-anthropic). Open: a user-defined upstream is a provider too."
+    },
+    "api_family": {
+      "type": "string",
+      "enum": [
+        "anthropic_messages",
+        "openai_chat",
+        "openai_responses",
+        "gemini_generate_content",
+        "typesafe_systemone",
+        "unknown"
+      ],
+      "description": "The wire dialect, underscore-spelled per spec/vocabularies.md — the same namespace as api_family on cases. 'unknown' means the gateway could not classify the exchange as a model call it knows (a /v1/models listing, a login refresh, an unrecognised path)."
+    },
+    "transport": {
+      "type": "string",
+      "enum": ["http", "sse", "websocket"]
+    },
+    "lane": {
+      "type": "string",
+      "enum": ["passthrough", "rewrite", "translate"],
+      "description": "changes/2026-09-19-gateway-boundary.md D4."
+    },
+    "error_code": {
+      "type": "string",
+      "enum": [
+        "auth", "billing", "rate_limit", "invalid_request", "context_length",
+        "timeout", "server", "unsupported_model", "unsupported_feature",
+        "not_configured", "unknown_model", "ambiguous_model", "transport",
+        "lock_timeout", "stream_assembly", "collection_limit", "provider"
+      ],
+      "description": "spec/vocabularies.md ErrorCode, verbatim."
+    },
+    "adaptation_action": {
+      "type": "string",
+      "enum": ["dropped", "clamped", "substituted", "client_side", "satisfied", "defaulted"],
+      "description": "spec/vocabularies.md AdaptationAction, verbatim."
+    },
+    "usage": {
+      "type": "object",
+      "description": "spec/types.md Usage, verbatim: provider-reported counters, omit-empty, never re-derived. Which counters include which others differs per provider (the table under Usage); the row's provider says which rule applies.",
+      "properties": {
+        "input_tokens":        { "type": "integer", "minimum": 0 },
+        "output_tokens":       { "type": "integer", "minimum": 0 },
+        "total_tokens":        { "type": "integer", "minimum": 0 },
+        "cache_read_tokens":   { "type": "integer", "minimum": 0 },
+        "cache_write_tokens":  { "type": "integer", "minimum": 0 },
+        "reasoning_tokens":    { "type": "integer", "minimum": 0 },
+        "input_audio_tokens":  { "type": "integer", "minimum": 0 },
+        "output_audio_tokens": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "adaptation": {
+      "type": "object",
+      "description": "spec/types.md Adaptation, verbatim (MAP-13).",
+      "properties": {
+        "field":   { "type": "string", "minLength": 1 },
+        "action":  { "$ref": "#/$defs/adaptation_action" },
+        "reason":  { "type": "string", "minLength": 1 },
+        "asked":   {},
+        "applied": {}
+      },
+      "required": ["field", "action", "reason"],
+      "additionalProperties": false
+    },
+    "blob": {
+      "type": "object",
+      "description": "One stored raw message under raw/<sha256[:2]>/<sha256>.http (request or response) or .jsonl (websocket frames). See gateway/README.md 'Raw blobs' for the byte format.",
+      "properties": {
+        "sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the stored bytes: the content address. Computed after redaction (C5) and, when a tag opts in, scrubbing (C5b)."
+        },
+        "bytes": { "type": "integer", "minimum": 0, "description": "Length of the stored blob." },
+        "wire_sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the unredacted transport message exactly as sent or received (headers as on the wire, body as on the wire). Never stored as bytes; this hash is the receipt AUTHORITY.md requires to promote an exchange into the contract corpus. Omitted by synthetic examples, required in gateway/captures/."
+        },
+        "content_encoding": {
+          "type": "string",
+          "description": "The wire's Content-Encoding (gzip, br, ...) when the stored body is the DECODED entity. The stored headers then omit content-encoding and transfer-encoding and carry a content-length equal to `bytes` minus the header section; this field is the only trace of the original framing."
+        }
+      },
+      "required": ["sha256", "bytes"],
+      "additionalProperties": false
+    },
+    "secret_location": {
+      "type": "object",
+      "properties": {
+        "blob":   { "type": "string", "enum": ["request", "response", "frames"] },
+        "offset": { "type": "integer", "minimum": 0, "description": "Byte offset into the stored blob." },
+        "length": { "type": "integer", "minimum": 1 },
+        "kind":   { "type": "string", "minLength": 1, "description": "The pattern name, e.g. 'aws access key id' — the names of tools/check_secrecy.py are the seed set." }
+      },
+      "required": ["blob", "offset", "length", "kind"],
+      "additionalProperties": false
+    },
+
+    "exchange": {
+      "type": "object",
+      "title": "exchanges/YYYY-MM-DD.jsonl — one row per request through the gateway",
+      "description": "Written exactly once, when the exchange ends or aborts. The ledger: answers who, which model, how much, how long and how routed with no join. C2.",
+      "properties": {
+        "v":     { "$ref": "#/$defs/version" },
+        "id":    { "$ref": "#/$defs/ulid" },
+        "t":     { "$ref": "#/$defs/timestamp", "description": "First byte received from the application." },
+        "t_end": { "$ref": "#/$defs/timestamp", "description": "Last byte sent to the application. Absent on abort." },
+        "tag":   { "$ref": "#/$defs/tag" },
+        "origin": {
+          "type": "object",
+          "description": "Who called. user_agent from the request; pid/exe from the loopback peer lookup (best effort, omitted when unknown).",
+          "properties": {
+            "user_agent": { "type": "string" },
+            "pid":        { "type": "integer", "minimum": 1 },
+            "exe":        { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "provider":   { "$ref": "#/$defs/provider" },
+        "api_family": { "$ref": "#/$defs/api_family" },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Path and query as received, after the /t/<tag>/<provider> prefix is stripped and secret query parameters are removed (C5)."
+        },
+        "transport": { "$ref": "#/$defs/transport" },
+        "upstream": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https?://[^@/\\s]+(/|$)",
+              "description": "Where the request went after routing. Never carries userinfo; never carries a secret query parameter."
+            },
+            "status":     { "type": "integer", "minimum": 100, "maximum": 599 },
+            "request_id": { "type": "string", "minLength": 1, "description": "The provider's request id (x-request-id, request-id, x-amzn-requestid, ...), for support tickets and provider dashboards." },
+            "ttfb_ms":    { "type": "integer", "minimum": 0, "description": "Milliseconds from sending the request upstream to the first response byte." },
+            "latency_ms": { "type": "integer", "minimum": 0, "description": "Milliseconds from sending the request upstream to the last response byte." }
+          },
+          "required": ["url"],
+          "additionalProperties": false
+        },
+        "model": {
+          "type": "object",
+          "description": "Absent when the exchange carries no model (a listing, a login call). When present, asked and sent are both written even when equal: the ledger must not need a join to answer 'was it rerouted?'.",
+          "properties": {
+            "asked":  { "type": "string", "minLength": 1, "description": "What the application sent." },
+            "sent":   { "type": "string", "minLength": 1, "description": "What went upstream after routing." },
+            "served": { "type": "string", "minLength": 1, "description": "What the response named (often a dated snapshot)." }
+          },
+          "required": ["asked", "sent"],
+          "additionalProperties": false
+        },
+        "usage": { "$ref": "#/$defs/usage" },
+        "route": {
+          "type": "object",
+          "description": "Absent means no rule matched: pass-through.",
+          "properties": {
+            "rule":       { "type": "string", "minLength": 1 },
+            "lane":       { "$ref": "#/$defs/lane" },
+            "experiment": { "type": "string", "minLength": 1 },
+            "arm":        { "type": "string", "minLength": 1 },
+            "sticky_key": { "type": "string", "minLength": 1 }
+          },
+          "required": ["lane"],
+          "additionalProperties": false
+        },
+        "adaptations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adaptation" },
+          "minItems": 1,
+          "description": "MAP-13 records from a translate lane; the same type as Response.adaptations. Omitted when empty."
+        },
+        "error": {
+          "type": "object",
+          "description": "Present when the gateway failed or refused, or as the canonical summary of a provider error (whose bytes are in the raw response).",
+          "properties": {
+            "code":          { "$ref": "#/$defs/error_code" },
+            "message":       { "type": "string", "minLength": 1 },
+            "provider_code": { "type": "string" },
+            "request_id":    { "type": "string" },
+            "retry_after":   { "type": "number", "minimum": 0 },
+            "feature":       { "type": "string", "description": "CapabilityError.feature: the config path a refusal is about." }
+          },
+          "required": ["code", "message"],
+          "additionalProperties": false
+        },
+        "redacted": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(query:)?[a-z0-9-]+$" },
+          "uniqueItems": true,
+          "description": "Lower-cased header names, and 'query:<name>' for query parameters, whose values were removed before storage (C5). Always present, possibly empty: an auditor sees what was removed without seeing it."
+        },
+        "secrets": {
+          "type": "object",
+          "description": "C5b. Present only when the body scan matched.",
+          "properties": {
+            "found":  { "type": "integer", "minimum": 1 },
+            "kinds":  { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "uniqueItems": true },
+            "action": { "type": "string", "enum": ["marked", "scrubbed"] },
+            "locations": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/secret_location" },
+              "minItems": 1,
+              "description": "Where, when marked (the default). Omitted when scrubbed: the bytes are gone."
+            }
+          },
+          "required": ["found", "kinds", "action"],
+          "additionalProperties": false
+        },
+        "raw": {
+          "type": "object",
+          "properties": {
+            "request":  { "$ref": "#/$defs/blob" },
+            "response": { "$ref": "#/$defs/blob", "description": "For sse, the complete stream text. Absent on abort before any response byte." },
+            "frames":   { "$ref": "#/$defs/blob", "description": "websocket only: the frame log (README 'Raw blobs')." }
+          },
+          "required": ["request"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["v", "id", "t", "origin", "provider", "api_family", "method", "path", "transport", "upstream", "redacted", "raw"],
+      "additionalProperties": false
+    },
+
+    "event": {
+      "type": "object",
+      "title": "events/YYYY-MM-DD.jsonl — one row per wire frame",
+      "description": "When each piece of a reply arrived and how big it was. Content is not repeated here: the raw response (or frames) blob holds it verbatim. A non-streamed reply is one row (seq 0). C3.",
+      "properties": {
+        "v":           { "$ref": "#/$defs/version" },
+        "id":          { "$ref": "#/$defs/ulid", "description": "The exchange." },
+        "seq":         { "type": "integer", "minimum": 0, "description": "0-based within the exchange." },
+        "t_offset_ms": { "type": "integer", "minimum": 0, "description": "Milliseconds after the exchange's t." },
+        "bytes":       { "type": "integer", "minimum": 0 },
+        "dir":         { "type": "string", "enum": ["in", "out"], "description": "websocket only: in = from upstream to the application, out = from the application to upstream." },
+        "event": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The SSE event name (Anthropic, Responses) or the JSON 'type' of a frame when the wire names frames that way; absent on wires that do not (Chat Completions chunks). Lets timing analysis (first content vs ping) run without opening blobs."
+        }
+      },
+      "required": ["v", "id", "seq", "t_offset_ms", "bytes"],
+      "additionalProperties": false
+    },
+
+    "scan": {
+      "type": "object",
+      "title": "scan/YYYY-MM-DD.jsonl — one row per observed program→provider connection",
+      "description": "The coverage view's input (boundary D8, C4). No root, no certificate: connection tables and process names only.",
+      "properties": {
+        "v":       { "$ref": "#/$defs/version" },
+        "t":       { "$ref": "#/$defs/timestamp" },
+        "pid":     { "type": "integer", "minimum": 1 },
+        "exe":     { "type": "string", "minLength": 1 },
+        "cmdline": { "type": "string" },
+        "host":    { "type": "string", "minLength": 1, "description": "Provider hostname when known (api.openai.com); absent when only the address matched a range." },
+        "remote":  { "type": "string", "pattern": "^(\\[[0-9a-fA-F:.]+\\]|[0-9.]+):[0-9]{1,5}$", "description": "ip:port, IPv6 in brackets." },
+        "match": {
+          "type": "string",
+          "enum": ["ip", "dns"],
+          "description": "ip: the address matched a provider host the gateway resolved itself. dns: the optional privileged helper saw the lookup of `host` precede the connection (definitive)."
+        },
+        "shared_range": {
+          "type": "boolean",
+          "description": "True when the matched address is on a CDN range shared with unrelated services (Cloudflare fronts api.openai.com and chatgpt.com): the match is probable, not certain. Omitted when false."
+        },
+        "coverage": {
+          "type": "string",
+          "enum": ["covered", "observed", "observed_not_coverable"],
+          "description": "covered: the connection is to the gateway itself. observed: reached a provider directly; a recipe may exist. observed_not_coverable: no known way to route this program."
+        },
+        "recipe": { "type": "string", "minLength": 1, "description": "Knowledge-base entry that would cover this program (cursor, zed, aider, ...)." }
+      },
+      "required": ["v", "t", "pid", "exe", "remote", "match", "coverage"],
+      "additionalProperties": false
+    },
+
+    "decoded": {
+      "type": "object",
+      "title": "decoded/YYYY-MM-DD.jsonl — one row per decoder pass over one exchange",
+      "description": "Joined to exchanges on id. Written later, possibly by another program and another SDK; two decoders may each write a row for one id and readers pick by decoder or contract_pin, never 'last wins'. An exchange with no decoded row is pending. C2b.",
+      "properties": {
+        "v":  { "$ref": "#/$defs/version" },
+        "id": { "$ref": "#/$defs/ulid" },
+        "t":  { "$ref": "#/$defs/timestamp", "description": "When the decoder ran." },
+        "decoder": {
+          "type": "object",
+          "properties": {
+            "name":    { "type": "string", "enum": ["lm15-python", "lm15-go", "lm15-rs", "lm15-ts", "lm15-jl", "lm15-r"] },
+            "version": { "type": "string", "minLength": 1 }
+          },
+          "required": ["name", "version"],
+          "additionalProperties": false
+        },
+        "contract_pin": { "type": "string", "pattern": "^[0-9a-f]{40}$", "description": "The lm15-contract commit the decoder implements; the canonical types below are that pin's." },
+        "status": {
+          "type": "string",
+          "enum": ["full", "partial", "none"],
+          "description": "full: request and response both decoded. partial: something was not (notes says what and why; the raw bytes are still there). none: api_family unknown, or a call on a provider host that is not a model call."
+        },
+        "notes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "request": {
+          "type": "object",
+          "description": "Canonical Request (spec/types.md) as the decoder read it from the raw request. Validated by the SDK's own deserializer against its pin, not by this schema: the canonical types are specified by spec/types.md and serde/canonical.json, which have no JSON Schema rendering yet."
+        },
+        "response": {
+          "type": "object",
+          "description": "Canonical Response, including adaptations and provider_data as the SDK produces them."
+        },
+        "events": {
+          "type": "array",
+          "items": { "type": "object" },
+          "minItems": 1,
+          "description": "The canonical post-coalesce event trace (MAP-3/4) for a streamed exchange, in the order of the events stream rows."
+        }
+      },
+      "required": ["v", "id", "t", "decoder", "contract_pin", "status"],
+      "additionalProperties": false
+    }
+  }
+}

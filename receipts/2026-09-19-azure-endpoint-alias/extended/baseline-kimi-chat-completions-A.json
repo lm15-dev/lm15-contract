@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-19T13:56:59.830058+00:00",
+  "label": "baseline-kimi-chat-completions-A",
+  "url": "https://lm15-fdy-29d280ed6f8e.openai.azure.com/openai/v1/chat/completions",
+  "method": "POST",
+  "authentication": "entra-ai (secret omitted)",
+  "request": {
+    "model": "lm15-endpoint-v2-kimi",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Reply with exactly OK."
+      }
+    ],
+    "max_tokens": 256
+  },
+  "request_sha256": "ff1971afe5b9004e76add2101db969780aba52f358213acd0c6e693b933a67d2",
+  "status": 200,
+  "response_headers": {
+    "Transfer-Encoding": "chunked",
+    "Content-Type": "application/json",
+    "x-ms-rai-invoked": "true",
+    "x-envoy-max-retries": "3",
+    "x-envoy-retriable-status-codes": "429,503,529",
+    "x-request-id": "d6950876-47ef-4505-8e14-9fc02c45d776",
+    "x-ms-client-request-id": "Not-Set",
+    "azureml-model-session": "d20260731104241-160affeb",
+    "x-ms-inference-retry-history": "{\"v\":1,\"entries\":[{\"service_id\":\"mir.frontdoor\",\"layer\":\"regional\",\"role\":\"direct\",\"retries\":0}]}",
+    "azureai-requested-tier": "default",
+    "azureai-processed-tier": "default",
+    "x-ms-is-spilled-over": "false",
+    "x-ratelimit-key": "lm15-endpoint-v2-kimi",
+    "x-ratelimit-remaining-requests": "8",
+    "x-ratelimit-reset-requests": "9",
+    "x-ratelimit-limit-requests": "10",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "9972",
+    "x-ratelimit-reset-tokens": "0",
+    "x-ratelimit-limit-tokens": "10000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "azureai-fe-is-streaming": "False",
+    "azureai-fe-offer-type": "paygo",
+    "apim-request-id": "43c4f5b5-81cb-431f-ba68-8823f69c43af",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "x-content-type-options": "nosniff",
+    "x-ms-region": "East US 2",
+    "Date": "Sat, 19 Sep 2026 13:57:00 GMT",
+    "Connection": "close"
+  },
+  "response_body": "{\"id\":\"1b0d3d95efe94e74b8a823e3ed5571e1\",\"model\":\"Kimi-K2.6\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"OK\",\"reasoning_content\":\"The user wants me to reply with exactly \\\"OK\\\". No punctuation, no extra text, just exactly OK. I should output exactly those two letters.\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":13,\"completion_tokens\":33,\"total_tokens\":46,\"audio_prompt_tokens\":0},\"created\":1789826220,\"object\":\"chat.completion\",\"prompt_filter_results\":null}",
+  "elapsed_seconds": 0.557
+}

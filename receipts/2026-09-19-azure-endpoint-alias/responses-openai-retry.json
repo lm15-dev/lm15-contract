@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-09-19T13:46:49.214090+00:00",
+  "url": "https://lm15-fdy-29d280ed6f8e.openai.azure.com/openai/v1/responses",
+  "request": {
+    "model": "lm15-endpoint-probe-deepseek",
+    "input": "Reply with exactly OK.",
+    "max_output_tokens": 256
+  },
+  "request_sha256": "e1d62285793649bd08b18297e4d6addc3ebe22c6cc0bcf48dce66e66a174fb83",
+  "authentication": "Entra bearer, ai.azure.com scope; token omitted",
+  "status": 429,
+  "response_headers": {
+    "Content-Type": "application/json",
+    "retry-after": "3",
+    "x-request-id": "d8a8b82f-d7a7-4001-a95c-8925b197ee72",
+    "apim-request-id": "47924508-9533-4d6f-8fb3-02f7356de87e",
+    "Date": "Sat, 19 Sep 2026 13:46:48 GMT"
+  },
+  "response_body": "{\n  \"error\": {\n    \"message\": \"The system is currently experiencing high demand and cannot process your request. Your request exceeds the maximum usage size allowed during peak load. For improved capacity reliability, consider switching to Provisioned Throughput.\",\n    \"type\": \"too_many_requests\",\n    \"param\": null,\n    \"code\": \"no_capacity\"\n  }\n}",
+  "note": "One explicit retry after no_capacity; no SDK retries or endpoint fallback."
+}

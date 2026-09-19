@@ -199,6 +199,58 @@ would misread. New omit-empty fields are additive under `v = 1` with a
   content must open the raw blob. Keeps `events` small enough to hold a
   year of streaming timings in a laptop's DuckDB.
 
+## Amendments at schema authoring (2026-09-19, same day)
+
+Writing `gateway/schema/capture-v1.json` and the example day exposed
+places where the text above was loose or contradicted an existing rule.
+The schema is normative where the two differ; each departure is listed
+so the text is not silently wrong:
+
+- **`dialect` is `api_family`**, with the contract's underscore
+  spellings (`anthropic_messages`, `openai_chat`, `openai_responses`,
+  `gemini_generate_content`, `typesafe_systemone`, `unknown`).
+  `spec/vocabularies.md` "Open string namespaces" already names this
+  namespace and warns against confusing it with hyphenated provider
+  doors; the text above did exactly that.
+- **`model` is omit-empty**, required when `api_family` is not
+  `unknown`. A catalog listing or a login refresh has no model; "always"
+  would have forced an invented value.
+- **`raw.request` / `raw.response` / `raw.frames` are objects**
+  `{sha256, bytes, wire_sha256?, content_encoding?}`, not bare hashes.
+  `bytes` lets a reader size a day without opening blobs;
+  `wire_sha256` is the AUTHORITY.md receipt for promotion (the hash of
+  the unredacted transport message, computed and discarded by the
+  gateway); `content_encoding` records the wire's compression because
+  the stored body is the decoded entity (a gzip blob is unreadable and
+  un-greppable). Consequence, stated: the stored headers omit
+  `content-encoding`/`transfer-encoding` and carry a `content-length`
+  equal to the stored body — the one place the blob is not
+  byte-for-byte the wire, and `wire_sha256` still covers the wire.
+- **Blob format is fixed**: an HTTP/1.1 message (`.http`) for requests
+  and responses; a JSONL frame log (`.jsonl`) for websocket frames.
+  Files live at `raw/<sha256[:2]>/<sha256>.<ext>`. `gateway/README.md`
+  "Raw blobs".
+- **`events.event`** (omit-empty): the SSE event name or frame `type`,
+  so first-content-token timing runs without opening blobs.
+- **`upstream.request_id`** (omit-empty): the provider's request id
+  header, for support tickets and provider dashboards.
+- **`decoded.decoder` is an object** `{name, version}` with `name`
+  drawn from the SDK names; `decoded.events` (omit-empty) carries the
+  canonical post-coalesce event trace for a streamed exchange.
+- **`tag` is lower-case** (`[a-z0-9][a-z0-9._-]{0,63}`), lower-cased by
+  the gateway, so `Pi` and `pi` are one ledger line.
+- **`secrets.locations[].blob`** is `request | response | frames`.
+- **`error`** carries the canonical error metadata fields
+  (`provider_code`, `request_id`, `retry_after`, `feature`) as
+  omit-empty beside `code` and `message`.
+- Invariants the schema cannot state are enforced by
+  `tools/check_gateway.py` and listed in its docstring: the ULID's
+  millisecond equals `t`; no response blob implies an `error`; an abort
+  carries no usage; adaptations only on a translate lane; the
+  `redacted` list equals the set of header names actually redacted
+  inside the blobs; no secret query parameter survives anywhere; no
+  orphan blobs. `tools/test_check_gateway.py` proves each is caught.
+
 ## Defaults taken at ratification
 
 Each may change with a `changes/` entry:

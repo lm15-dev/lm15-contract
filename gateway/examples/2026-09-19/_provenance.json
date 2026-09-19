@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "built_by": "gateway/examples/build.py",
+  "statement": "No gateway ran. Response bodies are pinned bodies from bodies/; canonical forms are the reviewed goldens for the same cases. Timings, pids, ids, request headers and response headers are invented to illustrate the record. wire_sha256 is absent because no unredacted wire existed; these rows can never be promoted to gateway/captures/.",
+  "rows": {
+    "01M2WZMVQ1JCGPB7CM1MGYBF9H": "request body: cases/anthropic/streaming.json; response body: bodies/anthropic.streaming/2026-04-13T14-49-00Z.txt; canonical: goldens/anthropic/streaming.json; events timing invented",
+    "01M2WZSBSC55RF3X82XA3ER9YQ": "request body: cases/openai/basic_text.json; response body: bodies/openai.basic_text/2026-04-13T14-51-18Z.txt; canonical: goldens/openai/basic_text.json; content_encoding gzip is illustrative",
+    "01M2WZVWQVHR8R0PE8FZM4TAK0": "request body: cases/anthropic/basic_text.json with model rewritten to claude-haiku-4-5 to show a rewrite lane; response body: bodies/anthropic.basic_text/2026-04-13T14-48-36Z.txt; canonical: goldens/anthropic/basic_text.json; the decoded request carries the model AS ASKED (what the application meant), the exchange row carries asked and sent",
+    "01M2WZMV7PD654BQG4NXK8J3BZ": "listing body invented (one entry, Anthropic list shape); shows api_family unknown, no model, decoded status none",
+    "01M2X06MN205KKD1YWZ88AF5H2": "request invented around AWS's published example access key id AKIAIOSFODNN7EXAMPLE (chosen so tools/check_secrecy.py stays clean; a real id of that shape is what the gateway marks); response body: bodies/anthropic.basic_text/2026-04-13T14-48-36Z.txt — the same bytes as the rewrite exchange, so the same blob file: content addressing in action",
+    "01M2X0BBYGKSS1MP8NAZKRY0CP": "request invented; shows an abort: no t_end, no response blob, no usage, error.code transport, decoded status partial",
+    "scan": "all invented; shows covered, observed (same connection first by ip on a shared range, then confirmed by the dns helper), and observed_not_coverable"
+  }
+}

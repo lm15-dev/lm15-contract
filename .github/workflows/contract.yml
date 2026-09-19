@@ -25,6 +25,8 @@ jobs:
         run: python3 tools/spec_drift.py
       - name: Content coverage (MAP-10: every binding pins its tool-result media cell or declares it open)
         run: python3 tools/check_content_coverage.py
+      - name: Gateway capture record (schema, example day, blob and redaction invariants)
+        run: python3 tools/check_gateway.py
       - name: Offline tooling regressions
         run: python3 -m unittest discover -s tools -p 'test_*.py' -v
       - name: Mutation self-test (the comparator must catch every injected mutation)

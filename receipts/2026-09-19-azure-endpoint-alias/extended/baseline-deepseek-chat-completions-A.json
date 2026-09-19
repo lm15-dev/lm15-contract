@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-19T13:56:15.232937+00:00",
+  "label": "baseline-deepseek-chat-completions-A",
+  "url": "https://lm15-fdy-29d280ed6f8e.openai.azure.com/openai/v1/chat/completions",
+  "method": "POST",
+  "authentication": "entra-ai (secret omitted)",
+  "request": {
+    "model": "lm15-endpoint-v2-deepseek",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Reply with exactly OK."
+      }
+    ],
+    "max_tokens": 256
+  },
+  "request_sha256": "cd280a630482c810442525708764fed9438c528fff35ee6a1db3346642fe1440",
+  "status": 200,
+  "response_headers": {
+    "Transfer-Encoding": "chunked",
+    "Content-Type": "application/json",
+    "x-ms-rai-invoked": "true",
+    "x-request-id": "f48842e5-c2fe-4de4-916d-c7ac140f10be",
+    "x-ms-client-request-id": "Not-Set",
+    "azureml-model-session": "d20260731214831-6b0c9477",
+    "x-ms-inference-retry-history": "{\"v\":1,\"entries\":[{\"service_id\":\"mir.frontdoor\",\"layer\":\"regional\",\"role\":\"direct\",\"retries\":0}]}",
+    "azureai-requested-tier": "default",
+    "azureai-processed-tier": "default",
+    "x-ms-is-spilled-over": "false",
+    "x-ratelimit-key": "lm15-endpoint-v2-deepseek",
+    "x-ratelimit-remaining-requests": "8",
+    "x-ratelimit-reset-requests": "11",
+    "x-ratelimit-limit-requests": "10",
+    "x-ratelimit-renewalperiod-requests": "60",
+    "x-ratelimit-abusepenalty-active": "False",
+    "x-ratelimit-remaining-tokens": "9971",
+    "x-ratelimit-reset-tokens": "0",
+    "x-ratelimit-limit-tokens": "10000",
+    "x-ratelimit-renewalperiod-tokens": "60",
+    "azureai-fe-is-streaming": "False",
+    "azureai-fe-offer-type": "paygo",
+    "apim-request-id": "fe0cc224-e87a-4e8b-8f2c-0d85924b85fd",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "x-content-type-options": "nosniff",
+    "x-ms-region": "East US 2",
+    "Date": "Sat, 19 Sep 2026 13:56:15 GMT",
+    "Connection": "close"
+  },
+  "response_body": "{\"id\":\"929a162c22ac44cc85e3eea40b40f6a5\",\"model\":\"lm15-endpoint-v2-deepseek\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"OK.\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":9,\"completion_tokens\":3,\"total_tokens\":12,\"audio_prompt_tokens\":0},\"created\":1789826175,\"object\":\"chat.completion\",\"prompt_filter_results\":null}",
+  "elapsed_seconds": 0.728
+}

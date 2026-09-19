@@ -107,7 +107,8 @@ ALLOWLIST_SHA256 = {
 }
 
 SCANNED_SUFFIXES = {".json", ".jsonl", ".txt", ".md", ".sse", ".pem", ".py", ".sh",
-                    ".req", ".creq", ".sts", ".authz"}
+                    ".req", ".creq", ".sts", ".authz",
+                    ".http"}  # gateway raw blobs (gateway/README.md "Raw blobs"), 2026-09-19
 SKIPPED_PARTS = {".git", "__pycache__", "node_modules"}
 
 

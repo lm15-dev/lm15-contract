@@ -67,6 +67,16 @@ evolution, but breaking changes in a 1.x release are permitted with a
   one provider measures natively and the candidate-likelihood path
   depends on a server feature (`logprob_token_ids`) whose harness
   direction is deferred.
+- **The gateway capture record** — `gateway/schema/capture-v1.json` and
+  the day layout under `gateway/` (2026-09-19,
+  changes/2026-09-19-capture-record.md; product boundary in
+  changes/2026-09-19-gateway-boundary.md). Not a canonical type: it is
+  what the lm15 gateway writes and what dashboards, decoders and the
+  routing rules read, and it embeds the canonical `Usage`, `Adaptation`,
+  `ErrorCode`, `Request` and `Response` verbatim under the decoder's
+  contract pin. Provisional because no gateway has run yet: the first
+  promoted capture under `gateway/captures/` is expected to add
+  omit-empty fields. Checked by `tools/check_gateway.py`.
 - **Cache resources** — the stored tier of MAP-6 (`CacheInfo`, `CachePage`,
   `CachedPrefix`, the `cache_*` verbs, the `cache` harness direction),
   added 2026-09-02 (changes/2026-09-01-caching-design.md). Provider-
