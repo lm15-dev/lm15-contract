@@ -182,6 +182,64 @@ default), Broker (extra package), `AZURE_USERNAME`+`AZURE_PASSWORD` (ROPC).
 legacy runtime rung. Scope for every Vertex door:
 `https://www.googleapis.com/auth/cloud-platform`.
 
+### Named credentials and provenance (amended 2026-09-19)
+
+(changes/2026-09-19-cloud-identity-and-endpoints.md D1, D2.) The three
+clouds' own guidance differs on the default chain: Microsoft asks that a
+library never build `DefaultAzureCredential` on the developer's behalf in
+production and that the developer pick one deterministic credential
+(managed identity when hosted on Azure); AWS endorses the chain but says
+"specify the provider explicitly in production"; Google recommends ADC
+and warns that on a laptop it picks the user. What all three object to
+is not a chain existing but a chain being invisible. Hence one rule:
+**an implementation never picks an identity silently — it either
+receives a credential, or it says which one it picked.**
+
+**Named credentials.** A router configuration may name one identity for
+a cloud door instead of walking its chain: `credentials: {provider:
+name}` with `name` ∈ {`platform`, `workload`, `environment`, `cli`} —
+the same four words on every cloud. A bare adapter takes the same name
+(`credential=`). The name selects the rungs below, in chain order, and
+**nothing else is tried**: an absent named identity is
+`NotConfiguredError` naming the name, what it means on this cloud, and
+what was probed — never a fall-through to another rung. A name and an
+explicit `api_keys` entry for one provider is refused at construction
+(two answers to "who am I"); a name on a non-cloud door is refused; an
+unknown name is refused before the first request.
+
+| name | `azure-chain` | `aws-chain` | `gcp-chain` |
+|---|---|---|---|
+| `platform` | managed-identity | container, then imds | metadata |
+| `workload` | workload-identity | web-identity | adc-env with `type: external_account` |
+| `environment` | environment | `AWS_ACCESS_KEY_ID` + secret | adc-env with `type: service_account` (or `impersonated_service_account`) |
+| `cli` | az, pwsh, azd | assume-role, sso, shared-credentials-file, login, credential_process, config-file | adc-file, gcloud |
+
+Stated: `platform` on AWS covers two rungs (the container endpoint, then
+IMDS) — both are the machine's own identity and boto3 tries them in
+that order; the doctor and every error say which answered. On GCP,
+`workload` and `environment` are one file rung told apart by the file's
+`type`; the wrong type is refused by name (the message names the other
+name), never read as the other. The door's own key variable (rung 1) is
+never part of a named credential: a name means "not a key". The Azure
+continuation rule (developer commands tried through errors) holds under
+`cli`.
+
+Trade-off, stated: the chain stays the default when nothing is
+configured. Microsoft would prefer opt-in; AWS and Google endorse the
+chain; provenance and named credentials remove the actual harm
+(ambiguity), so the zero-configuration laptop path stays zero.
+
+**Provenance.** A credential a cloud chain (or a named credential)
+resolved carries where it came from: the rung's fixture kind, its human
+label, the name that selected it if any, and its expiry if known — never
+the value. Every auth error an adapter raises from the wire names the
+source of the credential it sent, as one line under the provider's
+message: the rung, the environment variable, "an explicit api_key", the
+stored login, or "an application-supplied callable (identity not
+inspected)". The implementation is honest about the last: a caller's
+callable is not introspected. Provenance is appended once and survives
+the re-login hint. The doctor (AUTH-7) says the same before any request.
+
 ## AUTH-2 — Credential providers
 
 Every implementation exposes a credential-provider shape native to its
@@ -206,6 +264,20 @@ changes/2026-09-04-bedrock-bearer.md, changes/2026-09-06-decisions.md D1):
   if the policy lists it; else the adapter raises `NotConfiguredError`
   naming the accepted schemes.
 - `AwsCredentials` uses `sigv4` only; any other scheme raises.
+- (amended 2026-09-19, changes/2026-09-19-cloud-identity-and-endpoints.md
+  D3) A plain string that is a JWS compact JWT (three base64url segments,
+  the first decoding to a JSON object with `alg`) is an Entra/OAuth
+  access token that a token-provider callable handed over as a string
+  (`azure.identity.get_bearer_token_provider` returns `str`), never an
+  API key: no door lm15 has issues a JWT-shaped key, and sent in a key
+  header it is a bare 401 (live 2026-09-04). When the `ApiKey` scheme
+  selected above is `api-key` or `x-api-key` and the policy also lists
+  `bearer`, such a string travels as `bearer`. Before this date the
+  reference refused it and named the `BearerToken` wrap; the wrap stays
+  accepted and is the form when nothing should be read from a token's
+  shape. Stated trade-off: a decision from appearance, made only where
+  the alternative is a certain 401; the doctor reports "sent as bearer
+  (JWT)".
 
 Cost, stated: a token given to a key-header-only door that does not take
 tokens (first-party `anthropic`) gets the provider's 401, not a local
@@ -296,6 +368,15 @@ Every implementation ships an `explain_auth` equivalent that:
 - prints the resolved host settings (region, location, project, resource,
   workspace) by name and value — they are not secrets and they decide
   residency (amended 2026-09-03);
+- (amended 2026-09-19) under a named credential walks exactly the rungs
+  the name covers (rung 0 `api_keys` then those rungs; nothing else is a
+  step, because nothing else runs) and says the chain is not walked;
+  prints the base URL the door will send to and where it came from (the
+  explicit entry, the vendor's endpoint variable by name, or the
+  template) — `auth/named-credentials.json` pins these walks the way
+  `auth/resolution.json` pins the chains; for a caller-supplied callable
+  it reports the callable and that the underlying identity is not
+  inspected;
 - never includes secret values in its output. Presence checks may read
   values into memory; they must not retain or render them.
 
@@ -373,7 +454,7 @@ points:
 | `backend_options` | string knobs the variant needs | those branches |
 | `system_prefix` | text the backend requires first in system/instructions | payload |
 | `base_url` | this access path's default base URL | construction, when the caller left the dialect default |
-| `host` (amended 2026-09-03) | a host descriptor: URL template over the settings below, `model_in` (`body`\|`path`), `anthropic_version_in` (`header`\|`body:<value>`), `stream_framing` (`sse`\|`aws-event-stream`), `required_headers` (`name: {setting}`), `sigv4_service` | URL build, payload, stream decoder |
+| `host` (amended 2026-09-03, 2026-09-19) | a host descriptor: URL template over the settings below (a root and a door path), `endpoint_env` (the vendor's endpoint variables, in order), `model_in` (`body`\|`path`), `anthropic_version_in` (`header`\|`body:<value>`), `stream_framing` (`sse`\|`aws-event-stream`), `required_headers` (`name: {setting}`), `sigv4_service` | URL build, payload, stream decoder |
 | `settings` (amended 2026-09-03; the typed face of `backend_options`) | `region`, `workspace`, `project`, `location`, `resource`, `authority_host`, `scope`; each with its env fallbacks in order | construction; the doctor prints them |
 
 Host settings and their env fallbacks (in order): `region` ←
@@ -383,12 +464,69 @@ raise**; `workspace` ← `ANTHROPIC_AWS_WORKSPACE_ID` — no default;
 `quota_project_id`/`project_id` — no default; `location` ←
 `GOOGLE_CLOUD_LOCATION` — default `global` (stated trade-off:
 availability first; the doctor prints it); `resource` ←
-`AZURE_OPENAI_ENDPOINT` (a full URL) or `AZURE_OPENAI_RESOURCE`;
-`ANTHROPIC_FOUNDRY_BASE_URL` or `ANTHROPIC_FOUNDRY_RESOURCE` — no default;
-`authority_host` ← `AZURE_AUTHORITY_HOST`, default
+`AZURE_OPENAI_RESOURCE` (`azure`, `azure-chat`), `ANTHROPIC_FOUNDRY_RESOURCE`
+(`azure-anthropic`) — no default, and not required when an endpoint (below)
+is given; `authority_host` ← `AZURE_AUTHORITY_HOST`, default
 `https://login.microsoftonline.com`; `scope` default
-`https://ai.azure.com/.default`. Settings are never part of the model
-string: `Request.model` stays `provider:model`.
+`https://ai.azure.com/.default` on every Azure door (the classic
+`https://cognitiveservices.azure.com/.default` is also accepted by the
+resource; a caller sets it through the setting). Settings are never part
+of the model string: `Request.model` stays `provider:model`.
+
+**Endpoint override (amended 2026-09-19,
+changes/2026-09-19-cloud-identity-and-endpoints.md D4).** A host's
+`base_url` template is a *root* (scheme and host, before the first path
+segment) and a *door path* (`/openai/v1`, `/anthropic/v1`,
+`/v1/projects/{project}/locations/{location}/publishers/google`). A caller
+may hand a door the whole root instead — a router `base_urls` entry, an
+adapter `base_url=`, or, read by the router after the explicit entry and
+before the template, the vendor's own variable named in `HostSpec.endpoint_env`:
+`AZURE_OPENAI_ENDPOINT` (`azure`, `azure-chat`; the OpenAI SDK's
+`AzureOpenAI` reads it), `ANTHROPIC_FOUNDRY_BASE_URL` (`azure-anthropic`;
+anthropic-on-foundry.md:180-182), `AWS_ENDPOINT_URL_<SERVICE_ID>` then
+`AWS_ENDPOINT_URL` (`bedrock-chat` → `BEDROCK_RUNTIME`; `bedrock-anthropic`
+and `bedrock-mantle-chat` → `BEDROCK_MANTLE`; `aws-anthropic` →
+`AWS_EXTERNAL_ANTHROPIC` — the SDK's rule, service id upper-cased with
+`-` → `_`; aws-sdkref-endpoints.md names the rule, not these ids); Vertex
+has no vendor variable this corpus can cite and takes the explicit entry
+only. Rules:
+
+- The endpoint replaces the root. The door path (rendered over the
+  settings) is appended unless the endpoint already ends with it, or
+  with a leading part of it: `https://acct.services.ai.azure.com`,
+  `…/openai/v1` and Microsoft's `…/anthropic` all name one door. Stated
+  trade-off: a gateway whose own path ends with a leading part of a door
+  path cannot be spelled; none is known.
+- The endpoint is `http(s)` with a host, without query, fragment or
+  userinfo; a trailing slash is dropped. It is trusted configuration: it
+  decides where credentials and data go, and is never derived from
+  untrusted input.
+- With an endpoint, the settings that appear only in the root of the
+  template are not required (`resource`); settings in the door path
+  (`project`, `location`) and the SigV4 signing `region` still are (the
+  AWS SDK requires a region with `endpoint_url` too: the credential
+  scope names it).
+- The door's auth scheme, backend branches, error mapping, required
+  headers and doctor stay attached: an endpoint changes the URL and
+  nothing else. Before this amendment the reference refused a
+  `base_urls` entry on a cloud door, and the only way to reach a Foundry
+  root was to leave the `azure` door for `openai` + `base_urls`, which
+  silently lost all of the above (reported by Pamela Fox, lm15-python
+  issue #10, 2026-09-18).
+
+**Default Azure host (D5, decided against the in-session plan with
+evidence).** The `azure`/`azure-chat` template stays
+`https://{resource}.openai.azure.com/openai/v1`. The Foundry console
+shows `https://{account}.services.ai.azure.com`, which serves OpenAI and
+non-OpenAI deployments alike and was proposed as the new default; but a
+classic `OpenAI`-kind resource has no `services.ai.azure.com` name at all
+(DNS 2026-09-19: the lab's `lm15-oai-*` resource resolves on
+`openai.azure.com` only, NXDOMAIN on the other two; the lab's Foundry
+`lm15-fdy-*` resource resolves on all three), so the alias is the only
+host every resource kind answers on, and it saves one internal hop for
+OpenAI models today. The Foundry root is one variable away
+(`AZURE_OPENAI_ENDPOINT`), and the docs say to paste it whenever the
+console shows one.
 
 The policies (reference: `lm15/access.py`):
 
@@ -401,8 +539,8 @@ The policies (reference: `lm15/access.py`):
 | `openai_chat` | Chat | key | bearer | api | complete, stream, models |
 | `xai` | Chat (+ provider adapter) | oauth-unless-explicit | bearer | api | base `https://api.x.ai/v1`; images, video, models |
 | `gemini` | Gemini | key | `x-goog-api-key` | api | full surface incl. caches |
-| `azure` / `azure-chat` | Responses / Chat | azure-chain | `api-key`, `bearer` | azure-openai | `https://{resource}.openai.azure.com/openai/v1`; model = deployment name; data-plane `/models` lists the resource catalog (live, contrary to docs); `azure` also carries Files, Batch, speech and Realtime |
-| `azure-anthropic` | Anthropic | azure-chain | `x-api-key`, `bearer` | azure-foundry | `https://{resource}.services.ai.azure.com/anthropic/v1`; docs also claim `api-key`, but live it is 401 while `x-api-key` reaches deployment lookup; no batches/models/`fallbacks`; successful inference quota-blocked |
+| `azure` / `azure-chat` | Responses / Chat | azure-chain | `api-key`, `bearer` | azure-openai | `https://{resource}.openai.azure.com/openai/v1`, or `AZURE_OPENAI_ENDPOINT` + `/openai/v1` (the Foundry root, amended 2026-09-19); model = deployment name; data-plane `/models` lists the resource catalog (live, contrary to docs); `azure` also carries Files, Batch, speech and Realtime |
+| `azure-anthropic` | Anthropic | azure-chain | `x-api-key`, `bearer` | azure-foundry | `https://{resource}.services.ai.azure.com/anthropic/v1`, or `ANTHROPIC_FOUNDRY_BASE_URL` + `/anthropic/v1`; docs also claim `api-key`, but live it is 401 while `x-api-key` reaches deployment lookup; no batches/models/`fallbacks`; successful inference quota-blocked |
 | `aws-anthropic` | Anthropic | aws-chain | `sigv4`(`aws-external-anthropic`), `x-api-key` | aws-external-anthropic | `https://aws-external-anthropic.{region}.api.aws`; header `anthropic-workspace-id: {workspace}`; betas pass |
 | `bedrock-anthropic` | Anthropic | aws-chain | `sigv4`(`bedrock-mantle`), `x-api-key` | bedrock-mantle | `https://bedrock-mantle.{region}.api.aws/anthropic`; no structured outputs, URL/Files sources, server tools, batches, models, `anthropic-beta` |
 | `bedrock-chat` | Chat | aws-chain | `sigv4`(`bedrock`), `bearer` | bedrock-runtime | `https://bedrock-runtime.{region}.amazonaws.com/openai/v1`; versioned ids; GET `/openai/v1/models` is 404 under SigV4 and bearer (live 2026-09-03/04) |
@@ -509,3 +647,16 @@ model-id namespace, listing, and reasoning shape.  Not a rename of
 `bedrock-chat`.  One provider string, one wire.  See
 changes/2026-09-04-bedrock-mantle-chat-live.md and
 changes/2026-09-06-ratification.md.
+
+Amended 2026-09-19 (AUTH-1 named credentials `platform`/`workload`/
+`environment`/`cli` and provenance on every auth error; AUTH-2 a JWT
+string travels as bearer; AUTH-7 named mode and the base URL; AUTH-10
+endpoint override with the vendor's variables, `HostSpec.endpoint_env`,
+`resource` optional with an endpoint, Azure default host kept with DNS
+evidence) — ratified in session ("Yes, this is perfect. Go and implement
+it completely"), one decision (D5, the Azure default host) revised by the
+implementer with evidence and stated for assent; independent live
+receipt for `azure-anthropic` by Pamela Fox (Microsoft), 2026-09-18,
+`pamelafox/python-stack-foundry-models`; see
+changes/2026-09-19-cloud-identity-and-endpoints.md and
+auth/named-credentials.json.
