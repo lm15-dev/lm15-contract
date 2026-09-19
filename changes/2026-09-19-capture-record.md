@@ -6,8 +6,10 @@ Ratification: **RATIFIED** — Maxime Rivest, 2026-09-19, in session
 before ratification on the reviewer's own findings: the decoded form
 moved to its own stream (C2b) instead of a second row per exchange, the
 scanner's DNS match became an optional privileged helper (C4), and
-secrets inside bodies got their own rule (C5b). Nothing below is
-implemented.
+secrets inside bodies got their own rule (C5b). C5b's default was then
+changed at Maxime's direction from scrub to mark ("No, I disagree with
+that … Slack and others … would obviously not hide things"): the
+record is verbatim. Nothing below is implemented.
 
 ## The problem
 
@@ -64,7 +66,7 @@ follows `docs/serde-rules.md` (absent, never `null`, unless stated).
 | `adaptations` | array (Adaptation) | omit-empty | MAP-13 records from a `translate` lane; the same type as `Response.adaptations` |
 | `error` | object | omit-empty | `code` (ErrorCode vocabulary), `message`; present when the gateway itself failed or refused (a provider's error is in `upstream.status` and the raw response, and is *also* summarised here with the canonical mapping) |
 | `redacted` | array of string | always (may be `[]`) | header and query names whose values were replaced (C5); an auditor can see what was removed without seeing it |
-| `secrets` | object | omit-empty | C5b: `found` (int), `kinds` (array of string), `action` (`marked` \| `scrubbed`); present only when the body scan matched |
+| `secrets` | object | omit-empty | C5b: `found` (int), `kinds` (array of string), `action` (`marked` \| `scrubbed`), `locations` (array of `{blob, offset, length, kind}`; omit-empty when scrubbed); present only when the body scan matched |
 | `raw` | object | always | `request`, `response` (sha256 hex; `response` omit-empty on abort) |
 
 An exchange row is written exactly once, when the exchange ends or
@@ -126,19 +128,27 @@ disk or the live feed it is scanned for known credential shapes (the
 patterns of `tools/check_secrecy.py` are the seed: provider key
 prefixes, `AKIA…`, JWTs, PEM blocks, `Bearer <token>` inside text,
 GitHub/Slack/Stripe token shapes). Two actions, chosen per tag:
-`scrubbed` (default) — each match is replaced in the stored body and in
-the raw blob with `[secret:<kind>:<sha256[:8]>]`, so the record is no
-longer verbatim there but repeated occurrences of one secret are still
-recognisable as the same; `marked` — the body is kept verbatim and the
-row says a secret is present. Either way the exchange row carries
-`secrets` (C2) so an auditor can find the rows. What is forwarded to
-the provider is never altered by this rule; it acts on the copy. A body
-scan is heuristic and will miss some secrets and flag some
-non-secrets; the documentation says so, and the data directory is
-never described as safe to share. The default is `scrubbed` because the
-verbatim-evidence purpose of `raw` is served for everything *except*
-credentials, and a credential is the one thing evidence must not
-contain.
+`marked` (**default**) — the body is stored verbatim and the exchange
+row says a secret is present, of which kind, and where
+(`secrets.locations`, byte offsets into the raw blob), so the coverage
+view can show "3 exchanges today carried something that looks like a
+key" and an auditor can find them; `scrubbed` (opt-in) — each match is
+replaced in the stored body and raw blob with
+`[secret:<kind>:<sha256[:8]>]`, for tags or organisations whose
+retention policy forbids credentials at rest. What is forwarded to the
+provider is never altered by this rule; it acts on the copy. A body scan
+is heuristic and will miss some secrets and flag some non-secrets; the
+documentation says so, and the data directory is never described as
+safe to share.
+
+The default is `marked` because the record's purpose is to show exactly
+what left the machine; a store that rewrites what one sent — as no chat
+or version-control product does — is no longer a record of it. The
+secret already left for the provider; the honest response is to make
+that visible, not to hide it from the one person entitled to see it.
+The risk this leaves is stated, not absorbed: the data directory holds
+whatever credentials passed through, protected by mode 0700 and nothing
+else, exactly like `~/.claude` and Pi's session files today.
 
 **C6 — Relationship to the canonical types.** `usage`, `adaptations`,
 `error.code`, `request` and `response` are the contract's own types,
@@ -176,11 +186,12 @@ would misread. New omit-empty fields are additive under `v = 1` with a
   alternatives — rewriting the exchange line in place, or appending a
   second row with the same id — would respectively forfeit crash safety
   and force a "last row wins" step into every query.
-- Scrubbing secrets in bodies (C5b) makes `raw` non-verbatim exactly
-  where a credential appeared. A fixture promoted from such a capture
-  says so in its receipt; the alternative — verbatim credentials on disk
-  — is not acceptable for a product whose data directory holds months of
-  conversations.
+- Bodies are verbatim by default (C5b), so credentials an agent read
+  and sent are on disk in the capture, marked but present. The
+  alternative — scrubbing by default — was rejected because it makes
+  the record lie about what was sent; scrubbing stays available per tag
+  for those whose policy needs it, and a fixture promoted from a
+  scrubbed capture says so in its receipt.
 - `usage` extracted at capture time duplicates what the decoder would
   produce. Deliberate: the ledger must work with no decoder (boundary
   D5), and the two are compared by the audit to catch decoder drift.
