@@ -1,5 +1,11 @@
 # Foundry hostname comparison — 2026-09-19
 
+**Follow-up:** [Extended investigation](extended/README.md) supersedes the
+provisional interpretation below. Both DeepSeek and Kimi completed Responses
+and Chat Completions on both hosts. The original capacity error was reproduced
+on both hosts at the smallest deployment allowance; longer request spacing
+restored success. These initial six receipts remain unchanged as evidence.
+
 Live test on existing AIServices account `lm15-fdy-29d280ed6f8e`, eastus2,
 resource group `lm15-lab`. Temporary deployment `lm15-endpoint-probe-deepseek`:
 DeepSeek-V4-Flash, format DeepSeek, version 2026-04-23, GlobalStandard,

@@ -385,6 +385,52 @@
       }
     },
     {
+      "id": "error_detail.http_response",
+      "kind": "error_detail",
+      "value": {
+        "code": "rate_limit",
+        "message": "busy",
+        "provider_code": "no_capacity",
+        "http_response": {
+          "request_id": "request-1",
+          "retry_after": 39.0,
+          "rate_limit_headers": {
+            "x-ratelimit-limit-requests": ["1"],
+            "x-ratelimit-remaining-requests": ["-1"],
+            "x-ratelimit-reset-requests": ["105"],
+            "retry-after": ["39", "40"]
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-19",
+        "evidence": "changes/2026-09-19-rate-limit-diagnostics.md; spec/types.md ErrorDetail.http_response; docs/error-diagnostics.md. Synthetic canonical example, not a live response."
+      }
+    },
+    {
+      "id": "stream.error.http_response",
+      "kind": "stream_event",
+      "value": {
+        "type": "error",
+        "error": {
+          "code": "rate_limit",
+          "message": "busy",
+          "provider_code": "no_capacity",
+          "http_response": {
+            "request_id": "request-1",
+            "retry_after": 0.0,
+            "rate_limit_headers": {"retry-after": ["0"]}
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-19",
+        "evidence": "changes/2026-09-19-rate-limit-diagnostics.md; docs/error-diagnostics.md. Synthetic stream replay vector: zero wait is not omitted; handshake status 200 is not an error status."
+      }
+    },
+    {
       "id": "delta.text",
       "kind": "delta",
       "value": {

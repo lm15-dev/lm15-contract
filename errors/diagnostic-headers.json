@@ -1,0 +1,72 @@
+{
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-19",
+    "evidence": "changes/2026-09-19-rate-limit-diagnostics.md; docs/error-diagnostics.md; Azure values from receipts/2026-09-19-azure-endpoint-alias/extended/fresh1-original-name-2-A.json. Synthetic edge cases exercise the normative parser, precedence and secrecy rules."
+  },
+  "sentinel": "SECRET-SENTINEL-DO-NOT-PRINT",
+  "cases": [
+    {
+      "id": "azure-no-capacity-retains-conflicting-evidence",
+      "status": 429, "provider_code": "no_capacity",
+      "headers": [["Retry-After", "39"], ["x-ratelimit-limit-requests", "1"], ["x-ratelimit-remaining-requests", "-1"], ["x-ratelimit-reset-requests", "105"], ["x-ratelimit-type", "Tokens"], ["x-ratelimit-remaining-tokens", "995"], ["x-ratelimit-limit-tokens", "1000"], ["apim-request-id", "azure-request-1"], ["Authorization", "SECRET-SENTINEL-DO-NOT-PRINT"], ["x-ratelimit-key", "SECRET-SENTINEL-DO-NOT-PRINT"]],
+      "expect": {"retry_after": 39.0, "request_id": "azure-request-1", "rate_limit_headers": {"retry-after": ["39"], "x-ratelimit-limit-requests": ["1"], "x-ratelimit-remaining-requests": ["-1"], "x-ratelimit-reset-requests": ["105"], "x-ratelimit-type": ["Tokens"], "x-ratelimit-remaining-tokens": ["995"], "x-ratelimit-limit-tokens": ["1000"]}}
+    },
+    {
+      "id": "body-zero-and-id-win-but-headers-still-attached", "status": 429,
+      "body_retry_after": 0, "body_request_id": "body-id",
+      "headers": [["RETRY-AFTER", "17"], ["retry-after-ms", "2000"], ["x-request-id", "header-id"], ["x-ratelimit-reset-requests", "105"]],
+      "expect": {"retry_after": 0.0, "request_id": "body-id", "rate_limit_headers": {"retry-after": ["17"], "retry-after-ms": ["2000"], "x-ratelimit-reset-requests": ["105"]}}
+    },
+    {
+      "id": "duplicates-preserved-first-standard-header-only", "status": 429,
+      "headers": [["retry-after", "bad"], ["Retry-After", "20"], ["retry-after-ms", "1250"], ["X-Ratelimit-Remaining-Requests", " -2 "], ["x-ratelimit-remaining-requests", "3"], ["x-request-id", "first"], ["X-Request-ID", "second"]],
+      "expect": {"retry_after": 1.25, "request_id": "first", "rate_limit_headers": {"retry-after": ["bad", "20"], "retry-after-ms": ["1250"], "x-ratelimit-remaining-requests": [" -2 ", "3"]}}
+    },
+    {
+      "id": "invalid-body-and-standard-fall-back-to-ms", "status": 429,
+      "body_retry_after": -1,
+      "headers": [["Retry-After", "-7"], ["retry-after-ms", "NaN"], ["x-ms-retry-after-ms", "2500"]],
+      "expect": {"retry_after": 2.5, "request_id": null, "rate_limit_headers": {"retry-after": ["-7"], "retry-after-ms": ["NaN"], "x-ms-retry-after-ms": ["2500"]}}
+    },
+    {
+      "id": "absent-is-unknown-not-zero", "status": 429, "headers": [],
+      "expect": {"retry_after": null, "request_id": null, "rate_limit_headers": {}}
+    },
+    {
+      "id": "non-429-also-retains-diagnostics", "status": 503,
+      "headers": [["x-ms-retry-after-ms", "500"], ["apim-request-id", "apim-1"]],
+      "expect": {"retry_after": 0.5, "request_id": "apim-1", "rate_limit_headers": {"x-ms-retry-after-ms": ["500"]}}
+    },
+    {
+      "id": "provider-reset-units-are-not-guessed", "status": 429,
+      "headers": [["anthropic-ratelimit-input-tokens-remaining", "-3"], ["anthropic-ratelimit-input-tokens-reset", "2026-09-19T15:00:00Z"], ["x-ratelimit-reset-requests", "1m2s"], ["x-ratelimit-renewalperiod-requests", "60"]],
+      "expect": {"retry_after": null, "request_id": null, "rate_limit_headers": {"anthropic-ratelimit-input-tokens-remaining": ["-3"], "anthropic-ratelimit-input-tokens-reset": ["2026-09-19T15:00:00Z"], "x-ratelimit-reset-requests": ["1m2s"], "x-ratelimit-renewalperiod-requests": ["60"]}}
+    },
+    {
+      "id": "nonfinite-waits-kept-as-evidence-not-timers", "status": 429,
+      "headers": [["Retry-After", "NaN"], ["retry-after-ms", "Infinity"], ["x-ms-retry-after-ms", "-2000"]],
+      "expect": {"retry_after": null, "request_id": null, "rate_limit_headers": {"retry-after": ["NaN"], "retry-after-ms": ["Infinity"], "x-ms-retry-after-ms": ["-2000"]}}
+    },
+    {
+      "id": "closed-allowlist-and-control-characters", "status": 429,
+      "headers": [["Set-Cookie", "SECRET-SENTINEL-DO-NOT-PRINT"], ["api-key", "SECRET-SENTINEL-DO-NOT-PRINT"], ["x-ratelimit-secret", "SECRET-SENTINEL-DO-NOT-PRINT"], ["x-ratelimit-remaining-requests", "0\r\ninjected"], ["x-ratelimit-limit-requests", "10"], ["x-ratelimit-type", "\u001b[31mTokens"]],
+      "expect": {"retry_after": null, "request_id": null, "rate_limit_headers": {"x-ratelimit-limit-requests": ["10"]}}
+    },
+    {
+      "id": "http-date-in-the-past-is-zero", "status": 429,
+      "headers": [["Retry-After", "Sat, 01 Jan 2000 00:00:00 GMT"], ["retry-after-ms", "9000"]],
+      "expect": {"retry_after": 0.0, "request_id": null, "rate_limit_headers": {"retry-after": ["Sat, 01 Jan 2000 00:00:00 GMT"], "retry-after-ms": ["9000"]}}
+    },
+    {
+      "id": "millisecond-headers-never-parse-dates", "status": 429,
+      "headers": [["retry-after-ms", "Sat, 01 Jan 2000 00:00:00 GMT"], ["x-ms-retry-after-ms", "3000"], ["x-ms-request-id", "ms-id"], ["apim-request-id", "apim-id"]],
+      "expect": {"retry_after": 3.0, "request_id": "ms-id", "rate_limit_headers": {"retry-after-ms": ["Sat, 01 Jan 2000 00:00:00 GMT"], "x-ms-retry-after-ms": ["3000"]}}
+    },
+    {
+      "id": "fractional-milliseconds-and-typesafe-id", "status": 429,
+      "headers": [["retry-after-ms", "1250.5"], ["x-typesafe-request-id", "ts-id"]],
+      "expect": {"retry_after": 1.2505, "request_id": "ts-id", "rate_limit_headers": {"retry-after-ms": ["1250.5"]}}
+    }
+  ]
+}

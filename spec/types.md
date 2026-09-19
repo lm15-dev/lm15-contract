@@ -425,6 +425,7 @@ Exactly one per stream, final (MAP-3, mapping-rules.md).
 | `code` | string (ErrorCode) | yes | — | always | closed vocabulary |
 | `message` | string | yes | — | omit-empty | empty allowed |
 | `provider_code` | string | no | `null` | omit-empty | non-empty when present |
+| `http_response` | object | no | `{}` | omit-empty | handshake diagnostics only: optional `request_id` (non-empty string), `retry_after` (finite nonnegative float seconds), `rate_limit_headers` (bounded lowercase name → string arrays); reject unknown keys; see [error diagnostics](../docs/error-diagnostics.md), amended 2026-09-19 |
 
 ## Tools
 

@@ -212,6 +212,15 @@ retryable set (INV-054, ratified 2026-09-18).
 Code mapping is most-specific-class-first; unknown code →
 `ProviderError`.
 
+Amended 2026-09-19: errors also expose `rate_limit_headers`, an immutable
+lowercase-name → ordered string-array snapshot of the closed set specified
+in [Provider error diagnostics](../docs/error-diagnostics.md). That document
+is normative for bounds, duplicate/contradictory values, millisecond retry
+fallbacks, Azure `apim-request-id`, advisory display, and preservation through
+HTTP-200 stream errors (the new optional `ErrorDetail.http_response` field,
+see spec/types.md). It amends the metadata rules above without adding an
+ErrorCode. See changes/2026-09-19-rate-limit-diagnostics.md.
+
 ## StreamEventType
 
 | Value |
@@ -483,6 +492,19 @@ three exist since 2026-09-01). spec/auth.md AUTH-1.
 | `aws-chain` |
 | `azure-chain` |
 | `gcp-chain` |
+
+## NamedCredential
+
+Runtime mirror: `NAMED_CREDENTIALS`. The closed names already ratified in
+spec/auth.md AUTH-1 (changes/2026-09-19-cloud-identity-and-endpoints.md);
+listed here when the merged reference exposed the missing vocabulary entry.
+
+| Value |
+|---|
+| `platform` |
+| `workload` |
+| `environment` |
+| `cli` |
 
 ## RungKind
 
