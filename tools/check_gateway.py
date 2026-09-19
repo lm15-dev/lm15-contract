@@ -50,7 +50,7 @@ STREAMS = {"exchanges": "exchange", "events": "event", "scan": "scan", "decoded"
 DAY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 REDACTED_VALUE = re.compile(r"^\[redacted:\d+\]$")
 REDACT_HEADERS = {"authorization", "proxy-authorization", "x-api-key", "x-goog-api-key", "cookie", "set-cookie"}
-REDACT_HEADER_WORDS = ("token", "secret", "session")
+REDACT_HEADER_WORDS = ("token", "secret")  # singular token only: "tokens" is a rate-limit counter
 SECRET_QUERY = {"key", "api_key", "access_token"}
 CROCKFORD = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 SUPPORTED_KEYWORDS = {
@@ -229,7 +229,9 @@ def parse_http(data: bytes) -> tuple[str, list[tuple[str, str]], bytes] | None:
 
 
 def must_redact(name: str) -> bool:
-    return name in REDACT_HEADERS or any(w in name for w in REDACT_HEADER_WORDS)
+    if name in REDACT_HEADERS:
+        return True
+    return re.search(r"token(?!s)|secret", name) is not None
 
 
 def has_secret_query(s: str) -> str | None:

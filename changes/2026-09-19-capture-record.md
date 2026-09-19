@@ -111,8 +111,10 @@ contract-owned part of boundary D8.
 **C5 — Redaction is not configurable off.** Before any byte reaches
 disk or the live feed: header values for `authorization`,
 `proxy-authorization`, `x-api-key`, `x-goog-api-key`, `cookie`,
-`set-cookie`, and any header whose name contains `token`, `secret` or
-`session`, are replaced with `[redacted:<byte length>]`; query
+`set-cookie`, and any header whose name contains `token` (the singular —
+`x-auth-token`, `x-amz-security-token` — never the plural `tokens` of a
+rate-limit counter) or `secret`, are replaced with `[redacted:<byte
+length>]`; query
 parameters `key`, `api_key`, `access_token` are removed from `path` and
 from the raw request; the gateway's own credential-store substitutions
 are never written. Body content is *not* redacted by default (it is the
@@ -282,6 +284,14 @@ so the text is not silently wrong:
   flushed when their exchange ends and fsynced with the next exchange, so
   a crash loses at most the frame timings of in-flight exchanges, never a
   ledger line.
+- **The header word rule is `token` (singular) and `secret`; `session` is
+  dropped.** The first real capture (Claude Code, 2026-09-19) showed the
+  ratified wording redacting `anthropic-ratelimit-input-tokens-remaining`,
+  `x-ratelimit-limit-tokens` and `x-claude-code-session-id`: the first two
+  are the telemetry a ledger exists to keep, the third is the identifier
+  that groups exchanges into one conversation. A session *credential*
+  carries `token` (`x-session-token`) and stays redacted; a session *id*
+  is attribution and stays visible.
 - **Body scanning marks documented example ids too** (`AKIAIOSFODNN7EXAMPLE`),
   unlike `tools/check_secrecy.py`, which exempts them for corpus hygiene:
   a live scanner with an allowlist is a scanner with a hole.
