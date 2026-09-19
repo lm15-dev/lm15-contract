@@ -251,6 +251,37 @@ so the text is not silently wrong:
   inside the blobs; no secret query parameter survives anywhere; no
   orphan blobs. `tools/test_check_gateway.py` proves each is caught.
 
+## Amendments at first implementation (2026-09-19, `lm15-gateway` `internal/capture`)
+
+- **Day directories, not flat streams.** C1's paths (`exchanges/YYYY-MM-DD.jsonl`
+  beside one `raw/` store) are superseded by the layout the schema's
+  examples, the checker and the writer all use: `<day>/exchanges/<day>.jsonl`,
+  `<day>/events/…`, `<day>/scan/…`, `<day>/decoded/…`, `<day>/raw/…`. A day is
+  one self-contained unit that `prune` removes, `compact` rolls and
+  promotion copies, and the checker validates one day at a time. Stated
+  cost: identical bytes seen on two days are stored twice. Every row of an
+  exchange lives in the day of the exchange's `t`, whatever the clock said
+  when the row was written; a decoder derives that day from the ULID.
+- **`wire_sha256` has one format per direction**, the one
+  `research/providers/_capture.py` already writes (schema description
+  updated): request = sha256 of compact JSON `{method, url, headers, body_b64}`
+  over the unredacted input; response = sha256 of the upstream body bytes
+  before content decoding. The writer's test proves byte-compatibility
+  with the Python tooling.
+- **Header redaction is exact, not approximate**: values become
+  `[redacted:<byte length>]`; the length survives so an empty credential
+  and a long one are distinguishable in evidence.
+- **Abort semantics**: `t_end` is absent only when no reply byte reached
+  the application. A reply that was partly delivered keeps its partial
+  blob as evidence, records `t_end` and an `error`, and carries no usage.
+- **Durability**: an exchange row is fsynced when written; event rows are
+  flushed when their exchange ends and fsynced with the next exchange, so
+  a crash loses at most the frame timings of in-flight exchanges, never a
+  ledger line.
+- **Body scanning marks documented example ids too** (`AKIAIOSFODNN7EXAMPLE`),
+  unlike `tools/check_secrecy.py`, which exempts them for corpus hygiene:
+  a live scanner with an allowlist is a scanner with a hole.
+
 ## Defaults taken at ratification
 
 Each may change with a `changes/` entry:

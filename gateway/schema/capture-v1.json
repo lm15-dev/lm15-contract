@@ -113,7 +113,7 @@
         "bytes": { "type": "integer", "minimum": 0, "description": "Length of the stored blob." },
         "wire_sha256": {
           "$ref": "#/$defs/sha256",
-          "description": "SHA-256 of the unredacted transport message exactly as sent or received (headers as on the wire, body as on the wire). Never stored as bytes; this hash is the receipt AUTHORITY.md requires to promote an exchange into the contract corpus. Omitted by synthetic examples, required in gateway/captures/."
+          "description": "The receipt hash over the UNREDACTED transport message, in the format lm15-contract/research/providers/_capture.py already writes: for a request, sha256 of the compact UTF-8 JSON {\"method\",\"url\",\"headers\":[[name,value],...],\"body_b64\"} with the unredacted upstream URL, header names in wire case and order, and the body as sent (before any content decoding); for a response, sha256 of the body bytes exactly as received from upstream (before content decoding). Never stored as bytes; this is what AUTHORITY.md requires to promote an exchange into the corpus. Omitted by synthetic examples, required in gateway/captures/."
         },
         "content_encoding": {
           "type": "string",
