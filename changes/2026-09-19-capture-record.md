@@ -272,7 +272,11 @@ so the text is not silently wrong:
   `[redacted:<byte length>]`; the length survives so an empty credential
   and a long one are distinguishable in evidence.
 - **Abort semantics**: `t_end` is absent only when no reply byte reached
-  the application. A reply that was partly delivered keeps its partial
+  the application. Such an abort may carry no `model` even on a model
+  call: the request body may never have arrived (the application
+  disconnected while sending it). When the body did arrive but the
+  upstream could not be reached, the gateway drains it into the record
+  so the model asked is known. A reply that was partly delivered keeps its partial
   blob as evidence, records `t_end` and an `error`, and carries no usage.
 - **Durability**: an exchange row is fsynced when written; event rows are
   flushed when their exchange ends and fsynced with the next exchange, so

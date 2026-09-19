@@ -12,7 +12,9 @@ schema cannot say (changes/2026-09-19-capture-record.md).
                    against its stream's row schema.
 3. LEDGER        : exchange ids unique; the ULID's embedded millisecond is
                    the row's `t`; t_end >= t; latency >= ttfb; a model call
-                   (api_family known) names a model; no response blob means
+                   (api_family known) names a model unless it aborted before
+                   any reply (error present, t_end absent: the body may never
+                   have arrived); no response blob means
                    an error is recorded; adaptations only on a translate
                    lane; marked secrets carry locations, scrubbed ones do not.
 4. EVENTS        : every event and decoded row names an existing exchange;
@@ -280,7 +282,8 @@ def check_day(day_dir: Path, kind: str, validator: Validator, rep: Report) -> No
         up = r.get("upstream", {})
         if "ttfb_ms" in up and "latency_ms" in up and up["latency_ms"] < up["ttfb_ms"]:
             rep.fail(f"{where}: latency_ms < ttfb_ms")
-        if r.get("api_family") not in (None, "unknown") and "model" not in r:
+        aborted_early = "error" in r and "t_end" not in r
+        if r.get("api_family") not in (None, "unknown") and "model" not in r and not aborted_early:
             rep.fail(f"{where}: api_family {r.get('api_family')} is a model call but no model is recorded")
         raw = r.get("raw", {})
         if "response" not in raw and "error" not in r:

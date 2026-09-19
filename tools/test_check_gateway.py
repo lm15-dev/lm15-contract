@@ -80,6 +80,7 @@ MUTATIONS = {
     "t_end before t": ("exchanges", 0, lambda r: r.__setitem__("t_end", "2026-09-19T14:03:12.000Z")),
     "latency below ttfb": ("exchanges", 0, lambda r: r["upstream"].__setitem__("latency_ms", 1)),
     "model call without model": ("exchanges", 0, lambda r: r.pop("model")),
+    "model call without model, completed with error": ("exchanges", 4, lambda r: (r.pop("model"), r.__setitem__("error", {"code": "server", "message": "x"}))),
     "model without sent": ("exchanges", 0, lambda r: r["model"].pop("sent")),
     "usage counter negative": ("exchanges", 0, lambda r: r["usage"].__setitem__("output_tokens", -1)),
     "usage counter invented": ("exchanges", 0, lambda r: r["usage"].__setitem__("billed_tokens", 5)),
