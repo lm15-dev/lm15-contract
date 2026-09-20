@@ -829,6 +829,18 @@ wire bytes are what the contract pins; the sugar is per-language.
 |---|---|---|---|---|---|
 | `prefix` | object (Request) | yes | — | always | `config` must be default (a cached object has no generation settings) |
 | `resource` | object (CacheInfo) | no | `null` | omit-empty | when present, `resource.model == prefix.model` |
+| `provider` | string | no | `null` | omit-empty | optional canonical router destination; non-empty, no whitespace/colon/slash; underscore input aliases normalize to hyphens (2026-09-20 source repair, see change entry) |
+
+`prefix.model` and `resource.model` remain wire model identifiers. A router-created
+CachedPrefix retains its resolved provider separately, including router-local
+declarations. When `provider` is present, a suffix request uses
+`provider:prefix.model`; otherwise it keeps the previous bare-model behavior.
+A Request suffix may name the wire model or the identical qualified destination,
+not another provider. This metadata survives canonical serialization; it contains
+no credentials, endpoint or account binding. Reuse requires the same router
+configuration/account. Direct bare-model cache helpers do not invent a route.
+The addition and its review status are recorded in
+`changes/2026-09-20-source-parity-repairs.md`.
 
 `request(messages, config=None)` appends `messages` (a string → one user
 message, a Message, a sequence, or a Request with the same model and no

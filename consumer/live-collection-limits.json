@@ -44,6 +44,18 @@
       "expect": {"accepted": 2, "reads": 2, "retained_bytes": 50, "limit": null, "rejected_index": null}
     },
     {
+      "id": "delete-control-is-ascii-json-escaped",
+      "limits": {"max_bytes": 50, "max_events": 2},
+      "events": [{"type": "text", "text": "\u007f"}, {"type": "turn_end"}],
+      "expect": {"accepted": 2, "reads": 2, "retained_bytes": 50, "limit": null, "rejected_index": null}
+    },
+    {
+      "id": "delete-control-exceeds-byte-budget",
+      "limits": {"max_bytes": 30, "max_events": 10},
+      "events": [{"type": "text", "text": "\u007f"}],
+      "expect": {"accepted": 0, "reads": 1, "retained_bytes": 0, "limit": "max_bytes", "rejected_index": 0}
+    },
+    {
       "id": "audio-counts-encoded-data-and-metadata",
       "limits": {"max_bytes": 30, "max_events": 10},
       "events": [{"type": "audio", "data": "UENNMQ==", "media_type": "audio/pcm;rate=24000"}],

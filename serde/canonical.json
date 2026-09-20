@@ -1,6 +1,20 @@
 {
   "cases": [
     {
+      "id": "cached_prefix.routed",
+      "kind": "cached_prefix",
+      "value": {
+        "prefix": {"model": "gemini-2.5-flash", "messages": [{"role": "user", "parts": [{"type": "text", "text": "prefix"}]}]},
+        "resource": {"id": "cachedContents/example", "model": "gemini-2.5-flash"},
+        "provider": "gemini"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-20",
+        "evidence": "spec/types.md CachedPrefix: optional provider preserves routing while prefix.model and resource.model remain equal wire identifiers; changes/2026-09-20-source-parity-repairs.md"
+      }
+    },
+    {
       "id": "part.text",
       "kind": "part",
       "value": {

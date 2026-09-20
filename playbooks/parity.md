@@ -1,6 +1,67 @@
 # Parity ledger — what each implementation has, lacks, or will never have
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
+
+## 2026-09-20 — implementation pass, execution deliberately deferred
+
+The maintainer requested Python, TypeScript/browser and Rust source catch-up,
+with baseline/final commits and **no tests or builds in this pass**. The rows
+below describe implemented source, NOT passing conformance, runtime verification,
+or published packages. A CONTRACT_PIN names the target rules, not proof that an
+implementation satisfies them. The September 11 results farther below are
+historical evidence for different revisions.
+
+| Area | Python | TypeScript / browser | Rust |
+|---|---|---|---|
+| MAP-13 records, policies, planning, promoted controls | implemented | implemented | implemented |
+| Stops preserving scores and reporting incomplete coverage | implemented | implemented | implemented |
+| MAP-14 data, judgment helpers, TypeSafe and candidate scoring | implemented; malformed-reply repairs | implemented; malformed-reply repairs | implemented |
+| Streamed judgment answers materialize as DataPart | repaired | repaired | implemented |
+| Named cloud identity, provenance, endpoint roots, JWT bearer | implemented | implemented | implemented |
+| Caller-owned budgets and bounded transport concurrency | implemented | native Node implementation; explicit Fetch limitations | implemented over reqwest; backend limits stated |
+| Malformed replies, compression and retained diagnostics | implemented; auxiliary faults repaired | implemented; Node codec / Fetch decoded bodies | implemented; native and host codec |
+| Router-local declarations and credential-free planning | implemented | implemented | implemented |
+| Bounded live collection, retained events and recovery | implemented | implemented; DEL byte charge repaired | implemented |
+| Batch/video handles, cached-prefix convenience | implemented | implemented | implemented |
+| Generic credential store and shared lock identity | implemented; identity repaired | implemented; optional native lock source | implemented; identity repaired |
+| Blocking mirror | sync/async implementations | async language API | expanded beyond chat/model listing |
+| Testing helpers and API inspection | existing helpers | existing helpers | scripted helpers and surface description added |
+
+Source guides: `lm15-python/CHANGELOG.md`, `lm15-ts/docs/transport.md`,
+`lm15-ts/docs/cloud-identity.md`, `lm15-rs/docs/catchup.md`, and each SDK's
+`docs/credential-lock-identity.md`. New regression files are written, not run.
+Provider fixtures and previous goldens were not rewritten to match SDK output.
+`changes/2026-09-20-source-parity-repairs.md` records the additional consumer
+vectors and corrections to the preliminary study.
+
+### Boundaries that must not be mistaken for completed verification
+
+- Browser credentials/files/cloud chains remain explicit host boundaries.
+  Fetch owns decompression and socket controls; CORS can hide diagnostic or
+  Content-Encoding headers. Unknown does not mean unlimited quota or identity
+  coding. Browser code does not silently gain filesystem access.
+- TypeScript's macOS/Windows credential-lock backend is native **source**, not
+  a built or platform-verified binary. Linux's util-linux backend remains usable.
+  A matching native artifact is required where that backend is selected.
+- Shared credential identity has a coordinated-upgrade requirement: do not mix
+  old/new Windows writers or writers using previously unresolved POSIX aliases.
+  Unsupported ambiguous paths fail closed. This does not coordinate foreign
+  CLIs or unify every filesystem alias.
+- Transport libraries impose stated limitations. Rust's write watchdog observes
+  upload-body consumption, not every socket write; Node's new native transport
+  is HTTP/1.1 and does not automatically discover proxies or follow redirects.
+  Configure an appropriate transport rather than assuming those capabilities.
+- Platform-specific APIs, release artifacts, generated metadata, compiler/type
+  compatibility, locks, cancellation and concurrency all still need the next
+  authorized verification pass. No release approval is implied here.
+- Existing explicit cloud-chain gaps remain shared limitations, not silently
+  successful fallback: AWS login DPoP refresh, special Azure managed-identity
+  environments, and unsupported GCP credential-source variants.
+- Python-only introspection/catalog discovery and deprecated profile layers
+  remain intentional non-goals for ports. The gateway is a separate product.
+
+## Historical ledger — September 11 (not the current implementation status)
+
 Started 2026-09-11 from a file-by-file comparison of `lm15-python` 8bafafa,
 `lm15-ts` 17a521e (+ uncommitted browser work), `lm15-rs` c81ad74, all at
 contract pin 42d8040; updated the same day after the four OPEN rows were
