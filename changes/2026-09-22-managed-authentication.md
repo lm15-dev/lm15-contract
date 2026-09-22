@@ -2,13 +2,15 @@
 
 ## Status and authority
 
-**REVIEW DRAFT: specification work commissioned by the maintainer; detailed
-amendment not yet reviewed/ratified. No SDK implementation in this change.**
+**RATIFIED CORE, 2026-09-22. R1–R3 preserve subscription access and precedence;
+R10 starts with Python and TypeScript. Reserved details remain non-normative.
+No SDK implementation in this change.**
 
 The maintainer requested a shared written definition covering concepts, identity
-precedence, lifecycle, I/O, secrecy and platforms before implementing ten SDKs.
-He explicitly stated that there are no users of the old login/auth flows to
-preserve; existing API-key/Azure-style users do exist. Earlier discussion approved
+precedence, lifecycle, I/O, secrecy and platforms before implementation.
+He clarified that no legacy API compatibility is needed, but losing working
+subscription access is unacceptable. Existing API-key/Azure users also remain
+supported. The initial implementation scope is Python and TypeScript. Earlier discussion approved
 the direction of scoped auth, UI independence, resumable login and an interactive
 `connect()` that hides routine assembly, not consequential choices.
 
@@ -16,15 +18,37 @@ This change amends `spec/auth.md`, adds its managed supplement
 `spec/auth-managed.md` (AUTH-12–26, core tier) and `spec/auth-managed-reserved.md`
 (rules written ahead of any implementation that needs them; each names the
 trigger that promotes it), examples, schema/fixtures and acceptance scenarios, and makes the scope/API-family/vocabulary consequences explicit.
-It does not amend the evidence precedence in AUTHORITY.md or claim that its new
-rules were already ratified. Canonical decisions below are proposed normative
-facts; upstream protocol details still require wire evidence.
+It does not amend the evidence precedence in AUTHORITY.md. Core decisions below
+are ratified; entries concerning reserved rules remain design notes until
+explicit promotion. Upstream protocol details still require wire evidence.
 
 The maintainer's yes/no list is
 [2026-09-22-managed-authentication-ratification.md](2026-09-22-managed-authentication-ratification.md).
 The split into core/reserved was made on 2026-09-22 after review judged the
 first draft front-loaded server, database and relay rules no implementation had
-yet tested; the moved text is unchanged.
+yet tested. The later subscription-first correction supersedes the original
+retirement proposal; it is not a blanket ratification of reserved text.
+
+### Ratification and fixture correction
+
+The maintainer corrected the proposal: “subs is always better then keys except
+when keys are explicitly used”, edited R10 to “Starting with python and
+typescript.”, accepted R11/R12, and said “otherwise i ratify.”
+
+- R1: no Claude/Codex cutover before separate provider-permission and live
+  login → inference → renewal evidence with the intended account/billing behavior.
+- R2/R3: explicit key/named cloud authority wins; otherwise subscriptions precede
+  ambient keys. Failure/logout never silently switches billing sources.
+- All existing access-preservation fixtures remain. The canonical expectation
+  `xai-env-rescues-unusable-login` is corrected to
+  `xai-unusable-login-blocks-env` under AUTH-1/AUTH-15 and R3: configured=false,
+  the environment rung shadowed (blocked), no key acquisition. The old commit
+  preserves the historical expectation; this change is not based on SDK output.
+- `auth/managed/resolution.json` replaces the draft's two anti-subscription
+  decisions and adds explicit/failure/logout/ambiguity regressions. They are
+  synthetic canonical cases, not evidence of provider support.
+- No SDK pins, support rows or wire fixtures change. The old runtime may fail the
+  corrected xAI behavior until implementation; do not weaken this gate to hide it.
 
 ## Evidence and limits
 
@@ -52,13 +76,13 @@ implementation shortcut.
 |---|---|---|
 | **D1. Separate service, route, instance, binding and connection** (AUTH-12) | A provider string used for all five conflates menu grouping, wire protocol, enterprise host and identity; credential leakage/account confusion follows | More internal concepts; ordinary users see a picker and a bound client |
 | **D2. Descriptors plus stable IDs** (AUTH-13) | String-only APIs require memorizing IDs; closed built-in enums alone block custom providers | Named built-ins and dynamic descriptors coexist; receiver revalidates registry/revision |
-| **D3. Native language APIs over one behavior contract** (AUTH-22) | One mandatory Node subprocess or hosted auth service erases SDK independence and changes trust/deployment | More implementation work; same scenario suite in all ten languages |
-| **D4. Managed Auth is explicit and authoritative** (AUTH-15) | Falling back after logout can charge the server owner's key; adding saved login to all routers changes existing API-key/cloud users | Managed mode has fewer implicit conveniences; unmanaged keys/cloud retain their existing behavior |
+| **D3. Native language APIs over one behavior contract** (AUTH-22) | One mandatory Node subprocess or hosted auth service erases SDK independence and changes trust/deployment | More implementation work; Python and TypeScript first, with the same scenario suite; other languages are follow-up |
+| **D4. Explicit authority first, otherwise subscription-first** (AUTH-15) | Env-first selection or fallback after logout can silently change who pays | Respect scope and route boundaries; ambiguity requires selection; API-key/cloud-only use remains supported |
 | **D5. Bound client pins connection ID and exact model** (AUTH-23) | Following the active slot after replacement can change the account halfway through a CSV without code changes | Old bound clients stop after replacement; caller explicitly selects again |
 | **D6. Interactive connect assembles the advanced API** (AUTH-16/23) | Making every cookbook construct five objects exposes plumbing; installing a global account hides ownership | One convenience client/facade, returning full canonical results, with a pure Request escape hatch |
 | **D7. One active connection/attempt per binding slot in v1** (AUTH-12/18) | Full multi-account arbitration/default selection multiplies policy before the basic contract is proven | Personal/work accounts require explicit scopes/instances; future same-slot account picker is not promised |
-| **D8. Own-store login; no legacy migration** (AUTH-14) | Copying rotating foreign tokens creates unsafe dual owners; user explicitly rejects compatibility work | Users of this new feature sign in directly or explicitly supply credentials; old implicit login fixtures retire |
-| **D9. Private stored attempt, public opaque ID** (AUTH-18) | A self-contained secret `pending.token` moves verifier/device-secret handling into every app and still needs replay/ownership management | Begin needs storage and one-time commit coordination; a public ID alone cannot authorize resume |
+| **D8. Preserve subscription access until a replacement is proven** (AUTH-14, R1/R2) | Retiring CLI access assumes new login grants equivalent subscription entitlement; copying rotating tokens creates unsafe dual owners | Temporary coexistence and provider-specific evidence work; stop/review if safe coexistence cannot be established. No blanket API compatibility layer required |
+| **D9. Reserved: private resumable attempt, public opaque ID** (AUTH-18 reserved) | A self-contained secret `pending.token` moves verifier/device-secret handling into every app and still needs replay/ownership management | Begin needs storage and one-time commit coordination; a public ID alone cannot authorize resume |
 | **D10. Transactions, generations and durable exchange markers** (AUTH-19/20/25) | Plain get/set loses rotated tokens; lease fencing alone cannot stop a second remote exchange after lease loss | Stronger storage adapter requirements and contention; uncertain rotating exchanges stop for recovery rather than guessing |
 | **D11. Cancellation is ordered against commit, not a promise of rollback** (AUTH-19) | Returning cancelled as proof of no effect is false after remote approval or a winning local commit | Apps can inspect attempt state; cancellation after commit requires explicit logout to undo local storage |
 | **D12. Keep saved login after model-picker cancellation** (AUTH-23) | Whole-wizard rollback may erase a valuable grant or pretend to revoke it remotely | connect is not atomic; helper says what was saved and returns a safe recovery reference |
@@ -70,16 +94,17 @@ implementation shortcut.
 | **D18. Keep inference canonical and stateless** (AUTH-23) | A string-returning chat wrapper or hidden history/agent loop would change LM15's foundation | Bound-client sugar constructs ordinary Requests; users still own conversation, SQL/UDF execution and retry policies |
 | **D19. Literal key entry, not a secret-command mini-language** (AUTH-16) | Interpreting pasted keys as shell/env expressions introduces execution and injection into an innocent form | Advanced users supply explicit credential providers or approved cloud recipes instead |
 | **D20. Local AuthOperationError reasons, not synthetic 401s** (AUTH-24) | Expired attempts, lost races and broken stores are not provider credential rejection; errors cannot safely share automatic retry behavior | New root code and closed reason vocabulary; ordinary model/API-key/cloud HTTP errors are unchanged |
-| **D21. Fixed bounded attempt/retention defaults** (AUTH-18) | Infinite polling/private-state retention makes leaks and abandoned grants permanent; provider expiry alone may be absent | Local login defaults to 15 minutes (explicit finite budget allowed before begin, never beyond provider expiry); terminal metadata lives 24 hours; binding generations remain for scope lifetime |
+| **D21. Bounded attempt defaults; retention details reserved** (AUTH-18) | Infinite polling/private-state retention makes leaks and abandoned grants permanent; provider expiry alone may be absent | Local login defaults to 15 minutes (explicit finite budget allowed before begin, never beyond provider expiry); 24-hour terminal retention and scope-lifetime tombstones remain reserved, not first-rollout requirements |
 | **D22. No runtime/fixture claims from this specification** (AUTH-26) | A green documentation check or Python-only unit suite is not SDK/provider parity | Follow-on harness, cross-language race, UI and authorized live tests remain required; support matrix/pins stay unchanged |
 
 ## Compatibility boundary
 
-There is deliberately no compatibility layer, deprecation wrapper, auto-import or
-legacy dual-format store for login. `oauth` and `oauth-unless-explicit` implicit
-source policies are replaced by `connection` for account-only routes and `key`
-for unmanaged key-capable routes. Login availability is described separately by
-methods/bindings. This is a deliberate draft change to that vocabulary.
+`oauth` and `oauth-unless-explicit` are **not retired**. Existing Claude/Codex
+access and xAI subscription precedence remain until the ratified replacement
+gates pass. The new `connection` policy is additive, not permission to reclassify
+xAI as env-key-only. Login methods describe protocols separately from authority.
+No auto-import or independent copy of rotating foreign credentials is introduced;
+LM15's locks do not coordinate foreign tools. Safe coexistence needs evidence.
 
 The following **existing callers retain their behavior** when managed Auth is not
 attached: explicit API keys/credential callbacks, shared explicit keys, declared
@@ -88,7 +113,9 @@ cloud chains, cloud endpoint overrides, JWT-to-bearer handling and error provena
 Their fixtures must not be weakened to make managed mode look green.
 
 With managed Auth attached, explicit credentials/named identities still win on a
-general router. Saved state is then authoritative: no ambient fallback. A bound
+general router. Otherwise eligible subscriptions are preferred within the
+selected scope; multiple eligible accounts require choice. Absence/failure in
+managed mode does not authorize ambient fallback. A bound
 client has no per-request identity override at all. `auth.status()` describes the
 store; the router doctor describes the actual request selection, including any
 explicit override. Login returns metadata, never a public token bag.
@@ -97,10 +124,10 @@ explicit override. Login returns metadata, never a public token bag.
 
 - `spec/auth.md`: revised entry rules/boundary and links to AUTH-12–26; long cloud
   chain/named-credential/endpoint rules preserved.
-- `spec/vocabularies.md`: draft `connection` policy and `auth_operation` root code;
+- `spec/vocabularies.md`: additive `connection` policy and `auth_operation` root code;
   managed-only vocabularies live in the supplement rather than pretending they are
   current canonical Request fields.
-- `spec/SCOPE.md`, `playbooks/api-family.md`: explicit draft managed/auth convenience
+- `spec/SCOPE.md`, `playbooks/api-family.md`: ratified core managed/auth convenience
   surface and narrowly scoped exception for model-bound request construction.
 - `docs/auth-examples.md`: non-executable language-native illustrations, no Python
   reference algorithm used as an oracle.
@@ -111,17 +138,16 @@ explicit override. Login returns metadata, never a public token bag.
   bad-artifact mutation self-tests. This is not a login engine, SDK implementation
   or behavioral conformance runner.
 
-The new draft is not a reason to revise live wire fixtures or recorded receipts.
-The exact old implicit-login cases superseded by this proposal are identified in
-`auth/managed/README.md`; their current presence is historical, not a promise to
-preserve that behavior. Promotion of the amendment must transition the harness
-explicitly, not quietly count both incompatible contracts as passing.
+Ratification is not a reason to revise live wire fixtures or recorded receipts.
+`auth/managed/README.md` identifies the retained subscription fixtures and the
+single corrected xAI fallback expectation. Their gate remains active; no archive,
+skip, broad policy retirement or claim of SDK conformance follows from ratification.
 
 ## Follow-on work, not hidden decisions
 
 Implement the specified native types, private schemas/store guarantees and
 scenario-driving harness; supply evidenced provider flow profiles; port primitives
-and integrations across ten SDKs; add terminal/custom UI and model discovery;
+and integrations in Python then TypeScript; add terminal/custom UI and model discovery;
 implement the thin bound client; extend/deploy a relay only with its own security
 review and consent model; collect platform/account receipts with permission.
 

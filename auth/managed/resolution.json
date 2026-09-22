@@ -1,14 +1,15 @@
 {
-  "provenance": {"source": "hand-authored", "date": "2026-09-22", "evidence": "changes/2026-09-22-managed-authentication.md D4/D5; spec/auth-managed.md AUTH-12–15, AUTH-20, AUTH-23–24"},
+  "provenance": {"source": "hand-authored", "date": "2026-09-22", "evidence": "changes/2026-09-22-managed-authentication.md Ratification and fixture correction, D4/D5/D8; changes/2026-09-22-managed-authentication-ratification.md R1–R3/R10; spec/auth-managed.md AUTH-12–15, AUTH-20, AUTH-23–24"},
   "version": 1,
-  "status": "review-draft",
+  "status": "ratified-core",
   "description": "Synthetic pre-acquisition decisions. Every case is offline, read-only and callback-free. Symbolic references are materialized privately by the future harness; see README.md.",
   "definitions": [
     {"id": "openai", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "openai-key"},
     {"id": "openai-chat", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "openai-key"},
     {"id": "openai-alt", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "application-alt-key"},
-    {"id": "claude-code", "policy": "connection", "env_keys": [], "binding_id": "claude-account"},
-    {"id": "xai", "policy": "key", "env_keys": ["XAI_API_KEY"], "binding_id": "xai"},
+    {"id": "claude-code", "policy": "oauth", "env_keys": [], "binding_id": "claude-account"},
+    {"id": "openai-codex", "policy": "oauth", "env_keys": [], "binding_id": "codex-account"},
+    {"id": "xai", "policy": "oauth-unless-explicit", "env_keys": ["XAI_API_KEY"], "binding_id": "xai"},
     {"id": "azure", "policy": "azure-chain", "env_keys": ["AZURE_OPENAI_API_KEY"], "binding_id": "azure"},
     {"id": "gemini", "policy": "key", "env_keys": ["GEMINI_API_KEY", "GOOGLE_API_KEY"], "binding_id": "gemini"},
     {"id": "vertex-express", "policy": "key", "env_keys": ["GOOGLE_API_KEY"], "binding_id": "vertex-express"},
@@ -51,14 +52,14 @@
       "expect": {"result": "blocked", "code": "not_configured"}
     },
     {
-      "id": "unmanaged-does-not-load-managed-login",
-      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
-      "expect": {"result": "selected", "source": "environment", "key": "XAI_API_KEY", "next": "acquire"}
+      "id": "unmanaged-xai-subscription-still-beats-env",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "existing_subscription": {"source": "xai-store", "state": "ready"}},
+      "expect": {"result": "selected", "source": "existing_subscription", "key": "xai-store", "next": "acquire"}
     },
     {
-      "id": "account-only-has-no-implicit-file-source",
-      "given": {"mode": "unmanaged", "route": "claude-code", "env": {"ANTHROPIC_API_KEY": "ambient"}, "foreign_login_present": true},
-      "expect": {"result": "blocked", "code": "not_configured"}
+      "id": "claude-cli-access-preserved-until-replacement-proven",
+      "given": {"mode": "unmanaged", "route": "claude-code", "env": {"ANTHROPIC_API_KEY": "ambient"}, "existing_subscription": {"source": "claude-code-cli", "state": "ready"}},
+      "expect": {"result": "selected", "source": "existing_subscription", "key": "claude-code-cli", "next": "acquire"}
     },
     {
       "id": "account-only-accepts-explicit-credential",
@@ -179,6 +180,51 @@
       "id": "bound-client-refuses-security-definition-change",
       "given": {"mode": "bound", "route": "xai", "definition_revision": "v2", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
       "expect": {"result": "blocked", "code": "auth_operation", "reason": "connection_changed"}
+    },
+    {
+      "id": "codex-cli-access-preserved-until-replacement-proven",
+      "given": {"mode": "unmanaged", "route": "openai-codex", "existing_subscription": {"source": "codex-cli", "state": "ready"}},
+      "expect": {"result": "selected", "source": "existing_subscription", "key": "codex-cli", "next": "acquire"}
+    },
+    {
+      "id": "unmanaged-xai-explicit-key-beats-subscription",
+      "given": {"mode": "unmanaged", "route": "xai", "explicit": {"xai": {"ref": "caller"}}, "existing_subscription": {"source": "xai-store", "state": "ready"}},
+      "expect": {"result": "selected", "source": "explicit", "key": "xai", "next": "acquire"}
+    },
+    {
+      "id": "unmanaged-xai-unusable-subscription-blocks-env",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "existing_subscription": {"source": "xai-store", "state": "needs_login"}},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "unmanaged-xai-logout-blocks-env-after-restart",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "existing_subscription": {"source": "xai-store", "state": "logged_out"}},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "unmanaged-xai-explicit-key-after-logout-is-deliberate",
+      "given": {"mode": "unmanaged", "route": "xai", "explicit": {"xai": {"ref": "caller"}}, "existing_subscription": {"source": "xai-store", "state": "logged_out"}},
+      "expect": {"result": "selected", "source": "explicit", "key": "xai", "next": "acquire"}
+    },
+    {
+      "id": "unmanaged-xai-never-connected-key-only-still-works",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}},
+      "expect": {"result": "selected", "source": "environment", "key": "XAI_API_KEY", "next": "acquire"}
+    },
+    {
+      "id": "managed-does-not-borrow-server-owners-cli-login",
+      "given": {"mode": "managed", "route": "claude-code", "existing_subscription": {"source": "claude-code-cli", "state": "ready"}},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "multiple-eligible-subscription-instances-require-choice",
+      "given": {"mode": "managed", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "instance_id": "personal", "routes": ["xai"], "state": "ready"}, {"id": "c2", "instance_id": "work", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "interaction_required"}
+    },
+    {
+      "id": "unmanaged-xai-renewable-subscription-stays-selected",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "existing_subscription": {"source": "xai-store", "state": "renewal_due"}},
+      "expect": {"result": "selected", "source": "existing_subscription", "key": "xai-store", "next": "renew_if_due"}
     },
     {
       "id": "unknown-provider-fails-before-any-source",

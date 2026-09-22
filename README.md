@@ -19,17 +19,18 @@ first. Implementations must follow the contract, not change fixtures to pass.
 | `playbooks/port.md` | Port order, test gates, and review rules |
 | `playbooks/api-family.md` | Public API guide (ratified 2026-09-06) |
 
-## Managed authentication design (2026-09-22 review draft)
+## Managed authentication (2026-09-22 ratified core)
 
-Start with [what needs a yes/no](changes/2026-09-22-managed-authentication-ratification.md)
+Start with [the ratified decisions](changes/2026-09-22-managed-authentication-ratification.md)
 (one page), then the [decision record](changes/2026-09-22-managed-authentication.md),
 the [core spec AUTH-12–26](spec/auth-managed.md), its
 [reserved rules](spec/auth-managed-reserved.md) (design notes, not binding until
-their trigger is met) and [worked examples](docs/auth-examples.md).
-[Acceptance scenarios and vectors](auth/managed/README.md) specify what every SDK
-must prove. The private store schema is [here](spec/auth-store.schema.json).
-The changed portions of `spec/auth.md`/vocabularies are explicitly draft; no SDK
-implementation, provider support promotion or CONTRACT_PIN update is included.
+their trigger and explicit promotion are met) and [worked examples](docs/auth-examples.md).
+[Acceptance scenarios and vectors](auth/managed/README.md) specify what Python
+and TypeScript must prove first. Existing subscription access is preserved;
+explicit keys win, otherwise subscription access precedes ambient keys. The
+private store schema remains a [reserved design](spec/auth-store.schema.json).
+No SDK implementation, provider support promotion or CONTRACT_PIN update is included.
 
 ## Check the contract
 

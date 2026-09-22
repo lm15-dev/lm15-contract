@@ -1,9 +1,9 @@
 # spec/auth.md — credential resolution, refresh, storage, secrecy
 
 **STATUS: existing rules ratified 2026-08-31 with subsequent amendments;
-2026-09-22 managed-authentication revision is a REVIEW DRAFT.** The newly
-written behavior is a normative candidate for review, not a claim that any
-SDK implements it. Unchanged API-key and cloud-identity rules remain in
+2026-09-22 managed-authentication core is RATIFIED with subscription-first
+corrections and Python/TypeScript-first scope.** This is not a claim that any
+SDK implements the new behavior. Unchanged API-key and cloud-identity rules remain in
 force. The detailed revision is [AUTH-12–26](auth-managed.md) (core tier;
 [reserved rules](auth-managed-reserved.md) bind nobody until promoted),
 incorporated as the managed-authentication part of this specification. See
@@ -15,9 +15,10 @@ storage coordination and safe request binding. Applications own presentation,
 authorized user scopes and deliberate login actions. Ordinary inference never
 initiates interactive login. The interactive `connect()` helper composes these
 operations without changing process-global identity or canonical request types.
-No compatibility with the old implicit Claude/Codex/Pi or xAI login behavior is
-required; API-key and cloud users are deliberately unaffected when they do not
-attach a managed Auth.
+Existing Claude/Codex subscription access stays until a permitted replacement
+passes login, inference and renewal with the intended account/billing behavior.
+xAI keeps subscription-first selection. No independent copies of rotating foreign
+tokens are authorized. Existing API-key/cloud-only callers remain supported.
 
 ## AUTH-1 — Credential policy and resolution order
 
@@ -27,24 +28,30 @@ from the declaration — never from a hardcoded provider-name list, which is
 a second copy of the same fact and will drift (amended 2026-09-01):
 
 - **`key`** — the ordinary chain below supplies the credential.
-- **`connection`** — an account-only route requires an accepted explicit
-  credential or an explicitly attached managed Auth. No environment-key,
-  foreign CLI-file or implicit managed-store lookup. Without either source,
-  fail with login guidance naming LM15's login/connect operation.
+- **`oauth`** — existing Claude Code/Codex access uses the declared CLI credential
+  source (AUTH-8). Missing/unusable credentials never fall through to an API key.
+  Preserve these paths until the provider-specific R1 replacement gate passes.
+- **`oauth-unless-explicit`** — xAI: an explicit credential entry wins; otherwise
+  subscription access wins over ambient keys. Failed, unreadable, expired without
+  renewal, or logged-out access blocks automatic key use. Only genuine absence
+  with no prior subscription selection/logout marker permits the existing
+  API-key-only chain. An explicit key selection still works.
+- **`connection`** — a new managed account route uses an accepted explicit
+  credential or scoped Auth selection. It never implicitly searches another
+  scope or foreign CLI store. This policy does not replace existing routes merely
+  because the managed contract is ratified.
 
-The `oauth` and `oauth-unless-explicit` policies are proposed for retirement
-by the 2026-09-22 draft (ratification items R1/R2); they remain in force and in
-the runtime until that answer. Protocol capabilities now live in discoverable auth-method
-and binding declarations (AUTH-13), not implicit source chains. A dual-method
-provider such as xAI, Meta or OpenRouter has ordinary `key` resolution without
-managed Auth, and the managed rules below when Auth is attached. Account-only
-routes use `connection`. OAuth is not a billing guarantee: account access can
-consume credits or incur extra usage.
+R1/R2 do **not** retire `oauth` or `oauth-unless-explicit`. Discoverable methods
+(AUTH-13) describe login protocols separately from selection. Subscription-first
+is a preference, not proof of free/included usage: account access can consume
+credits or incur extra charges. Provider-specific permission and billing require
+evidence; code licensing or a successful token exchange is insufficient.
 
 **Mode boundary:** the key/cloud chains in this section apply to callers
 without managed Auth. With managed Auth, AUTH-15 is authoritative: explicit
-credentials/named identities still win, then the scoped connection; absence
-or failure never falls through to ambient identity. The bound client returned
+credentials/named identities still win; otherwise eligible subscription access
+is preferred within the authorized scope. Multiple eligible accounts require a
+choice. Absence or failure in managed mode never falls through to ambient identity. The bound client returned
 by `connect()` is stricter: it pins the selected Connection ID and model and
 rejects identity overrides.
 
@@ -87,10 +94,12 @@ The `connection` policy has no ambient-store or environment fallback.
 See `changes/2026-09-09-python-migration-ux.md`. Implementation rollout is
 Python first; other languages are follow-up, not claimed aligned here.
 
-Saved account/key/cloud connections are never inserted into an unmanaged
-router's source chain. To use them, attach Auth explicitly or use the
-interactive `connect()` helper. AUTH-15 specifies resolution, and AUTH-19/20
-specify failure, replacement, logout and renewal.
+New managed scopes are not implicitly inserted into unrelated routers' source
+chains. This does not disable existing CLI subscription sources or xAI's own
+subscription store. AUTH-15 governs subscription-first selection and scoped
+isolation; AUTH-19/20 govern failure, replacement, logout and renewal. Logout
+retains nonsecret suppression state so restarting cannot silently charge an
+ambient key. API-key/cloud-only callers remain supported.
 
 Cloud chains (amended 2026-09-03, changes/2026-09-03-cloud-hosts.md). Three
 further policies exist for providers whose door is a cloud host:
@@ -308,6 +317,12 @@ serialized renewal, durable in-flight markers, and conservative recovery after
 possibly rotating exchanges. A failed selected credential never selects another
 identity. A network outage is not automatically an invalid login.
 
+Existing CLI subscription renewal remains available under its source rules:
+double-check freshness after the canonical-path lock, serialize cooperating
+refreshers, and never switch to a key after failure. Such locks do not coordinate
+foreign tools. Do not copy rotating tokens into an independent managed store.
+A safe coexistence/replacement strategy needs provider evidence under R1.
+
 Existing cloud-chain credential acquisition/caching remains unchanged: the
 five-minute renewal window and provider-specific rules apply, and the cache is
 keyed by provider plus identity-selecting settings (AWS profile/role; Azure
@@ -328,7 +343,8 @@ meaning or caching responsibility of application-supplied AUTH-2 callbacks.
   directory (`~/.claude`, `~/.codex` are foreign territory).
 - Stated limitation: locks coordinate only cooperating processes/backends;
   re-reading is not a cure for a foreign tool rotating the same credential.
-  Managed auth does not borrow foreign CLI logins. AUTH-25 additionally requires
+  Existing CLI access is retained subject to R1's ownership/evidence boundary;
+  this is not a claim that foreign-tool renewal races are solved. AUTH-25 requires
   atomic attempt/connection commits, scope isolation, identity generations and
   interrupted-exchange detection; plain per-value get/set is insufficient.
 
@@ -336,7 +352,7 @@ meaning or caching responsibility of application-supplied AUTH-2 callbacks.
 
 AUTH-21 in [auth-managed.md](auth-managed.md) extends this boundary to private
 attempts, device codes, PKCE material, callback/session-sensitive URLs, typed UI,
-relay consent and auth HTTP diagnostics. Private store encoding is not public
+auth HTTP diagnostics. Detailed relay consent remains reserved. Private store encoding is not public
 status serialization. Applications' own trusted secret callbacks are not sandboxed.
 
 Token and key material never appears in: reprs, exception messages,
@@ -354,6 +370,11 @@ credential responses: each is a bearer-equivalent for its lifetime.
 - For existing unmanaged key/cloud sources, missing/unreadable/malformed
   sources retain `NotConfiguredError`, `provider` and the actual configuration
   hint (`export GROQ_API_KEY=...`, select/configure the named cloud identity).
+  When a subscription blocks an ambient key (AUTH-1 `oauth-unless-explicit`
+  after failure/logout), the same error MUST say so: name the unusable or
+  logged-out subscription, the re-login command, and that the present key is
+  used only when passed explicitly. "Not configured" alone is wrong when the
+  user can see the key is set.
   Managed lifecycle failures use AUTH-24 `AuthOperationError` with a typed reason,
   commit state and recovery action; these are not fabricated provider HTTP errors.
 - Existing unmanaged credential acquisition and model-request provider rejection
@@ -380,13 +401,17 @@ and explicit verification. Without managed Auth it retains the existing walk:
   bug, testable against `auth/resolution.json`);
 - performs no network I/O;
 - reports each rung as `selected`, `shadowed` (usable but beaten by an
-  earlier rung), `absent`, or (amended 2026-09-03) `unprobed` — a network
+  earlier rung, or blocked by subscription failure/logout under R3), `absent`,
+  or (amended 2026-09-03) `unprobed` — a network
   rung (IMDS, container endpoint, Azure managed identity, GCE metadata)
   that the offline doctor did not contact. An environment variable may
   prove such a rung absent (`AWS_EC2_METADATA_DISABLED`, `NO_GCE_CHECK`)
   or present (`IDENTITY_ENDPOINT`, `MSI_ENDPOINT`, the container URIs);
   otherwise it is `unprobed`. Real resolution probes it with the SDK's
-  timeouts;
+  timeouts. In the legacy projection, an unusable subscription rung is `absent`
+  (not usable), but a present environment key is `shadowed` (blocked), so
+  `configured=false`. Diagnostics must distinguish this from never-connected
+  key-only use; `absent` must not be interpreted as permission to fall through;
 - prints the resolved host settings (region, location, project, resource,
   workspace) by name and value — they are not secrets and they decide
   residency (amended 2026-09-03);
@@ -409,10 +434,12 @@ and explicit verification. Without managed Auth it retains the existing walk:
   `~/.config/lm15/credentials.json`.
 - Lock directory: `$LM15_LOCK_DIR`, else `$XDG_CACHE_HOME/lm15/locks`, else
   `~/.cache/lm15/locks`.
-- Managed login does not read/write `~/.claude/.credentials.json`,
-  `~/.codex/auth.json` or `~/.pi/agent/auth.json`. No auto-import, migration,
-  dual-format writer or compatibility flow is required. Explicit external
-  credential providers remain an application choice under AUTH-2.
+- Existing subscription sources: `~/.claude/.credentials.json` for Claude Code
+  and `~/.codex/auth.json` for Codex. Their access paths remain until R1's
+  replacement gate passes. Preserve source-specific formats/renewal behavior;
+  do not copy rotating material to create another independent owner. New managed
+  scopes never implicitly discover these files or `~/.pi/agent/auth.json`.
+  Explicit external credential providers remain a choice under AUTH-2.
 - Borrowed cloud files (amended 2026-09-03): `~/.aws/credentials`,
   `~/.aws/config` (`AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`),
   `~/.aws/sso/cache/*.json`, `~/.aws/login/cache/*.json`,
@@ -420,30 +447,31 @@ and explicit verification. Without managed Auth it retains the existing walk:
   Same rule: foreign formats, revalidated, never cleaned. lm15 never
   writes to them; refreshed cloud tokens live in memory (AUTH-3 cache),
   never in a foreign file.
-- The managed store has its own versioned format (AUTH-25), not the former
-  xAI/Pi entry shape. Unknown existing formats are refused without overwriting
-  them; a caller deliberately chooses a supported store. These paths are
-  consulted only by explicit local-store construction/operations, not by an
-  otherwise unconfigured router.
+- A managed store has a versioned format (AUTH-25); its exact schema remains a
+  reserved design artifact. Unknown formats must not be overwritten. xAI's
+  migration must preserve existing subscription access and precedence, including
+  when an ambient key exists. Do not make a router ignore its current subscription
+  store merely by changing the managed format or requiring a new constructor.
 
 ## AUTH-9 — SDK-owned login, application-owned presentation
 
-**Replaced by the 2026-09-22 review draft.** Every implementation exposes the
-same managed operations defined in [AUTH-12–26](auth-managed.md): discovery,
-login, begin/resume/cancel, key/recipe setup, status, verification, renewal,
-logout and model-bound connection. Login returns secret-free Connection metadata;
-ordinary inference never starts login. There is no xAI-only restriction or
-requirement to install another provider's CLI.
+**Amended 2026-09-22, ratified core.** Python and TypeScript are the first
+implementations of [AUTH-12–26](auth-managed.md): discovery, connected login/cancel,
+key/recipe setup, status, verification, renewal, logout and model-bound connection.
+Login returns secret-free Connection metadata; inference never starts login.
+SDK-owned login is no longer limited to xAI, but Claude/Codex-owned login is not
+assumed to replace current CLI access before R1's evidence gate passes.
 
 The core requires explicit UI where a choice is needed. An optional interactive
-`connect()` selects/reuses an account and model and returns a bound client. Both
-connected login and resumable website login drive the same state machine.
+`connect()` prefers subscriptions unless a key/named cloud identity was explicitly
+selected. Resumable begin/resume website login remains reserved; when promoted,
+it must share protocol machinery rather than create a second login engine.
 
 AUTH-18 specifies S256 PKCE, state/issuer/redirect binding, device polling,
-loopback-only native callbacks, supported manual returns and website session
-ownership. Wrong-state error callbacks cannot terminate a legitimate attempt.
+loopback-only native callbacks and supported manual returns. Website session
+ownership details are reserved until the web/server track is promoted. Wrong-state error callbacks cannot terminate a legitimate attempt.
 AUTH-19 defines cancellation/commit races; AUTH-20 defines uncertain exchange
-outcomes; AUTH-21 defines secrets and relay consent. No implementation may reduce
+outcomes; AUTH-21 defines secrets. Detailed relay consent remains reserved. No implementation may reduce
 these requirements to a provider-specific happy-path helper.
 
 ## AUTH-10 — Access policy: auth by composition
@@ -551,11 +579,11 @@ The policies (reference: `lm15/access.py`):
 | Policy | Dialect | credential | auth_header | backend | Notable fields |
 |---|---|---|---|---|---|
 | `anthropic` | Anthropic | key | `x-api-key` | api | files, batches, models |
-| `claude-code` | Anthropic | connection | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
+| `claude-code` | Anthropic | oauth (preserved under R1) | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
 | `openai` | Responses | key | bearer | api | full surface |
-| `openai-codex` | Responses | connection | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
+| `openai-codex` | Responses | oauth (preserved under R1) | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
 | `openai_chat` | Chat | key | bearer | api | complete, stream, models |
-| `xai` | Chat (+ provider adapter) | key (unmanaged); explicit managed binding otherwise | bearer | api | base `https://api.x.ai/v1`; images, video, models |
+| `xai` | Chat (+ provider adapter) | oauth-unless-explicit; scoped managed selection under AUTH-15 | bearer | api | base `https://api.x.ai/v1`; images, video, models |
 | `gemini` | Gemini | key | `x-goog-api-key` | api | full surface incl. caches |
 | `azure` / `azure-chat` | Responses / Chat | azure-chain | `api-key`, `bearer` | azure-openai | `https://{resource}.openai.azure.com/openai/v1`, or `AZURE_OPENAI_ENDPOINT` + `/openai/v1` (the Foundry root, amended 2026-09-19); model = deployment name; data-plane `/models` lists the resource catalog (live, contrary to docs); `azure` also carries Files, Batch, speech and Realtime |
 | `azure-anthropic` | Anthropic | azure-chain | `x-api-key`, `bearer` | azure-foundry | `https://{resource}.services.ai.azure.com/anthropic/v1`, or `ANTHROPIC_FOUNDRY_BASE_URL` + `/anthropic/v1`; docs also claim `api-key`, but live it is 401 while `x-api-key` reaches deployment lookup; no batches/models/`fallbacks`; successful inference quota-blocked |

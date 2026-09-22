@@ -1,6 +1,7 @@
 # Managed-auth acceptance scenarios
 
-**REVIEW DRAFT, 2026-09-22. Required tests, not a report of tests already passing.**
+**RATIFIED CORE, 2026-09-22. Reserved portions remain non-normative.
+Required tests for Python and TypeScript first, not a report of passing SDKs.**
 
 Rules: [AUTH-12–26](../../spec/auth-managed.md). Driver/evidence levels:
 [README](README.md). Every scenario runs against public SDK operations with fake
@@ -16,11 +17,12 @@ Numbering is stable; a scenario keeps its ID when promoted.
 
 | Tier | Scenarios | Gate |
 |---|---|---|
-| **Core** | MA-001–009, 011–020, 022, 025–040, 042–045, 047, 048, 050–064 | Required before the xAI migration and the first browser login are called done. MA-024 only its expiry half; MA-041 only its >2^53 revision half; MA-040 only the structural-schema half. |
-| **Reserved** | MA-010, 021, 023, 046, 049; the retention half of MA-024; the tombstone/epoch half of MA-041; the cross-record-invariant half of MA-040 | Promoted with the reserved rule they test (resumable attempts, relay, database stores). Not required, not counted, until then. |
+| **Core** | MA-001–009, 011–020, 022, 025–040, 042–045, 047, 048, 050–064 | Applicable portions gate each claimed provider/platform in Python and TypeScript. MA-024: expiry only; MA-041: >2^53 revisions only. MA-040's fixed-layout details remain reserved. |
+| **Reserved** | MA-010, 021, 023, 046, 049; the retention half of MA-024; the tombstone/epoch half of MA-041; MA-040's exact schema/cross-record layout requirements | Promoted with the reserved rule they test (resumable attempts, relay, database stores). Not required, not counted, until then. |
 
-MA-064 says "all ten languages"; which languages are release SDKs is a separate
-maintainer decision (see the ratification list), not something this file settles.
+R10 commits the first rollout to Python and TypeScript. Tests for unrelated
+future providers/platforms are not prerequisites for the xAI milestone; report
+applicability explicitly rather than count unimplemented surfaces as passing.
 
 For all scenarios, assert both the expected result **and forbidden effects**.
 Examples: "no fallback" means a trap credential callback/transport was not invoked,
@@ -58,7 +60,11 @@ silently selected.
 Replay every `resolution.json` case through inspection and public request
 preparation. The decision-phase trace has zero network/callbacks/writes. Subsequent
 fake acquisition uses only the selected source or refuses with the pinned reason.
-Reorder maps to prove order is not an identity-selection rule.
+Reorder maps to prove order is not an identity-selection rule. Exercise retained
+Claude/Codex CLI sources and xAI subscription precedence without a manager;
+managed scope isolation must not be mistaken for retiring those existing paths.
+Explicit keys win; multiple eligible subscription instances require choice.
+A saved key's mere presence is not explicit selection overriding a subscription.
 
 ### MA-005 — Explicit credential failure is not a fallback (AUTH-15/20)
 
@@ -76,9 +82,11 @@ provenance remain. A failing named source never broadens into the whole chain.
 ### MA-007 — Existing API-key and Azure regression boundary (AUTH-15/26)
 
 Run unchanged unmanaged shared-key, key-kind/header, JWT, named-cloud, endpoint and
-error-provenance fixtures. Add a managed file on disk and show their source/wire
-is unchanged. Do not retain the ten retired implicit-login vectors as obligations
-of the new managed mode (README lists them).
+error-provenance fixtures. Add an unrelated managed file and show their source/wire
+is unchanged. Keep Claude/Codex access fixtures and xAI subscription-first fixtures
+as regression gates. The one corrected case, `xai-unusable-login-blocks-env`, must
+refuse acquisition rather than charge the environment key. No blanket retirement
+or fixture skips. Never-connected API-key-only use still works.
 
 ### MA-008 — Scope/instance separation (AUTH-12/14/15)
 
@@ -243,12 +251,17 @@ result. A native caller cancellation that loses delivery can inspect attempt(id)
 to discover the result. The UI must not claim nothing was saved from task abort
 alone. No provider revoke request is used as hidden compensation.
 
-### MA-029 — Logout is scoped, idempotent and generation-safe (AUTH-19)
+### MA-029 — Logout is scoped, idempotent and generation-safe (AUTH-15/19)
 
 Logout C1: clear its secrets, increment tombstone generation, cancel its pending
 attempts, invalidate caches. Repeat after C2 replaces it: C2 survives. Other scopes
 and bindings, environment keys and cloud/foreign files are unchanged. No remote
 request, subscription cancellation or claim of provider-wide logout.
+
+Restart the process after subscription logout with a valid ambient API key.
+The retained nonsecret suppression state prevents automatic key acquisition;
+a new explicit key selection succeeds. Test this for xAI's existing source as
+well as managed connections. A logout marker for Alice must not affect Bob.
 
 ### MA-030 — Logout versus request dispatch (AUTH-19/20)
 
@@ -449,6 +462,12 @@ using returned descriptors/IDs end to end. No user must type an internal provide
 ID; the resulting canonical Request still contains the exact routed model.
 Unknown service labels are not silently treated as provider aliases.
 
+With multiple eligible subscriptions, the picker asks; without a UI, selection
+fails `interaction_required`. With no subscription available, `connect()` offers
+key use as an explicit choice, without acquiring/charging the ambient key first.
+An explicit key or named cloud identity bypasses subscription preference. Do not
+infer included usage from `kind=account`, OAuth, or login success.
+
 ### MA-055 — No UI or network magic in a server (AUTH-16/23)
 
 Call bare interactive connect without a TTY/UI. Fail interaction_required before
@@ -510,6 +529,13 @@ OpenRouter non-expiring key and Radius gateway discovery/protocol. Use docs/live
 provenance for exact requests; fake-provider success alone is not a live support
 claim. No Gemini CLI/Antigravity login or hidden ninth built-in requirement.
 
+Before either Claude or Codex source is retired, independently establish
+provider-permitted use and demonstrate login → inference → renewal with the
+intended account/billing behavior for that provider. Mocks or xAI receipts cannot
+satisfy this gate. Inspect coexistence for independent rotating-token copies;
+never claim LM15 locks coordinate foreign tools. Unresolved safety blocks cutover,
+not continued honest reporting of the existing path's limitations.
+
 ### MA-063 — Packaging prerequisite failures (AUTH-17/22)
 
 Integration on claimed OS/runtime: missing TS lock addon/flock, R callback packages,
@@ -517,10 +543,11 @@ read-only directories, inaccessible database and browser storage quota/private-m
 failures surface before approval when detectable. No unsafe unlocked write or
 silent memory fallback to make the happy-path screenshot work.
 
-### MA-064 — Same behavior in all ten languages, separate platform claims (AUTH-26)
+### MA-064 — Python/TypeScript first, separate platform claims (AUTH-26)
 
-Publish results per SDK and native/browser/mobile/server profile against one
-contract revision. Existing API-key/cloud gates remain green. Add the mutation
+Publish separate Python and TypeScript results by claimed provider/platform
+against one contract revision. Other SDKs are follow-up scope decisions, not
+initial rollout gates. Existing API-key/cloud gates remain green. Add the mutation
 self-tests required by README. No skips counted as implementation, no fixture
 rewrites to fit Python, and no source-only/browser-preflight success sold as a live
 account login. Authorized live tests explicitly disclose approval, data and cost.

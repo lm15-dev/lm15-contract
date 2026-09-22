@@ -143,7 +143,7 @@ CLASS name, `code` is the ErrorCode literal.
 | Value | Canonical class | Notes |
 |---|---|---|
 | `auth` | `AuthError` | 401/403 |
-| `auth_operation` | `AuthOperationError` | **2026-09-22 review draft:** local managed-auth lifecycle failure; root-level, not a provider 401. Closed reasons, commit state and recovery in AUTH-24 of `auth-managed.md`. Not automatically retryable. |
+| `auth_operation` | `AuthOperationError` | **2026-09-22 ratified core:** local managed-auth lifecycle failure; root-level, not a provider 401. Closed reasons, commit state and recovery in AUTH-24 of `auth-managed.md`. Not automatically retryable. |
 | `billing` | `BillingError` | 402 |
 | `rate_limit` | `RateLimitError` | 429 |
 | `invalid_request` | `InvalidRequestError` | 400/404/409/413/422 |
@@ -161,7 +161,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `collection_limit` | `CollectionLimitError` | Local collector byte/event budget reached, not a provider failure; non-retryable. Accepted events and any received-but-rejected event remain available. No synthetic end event or automatic session cancellation. Ratified 2026-09-15 in `changes/2026-09-15-live-collection-limits.md` |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
-The managed-auth draft's AuthOperationError adds `reason`, `operation`,
+The ratified managed-auth core's AuthOperationError adds `reason`, `operation`,
 `instance_id`, optional method/attempt/connection references, `stage`,
 `commit_state` and `recovery` as specified in AUTH-24. These are sanitized
 lifecycle metadata, not a second provider HTTP error mapping. Native
@@ -172,7 +172,7 @@ allowed):
 
 ```
 LM15Error
-├── AuthOperationError  (2026-09-22 review draft)
+├── AuthOperationError  (2026-09-22 ratified core; implementation pending)
 ├── TransportError
 ├── LockTimeoutError
 ├── StreamAssemblyError
@@ -492,33 +492,33 @@ discriminator of a credential value (spec/auth.md AUTH-2).
 Runtime mirror: `CREDENTIAL_POLICIES` (pinned 2026-09-03; the first three
 exist since 2026-09-01). spec/auth.md AUTH-1.
 
-**2026-09-22 review draft, pending ratification R1/R2
-(changes/2026-09-22-managed-authentication-ratification.md):** `connection`
-is proposed, and the implicit-file `oauth` / `oauth-unless-explicit` entries
-are proposed for retirement, not as aliases. Until the maintainer answers,
-the retiring values stay listed because the shipped runtime still has them
-and the drift gate must reflect reality, not a proposal.
+**2026-09-22 ratified core, R1/R2:** `connection` is additive.
+`oauth` and `oauth-unless-explicit` are retained, not retired or aliased.
+The latter preserves subscription-first selection; R3 removes automatic
+ambient-key fallback after subscription failure/logout. Python and TypeScript
+implement this first; vocabulary presence alone proves no runtime behavior.
 
 | Value | Status |
 |---|---|
 | `key` | ratified |
-| `connection` | draft (R1/R2) |
-| `oauth` | ratified; retirement proposed (R1) |
-| `oauth-unless-explicit` | ratified; retirement proposed (R2) |
+| `connection` | ratified core; implementation pending |
+| `oauth` | ratified; access preserved under R1 |
+| `oauth-unless-explicit` | ratified; subscription-first, no failure/logout fallback (R2/R3) |
 | `aws-chain` | ratified |
 | `azure-chain` | ratified |
 | `gcp-chain` | ratified |
 
 `connection` has no implicit file/environment source: supply an accepted
-explicit credential or managed Auth. Dual-method providers use `key` for
-unmanaged callers; attached Auth uses AUTH-15 instead. The protocol is named
+explicit credential or managed Auth. Existing xAI keeps `oauth-unless-explicit`,
+not env-key-only resolution. Attached Auth uses AUTH-15. The protocol is named
 by method/flow descriptors, not guessed from this source policy.
 
 Managed-only closed values (connection kind, flow, availability, lifecycle,
 commit state and AuthOperationError.reason) are defined in
 [auth-managed.md](auth-managed.md); they are not canonical Request fields.
-The private persistent representation is [auth-store.schema.json](auth-store.schema.json).
-No current SDK reflection or support claim follows from these draft additions.
+The private persistent representation is a reserved design artifact:
+[auth-store.schema.json](auth-store.schema.json). No SDK reflection or support
+claim follows from the ratified additions.
 
 ## NamedCredential
 

@@ -1,12 +1,22 @@
 # Authentication journeys — contract examples
 
-**REVIEW DRAFT, 2026-09-22. These are static design examples, not executable
-notebooks or claims about the installed SDKs.** Names illustrate idiomatic bindings;
+**2026-09-22. Static API sketches for the ratified core, not executable notebooks
+or claims about installed SDKs.** Python and TypeScript are the initial scope;
+other language sketches are illustrative follow-up, not release commitments.
+Names illustrate idiomatic bindings;
 [AUTH-12–26](../spec/auth-managed.md) fixes the behavior. Do not run these against
 current packages or infer an implementation from one language's pseudocode.
 Section 5 and the `begin_login`/`resume_login` calls in section 6 illustrate
 [reserved](../spec/auth-managed-reserved.md) rules (resumable login across
 requests); they bind nobody until promoted. Sections 1–4, 7 and 8 are core.
+
+Subscription-first applies throughout: explicit keys/named cloud identities win;
+otherwise eligible subscriptions precede ambient keys. If several accounts are
+eligible, ask. With no subscription available, `connect()` offers deliberate key
+use, never silently charges an environment key. Failures/logout do not change
+billing sources. Existing Claude/Codex CLI access stays until each replacement
+passes R1's permission, login, inference, renewal and billing evidence gate.
+No example here proves LM15-owned login supplies subscription entitlement.
 
 ## 1. One deliberate setup operation, no provider strings to memorize
 

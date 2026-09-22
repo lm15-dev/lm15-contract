@@ -1,9 +1,10 @@
 # Managed-auth contract examples and acceptance suite
 
-**2026-09-22 REVIEW DRAFT. No SDK or new harness implementation is included.**
+**2026-09-22 RATIFIED CORE; reserved scenarios/storage layout remain design
+artifacts. Python and TypeScript first. No SDK or new harness implementation.**
 
 This directory specifies the tests for [AUTH-12–26](../../spec/auth-managed.md).
-It is hand-authored canonical evidence, not captured provider behavior.
+It contains hand-authored canonical expectations, not captured provider behavior.
 `scenarios.md` opens with a tier table: core scenarios gate the first
 implementations; reserved ones follow the
 [reserved rules](../../spec/auth-managed-reserved.md) and are not counted until
@@ -14,7 +15,7 @@ promoted.
 | `resolution.json` | Exact identity-selection decisions with competing sources and bound selections |
 | `store-vectors.json` | Private v1 storage schema examples and invalid structural cases |
 | `scenarios.md` | Ordered lifecycle, protocol, security, platform and convenience acceptance scenarios |
-| `../../spec/auth-store.schema.json` | Normative private envelope/record schema |
+| `../../spec/auth-store.schema.json` | Reserved private envelope/record design; not a frozen layout |
 
 ## Resolution vector interpretation
 
@@ -33,6 +34,11 @@ Each case has:
 - `given.explicit`: configuration provider IDs mapped to symbolic credential
   references; `{ "empty": true }` is an explicit unusable value;
 - optional `given.named`: an explicitly selected cloud source;
+- optional `given.existing_subscription`: the declared legacy source (`xai-store`,
+  `claude-code-cli`, `codex-cli`) and local state. This is synthetic fixture input,
+  not a public SDK API or permission for a managed scope to borrow a host login.
+  Missing means no prior subscription selection/logout marker; `logged_out` means
+  persisted suppression state must block ambient fallback even after restart;
 - `given.env`: complete injected environment with symbolic values; omitted = {};
 - optional `given.connections`: authorized-scope active connection summaries;
 - optional `given.bound`: pinned selection, including definition revision;
@@ -40,9 +46,11 @@ Each case has:
 - `expect`: `selected` with source details and next action (`acquire`,
   `renew_if_due`, or `none`), or `blocked` with canonical code/reason.
 
-Common defaults: authorized scope `alice`, public instance, definition revision
-`v1`, model `example-model`, no connections, no explicit/named/ambient sources,
-no injected storage error. All setup is synthetic, with no real HOME/environment
+Common defaults: authorized scope `alice`, definition revision `v1`, model
+`example-model`, no connections, no explicit/named/ambient sources, no storage
+error. Connections without an instance ID belong to `public`; a request without
+an explicit instance selects the sole eligible instance, or requires a choice
+when multiple instances remain. Explicit `instance_id` restricts eligibility. All setup is synthetic, with no real HOME/environment
 access. A connection's scope, instance and route membership are exact; the tests
 must include inaccessible records in the fake backend, not merely omit them.
 `state=renewal_due` selects that connection for subsequent renewal; these decision
@@ -56,7 +64,10 @@ invocations, and zero writes**. Failed/unused sources are not invoked to inspect
 whether they would work. Tests of acquisition failures and no fallback follow in
 `scenarios.md`.
 
-`selected` is a normalized comparator outcome, not a new public SDK return type;
+`source=existing_subscription` identifies the declared existing route's credential
+source without copying tokens into another store. Managed mode ignores that host
+source unless explicitly authorized; a manager is not permission to use the server
+owner's account. `selected` is a normalized comparator outcome, not a new public SDK return type;
 `blocked` is the reason request acquisition must refuse. The doctor can express
 that same decision as a report. This avoids making the public inspector throw
 merely because no account is connected, while still requiring identical source
@@ -91,7 +102,7 @@ python3 tools/check_provenance.py
 python3 tools/check_secrecy.py
 ```
 
-The recorded results and the deliberate source/spec mismatch are in
+The recorded artifact results and remaining SDK evidence gaps are in
 [VALIDATION.md](VALIDATION.md). These are not SDK runtime results.
 
 The format extra is required: the checker first proves an invalid calendar date
@@ -104,7 +115,9 @@ runtime authentication requirements below. No live-provider support follows.
 
 The existing `auth` direction does not execute these login protocols. Add a
 separately reported managed-auth direction before promoting support; do not make a
-shim fabricate a pass by echoing expected values. Required capabilities:
+shim fabricate a pass by echoing expected values. Python and TypeScript are the
+first targets. Begin/resume and related reserved scenario portions below are
+future capabilities, required only when explicitly promoted. Required capabilities:
 
 1. Inject full environment, sandbox store, definitions, clock, deterministic
    randomness, UI answers, HTTP replies and barriers. Fail any access to actual
@@ -135,15 +148,12 @@ right live/docs provenance. The scenarios here use fake endpoints by default.
 Secret-bearing auth traffic is never captured through normal model request logging.
 Authorized live evidence is redacted at capture time and approved separately.
 
-## Existing fixture transition — explicit, no compatibility project
+## Existing fixture transition — preserve access, correct unsafe fallback
 
-No current provider wire bodies/goldens are rewritten for this draft. Existing
-unmanaged key/shared-key/cloud/named-credential/endpoint vectors remain regression
-gates without weakening their expectations.
-
-These ten cases in `auth/resolution.json` describe the retired implicit-login
-source rules and must be replaced in the new managed harness, **not** counted as
-new managed conformance:
+No provider wire bodies/goldens are rewritten. Existing key/shared-key/cloud/
+named-credential/endpoint vectors remain regression gates. Existing Claude/Codex
+access and xAI subscription precedence remain under R1/R2; these cases in
+`auth/resolution.json` remain required (not proof of the new login implementation):
 
 - `oauth-fresh`
 - `oauth-missing`
@@ -153,17 +163,21 @@ new managed conformance:
 - `xai-explicit-key-shadows-subscription`
 - `xai-subscription-shadows-env`
 - `xai-subscription-only`
-- `xai-env-rescues-unusable-login`
+- `xai-unusable-login-blocks-env` (corrected under R3; see below)
 - `xai-nothing-configured`
 
-They remain untouched while this is a review draft so that the previously pinned
-contract remains reproducible. On ratification/harness transition, archive these
-old source-policy cases under their historical contract commit and stop including
-them in the new default gate. Do not add SDK dual behavior or deprecation machinery
-to make both versions pass. Existing access-policy wire fixtures for valid explicit
-credentials remain useful; they do not require retaining borrowed CLI-file lookup.
+The sole changed legacy expectation is `xai-env-rescues-unusable-login`, renamed
+`xai-unusable-login-blocks-env`: AUTH-1/AUTH-15 and R3 now require configured=false
+and no environment-key acquisition. The present env rung is `shadowed` because
+subscription failure blocks it. The old expectation remains in Git history, not
+in an active competing fixture. Any runtime failure is an implementation gap,
+not permission to skip the case. The decision log records its canonical authority.
 
-The draft changes CredentialPolicy and adds AuthOperationError; current runtime
-reflection can therefore differ intentionally until implementation. Such drift is
-not fixed by editing runtime snapshots or claiming a documentation-only pass proves
-SDK parity. No SDK CONTRACT_PIN or provider support row is updated by this step.
+New vectors also cover both CLI sources, explicit overrides, subscription renewal,
+logout across restart, ambiguity, and continued never-connected API-key-only use.
+The complete login/inference/renewal evidence gate is provider-specific, separately
+for Claude and Codex; do not archive their access fixtures on ratification alone.
+
+CredentialPolicy retains existing values and adds `connection`; AuthOperationError
+is additive. No SDK snapshot/pin or support row changes. Artifact checks cannot
+prove SDK parity or provider entitlement.

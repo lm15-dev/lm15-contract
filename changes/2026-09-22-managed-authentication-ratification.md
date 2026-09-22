@@ -1,23 +1,42 @@
 # Managed authentication — what needs your yes or no
 
-**2026-09-22. One page. Answer each line; everything not listed here has one
-obvious answer and was decided for you (see the
-[decision log](2026-09-22-managed-authentication.md)).**
+**RATIFIED 2026-09-22. The maintainer edited R10–R12, then confirmed:
+“ok, i just changed that but otherwise i ratify.” R1–R12 and the supporting
+core recommendations are accepted. Reserved details are not ratified.**
 
-The draft is split in two: [core](../spec/auth-managed.md) (ratify now, gates the
+The specification is split in two: [core](../spec/auth-managed.md) (ratified, gates the
 first two implementations) and [reserved](../spec/auth-managed-reserved.md)
 (design notes; each says what must exist before it binds anyone). This page is
 about the core.
 
-## Decisions that change what LM15 does today
+## Subscription access comes first
+
+- An explicitly selected key or named cloud identity is deliberate authority;
+  use it, never replace it with a discovered account.
+- Otherwise prefer subscription access over ambient API keys. If several accounts
+  are eligible, ask rather than guess whose account to use.
+- Failed renewal, expiry or logout must not silently switch to a metered key.
+  With no subscription available, the connection helper offers API-key use as an
+  explicit choice. Existing API-key/Azure-only callers remain supported.
+- Login success alone does not prove subscription entitlement, included usage or
+  freedom from extra charges. Provider permission and actual billing behavior
+  require separate evidence.
+
+**This correction supersedes the earlier R1/R2 retirement proposal**, including
+conflicting statements in the linked core, decision log and fixture-transition
+notes. The companion specification, decision log and scenarios have been aligned
+with this correction; none authorizes removing current subscription access
+before R1's evidence gate passes.
+
+## Protect existing access while improving login
 
 | # | Decision | What you give up | Yes / No |
 |---|---|---|---|
-| **R1** | **Python stops borrowing Claude Code and Codex CLI logins.** Today `claude-code` and `openai-codex` read `~/.claude/.credentials.json` / `~/.codex/auth.json`. The draft retires that: LM15 runs its own login and keeps its own store. No importer. | Those two routes stop working until LM15's own Claude/Codex login ships (stages 3–4). A later "import from CLI" is a separate design, if ever. | |
-| **R2** | **xAI's existing device-code login is migrated, not kept.** Same user experience, new machinery underneath; the `oauth-unless-explicit` policy (stored login beats env key) is retired. With managed Auth attached: explicit key > saved connection, and **no** fall-through to env keys. Without it: ordinary key rules. | The "subscription beats ambient key" convenience for xAI users who set both. They now choose by attaching Auth or passing the key. | |
-| **R3** | **Attaching managed Auth turns off ambient fallback entirely.** After logout or a failed renewal, a managed router fails `login_required`; it never picks up an env key or the machine's cloud identity. API-key/Azure users who never attach Auth are untouched. | Some availability: a stale login means an error, not a silent switch to a paid key. | |
+| **R1** | **Keep existing Claude Code/Codex subscription access until a replacement is demonstrated.** LM15-owned login remains a goal, not a proven substitute. Before retiring either existing path, establish provider-permitted use and demonstrate login → inference → renewal with the intended account access and billing behavior, separately for Claude and Codex. | Temporary coexistence and provider-specific work. Do not copy rotating refresh tokens into independent stores or claim LM15's locks coordinate foreign tools. If safe coexistence cannot be established, stop and review—not remove access or claim certainty. | Confirmed direction |
+| **R2** | **Preserve subscription-first selection, including xAI.** An explicitly selected key wins; otherwise subscription access wins over ambient keys. Migrating xAI's device flow must preserve that behavior, regardless of internal policy names. | An environment key alone does not override an available subscription. Choosing API-key use explicitly still works. | Confirmed direction |
+| **R3** | **Never silently switch billing sources after subscription failure or logout.** Report the actual problem and offer deliberate recovery or explicit key selection; do not silently charge an ambient key or use the machine's cloud identity. | A request may stop rather than use a different billing source. Existing API-key/Azure-only callers remain supported. | Confirmed direction |
 
-## Decisions that shape the new API
+## Ratified decisions that shape the new API
 
 | # | Decision | Alternative rejected | Yes / No |
 |---|---|---|---|
@@ -37,11 +56,11 @@ about the core.
 
 | # | Question | Draft assumed | Yes / No |
 |---|---|---|---|
-| **R10** | **Which SDKs must implement this?** The draft says all ten: Python, TypeScript, Rust, Go, R, Julia, Java, .NET, Ruby, Swift. Your project memory lists "which language ports are committed deliverables" as still open. | All ten. | |
-| **R11** | **Which provider logins are the initial inventory?** Draft: Claude, Codex, Copilot, xAI, Kimi Code, Meta, OpenRouter, Radius. Gemini CLI and Antigravity excluded. | Those eight. | |
-| **R12** | **Sequencing.** Core is ratified now; the reserved file binds nobody until its trigger is met. Implementation order: xAI migration → Claude browser login → then the rest. The spec is corrected wherever those two contradict it. | Yes. | |
+| **R10** | **Which SDKs must implement this?** The draft says all ten: Python, TypeScript, Rust, Go, R, Julia, Java, .NET, Ruby, Swift. Your project memory lists "which language ports are committed deliverables" as still open. | Starting with python and typescript. | yes |
+| **R11** | **Which provider logins are the initial inventory?** Draft: Claude, Codex, Copilot, xAI, Kimi Code, Meta, OpenRouter, Radius. Gemini CLI and Antigravity excluded. | Those eight. | yes |
+| **R12** | **Sequencing proposal.** Review the core first; reserved details need explicit promotion. Preserve existing access while proving xAI migration and Claude/Codex-owned login, then expand. Correct the spec when provider evidence contradicts it; no cutover before R1's evidence gate. | Ratified sequence; reserved details still need promotion. | yes |
 
-## What was decided for you (no action)
+## Supporting recommendations (ratified for the core)
 
 Explicit scope, no global current account; login returns metadata not tokens;
 UI is an adapter with `prompt`/`notify`; PKCE S256 + state, loopback-only

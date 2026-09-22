@@ -10,11 +10,12 @@ Construction-time invariants are numbered in [invariants.md](invariants.md)
 (cited as INV-###). Closed value sets are in
 [vocabularies.md](vocabularies.md).
 
-**Managed-auth review draft (2026-09-22):** Connection, LoginAttempt,
-ModelSelection and BoundClient are separately specified in
-[AUTH-12–26](auth-managed.md). They do not become message/request fields or
-credential-bearing canonical payloads. The private store uses its own
-[versioned schema](auth-store.schema.json), never public status serialization.
+**Managed-auth ratified core (2026-09-22):** Connection and BoundClient are
+specified in [AUTH-12–26](auth-managed.md), Python and TypeScript first. Resumable
+LoginAttempt and serialized ModelSelection details remain reserved. None becomes
+a message/request field or credential-bearing canonical payload. The private
+store's [versioned schema](auth-store.schema.json) remains a design artifact,
+never public status serialization.
 
 Conventions used in the tables:
 

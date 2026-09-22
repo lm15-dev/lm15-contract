@@ -1,13 +1,13 @@
 # Managed authentication and interactive connection — core
 
-**Status: REVIEW DRAFT, 2026-09-22 (core tier). Normative candidate, not an
-implementation or support claim.**
+**Status: RATIFIED CORE, 2026-09-22, with R1–R3 subscription-first corrections
+and R10 Python/TypeScript-first scope. Not an implementation or support claim.**
 
 This is the managed-authentication part of [auth.md](auth.md), numbered AUTH-12
 through AUTH-26. It is split in two tiers:
 
-- **Core (this file).** The rules a first implementation (xAI migration, then one
-  browser login) must obey, and the decisions the maintainer must ratify now. See
+- **Core (this file).** The ratified rules for the first implementations in
+  Python and TypeScript, starting with xAI. See
   the [one-page ratification list](../changes/2026-09-22-managed-authentication-ratification.md).
 - **Reserved ([auth-managed-reserved.md](auth-managed-reserved.md)).** Rules
   written for situations no implementation has met yet: multi-process web servers
@@ -16,8 +16,9 @@ through AUTH-26. It is split in two tiers:
   before it is promoted to core. Until then they bind nobody.
 
 The reserved text was written first and moved out unchanged on 2026-09-22 so it
-can be pressure-tested by real flows before it hardens. A rule that the first two
-implementations contradict is fixed in the spec, not worked around in code.
+can be pressure-tested by real flows before it hardens. Provider evidence that
+contradicts a rule requires a documented contract correction; an implementation
+alone cannot overrule it. Reserved details require explicit promotion.
 
 MUST, MUST NOT, SHOULD and MAY are normative (RFC 2119/8174). A SHOULD exception
 must be stated and tested. Language spellings in examples are illustrative; operations, results and state transitions are the
@@ -150,12 +151,20 @@ an untrusted provider name, callback parameter or tenant field. Sharing a store
 backend between Auth instances does not share identity unless the authorized
 scope and binding are deliberately the same.
 
-Managed operations do not discover or copy Claude Code, Codex or Pi credential
-files. There is no automatic migration, compatibility wrapper or implicit
-foreign-store fallback. A future import feature is a separate design: copying a
-rotating refresh token can break both consumers, and LM15 locks do not coordinate
-foreign tools. Existing cloud-file discovery under AUTH-1 is different and
-remains supported.
+Existing Claude Code/Codex subscription access MUST remain available until its
+replacement meets R1's evidence gate, separately for each provider: permitted
+use, login → inference → renewal, and the intended account access/billing behavior.
+LM15-owned login is a goal, not proof of equivalent subscription access.
+
+Preservation does not authorize copying rotating refresh tokens into independent
+stores. LM15 locks coordinate cooperating LM15 processes, not foreign tools.
+Keep credential ownership and source inspectable; if safe coexistence cannot be
+established, stop and review rather than remove access or claim safety. New
+managed scopes must not discover the server owner's CLI login implicitly. An
+application may deliberately select a supported external source; it remains
+externally owned, not an imported independent credential. No blanket legacy API
+compatibility requirement or automatic Pi-store importer is introduced. Existing
+API-key/cloud-file behavior remains supported.
 
 ## AUTH-15 — Identity selection, with and without a manager
 
@@ -167,9 +176,13 @@ heuristic.
 Existing API-key and cloud callers keep AUTH-1/2/7/10/11 behavior: explicit values
 and credential providers, shared explicit-key rules, declared environment keys,
 keyless placeholders, named cloud identities, cloud chains and endpoint settings.
-No new managed file is searched. Account-only routes require an explicit accepted
-credential or an attached Auth; they do not borrow another tool's login. The
-retired `oauth`/`oauth-unless-explicit` implicit-file rules are not preserved.
+No unrelated managed scope is searched. Existing Claude Code/Codex CLI sources
+remain supported under `oauth`; xAI retains `oauth-unless-explicit` subscription
+precedence. Neither policy is retired by this amendment. Internal names may
+change only without removing the ratified behavior and subject to R1's gate.
+An unusable, unreadable or logged-out subscription is not equivalent to never
+having selected one: it blocks automatic ambient-key use. API-key/cloud-only
+callers with no subscription selection or logout marker retain existing rules.
 
 ### B. Managed Auth attached to a general router or adapter
 
@@ -180,10 +193,15 @@ For the exact requested route:
    error, not permission to continue. A simultaneous named cloud identity is a
    construction error, as today.
 2. Otherwise an explicit named cloud identity selects exactly its existing rungs.
-3. Otherwise select the active connection in the one declared binding slot for
-   this route/instance in the attached scope. If routing/configuration leaves
-   multiple possible instances or bindings, require a selection; do not choose by
-   insertion order, model name, hostname similarity or last use.
+3. Otherwise honor a deliberately selected connection/source. With no such
+   selection, prefer eligible subscription access over saved or ambient keys,
+   within the authorized scope and declared route/destination bindings. A pasted
+   or saved key is not a perpetual explicit selection by mere presence. If more
+   than one eligible account/instance/binding remains, require selection through
+   the setup UI, or fail `interaction_required` without one. Never choose by
+   insertion order, model name, hostname similarity or last use. The v1 single
+   active-connection-per-slot rule still applies; this is not new multi-account
+   storage within a slot.
 4. An absent connection produces `login_required`. Revoked, expired-unrenewable,
    uncertain, unreadable and malformed selections fail by their own reasons.
    **None falls through to environment keys, foreign files, another connection or
@@ -218,9 +236,18 @@ Replacement or logout makes the old client fail `connection_changed` or
 bind a new selection to use the new connection. Generic managed routers, by
 contrast, consult their active slot on each request and expose that source.
 
-**Trade-off:** attaching managed Auth disables ambient convenience. This prevents
-logout from switching to the server owner's paid identity. The unmanaged API-key
-and Azure/cloud experience is not changed to obtain this safety.
+**Subscription-first applies with or without a managed manager.** Explicit keys
+and named cloud identities are deliberate authority and win. Subscription
+preference never licenses searching another user's scope, changing the requested
+route, or sending a credential to an undeclared destination. Account login alone
+is not evidence of subscription entitlement or included usage (AUTH-13).
+
+**Trade-off:** failed/expired/logged-out subscription access can stop a request
+rather than charge an ambient key. Logout retains a nonsecret suppression marker
+for the relevant scope/source so a restart cannot turn logout into key fallback;
+explicit source selection is deliberate recovery. The connection helper offers
+key use as an explicit choice when no subscription is available. This does not
+remove ordinary API-key/Azure-only usage.
 
 ## AUTH-16 — The interaction boundary
 
@@ -590,9 +617,12 @@ implementation. With no arguments on a native terminal it:
 
 1. Uses a lazily constructed local Auth and terminal UI, displaying store location
    and persistence intent before new authorization.
-2. Offers saved connection metadata and "connect another". It does not refresh or
-   verify every saved account just to populate the menu. Do not select the first
-   saved account silently; a previously explicit caller selection may skip this.
+2. Offers saved connection metadata and "connect another", preferring eligible
+   subscription access over ambient keys unless a key or named cloud identity
+   was explicitly selected. Multiple eligible accounts require a choice. With no
+   subscription available, key use is offered explicitly, never silently selected
+   from the environment. It does not refresh or verify every account to populate
+   the menu. A previously explicit caller selection may skip the picker.
 3. Reuses the selected connection, or runs the chosen login/setup flow. Core
    `login` is not an ambiguous "reuse or replace" operation; connect orchestrates
    those separate choices and obtains replacement consent if needed. A selected
@@ -698,8 +728,9 @@ renewal/exchange journal sufficient to detect interrupted one-use work.
 Persistent envelope version is **1**, independent of canonical Request JSON and
 of provider token-response schemas. Timestamps are RFC 3339 UTC; finite
 intervals use named units; generations and revisions serialize as nonnegative
-**decimal strings** (JavaScript integer precision). No legacy xAI/Pi/Claude/Codex
-importer or dual-format writer is required. Secret serialization is explicit and restricted to store adapters.
+**decimal strings** (JavaScript integer precision). No automatic credential-copy
+importer or dual-format writer is required; existing subscription access remains
+available until a safe replacement passes R1's evidence gate. Secret serialization is explicit and restricted to store adapters.
 Do not serialize native objects, code, a Python pickle or a language-specific enum
 layout. Private-store and auth-response JSON must be strict UTF-8 JSON without
 duplicate member names or non-finite numbers, with bounded sizes (AUTH-18).
@@ -721,16 +752,17 @@ request dispatch admission; stale caches cannot bypass logout.
 
 The draft envelope schema is [auth-store.schema.json](auth-store.schema.json) with
 examples in [store-vectors.json](../auth/managed/store-vectors.json). It is a
-draft artifact: the file store implementation may change it before ratification.
+reserved design artifact, not a frozen storage layout. A layout change must
+preserve the ratified core guarantees and update its structural examples together.
 The full cross-record invariant list, the transaction primitive for
 database/lease stores, and browser cross-tab rules are reserved (AUTH-25
 reserved).
 
 ## AUTH-26 — Acceptance and honest support claims
 
-Every release SDK implements these behaviors with native mechanisms. Which
-languages are release SDKs is a separate, explicit maintainer decision; this
-specification does not enlarge that list. Platform profiles are separate from
+The initial implementation scope is **Python and TypeScript**, per R10. Other
+languages are follow-up decisions, not gates for this first rollout. Both initial
+SDKs implement the same behaviors with native mechanisms. Platform profiles are separate from
 language names. A native pass is not a browser/mobile pass; source availability
 is not a working provider integration.
 
@@ -755,15 +787,17 @@ Conformance has four independent evidence levels:
    with secrets redacted and costs/approval explicit.
 
 Existing API-key, shared-key, Azure/cloud-chain and endpoint/error fixtures remain
-regression gates. Old implicit-login fixtures are explicitly superseded as listed
-in the managed conformance README, not silently weakened or still counted as
-proof of the new contract. The harness operations required to drive the new
-scenarios are specified in that README; implementing them is later work. No
+regression gates. Existing subscription-access fixtures also remain gates; only
+the old xAI expectation that an ambient key rescues an unusable subscription is
+corrected under R3. The managed conformance README records that exact change.
+No broad retirement of CLI access or subscription-first fixtures is authorized.
+The harness operations required to drive the new scenarios are specified in that README; implementing them is later work. No
 support-matrix promotion or SDK pin update follows merely from adding this
 specification.
 
-**Promotion order.** Core scenarios (see the tier table in
-[scenarios.md](../auth/managed/scenarios.md)) gate the xAI migration and the first
-browser login. Reserved rules and their scenarios are promoted only when the
-trigger named in the reserved file is met, and only after the core has survived
-two real implementations.
+**Implementation order.** Align this contract, then migrate xAI in Python and
+TypeScript while preserving subscription-first behavior. Prove Claude/Codex-owned
+login before any existing access is retired; then expand the eight-provider
+inventory. Core scenarios apply to each claimed feature/platform, not unrelated
+future providers. Reserved rules require their trigger and explicit promotion;
+ratifying the core does not ratify them.

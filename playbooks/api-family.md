@@ -16,11 +16,12 @@ Goal: a person who knows lm15 in two of these languages opens the third and is a
 6. **Positional layout is frozen at 1.0. Every field added later is keyword-only (or the language's equivalent: options struct / builder).**
 7. **Prefer `reject` to a new send-as value. A compat knob exists only when the wire has no other way, the goal is unreachable without it, and at least two providers need it. Otherwise it is an `extensions` passthrough.**
 
-## Managed authentication — 2026-09-22 REVIEW DRAFT
+## Managed authentication — 2026-09-22 RATIFIED CORE
 
 [AUTH-12–26](../spec/auth-managed.md), not an implementation's surface, defines
-the proposed operations. [Worked examples](../docs/auth-examples.md) illustrate
-native bindings. All ten SDKs share behavior; they need not force Go into a
+the core operations. [Worked examples](../docs/auth-examples.md) illustrate
+native bindings. Python and TypeScript implement first; later ports share the
+behavior but need not force Go into a
 Python class API or put a hidden event loop inside Python's sync entry point.
 
 - Provider/method descriptors are discoverable values; stable IDs are also
@@ -30,11 +31,13 @@ Python class API or put a hidden event loop inside Python's sync entry point.
 - Core login needs explicit UI where interaction is required. `connect()` in
   an explicitly interactive module/function family may supply a terminal helper.
 - Typed prompts/notices are shared semantics, with snake_case/camelCase/native
-  structs/enums as appropriate. Resumable begin/resume and connected login are
-  the same state machine.
-- The new managed store and source policies do not preserve old borrowed CLI or
-  xAI login interfaces/formats. Existing unmanaged API-key/cloud callers retain
-  their behavior. Do not write compatibility wrappers for nonexistent users.
+  structs/enums as appropriate. Resumable begin/resume remains reserved and must
+  share protocol machinery when explicitly promoted.
+- Preserve existing Claude/Codex access until R1's replacement evidence gate passes.
+  Preserve xAI subscription-first behavior; explicit keys/named cloud identities
+  win, otherwise subscriptions precede ambient keys. Never switch to a paid key
+  after subscription failure/logout. No independent copies of rotating foreign
+  tokens; existing API-key/cloud-only callers remain supported.
 - Native cancellation and close/resource ownership remain native, but durable
   cancel/commit ordering is AUTH-19 in every port. Closing does not log out.
 

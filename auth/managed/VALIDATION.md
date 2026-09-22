@@ -14,7 +14,7 @@ uv run --no-project --with 'jsonschema[format]>=4.18,<5' python tools/check_mana
 
 - Both JSON Schemas are valid Draft 2020-12 schemas.
 - 24 private-store vectors give the expected structural valid/invalid verdicts.
-- 34 identity-selection vectors have valid structure and unique identities.
+- 43 identity-selection vectors have valid structure and unique identities.
   Their selection expectations have **not** been executed against SDKs.
 - 64 acceptance scenarios have unique contiguous IDs; AUTH-12–26 headings and
   local document links are present; code fences are balanced.
@@ -35,29 +35,38 @@ git diff --check
 New private fixture inputs contain only artificial sentinel values; expected
 public outputs contain none. Existing provider wire fixtures were not edited.
 
-## Expected source/spec mismatch — not hidden or bypassed
+## Post-ratification alignment checks
 
 ```bash
 python3 tools/spec_drift.py
 ```
 
-This reports four missing reflected entries: the two retired values `oauth` and
-`oauth-unless-explicit`, each exposed by the current reference's two vocabulary
-reflections (`CREDENTIAL_POLICIES` and `CredentialPolicy`). The reviewed proposal
-replaces them with `connection` for account-only routes, and ordinary `key` for
-unmanaged key-capable routes. The runtime has deliberately **not** been changed.
+Passed after R1–R3/R10 alignment: 70 reflected types / 313 fields and
+57 enums / 282 values are covered. The earlier draft's four missing `oauth` /
+`oauth-unless-explicit` entries are no longer missing: their retirement was
+rejected, not hidden by aliases or a checker bypass.
 
-This mismatch is expected for a specification-only draft, not a green runtime
-gate. No checker was weakened, no SDK snapshot/pin was advanced, and no aliases or
-compatibility wrappers were introduced to conceal it. See README's explicit
-transition list of ten old implicit-login source-policy cases.
+This is a surface-coverage check, not behavioral conformance. The one legacy
+canonical fallback fixture is intentionally corrected under AUTH-1/AUTH-15 R3
+(`xai-unusable-login-blocks-env`); existing SDKs may fail it until repaired.
+No SDK runtime tests or live flows were run in this alignment pass. No pins,
+support rows, provider wire fixtures or runtime snapshots were changed.
+
+The managed checker also passed its five deliberate bad-artifact tests, and
+provenance, secrecy and `git diff --check` passed. `python3 harness/selftest.py`
+also passed its baseline and caught all 40 comparator mutations; this uses a fake
+shim, not SDK execution. The private-store schema and vectors remain reserved
+layout designs; validating them does not ratify them.
 
 ## Still required before claiming the feature works
 
-- Implement and run the managed harness against all ten SDKs.
+- Implement and run the managed harness against Python and TypeScript first.
+- Repair any SDK behavior still allowing key fallback from a failed subscription;
+  preserve existing subscription access until R1's replacement gates pass.
 - Exercise semantic store invariants, private-to-public projection and request
   source selection, not just JSON Schema.
 - Mixed-language, separate-process lock/renew/logout/replacement and crash tests.
 - Native/real-browser/mobile/server integration and packaging tests.
 - Provider-specific approved flow profiles and authorized, redacted live receipts.
-- Maintainer review/ratification of the detailed amendment.
+- Explicit promotion of reserved details when their use cases arrive; core
+  ratification does not promote server/relay/database features automatically.

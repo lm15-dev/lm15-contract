@@ -19,15 +19,16 @@ that four ports converge instead of each inventing a shape.
    not need keys either (a live smoke test may exist, env-gated, and is not
    a gate).
 
-## Managed-auth amendment (2026-09-22 REVIEW DRAFT)
+## Managed-auth amendment (2026-09-22 RATIFIED CORE)
 
-The new [AUTH-12–26](../spec/auth-managed.md) is a shared contract candidate,
-not a Python porting reference. Its [suite](../auth/managed/README.md) lists the
-new harness requirements and the exact old implicit-login cases it supersedes.
-Until ratification, the module table below describes the previously ratified
-baseline, including its old login vocabulary. Do not implement dual behavior or
-weaken API-key/cloud tests to satisfy both. No new runtime gate is claimed by a
-schema/documentation-only check. Report native/browser/mobile coverage separately.
+[AUTH-12–26](../spec/auth-managed.md) is a shared behavioral contract, not a
+Python implementation oracle. Python and TypeScript implement first. Its
+[suite](../auth/managed/README.md) preserves the existing subscription-access
+gates and corrects only the unsafe xAI fallback expectation under R3. The module
+table's existing `oauth`/`oauth-unless-explicit` vocabulary remains valid; no
+retirement is authorized. Reserved details require explicit promotion. A schema
+check proves no runtime conformance. Report each claimed provider/platform
+separately; do not count unrelated future language ports as first-rollout gates.
 
 ## Order of work
 
