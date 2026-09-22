@@ -30,7 +30,9 @@ their trigger and explicit promotion are met) and [worked examples](docs/auth-ex
 and TypeScript must prove first. Existing subscription access is preserved;
 explicit keys win, otherwise subscription access precedes ambient keys. The
 private store schema remains a [reserved design](spec/auth-store.schema.json).
-No SDK implementation, provider support promotion or CONTRACT_PIN update is included.
+The Python implementation and the decisions it forced are recorded in
+[the implementation record](changes/2026-09-22-managed-authentication-python.md);
+no provider support promotion follows from it.
 
 ## Check the contract
 

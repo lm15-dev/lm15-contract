@@ -226,6 +226,15 @@ already completed setup when it fails or is cancelled.
 
 ## AUTH-25 (reserved) — Cross-record invariants and non-file stores
 
+**Note (2026-09-22, Python implementation):** the private-store layout the
+first implementation actually uses is one file, provider entries in the
+legacy/Pi shape plus a non-secret `_lm15` metadata block — not the envelope
+in `auth-store.schema.json`. That schema and `store-vectors.json` are
+therefore a superseded draft; see
+[the implementation record](../changes/2026-09-22-managed-authentication-python.md)
+P1. Re-derive them from the Python and TypeScript layouts before promoting
+this section.
+
 **Promote when:** the file store has passed MA-032, MA-037 and MA-042 in two
 languages; then re-derive this list from what those implementations actually
 needed, and promote the transaction primitive with the first database adapter.
