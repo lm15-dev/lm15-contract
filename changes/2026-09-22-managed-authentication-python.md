@@ -4,7 +4,7 @@
 lm15-python. Offline conformance green; live receipts still owed per
 provider. No support-matrix promotion.**
 
-lm15-python commit `<pinned in lm15-python/CONTRACT_PIN>` implements the core
+lm15-python (see its CONTRACT_PIN for the contract revision) implements the core
 in `lm15/login/` (`Auth`, `AsyncAuth`, store, engine, flows, `TerminalUI`,
 `BoundClient`, `model_choices`), `lm15/interactive.py` (`connect()`),
 `RouterConfig(auth=...)` (AUTH-15 mode B), the doctor's managed walk, and
