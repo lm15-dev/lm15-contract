@@ -4,8 +4,9 @@
 2026-09-22 managed-authentication revision is a REVIEW DRAFT.** The newly
 written behavior is a normative candidate for review, not a claim that any
 SDK implements it. Unchanged API-key and cloud-identity rules remain in
-force. The detailed revision is [AUTH-12–26](auth-managed.md), incorporated
-as the managed-authentication part of this specification. See
+force. The detailed revision is [AUTH-12–26](auth-managed.md) (core tier;
+[reserved rules](auth-managed-reserved.md) bind nobody until promoted),
+incorporated as the managed-authentication part of this specification. See
 [the change record](../changes/2026-09-22-managed-authentication.md) and
 [fixture transition](../auth/managed/README.md).
 
@@ -31,8 +32,9 @@ a second copy of the same fact and will drift (amended 2026-09-01):
   foreign CLI-file or implicit managed-store lookup. Without either source,
   fail with login guidance naming LM15's login/connect operation.
 
-The former `oauth` and `oauth-unless-explicit` policies are retired by the
-2026-09-22 draft. Protocol capabilities now live in discoverable auth-method
+The `oauth` and `oauth-unless-explicit` policies are proposed for retirement
+by the 2026-09-22 draft (ratification items R1/R2); they remain in force and in
+the runtime until that answer. Protocol capabilities now live in discoverable auth-method
 and binding declarations (AUTH-13), not implicit source chains. A dual-method
 provider such as xAI, Meta or OpenRouter has ordinary `key` resolution without
 managed Auth, and the managed rules below when Auth is attached. Account-only

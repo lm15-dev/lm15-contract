@@ -8,6 +8,20 @@ HTTP, private sandbox storage, injected complete environment, deterministic time
 and scheduling barriers unless explicitly labelled integration/live. No real
 credentials, paid inference or user HOME access are needed for deterministic tests.
 
+## Tiers
+
+Scenarios follow the two-tier split of the specification
+([core](../../spec/auth-managed.md) / [reserved](../../spec/auth-managed-reserved.md)).
+Numbering is stable; a scenario keeps its ID when promoted.
+
+| Tier | Scenarios | Gate |
+|---|---|---|
+| **Core** | MA-001–009, 011–020, 022, 025–040, 042–045, 047, 048, 050–064 | Required before the xAI migration and the first browser login are called done. MA-024 only its expiry half; MA-041 only its >2^53 revision half; MA-040 only the structural-schema half. |
+| **Reserved** | MA-010, 021, 023, 046, 049; the retention half of MA-024; the tombstone/epoch half of MA-041; the cross-record-invariant half of MA-040 | Promoted with the reserved rule they test (resumable attempts, relay, database stores). Not required, not counted, until then. |
+
+MA-064 says "all ten languages"; which languages are release SDKs is a separate
+maintainer decision (see the ratification list), not something this file settles.
+
 For all scenarios, assert both the expected result **and forbidden effects**.
 Examples: "no fallback" means a trap credential callback/transport was not invoked,
 not just that the final error text looks right. Seed secret sentinels in all private

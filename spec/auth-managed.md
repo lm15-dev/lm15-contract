@@ -1,17 +1,26 @@
-# Managed authentication and interactive connection
+# Managed authentication and interactive connection — core
 
-**Status: REVIEW DRAFT, 2026-09-22. Normative candidate, not an implementation or support claim.**
+**Status: REVIEW DRAFT, 2026-09-22 (core tier). Normative candidate, not an
+implementation or support claim.**
 
-This is the proposed managed-authentication part of [auth.md](auth.md), numbered
-AUTH-12 through AUTH-26. The maintainer commissioned this contract after approving
-the product direction, including a short interactive `connect()` and **no backward
-compatibility requirement for old login flows**. The detailed rules here still
-need review; this document does not manufacture ratification of unseen decisions.
-See [the amendment and trade-offs](../changes/2026-09-22-managed-authentication.md).
+This is the managed-authentication part of [auth.md](auth.md), numbered AUTH-12
+through AUTH-26. It is split in two tiers:
 
-MUST, MUST NOT, SHOULD and MAY are normative requirements in the RFC 2119/8174
-sense. A SHOULD exception must be stated and tested. Language spellings in examples
-are illustrative; the operations, results and state transitions below are the
+- **Core (this file).** The rules a first implementation (xAI migration, then one
+  browser login) must obey, and the decisions the maintainer must ratify now. See
+  the [one-page ratification list](../changes/2026-09-22-managed-authentication-ratification.md).
+- **Reserved ([auth-managed-reserved.md](auth-managed-reserved.md)).** Rules
+  written for situations no implementation has met yet: multi-process web servers
+  resuming a login, database/lease stores, relays, remote provider definitions,
+  serialized selections. They are design notes. Each states what must exist
+  before it is promoted to core. Until then they bind nobody.
+
+The reserved text was written first and moved out unchanged on 2026-09-22 so it
+can be pressure-tested by real flows before it hardens. A rule that the first two
+implementations contradict is fixed in the spec, not worked around in code.
+
+MUST, MUST NOT, SHOULD and MAY are normative (RFC 2119/8174). A SHOULD exception
+must be stated and tested. Language spellings in examples are illustrative; operations, results and state transitions are the
 contract. Python is not the oracle.
 
 ## Reading map
@@ -24,20 +33,21 @@ contract. Python is not the oracle.
 | Which identity is actually used? | AUTH-15 |
 | What must my UI implement? | AUTH-16 |
 | Which operations perform I/O? | AUTH-17 |
-| What survives a redirect? | AUTH-18 |
+| How does a login run, and what protects it? | AUTH-18 |
 | What do cancel, replace and logout mean? | AUTH-19 |
 | How is a credential renewed and sent? | AUTH-20 |
 | What is secret, and where may it go? | AUTH-21 |
-| What changes in a browser, server or mobile app? | AUTH-22 |
+| What differs between a terminal, a browser and a server? | AUTH-22 |
 | What does `connect()` return? | AUTH-23 |
 | What can fail, and what is safe to retry? | AUTH-24 |
-| What must stores serialize? | AUTH-25 |
+| What must a store guarantee? | AUTH-25 |
 | How is this proved in every SDK? | AUTH-26 |
 
 Companions: [worked examples](../docs/auth-examples.md),
-[acceptance scenarios](../auth/managed/scenarios.md),
+[acceptance scenarios](../auth/managed/scenarios.md) (tiered the same way),
 [resolution vectors](../auth/managed/resolution.json),
-[conformance boundary](../auth/managed/README.md).
+[conformance boundary](../auth/managed/README.md),
+[decision log](../changes/2026-09-22-managed-authentication.md).
 
 ## AUTH-12 — Vocabulary and ownership
 
@@ -55,13 +65,6 @@ Companions: [worked examples](../docs/auth-examples.md),
 | **Model selection** | An exact route and model ID bound to a particular connection ID and provider-instance/binding definition. Not merely a bare model-family string. |
 | **Bound client** | The result of `connect()`: an explicit model selection plus the scoped services needed to resolve its authentication for each request. No conversation memory. |
 
-A provider instance has a stable application-assigned ID and a revision/digest of
-its trusted auth-relevant definition. That revision covers issuer/client identity,
-credential destination policy, route bindings, relay policy and flow version.
-Nonsecret display-label edits need not invalidate it. Changing security-relevant
-configuration requires a new revision; existing attempts and selections MUST NOT
-silently adopt it.
-
 A binding slot is addressed by **(scope, provider instance, binding ID)**. Version
 1 allows one active connection per slot; applications wanting separate personal
 and work connections use separate scopes or explicit configured instances. There
@@ -70,17 +73,19 @@ picker. This is a stated limit, not an accidental restriction of a string-keyed
 file.
 
 A Connection has at least `id`, `instance_id`, `binding_id`, `kind`, `method_id`,
-`routes`, `label`, `created_at`, and an identity generation. Optional provider
-account labels are untrusted display text. Do not claim an email/name was verified
-because it was decoded from an unverified JWT. Metadata may be personal even when
-it is not a credential: safe from secret leakage is not permission for public logs.
+`routes`, `label`, `created_at`, and an identity generation (AUTH-19). Optional
+provider account labels are untrusted display text: do not claim an email/name
+was verified because it was decoded from an unverified JWT. Metadata may be
+personal even when it is not a credential: safe from secret leakage is not
+permission for public logs.
 
 **Ownership:** login returns a Connection, not tokens. The Auth manager owns
 lifecycle orchestration; the chosen store owns persistence; the app owns scope
 and presentation; the provider owns authorization and billing. UI/storage
 callbacks and provider plugins are trusted application code, not a sandbox.
-Application/SDK dependency authors, not an untrusted webpage visitor, register
-provider code and destination policies.
+
+Provider-instance security revisions and their effect on existing attempts are
+reserved (AUTH-12 reserved).
 
 ## AUTH-13 — Discovery, descriptors and availability
 
@@ -91,8 +96,6 @@ provider code and destination policies.
 2. `providers()` and `methods(provider?)` return immutable descriptors using only
    loaded definitions and declared host capabilities. They do not read credential
    files, execute credential callbacks, refresh, resolve DNS or contact providers.
-   Optional remote definition loading is a separate explicit operation; downloaded
-   data MUST NOT execute code or widen a credential destination policy.
 3. A method descriptor contains `id` (within an instance), `label`, `kind`, `flow`,
    declared input fields, route binding, availability and provider-specific
    guidance. Fields name stable IDs, type (`text`, `secret`, `select`), requiredness
@@ -119,40 +122,40 @@ provider code and destination policies.
    it is OAuth. `kind=account` includes credit-funded key minting. Billing notices
    distinguish known provider policy from unknown account entitlements; no filter
    named subscription can promise an allowance the SDK has not established.
-8. Descriptors received from another registry/revision must be revalidated against
-   the receiver's definitions. A descriptor is data, not authority to add an issuer,
-   access a scope or forward secrets to its embedded URLs.
+
+Remote definition loading and descriptors received from another registry
+revision are reserved (AUTH-13 reserved).
 
 ## AUTH-14 — Manager construction and explicit scope
 
 An Auth manager binds a store scope, trusted provider definitions and platform
-services. Scope namespacing is part of the store's authorization boundary, not a
-string concatenated into a filesystem path. Construction validates arguments but does not read secrets, create files,
-probe storage permissions, launch a helper or use the network. `local()` chooses
-AUTH-8 paths explicitly; `memory()` is process-lifetime storage. Other stores are
-application-supplied. Construction is not sign-in. Local path/default selection
-captures its nonsecret configuration and absolute path anchor at construction;
-a later working-directory change must not silently choose a different store.
-Physical path/permission checks happen only at an explicit store operation.
+services. Construction validates arguments but does not read secrets, create
+files, probe storage permissions, launch a helper or use the network. `local()`
+chooses AUTH-8 paths explicitly; `memory()` is process-lifetime storage. Other
+stores are application-supplied. Construction is not sign-in. Local path/default
+selection captures its nonsecret configuration and absolute path anchor at
+construction; a later working-directory change must not silently choose a
+different store. Physical path/permission checks happen only at an explicit
+store operation.
 
 Closing a manager cancels connected operations it owns under AUTH-19, releases
-owned platform resources, and never logs out. Detached begin/resume attempts
-remain in the store until explicitly cancelled or expired. Closing a bound client
-does not close a caller-owned manager or transport. All close operations are
-idempotent; they do not install/remove a process-global identity.
+owned platform resources, and never logs out. Closing a bound client does not
+close a caller-owned manager or transport. All close operations are idempotent;
+they do not install/remove a process-global identity.
 
-Every operation and cache is scoped. A server MUST derive scope from its own
-validated application session, not an untrusted provider name, callback parameter
-or tenant field from the browser. A database adapter MUST enforce the scope at its
-storage boundary. Sharing a store backend between Auth instances does not share
-identity unless the authorized scope and binding are deliberately the same.
+Every operation and cache is scoped. Scope namespacing is part of the store's
+authorization boundary, not a string concatenated into a filesystem path. A
+server MUST derive scope from its own validated application session, never from
+an untrusted provider name, callback parameter or tenant field. Sharing a store
+backend between Auth instances does not share identity unless the authorized
+scope and binding are deliberately the same.
 
 Managed operations do not discover or copy Claude Code, Codex or Pi credential
 files. There is no automatic migration, compatibility wrapper or implicit
-foreign-store fallback required for this feature. A future import feature is a
-separate design: copying a rotating refresh token can break both consumers, and
-LM15 locks do not coordinate foreign tools. Existing cloud-file discovery under
-AUTH-1 is different and remains supported.
+foreign-store fallback. A future import feature is a separate design: copying a
+rotating refresh token can break both consumers, and LM15 locks do not coordinate
+foreign tools. Existing cloud-file discovery under AUTH-1 is different and
+remains supported.
 
 ## AUTH-15 — Identity selection, with and without a manager
 
@@ -193,24 +196,24 @@ or an explicitly chosen default cloud chain, plus its declared settings and allo
 destination policy. Executing that selected recipe uses the existing cloud rules,
 including their settings/environment behavior and provenance. A chain can change
 its selected principal when its inputs change; the UI/doctor MUST name this fact.
-It is not sold as a pinned provider account. A strict single-principal deployment
-uses a deterministic named credential or its own credential provider.
+A strict single-principal deployment uses a deterministic named credential or its
+own credential provider.
 
 For managed account/key/local connections, host/endpoint settings come from the
 saved connection and trusted explicit configuration, not ambient endpoint
 variables. An override may narrow/refine the allowed destination; it cannot send
 an account token to an unrelated host. To change trust, explicitly configure a
-new binding/instance and connect it. Existing **unmanaged** API-key/cloud endpoint
-overrides are unchanged. An explicit credential override in mode B is deliberate
-application configuration, and its source and effective endpoint must be visible
-in router diagnostics; `auth.status()` alone cannot describe that request.
+new binding/instance and connect it. Existing **unmanaged** API-key/cloud
+endpoint overrides are unchanged. An explicit credential override in mode B is
+deliberate application configuration; its source and effective endpoint must be
+visible in router diagnostics. `auth.status()` alone cannot describe that request.
 
 ### C. Client returned by `connect()`
 
-A bound client pins the connection **ID**, provider instance/security revision,
-route and model. It follows credential renewal of that ID, not a slot's later
-replacement. No per-request account, credential, route or model override is
-accepted. Replacement or logout makes the old client fail `connection_changed` or
+A bound client pins the connection **ID**, provider instance, route and model. It
+follows credential renewal of that ID, not a slot's later replacement. No
+per-request account, credential, route or model override is accepted.
+Replacement or logout makes the old client fail `connection_changed` or
 `login_required`, never follow the new identity. Deliberately call `connect()` or
 bind a new selection to use the new connection. Generic managed routers, by
 contrast, consult their active slot on each request and expose that source.
@@ -229,12 +232,12 @@ A UI adapter implements two operations and respects cancellation:
 | `prompt` -> answer | `text` (field ID, label), `secret` (field ID, label), `select` (option IDs, labels, descriptions), `manual_code` (label, accepted form) |
 | `notify` | `auth_url` (URL, instructions), `device_code` (user code, verification URL, expiry, next poll time), `progress` (safe stage), `info` (safe guidance and links) |
 
-Each prompt has an attempt-local ID and step revision. A select answer is the
-option ID, not label or list position. Requiredness and shape are validated before
-use. Secret answers, manual redirect URLs and codes are private inputs. Text
-entered as a key is literal data: no `!shell`, environment interpolation or
-executable configuration language is introduced by this UI. Existing explicitly
-supplied credential callbacks/cloud subprocess recipes remain separate mechanisms.
+A select answer is the option ID, not label or list position. Requiredness and
+shape are validated before use. Secret answers, manual redirect URLs and codes are
+private inputs. Text entered as a key is literal data: no `!shell`, environment
+interpolation or executable configuration language is introduced by this UI.
+Existing explicitly supplied credential callbacks/cloud subprocess recipes remain
+separate mechanisms.
 
 A prompt has its own cancellation lifetime as well as the operation's. Callback
 completion invalidates a simultaneously displayed manual prompt; dismiss it and
@@ -261,11 +264,8 @@ are RFC 3339 UTC. Omitted input is not a magic different mode from explicit defa
 | `providers`, `methods` | descriptors | Definitions + declared capabilities only |
 | `connections`, `status`, managed `explain_auth` | secret-free metadata | Scoped store reads; no refresh, network, subprocess or credential callback |
 | `login` | Connection | Explicit UI, authorization, bounded polling/exchange, atomic persistence |
-| `begin_login`, `resume_login` | LoginAttempt | One advancement as specified in AUTH-18; may do bounded network I/O and private writes |
-| `attempt` | LoginAttempt | Read only; never polls or renews |
 | `cancel_login` | terminal attempt snapshot | Durable cancellation; close owned resources, never provider revocation |
-| `prune` | safe cleanup summary | Local expiry/retention cleanup under store transactions, no provider request |
-| `close` | none | Release owned resources; cancel owned connected operations, not logout or detached-attempt deletion |
+| `close` | none | Release owned resources; cancel owned connected operations, not logout |
 | `set_api_key` | Connection | Validate and atomically save literal credential/settings; no network verification |
 | `configure` | Connection | Save validated cloud/local recipe and settings; no credential acquisition or model call |
 | `verify` | Verification | Explicit supported non-inference provider check; may resolve/renew the selected credential |
@@ -277,8 +277,11 @@ are RFC 3339 UTC. Omitted input is not a magic different mode from explicit defa
 | bound `request` / `plan` | canonical Request / plan | Pure construction/planning with the exact selected model; no credential acquisition |
 | bound `complete` / `stream` | canonical Response / StreamEvents | Per-request selected authentication, necessary renewal, provider model request |
 
+`begin_login`, `resume_login`, `attempt` and `prune` (resumable, cross-process
+login) are reserved (AUTH-17 reserved).
+
 Constructing a default file store MUST NOT touch disk. Before any new external
-authorization, `begin_login` checks required storage/locking capability and reserves
+authorization, `login` checks required storage/locking capability and reserves
 its private attempt plus necessary local resources. A failed reservation means no
 provider authorization request or browser opening. A later disk failure can still
 occur; never claim this precheck guarantees the eventual write.
@@ -297,82 +300,38 @@ creating cloud resources and paid test prompts are **not implied by login/verify
 They require separate explicitly described actions and evidence. An account flow
 that mints a key or grants scopes must disclose that effect before approval.
 
-## AUTH-18 — Resumable attempts and protocol requirements
+## AUTH-18 — Running a login, and what protects it
 
-### Public snapshot and private state
+### Connected login
 
-A LoginAttempt exposes `id`, `instance_id`, `method_id`, `created_at`, `expires_at`,
-`step_revision` and one step:
+`login` runs one attempt to completion while the program stays alive: it renders
+each step through the AUTH-16 UI, waits and polls cancellably, exchanges, and
+commits atomically (AUTH-19). It does not retry a failed exchange without a proven
+safe retry classification (AUTH-20).
 
-- `prompt`: AUTH-16 prompt;
-- `redirect`: authorization URL and supported return mode;
-- `device_code`: user-facing approval details and `next_poll_at`;
-- `pending`: `next_poll_at` and safe progress stage;
-- `complete`: committed Connection metadata;
-- `cancelled`, `expired`, `denied`, `failed`, `superseded` or `indeterminate`:
-  safe AUTH-24 problem and recommended action, where applicable.
+- Default attempt lifetime is **15 minutes**, measured from begin. The caller may
+  explicitly select another positive finite budget before beginning; use the
+  earliest of that local deadline, caller cancellation/deadline and any
+  provider/profile deadline. No poll may extend an existing deadline, and a
+  provider expiry is never extended by restarting a local poll loop. Durable
+  time is wall-clock UTC; in-process waits use monotonic deadlines. Clock errors
+  fail safely rather than lengthen approval.
+- Device flow: early polls return the unchanged next permissible time without
+  network I/O. `pending` uses the provider interval, default 5 seconds, with a
+  minimum positive wait. `slow_down` MUST NOT decrease the interval: use at least
+  the previous interval + 5 seconds and any larger server-required interval.
+  Provider-specific exceptions require wire evidence, not silent per-language
+  variations. A device poll issues at most one poll request; documented follow-on
+  token/key exchanges after approval may complete within the bounded budget.
+- Recheck the deadline immediately before credential commit: a result received
+  before expiry cannot be saved after it. A completed durable commit is not undone
+  by a later deadline/abort.
+- A completed attempt's secret state is erased on termination, whatever the
+  outcome.
 
-The public ID has at least 128 unpredictable bits. It is a reference, **not** a
-bearer authorization credential. All reads/resumes/cancels verify the initiating
-application scope and session ownership. Browsers may keep the ID; verifiers,
-device codes and tokens stay in the private attempt store. Public snapshots may
-contain display-sensitive approval URLs/user codes and belong only to the
-initiating user's UI; default repr/log output redacts them.
-
-Private state records flow/schema revision, trusted instance revision, expected
-binding-slot generation, issuer/client/redirect context, expected prompt/step,
-state/PKCE material where applicable, expiry and exchange ownership. No executable
-callbacks or language objects are serialized. The store owns cross-process
-continuation; applications do not transport a secret serialized `pending.token`
-as an alternative default.
-
-### Begin, advance and connected execution
-
-- `begin_login` validates choice/settings/return mode and reserves the slot's one
-  active attempt without locking it for human approval. An existing active attempt
-  yields `login_in_progress` with scoped recovery; it is not silently cancelled.
-- Default local attempt lifetime is **15 minutes**, measured from begin. Before
-  beginning, the caller may explicitly select another positive finite local budget;
-  use the earliest of that local deadline, caller cancellation/deadline and any
-  provider/profile deadline. No resume/poll may extend an existing deadline. A
-  provider expiry is never extended by restarting a local poll loop. Durable time
-  is wall-clock UTC; in-process waits use monotonic deadlines. Clock errors fail
-  safely rather than lengthen approval.
-- `resume_login(id, input, step_revision)` takes `answer(prompt_id, value)`,
-  `callback(returned_url_or_supported_code)` or `poll`. It does not contain an
-  instruction to pick a different provider/scope/redirect/relay. It advances to the
-  next externally observable wait or terminal step. A device `poll` issues at most
-  one poll request; documented follow-on token/key exchanges after approval may
-  complete within that advancement's bounded budget.
-- Early polls return the unchanged next permissible time without network I/O.
-  `pending` uses the provider interval, default 5 seconds, with a minimum positive
-  wait. `slow_down` MUST NOT decrease the interval: use at least the previous
-  interval + 5 seconds and any larger server-required interval. Provider-specific
-  documented exceptions require wire evidence, not silent per-language variations.
-- A recorded terminal result wins over later input. Otherwise resume/cancel/prune
-  first checks `now >= expires_at`: logical expiry wins and no further approval or
-  exchange begins. Recheck the deadline immediately before credential commit as
-  well; a result received before expiry cannot be saved by a worker that resumes
-  after it. A completed durable commit is not undone by a later deadline/abort.
-- Resuming checks exact step revision and one-time exchange ownership before any
-  request. Wrong-step answers fail without corrupting a still-valid attempt.
-  Duplicate delivery after successful commit returns the retained result without
-  another token exchange. Concurrent delivery permits only one exchange owner;
-  the other returns current pending/terminal status, not another request.
-- A completed attempt's secret state is erased; its safe terminal record is
-  retained for **24 hours after termination**, then may be removed. Cancelled,
-  failed and expired attempts have the same metadata retention. Lookup after
-  removal returns `attempt_unavailable`, not a new login. Login secrets are erased
-  on termination even when metadata remains. Effective expiry is enforced on
-  every read/resume, even if no process ran at the deadline. Physical cleanup is
-  performed by explicit `prune`, a documented backend TTL worker, or the next
-  relevant write operation. A read-only inspector may report logical expiry but
-  must not claim it erased disk state. With no running process/TTL service,
-  wall-clock deletion is not guaranteed; raw storage/backup retention is separate.
-  Logical deletion is not guaranteed forensic erasure on SSDs or backups.
-- Connected `login` drives these exact operations, renders steps, waits and polls
-  cancellably; it is not a second flow implementation. It does not retry a failed
-  exchange without a proven safe retry classification (AUTH-20).
+Resumable attempts (public snapshot, private state, `begin`/`resume`, step
+revisions, exchange ownership across processes, 24-hour terminal retention)
+are reserved (AUTH-18 reserved).
 
 ### Browser and OAuth protections
 
@@ -386,9 +345,8 @@ Provider profiles must pin the actual supported registration and deviations.
   path plus PKCE and application session binding); never silently omit all checks.
 - Validate expected issuer/client/redirect context, path, state and duplicate
   parameters before accepting success **or an error callback**. A return carrying
-  both success-code and error fields is invalid, not an implementation-dependent
-  choice between them. Wrong path/state
-  receives a generic rejection and does not terminate the legitimate wait. Error
+  both success-code and error fields is invalid. Wrong path/state receives a
+  generic rejection and does not terminate the legitimate wait. Error
   descriptions supplied by an untrusted URL never become rendered SDK diagnostics.
 - Native listeners bind loopback only (`127.0.0.1`, or `::1` where the declared
   registration supports it), never wildcard/LAN. Binding address and exact
@@ -398,16 +356,11 @@ Provider profiles must pin the actual supported registration and deviations.
 - Manual entry is accepted only when the method profile permits it. A supplied
   redirect URL is parsed against that attempt's exact registered return context;
   a bare code cannot supply state, so is allowed only with the attempt's stored
-  PKCE/context and session ownership, explicitly declared by the profile.
+  PKCE/context, explicitly declared by the profile.
 - Callback URL/request limits and auth-response limits are finite: default request
   target 8 KiB, callback headers 32 KiB, auth HTTP response body 1 MiB. Refuse before
   unbounded buffering. A profile/app may explicitly choose other finite limits;
-  it cannot disable them by an untrusted response. Timeouts remain AUTH-18/20.
-- Website return URIs are preconfigured by the application and accepted by the
-  provider's registration, not an untrusted `next` URL. The app binds callback to
-  its authenticated session, protects begin/cancel/logout against CSRF, removes
-  code/state from the address after handling, and avoids analytics/referrer leaks.
-  The SDK does not proxy a provider's password/cookie login page.
+  it cannot disable them by an untrusted response.
 - Authorization URLs opened by a helper must match the declared HTTPS issuer
   policy. The UI is told the provider; it never opens arbitrary schemes from a
   provider response. Local return URLs are handled as returns, not launch commands.
@@ -415,13 +368,14 @@ Provider profiles must pin the actual supported registration and deviations.
   A provider requiring a confidential client needs an application backend with its
   own approved registration. A relay cannot waive this requirement.
 
+Website return-URI, CSRF and session-binding rules for server applications are
+reserved (AUTH-18 reserved).
+
 ## AUTH-19 — Lifecycle, replacement and cancellation
 
 Every binding slot has a monotonically increasing **identity generation**, even
 when empty. Each stored credential has a separate monotonically increasing
-**credential revision**. IDs are never reused. Tombstone generation metadata is
-retained for the lifetime of the store scope (contains no credential); deleting
-and recreating a whole scope gives it a new internal namespace epoch.
+**credential revision**. Connection IDs are never reused.
 
 ### Creation and replacement
 
@@ -432,12 +386,13 @@ An attempt reserves the observed identity generation. Commit atomically checks
 that generation, stores a **new Connection ID**, increments identity generation,
 and marks the attempt complete. Refresh may occur while replacement is pending;
 it changes credential revision only and does not invalidate the user's intended
-replacement. A different replacement, logout or security-definition change does.
+replacement. A different replacement or logout does.
 
 A direct `set_api_key`/`configure` targeting a slot with an active login attempt
 returns `login_in_progress`; it does not silently supersede that attempt. The app
-must cancel it deliberately first. Direct setup otherwise uses the same expected-
-generation/new-ID commit rules without a provider authorization round-trip.
+must cancel it deliberately first. Direct setup otherwise uses the same
+expected-generation/new-ID commit rules without a provider authorization
+round-trip.
 
 Old credentials remain active until replacement commits. Cancel, denial, expiry,
 validation error or storage failure preserves the old active connection. If commit
@@ -446,7 +401,7 @@ A successful remote grant may already exist even if saving fails. The UI says
 "not saved"; no usable Connection is returned and no unrelated login is revoked
 as compensation. Once that attempt terminates as failed, its private result is
 erased and authorization must restart after storage is repaired. If commit outcome
-is unknown, inspect the authoritative attempt before starting again; never repeat
+is unknown, inspect the authoritative state before starting again; never repeat
 a one-use exchange just to discover whether the write succeeded.
 
 ### Logout
@@ -471,20 +426,19 @@ new polling and unsent exchanges; release resources and invalidate pending UI.
 `cancel_login` is a **durable**, serialized operation returning the actual terminal
 state. If cancellation commits first, credential commit is forbidden. If credential
 commit won first, cancellation returns `complete`; undo requires explicit logout.
-Navigation/suspension is not cancellation: a resumable attempt survives while its
-store/session and deadline survive.
 
 Native task/AbortSignal/context cancellation may prevent delivery of a result
-that already committed. It does not prove nothing changed: `attempt(id)` recovers
-the durable state. SDK helpers retain/reveal that safe ID for recovery. They must
-not report "nothing saved" without reading the authoritative state. Process death
-cannot run cleanup; persistent expiry/ownership rules still apply.
+that already committed. It does not prove nothing changed: the SDK must not report
+"nothing saved" without reading the authoritative state. Process death cannot run
+cleanup; persistent expiry/ownership rules still apply.
 
 After a credential snapshot has been admitted for sending, logout cannot recall
 bytes already sent. The request path rechecks generation at final local dispatch
 admission (AUTH-20); a logout that committed before admission prevents dispatch.
 An already admitted request may finish or be aborted on a best-effort basis. No
 claim of instantaneous provider-side revocation is made.
+
+Tombstone/epoch retention across scope deletion is reserved (AUTH-19 reserved).
 
 ## AUTH-20 — Renewal and request authentication
 
@@ -494,11 +448,11 @@ claim of instantaneous provider-side revocation is made.
    B's account header or endpoint. Generation is checked again at local dispatch
    admission; a lost race is not silently rebound. When the profile exposes a
    stable principal/account identifier through an authenticated exchange, renewal
-   must preserve it or fail connection_changed for explicit reauthorization. Do
-   not relabel a different principal as renewal of the same Connection. Opaque
-   credentials cannot independently prove a provider's human identity; pinning
-   guarantees the local credential lineage/selection, not immutable external IAM
-   permissions, billing entitlements or a cryptographically verified account label.
+   must preserve it or fail `connection_changed` for explicit reauthorization.
+   Do not relabel a different principal as renewal of the same Connection.
+   Opaque credentials cannot independently prove a provider's human identity;
+   pinning guarantees the local credential lineage/selection, not immutable
+   external IAM permissions, billing entitlements or a verified account label.
 2. Stored account expiry is the provider's actual expiry, not a timestamp already
    reduced by skew. `never` is an explicit provider-proven property, not an omitted
    expiry or a large magic number. Unknown expiry is represented as `unknown`;
@@ -507,26 +461,21 @@ claim of instantaneous provider-side revocation is made.
 3. For a finite account credential with known issue time/lifetime, renewal becomes
    due at `expires_at - min(300 seconds, lifetime / 10)`. This keeps a five-minute
    buffer for long tokens without making a short-lived token permanently due.
-   A request requiring longer remaining validity must declare it. After one renewal,
-   accept a positive-lifetime result sufficient for that request, or fail; do not
-   spin renewing within the same request. Provider-specific minimums need evidence.
-   Existing cloud-chain caching/skew rules under AUTH-3 are unchanged.
+   After one renewal, accept a positive-lifetime result sufficient for that request,
+   or fail; do not spin renewing within the same request. Existing cloud-chain
+   caching/skew rules under AUTH-3 are unchanged.
 4. On renewal: lock/serialize the binding, re-read authoritative generation and
    credential revision, and reuse a sibling's sufficiently fresh result. Otherwise
    write a durable `renewal_in_flight` marker **before** the possibly rotating
    exchange; hold exclusive ownership through the bounded exchange and atomic
-   write. Refresh does not change Connection ID or identity generation. Other
-   bindings should not be held during the network call; a file backend may serialize
-   more broadly and must disclose that contention cost. An unresolved in-flight
-   marker prevents request acquisition from using that material, even if its
-   recorded expiry would otherwise be fresh: await the owner or apply uncertainty
-   recovery, never bypass the marker.
+   write. Refresh does not change Connection ID or identity generation. An
+   unresolved in-flight marker prevents request acquisition from using that
+   material, even if its recorded expiry would otherwise be fresh: await the owner
+   or apply uncertainty recovery, never bypass the marker.
 5. No lock is held while a human approves a login. Network exchange budget defaults
    to 30 seconds per request and is bounded by the operation deadline. Lock waiting
    defaults to 30 seconds and is cancellable. Callers may shorten/explicitly change
-   these finite budgets; never use an unbounded refresh lock. Leased stores need
-   fencing against stale writes. A lost lease while an exchange might still be in
-   flight means **uncertain**, not permission for another worker to repeat it.
+   these finite budgets; never use an unbounded refresh lock.
 6. A provider-declared permanent rejection marks `needs_login`, clears unusable
    renewal secrets, and fails without another identity. A known safe transient
    failure retains credentials and clears its in-flight marker. Ambiguous timeout,
@@ -535,12 +484,12 @@ claim of instantaneous provider-side revocation is made.
    one-use credential automatically. Reconcile only through a documented provider
    recovery mechanism; otherwise require fresh login. Missing `refresh_token` in a
    response preserves the old one only if that provider's profile permits it.
-7. Device polling is protocol progress, not a generic retry loop. AUTH-18 handles
-   pending/slowdown. Other retries require explicit operation semantics proving
-   repetition safe. SDKs must not add inference retries, hidden 401-replay or account
-   fallback under the banner of authentication. No exactly-once network guarantee
-   is possible across provider/store crashes; the contract guarantees local commit
-   ordering and conservative uncertainty handling.
+7. Device polling is protocol progress, not a generic retry loop. Other retries
+   require explicit operation semantics proving repetition safe. SDKs must not add
+   inference retries, hidden 401-replay or account fallback under the banner of
+   authentication. No exactly-once network guarantee is possible across
+   provider/store crashes; the contract guarantees local commit ordering and
+   conservative uncertainty handling.
 8. Safe transient renewal failure does not delete an account, and callers can retry
    deliberately. The selected operation fails; the SDK does not silently send the
    nearly expired token or charge an environment key instead. This trades some
@@ -550,16 +499,15 @@ claim of instantaneous provider-side revocation is made.
    account endpoints (Copilot) must be validated against the provider's allowed
    origins/path policy, not accepted merely because a token string contains a URL.
    Custom gateways are trusted application configuration with separately scoped
-   bindings. Discovery from a remote host must not expand its own trust boundary.
-   Server/relay hosts must enforce an explicit egress policy against SSRF, including
-   DNS resolution/rebinding, private/link-local/metadata addresses and redirect hops;
-   hostname allow-listing alone is not a complete egress policy. Private gateways
-   are explicit application allow rules, never inferred from submitted login text.
-   TLS certificate verification is mandatory for credential-bearing HTTPS.
-10. Pure LM15 build/plan operations remain offline. Network authentication preparation
-    happens before pure encoding/dispatch, not inside serialization, repr or model
-    planning. An explicitly supplied AUTH-2 callable keeps its existing per-request
-    semantics; managed sources must not smuggle interactive work into it.
+   bindings. TLS certificate verification is mandatory for credential-bearing HTTPS.
+10. Pure LM15 build/plan operations remain offline. Network authentication
+    preparation happens before pure encoding/dispatch, not inside serialization,
+    repr or model planning. An explicitly supplied AUTH-2 callable keeps its
+    existing per-request semantics; managed sources must not smuggle interactive
+    work into it.
+
+Lease fencing for distributed stores and server-side egress/SSRF policy are
+reserved (AUTH-20 reserved).
 
 ## AUTH-21 — Secret and privacy boundary
 
@@ -582,52 +530,38 @@ receives and state that trust boundary, not claim to sandbox them.
 Bearer-equivalent values may travel only in the fields required by the provider
 protocol. Never place a refresh token/verifier in an ordinary navigation URL.
 OAuth itself returns short-lived codes/state in URLs; they are the explicit,
-protected exception, not a reason to claim no sensitive value ever appears there.
-Native listener access logs must be disabled. Browser callback pages need a
-restrictive referrer policy and no unrelated scripts before handling/scrubbing the
-return. HTML/terminal display escapes untrusted provider/account text.
+protected exception. Native listener access logs must be disabled. HTML/terminal
+display escapes untrusted provider/account text.
 
 Browser storage is readable by same-origin scripts; a private file is not encrypted
-at rest; an origin allow-list is not authentication of arbitrary non-browser relay
-clients. These limitations must be stated. Do not promise keychain security from
+at rest. These limitations must be stated. Do not promise keychain security from
 `0600`, or stronger isolation because the caller used WASM.
 
-Consent to relay is bound to the instance, relay origin and stages of use
-(authorization/renewal, catalog, inference). A changed relay or new stage requires
-fresh consent/configuration. It is never inferred from a generic network failure.
-The UI must say whether credentials, identity tokens and prompts traverse the
-relay. The auth path does not inherit broad body-capture defaults from model-call
-logging or a gateway: auth exchanges are never captured as ordinary model traffic.
+Auth exchanges are never captured as ordinary model traffic: the auth path does
+not inherit body-capture defaults from model-call logging or a gateway.
 
-## AUTH-22 — Platform profiles, not language promises
+Relay consent rules are reserved (AUTH-21 reserved).
 
-| Environment | Supported building blocks | Boundary |
-|---|---|---|
-| Native interactive terminal | Terminal UI, private files, supported loopback/device/manual flow | Browser may be on another machine; opening is a UI action |
-| SSH/headless native | Device approval, displayed link/manual return, explicit configuration | Never assume user's browser reaches server localhost |
-| Native GUI | App UI and secure-storage adapter, approved browser handoff | No hard dependency on a GUI toolkit |
-| Web page / browser WASM | Page UI, explicit browser store, approved page redirect/device/manual flow | No native filesystem, localhost listener, ambient CLI login, or unrestricted headers |
-| Application server | Server-private scoped store, begin/resume, explicit selected auth | App owns user/session authentication, CSRF, callback routes and authorization of scope |
-| Mobile | System browser/device flow, app lifecycle and secure storage where supplied | A new app callback scheme must be provider-approved; SDK language does not grant registration |
-| Worker/serverless | Explicit storage/HTTP/UI bridge as supplied | No assumed persistent process, local callback or local disk |
+## AUTH-22 — Platforms: declared capabilities, separate evidence
 
 An SDK reports declared capabilities; it does not run probing code during
-`methods()`. Browser directness must be evidenced separately for authorization,
-token exchange, renewal, catalogs and inference. Provider pages can normally be
-opened as navigation even when their token API refuses cross-origin fetch; those
-are distinct operations. A relay solves some HTTP/CORS/header problems, not
-provider authorization, client registration, cookies, callbacks or model codecs.
-It cannot access the user's local model server through the user's localhost.
+`methods()`. A native pass is not a browser pass: browser directness must be
+evidenced separately for authorization, token exchange, renewal, catalogs and
+inference. Provider pages can normally be opened as navigation even when their
+token API refuses cross-origin fetch; those are distinct operations.
 
-Language bindings keep native mechanics: Python sync Auth plus native AsyncAuth,
-TypeScript promises + AbortSignal, Go context, Rust async cancellation/drop plus
-explicit durable cancel, R explicit interruption/cancellation controls, Julia task
-interruption, Java interruption/explicit cancellation, .NET CancellationToken,
-Ruby its documented interruption/cancellation hook, Swift task cancellation.
-Cancellation of an in-memory task is not a proof of durable cancel; AUTH-19 always
-applies. No sync wrapper may secretly start an event loop in an already-running
-loop. Browser builds must not import native callback/filesystem modules merely to
-list providers or build a request.
+Language bindings keep native mechanics: Python sync Auth plus native AsyncAuth
+and CancelledError, TypeScript promises + AbortSignal, Go context, Rust async
+cancellation/drop plus explicit durable cancel; the full per-language list is in
+the reserved file. Cancellation of an in-memory task
+is not a proof of durable cancel; AUTH-19 always applies. No sync wrapper may
+secretly start an event loop in an already-running loop. Browser builds must not
+import native callback/filesystem modules merely to list providers or build a
+request.
+
+The per-environment profile table (SSH, GUI, mobile, serverless, relay limits) is
+reserved (AUTH-22 reserved) and promoted one row at a time as each environment
+gets its first receipt.
 
 ## AUTH-23 — Model selection and `connect()`
 
@@ -640,9 +574,6 @@ features. Account-listed availability is not a pricing or quota promise. Catalog
 fetch failure is surfaced; an explicit cached/manual alternative must be labelled,
 not silently substituted. Provider calls use the same scoped selected identity and
 destination policy as inference. A model list MUST NOT widen that policy.
-Verification/catalog results are bound to the captured Connection ID and identity
-generation. Persisting them rechecks that identity; a lost replacement/logout race
-returns connection_changed instead of attaching the old result to a new account.
 
 `capability="structured-output"` is a strict requested capability: only supported
 choices are automatically offered. Unknown can be considered only by explicit
@@ -665,9 +596,9 @@ implementation. With no arguments on a native terminal it:
 3. Reuses the selected connection, or runs the chosen login/setup flow. Core
    `login` is not an ambiguous "reuse or replace" operation; connect orchestrates
    those separate choices and obtains replacement consent if needed. A selected
-   connection marked needs_login is offered explicit reauthorization/replacement;
-   it is not reused as if ready. A renewal failure during this setup may offer a
-   deliberate new login, but cannot silently create one or select another account.
+   connection marked `needs_login` is offered explicit reauthorization; it is not
+   reused as if ready. A renewal failure during setup may offer a deliberate new
+   login, but cannot silently create one or select another account.
 4. Explicitly fetches/uses the selected connection's model catalog with visible
    source/freshness, offers supported choices and checks route binding. No guessing
    from a model family name. A caller-specified valid selection can skip the picker.
@@ -677,10 +608,9 @@ implementation. With no arguments on a native terminal it:
 A completed login is persisted **before** model choice. If the user then cancels
 model selection or catalog fetching fails, the connection remains saved and the UI
 says so. There is no pretend whole-wizard rollback or silent provider revocation.
-The caller may explicitly logout that new connection. This is a stated trade-off:
-valuable authorization survives a later choice failure, but connect is not one
-atomic transaction. The helper returns/attaches a safe recovery reference for
-already completed setup when it fails or is cancelled.
+The caller may explicitly logout that new connection. Stated trade-off: valuable
+authorization survives a later choice failure, but connect is not one atomic
+transaction.
 
 The BoundClient exposes selection metadata and has `request(messages, tools?,
 config?, ...)` that produces an ordinary canonical Request with the selected routed
@@ -693,19 +623,11 @@ policy is introduced. Request/Response serialization gains no credential fields.
 
 Bound clients pin route/model/Connection ID but re-resolve renewable material per
 request. Cloning/sharing one shares the same selection/scope, not an independent
-copy of a rotating token. Closing releases resources **owned by that client**;
-caller-supplied managers/transports remain caller-owned. Closing is not logout.
-A serializable ModelSelection contains `scope_epoch`, `connection_id`,
-`identity_generation`, `instance_id`, `binding_id`, `definition_revision`,
-`provider` (the exact route) and `model_id`. Generation uses the AUTH-25 decimal
-string encoding. Catalog evidence accompanies the choice but cannot widen its
-binding. No credential or callable appears in a selection. `router.bind(selection)`
-or the native equivalent validates it structurally against the attached manager
-and definitions without I/O; current store/generation validation is performed at
-request acquisition/dispatch. A known epoch/revision mismatch fails immediately.
-Restoring a selection requires an authorized Auth scope and matching definitions;
-serialized IDs confer no access. Changing accounts/models means explicitly making
-a new selection/client.
+copy of a rotating token. Closing is not logout. A selection contains no
+credential or callable; serialized IDs confer no access.
+
+The serializable ModelSelection record (epochs, revisions, `router.bind` from
+persisted data) is reserved (AUTH-23 reserved).
 
 ## AUTH-24 — Errors, cancellation and recovery
 
@@ -714,15 +636,16 @@ Managed lifecycle errors are `AuthOperationError` at the LM15 root with
 401s and do not imply credentials are wrong. Public metadata includes operation,
 instance, method, attempt/connection reference where safe, stage, commit state
 (`not_committed`, `committed`, `unknown`) and a recovery action. Messages are helpful
-but not matched as protocol. IDs do not grant access. Bad argument types use the
-language's normal argument error; unknown registered IDs are `not_configured`.
+but not matched as protocol. Bad argument types use the language's normal argument
+error; unknown registered IDs are `not_configured`.
+
 `recovery` is one of `provide_input`, `choose_method`, `resume_attempt`,
 `inspect_attempt`, `restart_login`, `select_connection`, `repair_storage`,
-`operator_action` or `none`, with an optional safe scoped reference. It is guidance,
-not an automatic retry instruction. `stage` is one of `discovery`, `reservation`,
-`interaction`, `authorization`, `polling`, `exchange`, `persistence`, `resolution`,
-`renewal`, `verification`, `catalog` or `dispatch`. Provider-specific progress text
-may accompany a stage, but cannot invent an error code or expose a raw response.
+`operator_action` or `none`. It is guidance, not an automatic retry instruction.
+`stage` is one of `discovery`, `reservation`, `interaction`, `authorization`,
+`polling`, `exchange`, `persistence`, `resolution`, `renewal`, `verification`,
+`catalog` or `dispatch`. Provider-specific progress text may accompany a stage,
+but cannot invent an error code or expose a raw response.
 
 | reason | Meaning / normal recovery |
 |---|---|
@@ -742,141 +665,81 @@ may accompany a stage, but cannot invent an error code or expose a raw response.
 | `selection_mismatch` | Request/model/credential override contradicts a bound selection |
 | `credential_rejected` | Selected renewal/session permanently rejected; sign in again |
 
-Native cancellation remains idiomatic (Python CancelledError, Go context errors,
-etc.); normalized conformance outcome is `cancelled`, not an AuthError and not
-retryable. SDK-created cancellation errors do not copy arbitrary secret-bearing
-signal reasons into messages/causes. Deadline expiry outside the login-attempt
-lifetime uses the existing timeout mechanism; attempt expiry is `login_expired`.
-Lock contention retains AUTH-6 LockTimeoutError. Definite safe transport/rate-limit
-failures may retain the existing typed errors with sanitized diagnostics and safe
-operation context. AUTH-20 indeterminate classification takes precedence over
-"retryable network error" for a possibly consumed code or rotated token.
+Native cancellation remains idiomatic; normalized conformance outcome is
+`cancelled`, not an AuthError and not retryable. SDK-created cancellation errors
+do not copy arbitrary secret-bearing signal reasons into messages/causes.
+Deadline expiry outside the login-attempt lifetime uses the existing timeout
+mechanism; attempt expiry is `login_expired`. Lock contention retains AUTH-6
+LockTimeoutError. Definite safe transport/rate-limit failures may retain the
+existing typed errors with sanitized diagnostics and safe operation context.
+AUTH-20 indeterminate classification takes precedence over "retryable network
+error" for a possibly consumed code or rotated token. Auth-endpoint diagnostics
+use the stricter secrecy boundary, never wholesale token-response passthrough.
 
 No AuthOperationError enters the global automatic/retryable set merely because
 its English message says try again. Model-inference HTTP errors keep their current
 classes, provenance and evidence-backed metadata; this amendment does not alter
-Azure/API-key provider error mapping. Auth-endpoint diagnostics use the stricter
-secrecy boundary, never wholesale token-response passthrough.
+Azure/API-key provider error mapping.
 
 Connection status separates `presence` (`saved`, `absent`), `usability`
 (`ready`, `renewal_due`, `needs_login`, `indeterminate`, `unknown`), and optional
 last Verification (`valid`, `rejected`, `unverified`, timestamp and check identity).
-`ready` is a local assessment, not remote verification. Absence of expiry does not
-justify a verified badge. An unreadable store produces an error, not `absent`.
+`ready` is a local assessment, not remote verification. Absence of expiry does
+not justify a verified badge. An unreadable store produces an error, not `absent`.
 
-## AUTH-25 — Persistence and concurrency requirements
+## AUTH-25 — Persistence: what every store must guarantee
 
 Public Connection/Attempt/Selection snapshots are not credential-store records.
-The private store needs versioned records for:
-
-- scope epoch and binding slots (identity generation, active Connection ID,
-  reserved Attempt ID);
-- connections (ID, trusted definition revision, credential revision, settings,
-  actual expiry representation, renewal material/strategy and recovery state);
-- attempts (AUTH-18 context, state, step revision, deadlines, exchange ownership,
-  private pending result, terminal metadata);
-- renewal/exchange journal markers sufficient to detect interrupted one-use work.
+The private store keeps versioned records for binding slots (identity generation,
+active Connection ID, reserved Attempt ID), connections (credential revision,
+settings, actual expiry, renewal material and recovery state), attempts, and a
+renewal/exchange journal sufficient to detect interrupted one-use work.
 
 Persistent envelope version is **1**, independent of canonical Request JSON and
-of provider token-response schemas. Record timestamps use RFC 3339 UTC, finite
-intervals use named units, and generations/revisions serialize as nonnegative
-**decimal strings** (avoid JavaScript's integer precision limit). Omitted optional
-fields mean absent; secret serialization is explicit and restricted to store
-adapters. Provider-specific private data must be namespaced and versioned; preserve
-unrecognized private fields within a known compatible version. Unknown required
-flow/schema versions fail before exchange/write. Do not serialize native objects,
-code, a Python pickle or a language-specific enum layout.
+of provider token-response schemas. Timestamps are RFC 3339 UTC; finite
+intervals use named units; generations and revisions serialize as nonnegative
+**decimal strings** (JavaScript integer precision). No legacy xAI/Pi/Claude/Codex
+importer or dual-format writer is required. Secret serialization is explicit and restricted to store adapters.
+Do not serialize native objects, code, a Python pickle or a language-specific enum
+layout. Private-store and auth-response JSON must be strict UTF-8 JSON without
+duplicate member names or non-finite numbers, with bounded sizes (AUTH-18).
 
-Private-store and auth-response JSON must be strict UTF-8 JSON, without duplicate
-object-member names or non-finite numbers. Reject duplicates before collapsing
-objects into maps; a post-parse schema cannot detect that ambiguity. Parsing and
-string/body sizes are bounded (AUTH-18). Stored `reason` is a bounded stable managed
-reason or existing error code, never a raw provider/user error description.
+Mandatory atomicity: credential commit + attempt completion is one durable
+operation; logout + generation invalidation is one durable operation. A commit
+never decreases identity/credential revisions or reuses a Connection ID. An
+unsupported format, integrity violation or unreadable store fails closed without
+writing or probing another identity.
 
-The exact private envelope is [auth-store.schema.json](auth-store.schema.json)
-(JSON Schema 2020-12, including date-time format validation); examples and invalid
-vectors are in [store-vectors.json](../auth/managed/store-vectors.json). This is
-the logical record format database/keychain stores expose too, not a requirement
-that they store all scopes in one physical JSON file. A file backend writes that
-envelope; a database may distribute records while preserving their semantics.
-No legacy xAI/Pi/Claude/Codex importer or dual-format writer is required.
+Files use AUTH-4's private atomic writes and canonical-path locking. Unix modes
+and Windows semantics must be documented; `0600` text is not a Windows security
+implementation.
 
-In addition to the structural schema, every store commit/load enforces:
+Auth caches must include scope, instance/definition revision, binding, Connection
+ID and credential revision/expiry. A label, provider name or access-token hash
+alone is not an adequate cache key. Cross-process changes must be observed before
+request dispatch admission; stale caches cannot bypass logout.
 
-1. Scope IDs/epochs are unique; slot keys and connection/attempt IDs are unique
-   within the authorized scope. No cross-scope references. IDs are unpredictable
-   where AUTH-18 requires it; schema string validation alone cannot prove entropy.
-2. A slot's active Connection ID points to exactly one connection whose instance,
-   binding and identity generation match it. No orphan active credential records.
-   A reserved Attempt ID points to exactly one nonterminal attempt for that slot
-   with matching expected generation. A reservation never creates a connection.
-3. A terminal attempt has no private protocol/exchange data and is not reserved
-   by a slot. Its completion metadata records what committed then, not proof the
-   connection is still active now. Logout can remove that connection while the
-   safe completion receipt remains readable. Consult status for current presence.
-4. `complete` records have a result; other terminal records do not. `exchanging`
-   has a matching in-flight journal. An interrupted journal is reconciled or
-   marked indeterminate before another exchange; it is not treated as expired
-   ownership that can simply be replayed. Step/credential revisions match their
-   journal. Known-safe unsuccessful exchanges clear it atomically.
-5. Finite issue/expiry times satisfy expires_at > issued_at; duplicate expiry on
-   an AUTH-2 request credential agrees with the material's actual expiry. Attempt
-   creation < expiry, terminal time >= creation, and exchange deadline > start.
-   Exact time comparisons parse RFC 3339, never compare localized strings.
-6. Connection kind matches material: cloud_identity -> cloud_recipe,
-   local_server -> local_recipe, account/api_key -> credential. Api-key form
-   storage has renewal=none; account renewal follows the evidenced flow profile.
-   `needs_login` keeps metadata but no credential material/journal. Indeterminate
-   material is private recovery-only and cannot authenticate model requests.
-7. Persisted instance/profile/security revisions exist in the trusted registry;
-   routes/settings and private provider data validate against those versioned
-   profiles. Nonsecret provider settings occur only in `connection.settings`,
-   not a second cloud-recipe settings map; secret credentials cannot be stored
-   there. Local recipe `base_url` is its single endpoint field; profiles reject
-   a conflicting second spelling in settings. A new unknown required revision is refused before credential use.
-   Shared bindings have one declared owner. No settings string is executable.
-8. A commit never decreases identity/credential/step revisions, reuses a Connection
-   ID for replacement, or deletes generation tombstones while the scope survives.
-   This is checked against the previous authoritative state, not just new JSON.
-
-An unsupported format, integrity violation or unreadable store fails closed
-without writing or probing another identity. Structural vectors do not prove the
-cross-record or cross-process guarantees; AUTH-26 requires both kinds of tests.
-
-The logical store primitive is a **scoped serialized transaction** over declared
-binding/attempt/connection keys, with consistent reads, all-or-nothing durable
-commit and a definitive commit result when available. A compare-and-swap/lease
-backend is acceptable only if it implements the same ordering/fencing guarantees.
-Define a global lock order for multi-key operations to avoid deadlock. A backend
-without the required semantics is unavailable for persistent managed auth, not a
-best-effort conforming store. Atomic credential + attempt completion and atomic
-logout + generation invalidation are mandatory.
-
-Files use AUTH-4's private atomic writes and canonical-path locking (plus directory
-sync where required for the claimed durability). Unix modes and Windows ACL/lock
-semantics must be documented; 0600 text is not a Windows security implementation.
-A browser session store states tab lifetime; cross-tab shared stores require real
-coordination or refuse shared mutable use. Store quotas/read-only/private-mode
-failures are surfaced before authorization where detectable.
-
-Auth caches must include scope epoch, instance/definition revision, binding,
-Connection ID and credential revision/expiry. A label, provider name or access-token
-hash alone is not an adequate cache key. Cross-process changes must be observed
-before request dispatch admission; stale caches cannot bypass logout.
+The draft envelope schema is [auth-store.schema.json](auth-store.schema.json) with
+examples in [store-vectors.json](../auth/managed/store-vectors.json). It is a
+draft artifact: the file store implementation may change it before ratification.
+The full cross-record invariant list, the transaction primitive for
+database/lease stores, and browser cross-tab rules are reserved (AUTH-25
+reserved).
 
 ## AUTH-26 — Acceptance and honest support claims
 
-All ten SDKs implement these behaviors with native mechanisms: Python, TypeScript,
-Rust, Go, R, Julia, Java, .NET, Ruby and Swift. Platform profiles are separate from
-language names. A native pass is not a browser/mobile pass; source availability is
-not a working provider integration.
+Every release SDK implements these behaviors with native mechanisms. Which
+languages are release SDKs is a separate, explicit maintainer decision; this
+specification does not enlarge that list. Platform profiles are separate from
+language names. A native pass is not a browser/mobile pass; source availability
+is not a working provider integration.
 
 The initial account inventory is Claude, Codex, Copilot, xAI, Kimi Code, Meta,
 OpenRouter and Radius; ordinary key/cloud/local setup uses the same public
 operations. Gemini CLI and Antigravity account login are excluded. GitLab Duo is
-an optional extension example, not an unannounced ninth mandatory built-in. Radius
-requires its model protocol as well as login; do not advertise a usable model
-connection when only authorization was implemented.
+an optional extension example, not an unannounced ninth built-in. Radius requires
+its model protocol as well as login; do not advertise a usable model connection
+when only authorization was implemented.
 
 Provider flow profiles and wire fixtures must be grounded in provider docs/live
 receipts per AUTHORITY.md. The Pi 0.87.0 study is implementation reference, not
@@ -893,7 +756,14 @@ Conformance has four independent evidence levels:
 
 Existing API-key, shared-key, Azure/cloud-chain and endpoint/error fixtures remain
 regression gates. Old implicit-login fixtures are explicitly superseded as listed
-in the managed conformance README, not silently weakened or still counted as proof
-of the new contract. No support-matrix promotion or SDK pin update follows merely
-from adding this specification. The harness operations required to drive the new
-scenarios are specified in that README; implementing them is later work.
+in the managed conformance README, not silently weakened or still counted as
+proof of the new contract. The harness operations required to drive the new
+scenarios are specified in that README; implementing them is later work. No
+support-matrix promotion or SDK pin update follows merely from adding this
+specification.
+
+**Promotion order.** Core scenarios (see the tier table in
+[scenarios.md](../auth/managed/scenarios.md)) gate the xAI migration and the first
+browser login. Reserved rules and their scenarios are promoted only when the
+trigger named in the reserved file is met, and only after the core has survived
+two real implementations.

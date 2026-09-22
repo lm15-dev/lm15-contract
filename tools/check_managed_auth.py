@@ -125,12 +125,20 @@ def check_documents(root: Path) -> int:
     require(ids == [f"{n:03}" for n in range(1, len(ids) + 1)] and len(ids) >= 64,
             "acceptance scenario IDs must be unique, contiguous, and include MA-001..064")
     spec = (root / "spec/auth-managed.md").read_text(encoding="utf-8")
-    rules = re.findall(r"^## AUTH-(\d+)\b", spec, re.MULTILINE)
-    require(rules == [str(n) for n in range(12, 27)], "AUTH-12..26 headings missing/repeated")
+    rules = re.findall(r"^## AUTH-(\d+) —", spec, re.MULTILINE)
+    require(rules == [str(n) for n in range(12, 27)], "core AUTH-12..26 headings missing/repeated")
+    reserved = (root / "spec/auth-managed-reserved.md").read_text(encoding="utf-8")
+    reserved_rules = re.findall(r"^## AUTH-(\d+) \(reserved\)", reserved, re.MULTILINE)
+    require(bool(reserved_rules) and all(12 <= int(n) <= 26 for n in reserved_rules)
+            and len(reserved_rules) == len(set(reserved_rules)),
+            "reserved headings must be '## AUTH-n (reserved)' with n in 12..26, each at most once")
+    require(all("**Promote when:**" in block for block in re.split(r"^## AUTH-", reserved, flags=re.MULTILINE)[1:]),
+            "every reserved rule must state its promote-when trigger")
     docs = [
-        "spec/auth-managed.md", "spec/auth.md", "docs/auth-examples.md",
-        "auth/managed/README.md", "auth/managed/scenarios.md",
+        "spec/auth-managed.md", "spec/auth-managed-reserved.md", "spec/auth.md",
+        "docs/auth-examples.md", "auth/managed/README.md", "auth/managed/scenarios.md",
         "changes/2026-09-22-managed-authentication.md",
+        "changes/2026-09-22-managed-authentication-ratification.md",
     ]
     for rel in docs:
         path = root / rel
@@ -192,7 +200,7 @@ def main() -> int:
         ns = validate_store_vectors(stores, validators[0])
         nr = validate_resolution(resolutions, validators[1])
         nd = check_documents(args.root)
-        print(f"check_managed_auth: OK ({ns} structural store verdicts, {nr} resolution shapes, {nd} scenario IDs/local links)")
+        print(f"check_managed_auth: OK ({ns} structural store verdicts, {nr} resolution shapes, {nd} scenario IDs/local links, core+reserved tiers)")
         if args.self_test:
             n = self_test(stores, validators[0], resolutions, validators[1])
             print(f"check_managed_auth: checker self-test OK ({n} bad-artifact mutations detected)")

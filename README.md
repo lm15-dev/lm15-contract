@@ -21,8 +21,11 @@ first. Implementations must follow the contract, not change fixtures to pass.
 
 ## Managed authentication design (2026-09-22 review draft)
 
-Start with [the decision record](changes/2026-09-22-managed-authentication.md),
-then [AUTH-12–26](spec/auth-managed.md) and [worked examples](docs/auth-examples.md).
+Start with [what needs a yes/no](changes/2026-09-22-managed-authentication-ratification.md)
+(one page), then the [decision record](changes/2026-09-22-managed-authentication.md),
+the [core spec AUTH-12–26](spec/auth-managed.md), its
+[reserved rules](spec/auth-managed-reserved.md) (design notes, not binding until
+their trigger is met) and [worked examples](docs/auth-examples.md).
 [Acceptance scenarios and vectors](auth/managed/README.md) specify what every SDK
 must prove. The private store schema is [here](spec/auth-store.schema.json).
 The changed portions of `spec/auth.md`/vocabularies are explicitly draft; no SDK

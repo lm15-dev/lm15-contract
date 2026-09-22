@@ -489,19 +489,25 @@ discriminator of a credential value (spec/auth.md AUTH-2).
 
 ## CredentialPolicy
 
-Runtime mirror: `CREDENTIAL_POLICIES`. **2026-09-22 review-draft revision**
-(spec/auth.md AUTH-1; changes/2026-09-22-managed-authentication.md): default
-source policy is distinct from the auth methods an attached manager offers.
-The implicit-file `oauth` and `oauth-unless-explicit` entries are retired,
-not retained as aliases. Runtime mirrors are not yet updated by this spec work.
+Runtime mirror: `CREDENTIAL_POLICIES` (pinned 2026-09-03; the first three
+exist since 2026-09-01). spec/auth.md AUTH-1.
 
-| Value |
-|---|
-| `key` |
-| `connection` |
-| `aws-chain` |
-| `azure-chain` |
-| `gcp-chain` |
+**2026-09-22 review draft, pending ratification R1/R2
+(changes/2026-09-22-managed-authentication-ratification.md):** `connection`
+is proposed, and the implicit-file `oauth` / `oauth-unless-explicit` entries
+are proposed for retirement, not as aliases. Until the maintainer answers,
+the retiring values stay listed because the shipped runtime still has them
+and the drift gate must reflect reality, not a proposal.
+
+| Value | Status |
+|---|---|
+| `key` | ratified |
+| `connection` | draft (R1/R2) |
+| `oauth` | ratified; retirement proposed (R1) |
+| `oauth-unless-explicit` | ratified; retirement proposed (R2) |
+| `aws-chain` | ratified |
+| `azure-chain` | ratified |
+| `gcp-chain` | ratified |
 
 `connection` has no implicit file/environment source: supply an accepted
 explicit credential or managed Auth. Dual-method providers use `key` for

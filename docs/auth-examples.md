@@ -4,6 +4,9 @@
 notebooks or claims about the installed SDKs.** Names illustrate idiomatic bindings;
 [AUTH-12–26](../spec/auth-managed.md) fixes the behavior. Do not run these against
 current packages or infer an implementation from one language's pseudocode.
+Section 5 and the `begin_login`/`resume_login` calls in section 6 illustrate
+[reserved](../spec/auth-managed-reserved.md) rules (resumable login across
+requests); they bind nobody until promoted. Sections 1–4, 7 and 8 are core.
 
 ## 1. One deliberate setup operation, no provider strings to memorize
 
@@ -167,7 +170,7 @@ one. The existing Azure named-platform behavior remains its meaning. Choosing a
 cloud chain, rather than a deterministic named source, is visible and may select
 a different principal as the environment changes; it is not a pinned account.
 
-## 5. Web/server login that survives redirects
+## 5. Web/server login that survives redirects (reserved tier)
 
 The server owns application login/session authorization. The provider login is
 an additional connection, not a substitute for authenticating the app's user.
@@ -211,9 +214,9 @@ CLI files, or assume another provider permits direct browser exchanges.
 
 ```text
 current = status(binding).connection
-attempt = begin_login(binding, replace=current.id, expected_generation=current.identity_generation)
+new = login(binding, ui=ui, replace=current.id, expected_generation=current.identity_generation)
 # current remains usable while the user approves the new account
-new = resume_login(...).complete.connection
+# (reserved tier: the same with begin_login / resume_login across requests)
 # new has a new ID; an old bound client now fails connection_changed
 
 logout(new.id)

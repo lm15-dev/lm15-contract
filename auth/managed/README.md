@@ -4,6 +4,10 @@
 
 This directory specifies the tests for [AUTH-12–26](../../spec/auth-managed.md).
 It is hand-authored canonical evidence, not captured provider behavior.
+`scenarios.md` opens with a tier table: core scenarios gate the first
+implementations; reserved ones follow the
+[reserved rules](../../spec/auth-managed-reserved.md) and are not counted until
+promoted.
 
 | Artifact | Purpose |
 |---|---|

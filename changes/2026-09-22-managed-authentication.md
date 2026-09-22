@@ -13,11 +13,18 @@ the direction of scoped auth, UI independence, resumable login and an interactiv
 `connect()` that hides routine assembly, not consequential choices.
 
 This change amends `spec/auth.md`, adds its managed supplement
-`spec/auth-managed.md` (AUTH-12–26), examples, schema/fixtures and acceptance
-scenarios, and makes the scope/API-family/vocabulary consequences explicit.
+`spec/auth-managed.md` (AUTH-12–26, core tier) and `spec/auth-managed-reserved.md`
+(rules written ahead of any implementation that needs them; each names the
+trigger that promotes it), examples, schema/fixtures and acceptance scenarios, and makes the scope/API-family/vocabulary consequences explicit.
 It does not amend the evidence precedence in AUTHORITY.md or claim that its new
 rules were already ratified. Canonical decisions below are proposed normative
 facts; upstream protocol details still require wire evidence.
+
+The maintainer's yes/no list is
+[2026-09-22-managed-authentication-ratification.md](2026-09-22-managed-authentication-ratification.md).
+The split into core/reserved was made on 2026-09-22 after review judged the
+first draft front-loaded server, database and relay rules no implementation had
+yet tested; the moved text is unchanged.
 
 ## Evidence and limits
 
