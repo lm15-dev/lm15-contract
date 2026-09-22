@@ -19,6 +19,16 @@ that four ports converge instead of each inventing a shape.
    not need keys either (a live smoke test may exist, env-gated, and is not
    a gate).
 
+## Managed-auth amendment (2026-09-22 REVIEW DRAFT)
+
+The new [AUTH-12–26](../spec/auth-managed.md) is a shared contract candidate,
+not a Python porting reference. Its [suite](../auth/managed/README.md) lists the
+new harness requirements and the exact old implicit-login cases it supersedes.
+Until ratification, the module table below describes the previously ratified
+baseline, including its old login vocabulary. Do not implement dual behavior or
+weaken API-key/cloud tests to satisfy both. No new runtime gate is claimed by a
+schema/documentation-only check. Report native/browser/mobile coverage separately.
+
 ## Order of work
 
 Each module is a harness direction or a spec section; a module is done

@@ -143,6 +143,7 @@ CLASS name, `code` is the ErrorCode literal.
 | Value | Canonical class | Notes |
 |---|---|---|
 | `auth` | `AuthError` | 401/403 |
+| `auth_operation` | `AuthOperationError` | **2026-09-22 review draft:** local managed-auth lifecycle failure; root-level, not a provider 401. Closed reasons, commit state and recovery in AUTH-24 of `auth-managed.md`. Not automatically retryable. |
 | `billing` | `BillingError` | 402 |
 | `rate_limit` | `RateLimitError` | 429 |
 | `invalid_request` | `InvalidRequestError` | 400/404/409/413/422 |
@@ -160,11 +161,18 @@ CLASS name, `code` is the ErrorCode literal.
 | `collection_limit` | `CollectionLimitError` | Local collector byte/event budget reached, not a provider failure; non-retryable. Accepted events and any received-but-rejected event remain available. No synthetic end event or automatic session cancellation. Ratified 2026-09-15 in `changes/2026-09-15-live-collection-limits.md` |
 | `provider` | `ProviderError` | catch-all; the code fallback; also a provider reply that cannot become a Response without inventing a fact on the complete path (MAP-9, 2026-09-07: a tool call with no name) |
 
+The managed-auth draft's AuthOperationError adds `reason`, `operation`,
+`instance_id`, optional method/attempt/connection references, `stage`,
+`commit_state` and `recovery` as specified in AUTH-24. These are sanitized
+lifecycle metadata, not a second provider HTTP error mapping. Native
+cancellation is not converted into auth_operation merely to fit this class.
+
 Class hierarchy (ports must replicate the SHAPE; idiomatic error mechanisms
 allowed):
 
 ```
 LM15Error
+├── AuthOperationError  (2026-09-22 review draft)
 ├── TransportError
 ├── LockTimeoutError
 ├── StreamAssemblyError
@@ -481,17 +489,30 @@ discriminator of a credential value (spec/auth.md AUTH-2).
 
 ## CredentialPolicy
 
-Runtime mirror: `CREDENTIAL_POLICIES` (pinned here 2026-09-03; the first
-three exist since 2026-09-01). spec/auth.md AUTH-1.
+Runtime mirror: `CREDENTIAL_POLICIES`. **2026-09-22 review-draft revision**
+(spec/auth.md AUTH-1; changes/2026-09-22-managed-authentication.md): default
+source policy is distinct from the auth methods an attached manager offers.
+The implicit-file `oauth` and `oauth-unless-explicit` entries are retired,
+not retained as aliases. Runtime mirrors are not yet updated by this spec work.
 
 | Value |
 |---|
 | `key` |
-| `oauth` |
-| `oauth-unless-explicit` |
+| `connection` |
 | `aws-chain` |
 | `azure-chain` |
 | `gcp-chain` |
+
+`connection` has no implicit file/environment source: supply an accepted
+explicit credential or managed Auth. Dual-method providers use `key` for
+unmanaged callers; attached Auth uses AUTH-15 instead. The protocol is named
+by method/flow descriptors, not guessed from this source policy.
+
+Managed-only closed values (connection kind, flow, availability, lifecycle,
+commit state and AuthOperationError.reason) are defined in
+[auth-managed.md](auth-managed.md); they are not canonical Request fields.
+The private persistent representation is [auth-store.schema.json](auth-store.schema.json).
+No current SDK reflection or support claim follows from these draft additions.
 
 ## NamedCredential
 

@@ -1,13 +1,22 @@
 # spec/auth.md — credential resolution, refresh, storage, secrecy
 
-**STATUS: RATIFIED 2026-08-31.** These rules are normative for every lm15
-implementation. The reference implementation (lm15-python `auth.py`,
-`authkit.py`, `doctor.py`) implements them; `auth/resolution.json` pins the
-AUTH-1/AUTH-7 behavior as fixtures; ports are held to them.
+**STATUS: existing rules ratified 2026-08-31 with subsequent amendments;
+2026-09-22 managed-authentication revision is a REVIEW DRAFT.** The newly
+written behavior is a normative candidate for review, not a claim that any
+SDK implements it. Unchanged API-key and cloud-identity rules remain in
+force. The detailed revision is [AUTH-12–26](auth-managed.md), incorporated
+as the managed-authentication part of this specification. See
+[the change record](../changes/2026-09-22-managed-authentication.md) and
+[fixture transition](../auth/managed/README.md).
 
-Scope: how an lm15 implementation finds, refreshes, stores, and explains
-credentials. lm15 does not own interactive login: applications do. These
-rules cover everything around that boundary.
+Scope: LM15 owns credential resolution, provider login protocols, renewal,
+storage coordination and safe request binding. Applications own presentation,
+authorized user scopes and deliberate login actions. Ordinary inference never
+initiates interactive login. The interactive `connect()` helper composes these
+operations without changing process-global identity or canonical request types.
+No compatibility with the old implicit Claude/Codex/Pi or xAI login behavior is
+required; API-key and cloud users are deliberately unaffected when they do not
+attach a managed Auth.
 
 ## AUTH-1 — Credential policy and resolution order
 
@@ -17,25 +26,25 @@ from the declaration — never from a hardcoded provider-name list, which is
 a second copy of the same fact and will drift (amended 2026-09-01):
 
 - **`key`** — the ordinary chain below supplies the credential.
-- **`oauth`** (`claude-code`, `openai-codex`) — the provider resolves
-  **only** its local CLI credential file; the chain below never runs. In
-  particular (stored-credential-owns-provider): a failed OAuth load or
-  refresh never falls back to an environment variable silently. An `oauth`
-  manifest declares no environment keys.
-- **`oauth-unless-explicit`** (`xai`) — an explicit `api_keys` entry wins;
-  otherwise a **usable** stored local OAuth credential (fresh, or expired
-  with a refresh token) wins; the declared environment keys are consulted
-  only when no usable credential is stored. Rationale: deliberate
-  in-process configuration always wins, but between two kinds of stored
-  state — a subscription login and an ambient environment variable — the
-  subscription wins because it spends no money per token, and normal
-  inference must never unexpectedly spend money. Stated trade-off: with a
-  usable login stored, a set environment key is silently ignored; forcing
-  that key's account requires passing it explicitly. The doctor (AUTH-7)
-  makes the winning and shadowed rungs visible. Implementations expose an
-  offline stored-credential probe on the adapter (reads files, never the
-  network) so routers can walk this chain without I/O beyond the
-  credential file.
+- **`connection`** — an account-only route requires an accepted explicit
+  credential or an explicitly attached managed Auth. No environment-key,
+  foreign CLI-file or implicit managed-store lookup. Without either source,
+  fail with login guidance naming LM15's login/connect operation.
+
+The former `oauth` and `oauth-unless-explicit` policies are retired by the
+2026-09-22 draft. Protocol capabilities now live in discoverable auth-method
+and binding declarations (AUTH-13), not implicit source chains. A dual-method
+provider such as xAI, Meta or OpenRouter has ordinary `key` resolution without
+managed Auth, and the managed rules below when Auth is attached. Account-only
+routes use `connection`. OAuth is not a billing guarantee: account access can
+consume credits or incur extra usage.
+
+**Mode boundary:** the key/cloud chains in this section apply to callers
+without managed Auth. With managed Auth, AUTH-15 is authoritative: explicit
+credentials/named identities still win, then the scoped connection; absence
+or failure never falls through to ambient identity. The bound client returned
+by `connect()` is stricter: it pins the selected Connection ID and model and
+rejects identity overrides.
 
 For a `key` provider constructed through the router, the credential
 resolves in exactly this order; the first hit wins and later rungs are
@@ -71,15 +80,15 @@ from the target; it remains kind `api_keys`. This does not claim the key is
 valid for the selected host/account: provider authentication still decides.
 URLs and host settings remain exact-provider configuration; this rule never
 shares endpoints, settings, stored OAuth credentials, or an implicit login.
-The `oauth` policy remains local-store-only.
+The `connection` policy has no ambient-store or environment fallback.
 
 See `changes/2026-09-09-python-migration-ux.md`. Implementation rollout is
 Python first; other languages are follow-up, not claimed aligned here.
 
-For an `oauth-unless-explicit` provider the order is: the explicit
-`api_keys` entry; the stored local OAuth credential (AUTH-8 store paths)
-when usable; the declared environment keys; then the typed
-not-configured error carrying the login hint.
+Saved account/key/cloud connections are never inserted into an unmanaged
+router's source chain. To use them, attach Auth explicitly or use the
+interactive `connect()` helper. AUTH-15 specifies resolution, and AUTH-19/20
+specify failure, replacement, logout and renewal.
 
 Cloud chains (amended 2026-09-03, changes/2026-09-03-cloud-hosts.md). Three
 further policies exist for providers whose door is a cloud host:
@@ -291,23 +300,18 @@ kind names. `expires_at` is RFC 3339; absent means non-expiring.
 
 ## AUTH-3 — Refresh state machine
 
-For refreshable OAuth credentials:
+For managed account credentials, [AUTH-20](auth-managed.md#auth-20--renewal-and-request-authentication)
+defines actual expiry, bounded skew for short-lived tokens, double-checked
+serialized renewal, durable in-flight markers, and conservative recovery after
+possibly rotating exchanges. A failed selected credential never selects another
+identity. A network outage is not automatically an invalid login.
 
-- an expiry skew of five minutes: a token inside the skew window counts as
-  expired for refresh purposes;
-- refresh is double-checked: acquire the cross-process lock, re-read the
-  stored credential, and skip the network refresh when the re-read
-  credential is fresh (another process refreshed while we waited);
-- the network refresh executes while holding the lock. Trade-off, stated:
-  one slow refresh stalls sibling processes up to the lock timeout; the
-  alternative double-spends rotated refresh tokens, which forces re-login;
-- an expired credential without a refresh token, or a failed refresh,
-  raises the typed auth error carrying the provider id and a re-login hint
-  naming the exact command. Never a raw traceback, never a silent fallback.
-- (amended 2026-09-03) a token cache is keyed by the provider id AND a hash
-  of the settings that select the identity (AWS profile / role; Azure
-  tenant + client id + resource; GCP project + credential source path), so
-  two identities on one provider never share a cached token.
+Existing cloud-chain credential acquisition/caching remains unchanged: the
+five-minute renewal window and provider-specific rules apply, and the cache is
+keyed by provider plus identity-selecting settings (AWS profile/role; Azure
+tenant/client/resource; GCP project/credential source). Managed saved cloud
+recipes invoke those same chains explicitly. AUTH-20 does not change the
+meaning or caching responsibility of application-supplied AUTH-2 callbacks.
 
 ## AUTH-4 — Storage semantics
 
@@ -320,10 +324,18 @@ For refreshable OAuth credentials:
   credential file's canonical path.
 - Lock files live in an lm15-owned directory, never inside another tool's
   directory (`~/.claude`, `~/.codex` are foreign territory).
-- Stated limitation: the lock is cooperative among lm15 processes. Foreign
-  writers do not take it; AUTH-3's double-checked re-read is the mitigation.
+- Stated limitation: locks coordinate only cooperating processes/backends;
+  re-reading is not a cure for a foreign tool rotating the same credential.
+  Managed auth does not borrow foreign CLI logins. AUTH-25 additionally requires
+  atomic attempt/connection commits, scope isolation, identity generations and
+  interrupted-exchange detection; plain per-value get/set is insufficient.
 
 ## AUTH-5 — Secrecy invariant
+
+AUTH-21 in [auth-managed.md](auth-managed.md) extends this boundary to private
+attempts, device codes, PKCE material, callback/session-sensitive URLs, typed UI,
+relay consent and auth HTTP diagnostics. Private store encoding is not public
+status serialization. Applications' own trusted secret callbacks are not sandboxed.
 
 Token and key material never appears in: reprs, exception messages,
 exception reprs, doctor reports, log output produced by lm15, or any fixture
@@ -337,12 +349,15 @@ credential responses: each is a bearer-equivalent for its lifetime.
 
 ## AUTH-6 — Error taxonomy
 
-- Missing/unreadable/malformed credential sources → the implementation's
-  `NotConfiguredError` equivalent, carrying `provider` and a
-  `credential_hint` that names the fix (`export GROQ_API_KEY=...`,
-  ``run `codex login` ``).
-- Expired-and-unrefreshable or provider-rejected credentials → `AuthError`
-  equivalent, same hint discipline.
+- For existing unmanaged key/cloud sources, missing/unreadable/malformed
+  sources retain `NotConfiguredError`, `provider` and the actual configuration
+  hint (`export GROQ_API_KEY=...`, select/configure the named cloud identity).
+  Managed lifecycle failures use AUTH-24 `AuthOperationError` with a typed reason,
+  commit state and recovery action; these are not fabricated provider HTTP errors.
+- Existing unmanaged credential acquisition and model-request provider rejection
+  retain their `AuthError` behavior and selected-source hints. Managed login and
+  renewal lifecycle failures instead follow AUTH-24's specific reasons; they are
+  not blanket-labelled 401 or automatically retryable.
 - Lock contention → `LockTimeoutError` (ErrorCode `lock_timeout`,
   spec/vocabularies.md; named 2026-09-08), a root-level, retryable class
   deliberately **not** an `AuthError`: nothing is wrong with the
@@ -352,7 +367,12 @@ credential responses: each is a bearer-equivalent for its lifetime.
 
 ## AUTH-7 — Explainability (doctor)
 
-Every implementation ships an `explain_auth` equivalent that:
+Every implementation ships an `explain_auth` equivalent. With managed Auth it
+walks AUTH-15, reports the selected scope/binding and any explicit overrides,
+never resolves/refreshes credentials, and distinguishes absent storage from a
+storage failure. `auth.status()` describes saved state; router diagnostics
+describe the actual request selection. See AUTH-17/24 for network-free status
+and explicit verification. Without managed Auth it retains the existing walk:
 
 - walks exactly the AUTH-1 chain (divergence from real construction is a
   bug, testable against `auth/resolution.json`);
@@ -387,10 +407,10 @@ Every implementation ships an `explain_auth` equivalent that:
   `~/.config/lm15/credentials.json`.
 - Lock directory: `$LM15_LOCK_DIR`, else `$XDG_CACHE_HOME/lm15/locks`, else
   `~/.cache/lm15/locks`.
-- Borrowed files: `~/.claude/.credentials.json` (Claude Code),
-  `~/.codex/auth.json` (Codex CLI), and `~/.pi/agent/auth.json` (Pi agent
-  store, read for xAI when present). These formats are wire-fact-like:
-  owned by foreign tools, revalidated against reality, never "cleaned".
+- Managed login does not read/write `~/.claude/.credentials.json`,
+  `~/.codex/auth.json` or `~/.pi/agent/auth.json`. No auto-import, migration,
+  dual-format writer or compatibility flow is required. Explicit external
+  credential providers remain an application choice under AUTH-2.
 - Borrowed cloud files (amended 2026-09-03): `~/.aws/credentials`,
   `~/.aws/config` (`AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`),
   `~/.aws/sso/cache/*.json`, `~/.aws/login/cache/*.json`,
@@ -398,35 +418,31 @@ Every implementation ships an `explain_auth` equivalent that:
   Same rule: foreign formats, revalidated, never cleaned. lm15 never
   writes to them; refreshed cloud tokens live in memory (AUTH-3 cache),
   never in a foreign file.
-- The lm15-owned store's xAI entry is
-  `{"xai": {"type": "oauth", "access", "expires" (ms), "refresh"?}}`;
-  refreshes write back to whichever file the credential came from, because
-  xAI rotates refresh tokens.
+- The managed store has its own versioned format (AUTH-25), not the former
+  xAI/Pi entry shape. Unknown existing formats are refused without overwriting
+  them; a caller deliberately chooses a supported store. These paths are
+  consulted only by explicit local-store construction/operations, not by an
+  otherwise unconfigured router.
 
-## AUTH-9 — Login-flow primitives
+## AUTH-9 — SDK-owned login, application-owned presentation
 
-Every implementation exposes one uniform login entry point
-(`login(provider)` or the language's idiomatic equivalent; added
-2026-09-01). It runs the login flow lm15 owns for that provider (today:
-xAI's device-code flow) and returns the stored credential. For every other
-provider it fails with the implementation's unsupported-feature error
-naming the exact fix: the foreign CLI command that owns the flow
-(`claude` `/login`, `codex login`) or the console URL where an API key is
-created. Console URLs are guidance strings, not wire facts: drift costs a
-stale hint, never broken inference. The entry point must not prompt, open
-a browser, or spend money except in the one flow explicitly requested.
-Provider-named login functions may exist as the concrete flows underneath;
-the uniform door dispatches to them.
+**Replaced by the 2026-09-22 review draft.** Every implementation exposes the
+same managed operations defined in [AUTH-12–26](auth-managed.md): discovery,
+login, begin/resume/cancel, key/recipe setup, status, verification, renewal,
+logout and model-bound connection. Login returns secret-free Connection metadata;
+ordinary inference never starts login. There is no xAI-only restriction or
+requirement to install another provider's CLI.
 
-Implementations that ship login primitives (PKCE, RFC 8628 device polling,
-loopback callback listener, credential store) follow:
+The core requires explicit UI where a choice is needed. An optional interactive
+`connect()` selects/reuses an account and model and returns a bound client. Both
+connected login and resumable website login drive the same state machine.
 
-- PKCE: S256 only; the RFC 7636 Appendix B vector is a required test.
-- Device polling: `slow_down` grows the interval by 5 seconds unless the
-  server names an interval; expiry is a typed error distinct from denial.
-- Loopback listener: binds `127.0.0.1` only; wrong path or wrong state gets
-  an error page and the wait continues; a provider `error` parameter ends
-  the wait as a typed failure; authorization codes are repr-suppressed.
+AUTH-18 specifies S256 PKCE, state/issuer/redirect binding, device polling,
+loopback-only native callbacks, supported manual returns and website session
+ownership. Wrong-state error callbacks cannot terminate a legitimate attempt.
+AUTH-19 defines cancellation/commit races; AUTH-20 defines uncertain exchange
+outcomes; AUTH-21 defines secrets and relay consent. No implementation may reduce
+these requirements to a provider-specific happy-path helper.
 
 ## AUTH-10 — Access policy: auth by composition
 
@@ -449,7 +465,7 @@ points:
 | `credential_policy`, `auth_modes`, `env_keys`, `enterprise_variants` | AUTH-1; support-matrix pinned | router, doctor, error guidance |
 | `auth_scheme` (was `auth_header`; amended 2026-09-03) | the schemes this access path accepts, in preference order, from `AuthScheme`; the credential kind selects one | the auth header / query / signature |
 | `headers` | static headers, in order | every request; Anthropic joins `anthropic-beta` with its own betas |
-| `login_hint` | re-login guidance | auth errors — always under `oauth`; under `oauth-unless-explicit` only when the stored login was the rung that won |
+| `login_hint` | re-login/configuration guidance | names the selected managed login or explicit key/cloud source; never redirects a managed failure to ambient billing |
 | `backend` | dialect-consulted variant (`api` is the public API) | a small stated set of branches inside the dialect |
 | `backend_options` | string knobs the variant needs | those branches |
 | `system_prefix` | text the backend requires first in system/instructions | payload |
@@ -533,11 +549,11 @@ The policies (reference: `lm15/access.py`):
 | Policy | Dialect | credential | auth_header | backend | Notable fields |
 |---|---|---|---|---|---|
 | `anthropic` | Anthropic | key | `x-api-key` | api | files, batches, models |
-| `claude-code` | Anthropic | oauth | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
+| `claude-code` | Anthropic | connection | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
 | `openai` | Responses | key | bearer | api | full surface |
-| `openai-codex` | Responses | oauth | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
+| `openai-codex` | Responses | connection | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
 | `openai_chat` | Chat | key | bearer | api | complete, stream, models |
-| `xai` | Chat (+ provider adapter) | oauth-unless-explicit | bearer | api | base `https://api.x.ai/v1`; images, video, models |
+| `xai` | Chat (+ provider adapter) | key (unmanaged); explicit managed binding otherwise | bearer | api | base `https://api.x.ai/v1`; images, video, models |
 | `gemini` | Gemini | key | `x-goog-api-key` | api | full surface incl. caches |
 | `azure` / `azure-chat` | Responses / Chat | azure-chain | `api-key`, `bearer` | azure-openai | `https://{resource}.openai.azure.com/openai/v1`, or `AZURE_OPENAI_ENDPOINT` + `/openai/v1` (the Foundry root, amended 2026-09-19); model = deployment name; data-plane `/models` lists the resource catalog (live, contrary to docs); `azure` also carries Files, Batch, speech and Realtime |
 | `azure-anthropic` | Anthropic | azure-chain | `x-api-key`, `bearer` | azure-foundry | `https://{resource}.services.ai.azure.com/anthropic/v1`, or `ANTHROPIC_FOUNDRY_BASE_URL` + `/anthropic/v1`; docs also claim `api-key`, but live it is 401 while `x-api-key` reaches deployment lookup; no batches/models/`fallbacks`; successful inference quota-blocked |
@@ -563,11 +579,12 @@ the OpenAI envelope; (4) `/models` takes `client_version` and lists
 `models[].slug`. The `claude-code` backend has no branches beyond the
 policy fields.
 
-What stays per-language: loading a stored login (keyed by `provider`) and
-the offline stored-credential probe. The policy says *that* a login is
-used; the loader says *how*. A subscription adapter class, where a
-language keeps one for ergonomics, holds the class-level policy and
-constructors and nothing that touches the wire.
+Managed authentication is composed through a scoped manager and an explicit
+credential binding (AUTH-12/15/20), including account-dependent destinations and
+headers. No per-language provider-name switch invents a parallel login registry.
+Platform I/O stays per-language; meanings and state transitions do not. A
+subscription adapter class, where retained for ergonomics, binds access policy
+and authentication services rather than reimplementing a wire dialect.
 
 WHY: the same wire from `AnthropicLM(access=CLAUDE_CODE)` and from a named
 `ClaudeCodeLM` is verifiable (lm15-python `tests/test_access_policy.py`);

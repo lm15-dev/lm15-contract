@@ -1,0 +1,213 @@
+{
+  "provenance": {"source": "hand-authored", "date": "2026-09-22", "evidence": "changes/2026-09-22-managed-authentication.md D9/D10/D13/D21; spec/auth-managed.md AUTH-18–21, AUTH-25; spec/auth-store.schema.json"},
+  "version": 1,
+  "status": "review-draft",
+  "description": "Private schema examples, not public connection output or live tokens. Patch inputs follow the README. Semantic cross-record/race validation is additionally required.",
+  "cases": [
+    {
+      "id": "empty-store",
+      "input": {"version": 1, "scopes": []},
+      "expect": {"valid": true}
+    },
+    {
+      "id": "saved-key",
+      "input": {
+        "version": 1,
+        "scopes": [{
+          "id": "alice", "epoch": "scope-epoch-1",
+          "slots": [{"instance_id": "example", "binding_id": "example-key", "identity_generation": "1", "connection_id": "c1"}],
+          "connections": [{
+            "metadata": {"id": "c1", "instance_id": "example", "binding_id": "example-key", "identity_generation": "1", "kind": "api_key", "method_id": "api-key", "routes": ["example-chat"], "label": "Example key", "created_at": "2026-09-22T10:00:00Z"},
+            "definition_revision": "definition-v1", "credential_revision": "1", "state": "active", "settings": {},
+            "material": {"kind": "credential", "credential": {"kind": "api_key", "value": "SECRET-SENTINEL-DO-NOT-PRINT"}, "expiry": {"kind": "never"}, "renewal": {"kind": "none"}, "private_data": {}}
+          }],
+          "attempts": []
+        }]
+      },
+      "expect": {"valid": true}
+    },
+    {
+      "id": "renewable-account",
+      "base": "saved-key",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/kind", "value": "account"},
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/method_id", "value": "browser"},
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/label", "value": "Example account"},
+        {"op": "replace", "path": "/scopes/0/connections/0/material/credential/kind", "value": "bearer_token"},
+        {"op": "replace", "path": "/scopes/0/connections/0/material/expiry", "value": {"kind": "at", "issued_at": "2026-09-22T10:00:00Z", "expires_at": "2026-09-22T11:00:00Z"}},
+        {"op": "replace", "path": "/scopes/0/connections/0/material/renewal", "value": {"kind": "provider", "profile_id": "example-renewal", "profile_version": 1, "private_data": {"refresh_token": "SECRET-SENTINEL-DO-NOT-PRINT"}}}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "cloud-recipe-not-captured-token",
+      "base": "saved-key",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/kind", "value": "cloud_identity"},
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/method_id", "value": "platform"},
+        {"op": "replace", "path": "/scopes/0/connections/0/settings", "value": {"resource": "example-resource"}},
+        {"op": "replace", "path": "/scopes/0/connections/0/material", "value": {"kind": "cloud_recipe", "source": "platform"}}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "local-server-recipe",
+      "base": "saved-key",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/kind", "value": "local_server"},
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/method_id", "value": "server"},
+        {"op": "replace", "path": "/scopes/0/connections/0/material", "value": {"kind": "local_recipe", "base_url": "http://127.0.0.1:8080/v1"}}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "logout-tombstone",
+      "base": "saved-key",
+      "patch": [
+        {"op": "remove", "path": "/scopes/0/slots/0/connection_id"},
+        {"op": "replace", "path": "/scopes/0/slots/0/identity_generation", "value": "2"},
+        {"op": "replace", "path": "/scopes/0/connections", "value": []}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "rejected-connection-retains-no-credential",
+      "base": "renewable-account",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/connections/0/state", "value": "needs_login"},
+        {"op": "remove", "path": "/scopes/0/connections/0/material"}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "pending-browser-attempt",
+      "input": {
+        "version": 1,
+        "scopes": [{
+          "id": "alice", "epoch": "scope-epoch-1",
+          "slots": [{"instance_id": "example", "binding_id": "example-key", "identity_generation": "0", "attempt_id": "a1"}],
+          "connections": [],
+          "attempts": [{
+            "id": "a1", "instance_id": "example", "binding_id": "example-key", "method_id": "browser", "definition_revision": "definition-v1", "profile_id": "example-browser", "profile_version": 1,
+            "expected_generation": "0", "step_revision": "1", "owner": {"kind": "application_session", "id": "session-alice"},
+            "created_at": "2026-09-22T10:00:00Z", "expires_at": "2026-09-22T10:15:00Z", "state": "redirect",
+            "protocol_data": {"verifier": "SECRET-SENTINEL-DO-NOT-PRINT", "state": "SECRET-SENTINEL-DO-NOT-PRINT", "return_uri": "https://app.example/return"}
+          }]
+        }]
+      },
+      "expect": {"valid": true}
+    },
+    {
+      "id": "cancelled-attempt-has-no-private-state",
+      "base": "pending-browser-attempt",
+      "patch": [
+        {"op": "remove", "path": "/scopes/0/slots/0/attempt_id"},
+        {"op": "replace", "path": "/scopes/0/attempts/0/state", "value": "cancelled"},
+        {"op": "remove", "path": "/scopes/0/attempts/0/protocol_data"},
+        {"op": "add", "path": "/scopes/0/attempts/0/terminated_at", "value": "2026-09-22T10:01:00Z"}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "completed-attempt-receipt",
+      "base": "saved-key",
+      "patch": [{"op": "add", "path": "/scopes/0/attempts/0", "value": {
+        "id": "a1", "instance_id": "example", "binding_id": "example-key", "method_id": "api-key", "definition_revision": "definition-v1", "profile_id": "example-key-form", "profile_version": 1,
+        "expected_generation": "0", "step_revision": "3", "owner": {"kind": "local", "id": "local-owner"},
+        "created_at": "2026-09-22T09:59:00Z", "expires_at": "2026-09-22T10:14:00Z", "state": "complete", "terminated_at": "2026-09-22T10:00:00Z",
+        "result": {"id": "c1", "instance_id": "example", "binding_id": "example-key", "identity_generation": "1", "kind": "api_key", "method_id": "api-key", "routes": ["example-chat"], "label": "Example key", "created_at": "2026-09-22T10:00:00Z"}
+      }}],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "uncertain-renewal-material-is-private-recovery-only",
+      "base": "renewable-account",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/connections/0/state", "value": "indeterminate"},
+        {"op": "add", "path": "/scopes/0/connections/0/exchange", "value": {"operation_id": "renewal-1", "phase": "indeterminate", "revision": "1", "owner": "fenced-owner-1", "started_at": "2026-09-22T10:55:00Z", "deadline_at": "2026-09-22T10:55:30Z"}}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "large-generation-is-exact-decimal-text",
+      "base": "saved-key",
+      "patch": [
+        {"op": "replace", "path": "/scopes/0/slots/0/identity_generation", "value": "9007199254740993"},
+        {"op": "replace", "path": "/scopes/0/connections/0/metadata/identity_generation", "value": "9007199254740993"},
+        {"op": "replace", "path": "/scopes/0/connections/0/credential_revision", "value": "9007199254740993"}
+      ],
+      "expect": {"valid": true}
+    },
+    {
+      "id": "unknown-envelope-version",
+      "base": "empty-store",
+      "patch": [{"op": "replace", "path": "/version", "value": 2}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "legacy-provider-keyed-store-not-accepted",
+      "input": {"xai": {"type": "oauth", "access": "SECRET-SENTINEL-DO-NOT-PRINT", "expires": 1}},
+      "expect": {"valid": false}
+    },
+    {
+      "id": "numeric-generation-refused",
+      "base": "saved-key",
+      "patch": [{"op": "replace", "path": "/scopes/0/slots/0/identity_generation", "value": 1}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "leading-zero-revision-refused",
+      "base": "saved-key",
+      "patch": [{"op": "replace", "path": "/scopes/0/connections/0/credential_revision", "value": "01"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "credential-cannot-appear-in-public-metadata",
+      "base": "saved-key",
+      "patch": [{"op": "add", "path": "/scopes/0/connections/0/metadata/access_token", "value": "SECRET-SENTINEL-DO-NOT-PRINT"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "active-connection-needs-material",
+      "base": "saved-key",
+      "patch": [{"op": "remove", "path": "/scopes/0/connections/0/material"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "nonexpiring-is-not-magic-timestamp",
+      "base": "saved-key",
+      "patch": [{"op": "replace", "path": "/scopes/0/connections/0/material/expiry", "value": {"kind": "at", "issued_at": "2026-09-22T10:00:00Z", "expires_at": 9007199254740991}}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "invalid-calendar-date-refused",
+      "base": "saved-key",
+      "patch": [{"op": "replace", "path": "/scopes/0/connections/0/metadata/created_at", "value": "2026-02-30T10:00:00Z"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "needs-login-cannot-retain-live-material",
+      "base": "saved-key",
+      "patch": [{"op": "replace", "path": "/scopes/0/connections/0/state", "value": "needs_login"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "pending-attempt-cannot-claim-termination",
+      "base": "pending-browser-attempt",
+      "patch": [{"op": "add", "path": "/scopes/0/attempts/0/terminated_at", "value": "2026-09-22T10:01:00Z"}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "terminal-attempt-cannot-retain-verifier",
+      "base": "cancelled-attempt-has-no-private-state",
+      "patch": [{"op": "add", "path": "/scopes/0/attempts/0/protocol_data", "value": {"verifier": "SECRET-SENTINEL-DO-NOT-PRINT"}}],
+      "expect": {"valid": false}
+    },
+    {
+      "id": "complete-requires-committed-result",
+      "base": "cancelled-attempt-has-no-private-state",
+      "patch": [{"op": "replace", "path": "/scopes/0/attempts/0/state", "value": "complete"}],
+      "expect": {"valid": false}
+    }
+  ]
+}

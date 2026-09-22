@@ -1,0 +1,189 @@
+{
+  "provenance": {"source": "hand-authored", "date": "2026-09-22", "evidence": "changes/2026-09-22-managed-authentication.md D4/D5; spec/auth-managed.md AUTH-12–15, AUTH-20, AUTH-23–24"},
+  "version": 1,
+  "status": "review-draft",
+  "description": "Synthetic pre-acquisition decisions. Every case is offline, read-only and callback-free. Symbolic references are materialized privately by the future harness; see README.md.",
+  "definitions": [
+    {"id": "openai", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "openai-key"},
+    {"id": "openai-chat", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "openai-key"},
+    {"id": "openai-alt", "policy": "key", "env_keys": ["OPENAI_API_KEY"], "binding_id": "application-alt-key"},
+    {"id": "claude-code", "policy": "connection", "env_keys": [], "binding_id": "claude-account"},
+    {"id": "xai", "policy": "key", "env_keys": ["XAI_API_KEY"], "binding_id": "xai"},
+    {"id": "azure", "policy": "azure-chain", "env_keys": ["AZURE_OPENAI_API_KEY"], "binding_id": "azure"},
+    {"id": "gemini", "policy": "key", "env_keys": ["GEMINI_API_KEY", "GOOGLE_API_KEY"], "binding_id": "gemini"},
+    {"id": "vertex-express", "policy": "key", "env_keys": ["GOOGLE_API_KEY"], "binding_id": "vertex-express"},
+    {"id": "ollama", "policy": "key", "env_keys": [], "binding_id": "ollama", "placeholder": "ollama"}
+  ],
+  "cases": [
+    {
+      "id": "unmanaged-explicit-still-wins",
+      "given": {"mode": "unmanaged", "route": "openai", "explicit": {"openai": {"ref": "caller"}}, "env": {"OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "selected", "source": "explicit", "key": "openai", "next": "acquire"}
+    },
+    {
+      "id": "unmanaged-shared-explicit-key-still-wins",
+      "given": {"mode": "unmanaged", "route": "openai-chat", "explicit": {"openai": {"ref": "caller"}}, "env": {"OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "selected", "source": "explicit", "key": "openai", "next": "acquire"}
+    },
+    {
+      "id": "exact-explicit-beats-shared-candidates",
+      "given": {"mode": "managed", "route": "openai-chat", "explicit": {"openai": {"ref": "first"}, "openai-alt": {"ref": "second"}, "openai-chat": {"ref": "exact"}}},
+      "expect": {"result": "selected", "source": "explicit", "key": "openai-chat", "next": "acquire"}
+    },
+    {
+      "id": "ambiguous-shared-explicit-key-is-not-order-dependent",
+      "given": {"mode": "managed", "route": "openai-chat", "explicit": {"openai": {"ref": "first"}, "openai-alt": {"ref": "second"}}, "env": {"OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "empty-explicit-key-never-falls-back",
+      "given": {"mode": "managed", "route": "xai", "explicit": {"xai": {"empty": true}}, "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "unmanaged-environment-order-unchanged",
+      "given": {"mode": "unmanaged", "route": "gemini", "env": {"GEMINI_API_KEY": "first", "GOOGLE_API_KEY": "second"}},
+      "expect": {"result": "selected", "source": "environment", "key": "GEMINI_API_KEY", "next": "acquire"}
+    },
+    {
+      "id": "overlapping-env-lists-do-not-share-explicit-keys",
+      "given": {"mode": "unmanaged", "route": "gemini", "explicit": {"vertex-express": {"ref": "not-shared"}}},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "unmanaged-does-not-load-managed-login",
+      "given": {"mode": "unmanaged", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "selected", "source": "environment", "key": "XAI_API_KEY", "next": "acquire"}
+    },
+    {
+      "id": "account-only-has-no-implicit-file-source",
+      "given": {"mode": "unmanaged", "route": "claude-code", "env": {"ANTHROPIC_API_KEY": "ambient"}, "foreign_login_present": true},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "account-only-accepts-explicit-credential",
+      "given": {"mode": "unmanaged", "route": "claude-code", "explicit": {"claude-code": {"ref": "caller-bearer"}}},
+      "expect": {"result": "selected", "source": "explicit", "key": "claude-code", "next": "acquire"}
+    },
+    {
+      "id": "managed-selects-scoped-login-not-environment",
+      "given": {"mode": "managed", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "selected", "source": "connection", "connection_id": "c1", "next": "acquire"}
+    },
+    {
+      "id": "managed-explicit-key-overrides-saved-login",
+      "given": {"mode": "managed", "route": "xai", "explicit": {"xai": {"ref": "caller"}}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "selected", "source": "explicit", "key": "xai", "next": "acquire"}
+    },
+    {
+      "id": "managed-explicit-source-does-not-read-broken-store",
+      "given": {"mode": "managed", "route": "openai", "explicit": {"openai": {"ref": "caller"}}, "store_error": "unreadable"},
+      "expect": {"result": "selected", "source": "explicit", "key": "openai", "next": "acquire"}
+    },
+    {
+      "id": "managed-absence-does-not-charge-environment",
+      "given": {"mode": "managed", "route": "xai", "env": {"XAI_API_KEY": "ambient"}},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "managed-unreadable-store-is-not-absence",
+      "given": {"mode": "managed", "route": "xai", "store_error": "unreadable", "env": {"XAI_API_KEY": "ambient"}},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "storage_unavailable"}
+    },
+    {
+      "id": "managed-renewal-due-stays-on-same-account",
+      "given": {"mode": "managed", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "renewal_due"}]},
+      "expect": {"result": "selected", "source": "connection", "connection_id": "c1", "next": "renew_if_due"}
+    },
+    {
+      "id": "managed-rejected-account-never-falls-back",
+      "given": {"mode": "managed", "route": "xai", "env": {"XAI_API_KEY": "ambient"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "needs_login"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "managed-uncertain-account-cannot-send",
+      "given": {"mode": "managed", "route": "xai", "connections": [{"id": "c1", "routes": ["xai"], "state": "indeterminate"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "indeterminate"}
+    },
+    {
+      "id": "other-users-connection-is-invisible",
+      "given": {"mode": "managed", "route": "xai", "scope": "alice", "connections": [{"id": "bob-c1", "scope": "bob", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "managed-binding-shares-only-declared-routes",
+      "given": {"mode": "managed", "route": "openai-chat", "connections": [{"id": "c1", "routes": ["openai", "openai-chat"], "state": "ready"}]},
+      "expect": {"result": "selected", "source": "connection", "connection_id": "c1", "next": "acquire"}
+    },
+    {
+      "id": "managed-gateway-instance-is-not-public-instance",
+      "given": {"mode": "managed", "route": "xai", "instance_id": "public", "connections": [{"id": "c1", "instance_id": "corp", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "keyless-local-still-works-in-managed-mode",
+      "given": {"mode": "managed", "route": "ollama"},
+      "expect": {"result": "selected", "source": "placeholder", "key": "ollama", "next": "none"}
+    },
+    {
+      "id": "unmanaged-azure-key-still-wins-before-chain",
+      "given": {"mode": "unmanaged", "route": "azure", "env": {"AZURE_OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "selected", "source": "environment", "key": "AZURE_OPENAI_API_KEY", "next": "acquire"}
+    },
+    {
+      "id": "unmanaged-azure-chain-still-default",
+      "given": {"mode": "unmanaged", "route": "azure"},
+      "expect": {"result": "selected", "source": "cloud_chain", "key": "azure-chain", "next": "acquire"}
+    },
+    {
+      "id": "managed-does-not-discover-server-cloud-principal",
+      "given": {"mode": "managed", "route": "azure", "env": {"AZURE_OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "explicit-named-azure-platform-remains-deliberate",
+      "given": {"mode": "managed", "route": "azure", "named": "platform", "env": {"AZURE_OPENAI_API_KEY": "ambient"}},
+      "expect": {"result": "selected", "source": "named_cloud", "key": "platform", "next": "acquire"}
+    },
+    {
+      "id": "key-plus-named-cloud-remains-conflict",
+      "given": {"mode": "managed", "route": "azure", "named": "platform", "explicit": {"azure": {"ref": "caller"}}},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    },
+    {
+      "id": "bound-client-reuses-same-id-after-renewal",
+      "given": {"mode": "bound", "route": "xai", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready", "credential_revision": "9"}]},
+      "expect": {"result": "selected", "source": "connection", "connection_id": "c1", "next": "acquire"}
+    },
+    {
+      "id": "bound-client-does-not-follow-replacement",
+      "given": {"mode": "bound", "route": "xai", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "connections": [{"id": "c2", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "connection_changed"}
+    },
+    {
+      "id": "bound-client-after-logout-does-not-use-environment",
+      "given": {"mode": "bound", "route": "xai", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "env": {"XAI_API_KEY": "ambient"}},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "login_required"}
+    },
+    {
+      "id": "bound-client-refuses-explicit-identity-override",
+      "given": {"mode": "bound", "route": "xai", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "explicit": {"xai": {"ref": "other"}}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "selection_mismatch"}
+    },
+    {
+      "id": "bound-client-refuses-different-model",
+      "given": {"mode": "bound", "route": "xai", "model": "another-model", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "selection_mismatch"}
+    },
+    {
+      "id": "bound-client-refuses-security-definition-change",
+      "given": {"mode": "bound", "route": "xai", "definition_revision": "v2", "bound": {"connection_id": "c1", "route": "xai", "model": "example-model", "definition_revision": "v1"}, "connections": [{"id": "c1", "routes": ["xai"], "state": "ready"}]},
+      "expect": {"result": "blocked", "code": "auth_operation", "reason": "connection_changed"}
+    },
+    {
+      "id": "unknown-provider-fails-before-any-source",
+      "given": {"mode": "managed", "route": "unknown-service", "store_error": "unreadable"},
+      "expect": {"result": "blocked", "code": "not_configured"}
+    }
+  ]
+}

@@ -4,6 +4,26 @@ What the 1.0 freeze covers, what is provisional, and what is out of scope.
 Companion to [types.md](types.md), [vocabularies.md](vocabularies.md),
 [invariants.md](invariants.md), and `harness/PROTOCOL.md`.
 
+## 2026-09-22 managed-authentication amendment — REVIEW DRAFT
+
+[AUTH-12–26](auth-managed.md) proposes SDK-owned login/lifecycle and an explicitly
+interactive `connect()` returning a model-bound client. It preserves unmanaged
+API-key/cloud resolution and canonical request/response types; it deliberately
+replaces the old implicit-login policies without a migration/compatibility layer.
+See [the amendment](../changes/2026-09-22-managed-authentication.md) for decisions,
+[examples](../docs/auth-examples.md) and [acceptance suite](../auth/managed/README.md).
+
+This is a candidate addition, not a ratified 1.0 gate or an implemented provisional
+surface. On ratification it gets its own managed-auth conformance direction and
+platform coverage reporting. Existing key/cloud gates remain required; old login
+vectors transition explicitly. No SDK pin/support-matrix change is implied.
+
+The narrow bound-client convenience fills the selected model in a canonical
+Request and returns full canonical results. It does not add conversation state,
+an agent loop, model ranking, account fallback or inference retries. Provider
+revocation, full same-slot multi-account arbitration and automatic imports from
+foreign CLI login files are outside this first managed-auth contract.
+
 ## FROZEN — the chat core, auth resolution, and model listing
 
 The 1.0 contract freezes exactly the surface the seven harness directions

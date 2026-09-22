@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lm15.dev/spec/auth-store-v1.schema.json",
+  "title": "LM15 managed private credential store v1 — review draft",
+  "description": "Private storage representation, never a public status response. AUTH-25 supplies cross-record and transaction invariants that JSON Schema cannot express.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "scopes"],
+  "properties": {
+    "version": {"const": 1},
+    "scopes": {"type": "array", "items": {"$ref": "#/$defs/scope"}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 512},
+    "revision": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$"},
+    "time": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "strings": {"type": "object", "additionalProperties": {"type": "string"}},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "epoch", "slots", "connections", "attempts"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "epoch": {"$ref": "#/$defs/id"},
+        "slots": {"type": "array", "items": {"$ref": "#/$defs/slot"}},
+        "connections": {"type": "array", "items": {"$ref": "#/$defs/connection"}},
+        "attempts": {"type": "array", "items": {"$ref": "#/$defs/attempt"}}
+      }
+    },
+    "slot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["instance_id", "binding_id", "identity_generation"],
+      "properties": {
+        "instance_id": {"$ref": "#/$defs/id"}, "binding_id": {"$ref": "#/$defs/id"},
+        "identity_generation": {"$ref": "#/$defs/revision"},
+        "connection_id": {"$ref": "#/$defs/id"}, "attempt_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "instance_id", "binding_id", "identity_generation", "kind", "method_id", "routes", "label", "created_at"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "instance_id": {"$ref": "#/$defs/id"},
+        "binding_id": {"$ref": "#/$defs/id"}, "identity_generation": {"$ref": "#/$defs/revision"},
+        "kind": {"enum": ["account", "api_key", "cloud_identity", "local_server"]},
+        "method_id": {"$ref": "#/$defs/id"},
+        "routes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "label": {"type": "string", "maxLength": 1024}, "created_at": {"$ref": "#/$defs/time"},
+        "account_label": {"type": "string", "maxLength": 1024}
+      }
+    },
+    "expiry": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["kind", "issued_at", "expires_at"], "properties": {"kind": {"const": "at"}, "issued_at": {"$ref": "#/$defs/time"}, "expires_at": {"$ref": "#/$defs/time"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"enum": ["never", "unknown"]}}}
+      ]
+    },
+    "request_credential": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": {"kind": {"const": "api_key"}, "value": {"type": "string", "minLength": 1}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": {"kind": {"const": "bearer_token"}, "value": {"type": "string", "minLength": 1}, "expires_at": {"$ref": "#/$defs/time"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "access_key_id", "secret_access_key"], "properties": {"kind": {"const": "aws"}, "access_key_id": {"type": "string", "minLength": 1}, "secret_access_key": {"type": "string", "minLength": 1}, "session_token": {"type": "string", "minLength": 1}, "expires_at": {"$ref": "#/$defs/time"}}}
+      ]
+    },
+    "renewal": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "none"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "profile_id", "profile_version", "private_data"], "properties": {"kind": {"const": "provider"}, "profile_id": {"$ref": "#/$defs/id"}, "profile_version": {"type": "integer", "minimum": 1}, "private_data": {"type": "object"}}}
+      ]
+    },
+    "material": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["kind", "credential", "expiry", "renewal", "private_data"], "properties": {"kind": {"const": "credential"}, "credential": {"$ref": "#/$defs/request_credential"}, "expiry": {"$ref": "#/$defs/expiry"}, "renewal": {"$ref": "#/$defs/renewal"}, "private_data": {"type": "object"}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "source"], "properties": {"kind": {"const": "cloud_recipe"}, "source": {"enum": ["platform", "workload", "environment", "cli", "chain"]}}},
+        {"type": "object", "additionalProperties": false, "required": ["kind", "base_url"], "properties": {"kind": {"const": "local_recipe"}, "base_url": {"type": "string", "format": "uri"}, "credential": {"$ref": "#/$defs/request_credential"}}}
+      ]
+    },
+    "exchange": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operation_id", "phase", "revision", "owner", "started_at", "deadline_at"],
+      "properties": {
+        "operation_id": {"$ref": "#/$defs/id"}, "phase": {"enum": ["in_flight", "indeterminate"]},
+        "revision": {"$ref": "#/$defs/revision"}, "owner": {"$ref": "#/$defs/id"},
+        "started_at": {"$ref": "#/$defs/time"}, "deadline_at": {"$ref": "#/$defs/time"}
+      }
+    },
+    "connection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["metadata", "definition_revision", "credential_revision", "state", "settings"],
+      "properties": {
+        "metadata": {"$ref": "#/$defs/metadata"}, "definition_revision": {"$ref": "#/$defs/id"},
+        "credential_revision": {"$ref": "#/$defs/revision"},
+        "state": {"enum": ["active", "needs_login", "indeterminate"]},
+        "settings": {"$ref": "#/$defs/strings"}, "material": {"$ref": "#/$defs/material"},
+        "exchange": {"$ref": "#/$defs/exchange"},
+        "verification": {
+          "type": "object", "additionalProperties": false, "required": ["state", "checked_at", "check_id"],
+          "properties": {"state": {"enum": ["valid", "rejected", "unverified"]}, "checked_at": {"$ref": "#/$defs/time"}, "check_id": {"$ref": "#/$defs/id"}}
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"state": {"const": "active"}}}, "then": {"required": ["material"]}},
+        {"if": {"properties": {"state": {"const": "needs_login"}}}, "then": {"not": {"anyOf": [{"required": ["material"]}, {"required": ["exchange"]}]}}}
+      ]
+    },
+    "attempt": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "instance_id", "binding_id", "method_id", "definition_revision", "profile_id", "profile_version", "expected_generation", "step_revision", "owner", "created_at", "expires_at", "state"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "instance_id": {"$ref": "#/$defs/id"}, "binding_id": {"$ref": "#/$defs/id"}, "method_id": {"$ref": "#/$defs/id"},
+        "definition_revision": {"$ref": "#/$defs/id"}, "profile_id": {"$ref": "#/$defs/id"}, "profile_version": {"type": "integer", "minimum": 1},
+        "expected_generation": {"$ref": "#/$defs/revision"}, "step_revision": {"$ref": "#/$defs/revision"},
+        "owner": {"type": "object", "additionalProperties": false, "required": ["kind", "id"], "properties": {"kind": {"enum": ["local", "application_session"]}, "id": {"$ref": "#/$defs/id"}}},
+        "created_at": {"$ref": "#/$defs/time"}, "expires_at": {"$ref": "#/$defs/time"},
+        "state": {"enum": ["prompt", "redirect", "device_code", "pending", "exchanging", "complete", "cancelled", "expired", "denied", "failed", "superseded", "indeterminate"]},
+        "protocol_data": {"type": "object"}, "exchange": {"$ref": "#/$defs/exchange"},
+        "result": {"$ref": "#/$defs/metadata"}, "terminated_at": {"$ref": "#/$defs/time"},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "allOf": [
+        {"if": {"properties": {"state": {"enum": ["prompt", "redirect", "device_code", "pending", "exchanging"]}}}, "then": {"required": ["protocol_data"], "not": {"anyOf": [{"required": ["terminated_at"]}, {"required": ["result"]}]}}},
+        {"if": {"properties": {"state": {"enum": ["complete", "cancelled", "expired", "denied", "failed", "superseded", "indeterminate"]}}}, "then": {"required": ["terminated_at"], "not": {"anyOf": [{"required": ["protocol_data"]}, {"required": ["exchange"]}]}}},
+        {"if": {"properties": {"state": {"const": "complete"}}}, "then": {"required": ["result"]}, "else": {"not": {"required": ["result"]}}}
+      ]
+    }
+  }
+}

@@ -10,11 +10,37 @@ Goal: a person who knows lm15 in two of these languages opens the third and is a
 
 1. **One word per concept.** `complete`, `stream`, `Request`, `Response`, `Message`, `Router`. A port never introduces a synonym (`generate`, `chat`, `run`, `send`) for a concept that has a word here.
 2. **Casing follows the language; the word does not.** Python and Rust `tool_calls`, TypeScript `toolCalls`, Go `ToolCalls`. The JSON key is `tool_calls` in all four (wire contract, `port.md` § Idioms).
-3. **The user builds a `Request`, gets a `Response`.** Every entry point takes the canonical types. No port adds a convenience layer that hides them (no `router.ask("text")` returning a string).
+3. **The user builds a `Request`, gets a `Response`.** Core entry points take canonical types; no string-returning `router.ask("text")`. The existing migration exception is below. **2026-09-22 review draft:** AUTH-23 adds one explicit model-bound convenience after interactive `connect()`: canonical messages/tools/config may omit the already selected model; the client's pure `request()` exposes the exact Request it constructs, and complete/stream return full canonical results. No hidden conversation or new retry/account-fallback behavior.
 4. **Async is the language's own.** Python ships both (`Async` prefix). TypeScript is async only. Go is sync with `context.Context`. Rust is async (tokio), with a `blocking` feature that mirrors the same names.
 5. **Zero dependencies where the language allows it.** Python stdlib, TypeScript `fetch` + `WebSocket`, Go `net/http` + `x/net/websocket` or `nhooyr` (state which). Rust uses `reqwest` + `tokio` + `serde`; zero-dep is not a Rust idiom, so this is a stated deviation for the whole port, once.
 6. **Positional layout is frozen at 1.0. Every field added later is keyword-only (or the language's equivalent: options struct / builder).**
 7. **Prefer `reject` to a new send-as value. A compat knob exists only when the wire has no other way, the goal is unreachable without it, and at least two providers need it. Otherwise it is an `extensions` passthrough.**
+
+## Managed authentication — 2026-09-22 REVIEW DRAFT
+
+[AUTH-12–26](../spec/auth-managed.md), not an implementation's surface, defines
+the proposed operations. [Worked examples](../docs/auth-examples.md) illustrate
+native bindings. All ten SDKs share behavior; they need not force Go into a
+Python class API or put a hidden event loop inside Python's sync entry point.
+
+- Provider/method descriptors are discoverable values; stable IDs are also
+  accepted for configuration. No memorized string is required in the picker path.
+- `Auth` is a scoped manager; `Connection` is metadata; `BoundClient` pins one
+  connection/route/model and follows renewal, not identity replacement.
+- Core login needs explicit UI where interaction is required. `connect()` in
+  an explicitly interactive module/function family may supply a terminal helper.
+- Typed prompts/notices are shared semantics, with snake_case/camelCase/native
+  structs/enums as appropriate. Resumable begin/resume and connected login are
+  the same state machine.
+- The new managed store and source policies do not preserve old borrowed CLI or
+  xAI login interfaces/formats. Existing unmanaged API-key/cloud callers retain
+  their behavior. Do not write compatibility wrappers for nonexistent users.
+- Native cancellation and close/resource ownership remain native, but durable
+  cancel/commit ordering is AUTH-19 in every port. Closing does not log out.
+
+The draft vocabulary/schema and acceptance tests must land as a reviewed contract
+before implementations advertise this surface. Existing package names/examples
+are not proof of support.
 
 ## The core loop
 

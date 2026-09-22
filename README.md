@@ -11,13 +11,22 @@ first. Implementations must follow the contract, not change fixtures to pass.
 | `cases/`, `bodies/`, `errors/` | Provider requests and captured responses |
 | `goldens/` | Expected canonical responses and stream events |
 | `serde/canonical.json` | Canonical JSON vectors |
-| `auth/` | Credential resolution, signing, and token-exchange vectors |
+| `auth/` | Credential resolution, signing, token-exchange vectors, and the review-draft managed-auth acceptance suite |
 | `receipts/`, `changes/` | Capture evidence and change records |
 | `spec/support-matrix.json` | Provider support and evidence status |
 | `harness/` | Shared test protocol, runner, and comparator tests |
 | `tools/` | Provenance, secrecy, coverage, and spec checks; the verdict registries (`extensions-verdicts.json`, INV-049; `openai-chat-ingest-verdicts.json`, MAP-12) |
 | `playbooks/port.md` | Port order, test gates, and review rules |
 | `playbooks/api-family.md` | Public API guide (ratified 2026-09-06) |
+
+## Managed authentication design (2026-09-22 review draft)
+
+Start with [the decision record](changes/2026-09-22-managed-authentication.md),
+then [AUTH-12–26](spec/auth-managed.md) and [worked examples](docs/auth-examples.md).
+[Acceptance scenarios and vectors](auth/managed/README.md) specify what every SDK
+must prove. The private store schema is [here](spec/auth-store.schema.json).
+The changed portions of `spec/auth.md`/vocabularies are explicitly draft; no SDK
+implementation, provider support promotion or CONTRACT_PIN update is included.
 
 ## Check the contract
 

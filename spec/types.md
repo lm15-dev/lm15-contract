@@ -10,6 +10,12 @@ Construction-time invariants are numbered in [invariants.md](invariants.md)
 (cited as INV-###). Closed value sets are in
 [vocabularies.md](vocabularies.md).
 
+**Managed-auth review draft (2026-09-22):** Connection, LoginAttempt,
+ModelSelection and BoundClient are separately specified in
+[AUTH-12–26](auth-managed.md). They do not become message/request fields or
+credential-bearing canonical payloads. The private store uses its own
+[versioned schema](auth-store.schema.json), never public status serialization.
+
 Conventions used in the tables:
 
 - **JSON type** is the declared wire type per the Number rule (serde-rules.md
