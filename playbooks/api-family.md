@@ -170,11 +170,11 @@ one; `generate_pkce` is the primitive every port has.
 
 | Concept | Python | TypeScript | Go | Rust |
 |---|---|---|---|---|
-| Declare a tool | `tool(fn)` derives schema from the signature | `tool(fn, { name, description, parameters })` — schema explicit | `lm15.FunctionTool{Name:, Description:, Parameters: schema}` | `FunctionTool { name, description, parameters }` |
+| Declare a tool | `FunctionTool(name=, description=, parameters=schema)` | `tool(fn, { name, description, parameters })` — schema explicit | `lm15.FunctionTool{Name:, Description:, Parameters: schema}` | `FunctionTool { name, description, parameters }` |
 | Tool call part | `ToolCallPart(id, name, input)` | `{ type: "tool_call", id, name, input }` | `lm15.ToolCallPart{ID, Name, Input}` | `Part::ToolCall { id, name, input }` |
 | Loop | user runs the function, sends `Message.tool(...)`, calls `complete` again | same | same | same |
 
-Stated deviation, all three non-Python ports: no derivation from a function signature. Python can read a signature at runtime; the others cannot without a build step or a schema library. The schema is written by the user. This is one deviation, stated here, not four.
+No SDK derives a tool from a function: the schema is written by the user, in every language, and a function passed where a tool belongs is refused with the fix named ([changes/2026-09-23-no-tool-derivation.md](../changes/2026-09-23-no-tool-derivation.md)). Python's `tool(fn)` and Julia's `@tool` were removed before 1.0.
 
 ## Types and serde
 

@@ -102,7 +102,7 @@ Three verdicts, one per row:
 | `complete_from_openai_chat` / `stream_from_openai_chat`, litellm prefixes, client-keyword refusals | ✓ (+ `stream=True`) | ✓ (+ `stream: true`) | ✓ | ✓ (two functions; no flag) | SAME — the `stream` flag is a Python amendment; TS mirrors it, Rust states two functions (README) |
 | Router: prefix / catalog / rule rungs, `explain`, shared explicit keys, `base_urls`, provider-key check | ✓ | ✓ | ✓ | ✓ | SAME |
 | Router rung 0 (a `provider` attribute on a `str` subclass) and catalog discovery from installed packages | ✓ | ✗ | ✗ | ✗ | NEVER — Python idiom (`str` subclass, entry points); the ports take a data catalog (`RouterConfig.catalog`, `{ registry }`). Recorded in both READMEs. |
-| `lm15.tool` / `derive_tool` (JSON Schema from a function signature) | ✓ | ✗ | ✗ | ✗ | NEVER — api-family § Tools: `tool(name, { parameters })` takes the schema you write, "stated once for all three non-Python ports". |
+| Tool derivation from a function signature (`tool(fn)`, `@tool`) | ✗ | ✗ | ✗ | ✗ | NEVER, in any language — removed from Python and Julia before 1.0 ([changes/2026-09-23-no-tool-derivation.md](../changes/2026-09-23-no-tool-derivation.md)). A tool is a written-out `FunctionTool`. |
 
 ## Auth
 
