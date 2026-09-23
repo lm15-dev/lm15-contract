@@ -37,9 +37,11 @@ never execute tools.
   they turn a function's result into tool-result content, which is not derivation.
   A function in `tools` is refused with the fix named.
 - TypeScript, Go, Rust, R: unchanged (they never derived tools).
-- Consumers: DSPy maps `ToolDerivationError` in `dspy/clients/errors.py`; that
-  mapping is removed with this change. The published DSPy 3.4.0b1 vendors
-  lm15 1.0.0a1 and keeps its own copy.
+- Consumers: DSPy never calls `tool()`, but maps `ToolDerivationError` in
+  `dspy/clients/errors.py`, and its test requires every error the vendored lm15
+  exports to be mapped. Drop that line (and its test entry) in the same DSPy
+  change that next updates the vendored lm15; neither half passes alone. The
+  published DSPy 3.4.0b1 vendors lm15 1.0.0a1 and keeps its own copy.
 
 No wire change and no fixture change: a derived tool and the same tool written
 out were already identical on the wire.
