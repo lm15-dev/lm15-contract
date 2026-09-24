@@ -1051,6 +1051,36 @@
       "way": "relay",
       "observed": "HTTP 200; signed in — the loopback registration also works from a page by manual paste",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab; confirmed the same day from lambda with the saved Claude Code token: GET /v1/models → 200 without Origin, 401 with Origin (token never printed)"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "catalog",
+      "request": "GET api.anthropic.com/v1/models",
+      "way": "relay",
+      "observed": "model list returned to the page",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), which drops Origin; 2026-09-24; the lab's log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "inference",
+      "request": "POST api.anthropic.com/v1/messages (claude-sonnet-4-5, 'Reply with exactly OK.')",
+      "way": "relay",
+      "observed": "ok: a subscription call from a page, through a relay that drops Origin",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), which drops Origin; 2026-09-24; the lab's log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "renewal",
+      "request": "POST platform.claude.com/v1/oauth/token (grant_type=refresh_token)",
+      "way": "relay",
+      "observed": "HTTP 200; renewed",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), which drops Origin; 2026-09-24; the lab's log, pasted in the conversation of that date"
     }
   ],
   "live_verdicts": {
