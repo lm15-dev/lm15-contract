@@ -34,3 +34,17 @@ lm15-ts (the only port with a browser Fetch transport in the playground whose
 behavior was observed; the Python, Rust and Go playground runtimes are checked
 separately); relay consent in lm15-ts `loginAdapter` and the playground's
 sign-in lab.
+
+## Pins moved to this record's contract (same day)
+
+`harness/check.py --direction all` against this contract, every direction:
+
+| Port | Pass | Fail | Was pinned at | Notes |
+|---|---|---|---|---|
+| lm15-python | 1440 | 0 | ec989ba | |
+| lm15-ts | 1440 | 0 | b721ce4 (09-20) | `xai-unusable-login-blocks-env` fixed (R3 ported to router and doctor), the gate `changes/2026-09-24-managed-auth-profiles-and-browser-track.md` named for moving this pin |
+| lm15-rs | 1440 | 0 | b721ce4 (09-20) | R3 ported; the TypeSafe listing's content type |
+| lm15-go | 1416 | 24 | 18dad7b (09-19) | R3 ported. Known, visible, and also failing at its old pin: **23** cases where Go serializes JSON keys alphabetically while the recorded bytes keep insertion order: 20 Bedrock Chat / Mantle SigV4 signatures (the signature covers the body bytes), 2 batch JSONL uploads, 1 image-edit multipart field order. Providers accept either order; the harness compares bodies as parsed JSON but a signature or an uploaded file pins bytes. **1**: `cached_prefix.routed` (the 2026-09-20 `CachedPrefix.provider` field, itself still awaiting review, is not ported). At its old pin Go failed 28, including the five MAP-15 cases it now implements. |
+
+lm15-jl and lm15-r stay at cfed007 (2026-09-11): R3 and several later rules
+are not ported there, and their harness runs were not repeated today.
