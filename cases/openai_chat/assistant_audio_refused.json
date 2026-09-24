@@ -1,0 +1,61 @@
+{
+ "id": "openai_chat.assistant_audio_refused",
+ "provider": "openai_chat",
+ "feature": "assistant_audio_refused",
+ "description": "MAP-10: a media part reaches the wire natively or raises. This dialect has no slot for it in this role, so build_request refuses, naming the part's path.",
+ "expect_lm15": {
+  "raises": {
+   "op": "build_request",
+   "type": "UnsupportedFeatureError",
+   "code": "unsupported_feature",
+   "feature": "messages[1].parts[1]"
+  }
+ },
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "Chat Completions: an assistant message's content is text or refusal parts (platform.openai.com API reference, assistant message). Until 2026-09-24 lm15-python, -ts and -go sent content null in its place. changes/2026-09-24-message-media.md"
+ },
+ "canonical_request": {
+  "model": "gpt-4.1",
+  "messages": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Describe the recording."
+     }
+    ]
+   },
+   {
+    "role": "assistant",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Here it is."
+     },
+     {
+      "type": "audio",
+      "media_type": "audio/wav",
+      "data": "QUJD"
+     }
+    ]
+   },
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Go on."
+     }
+    ]
+   }
+  ]
+ },
+ "canonical_request_provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "authored with the case"
+ }
+}

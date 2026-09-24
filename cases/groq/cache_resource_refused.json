@@ -1,0 +1,44 @@
+{
+ "id": "groq.cache_resource_refused",
+ "provider": "groq",
+ "feature": "cache_resource_refused",
+ "description": "MAP-6 rule 7: a stored-cache resource on a provider without that tier RAISES before the wire. Dropping it would send the request without the prompt prefix the resource holds (MAP-13: refuse when a guess could hurt).",
+ "expect_lm15": {
+  "raises": {
+   "op": "build_request",
+   "type": "UnsupportedFeatureError",
+   "code": "unsupported_feature",
+   "feature": "config.cache.resource"
+  }
+ },
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "docs/mapping-rules.md MAP-6 rule 7 (\"Providers without the tier RAISE\"); lm15-python, lm15-ts and lm15-go dropped it silently on this provider until 2026-09-24 while lm15-rs refused (changes/2026-09-24-cache-resource-refusal.md)"
+ },
+ "canonical_request": {
+  "model": "openai/gpt-oss-20b",
+  "messages": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Hi"
+     }
+    ]
+   }
+  ],
+  "config": {
+   "cache": {
+    "resource": "cache-1"
+   }
+  }
+ },
+ "canonical_request_provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "authored with the case; the model is the provider's corpus model"
+ },
+ "base_url": "https://api.groq.com/openai/v1"
+}

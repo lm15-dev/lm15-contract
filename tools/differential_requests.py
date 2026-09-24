@@ -41,15 +41,35 @@ VARIANTS = {
     "budget": {"reasoning": {"effort": "medium", "thinking_budget": 2048}}, "summary": {"reasoning": {"effort": "medium", "summary": "concise"}},
     "json_schema": {"response_format": SCHEMA}, "json_object": {"response_format": {"type": "json_object"}},
     "cache_key": {"cache": {"mode": "auto", "key": "k1"}}, "cache_long": {"cache": {"mode": "auto", "retention": "long"}},
+    # Added 2026-09-24 (changes/2026-09-24-cache-resource-refusal.md): three SDKs dropped a resource silently.
+    "cache_resource": {"cache": {"mode": "auto", "resource": "cachedContents/c1"}}, "cache_off": {"cache": {"mode": "off"}},
     "tc_required": {"tool_choice": {"mode": "required"}, "_tools": True},
     "tc_allowed_one": {"tool_choice": {"mode": "required", "allowed": ["a"]}, "_tools": True},
     "tc_allowed_subset_auto": {"tool_choice": {"mode": "auto", "allowed": ["a"]}, "_tools": True},
     "tc_parallel_false": {"tool_choice": {"mode": "auto", "parallel": False}, "_tools": True},
     "tc_none": {"tool_choice": {"mode": "none"}, "_tools": True},
+    # Media in each role (MAP-10: natively or raises). Added 2026-09-24
+    # (changes/2026-09-24-message-media.md): three SDKs lost such parts silently.
+    **{f"{role}_{kind}": {"_media": (role, kind)} for role, kind in [
+        ("user", "image"), ("user", "audio"), ("user", "video"), ("user", "document"), ("user", "binary"),
+        ("assistant", "image"), ("assistant", "audio"), ("assistant", "document"),
+        ("developer", "image"), ("developer", "audio")]},
 }
+MEDIA = {"image": {"type": "image", "media_type": "image/png", "data": "QUJD"},
+         "audio": {"type": "audio", "media_type": "audio/wav", "data": "QUJD"},
+         "video": {"type": "video", "media_type": "video/mp4", "url": "https://example.com/a.mp4"},
+         "document": {"type": "document", "media_type": "application/pdf", "data": "QUJD"},
+         "binary": {"type": "binary", "media_type": "image/svg+xml", "data": "QUJD"}}
 def request(model, variant):
-    v = dict(VARIANTS[variant]); tools = v.pop("_tools", False)
+    v = dict(VARIANTS[variant]); tools = v.pop("_tools", False); media = v.pop("_media", None)
     r = {"model": model, "messages": [{"role": "user", "parts": [{"type": "text", "text": "Hi"}]}]}
+    if media:
+        role, kind = media
+        if role == "user":
+            r["messages"][0]["parts"].append(MEDIA[kind])
+        else:
+            r["messages"] += [{"role": role, "parts": [{"type": "text", "text": "a"}, MEDIA[kind]]},
+                              {"role": "user", "parts": [{"type": "text", "text": "more"}]}]
     if v: r["config"] = v
     if tools: r["tools"] = TOOLS
     return r
