@@ -851,6 +851,16 @@
       "way": "relay",
       "observed": "answered \"OK\"; 21 input / 17 output tokens",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs, exposed as https://lambda.tail69222b.ts.net:18787), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "renewal",
+      "request": "POST auth.openai.com/oauth/token (grant_type=refresh_token)",
+      "way": "direct",
+      "observed": "renewed from the page (early, by the lab's Renew now); the next gpt-5.5 call with the renewed token succeeded",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; same session as the 2026-09-24 inference receipt; reported in the conversation of that date (no screenshot of this step)"
     }
   ]
 }
