@@ -1011,6 +1011,26 @@
       "way": "direct",
       "observed": "ok with the renewed token",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "exchange",
+      "request": "POST platform.claude.com/v1/oauth/token (code#state pasted from Claude's hosted page)",
+      "way": "relay",
+      "observed": "HTTP 200; signed in. The relay sent User-Agent lm15/<version> (from x-lm15-user-agent)",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda; 2026-09-24; the lab's log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "catalog+inference",
+      "request": "api.anthropic.com/v1/models and /v1/messages",
+      "way": "direct",
+      "observed": "not a provider result: lm15-ts refused Anthropic's br-compressed replies (ProtocolError), which the browser had already decoded; fixed by the INV-053 browser amendment (changes/2026-09-24-inv-053-browser-fetch.md); retest pending",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda; 2026-09-24; the lab's log, pasted in the conversation of that date"
     }
   ]
 }
