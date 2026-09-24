@@ -921,6 +921,96 @@
       "way": "direct",
       "observed": "answered \"OK\"; 12 input / 1 output tokens: Copilot inference accepts a page's own User-Agent",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "catalog",
+      "request": "GET api.individual.githubcopilot.com/models",
+      "way": "direct",
+      "observed": "model list returned to the page (490 ms)",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "renewal",
+      "request": "GET api.github.com/copilot_internal/v2/token (re-mint with the GitHub token)",
+      "way": "relay",
+      "observed": "HTTP 200; renewed",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "inference",
+      "request": "POST api.individual.githubcopilot.com/chat/completions after renewal",
+      "way": "direct",
+      "observed": "ok with the re-minted token",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.x.ai/oauth2/device/code",
+      "way": "relay",
+      "observed": "HTTP 200; user code shown; the person approved on accounts.x.ai",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST auth.x.ai/oauth2/token",
+      "way": "relay",
+      "observed": "two HTTP 400 authorization_pending, then HTTP 200: signed in",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "catalog",
+      "request": "GET api.x.ai/v1/models",
+      "way": "direct",
+      "observed": "model list returned to the page",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "inference",
+      "request": "POST api.x.ai/v1/chat/completions (grok-4-fast, 'Reply with exactly OK.')",
+      "way": "direct",
+      "observed": "answered \"OK\"; 197 input / 1 output tokens",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "renewal",
+      "request": "POST auth.x.ai/oauth2/token (grant_type=refresh_token)",
+      "way": "relay",
+      "observed": "HTTP 200; renewed",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "inference",
+      "request": "POST api.x.ai/v1/chat/completions after renewal",
+      "way": "direct",
+      "observed": "ok with the renewed token",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24; the lab's own secret-free log, pasted in the conversation of that date"
     }
   ]
 }
