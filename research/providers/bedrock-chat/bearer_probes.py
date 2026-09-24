@@ -34,7 +34,7 @@ from lm15.registry import lookup  # noqa: E402
 
 
 def load_env_file(path: Path) -> None:
-    for line in path.read_text().splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         if "=" in line and not line.startswith("#"):
             k, v = line.split("=", 1)
             os.environ.setdefault(k.strip(), v.strip())

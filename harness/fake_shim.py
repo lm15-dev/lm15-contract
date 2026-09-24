@@ -294,7 +294,7 @@ def _strip_error_flag(body: JsonObject) -> None:
 
 def op_parse_response(msg: JsonObject) -> JsonObject:
     case = find_parse_case(msg)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     raises = check.expected_raise(case, "parse_response")
     if raises is not None:
         # A complete-path refusal (MAP-9, 2026-09-07): the golden carries
@@ -363,7 +363,7 @@ def op_ingest_openai_chat(msg: JsonObject) -> JsonObject:
 
 def op_replay_stream(msg: JsonObject) -> JsonObject:
     case = find_parse_case(msg)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     events = golden.get("events", [])
     raises = check.expected_raise(case, "replay_stream")
     if raises is not None:
@@ -429,7 +429,7 @@ def _borrowed_state(path: Path) -> str:
     """
     if not path.exists():
         return "missing"
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     if "claudeAiOauth" in data:
         oauth = data["claudeAiOauth"]
         expiry, refresh = oauth.get("expiresAt", 0), oauth.get("refreshToken")
@@ -460,7 +460,7 @@ def op_build_models_request(msg: JsonObject) -> JsonObject:
 
 def op_parse_models_response(msg: JsonObject) -> JsonObject:
     case = find_models_case(msg)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     entries = json.loads(check.pinned_body(case))[case["entries_key"]]
     models = []
     for i, model in enumerate(golden["models"]):
@@ -489,7 +489,7 @@ def op_replay_live(msg: JsonObject) -> JsonObject:
     transcript = check.load_live_transcript(case)
     setup = next((e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "setup"), [])
     client_frames = [e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "event"]
-    events = json.loads(check.golden_path(case).read_text())["events"]
+    events = json.loads(check.golden_path(case).read_text(encoding="utf-8"))["events"]
     if targeted(case):
         if MUTATION == "live_dropped_event":
             for group in reversed(events):
@@ -638,7 +638,7 @@ def op_generation_build(msg: JsonObject) -> JsonObject:
 
 def op_generation_parse(msg: JsonObject) -> JsonObject:
     case = find_generation_case(msg)
-    result = dict(json.loads(check.golden_path(case).read_text())["response"])
+    result = dict(json.loads(check.golden_path(case).read_text(encoding="utf-8"))["response"])
     result["provider_data"] = {"echo": "fixture"}  # presence is asserted, bulk is stripped
     if targeted(case):
         if MUTATION == "gen_wrong_media_type":
@@ -696,7 +696,7 @@ def op_file_op_parse(msg: JsonObject) -> JsonObject:
     body = base64.b64decode(msg["body_b64"])
     step = next(s for s in case["steps"]
                 if s.get("pinned_body") and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     value = dict(golden[step.get("golden_key", step["file_op"])])
     if MUTATION == "file_readiness_flip" and targeted(case) and value.get("readiness") == "ready":
         value["readiness"] = "pending"
@@ -714,7 +714,7 @@ def op_batch_op_build(msg: JsonObject) -> JsonObject:
 
 def op_batch_op_parse(msg: JsonObject) -> JsonObject:
     case = find_batch_case(msg)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     kind = msg["kind"]
     if kind == "entries":
         entries = [dict(e) for e in golden["entries"]]
@@ -751,7 +751,7 @@ def op_cache_op_parse(msg: JsonObject) -> JsonObject:
     body = base64.b64decode(msg["body_b64"])
     step = next(s for s in case["steps"]
                 if s.get("pinned_body") and (check.BODIES_DIR / case["id"] / s["pinned_body"]).read_bytes() == body)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     value = dict(golden[step.get("golden_key", step["cache_op"])])
     if MUTATION == "cache_expiry_drift" and targeted(case) and value.get("expires_at"):
         value["expires_at"] = "2099-01-01T00:00:00Z"
@@ -769,7 +769,7 @@ def op_video_op_build(msg: JsonObject) -> JsonObject:
 
 def op_video_op_parse(msg: JsonObject) -> JsonObject:
     case = find_video_case(msg)
-    golden = json.loads(check.golden_path(case).read_text())
+    golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     kind = msg["kind"]
     if kind == "part":
         part = dict(golden["part"])

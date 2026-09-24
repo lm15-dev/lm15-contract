@@ -153,7 +153,7 @@ def _write_refusals(force: bool) -> list[dict]:
             "canonical_request_provenance": {"source": "hand-authored", "date": cap.date,
                                             "evidence": f"authored with the case (research/providers/{cap.provider}/capture.py); live-validated (receipt above)"},
             "expect_lm15": {"raises": {"op": "build_request", "type": "UnsupportedFeatureError", "code": "unsupported_feature"}},
-        }, indent=2, ensure_ascii=False) + "\n")
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         rows.append({"feature": feature, "status": "refusal"})
     return rows
 

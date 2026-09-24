@@ -52,7 +52,7 @@ def main(argv: list[str]) -> int:
 
     creds = [("sigv4", cap.credential)]
     if "--bearer" in argv:
-        for line in Path(argv[argv.index("--bearer") + 1]).expanduser().read_text().splitlines():
+        for line in Path(argv[argv.index("--bearer") + 1]).expanduser().read_text(encoding="utf-8").splitlines():
             if line.startswith("AWS_BEARER_TOKEN_BEDROCK="):
                 os.environ["AWS_BEARER_TOKEN_BEDROCK"] = line.split("=", 1)[1].strip()
         creds.append(("bearer", resolve(access.BEDROCK_CHAT, ChainContext.online(settings={"region": REGION}))))

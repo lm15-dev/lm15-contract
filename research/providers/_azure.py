@@ -18,7 +18,7 @@ LAB_ENV = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "lm
 def load_lab_env() -> None:
     if not LAB_ENV.exists():
         return
-    for line in LAB_ENV.read_text().splitlines():
+    for line in LAB_ENV.read_text(encoding="utf-8").splitlines():
         if line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
@@ -33,7 +33,7 @@ def entra_token(scope: str, *, dry_run: bool = False) -> str | None:
     for argv in (["az"], ["nix", "run", "nixpkgs#azure-cli", "--"]):
         try:
             out = subprocess.run(argv + ["account", "get-access-token", "--output", "tsv", "--query", "accessToken", "--scope", scope],
-                                 capture_output=True, text=True, timeout=120)
+                                 capture_output=True, text=True, timeout=120, encoding="utf-8")
         except (OSError, subprocess.TimeoutExpired):
             continue
         if out.returncode == 0 and out.stdout.strip():

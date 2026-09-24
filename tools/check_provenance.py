@@ -91,7 +91,7 @@ def check_exchange(block: dict, where: str, root: Path, problems: list[str]) -> 
         problems.append(f"{where}: provenance.exchange {exchange!r} does not exist")
         return
     try:
-        receipt = json.loads(path.read_text())
+        receipt = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         problems.append(f"{where}: provenance.exchange {exchange!r} is unreadable JSON ({exc})")
         return
@@ -134,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
                 continue  # goldens/_failures.json is a scribe report, not a fixture
             scanned += 1
             try:
-                data = json.loads(path.read_text())
+                data = json.loads(path.read_text(encoding="utf-8"))
             except Exception as exc:
                 problems.append(f"{path.relative_to(root)}: unreadable JSON ({exc})")
                 continue
@@ -156,7 +156,7 @@ def main(argv: list[str] | None = None) -> int:
     if serde_path.is_file():
         scanned += 1
         try:
-            serde_cases = json.loads(serde_path.read_text()).get("cases", [])
+            serde_cases = json.loads(serde_path.read_text(encoding="utf-8")).get("cases", [])
         except Exception as exc:
             problems.append(f"serde/canonical.json: unreadable JSON ({exc})")
             serde_cases = []

@@ -18,3 +18,14 @@ Windows: its test job clones the contract and failed before any test ran.
   every reference resolves.
 - `tools/check_portable_paths.py`, now in CI, rejects any tracked path that
   Windows, or a case-insensitive file system, cannot store.
+
+## Text encodings (same day)
+
+Python reads and writes text in the platform's default encoding unless told
+otherwise, and on Windows that is not UTF-8: a case holding `é` read back as
+two other characters (found by lm15-python's Windows CI). Every text-mode
+`open`, `read_text`, `write_text` and text-mode subprocess call in `harness/`,
+`tools/` and `research/` now names `encoding="utf-8"` (253 calls), and CI runs
+every step with `PYTHONWARNDEFAULTENCODING=1` and `EncodingWarning` as an
+error, so an implicit encoding fails on Linux too. Harness results are
+unchanged for every port.

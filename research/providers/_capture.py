@@ -201,7 +201,7 @@ class Capture:
             return
         self.receipts.mkdir(parents=True, exist_ok=True)
         text = payload if isinstance(payload, str) else json.dumps(payload, indent=2, ensure_ascii=False)
-        (self.receipts / name).write_text(self.redact(text) + ("\n" if not text.endswith("\n") else ""))
+        (self.receipts / name).write_text(self.redact(text) + ("\n" if not text.endswith("\n") else ""), encoding="utf-8")
 
     def parse(self, adapter, request: Request, raw: bytes, *, stream: bool):
         if stream:
@@ -277,7 +277,7 @@ class Capture:
         if expect_lm15:
             case["expect_lm15"] = expect_lm15
         case_path.parent.mkdir(parents=True, exist_ok=True)
-        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         time.sleep(1.0)
         return row
 
@@ -361,7 +361,7 @@ class Capture:
                            "evidence": f"{self.host} /models {ts}, HTTP {status}, {len(ids)} entries {ids}; "
                                        f"verbatim at bodies/{self.provider}.models/{ts}.txt; {self.change_entry}"},
             "entries_key": "data", "pinned_body": f"{ts}.txt", "expect": {"status": status},
-        }, indent=2, ensure_ascii=False) + "\n")
+        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         self.write_receipt("models.json", data)
         return {"feature": "models", "status": status, "entries": ids}
 
@@ -426,7 +426,7 @@ class Capture:
             "expect": {"status": status},
         }
         case_path.parent.mkdir(parents=True, exist_ok=True)
-        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         time.sleep(1.0)
         return row
 
@@ -466,7 +466,7 @@ class Capture:
             "expect": {"status": status}, "response_headers": {"content-type": content_type},
         }
         case_path.parent.mkdir(parents=True, exist_ok=True)
-        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         self.write_receipt(f"speech-{ts}.json", {"sent": self.wire_block(treq), "status": status,
                                                   "bytes": len(raw), "content_type": content_type, "timestamp": ts})
         return row
@@ -554,7 +554,7 @@ class Capture:
             "steps": steps,
         }
         case_path.parent.mkdir(parents=True, exist_ok=True)
-        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         return row
 
     def batch_case(self, request, *, description: str, evidence_note: str, force: bool) -> dict:
@@ -633,7 +633,7 @@ class Capture:
         }
         if not self.dry_run:
             case_path.parent.mkdir(parents=True, exist_ok=True)
-            case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+            case_path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         return {"feature": feature, "status": submit_status, "parse": "; ".join(notes)}
 
     # ─── probes ──────────────────────────────────────────────────────
@@ -703,7 +703,7 @@ class Capture:
             path = self.receipts / f"probe-error-{name}.json"
             if not path.exists():
                 continue
-            rec = json.loads(path.read_text())
+            rec = json.loads(path.read_text(encoding="utf-8"))
             if rec["status"] < 400 or not isinstance(rec["body"], dict):
                 continue
             err = adapter.normalize_error(rec["status"], json.dumps(rec["body"]))
@@ -721,7 +721,7 @@ class Capture:
             })
         if out["cases"]:
             path = CONTRACT / "errors" / "cases" / f"{self.provider}.json"
-            path.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
+            path.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     # ─── entry point ─────────────────────────────────────────────────
 

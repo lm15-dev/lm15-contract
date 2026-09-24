@@ -58,7 +58,7 @@ def recapture_cache_cases():
     for cid in ("openai.cache_stable", "openai.prompt_cache_breakpoint", "openai_chat.cache_stable", "openai_chat.prompt_cache_breakpoint"):
         prov, feat = cid.split(".", 1)
         path = CONTRACT / "cases" / prov / f"{feat}.json"
-        case = json.loads(path.read_text())
+        case = json.loads(path.read_text(encoding="utf-8"))
         request = serde.request_from_dict(case["canonical_request"])
         lm = ADAPTERS[prov]()
         treq = lm.build_request(request, stream=False)
@@ -75,7 +75,7 @@ def recapture_cache_cases():
             "source": "live-capture", "date": ts[:10],
             "evidence": f"api.openai.com {ts}, {request.model}, HTTP {status}; re-captured with the adapter-built wire after the MAP-6 amendment (breakpoint + prompt_cache_options.mode=explicit; review probe 3): {json.dumps(details)}; echo prompt_cache_options={json.dumps(data.get('prompt_cache_options'))}; changes/2026-09-02-review-live-probes.md",
         }
-        path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        path.write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"  {cid}: HTTP {status} {details} echo={data.get('prompt_cache_options')}")
         time.sleep(1.5)
 
@@ -117,7 +117,7 @@ def capture_stream_tool_calls():
             "pinned_body": f"{ts}.txt",
             "stream": True,
         }
-        (CONTRACT / "cases" / prov / "streaming_tool_call.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+        (CONTRACT / "cases" / prov / "streaming_tool_call.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"  {cid}: HTTP {status} {len(raw)}B first_call_line={first_call} first_name_line={first_name}")
         time.sleep(1.0)
 

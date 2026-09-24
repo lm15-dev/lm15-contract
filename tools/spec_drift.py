@@ -45,7 +45,7 @@ _CODE = re.compile(r"`([^`]+)`")
 
 
 def surface_dump() -> dict | None:
-    shim = json.loads(SHIMS.read_text())["python"]
+    shim = json.loads(SHIMS.read_text(encoding="utf-8"))["python"]
     cwd = (ROOT / shim["cwd"]).resolve()
     cmd = shim["command"]
     if not cwd.is_dir() or not (cwd / cmd[0]).exists():
@@ -57,6 +57,7 @@ def surface_dump() -> dict | None:
         capture_output=True,
         text=True,
         timeout=120,
+        encoding="utf-8",
     )
     if proc.returncode != 0:
         sys.exit(f"spec_drift: shim exited {proc.returncode}: {proc.stderr.strip()}")
@@ -109,7 +110,7 @@ def table_code_tokens(body: str) -> set[str]:
 
 
 def check_types(reflected: dict, failures: list[str], extras: list[str]) -> None:
-    sections = {h: b for h, b in split_sections(TYPES_MD.read_text(), ("###",))}
+    sections = {h: b for h, b in split_sections(TYPES_MD.read_text(encoding="utf-8"), ("###",))}
     for type_name, info in sorted(reflected.items()):
         body = sections.get(type_name)
         if body is None:
@@ -126,7 +127,7 @@ def check_types(reflected: dict, failures: list[str], extras: list[str]) -> None
 
 
 def check_enums(reflected: dict, failures: list[str], extras: list[str]) -> None:
-    sections = split_sections(VOCABS_MD.read_text(), ("##",))
+    sections = split_sections(VOCABS_MD.read_text(encoding="utf-8"), ("##",))
     for enum_name, values in sorted(reflected.items()):
         body = None
         for heading, sec_body in sections:

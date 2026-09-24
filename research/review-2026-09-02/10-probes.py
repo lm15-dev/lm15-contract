@@ -29,7 +29,7 @@ def send(tag, url, headers, body, *, method="POST"):
     ts = time.strftime("%Y-%m-%dT%H-%M-%SZ", time.gmtime())
     d = RECEIPTS / tag.replace("/", "__"); d.mkdir(exist_ok=True)
     (d / f"{ts}.txt").write_bytes(raw)
-    (d / f"{ts}.request.json").write_text(json.dumps({"url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1))
+    (d / f"{ts}.request.json").write_text(json.dumps({"url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1), encoding="utf-8")
     try:
         data = json.loads(raw)
     except Exception:
@@ -44,13 +44,13 @@ def rec(row, summary):
 
 def load_case(cid):
     prov, feat = cid.split(".", 1)
-    return json.loads((CONTRACT / "cases" / prov / f"{feat}.json").read_text())
+    return json.loads((CONTRACT / "cases" / prov / f"{feat}.json").read_text(encoding="utf-8"))
 
 
 def body_of(cid):
     prov, feat = cid.split(".", 1)
     case = load_case(cid)
-    return json.loads((CONTRACT / "bodies" / cid / case["pinned_body"]).read_text())
+    return json.loads((CONTRACT / "bodies" / cid / case["pinned_body"]).read_text(encoding="utf-8"))
 
 
 OAI = {"Authorization": f"Bearer {E['OPENAI_API_KEY']}", "Content-Type": "application/json"}
@@ -118,7 +118,7 @@ def probe5_xai_allowlist():
     h = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
     exp = CONTRACT / "research/tool-choice/receipts/xai__grok-4.6__tc=allow-lookup-ask-weather"
     req_file = sorted(exp.glob("*.request.json"))[0]
-    base = json.loads(req_file.read_text())["body"]
+    base = json.loads(req_file.read_text(encoding="utf-8"))["body"]
     calls = []
     for i in range(5):
         req = json.loads(json.dumps(base))
@@ -173,4 +173,4 @@ if __name__ == "__main__":
         except Exception as exc:  # keep going; a failed probe is a finding too
             print(f"  FAILED: {type(exc).__name__}: {exc}")
             RESULTS.append({"tag": fn.__name__, "status": None, "summary": {"exception": f"{type(exc).__name__}: {exc}"}})
-    (ROOT / "20-results.json").write_text(json.dumps({"ran": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "cells": RESULTS}, indent=1))
+    (ROOT / "20-results.json").write_text(json.dumps({"ran": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "cells": RESULTS}, indent=1), encoding="utf-8")

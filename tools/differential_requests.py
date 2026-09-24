@@ -17,12 +17,12 @@ harness/reports/differential-requests.json. First run 2026-09-24
 """
 import json, glob, subprocess, sys, itertools, collections, os, pathlib
 CONTRACT = str(pathlib.Path(__file__).resolve().parent.parent)
-SHIMS = json.load(open(os.environ.get("SHIMS", os.path.join(CONTRACT, "harness/shims.json"))))
+SHIMS = json.load(open(os.environ.get("SHIMS", os.path.join(CONTRACT, "harness/shims.json")), encoding="utf-8"))
 SKIP_PROVIDERS = {"typesafe"}
 # (provider, model) pairs from the corpus, so model-specific rules are exercised.
 pairs, settings_by = set(), {}
 for f in glob.glob(f"{CONTRACT}/cases/*/*.json"):
-    c = json.load(open(f))
+    c = json.load(open(f, encoding="utf-8"))
     req = c.get("canonical_request") or {}
     p = c.get("provider")
     if not p or p in SKIP_PROVIDERS or not req.get("model") or c.get("expect_lm15", {}).get("raises"): continue
@@ -62,7 +62,7 @@ for (p, model, base_url, settings), variant in itertools.product(sorted(pairs, k
 def run(name):
     s = SHIMS[name]
     cwd = os.path.normpath(os.path.join(CONTRACT, s["cwd"]))
-    out = subprocess.run(s["command"], cwd=cwd, input="\n".join(json.dumps(o) for o in ops) + "\n", capture_output=True, text=True, timeout=3600)
+    out = subprocess.run(s["command"], cwd=cwd, input="\n".join(json.dumps(o) for o in ops) + "\n", capture_output=True, text=True, timeout=3600, encoding="utf-8")
     replies = [json.loads(l) for l in out.stdout.splitlines() if l.strip().startswith("{")]
     return {r["id"]: r for r in replies}
 def norm(r):
@@ -84,6 +84,6 @@ for o in ops:
         summary[(n, kind)] += 1
         rows.append({"shim": n, "id": o["id"], "kind": kind, "ref": a[:2] if a[0]=="ok" else a, "got": b[:2] if b[0]=="ok" else b,
                      "ref_body": a[2] if a[0]=="ok" else None, "got_body": b[2] if b[0]=="ok" else None})
-json.dump(rows, open(os.path.join(CONTRACT, "harness/reports/differential-requests.json"), "w"), indent=1)
+json.dump(rows, open(os.path.join(CONTRACT, "harness/reports/differential-requests.json"), "w", encoding="utf-8"), indent=1)
 print(len(ops), "requests;", {f"{shim} {kind}": n for (shim, kind), n in sorted(summary.items())})
 sys.exit(1 if rows else 0)

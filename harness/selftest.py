@@ -44,7 +44,7 @@ def golden_cases() -> list[tuple[dict, dict]]:
     out = []
     for case in check.load_wire_cases():
         if "canonical_request" in case and "pinned_body" in case and check.golden_path(case).exists():
-            out.append((case, json.loads(check.golden_path(case).read_text())))
+            out.append((case, json.loads(check.golden_path(case).read_text(encoding="utf-8"))))
     return out
 
 
@@ -156,7 +156,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     id_target = next(
         (c["id"] for c in model_cases
          if check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text())["models"]),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8"))["models"]),
         None,
     )
     param_target = next(
@@ -174,7 +174,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     decode_target = next(
         (c["id"] for c in live_cases
          if check.golden_path(c).exists()
-         and any(g for g in json.loads(check.golden_path(c).read_text())["events"])),
+         and any(g for g in json.loads(check.golden_path(c).read_text(encoding="utf-8"))["events"])),
         None,
     )
     encode_target = next(
@@ -194,7 +194,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     text_target = next(
         (c["id"] for c in gen_cases
          if check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text())["response"].get("text")),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8"))["response"].get("text")),
         None,
     )
     multipart_target = next(
@@ -211,7 +211,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     readiness_target = None
     param_target_files = None
     for c in files_cases:
-        golden = json.loads(check.golden_path(c).read_text()) if check.golden_path(c).exists() else {}
+        golden = json.loads(check.golden_path(c).read_text(encoding="utf-8")) if check.golden_path(c).exists() else {}
         for step in c["steps"]:
             key = step.get("golden_key", step["file_op"])
             if readiness_target is None and step.get("parse") == "info" and golden.get(key, {}).get("readiness") == "ready":
@@ -228,13 +228,13 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     swap_target = next(
         (c["id"] for c in batch_cases
          if check.golden_path(c).exists()
-         and len(json.loads(check.golden_path(c).read_text()).get("entries", [])) >= 2),
+         and len(json.loads(check.golden_path(c).read_text(encoding="utf-8")).get("entries", [])) >= 2),
         None,
     )
     vocab_target = next(
         (c["id"] for c in batch_cases
          if check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text()).get("status", {}).get("status") == "completed"),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8")).get("status", {}).get("status") == "completed"),
         None,
     )
     if swap_target is None or vocab_target is None:
@@ -247,7 +247,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     expiry_target = next(
         ((c["id"], s["cache_op"]) for c in cache_cases for s in c["steps"]
          if s.get("pinned_body") and check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text()).get(s.get("golden_key", s["cache_op"]), {}).get("expires_at")),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8")).get(s.get("golden_key", s["cache_op"]), {}).get("expires_at")),
         None,
     )
     create_target = next(
@@ -264,13 +264,13 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     video_vocab = next(
         (c["id"] for c in video_cases
          if check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text()).get("done", {}).get("status") == "completed"),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8")).get("done", {}).get("status") == "completed"),
         None,
     )
     video_url = next(
         (c["id"] for c in video_cases
          if check.golden_path(c).exists()
-         and json.loads(check.golden_path(c).read_text()).get("part", {}).get("url")),
+         and json.loads(check.golden_path(c).read_text(encoding="utf-8")).get("part", {}).get("url")),
         None,
     )
     if video_vocab is None or video_url is None:

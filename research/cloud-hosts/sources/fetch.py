@@ -208,7 +208,7 @@ def main() -> int:
     previous = {}
     previous_date = today
     if only and (HERE / "manifest.json").exists():
-        manifest = json.loads((HERE / "manifest.json").read_text())
+        manifest = json.loads((HERE / "manifest.json").read_text(encoding="utf-8"))
         previous = {e["name"]: e for e in manifest["entries"]}
         previous_date = manifest.get("date", today)
     entries = []
@@ -236,7 +236,7 @@ def main() -> int:
             failures += 1
             print(f"  {name} ... FAILED ({status}) {url}", file=sys.stderr)
         entries.append(entry)
-    (HERE / "manifest.json").write_text(json.dumps({"date": today, "entries": entries}, indent=1) + "\n")
+    (HERE / "manifest.json").write_text(json.dumps({"date": today, "entries": entries}, indent=1) + "\n", encoding="utf-8")
     print(f"---\n{len(entries) - failures} saved, {failures} failed -> manifest.json")
     return 1 if failures else 0
 

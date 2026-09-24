@@ -150,7 +150,7 @@ OPENER = urllib.request.build_opener(_NoRedirect())
 def _send(method: str, url: str, headers: dict[str, str], body: bytes | None):
     request = urllib.request.Request(url, data=body, method=method, headers=headers)
     try:
-        with OPENER.open(request, timeout=20) as response:
+        with OPENER.open(request, timeout=20, encoding="utf-8") as response:
             return response.status, {k.lower(): v for k, v in response.headers.items()}
     except urllib.error.HTTPError as exc:
         headers_out = {k.lower(): v for k, v in (exc.headers or {}).items()}

@@ -55,11 +55,11 @@ class Sandbox:
 
     def rows(self, stream: str) -> list[dict]:
         p = self.day / stream / f"{DAY}.jsonl"
-        return [json.loads(l) for l in p.read_text().splitlines()]
+        return [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines()]
 
     def write(self, stream: str, rows: list[dict]) -> None:
         p = self.day / stream / f"{DAY}.jsonl"
-        p.write_text("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows))
+        p.write_text("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows), encoding="utf-8")
 
     def mutate(self, stream: str, index: int, fn) -> None:
         rows = self.rows(stream)
@@ -225,9 +225,9 @@ class CheckGatewayTeeth(unittest.TestCase):
         sb = Sandbox()
         try:
             p = sb.tmp / "gateway" / "schema" / "capture-v1.json"
-            s = json.loads(p.read_text())
+            s = json.loads(p.read_text(encoding="utf-8"))
             s["$defs"]["exchange"]["properties"]["tag"] = {"type": "string", "format": "hostname"}
-            p.write_text(json.dumps(s))
+            p.write_text(json.dumps(s), encoding="utf-8")
             code, out = run(sb.tmp)
             self.assertEqual(code, 1, out)
             self.assertIn("not implemented", out)
@@ -239,13 +239,13 @@ class CheckGatewayTeeth(unittest.TestCase):
             import jsonschema  # type: ignore
         except ImportError:
             self.skipTest("jsonschema not installed: real-validator cross-check skipped (run under nix-shell -p 'python3.withPackages (p: [p.jsonschema])' to exercise it)")
-        schema = json.loads((ROOT / "gateway" / "schema" / "capture-v1.json").read_text())
+        schema = json.loads((ROOT / "gateway" / "schema" / "capture-v1.json").read_text(encoding="utf-8"))
         jsonschema.Draft202012Validator.check_schema(schema)
         for stream, defname in check_gateway.STREAMS.items():
             p = ROOT / "gateway" / "examples" / DAY / stream / f"{DAY}.jsonl"
             sub = {"$ref": f"#/$defs/{defname}", "$defs": schema["$defs"]}
             v = jsonschema.Draft202012Validator(sub)
-            for i, line in enumerate(p.read_text().splitlines(), 1):
+            for i, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
                 errs = list(v.iter_errors(json.loads(line)))
                 self.assertEqual(errs, [], f"{stream}:{i}: {[e.message for e in errs]}")
         # And the two validators agree on every mutation that is a pure schema matter.

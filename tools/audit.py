@@ -112,7 +112,7 @@ POLICY_ENUMS: dict[str, str] = {
 def load_cases(root: Path) -> list[tuple[Path, dict]]:
     cases: list[tuple[Path, dict]] = []
     for path in sorted(root.glob("cases/*/*.json")):
-        cases.append((path, json.loads(path.read_text())))
+        cases.append((path, json.loads(path.read_text(encoding="utf-8"))))
     return cases
 
 
@@ -247,7 +247,7 @@ def check_orphans(root: Path, cases: list[tuple[Path, dict]],
                                 "the decode phase would silently skip")
             transcript_path = bodies / str(case_id) / str(data.get("pinned_body", ""))
             if transcript_path.is_file():
-                for i, line in enumerate(transcript_path.read_text().splitlines()):
+                for i, line in enumerate(transcript_path.read_text(encoding="utf-8").splitlines()):
                     if not line.strip():
                         continue
                     entry = json.loads(line)
@@ -295,7 +295,7 @@ def check_volatile(root: Path, cases: list[tuple[Path, dict]],
 
     serde_path = root / "serde" / "canonical.json"
     if serde_path.is_file():
-        for case in json.loads(serde_path.read_text()).get("cases", []):
+        for case in json.loads(serde_path.read_text(encoding="utf-8")).get("cases", []):
             if isinstance(case, dict) and "volatile" in case:
                 maps += 1
                 where = f"serde/canonical.json:{case.get('id', '<no id>')}"
@@ -318,7 +318,7 @@ def check_extensions_verdicts(root: Path, cases: list[tuple[Path, dict]],
     if not registry_path.is_file():
         problems.append(f"EXTENSIONS {registry_path}: verdict registry missing")
         return "extensions-verdicts: registry missing"
-    registry = json.loads(registry_path.read_text())
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
     blessed = dict(registry.get("blessed", {}))
     deferred = dict(registry.get("deferred", {}))
     overlap = set(blessed) & set(deferred)
@@ -377,7 +377,7 @@ def _documented_chat_params(root: Path) -> set[str]:
         return set()
     names: set[str] = set()
     in_body = False
-    for line in page.read_text().splitlines():
+    for line in page.read_text(encoding="utf-8").splitlines():
         if line.startswith("### "):
             in_body = line.strip() == "### Body Parameters"
             continue
@@ -400,7 +400,7 @@ def check_ingest_verdicts(root: Path, cases: list[tuple[Path, dict]], problems: 
     if not registry_path.is_file():
         problems.append(f"INGEST {registry_path}: verdict registry missing")
         return "ingest-verdicts: registry missing"
-    registry = json.loads(registry_path.read_text())
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
     body_v = registry.get("body", {})
     rows_v = registry.get("messages_rows", {})
     blocks_v = registry.get("content_blocks", {})
@@ -475,6 +475,7 @@ def shim_surface_dump(python2: Path) -> tuple[dict | None, str]:
             [str(shim_python), "-m", "lm15.vet"],
             input='{"op": "surface_dump", "id": "audit"}\n',
             capture_output=True, text=True, cwd=python2, timeout=120,
+            encoding="utf-8",
         )
     except Exception as exc:
         return None, f"shim failed to run: {exc}"
@@ -496,7 +497,7 @@ def check_support_matrix(root: Path, python2: Path, problems: list[str]) -> str:
     if not pinned_path.is_file():
         problems.append("SUPPORT-MATRIX: spec/support-matrix.json is missing")
         return "support matrix: MISSING"
-    pinned = json.loads(pinned_path.read_text()).get("providers", {})
+    pinned = json.loads(pinned_path.read_text(encoding="utf-8")).get("providers", {})
     surface, reason = shim_surface_dump(python2)
     if surface is None:
         print(f"REPORT support-matrix: comparison skipped — {reason}")
@@ -532,7 +533,7 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
         return f"surface coverage: skipped ({reason})"
 
     serde_path = root / "serde" / "canonical.json"
-    serde_cases = json.loads(serde_path.read_text()).get("cases", []) if serde_path.is_file() else []
+    serde_cases = json.loads(serde_path.read_text(encoding="utf-8")).get("cases", []) if serde_path.is_file() else []
     kinds_present = {c.get("kind") for c in serde_cases if isinstance(c, dict)}
 
     def covered(name: str, column: int) -> bool:
@@ -543,7 +544,7 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
     gap_types = sorted(t for t in surface.get("types", {}) if not covered(t, 0) and t not in NON_WIRE_TYPES)
     gap_enums = sorted(e for e in surface.get("enums", {}) if not covered(e, 1) and e not in POLICY_ENUMS)
     vocab_path = root / "spec" / "vocabularies.md"
-    vocab_text = vocab_path.read_text() if vocab_path.is_file() else ""
+    vocab_text = vocab_path.read_text(encoding="utf-8") if vocab_path.is_file() else ""
     policy_count = 0
     for name, values in surface.get("enums", {}).items():
         if name not in POLICY_ENUMS:
@@ -563,7 +564,7 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
     protocol = root / "harness" / "PROTOCOL.md"
     listed: set[str] = set()
     if protocol.is_file():
-        text = protocol.read_text()
+        text = protocol.read_text(encoding="utf-8")
         start = text.find("## Serde kinds")
         end = text.find("\n## ", start + 1)
         section = text[start:end if end > 0 else None]
@@ -610,7 +611,7 @@ def main(argv: list[str] | None = None) -> int:
     allowlist: set[str] = set()
     body_dir_allowlist: set[str] = set()
     if allowlist_path.is_file():
-        allowlist_data = json.loads(allowlist_path.read_text())
+        allowlist_data = json.loads(allowlist_path.read_text(encoding="utf-8"))
         allowlist = set(allowlist_data.get("orphans", []))
         body_dir_allowlist = set(allowlist_data.get("body_dirs", []))
     else:

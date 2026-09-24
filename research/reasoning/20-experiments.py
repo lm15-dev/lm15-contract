@@ -39,7 +39,7 @@ def send(tag, method, url, headers, body):
     ts = time.strftime("%Y-%m-%dT%H-%M-%SZ", time.gmtime())
     d = RECEIPTS / tag.replace("/", "__"); d.mkdir(exist_ok=True)
     (d / f"{ts}.txt").write_bytes(raw)
-    (d / f"{ts}.request.json").write_text(json.dumps({"method": method, "url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1))
+    (d / f"{ts}.request.json").write_text(json.dumps({"method": method, "url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1), encoding="utf-8")
     try:
         data = json.loads(raw)
     except Exception:
@@ -195,12 +195,12 @@ def run_chat(name, url, key, model, efforts, extra_cells=()):
 
 
 if __name__ == "__main__" and "--rerun" in sys.argv:
-    prev = json.loads((ROOT / "20-results.json").read_text())["results"]
+    prev = json.loads((ROOT / "20-results.json").read_text(encoding="utf-8"))["results"]
     RESULTS.extend(r for r in prev if not r["tag"].startswith("openai/"))
     for model in ["gpt-5.6-sol", "gpt-5.4-mini"]:
         try: run_openai(model)
         except Exception as e: print("  !!", e)
-    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1))
+    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1), encoding="utf-8")
     print(f"\n{len(RESULTS)} rows -> 20-results.json"); sys.exit(0)
 
 if __name__ == "__main__":
@@ -223,5 +223,5 @@ if __name__ == "__main__":
             run_chat("groq", "https://api.groq.com/openai/v1/chat/completions", E["GROQ_API_KEY"], model, efforts,
                      [("include_reasoning=false", {"include_reasoning": False})])
         except Exception as e: print("  !!", e)
-    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1))
+    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1), encoding="utf-8")
     print(f"\n{len(RESULTS)} rows -> 20-results.json")

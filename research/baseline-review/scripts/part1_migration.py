@@ -30,7 +30,7 @@ NOTE_RE = re.compile(
 
 
 def git_show(rel: str) -> dict | None:
-    r = subprocess.run(["git", "-C", str(ROOT), "show", f"{OLD}:{rel}"], capture_output=True, text=True)
+    r = subprocess.run(["git", "-C", str(ROOT), "show", f"{OLD}:{rel}"], capture_output=True, text=True, encoding="utf-8")
     if r.returncode != 0:
         return None
     return json.loads(r.stdout)
@@ -160,7 +160,7 @@ def main() -> int:
     c_files = []
     for gp in goldens:
         rel = gp.relative_to(ROOT).as_posix()
-        new = json.loads(gp.read_text())
+        new = json.loads(gp.read_text(encoding="utf-8"))
         old = git_show(rel)
         if old is None:
             missing_old.append(rel)
@@ -276,7 +276,7 @@ def main() -> int:
 
     json.dump(
         {rel: {"counts": dict(c), "notes": n, "rest": [(p, str(a), str(b)) for p, a, b in r]} for rel, (c, n, r) in per_file.items()},
-        open("/tmp/rereview/part1_per_file.json", "w"), indent=1, ensure_ascii=False,
+        open("/tmp/rereview/part1_per_file.json", "w", encoding="utf-8"), indent=1, ensure_ascii=False,
     )
     return 1 if out_of_scope else 0
 

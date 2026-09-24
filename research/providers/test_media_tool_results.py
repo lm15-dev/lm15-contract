@@ -105,7 +105,7 @@ class ProbeTests(unittest.TestCase):
             cap.receipts = Path(folder)
             cap._secret_values.add("test-secret-sentinel")
             cap.write_receipt("one.json", {"body": "test-secret-sentinel"})
-            self.assertNotIn("test-secret-sentinel", (Path(folder) / "one.json").read_text())
+            self.assertNotIn("test-secret-sentinel", (Path(folder) / "one.json").read_text(encoding="utf-8"))
             with self.assertRaises(FileExistsError):
                 cap.write_receipt("one.json", {})
             cap.transport.close()

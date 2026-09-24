@@ -47,7 +47,7 @@ def send(tag, url, headers, body):
     # ":" in a cell name ("tc:auto") is not allowed in a Windows path: "=" in the folder name.
     d = RECEIPTS / tag.replace("/", "__").replace(":", "="); d.mkdir(exist_ok=True)
     (d / f"{ts}.txt").write_bytes(raw)
-    (d / f"{ts}.request.json").write_text(json.dumps({"url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1))
+    (d / f"{ts}.request.json").write_text(json.dumps({"url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1), encoding="utf-8")
     try: data = json.loads(raw)
     except Exception: data = {"_raw": raw[:300].decode(errors="replace")}
     return {"tag": tag, "ts": ts, "status": r.status, "ms": ms, "sha": hashlib.sha256(raw_body).hexdigest()[:16], "receipt": f"{d.name}/{ts}.txt"}, data
@@ -193,10 +193,10 @@ def run(p):
 
 
 if __name__ == "__main__" and "--rerun-chat" in sys.argv:
-    prev = json.loads((ROOT / "20-results.json").read_text())["results"]
+    prev = json.loads((ROOT / "20-results.json").read_text(encoding="utf-8"))["results"]
     RESULTS.extend(r for r in prev if not r["tag"].startswith("openai-chat/"))
     run(OpenAIChat("gpt-5.6-sol"))
-    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1)); print(f"\n{len(RESULTS)} rows"); sys.exit(0)
+    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1), encoding="utf-8"); print(f"\n{len(RESULTS)} rows"); sys.exit(0)
 
 if __name__ == "__main__":
     from lm15.auth import get_xai_access_token
@@ -206,5 +206,5 @@ if __name__ == "__main__":
               OpenAIChat("openai/gpt-oss-20b", key=E["GROQ_API_KEY"], url="https://api.groq.com/openai/v1/chat/completions", name="groq")]:
         try: run(p)
         except Exception as e: print("  !!", type(e).__name__, str(e)[:200])
-    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1))
+    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-02", "results": RESULTS}, indent=1), encoding="utf-8")
     print(f"\n{len(RESULTS)} rows -> 20-results.json")

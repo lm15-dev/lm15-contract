@@ -7,6 +7,11 @@ on:
 jobs:
   provenance:
     runs-on: ubuntu-latest
+    # Text I/O must name its encoding: the default is not UTF-8 on Windows
+    # (2026-09-24). Any implicit one is an error in every step.
+    env:
+      PYTHONWARNDEFAULTENCODING: "1"
+      PYTHONWARNINGS: "error::EncodingWarning"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

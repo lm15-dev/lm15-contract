@@ -52,7 +52,7 @@ def sse_frames(text: str):
 
 
 def body_for(rel: str):
-    g = json.loads((ROOT / rel).read_text())
+    g = json.loads((ROOT / rel).read_text(encoding="utf-8"))
     prov = g["provenance"]
     case_id = rel.split("/")[1] + "." + Path(rel).stem
     # case id may use a different dir name; check bodies dir
@@ -60,7 +60,7 @@ def body_for(rel: str):
     if not bdir.exists():
         # search for matching case file by golden dir
         for c in (ROOT / "cases").glob("*/*.json"):
-            cj = json.loads(c.read_text())
+            cj = json.loads(c.read_text(encoding="utf-8"))
             if cj.get("id", "").endswith("." + Path(rel).stem) and cj.get("provider") == rel.split("/")[1]:
                 case_id = cj["id"]
                 bdir = ROOT / "bodies" / case_id
@@ -68,7 +68,7 @@ def body_for(rel: str):
     pinned = prov.get("pinned_body")
     if pinned is None:
         for c in (ROOT / "cases").glob("*/*.json"):
-            cj = json.loads(c.read_text())
+            cj = json.loads(c.read_text(encoding="utf-8"))
             if cj.get("id") == case_id:
                 pinned = cj.get("pinned_body") or cj["provenance"]["pinned_body"]
                 break
@@ -110,7 +110,7 @@ def main():
         ends = [e for e in g["events"] if e.get("type") == "end"]
         assert len(ends) == 1, rel
         pd = ends[0].get("provider_data")
-        text = body.read_text()
+        text = body.read_text(encoding="utf-8")
         frames = sse_frames(text)
         exp, how, n = expected_frame(frames)
         match = (pd == exp)

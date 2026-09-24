@@ -60,13 +60,13 @@ def main() -> int:
     if payload.get("type") != "response.done" or payload.get("response", {}).get("status") != "completed":
         receipts = contract / "receipts" / f"{ts[:10]}-azure"
         receipts.mkdir(parents=True, exist_ok=True)
-        (receipts / f"failed-live-text-{ts}.jsonl").write_text(text.replace(key, "$AZURE_OPENAI_API_KEY"))
+        (receipts / f"failed-live-text-{ts}.jsonl").write_text(text.replace(key, "$AZURE_OPENAI_API_KEY"), encoding="utf-8")
         print("turn failed; transcript kept under receipts, no case written")
         return 1
     body_dir = contract / "bodies" / "azure.live_text"
     body_dir.mkdir(parents=True, exist_ok=True)
     body_name = f"{ts}.jsonl"
-    (body_dir / body_name).write_text(text)
+    (body_dir / body_name).write_text(text, encoding="utf-8")
     case_dir.mkdir(parents=True, exist_ok=True)
     case = {
         "id": "azure.live_text", "provider": "azure", "feature": "live_text", "surface": "live",
@@ -76,7 +76,7 @@ def main() -> int:
                        "evidence": f"live end-to-end against wss://{resource}.openai.azure.com/openai/v1/realtime, deployment gpt-realtime-mini; {len(transcript)-2} verbatim server frames at bodies/azure.live_text/{body_name}; changes/2026-09-04-azure-live.md"},
         "live_config": serde.live_config_to_dict(config), "pinned_body": body_name,
     }
-    (case_dir / "live_text.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+    (case_dir / "live_text.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"captured {len(transcript)-2} server frames -> {body_dir / body_name}")
     return 0
 

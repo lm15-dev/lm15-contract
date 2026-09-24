@@ -28,7 +28,7 @@ class HarnessFilesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "contract"
             root.mkdir()
-            (root / "vector.txt").write_text("# test comment\nfixture\n")
+            (root / "vector.txt").write_text("# test comment\nfixture\n", encoding="utf-8")
             (root / "escape").symlink_to(Path(directory) / "outside.txt")
             with patch.object(check, "CONTRACT_ROOT", root):
                 self.assertEqual(check.expand_files({"$file": "vector.txt", "strip_comment_lines": True}), "fixture\n")
@@ -160,12 +160,12 @@ class ProvenanceTests(unittest.TestCase):
 
     def write_case(self, root, name, provenance):
         (root / "cases" / "x").mkdir(parents=True, exist_ok=True)
-        (root / "cases" / "x" / f"{name}.json").write_text(json.dumps({"id": f"x.{name}", "provenance": provenance}))
+        (root / "cases" / "x" / f"{name}.json").write_text(json.dumps({"id": f"x.{name}", "provenance": provenance}), encoding="utf-8")
 
     def write_receipt(self, root, rel, payload):
         path = root / rel
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(payload) if not isinstance(payload, str) else payload)
+        path.write_text(json.dumps(payload) if not isinstance(payload, str) else payload, encoding="utf-8")
 
     def test_live_capture_from_cutoff_requires_a_hashed_exchange_receipt(self):
         receipt = {"request_sha256": "a" * 64, "response_sha256": "b" * 64}
@@ -207,13 +207,13 @@ class ProvenanceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "errors").mkdir()
-            (root / "errors" / "e.json").write_text(json.dumps({"provenance": {"source": "live-capture", "date": "2026-09-06", "evidence": "e"}}))
+            (root / "errors" / "e.json").write_text(json.dumps({"provenance": {"source": "live-capture", "date": "2026-09-06", "evidence": "e"}}), encoding="utf-8")
             result, output = self.run_checker(root)
             self.assertEqual(result, 0, output)
 
     def write_golden(self, root, name, provenance):
         (root / "goldens" / "p").mkdir(parents=True, exist_ok=True)
-        (root / "goldens" / "p" / f"{name}.json").write_text(json.dumps({"canonical_response": {}, "provenance": provenance}))
+        (root / "goldens" / "p" / f"{name}.json").write_text(json.dumps({"canonical_response": {}, "provenance": provenance}), encoding="utf-8")
 
     def test_reviewed_line_shape(self):
         base = {"source": "scribe-draft", "date": "2026-09-06", "evidence": "e"}
@@ -244,7 +244,7 @@ class SecrecyTests(unittest.TestCase):
         token = "ya29." + "x" * 40
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "transcript.jsonl").write_text(json.dumps({"frame": token}))
+            (root / "transcript.jsonl").write_text(json.dumps({"frame": token}), encoding="utf-8")
             result, output = self.scan(root)
         self.assertEqual(result, 1)
         self.assertIn("google access token", output)
@@ -255,7 +255,7 @@ class SecrecyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "auth").mkdir()
-            (root / "auth" / "token-vectors.json").write_text(json.dumps({"token": token}))
+            (root / "auth" / "token-vectors.json").write_text(json.dumps({"token": token}), encoding="utf-8")
             result, output = self.scan(root)
         self.assertEqual(result, 1)
         self.assertIn("signed jwt", output)
@@ -370,7 +370,7 @@ class CaptureTests(unittest.TestCase):
                 cap.send(request)
             receipts = list(cap.receipts.glob("exchange-*.json"))
             self.assertEqual(len(receipts), 2)
-            text = receipts[0].read_text()
+            text = receipts[0].read_text(encoding="utf-8")
             self.assertNotIn("fixture-value", text)
             receipt = json.loads(text)
             hashed = {"method": request.method, "url": request.url, "headers": request.headers, "body_b64": "e30="}

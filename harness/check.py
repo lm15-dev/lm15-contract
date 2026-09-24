@@ -289,6 +289,7 @@ class Shim:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
+            encoding="utf-8",
         )
 
     def call(self, op: str, **fields: Any) -> JsonObject:
@@ -342,6 +343,7 @@ def contract_head() -> str | None:
         out = subprocess.run(
             ["git", "-C", str(CONTRACT_ROOT), "rev-parse", "HEAD"],
             capture_output=True, text=True, timeout=10, check=True,
+            encoding="utf-8",
         )
     except (OSError, subprocess.SubprocessError):
         return None
@@ -353,6 +355,7 @@ def contract_dirty() -> bool:
         out = subprocess.run(
             ["git", "-C", str(CONTRACT_ROOT), "status", "--porcelain", "--untracked-files=no"],
             capture_output=True, text=True, timeout=10, check=True,
+            encoding="utf-8",
         )
     except (OSError, subprocess.SubprocessError):
         return False
@@ -372,7 +375,7 @@ def check_pin(shim: Shim) -> None:
         raise HarnessError(
             f"shim {shim.name!r} has no CONTRACT_PIN at {pin_file} (pass --no-check-pin to skip)"
         )
-    pinned = pin_file.read_text().strip()
+    pinned = pin_file.read_text(encoding="utf-8").strip()
     head = contract_head()
     if head is None:
         print("warning: cannot read contract HEAD (no git?) — pin not verified", file=sys.stderr)
@@ -387,7 +390,7 @@ def check_pin(shim: Shim) -> None:
 
 
 def load_shim(name: str) -> Shim:
-    registry = json.loads(SHIMS_FILE.read_text())
+    registry = json.loads(SHIMS_FILE.read_text(encoding="utf-8"))
     entry = registry.get(name)
     if not isinstance(entry, dict):
         known = sorted(k for k in registry if not k.startswith("_"))
@@ -402,7 +405,7 @@ def load_shim(name: str) -> Shim:
 
 def load_wire_cases() -> list[JsonObject]:
     """Chat-surface wire cases; models/live/ingest surfaces have their own loaders."""
-    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    cases = [json.loads(path.read_text(encoding="utf-8")) for path in sorted(CASES_DIR.glob("*/*.json"))]
     return [case for case in cases if case.get("surface") not in OWN_SURFACES]
 
 
@@ -414,12 +417,12 @@ def is_chat_dialect_case(case: JsonObject) -> bool:
 
 
 def load_model_cases() -> list[JsonObject]:
-    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    cases = [json.loads(path.read_text(encoding="utf-8")) for path in sorted(CASES_DIR.glob("*/*.json"))]
     return [case for case in cases if case.get("surface") == "models"]
 
 
 def load_live_cases() -> list[JsonObject]:
-    cases = [json.loads(path.read_text()) for path in sorted(CASES_DIR.glob("*/*.json"))]
+    cases = [json.loads(path.read_text(encoding="utf-8")) for path in sorted(CASES_DIR.glob("*/*.json"))]
     return [case for case in cases if case.get("surface") == "live"]
 
 
@@ -427,7 +430,7 @@ def load_live_transcript(case: JsonObject) -> list[JsonObject]:
     """Pinned transcript entries: {"dir":"client","kind":"setup"|"event",...}
     and {"dir":"server","frame"|"frame_b64": ...}, in wire order."""
     path = BODIES_DIR / case["id"] / case["pinned_body"]
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def live_server_frame_bytes(entry: JsonObject) -> bytes:
@@ -439,20 +442,20 @@ def live_server_frame_bytes(entry: JsonObject) -> bytes:
 def load_error_cases() -> list[JsonObject]:
     cases: list[JsonObject] = []
     for path in sorted(ERRORS_DIR.glob("*.json")):
-        cases.extend(json.loads(path.read_text())["cases"])
+        cases.extend(json.loads(path.read_text(encoding="utf-8"))["cases"])
     return cases
 
 
 def load_serde_cases() -> list[JsonObject]:
-    return list(json.loads(SERDE_FILE.read_text())["cases"])
+    return list(json.loads(SERDE_FILE.read_text(encoding="utf-8"))["cases"])
 
 
 def load_auth_fixture() -> JsonObject:
-    return json.loads(AUTH_FILE.read_text())
+    return json.loads(AUTH_FILE.read_text(encoding="utf-8"))
 
 
 def load_router_fixture() -> JsonObject:
-    return json.loads(ROUTER_FILE.read_text())
+    return json.loads(ROUTER_FILE.read_text(encoding="utf-8"))
 
 
 AUTH_SCOPES = ("core", "cloud", "all")
@@ -663,7 +666,7 @@ def write_reports(report: DirectionReport, shim: Shim, capabilities: JsonObject,
         "results": [r.to_dict() for r in report.results],
     }
     json_path = report_dir / f"{report.direction}.json"
-    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
+    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     counts = report.counts
     lines = [
@@ -695,7 +698,7 @@ def write_reports(report: DirectionReport, shim: Shim, capabilities: JsonObject,
         for result in skips:
             lines.append(f"- {result.case_id}: {result.reason}")
         lines.append("")
-    (report_dir / f"{report.direction}.md").write_text("\n".join(lines))
+    (report_dir / f"{report.direction}.md").write_text("\n".join(lines), encoding="utf-8")
 
 
 def _short(value: Any, limit: int = 200) -> str:
@@ -900,7 +903,7 @@ def write_canonicalization_proposal(flagged: list[JsonObject], report_dir: Path)
     decide at freeze time, per AUTHORITY.md (canonical fixtures change only
     with a spec citation).
     """
-    corpus = json.loads(SERDE_FILE.read_text())
+    corpus = json.loads(SERDE_FILE.read_text(encoding="utf-8"))
     by_id = {entry["id"]: entry for entry in flagged}
     for case in corpus["cases"]:
         entry = by_id.get(case["id"])
@@ -913,7 +916,7 @@ def write_canonicalization_proposal(flagged: list[JsonObject], report_dir: Path)
             }
     report_dir.mkdir(parents=True, exist_ok=True)
     proposal_path = report_dir / "serde-canonicalization-proposal.json"
-    proposal_path.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n")
+    proposal_path.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     if not SERDE_CHANGES_ENTRY.exists():
         ids = "\n".join(f"- `{entry['id']}`" for entry in flagged)
@@ -939,7 +942,8 @@ def write_canonicalization_proposal(flagged: list[JsonObject], report_dir: Path)
             "the structural check cannot distinguish typed levels from opaque\n"
             "payloads (rule 3: opaque payloads are never mutated), so each case\n"
             "must be reviewed against the spec before the fixture changes, with\n"
-            "this entry updated to cite the rule per AUTHORITY.md.\n"
+            "this entry updated to cite the rule per AUTHORITY.md.\n",
+            encoding="utf-8",
         )
 
 
@@ -1033,7 +1037,7 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
         if "canonical_request" not in case:
             report.results.append(CaseResult(case_id, "skip", reason="no canonical_request attached"))
             continue
-        golden = json.loads(golden_file.read_text())
+        golden = json.loads(golden_file.read_text(encoding="utf-8"))
         body_b64 = base64.b64encode(pinned_body(case)).decode("ascii")
         if want_stream:
             reply = shim.call(
@@ -1136,7 +1140,7 @@ def materialize_borrowed_file(case: JsonObject, tmp_dir: Path) -> str:
             entry["refresh"] = sentinel
         body = {"xai": entry}
     path = tmp_dir / f"{case['id']}-credentials.json"
-    path.write_text(json.dumps(body))
+    path.write_text(json.dumps(body), encoding="utf-8")
     return str(path)
 
 
@@ -1407,7 +1411,7 @@ def run_live_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if not golden_file.exists():
             report.results.append(CaseResult(f"{case_id}[decode]", "skip", reason="no-golden"))
             continue
-        golden = json.loads(golden_file.read_text())
+        golden = json.loads(golden_file.read_text(encoding="utf-8"))
         diff = first_difference(golden["events"], result.get("events", _ABSENT),
                                 ("events",), volatile=volatile, usage_int_float=True)
         report.results.append(CaseResult(f"{case_id}[decode]", "pass") if diff is None
@@ -1489,7 +1493,7 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
         if not golden_file.exists():
             report.results.append(CaseResult(f"{case_id}[parse]", "skip", reason="no-golden"))
             continue
-        golden = json.loads(golden_file.read_text())
+        golden = json.loads(golden_file.read_text(encoding="utf-8"))
         body = pinned_body(case)
         reply = shim.call("parse_models_response", provider=case["provider"], **host_fields(case),
                           status=int(case.get("expect", {}).get("status", 200)),
@@ -1567,7 +1571,7 @@ def _digest_long_strings(value: Any) -> Any:
 
 
 def load_surface_cases(surface: str) -> list[JsonObject]:
-    cases = [json.loads(p.read_text()) for p in sorted(CASES_DIR.glob("*/*.json"))]
+    cases = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(CASES_DIR.glob("*/*.json"))]
     return [case for case in cases if case.get("surface") == surface]
 
 
@@ -1698,7 +1702,7 @@ def run_files_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if case_filter and case_id != case_filter:
             continue
         golden_file = golden_path(case)
-        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        golden = json.loads(golden_file.read_text(encoding="utf-8")) if golden_file.exists() else {}
         for step in case["steps"]:
             op = step["file_op"]
             label = f"{case_id}[{op}]"
@@ -1739,7 +1743,7 @@ def run_cache_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if case_filter and case_id != case_filter:
             continue
         golden_file = golden_path(case)
-        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        golden = json.loads(golden_file.read_text(encoding="utf-8")) if golden_file.exists() else {}
         for step in case["steps"]:
             op = step["cache_op"]
             label = f"{case_id}[{op}]"
@@ -1778,7 +1782,7 @@ def run_batch_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if case_filter and case_id != case_filter:
             continue
         golden_file = golden_path(case)
-        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        golden = json.loads(golden_file.read_text(encoding="utf-8")) if golden_file.exists() else {}
         for step in case["steps"]:
             action = step["action"]
             label = f"{case_id}[{action}]"
@@ -1854,7 +1858,7 @@ def run_video_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
         if case_filter and case_id != case_filter:
             continue
         golden_file = golden_path(case)
-        golden = json.loads(golden_file.read_text()) if golden_file.exists() else {}
+        golden = json.loads(golden_file.read_text(encoding="utf-8")) if golden_file.exists() else {}
         for step in case["steps"]:
             action = step["action"]
             step_name = step.get("golden_key", action)
@@ -1953,7 +1957,7 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
         if not golden_file.exists():
             report.results.append(CaseResult(parse_label, "skip", reason="no-golden"))
             continue
-        golden = json.loads(golden_file.read_text())
+        golden = json.loads(golden_file.read_text(encoding="utf-8"))
         result = dict(reply["result"])
         if result.get("provider_data") in (None, {}):
             report.results.append(CaseResult(

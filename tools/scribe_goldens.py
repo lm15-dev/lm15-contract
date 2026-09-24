@@ -148,7 +148,7 @@ def scribe(shim: check.Shim, *, overwrite: bool = False, out_dir: Path | None = 
             # Scratch mode: content only, every golden, provenance untouched.
             path = out_dir / str(case["provider"]) / f"{case['feature']}.json"
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n")
+            path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
             counts["drafted"] += 1
             continue
         golden["provenance"] = draft_provenance(case)
@@ -161,13 +161,13 @@ def scribe(shim: check.Shim, *, overwrite: bool = False, out_dir: Path | None = 
             # goldens — the review record the oracle rests on.  Frozen
             # goldens are never rewritten at all: their evidence is a human
             # review, not a shim run.
-            existing = json.loads(path.read_text())
+            existing = json.loads(path.read_text(encoding="utf-8"))
             frozen = "reviewed" in (existing.get("provenance") or {})
             counts["kept"] += 1
             print(f"  kept     {case_id}: golden exists{' (REVIEWED — never overwritten)' if frozen else '; pass --overwrite to redraft'}")
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n")
+        path.write_text(json.dumps(golden, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         counts["drafted"] += 1
     return counts, failures
 
@@ -206,7 +206,8 @@ def main(argv: list[str] | None = None) -> int:
             indent=2,
             ensure_ascii=False,
         )
-        + "\n"
+        + "\n",
+        encoding="utf-8",
     )
 
     print(

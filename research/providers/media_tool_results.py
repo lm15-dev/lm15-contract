@@ -283,7 +283,7 @@ def load_env(path: Path) -> None:
     """Read simple assignments without executing shell code; environment wins."""
     if not path.is_file():
         return
-    for line in path.read_text().splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
@@ -459,7 +459,7 @@ def main() -> int:
         return 0
     if (root / "plan.json").exists():
         parser.error("Use a new run directory; receipts are append-only")
-    (root / "plan.json").write_text(json.dumps(plan, indent=2) + "\n")
+    (root / "plan.json").write_text(json.dumps(plan, indent=2) + "\n", encoding="utf-8")
     print(f"Receipts: {root}", flush=True)
 
     def worker(name, cell):
@@ -467,10 +467,10 @@ def main() -> int:
         if args.model:
             argv += ["--model", args.model]
         try:
-            completed = subprocess.run(argv, capture_output=True, text=True, timeout=260)
+            completed = subprocess.run(argv, capture_output=True, text=True, timeout=260, encoding="utf-8")
             path = root / name / cell / "result.json"
             if path.exists():
-                return json.loads(path.read_text())
+                return json.loads(path.read_text(encoding="utf-8"))
             return {"provider": name, "cell": cell, "outcome": "worker_failed", "exit_code": completed.returncode, "stderr": completed.stderr[-600:]}
         except subprocess.TimeoutExpired:
             return {"provider": name, "cell": cell, "outcome": "worker_timeout", "note": "Already-written exchange receipts remain; no retry."}
@@ -482,7 +482,7 @@ def main() -> int:
             row = future.result()
             rows.append(row)
             print(json.dumps({k: row[k] for k in ("provider", "model", "cell", "outcome", "turn1_status", "turn2_status", "error_type") if k in row}), flush=True)
-    (root / "SUMMARY.json").write_text(json.dumps(rows, indent=2) + "\n")
+    (root / "SUMMARY.json").write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     return 0
 
 

@@ -51,7 +51,7 @@ def case_path(case_id: str) -> Path:
 
 
 def write_case(path: Path, data: dict) -> None:
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -60,7 +60,7 @@ def main() -> int:
         sys.path.insert(0, str(PYTHON2))
     from lm15.serde import request_to_dict  # noqa: E402  (needs lm15-python on sys.path)
 
-    logical_cases = json.loads(TEST_CASES.read_text())["cases"]
+    logical_cases = json.loads(TEST_CASES.read_text(encoding="utf-8"))["cases"]
 
     # 1. Canonical requests, from the reference's own interpretation (DRAFT).
     attached = 0
@@ -71,7 +71,7 @@ def main() -> int:
         if not path.is_file():
             missing_case_files.append(case_id)
             continue
-        data = json.loads(path.read_text())
+        data = json.loads(path.read_text(encoding="utf-8"))
         if bool(case.get("stream", False)):
             data["stream"] = True
         data["canonical_request"] = request_to_dict(dump_request.request_for_case(case))
@@ -91,7 +91,7 @@ def main() -> int:
         if not body_files:
             bodies_without_case.append(f"{body_dir.name} (empty dir)")
             continue
-        data = json.loads(path.read_text())
+        data = json.loads(path.read_text(encoding="utf-8"))
         data["pinned_body"] = body_files[-1]
         write_case(path, data)
         pinned += 1
@@ -101,7 +101,7 @@ def main() -> int:
     orphans = [
         f"{p.parent.name}.{p.stem}"
         for p in all_case_files
-        if "canonical_request" not in json.loads(p.read_text())
+        if "canonical_request" not in json.loads(p.read_text(encoding="utf-8"))
     ]
     print(f"canonical_request attached: {attached} / {len(logical_cases)} logical cases")
     print(f"case files without canonical_request (orphans): {len(orphans)}")

@@ -34,7 +34,7 @@ def fixture_candidate(folder: Path, result: dict) -> dict:
     cell = result["cell"]
     first = probe.Request(model=result["model"], messages=(probe.Message.user(probe.prompt(cell)),),
                           tools=(probe.TOOL,), config=probe.Config(max_tokens=1600))
-    second_receipt = json.loads((folder / "turn2.json").read_text())
+    second_receipt = json.loads((folder / "turn2.json").read_text(encoding="utf-8"))
     candidate = {
         "id": f"{result['provider']}.tool_result_{cell}", "provider": result["provider"], "feature": f"tool_result_{cell}",
         "status": "DRAFT; not an active corpus fixture",
@@ -49,7 +49,7 @@ def fixture_candidate(folder: Path, result: dict) -> dict:
     try:
         adapter = adapter_for_provider(result["provider"], "fixture-parse-only")
         response = adapter.parse_response(first, HttpResponse(200, "OK", [], (folder / "turn1-response.txt").read_bytes()))
-        oracle = json.loads((folder / "visual-oracle.json").read_text())
+        oracle = json.loads((folder / "visual-oracle.json").read_text(encoding="utf-8"))
         results = []
         for call in response.message.parts:
             if not isinstance(call, ToolCallPart):
@@ -84,27 +84,27 @@ def main() -> None:
     root = Path(sys.argv[1]).resolve()
     rows = []
     for path in sorted(root.glob("*/*/result.json")) + sorted(root.glob("*/*/*/result.json")):
-        row = json.loads(path.read_text())
+        row = json.loads(path.read_text(encoding="utf-8"))
         row["provider"] = path.parent.name if path.parent.parent.parent == root else path.parent.parent.name
         row.setdefault("cell", "pair")          # the first probe (v0) was the two-call cell only
         row["run"] = path.relative_to(root).parts[0]
         row["receipt"] = str(path.parent.relative_to(probe.CONTRACT))
         oracle = path.parent / "visual-oracle.json"
         if oracle.exists():
-            o = json.loads(oracle.read_text())
+            o = json.loads(oracle.read_text(encoding="utf-8"))
             row["cell_px"], row["detail"] = o.get("cell_px", 64), o.get("detail")
         row["outcome_short"] = SHORT.get(row["outcome"], row["outcome"])
         if row["outcome"] in ("content_received", "visual_match", "error_acknowledged") and row["cell"] != "control" and (path.parent / "turn2.json").exists():
             cand = path.parent / "fixture-candidate.json"
             if not cand.exists():
-                cand.write_text(json.dumps(fixture_candidate(path.parent, row), indent=2, ensure_ascii=False) + "\n")
-            row["python_body_matches_sent"] = json.loads(cand.read_text()).get("python_body_matches_sent")
+                cand.write_text(json.dumps(fixture_candidate(path.parent, row), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            row["python_body_matches_sent"] = json.loads(cand.read_text(encoding="utf-8")).get("python_body_matches_sent")
         rows.append(row)
     ledger = {"experiments": len(rows), "inference_attempts": sum(r.get("inference_calls", 0) for r in rows),
               "outcomes": dict(Counter(r["outcome"] for r in rows)), "results": rows,
               "cost_note": "Usage fields are recorded per cell (result.json usage); provider price lists were not folded in. Total spend is bounded by inference_attempts × the models' list prices; no cell exceeded 2 calls.",
               "note": "Derived from append-only receipts. outcome judges whether the MODEL RECEIVED the content (hidden oracle), never whether the request got HTTP 200."}
-    (PASS / "20-results.json").write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n")
+    (PASS / "20-results.json").write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     # The matrix: latest run per (provider, model, cell_px/detail) wins a cell; older runs stay in the JSON.
     cells = list(probe.CELLS)
     grid: dict[tuple, dict] = defaultdict(dict)
@@ -119,7 +119,7 @@ def main() -> None:
     for (prov, model, oracle), by in sorted(grid.items()):
         lines.append(f"| {prov} | {model} | {oracle} | " + " | ".join(by[c]["outcome_short"] if c in by else "—" for c in cells) + " |")
     lines += ["", "Older runs of the same cell are kept in `20-results.json` (field `run`)."]
-    (PASS / "20-results.md").write_text("\n".join(lines) + "\n")
+    (PASS / "20-results.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(json.dumps({k: v for k, v in ledger.items() if k != "results"}, indent=2))
 
 

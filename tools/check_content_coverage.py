@@ -54,7 +54,7 @@ def main() -> int:
     ap.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     args = ap.parse_args()
     root = args.root
-    matrix = json.loads((root / "spec" / "support-matrix.json").read_text())
+    matrix = json.loads((root / "spec" / "support-matrix.json").read_text(encoding="utf-8"))
     bindings = sorted(matrix.get("providers", matrix).keys()) if isinstance(matrix, dict) else []
     problems: list[str] = []
     pinned = 0

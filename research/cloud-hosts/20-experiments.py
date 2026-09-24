@@ -83,7 +83,7 @@ def sigv4_headers(method: str, url: str, body: bytes, *, service: str, region: s
 def az_token(scope: str) -> str | None:
     try:
         out = subprocess.run(["az", "account", "get-access-token", "--output", "json", "--scope", scope],
-                             capture_output=True, text=True, timeout=30, check=True).stdout
+                             capture_output=True, text=True, timeout=30, check=True, encoding="utf-8").stdout
         return json.loads(out)["accessToken"]
     except Exception:  # noqa: BLE001
         return None
@@ -92,7 +92,7 @@ def az_token(scope: str) -> str | None:
 def gcloud_token() -> str | None:
     try:
         return subprocess.run(["gcloud", "auth", "print-access-token"], capture_output=True,
-                              text=True, timeout=30, check=True).stdout.strip()
+                              text=True, timeout=30, check=True, encoding="utf-8").stdout.strip()
     except Exception:  # noqa: BLE001
         return None
 
@@ -357,7 +357,7 @@ def run() -> int:
         time.sleep(0.3)
     OUT.write_text(json.dumps({"nonce": NONCE, "date": dt.date.today().isoformat(), "cells": len(results),
                                "successful_inference_cells": spend_cells,
-                               "spend_estimate_usd": round(spend_cells * 0.01, 2), "results": results}, indent=1) + "\n")
+                               "spend_estimate_usd": round(spend_cells * 0.01, 2), "results": results}, indent=1) + "\n", encoding="utf-8")
     print(f"---\n{len(results)} cells -> {OUT.name}; ~${spend_cells * 0.01:.2f}")
     return 0
 

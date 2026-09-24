@@ -415,7 +415,7 @@ def check_day(day_dir: Path, kind: str, validator: Validator, rep: Report) -> No
             rep.fail(f"{day_dir}: examples day needs _provenance.json")
         else:
             try:
-                if json.loads(pv.read_text()).get("synthetic") is not True:
+                if json.loads(pv.read_text(encoding="utf-8")).get("synthetic") is not True:
                     rep.fail(f"{pv}: an examples day must declare synthetic: true")
             except json.JSONDecodeError as e:
                 rep.fail(f"{pv}: not JSON: {e}")
@@ -425,7 +425,7 @@ def check_day(day_dir: Path, kind: str, validator: Validator, rep: Report) -> No
             rep.fail(f"{day_dir}: captures day needs _receipt.json (gateway version, host, date, reviewer)")
         else:
             try:
-                r = json.loads(rc.read_text())
+                r = json.loads(rc.read_text(encoding="utf-8"))
                 for k in ("gateway_version", "captured_on", "date", "reviewed_by"):
                     if k not in r:
                         rep.fail(f"{rc}: missing {k!r}")
@@ -440,7 +440,7 @@ def main() -> int:
     rep = Report()
     schema_path = root / "gateway" / "schema" / "capture-v1.json"
     try:
-        schema = json.loads(schema_path.read_text())
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
         if schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
             rep.fail(f"{schema_path}: not draft 2020-12")
         validator = Validator(schema)

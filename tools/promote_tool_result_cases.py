@@ -91,7 +91,7 @@ def classify(dialect: str, cell: str, path: str, sent, sdk, first_result: int) -
 def latest_candidates():
     best: dict[tuple[str, str], Path] = {}
     for path in sorted(RECEIPTS.glob("*/*/*/fixture-candidate.json")):
-        cand = json.loads(path.read_text())
+        cand = json.loads(path.read_text(encoding="utf-8"))
         cell = cand["feature"].removeprefix("tool_result_")
         best[(cand["provider"], cell)] = path  # sorted: the latest run wins
     return best
@@ -105,8 +105,8 @@ def main() -> int:
     for (provider, cell), path in sorted(latest_candidates().items()):
         if provider in SKIP or cell not in NATIVE_CELLS:
             continue
-        cand = json.loads(path.read_text())
-        result = json.loads((path.parent / "result.json").read_text())
+        cand = json.loads(path.read_text(encoding="utf-8"))
+        result = json.loads((path.parent / "result.json").read_text(encoding="utf-8"))
         if result["outcome"] not in ("content_received", "error_acknowledged"):
             continue
         dialect = probe.PROVIDERS[provider].dialect
@@ -127,7 +127,7 @@ def main() -> int:
             skipped.append((provider, cell, "; ".join(f"{p}: {w}" for p, w in blocked[:4])))
             continue
         feature = f"tool_result_{cell}"
-        ts = json.loads((path.parent / "turn2.json").read_text())["timestamp"]
+        ts = json.loads((path.parent / "turn2.json").read_text(encoding="utf-8"))["timestamp"]
         body_name = f"{ts}.txt"
         case = {
             "id": f"{provider}.{feature}", "provider": provider, "feature": feature,
@@ -158,7 +158,7 @@ def main() -> int:
         }
         if not args.dry_run:
             (CONTRACT / "cases" / provider).mkdir(parents=True, exist_ok=True)
-            (CONTRACT / "cases" / provider / f"{feature}.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+            (CONTRACT / "cases" / provider / f"{feature}.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
             body_dir = CONTRACT / "bodies" / f"{provider}.{feature}"
             body_dir.mkdir(parents=True, exist_ok=True)
             (body_dir / body_name).write_bytes((path.parent / "turn2-response.txt").read_bytes())
@@ -168,7 +168,7 @@ def main() -> int:
         if not runs:
             skipped.append((provider, "raise", "no receipt"))
             continue
-        rec = json.loads(runs[-1].read_text())
+        rec = json.loads(runs[-1].read_text(encoding="utf-8"))
         model = rec["model"]
         exchanges = sorted(runs[-1].parent.glob("exchange-*.json"))
         exchange = str(exchanges[-1].relative_to(CONTRACT)) if exchanges else None
@@ -191,7 +191,7 @@ def main() -> int:
         }
         if not args.dry_run:
             (CONTRACT / "cases" / provider).mkdir(parents=True, exist_ok=True)
-            (CONTRACT / "cases" / provider / "tool_result_image_raise.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n")
+            (CONTRACT / "cases" / provider / "tool_result_image_raise.json").write_text(json.dumps(case, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         written.append((provider, "raise", 0))
     print("promoted:", len(written))
     for w in written:

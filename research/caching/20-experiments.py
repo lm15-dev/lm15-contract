@@ -63,7 +63,7 @@ def send(tag: str, tr: TransportRequest, parse=None):
     sha = hashlib.sha256(tr.body).hexdigest()[:16]
     d = RECEIPTS / tag.replace("/", "__"); d.mkdir(exist_ok=True)
     (d / f"{ts}.txt").write_bytes(raw)
-    (d / f"{ts}.request.json").write_text(json.dumps({"method": tr.method, "url": tr.url, "headers": redact(tr.headers), "body": json.loads(tr.body) if tr.body else None}, indent=1))
+    (d / f"{ts}.request.json").write_text(json.dumps({"method": tr.method, "url": tr.url, "headers": redact(tr.headers), "body": json.loads(tr.body) if tr.body else None}, indent=1), encoding="utf-8")
     usage = None
     if parse is not None and r.status == 200:
         try:
@@ -127,7 +127,7 @@ rq=m.Request(model={model!r}, messages=(m.Message.user({pre!r}), m.Message.user(
 tr=(m.PROVIDERS[{name!r}][4](lm, rq) if m.PROVIDERS[{name!r}][4] else lm.build_request(rq, stream=False))
 r=m.send({name!r}+'/process2', tr, lambda resp: lm.parse_response(rq, resp)); r.pop('body',None); print(json.dumps(r))
 """
-        out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120)
+        out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120, encoding="utf-8")
         try:
             row = json.loads(out.stdout.strip().splitlines()[-1]); row["cell"] = "process2"; RESULTS.append(row)
             print(f"  {'process2':14s} HTTP {row['status']} {row['ms']:5d}ms  usage={row['usage']}")
@@ -229,5 +229,5 @@ if __name__ == "__main__":
         gemini_explicit_lifecycle()
     except Exception as exc:  # noqa: BLE001
         print(f"  !! gemini lifecycle aborted: {type(exc).__name__}: {str(exc)[:200]}")
-    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-01", "results": RESULTS}, indent=1))
+    (ROOT / "20-results.json").write_text(json.dumps({"date": "2026-09-01", "results": RESULTS}, indent=1), encoding="utf-8")
     print(f"\n{len(RESULTS)} rows -> 20-results.json")

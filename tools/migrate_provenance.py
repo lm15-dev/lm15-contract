@@ -25,11 +25,11 @@ HAND_AUTHORED = {
 
 
 def stamp_file(path: Path, block: dict) -> bool:
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     if "provenance" in data:
         return False
     data["provenance"] = block
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return True
 
 
@@ -41,14 +41,14 @@ def main() -> None:
         stamped += stamp_file(path, HAND_AUTHORED)
 
     serde_path = ROOT / "serde" / "canonical.json"
-    data = json.loads(serde_path.read_text())
+    data = json.loads(serde_path.read_text(encoding="utf-8"))
     changed = False
     for case in data.get("cases", []):
         if isinstance(case, dict) and "provenance" not in case:
             case["provenance"] = MIGRATED
             changed = True
     if changed:
-        serde_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+        serde_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"stamped {stamped} files; serde {'updated' if changed else 'unchanged'}")
 
 

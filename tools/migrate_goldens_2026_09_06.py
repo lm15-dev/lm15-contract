@@ -279,11 +279,11 @@ def annotate(final: dict, summary: Summary) -> None:
 # ─── Main ────────────────────────────────────────────────────────────
 
 def _load(path: Path) -> dict:
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _dump(path: Path, value: dict) -> None:
-    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:

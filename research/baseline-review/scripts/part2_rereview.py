@@ -25,11 +25,11 @@ ANTH_FINISH = {"end_turn": "stop", "tool_use": "tool_call", "max_tokens": "lengt
 
 
 def load(p):
-    return json.loads(Path(p).read_text())
+    return json.loads(Path(p).read_text(encoding="utf-8"))
 
 
 def git_show(rel):
-    r = subprocess.run(["git", "-C", str(ROOT), "show", f"{OLD}:{rel}"], capture_output=True, text=True)
+    r = subprocess.run(["git", "-C", str(ROOT), "show", f"{OLD}:{rel}"], capture_output=True, text=True, encoding="utf-8")
     return json.loads(r.stdout) if r.returncode == 0 else None
 
 
@@ -421,7 +421,7 @@ def review_one(gp: Path):
 
     if "canonical_response" in g and case is not None:
         body_path = ROOT / "bodies" / case["id"] / pinned
-        text = body_path.read_text()
+        text = body_path.read_text(encoding="utf-8")
         is_stream = "events" in g
         dialect = DIALECT[provider]
         decision_checks(g, provider, is_stream, findings, notes)
@@ -478,7 +478,7 @@ def review_one(gp: Path):
         # endpoint goldens: models / files / batch / image / speech / live
         kind = "endpoint"
         if stem == "models":
-            body = json.loads((ROOT / "bodies" / case["id"] / pinned).read_text())
+            body = json.loads((ROOT / "bodies" / case["id"] / pinned).read_text(encoding="utf-8"))
             ids = [m["id"] for m in body["data"] if m.get("id")]
             gids = [m["id"] for m in g["models"]] if "models" in g else None
             if gids is None:
@@ -531,7 +531,7 @@ def main():
         for n in r["notes"]:
             print(f"     note: {n[:400]}")
     print(f"\n{n_ok}/88 REVIEWED-OK")
-    json.dump(results, open("/tmp/rereview/part2_results.json", "w"), indent=1, ensure_ascii=False)
+    json.dump(results, open("/tmp/rereview/part2_results.json", "w", encoding="utf-8"), indent=1, ensure_ascii=False)
 
 
 main()
