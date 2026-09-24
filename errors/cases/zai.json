@@ -62,8 +62,8 @@
         }
       },
       "expected": {
-        "class": "InvalidRequestError",
-        "code": "invalid_request",
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
         "provider": "zai",
         "provider_code": "1214",
         "status": 400
@@ -71,7 +71,7 @@
       "provenance": {
         "source": "live-capture",
         "date": "2026-09-03",
-        "evidence": "api.z.ai HTTP 400 verbatim 2026-09-03T01-52-35Z — receipts/2026-09-03-zai/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+        "evidence": "api.z.ai HTTP 400 verbatim 2026-09-03T01-52-35Z — receipts/2026-09-03-zai/probe-error-model-not-found.json; expected reviewed 2026-09-24 under MAP-15 (was InvalidRequestError)"
       }
     },
     {
@@ -95,6 +95,29 @@
         "source": "live-capture",
         "date": "2026-09-03",
         "evidence": "api.z.ai HTTP 400 verbatim 2026-09-03T01-52-15Z — receipts/2026-09-03-zai/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "zai.model_not_found_1211",
+      "provider": "zai",
+      "status": 400,
+      "body": {
+        "error": {
+          "code": "1211",
+          "message": "Unknown Model, please check the model code."
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "zai",
+        "provider_code": "1211",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-24",
+        "evidence": "api.z.ai HTTP 400 verbatim — receipts/2026-09-24-model-not-found/zai.json (the same request answered 1214 on 2026-09-03)"
       }
     }
   ]

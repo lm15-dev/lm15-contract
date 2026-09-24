@@ -14,8 +14,8 @@
     "error": "Model not found: grok-nonexistent"
    },
    "expected": {
-    "class": "InvalidRequestError",
-    "code": "invalid_request",
+    "class": "UnsupportedModelError",
+    "code": "unsupported_model",
     "provider": "xai",
     "provider_code": "invalid-argument",
     "status": 400
@@ -23,7 +23,7 @@
    "provenance": {
     "source": "live-capture",
     "date": "2026-09-01",
-    "evidence": "api.x.ai 2026-09-01 HTTP 400 verbatim \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/chat-error-model.json"
+    "evidence": "api.x.ai 2026-09-01 HTTP 400 verbatim \u2014 lm15-dev/curl-fixtures/xai-2026-09-01/chat-error-model.json; expected reviewed 2026-09-24 under MAP-15 (was InvalidRequestError)"
    }
   },
   {
@@ -45,6 +45,27 @@
     "source": "live-capture",
     "date": "2026-09-01",
     "evidence": "api.x.ai 2026-09-01 HTTP 401 verbatim (keyless probe during the capability scan)"
+   }
+  },
+  {
+   "id": "xai.model_not_found_404",
+   "provider": "xai",
+   "status": 404,
+   "body": {
+    "code": "not-found",
+    "error": "The model grok-nonexistent does not exist or your team REDACTED does not have access to it. If you believe this is a mistake, please contact support and quote your team ID and the model name."
+   },
+   "expected": {
+    "class": "UnsupportedModelError",
+    "code": "unsupported_model",
+    "provider": "xai",
+    "provider_code": "not-found",
+    "status": 404
+   },
+   "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-24",
+    "evidence": "api.x.ai HTTP 404 verbatim, team id redacted \u2014 receipts/2026-09-24-model-not-found/xai.json (xAI's answer changed from 400 invalid-argument since 2026-09-01)"
    }
   }
  ]

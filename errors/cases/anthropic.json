@@ -65,11 +65,12 @@
       "provider": "anthropic",
       "status": 404,
       "body": {
+        "type": "error",
         "error": {
           "type": "not_found_error",
-          "message": "model claude-missing not found"
+          "message": "model: claude-haiku-9"
         },
-        "request_id": "req_model"
+        "request_id": "req_011CfNLjnQpj5D7Ci7pWQHsY"
       },
       "expected": {
         "class": "UnsupportedModelError",
@@ -77,7 +78,12 @@
         "provider": "anthropic",
         "provider_code": "not_found_error",
         "status": 404,
-        "request_id": "req_model"
+        "request_id": "req_011CfNLjnQpj5D7Ci7pWQHsY"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-24",
+        "evidence": "api.anthropic.com HTTP 404 verbatim — receipts/2026-09-24-model-not-found/anthropic.json; replaces a synthetic body ('model claude-missing not found') the provider never sends"
       }
     },
     {

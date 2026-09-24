@@ -1,0 +1,33 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-24",
+    "evidence": "openrouter.ai error envelope captured verbatim 2026-09-24 (unknown model, HTTP 400), user id redacted — receipts/2026-09-24-model-not-found/openrouter.json"
+  },
+  "cases": [
+    {
+      "id": "openrouter.model_not_found",
+      "provider": "openrouter",
+      "status": 400,
+      "body": {
+        "error": {
+          "message": "nonexistent/model is not a valid model ID",
+          "code": 400
+        },
+        "user_id": "user_REDACTED"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "openrouter",
+        "provider_code": "400",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-24",
+        "evidence": "openrouter.ai HTTP 400 verbatim, user id redacted — receipts/2026-09-24-model-not-found/openrouter.json"
+      }
+    }
+  ]
+}

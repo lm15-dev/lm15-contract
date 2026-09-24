@@ -150,7 +150,7 @@ CLASS name, `code` is the ErrorCode literal.
 | `context_length` | `ContextLengthError` | subclass of InvalidRequestError |
 | `timeout` | `TimeoutError` (`RequestTimeoutError` alias) | 408/504; also subclasses the builtin TimeoutError |
 | `server` | `ServerError` | 5xx |
-| `unsupported_model` | `UnsupportedModelError` | subclass of InvalidRequestError |
+| `unsupported_model` | `UnsupportedModelError` | subclass of InvalidRequestError; the provider says the requested model does not exist or is not available to the caller, whatever its status (MAP-15, 2026-09-24; pinned forms in `spec/model-not-found.json`) |
 | `unsupported_feature` | `UnsupportedFeatureError` (and base `CapabilityError`) | local adapter capability |
 | `not_configured` | `NotConfiguredError` (and base `ConfigurationError`) | missing key/config |
 | `unknown_model` | `UnknownModelError` | subclass of ConfigurationError (2026-09-08); the router: the model string routes nowhere — no routable provider prefix, no catalog match, no rule. Local and pre-network: no provider was asked (that is `unsupported_model`). Carries `model` (the string as requested) |

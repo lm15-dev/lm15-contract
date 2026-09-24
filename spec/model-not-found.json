@@ -1,0 +1,71 @@
+{
+  "_doc": [
+    "MAP-15 (docs/mapping-rules.md): the pinned forms of a provider's 'no such model' answer that",
+    "carry no model-specific code and no not-found class. A provider error whose provider_code equals",
+    "`code` and whose message satisfies every text test given (`prefix`: starts with; `contains`:",
+    "includes; `suffix`: ends with, all case-sensitive) is UnsupportedModelError (unsupported_model).",
+    "Checked before the dialect's own code/type table, on every path that turns an HTTP reply into a",
+    "ProviderError. Ports carry this table as data, verbatim. A form is added only with a live receipt,",
+    "`providers` records where a form was observed; matching does not use it (code plus exact text is the test).",
+    "and is never widened beyond the answer it was captured from."
+  ],
+  "forms": [
+    {
+      "providers": [
+        "anthropic",
+        "claude-code"
+      ],
+      "code": "not_found_error",
+      "prefix": "model: ",
+      "evidence": "receipts/2026-09-24-model-not-found/anthropic.json, claude-code.json: HTTP 404 {\"type\":\"not_found_error\",\"message\":\"model: claude-haiku-9\"}"
+    },
+    {
+      "providers": [
+        "deepseek",
+        "deepseek-anthropic"
+      ],
+      "code": "invalid_request_error",
+      "contains": "The supported API model names are ",
+      "evidence": "receipts/2026-09-03-deepseek/probe-error-model-not-found.json, 2026-09-03-deepseek-anthropic/…, 2026-09-24-model-not-found/deepseek.json: HTTP 400 'The supported API model names are …, but you passed deepseek-nonexistent.'"
+    },
+    {
+      "providers": [
+        "zai"
+      ],
+      "code": "1211",
+      "evidence": "receipts/2026-09-24-model-not-found/zai.json: HTTP 400 {\"code\":\"1211\",\"message\":\"Unknown Model, please check the model code.\"}; docs.z.ai error codes: 1211 = Unknown Model"
+    },
+    {
+      "providers": [
+        "zai"
+      ],
+      "code": "1214",
+      "prefix": "modelCode: ",
+      "evidence": "receipts/2026-09-03-zai/probe-error-model-not-found.json: HTTP 400 {\"code\":\"1214\",\"message\":\"modelCode: does not exist\"} (1214 alone is 'Parameter ${field} is invalid': only the model field qualifies)"
+    },
+    {
+      "providers": [
+        "openrouter"
+      ],
+      "code": "400",
+      "suffix": " is not a valid model ID",
+      "evidence": "receipts/2026-09-24-model-not-found/openrouter.json: HTTP 400 {\"error\":{\"message\":\"nonexistent/model is not a valid model ID\",\"code\":400}}"
+    },
+    {
+      "providers": [
+        "xai"
+      ],
+      "code": "invalid-argument",
+      "prefix": "Model not found: ",
+      "evidence": "lm15-dev/curl-fixtures/xai-2026-09-01/chat-error-model.json: HTTP 400 {\"code\":\"invalid-argument\",\"error\":\"Model not found: grok-nonexistent\"} (on 2026-09-24 xAI answered 404 not-found instead, which the not-found rule already maps)"
+    },
+    {
+      "providers": [
+        "bedrock-chat"
+      ],
+      "code": "validation_error",
+      "contains": "The provided model identifier is invalid",
+      "evidence": "receipts/2026-09-03-bedrock-chat/probe-error-model-not-found.json: HTTP 400 'The provided model identifier is invalid.'"
+    }
+  ]
+}

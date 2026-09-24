@@ -889,6 +889,43 @@ Evidence: `receipts/2026-09-17-judgments/`; measurements in
 `lm15-dev/architecture-review/jev-judgments-2026-09-17/`.
 
 
+## MAP-15 — A provider's "no such model" is `unsupported_model`
+
+**Written 2026-09-24 at the maintainer's request** (`changes/2026-09-24-model-not-found.md`); ratification pending.
+
+When a provider answers that the requested model does not exist, or is not
+available to the caller, the error is `UnsupportedModelError`
+(`unsupported_model`), whichever status the provider used (404 or 400). A
+program catches one class for a wrong model name, on every provider; before
+this rule, the same mistake was `UnsupportedModelError` on OpenAI and
+`InvalidRequestError` on Anthropic.
+
+Recognized, first match wins, on every path that turns an HTTP reply into a
+`ProviderError` (complete, stream, and the auxiliary endpoints):
+
+1. **A model-specific code** the dialect already names: `model_not_found`,
+   `model_not_available`, `unsupported_model`, `DeploymentNotFound`.
+2. **A not-found class about a model**: a not-found code or type
+   (`not_found_error`, `resource_not_found_error`, Gemini `NOT_FOUND`, a
+   Chat/Responses HTTP 404) whose message names a model and says it is
+   missing (the dialect's existing marker test).
+3. **A pinned form** from `spec/model-not-found.json`: the error's
+   `provider_code` equals the form's `code`, and its message passes each
+   text test the form gives (`prefix`, `contains`, `suffix`; exact,
+   case-sensitive). Ports carry the table as data, verbatim; matching does
+   not depend on which provider answered.
+
+A form enters the table only with a live receipt, and is never widened
+beyond the answer it was captured from. Rule 2's markers are not extended to
+400 replies: "this model does not support image input" names a model and a
+refusal, and is an `InvalidRequestError`, not a missing model.
+
+Stated trade-off: forms match a provider's wording. A provider that rewords
+its answer falls back to `InvalidRequestError`, the parent class, which is
+still true and less precise, until a new receipt adds the new form. Code
+that catches `InvalidRequestError` sees no change; code that catches
+`UnsupportedModelError` now sees every provider in the table.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -923,3 +960,7 @@ MAP-13 was written on 2026-09-14 after the DSPy gauntlet and a
 first-principles review reranked the two promises; it reversed roughly
 twenty refusals into recorded adaptations
 (`lm15-contract/changes/2026-09-14-adapt-visibly.md`).
+MAP-15 was written on 2026-09-24 when the documentation showed Anthropic's
+unknown model as a different class from OpenAI's; the Anthropic case in the
+corpus had been a synthetic body, not the provider's own words
+(`lm15-contract/changes/2026-09-24-model-not-found.md`).
