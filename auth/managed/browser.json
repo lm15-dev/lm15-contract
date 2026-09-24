@@ -671,5 +671,136 @@
       }
     ]
   },
-  "receipts": []
+  "receipts": [
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.x.ai/oauth2/device/code",
+      "way": "relay",
+      "observed": "HTTP 200; user code shown",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST auth.x.ai/oauth2/token",
+      "way": "relay",
+      "observed": "HTTP 400 authorization_pending, read by the page",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.openai.com/api/accounts/deviceauth/usercode",
+      "way": "direct",
+      "observed": "HTTP 200; user code shown",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST auth.openai.com/api/accounts/deviceauth/token",
+      "way": "direct",
+      "observed": "HTTP 403 (the profile's pending), read by the page",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST github.com/login/device/code",
+      "way": "relay",
+      "observed": "HTTP 200; user code shown (User-Agent GitHubCopilotChat/0.35.0 set by the relay from x-lm15-user-agent)",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST github.com/login/oauth/access_token",
+      "way": "relay",
+      "observed": "HTTP 200 authorization_pending, read by the page",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "kimi-code",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.kimi.com/api/oauth/device_authorization",
+      "way": "direct",
+      "observed": "HTTP 200; user code shown",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "kimi-code",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST auth.kimi.com/api/oauth/token",
+      "way": "direct",
+      "observed": "HTTP 400 authorization_pending, read by the page",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "meta",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.meta.com/oidc/device/authorization/",
+      "way": "relay",
+      "observed": "HTTP 200; user code shown",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "meta",
+      "method": "device",
+      "stage": "polling",
+      "request": "POST auth.meta.com/oidc/device/token/",
+      "way": "relay",
+      "observed": "HTTP 400 authorization_pending, read by the page",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "authorization",
+      "request": "navigation only",
+      "way": "-",
+      "observed": "authorization URL and paste prompt shown; nothing sent",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "authorization",
+      "request": "navigation only",
+      "way": "-",
+      "observed": "authorization URL and paste prompt shown; nothing sent",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "authorization",
+      "request": "navigation only",
+      "way": "-",
+      "observed": "authorization URL and page-return prompt shown; nothing sent",
+      "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    }
+  ]
 }
