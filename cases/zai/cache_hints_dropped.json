@@ -1,0 +1,93 @@
+{
+ "id": "zai.cache_hints_dropped",
+ "provider": "zai",
+ "feature": "cache_hints_dropped",
+ "request": {
+  "method": "POST",
+  "url": "https://api.z.ai/api/paas/v4/chat/completions",
+  "headers": {
+   "content-type": "application/json",
+   "authorization": "Bearer $API_KEY"
+  },
+  "body": {
+   "model": "glm-5.3-flash",
+   "messages": [
+    {
+     "role": "user",
+     "content": "Where is the Eiffel Tower? Reply as json."
+    }
+   ],
+   "max_tokens": 300
+  }
+ },
+ "description": "MAP-13 (2026-09-24): Z.AI has no cache affinity key and no in-request cache lifetime; both are DROPPED and recorded (before this case, three SDKs dropped them without a record).",
+ "expect_lm15": {
+  "adaptations": [
+   {
+    "field": "config.cache.key",
+    "action": "dropped",
+    "asked": "station"
+   },
+   {
+    "field": "config.cache.retention",
+    "action": "dropped",
+    "asked": "long"
+   }
+  ]
+ },
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "derived 2026-09-24 from the live capture it copies: the dropped settings never reach the wire, so the pinned body is that capture's; the records are MAP-13 (a setting with no home is dropped and recorded) (zai.response_format_json_schema, receipts/2026-09-03-zai/probe-json-schema.json)"
+ },
+ "canonical_request": {
+  "model": "glm-5.3-flash",
+  "messages": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Where is the Eiffel Tower? Reply as json."
+     }
+    ]
+   }
+  ],
+  "config": {
+   "max_tokens": 300,
+   "cache": {
+    "mode": "auto",
+    "key": "station",
+    "retention": "long"
+   }
+  }
+ },
+ "canonical_request_provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "changes/2026-09-24-adaptation-parity.md"
+ },
+ "ingest": {
+  "lossy": [
+   "adapted"
+  ],
+  "canonical_request": {
+   "model": "glm-5.3-flash",
+   "messages": [
+    {
+     "role": "user",
+     "parts": [
+      {
+       "type": "text",
+       "text": "Where is the Eiffel Tower? Reply as json."
+      }
+     ]
+    }
+   ],
+   "config": {
+    "max_tokens": 300
+   }
+  },
+  "note": "MAP-13: reading the wire back gives the request after the recorded adaptations: no cache settings."
+ }
+}

@@ -1,0 +1,72 @@
+{
+ "id": "openai.stop_client_side",
+ "provider": "openai",
+ "feature": "stop_client_side",
+ "description": "MAP-13: the Responses wire has no stop field; lm15 applies the stop sequence itself (the reply is streamed and cut). The body is unchanged; the record carries asked and applied (2026-09-24: one SDK omitted applied).",
+ "request": {
+  "method": "POST",
+  "url": "https://api.openai.com/v1/responses",
+  "headers": {
+   "Authorization": "Bearer $OPENAI_API_KEY",
+   "Content-Type": "application/json"
+  },
+  "body": {
+   "model": "gpt-4.1-mini",
+   "input": [
+    {
+     "role": "user",
+     "content": [
+      {
+       "type": "input_text",
+       "text": "Say hello."
+      }
+     ]
+    }
+   ],
+   "stream": false
+  }
+ },
+ "expect_lm15": {
+  "adaptations": [
+   {
+    "field": "config.stop",
+    "action": "client_side",
+    "asked": [
+     "END"
+    ],
+    "applied": [
+     "END"
+    ]
+   }
+  ]
+ },
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "derived 2026-09-24 from the live capture it copies: the client-side stop never reaches the wire, so the pinned body is that capture's; the records are MAP-13 (a setting with no home is dropped and recorded) (openai.basic_text)"
+ },
+ "canonical_request": {
+  "model": "gpt-4.1-mini",
+  "messages": [
+   {
+    "role": "user",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Say hello."
+     }
+    ]
+   }
+  ],
+  "config": {
+   "stop": [
+    "END"
+   ]
+  }
+ },
+ "canonical_request_provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-24",
+  "evidence": "changes/2026-09-24-adaptation-parity.md"
+ }
+}
