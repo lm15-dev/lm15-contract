@@ -1027,10 +1027,42 @@
       "provider": "claude-code",
       "method": "browser",
       "stage": "catalog+inference",
-      "request": "api.anthropic.com/v1/models and /v1/messages",
+      "request": "api.anthropic.com/v1/models and /v1/messages from the page",
       "way": "direct",
-      "observed": "not a provider result: lm15-ts refused Anthropic's br-compressed replies (ProtocolError), which the browser had already decoded; fixed by the INV-053 browser amendment (changes/2026-09-24-inv-053-browser-fetch.md); retest pending",
-      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda; 2026-09-24; the lab's log, pasted in the conversation of that date"
+      "observed": "HTTP 401 'CORS requests are not allowed for this Organization because of its settings' (after the INV-053 fix; a real provider refusal)",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab; confirmed the same day from lambda with the saved Claude Code token: GET /v1/models → 200 without Origin, 401 with Origin (token never printed)"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "renewal",
+      "request": "POST platform.claude.com/v1/oauth/token (grant_type=refresh_token)",
+      "way": "relay",
+      "observed": "HTTP 200; renewed",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab; confirmed the same day from lambda with the saved Claude Code token: GET /v1/models → 200 without Origin, 401 with Origin (token never printed)"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "loopback",
+      "stage": "exchange",
+      "request": "POST platform.claude.com/v1/oauth/token with redirect_uri http://localhost:53692/callback; return URL pasted from the failed localhost page",
+      "way": "relay",
+      "observed": "HTTP 200; signed in — the loopback registration also works from a page by manual paste",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab; confirmed the same day from lambda with the saved Claude Code token: GET /v1/models → 200 without Origin, 401 with Origin (token never printed)"
     }
-  ]
+  ],
+  "live_verdicts": {
+    "claude-code.models": {
+      "verdict": "relay",
+      "date": "2026-09-24",
+      "why": "Anthropic refuses a Claude subscription token on any request carrying an Origin header: HTTP 401 authentication_error 'CORS requests are not allowed for this Organization because of its settings', with or without anthropic-dangerous-direct-browser-access. The same token, same request, no Origin: HTTP 200. The preflight and CORS headers allow the page, so the header probe cannot see this. Observed for one subscription account (the message names organization settings); a relay that drops Origin is required."
+    },
+    "claude-code.inference": {
+      "verdict": "relay",
+      "date": "2026-09-24",
+      "why": "Anthropic refuses a Claude subscription token on any request carrying an Origin header: HTTP 401 authentication_error 'CORS requests are not allowed for this Organization because of its settings', with or without anthropic-dangerous-direct-browser-access. The same token, same request, no Origin: HTTP 200. The preflight and CORS headers allow the page, so the header probe cannot see this. Observed for one subscription account (the message names organization settings); a relay that drops Origin is required."
+    }
+  }
 }

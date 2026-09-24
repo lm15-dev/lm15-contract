@@ -241,7 +241,8 @@ def main() -> int:
             "at the given origin would make, with harmless invalid payloads. Its verdict says what the provider's "
             "headers allow (direct = a page may read the reply; relay = the browser would refuse it; unclear = rate "
             "limit, challenge or network error). It is not a receipt. receipts holds what a person observed in a real "
-            "browser page, redacted, one entry per provider, method and stage."),
+            "browser page, redacted, one entry per provider, method and stage. live_verdicts overrides a probe verdict where a real "
+            "page proved otherwise (live behavior outranks headers)."),
         "cors_probe": {
             "date": _dt.date.today().isoformat(),
             "origin": args.origin,
@@ -254,6 +255,7 @@ def main() -> int:
             ],
             "results": results,
         },
+        "live_verdicts": existing.get("live_verdicts", {}),
         "receipts": existing.get("receipts", []),
     }
     text = json.dumps(document, indent=2, ensure_ascii=False) + "\n"
