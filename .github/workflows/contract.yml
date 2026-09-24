@@ -23,7 +23,7 @@ jobs:
         # a sibling (same convention as the python2 vet smoke test); full
         # teeth locally and in any cross-repo checkout.
         run: python3 tools/spec_drift.py
-      - name: Content coverage (MAP-10: every binding pins its tool-result media cell or declares it open)
+      - name: "Content coverage (MAP-10: every binding pins its tool-result media cell or declares it open)"
         run: python3 tools/check_content_coverage.py
       - name: Gateway capture record (schema, example day, blob and redaction invariants)
         run: python3 tools/check_gateway.py

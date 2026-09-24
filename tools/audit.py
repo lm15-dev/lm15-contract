@@ -101,6 +101,8 @@ POLICY_ENUMS: dict[str, str] = {
     "AuthScheme": "AuthScheme", "AUTH_SCHEMES": "AuthScheme",
     "CredentialPolicy": "CredentialPolicy", "CREDENTIAL_POLICIES": "CredentialPolicy",
     "RungKind": "RungKind", "RUNG_KINDS": "RungKind",
+    # A RouterConfig input naming an identity (AUTH-1, amended 2026-09-19); never serialized.
+    "NamedCredential": "NamedCredential", "NAMED_CREDENTIALS": "NamedCredential",
     "AuthStepState": "AuthStepState", "AUTH_STEP_STATES": "AuthStepState",
     "StreamFraming": "StreamFraming", "STREAM_FRAMINGS": "StreamFraming",
     "ModelPlacement": "ModelPlacement", "MODEL_PLACEMENTS": "ModelPlacement",
