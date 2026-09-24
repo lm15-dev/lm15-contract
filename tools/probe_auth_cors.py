@@ -110,6 +110,8 @@ PROBES = [
     ("openrouter.token", "openrouter", "browser", "token", "authorization", "POST",
      "https://openrouter.ai/api/v1/auth/keys", JSON,
      '{"code":"invalid","code_verifier":"invalid","code_challenge_method":"S256"}', {}),
+    ("openrouter.models", "openrouter", None, None, "catalog", "GET", "https://openrouter.ai/api/v1/models/user", None, None,
+     {"Authorization": "Bearer invalid"}),
     ("openrouter.inference", "openrouter", None, None, "inference", "POST",
      "https://openrouter.ai/api/v1/chat/completions", JSON, "{}", {"Authorization": "Bearer invalid"}),
 

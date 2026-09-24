@@ -469,6 +469,30 @@
         "verdict": "direct"
       },
       {
+        "id": "openrouter.models",
+        "provider": "openrouter",
+        "stage": "catalog",
+        "method": "GET",
+        "url": "https://openrouter.ai/api/v1/models/user",
+        "request": "preflighted",
+        "requested_headers": [
+          "authorization"
+        ],
+        "preflight": {
+          "status": 204,
+          "allow_origin": "*",
+          "allow_headers": "Authorization,User-Agent,X-Api-Key,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version,HTTP-Referer,X-Windowai-Title,X-Openrouter-Title,X-Title,X-Openrouter-Categories,X-Openrouter-App-Visibility,X-Session-Id,X-Stainless-Lang,X-Stainless-Package-Version,X-Stainless-OS,X-Stainless-Arch,X-Stainless-Runtime,X-Stainless-Runtime-Version,X-Stainless-Retry-Count,X-Stainless-Timeout,X-Stainless-Helper-Method,Protection-Key,traceparent,tracestate,b3",
+          "passes": true
+        },
+        "actual": {
+          "status": 401,
+          "allow_origin": "*",
+          "content_type": "application/json",
+          "security_challenge": false
+        },
+        "verdict": "direct"
+      },
+      {
         "id": "openrouter.inference",
         "provider": "openrouter",
         "stage": "inference",
