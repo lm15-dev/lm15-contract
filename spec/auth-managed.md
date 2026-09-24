@@ -360,6 +360,23 @@ Resumable attempts (public snapshot, private state, `begin`/`resume`, step
 revisions, exchange ownership across processes, 24-hour terminal retention)
 are reserved (AUTH-18 reserved).
 
+### Provider profiles and identification
+
+Each provider method's client id, endpoints, parameters, registered return URI,
+PKCE/state sizes, device-poll vocabulary and token shape are recorded once in
+[auth/managed/profiles.json](../auth/managed/profiles.json) (2026-09-24). SDKs
+copy those values and test them against that file; no SDK is the source of a
+client id, URL or scope. The file ranks as a wire fact under AUTHORITY.md: live
+provider behavior and provider documentation outrank it.
+
+Auth HTTP identifies the SDK as `User-Agent: lm15/<version>` where the platform
+lets it set that header, and never inherits an HTTP library's default (Claude's
+token endpoint refused Python urllib's default with a bare 403, 2026-09-23). A
+profile may name a provider-required identification instead (Copilot); the SDK
+sends exactly that and never retries a failed exchange under guessed headers. A
+browser page cannot set User-Agent; that is a platform limit recorded in
+[auth/managed/browser.json](../auth/managed/browser.json), not a deviation.
+
 ### Browser and OAuth protections
 
 Use RFC 9700 security guidance, RFC 7636 S256 PKCE for authorization-code flows,
@@ -590,6 +607,10 @@ The per-environment profile table (SSH, GUI, mobile, serverless, relay limits) i
 reserved (AUTH-22 reserved) and promoted one row at a time as each environment
 gets its first receipt.
 
+Browser evidence lives in [auth/managed/browser.json](../auth/managed/browser.json):
+a regenerated CORS probe per endpoint and stage (what the provider's headers
+allow; not a receipt) and the receipts a person recorded from a real page.
+
 ## AUTH-23 — Model selection and `connect()`
 
 ### Model choices are evidence-bearing data
@@ -695,6 +716,18 @@ but cannot invent an error code or expose a raw response.
 | `selection_mismatch` | Request/model/credential override contradicts a bound selection |
 | `credential_rejected` | Selected renewal/session permanently rejected; sign in again |
 
+A failed auth-endpoint exchange (token, renewal, device start, key mint) may
+carry exactly these diagnostics and nothing else from the reply (2026-09-24,
+clarifying AUTH-21): the HTTP `status`; a response-format category (`json`,
+`invalid_json`, `html`, `text_or_binary`, `empty`); `provider_code`, set only
+when the reply's `error` (or `error.code`/`error.type`) is one of the fixed words
+`invalid_request`, `invalid_client`, `invalid_grant`, `unauthorized_client`,
+`unsupported_grant_type`, `invalid_scope`, `access_denied`, `server_error`,
+`temporarily_unavailable`, `authorization_pending`, `slow_down`, `expired_token`;
+and a security-challenge flag, set only when the reply marks one explicitly
+(`cf-mitigated: challenge`). HTML or HTTP 403 alone never establishes a security
+block, and the message says so rather than guessing a cause.
+
 Native cancellation remains idiomatic; normalized conformance outcome is
 `cancelled`, not an AuthError and not retryable. SDK-created cancellation errors
 do not copy arbitrary secret-bearing signal reasons into messages/causes.
@@ -750,9 +783,13 @@ ID and credential revision/expiry. A label, provider name or access-token hash
 alone is not an adequate cache key. Cross-process changes must be observed before
 request dispatch admission; stale caches cannot bypass logout.
 
-The draft envelope schema is [auth-store.schema.json](auth-store.schema.json) with
-examples in [store-vectors.json](../auth/managed/store-vectors.json). It is a
-reserved design artifact, not a frozen storage layout. A layout change must
+The file layout both initial SDKs share is
+[auth/managed/store-layout.md](../auth/managed/store-layout.md): the layout
+lm15-python writes since 2026-09-22, binding on the second implementation and
+promoted to a normative rule after mixed-language race tests pass. The draft
+envelope schema [auth-store.schema.json](auth-store.schema.json), with examples in
+[store-vectors.json](../auth/managed/store-vectors.json), is a reserved design
+artifact for non-file stores, not a frozen storage layout. A layout change must
 preserve the ratified core guarantees and update its structural examples together.
 The full cross-record invariant list, the transaction primitive for
 database/lease stores, and browser cross-tab rules are reserved (AUTH-25

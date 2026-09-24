@@ -54,3 +54,11 @@ Nothing here moves a provider row to "supported" in the support matrix.
 - The reserved store schema and its vectors: re-derive from the Python layout
   and the TypeScript one, then promote or retire.
 - TypeScript implementation (R10).
+
+## Update 2026-09-24
+
+The evidence table above describes 2026-09-22. Level-4 native observations made
+on 2026-09-22/23, the later Python changes (hosted Claude login, the corrected
+Claude client id, auth identification and diagnostics, reservation release on
+interrupt) and the provider profiles now moved into the contract are recorded in
+[2026-09-24-managed-auth-profiles-and-browser-track.md](2026-09-24-managed-auth-profiles-and-browser-track.md).

@@ -169,6 +169,13 @@ Discovery from a remote host must not expand its own trust boundary.
 **Promote when:** the browser relay is extended beyond its current single
 provider (relay track).
 
+**Trigger met 2026-09-24; promotion PROPOSED, awaiting ratification.** The
+playground relay is being extended to managed-login endpoints for the browser
+exploration. The proposed core text, re-read against that implementation, is in
+[changes/2026-09-24-managed-auth-profiles-and-browser-track.md](../changes/2026-09-24-managed-auth-profiles-and-browser-track.md)
+(§ Relay consent, proposed). Until ratified the text below still binds nobody;
+the exploration follows the proposal and labels itself unverified.
+
 Consent to relay is bound to the instance, relay origin and stages of use
 (authorization/renewal, catalog, inference). A changed relay or new stage requires
 fresh consent/configuration. It is never inferred from a generic network failure.
