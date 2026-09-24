@@ -311,7 +311,7 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   a transport `ProtocolError` naming the coding. Requests keep advertising
   `Accept-Encoding: identity` (a compressed SSE body buffers in proxies).
   WHY: a gzip 200 once surfaced as `'utf-8' codec can't decode byte 0x8b`.
-  *Browser Fetch (amended 2026-09-24, pending ratification):* where the
+  *Browser Fetch (amended and ratified 2026-09-24):* where the
   platform forbids setting `Accept-Encoding` (every browser: a forbidden
   request header), it advertises its own codings and decodes what it
   negotiated before the page reads a byte. There a transport accepts `br`
@@ -412,3 +412,6 @@ parity added, D8) — ratified in session ("perfect, implement it all!");
 see changes/2026-09-06-decisions.md and changes/2026-09-06-ratification.md.
 Amended 2026-09-18 (INV-053..055 reply faults) — ratified in session; see
 changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
+Amended 2026-09-24 (INV-053: codings a browser negotiated and decoded) —
+ratified in session; see changes/2026-09-24-inv-053-browser-fetch.md and
+changes/2026-09-24-ratification.md.

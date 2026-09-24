@@ -164,17 +164,15 @@ hostname allow-listing alone is not a complete egress policy. Private gateways
 are explicit application allow rules, never inferred from submitted login text.
 Discovery from a remote host must not expand its own trust boundary.
 
-## AUTH-21 (reserved) — Relay consent
+## AUTH-21 (reserved, promoted 2026-09-24) — Relay consent
 
 **Promote when:** the browser relay is extended beyond its current single
 provider (relay track).
 
-**Trigger met 2026-09-24; promotion PROPOSED, awaiting ratification.** The
-playground relay is being extended to managed-login endpoints for the browser
-exploration. The proposed core text, re-read against that implementation, is in
-[changes/2026-09-24-managed-auth-profiles-and-browser-track.md](../changes/2026-09-24-managed-auth-profiles-and-browser-track.md)
-(§ Relay consent, proposed). Until ratified the text below still binds nobody;
-the exploration follows the proposal and labels itself unverified.
+**Promoted to core 2026-09-24.** The binding text is now
+[auth-managed.md](auth-managed.md) AUTH-21, § Relay consent (record:
+[changes/2026-09-24-ratification.md](../changes/2026-09-24-ratification.md)).
+The paragraph below is the original reserved note, kept for history.
 
 Consent to relay is bound to the instance, relay origin and stages of use
 (authorization/renewal, catalog, inference). A changed relay or new stage requires

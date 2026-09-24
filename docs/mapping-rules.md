@@ -891,7 +891,7 @@ Evidence: `receipts/2026-09-17-judgments/`; measurements in
 
 ## MAP-15 — A provider's "no such model" is `unsupported_model`
 
-**Written 2026-09-24 at the maintainer's request** (`changes/2026-09-24-model-not-found.md`); ratification pending.
+**Written 2026-09-24 at the maintainer's request** (`changes/2026-09-24-model-not-found.md`); ratified 2026-09-24 (`changes/2026-09-24-ratification.md`).
 
 When a provider answers that the requested model does not exist, or is not
 available to the caller, the error is `UnsupportedModelError`

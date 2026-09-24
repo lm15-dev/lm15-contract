@@ -352,7 +352,7 @@ meaning or caching responsibility of application-supplied AUTH-2 callbacks.
 
 AUTH-21 in [auth-managed.md](auth-managed.md) extends this boundary to private
 attempts, device codes, PKCE material, callback/session-sensitive URLs, typed UI,
-auth HTTP diagnostics. Detailed relay consent remains reserved. Private store encoding is not public
+auth HTTP diagnostics, and relay consent (ratified 2026-09-24). Private store encoding is not public
 status serialization. Applications' own trusted secret callbacks are not sandboxed.
 
 Token and key material never appears in: reprs, exception messages,
@@ -471,7 +471,7 @@ AUTH-18 specifies S256 PKCE, state/issuer/redirect binding, device polling,
 loopback-only native callbacks and supported manual returns. Website session
 ownership details are reserved until the web/server track is promoted. Wrong-state error callbacks cannot terminate a legitimate attempt.
 AUTH-19 defines cancellation/commit races; AUTH-20 defines uncertain exchange
-outcomes; AUTH-21 defines secrets. Detailed relay consent remains reserved. No implementation may reduce
+outcomes; AUTH-21 defines secrets and relay consent. No implementation may reduce
 these requirements to a provider-specific happy-path helper.
 
 ## AUTH-10 — Access policy: auth by composition

@@ -584,7 +584,50 @@ at rest. These limitations must be stated. Do not promise keychain security from
 Auth exchanges are never captured as ordinary model traffic: the auth path does
 not inherit body-capture defaults from model-call logging or a gateway.
 
-Relay consent rules are reserved (AUTH-21 reserved).
+### Relay consent (ratified 2026-09-24)
+
+A relay is a server that carries a page's request to a provider because the
+page cannot send it directly (CORS, forbidden headers, a provider's refusal of
+browser origins). Ratified 2026-09-24 from
+[changes/2026-09-24-managed-auth-profiles-and-browser-track.md](../changes/2026-09-24-managed-auth-profiles-and-browser-track.md) §6;
+record: [changes/2026-09-24-ratification.md](../changes/2026-09-24-ratification.md).
+
+1. **Consent is scoped** to (relay origin, provider route, stage). Stages:
+   `auth` (authorization, device start and polling, code exchange, renewal, key
+   mint), `catalog`, `inference`. Consent to one stage never covers another; a
+   changed relay origin needs new consent.
+2. **Consent is a person's explicit act** in the application's UI, given after the
+   UI says, in words: who operates the relay; that it keeps no logs; and what
+   crosses it. For `auth`: authorization codes, PKCE verifiers, device codes,
+   access and refresh tokens, which let the operator act as the user until
+   sign-out or revocation. For `inference`: the access token or key, prompts and
+   replies. For `catalog`: the token.
+3. **No automatic fallback.** An SDK never reroutes through a relay on its own. A
+   direct request that fails the way a CORS refusal looks is reported as a
+   transport failure; the application may then ask for consent.
+4. **Configuration is explicit per stage.** An SDK takes the relay as a
+   per-stage routing choice in its configuration; the auth path and the
+   inference path are configured separately.
+5. **Memory by default.** Consent lasts for the page session unless the person
+   also chooses to remember it on the device; it is revocable, and revoking
+   stops future use without claiming to undo what already crossed.
+6. **The relay** forwards only to allow-listed upstream hosts, only for
+   allow-listed page origins, adds no credential of its own, keeps no logs or
+   state, and is not an open proxy. Origin allow-listing is not authentication
+   of non-browser callers; since the relay only carries the caller's own
+   credentials, that is acceptable and must be stated.
+
+**An encrypted relay** (TLS runs in the page and verifies the provider's
+certificate; the relay copies ciphertext between a WebSocket and the provider's
+port 443) changes two things and nothing else. Rule 2's disclosure says what it
+does see: the page's origin and the person's IP address, the provider host,
+timing and sizes, and none of the content; and that the encrypting code is
+served by the page, so trust moves to whoever serves the page. Rule 6's
+allow-list names hosts, not paths, because the relay cannot read paths. Consent
+is the same explicit, scoped act as for a reading relay (rules 1–5); whether it
+may be lighter was not decided.
+
+Server-side egress/SSRF policy for relays stays reserved (AUTH-20 reserved).
 
 ## AUTH-22 — Platforms: declared capabilities, separate evidence
 

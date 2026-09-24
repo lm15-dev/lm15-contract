@@ -1,7 +1,7 @@
 # 2026-09-24 — A provider's "no such model" is `unsupported_model` (MAP-15)
 
 Status: written at the maintainer's request ("can we correctly fix the model
-not found?"); ratification pending.
+not found?"); ratified 2026-09-24 (changes/2026-09-24-ratification.md).
 
 ## What was wrong
 

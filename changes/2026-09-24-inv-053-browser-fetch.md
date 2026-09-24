@@ -1,6 +1,6 @@
 # 2026-09-24 — INV-053 in a browser: a coding the platform negotiated is already decoded
 
-**Status: amendment PROPOSED, implemented in lm15-ts, awaiting ratification.**
+**Status: amendment RATIFIED 2026-09-24 (changes/2026-09-24-ratification.md); implemented in lm15-ts.**
 
 ## What happened
 

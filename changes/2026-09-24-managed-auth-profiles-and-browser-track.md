@@ -1,7 +1,8 @@
 # 2026-09-24 — Managed auth: provider profiles, the shared store layout, the 09-23 Python changes, and the browser track
 
-**Status: records and clarifications applied; the relay-consent promotion (§6) is
-PROPOSED and awaits ratification. No support-matrix promotion.**
+**Status: records and clarifications applied; the relay-consent promotion (§6)
+was RATIFIED 2026-09-24 and is now core AUTH-21 (changes/2026-09-24-ratification.md).
+§7 items 2 and 3 remain open. No support-matrix promotion.**
 
 ## Why
 
@@ -103,7 +104,7 @@ provider requires it is exactly what the page receipts must establish.
 This table is a hypothesis for the page exploration, not a support claim.
 Receipts from the real page are appended to `browser.json` `receipts`.
 
-## 6. Relay consent — PROPOSED promotion of AUTH-21 (reserved)
+## 6. Relay consent — promotion of AUTH-21 (reserved), RATIFIED 2026-09-24
 
 Trigger met: the playground relay is to forward managed-login and subscription
 traffic, not only TypeSafe. Proposed core text, re-read against that
@@ -149,7 +150,9 @@ for an encrypted relay is part of the ratification question.
 
 ## 7. What needs a decision
 
-1. Ratify §6 (relay consent) as core, amend it, or keep it reserved.
+1. ~~Ratify §6 (relay consent) as core, amend it, or keep it reserved.~~
+   Ratified as core 2026-09-24; the encrypted-relay consent question is
+   answered conservatively (same consent act), see the ratification record.
 2. Confirm the two clarifications (§3 identification, AUTH-24 diagnostics).
    They restate the ratified secrecy boundary in testable form.
 3. Confirm store-layout.md's status: binding on TypeScript, normative after the
