@@ -814,16 +814,6 @@
     },
     {
       "date": "2026-09-24",
-      "provider": "openrouter",
-      "method": "browser",
-      "stage": "authorization",
-      "request": "navigation to openrouter.ai/auth, approval, return",
-      "way": "-",
-      "observed": "approval completed; the return dropped the fragment and the trailing slash (profiles.json openrouter observed_normalization); the exchange was not reached",
-      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443), 2026-09-24; screenshot in the conversation of that date. No relay was involved in these rows."
-    },
-    {
-      "date": "2026-09-24",
       "provider": "openai-codex",
       "method": "browser",
       "stage": "exchange",
@@ -861,6 +851,36 @@
       "way": "direct",
       "observed": "renewed from the page (early, by the lab's Renew now); the next gpt-5.5 call with the renewed token succeeded",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; same session as the 2026-09-24 inference receipt; reported in the conversation of that date (no screenshot of this step)"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "authorization",
+      "request": "navigation to openrouter.ai/auth, approval, return to /playground/index.html?code=…",
+      "way": "-",
+      "observed": "the return reached the waiting tab by itself (return tab → BroadcastChannel); the callback without a trailing slash survives OpenRouter's normalization",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); no relay involved; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "exchange",
+      "request": "POST openrouter.ai/api/v1/auth/keys",
+      "way": "direct",
+      "observed": "HTTP 200; a minted key",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); no relay involved; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "inference",
+      "request": "POST openrouter.ai/api/v1/chat/completions (openai/gpt-4.1-mini, 'Reply with exactly OK.')",
+      "way": "direct",
+      "observed": "answered \"OK\"; 12 input / 2 output tokens",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); no relay involved; 2026-09-24, screenshot in the conversation of that date"
     }
   ]
 }
