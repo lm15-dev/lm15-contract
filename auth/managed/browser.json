@@ -881,6 +881,46 @@
       "way": "direct",
       "observed": "answered \"OK\"; 12 input / 2 output tokens",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); no relay involved; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "catalog",
+      "request": "GET openrouter.ai/api/v1/models",
+      "way": "direct",
+      "observed": "model list returned to the page",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST github.com/login/device/code",
+      "way": "relay",
+      "observed": "HTTP 200; user code shown; the person approved on github.com",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "polling+exchange",
+      "request": "POST github.com/login/oauth/access_token, then GET api.github.com/copilot_internal/v2/token (with the Editor-* headers)",
+      "way": "relay",
+      "observed": "GitHub token, then a Copilot token; signed in",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "inference",
+      "request": "POST <account Copilot host>/chat/completions (gpt-4.1, 'Reply with exactly OK.')",
+      "way": "direct",
+      "observed": "answered \"OK\"; 12 input / 1 output tokens: Copilot inference accepts a page's own User-Agent",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
     }
   ]
 }
