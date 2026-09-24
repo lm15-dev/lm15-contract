@@ -256,6 +256,7 @@ def main() -> int:
             "results": results,
         },
         "live_verdicts": existing.get("live_verdicts", {}),
+        "tunnel_notes": existing.get("tunnel_notes", {}),
         "receipts": existing.get("receipts", []),
     }
     text = json.dumps(document, indent=2, ensure_ascii=False) + "\n"

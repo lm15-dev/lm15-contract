@@ -1081,6 +1081,46 @@
       "way": "relay",
       "observed": "HTTP 200; renewed",
       "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve; relayed rows through website/relay/worker.js run on lambda (relay/serve-local.mjs), which drops Origin; 2026-09-24; the lab's log, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.x.ai/oauth2/device/code",
+      "way": "tunnel",
+      "observed": "HTTP 200 through the encrypted tunnel; user code shown",
+      "evidence": "headless Chromium 152 on lambda, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443 under its own CSP, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls 0.23 + ring on wasm32v1-none, webpki-roots), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; no account signed in, attempts cancelled"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST github.com/login/device/code",
+      "way": "tunnel",
+      "observed": "HTTP 200 through the encrypted tunnel; user code shown",
+      "evidence": "headless Chromium 152 on lambda, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443 under its own CSP, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls 0.23 + ring on wasm32v1-none, webpki-roots), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; no account signed in, attempts cancelled"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "meta",
+      "method": "device",
+      "stage": "authorization",
+      "request": "POST auth.meta.com/oidc/device/authorization/",
+      "way": "tunnel",
+      "observed": "HTTP 200 through the encrypted tunnel; user code shown",
+      "evidence": "headless Chromium 152 on lambda, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443 under its own CSP, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls 0.23 + ring on wasm32v1-none, webpki-roots), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; no account signed in, attempts cancelled"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "catalog",
+      "request": "GET api.anthropic.com/v1/models with a Claude subscription token (lambda's saved Claude Code login, read-only)",
+      "way": "tunnel",
+      "observed": "direct from the page: 401 'CORS requests are not allowed for this Organization'; through the encrypted tunnel: 200, 12 models — the tunnel sends no Origin",
+      "evidence": "headless Chromium 152 on lambda, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443 under its own CSP, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls 0.23 + ring on wasm32v1-none, webpki-roots), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the token was lambda's own saved Claude Code login, never printed"
     }
   ],
   "live_verdicts": {
@@ -1094,5 +1134,9 @@
       "date": "2026-09-24",
       "why": "Anthropic refuses a Claude subscription token on any request carrying an Origin header: HTTP 401 authentication_error 'CORS requests are not allowed for this Organization because of its settings', with or without anthropic-dangerous-direct-browser-access. The same token, same request, no Origin: HTTP 200. The preflight and CORS headers allow the page, so the header probe cannot see this. Observed for one subscription account (the message names organization settings); a relay that drops Origin is required."
     }
+  },
+  "tunnel_notes": {
+    "what_the_tunnel_sees": "page origin and IP, provider host (query and TLS SNI), timing, byte counts; not requests or replies",
+    "cloudflare_worker_limit": "Workers' outbound TCP is refused to Cloudflare IP ranges (developers.cloudflare.com/workers/runtime-apis/tcp-sockets, read 2026-09-24). Hosts on Cloudflare that day: auth.openai.com, chatgpt.com, auth.x.ai, api.x.ai, openrouter.ai, auth.kimi.com, api.kimi.com. Not: platform.claude.com, api.anthropic.com, github.com, api.github.com, api.individual.githubcopilot.com, auth.meta.com, api.meta.ai."
   }
 }

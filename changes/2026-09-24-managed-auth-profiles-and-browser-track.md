@@ -136,6 +136,17 @@ implementation:
 
 Until ratified, the exploration follows this text and says so on screen.
 
+**Addendum (same day): an encrypted relay.** A prototype tunnel carries only
+ciphertext: TLS runs in the page (rustls in WebAssembly) and verifies the
+provider's certificate; the relay copies bytes between a WebSocket and the
+provider's port 443. Rule 2's disclosure then changes: the relay sees the
+page's origin and IP, the provider host, timing and sizes, and nothing of the
+content; the page's own code still does the encryption, so trust moves to
+whoever serves the page. Rule 6 changes too: a tunnel can allow hosts, not
+paths. Receipts and the Cloudflare placement limit are in
+`auth/managed/browser.json` (`tunnel_notes`). Whether consent may be lighter
+for an encrypted relay is part of the ratification question.
+
 ## 7. What needs a decision
 
 1. Ratify §6 (relay consent) as core, amend it, or keep it reserved.
