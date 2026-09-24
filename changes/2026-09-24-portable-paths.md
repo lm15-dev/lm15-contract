@@ -29,3 +29,16 @@ two other characters (found by lm15-python's Windows CI). Every text-mode
 every step with `PYTHONWARNDEFAULTENCODING=1` and `EncodingWarning` as an
 error, so an implicit encoding fails on Linux too. Harness results are
 unchanged for every port.
+
+## Paths on the wire (same day)
+
+INV-009 said a path serializes "as its string", which is `/data/clip.mp4` on
+POSIX but `\data\clip.mp4` on Windows for the same input, so the corpus's
+`file_upload_request.path` vector failed on Windows (lm15-python's first
+Windows CI run). Clarified: the separator on the wire is `/` on every OS.
+Nothing changes on POSIX, and Windows accepts `/` (`C:/Users/...`). This
+is a clarification of the rule's intent (one canonical form per value, INV
+serde determinism), not a new rule; lm15-python implements it
+(`serde._wire_path`). Other ports serialize the string they hold, which is
+already `/`-separated unless a Windows caller passes `\`; the next Windows CI
+run for each port checks it.

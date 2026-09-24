@@ -59,7 +59,9 @@ rationale is the designed reason, ratified, not a guess.
 - **INV-009 — Path coercion.** Path-typed fields (`*Part.path`,
   `FileUploadRequest.path`) accept strings and coerce to `pathlib.Path`;
   empty path strings are rejected. On the wire a path serializes as its
-  string. WHY (design intent, confirmed by maintainer ratification 2026-06-11): ergonomics; empty path is always a bug.
+  string, with `/` as the separator on every OS (a Windows `C:\Users\a.png`
+  is `C:/Users/a.png`; clarified 2026-09-24, see
+  changes/2026-09-24-portable-paths.md). WHY (design intent, confirmed by maintainer ratification 2026-06-11): ergonomics; empty path is always a bug.
 
 ## Media parts
 
