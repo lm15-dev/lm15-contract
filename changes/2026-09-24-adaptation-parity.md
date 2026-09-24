@@ -68,8 +68,9 @@ all 1,881.**
 | Go | 1,881/1,881 | request green | pass |
 | Rust | 1,881/1,881 | request green | three unrelated tests fail before and after |
 | R | 1,881/1,881 | request 369/388, ingest 169/169; the rest are features R lacks (data parts, judgments, TypeSafe, logprobs_complete) | runtime script: records, plan, refuse, silent, client-side stop |
-| Julia | 1,881/1,881 | same as R | runtime script as R; test suite see below |
+| Julia | 1,881/1,881 | same as R | runtime script as R; test suite: only `xai-unusable-login-blocks-env` fails, before and after (managed-auth R3, not ported) |
 
+R is not under version control in the lab checkout; its change stands as edited files.
 R and Julia ran through temporary `harness/shims.json` entries (machine paths),
 not committed. Not done: MAP-14 judgments and data parts in R and Julia, which
 the harness still reports.
