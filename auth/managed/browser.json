@@ -826,11 +826,31 @@
       "date": "2026-09-24",
       "provider": "openai-codex",
       "method": "browser",
-      "stage": "catalog+inference",
-      "request": "chatgpt.com/backend-api/codex via the deployed relay",
+      "stage": "exchange",
+      "request": "POST auth.openai.com/oauth/token",
+      "way": "direct",
+      "observed": "HTTP 200; signed in (second complete page sign-in, same journey as the first)",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs, exposed as https://lambda.tail69222b.ts.net:18787), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "catalog",
+      "request": "GET chatgpt.com/backend-api/codex/models",
       "way": "relay",
-      "observed": "not a provider result: the deployed relay (lm15-relay.mrive052.workers.dev) refused the page origin before forwarding (403 origin, unreadable to the page without CORS); retest through the relay with the new allow-list",
-      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443), 2026-09-24; screenshot in the conversation of that date. No relay was involved in these rows."
+      "observed": "model list returned to the page",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs, exposed as https://lambda.tail69222b.ts.net:18787), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "inference",
+      "request": "POST chatgpt.com/backend-api/codex/responses (gpt-5.5, 'Reply with exactly OK.')",
+      "way": "relay",
+      "observed": "answered \"OK\"; 21 input / 17 output tokens",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443); relayed rows went through website/relay/worker.js run on lambda (relay/serve-local.mjs, exposed as https://lambda.tail69222b.ts.net:18787), not the deployed Cloudflare Worker; 2026-09-24, screenshot in the conversation of that date"
     }
   ]
 }
