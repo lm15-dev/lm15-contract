@@ -311,6 +311,14 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   a transport `ProtocolError` naming the coding. Requests keep advertising
   `Accept-Encoding: identity` (a compressed SSE body buffers in proxies).
   WHY: a gzip 200 once surfaced as `'utf-8' codec can't decode byte 0x8b`.
+  *Browser Fetch (amended 2026-09-24, pending ratification):* where the
+  platform forbids setting `Accept-Encoding` (every browser: a forbidden
+  request header), it advertises its own codings and decodes what it
+  negotiated before the page reads a byte. There a transport accepts `br`
+  and `zstd` and never decodes them again; any other coding is still
+  refused. Detection is a feature test (does the platform's `Request` drop
+  the header?), not a guess from the realm. See
+  changes/2026-09-24-inv-053-browser-fetch.md.
 - **INV-054 — A non-JSON success is a provider fault, not retryable.** A
   `2xx` whose body does not parse as JSON is `ProviderError` (code
   `provider`) carrying the status, content-type, the first 200 bytes and
