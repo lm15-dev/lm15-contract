@@ -44,7 +44,8 @@ def send(tag, url, headers, body):
     with T.stream(TransportRequest("POST", url, headers=list(headers.items()), body=raw_body)) as r:
         raw = r.read()
     ms = int((time.monotonic() - t0) * 1000); ts = time.strftime("%Y-%m-%dT%H-%M-%SZ", time.gmtime())
-    d = RECEIPTS / tag.replace("/", "__"); d.mkdir(exist_ok=True)
+    # ":" in a cell name ("tc:auto") is not allowed in a Windows path: "=" in the folder name.
+    d = RECEIPTS / tag.replace("/", "__").replace(":", "="); d.mkdir(exist_ok=True)
     (d / f"{ts}.txt").write_bytes(raw)
     (d / f"{ts}.request.json").write_text(json.dumps({"url": url, "headers": {k: ("$REDACTED" if k.lower() in SECRET else v) for k, v in headers.items()}, "body": body}, indent=1))
     try: data = json.loads(raw)

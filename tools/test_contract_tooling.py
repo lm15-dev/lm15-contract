@@ -408,3 +408,16 @@ class CompareRaiseTests(unittest.TestCase):
         self.assertEqual(result.status, "fail")
         self.assertEqual(result.diff.to_dict()["path"], "$.error.type")
         self.assertEqual(result.diff.to_dict()["actual"], "UnsupportedModelError")
+
+
+class PortablePathsTest(unittest.TestCase):
+    """tools/check_portable_paths.py: names every OS can store (2026-09-24)."""
+
+    def test_rejects_what_windows_or_case_insensitive_systems_cannot_store(self):
+        import check_portable_paths as c
+        found = c.problems(["r/a__tc:auto/x.txt", "r/CON", "r/aux.txt", "r/z.", "r/z ", "A/b", "a/B"])
+        self.assertEqual(len(found), 6, found)
+
+    def test_accepts_ordinary_names(self):
+        import check_portable_paths as c
+        self.assertEqual(c.problems(["r/a__tc=auto/2026-09-02T13-07-46Z.txt", "cases/xai/x.json", "console.md"]), [])

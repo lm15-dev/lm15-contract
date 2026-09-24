@@ -116,7 +116,7 @@ def probe5_xai_allowlist():
     """MAP-8 rule 1 rests on one call; repeat five times with fresh nonces."""
     key = get_xai_access_token()
     h = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
-    exp = CONTRACT / "research/tool-choice/receipts/xai__grok-4.6__tc:allow-lookup-ask-weather"
+    exp = CONTRACT / "research/tool-choice/receipts/xai__grok-4.6__tc=allow-lookup-ask-weather"
     req_file = sorted(exp.glob("*.request.json"))[0]
     base = json.loads(req_file.read_text())["body"]
     calls = []

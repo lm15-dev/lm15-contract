@@ -14,10 +14,10 @@ that produces a wire request here has mapped a cell the receipts refute.
 
 | Case | Rule | Receipt (`research/tool-choice/receipts/`) |
 |---|---|---|
-| `xai.tool_choice_allowed` | MAP-8 §1: allowlists on xAI | `xai__grok-4.6__tc:allow-lookup-ask-weather/…` — only `lookup` allowed, model called `weather` |
-| `gemini.tool_choice_parallel_false` | MAP-8 §2: no parallel knob | `gemini__gemini-2.5-flash__tc:parallel-false/…` — two calls returned; same on 3.7 |
-| `xai.tool_choice_forced_with_format` | MAP-8 §3: force lost under a schema | `xai__grok-4.6__tc:force+schema/…` — JSON text, no call |
-| `anthropic.response_format_json_object` | MAP-8 §6: no any-JSON mode | `anthropic__claude-sonnet-5__so:json_object/…` — HTTP 400; same on 4.5 |
+| `xai.tool_choice_allowed` | MAP-8 §1: allowlists on xAI | `xai__grok-4.6__tc=allow-lookup-ask-weather/…` — only `lookup` allowed, model called `weather` |
+| `gemini.tool_choice_parallel_false` | MAP-8 §2: no parallel knob | `gemini__gemini-2.5-flash__tc=parallel-false/…` — two calls returned; same on 3.7 |
+| `xai.tool_choice_forced_with_format` | MAP-8 §3: force lost under a schema | `xai__grok-4.6__tc=force+schema/…` — JSON text, no call |
+| `anthropic.response_format_json_object` | MAP-8 §6: no any-JSON mode | `anthropic__claude-sonnet-5__so=json_object/…` — HTTP 400; same on 4.5 |
 
 ## Harness
 
