@@ -1,6 +1,10 @@
 {
   "version": 1,
-  "provenance": {"source": "hand-authored", "date": "2026-09-24", "evidence": "values read from lm15-python@365cbca lm15/login/flows/*.py and lm15/auth.py; native live observations in lm15-python docs/cookbooks/21-managed-login-live.md; changes/2026-09-24-managed-auth-profiles-and-browser-track.md §1, §3, §4"},
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-24",
+    "evidence": "values read from lm15-python@365cbca lm15/login/flows/*.py and lm15/auth.py; native live observations in lm15-python docs/cookbooks/21-managed-login-live.md; changes/2026-09-24-managed-auth-profiles-and-browser-track.md §1, §3, §4"
+  },
   "about": "Provider login profiles for managed authentication (spec/auth-managed.md AUTH-13, AUTH-18, AUTH-26). One entry per provider route an SDK can sign in to, one method per way of signing in. Every value is what lm15-python sends today and, where stated, what was observed live. This file is a wire-fact record under AUTHORITY.md: live provider behavior beats it, provider documentation beats it, and it beats any SDK. An SDK copies these values and a test compares them; an SDK never becomes the source of a client id, URL or scope. Nothing here is a secret: client ids are public registrations of native or CLI apps.",
   "conventions": {
     "placeholders": "<client_id>, <redirect_uri>, <scope>, <state>, <code>, <verifier>, <challenge>, <device_code>, <user_code>, <device_auth_id>, <refresh>, <github_token>, <identity_token>, <domain>, <host>, <callback_url> are filled per attempt. Every other string is sent verbatim.",
@@ -20,29 +24,76 @@
       "methods": {
         "device": {
           "flow": "device_code",
-          "delivery": ["device"],
+          "delivery": [
+            "device"
+          ],
           "subscription": true,
           "availability": "supported",
           "requests": {
-            "device_authorization": {"method": "POST", "url": "https://auth.x.ai/oauth2/device/code", "encoding": "form",
-              "params": {"client_id": "<client_id>", "scope": "openid profile email offline_access grok-cli:access api:access", "referrer": "lm15"}},
-            "device_token": {"method": "POST", "url": "https://auth.x.ai/oauth2/token", "encoding": "form",
-              "params": {"grant_type": "urn:ietf:params:oauth:grant-type:device_code", "client_id": "<client_id>", "device_code": "<device_code>"}},
-            "renewal": {"method": "POST", "url": "https://auth.x.ai/oauth2/token", "encoding": "form",
-              "params": {"grant_type": "refresh_token", "client_id": "<client_id>", "refresh_token": "<refresh>"}}
+            "device_authorization": {
+              "method": "POST",
+              "url": "https://auth.x.ai/oauth2/device/code",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>",
+                "scope": "openid profile email offline_access grok-cli:access api:access",
+                "referrer": "lm15"
+              }
+            },
+            "device_token": {
+              "method": "POST",
+              "url": "https://auth.x.ai/oauth2/token",
+              "encoding": "form",
+              "params": {
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                "client_id": "<client_id>",
+                "device_code": "<device_code>"
+              }
+            },
+            "renewal": {
+              "method": "POST",
+              "url": "https://auth.x.ai/oauth2/token",
+              "encoding": "form",
+              "params": {
+                "grant_type": "refresh_token",
+                "client_id": "<client_id>",
+                "refresh_token": "<refresh>"
+              }
+            }
           },
           "device": {
             "verification": "verification_uri_complete if present, else verification_uri; https only",
             "default_interval_s": 5,
             "default_expires_in_s": 900,
-            "pending": ["authorization_pending"],
-            "slow_down": ["slow_down"],
-            "denied": ["access_denied", "authorization_denied"],
-            "expired": ["expired_token"]
+            "pending": [
+              "authorization_pending"
+            ],
+            "slow_down": [
+              "slow_down"
+            ],
+            "denied": [
+              "access_denied",
+              "authorization_denied"
+            ],
+            "expired": [
+              "expired_token"
+            ]
           },
-          "tokens": {"material": "oauth", "lifetime_when_absent_s": 3600, "refresh_when_absent": "keep the previous refresh token"},
-          "inference": {"route": "xai", "credential": "bearer access"},
-          "evidence": {"native": {"2026-09-01": "device login, renewal, inference (legacy entry point)", "2026-09-22/23": "managed device login, inference, streaming, logout blocking XAI_API_KEY, fresh-process persistence, one early renewal (HTTP 200)"}}
+          "tokens": {
+            "material": "oauth",
+            "lifetime_when_absent_s": 3600,
+            "refresh_when_absent": "keep the previous refresh token"
+          },
+          "inference": {
+            "route": "xai",
+            "credential": "bearer access"
+          },
+          "evidence": {
+            "native": {
+              "2026-09-01": "device login, renewal, inference (legacy entry point)",
+              "2026-09-22/23": "managed device login, inference, streaming, logout blocking XAI_API_KEY, fresh-process persistence, one early renewal (HTTP 200)"
+            }
+          }
         }
       }
     },
@@ -57,54 +108,149 @@
       "methods": {
         "browser": {
           "flow": "authorization_code",
-          "delivery": ["manual"],
+          "delivery": [
+            "manual"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "hosted login, inference, persistence and early renewal observed 2026-09-23; provider permission and billing unverified",
-          "pkce": {"verifier_bytes": 32},
-          "state": {"state_bytes": 32, "encoding": "base64url"},
+          "pkce": {
+            "verifier_bytes": 32
+          },
+          "state": {
+            "state_bytes": 32,
+            "encoding": "base64url"
+          },
           "requests": {
-            "authorize": {"method": "GET", "url": "https://claude.com/cai/oauth/authorize", "encoding": "query",
-              "params": {"code": "true", "client_id": "<client_id>", "response_type": "code", "redirect_uri": "https://platform.claude.com/oauth/code/callback",
-                "scope": "<scope>", "code_challenge": "<challenge>", "code_challenge_method": "S256", "state": "<state>"}},
-            "token": {"method": "POST", "url": "https://platform.claude.com/v1/oauth/token", "encoding": "json",
-              "params": {"grant_type": "authorization_code", "code": "<code>", "redirect_uri": "https://platform.claude.com/oauth/code/callback",
-                "client_id": "<client_id>", "code_verifier": "<verifier>", "state": "<state>"}},
-            "renewal": {"method": "POST", "url": "https://platform.claude.com/v1/oauth/token", "encoding": "json",
-              "params": {"grant_type": "refresh_token", "client_id": "<client_id>", "refresh_token": "<refresh>"}}
+            "authorize": {
+              "method": "GET",
+              "url": "https://claude.com/cai/oauth/authorize",
+              "encoding": "query",
+              "params": {
+                "code": "true",
+                "client_id": "<client_id>",
+                "response_type": "code",
+                "redirect_uri": "https://platform.claude.com/oauth/code/callback",
+                "scope": "<scope>",
+                "code_challenge": "<challenge>",
+                "code_challenge_method": "S256",
+                "state": "<state>"
+              }
+            },
+            "token": {
+              "method": "POST",
+              "url": "https://platform.claude.com/v1/oauth/token",
+              "encoding": "json",
+              "params": {
+                "grant_type": "authorization_code",
+                "code": "<code>",
+                "redirect_uri": "https://platform.claude.com/oauth/code/callback",
+                "client_id": "<client_id>",
+                "code_verifier": "<verifier>",
+                "state": "<state>"
+              }
+            },
+            "renewal": {
+              "method": "POST",
+              "url": "https://platform.claude.com/v1/oauth/token",
+              "encoding": "json",
+              "params": {
+                "grant_type": "refresh_token",
+                "client_id": "<client_id>",
+                "refresh_token": "<refresh>"
+              }
+            }
           },
           "return": {
             "registered_uri": "https://platform.claude.com/oauth/code/callback",
-            "accepted": ["code#state as displayed by Claude's hosted page", "the complete return URL; scheme, host, effective port and path must equal registered_uri"],
+            "accepted": [
+              "code#state as displayed by Claude's hosted page",
+              "the complete return URL; scheme, host, effective port and path must equal registered_uri"
+            ],
             "bare_code": false,
             "no_listener": "the browser may run on another machine"
           },
-          "tokens": {"material": "oauth", "requires_refresh": true},
+          "tokens": {
+            "material": "oauth",
+            "requires_refresh": true
+          },
           "identification": "2026-09-23: the token endpoint answered a bare HTTP 403 to Python urllib's default User-Agent and accepted lm15/<version>",
-          "inference": {"route": "claude-code", "credential": "bearer access", "wire": "spec/auth.md claude-code row"},
-          "evidence": {"native": {"2026-09-23": "hosted login, inference, fresh-process persistence, one early renewal"}}
+          "inference": {
+            "route": "claude-code",
+            "credential": "bearer access",
+            "wire": "spec/auth.md claude-code row"
+          },
+          "evidence": {
+            "native": {
+              "2026-09-23": "hosted login, inference, fresh-process persistence, one early renewal"
+            }
+          }
         },
         "loopback": {
           "flow": "authorization_code",
-          "delivery": ["loopback", "manual"],
+          "delivery": [
+            "loopback",
+            "manual"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "no live lm15 receipt for the local callback flow",
-          "pkce": {"verifier_bytes": 64},
-          "state": {"state_bytes": 32, "encoding": "base64url"},
-          "requests": {
-            "authorize": {"method": "GET", "url": "https://claude.ai/oauth/authorize", "encoding": "query",
-              "params": {"code": "true", "client_id": "<client_id>", "response_type": "code", "redirect_uri": "http://localhost:53692/callback",
-                "scope": "<scope>", "code_challenge": "<challenge>", "code_challenge_method": "S256", "state": "<state>"}},
-            "token": {"method": "POST", "url": "https://platform.claude.com/v1/oauth/token", "encoding": "json",
-              "params": {"grant_type": "authorization_code", "code": "<code>", "redirect_uri": "http://localhost:53692/callback",
-                "client_id": "<client_id>", "code_verifier": "<verifier>", "state": "<state>"}},
-            "renewal": {"same_as": "browser.renewal"}
+          "pkce": {
+            "verifier_bytes": 64
           },
-          "return": {"registered_uri": "http://localhost:53692/callback", "bind": "127.0.0.1:53692", "bare_code": false},
-          "tokens": {"material": "oauth", "requires_refresh": true},
-          "inference": {"route": "claude-code", "credential": "bearer access"},
-          "evidence": {"native": {}}
+          "state": {
+            "state_bytes": 32,
+            "encoding": "base64url"
+          },
+          "requests": {
+            "authorize": {
+              "method": "GET",
+              "url": "https://claude.ai/oauth/authorize",
+              "encoding": "query",
+              "params": {
+                "code": "true",
+                "client_id": "<client_id>",
+                "response_type": "code",
+                "redirect_uri": "http://localhost:53692/callback",
+                "scope": "<scope>",
+                "code_challenge": "<challenge>",
+                "code_challenge_method": "S256",
+                "state": "<state>"
+              }
+            },
+            "token": {
+              "method": "POST",
+              "url": "https://platform.claude.com/v1/oauth/token",
+              "encoding": "json",
+              "params": {
+                "grant_type": "authorization_code",
+                "code": "<code>",
+                "redirect_uri": "http://localhost:53692/callback",
+                "client_id": "<client_id>",
+                "code_verifier": "<verifier>",
+                "state": "<state>"
+              }
+            },
+            "renewal": {
+              "same_as": "browser.renewal"
+            }
+          },
+          "return": {
+            "registered_uri": "http://localhost:53692/callback",
+            "bind": "127.0.0.1:53692",
+            "bare_code": false
+          },
+          "tokens": {
+            "material": "oauth",
+            "requires_refresh": true
+          },
+          "inference": {
+            "route": "claude-code",
+            "credential": "bearer access"
+          },
+          "evidence": {
+            "native": {}
+          }
         }
       }
     },
@@ -119,49 +265,134 @@
       "methods": {
         "browser": {
           "flow": "authorization_code",
-          "delivery": ["loopback", "manual"],
+          "delivery": [
+            "loopback",
+            "manual"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "browser login, inference, persistence and early renewal observed 2026-09-23; provider permission and billing unverified",
-          "pkce": {"verifier_bytes": 64},
-          "state": {"state_bytes": 16, "encoding": "hex"},
+          "pkce": {
+            "verifier_bytes": 64
+          },
+          "state": {
+            "state_bytes": 16,
+            "encoding": "hex"
+          },
           "requests": {
-            "authorize": {"method": "GET", "url": "https://auth.openai.com/oauth/authorize", "encoding": "query",
-              "params": {"response_type": "code", "client_id": "<client_id>", "redirect_uri": "http://localhost:1455/auth/callback", "scope": "<scope>",
-                "code_challenge": "<challenge>", "code_challenge_method": "S256", "state": "<state>",
-                "id_token_add_organizations": "true", "codex_cli_simplified_flow": "true", "originator": "lm15"}},
-            "token": {"method": "POST", "url": "https://auth.openai.com/oauth/token", "encoding": "form",
-              "params": {"grant_type": "authorization_code", "client_id": "<client_id>", "code": "<code>", "code_verifier": "<verifier>",
-                "redirect_uri": "http://localhost:1455/auth/callback"}},
-            "renewal": {"method": "POST", "url": "https://auth.openai.com/oauth/token", "encoding": "form",
-              "params": {"grant_type": "refresh_token", "refresh_token": "<refresh>", "client_id": "<client_id>"}}
+            "authorize": {
+              "method": "GET",
+              "url": "https://auth.openai.com/oauth/authorize",
+              "encoding": "query",
+              "params": {
+                "response_type": "code",
+                "client_id": "<client_id>",
+                "redirect_uri": "http://localhost:1455/auth/callback",
+                "scope": "<scope>",
+                "code_challenge": "<challenge>",
+                "code_challenge_method": "S256",
+                "state": "<state>",
+                "id_token_add_organizations": "true",
+                "codex_cli_simplified_flow": "true",
+                "originator": "lm15"
+              }
+            },
+            "token": {
+              "method": "POST",
+              "url": "https://auth.openai.com/oauth/token",
+              "encoding": "form",
+              "params": {
+                "grant_type": "authorization_code",
+                "client_id": "<client_id>",
+                "code": "<code>",
+                "code_verifier": "<verifier>",
+                "redirect_uri": "http://localhost:1455/auth/callback"
+              }
+            },
+            "renewal": {
+              "method": "POST",
+              "url": "https://auth.openai.com/oauth/token",
+              "encoding": "form",
+              "params": {
+                "grant_type": "refresh_token",
+                "refresh_token": "<refresh>",
+                "client_id": "<client_id>"
+              }
+            }
           },
           "return": {
             "registered_uri": "http://localhost:1455/auth/callback",
             "bind": "127.0.0.1:1455",
-            "accepted": ["the complete return URL (path /auth/callback) carrying code and state"],
+            "accepted": [
+              "the complete return URL (path /auth/callback) carrying code and state"
+            ],
             "bare_code": false,
             "manual_note": "Without a listener the browser shows a failed page at localhost:1455; its address bar holds the return URL to paste."
           },
-          "tokens": {"material": "oauth", "requires_refresh": true, "lifetime_when_absent": "JWT exp", "refresh_when_absent": "keep the previous refresh token (renewal only)", "extra": ["accountId", "id_token"]},
-          "inference": {"route": "openai-codex", "credential": "bearer access", "headers": {"chatgpt-account-id": "<accountId>"}},
-          "evidence": {"native": {"2026-09-23": "browser login, model discovery, inference, fresh-process persistence, one early renewal"}}
+          "tokens": {
+            "material": "oauth",
+            "requires_refresh": true,
+            "lifetime_when_absent": "JWT exp",
+            "refresh_when_absent": "keep the previous refresh token (renewal only)",
+            "extra": [
+              "accountId",
+              "id_token"
+            ]
+          },
+          "inference": {
+            "route": "openai-codex",
+            "credential": "bearer access",
+            "headers": {
+              "chatgpt-account-id": "<accountId>"
+            }
+          },
+          "evidence": {
+            "native": {
+              "2026-09-23": "browser login, model discovery, inference, fresh-process persistence, one early renewal"
+            }
+          }
         },
         "device": {
           "flow": "device_code",
-          "delivery": ["device"],
+          "delivery": [
+            "device"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "device login and inference observed 2026-09-23; provider permission and billing unverified",
           "requests": {
-            "device_authorization": {"method": "POST", "url": "https://auth.openai.com/api/accounts/deviceauth/usercode", "encoding": "json",
-              "params": {"client_id": "<client_id>"}},
-            "device_token": {"method": "POST", "url": "https://auth.openai.com/api/accounts/deviceauth/token", "encoding": "json",
-              "params": {"device_auth_id": "<device_auth_id>", "user_code": "<user_code>"}},
-            "token": {"method": "POST", "url": "https://auth.openai.com/oauth/token", "encoding": "form",
-              "params": {"grant_type": "authorization_code", "client_id": "<client_id>", "code": "<code>", "code_verifier": "<verifier>",
-                "redirect_uri": "https://auth.openai.com/deviceauth/callback"}},
-            "renewal": {"same_as": "browser.renewal"}
+            "device_authorization": {
+              "method": "POST",
+              "url": "https://auth.openai.com/api/accounts/deviceauth/usercode",
+              "encoding": "json",
+              "params": {
+                "client_id": "<client_id>"
+              }
+            },
+            "device_token": {
+              "method": "POST",
+              "url": "https://auth.openai.com/api/accounts/deviceauth/token",
+              "encoding": "json",
+              "params": {
+                "device_auth_id": "<device_auth_id>",
+                "user_code": "<user_code>"
+              }
+            },
+            "token": {
+              "method": "POST",
+              "url": "https://auth.openai.com/oauth/token",
+              "encoding": "form",
+              "params": {
+                "grant_type": "authorization_code",
+                "client_id": "<client_id>",
+                "code": "<code>",
+                "code_verifier": "<verifier>",
+                "redirect_uri": "https://auth.openai.com/deviceauth/callback"
+              }
+            },
+            "renewal": {
+              "same_as": "browser.renewal"
+            }
           },
           "device": {
             "verification": "https://auth.openai.com/codex/device (fixed; not taken from the response)",
@@ -170,13 +401,31 @@
             "expires_in_s": 900,
             "wait_before_first_poll": true,
             "complete": "HTTP 200 with authorization_code and code_verifier, exchanged at token",
-            "pending": ["HTTP 403", "HTTP 404", "error.code deviceauth_authorization_pending"],
-            "slow_down": ["error.code slow_down"],
+            "pending": [
+              "HTTP 403",
+              "HTTP 404",
+              "error.code deviceauth_authorization_pending"
+            ],
+            "slow_down": [
+              "error.code slow_down"
+            ],
             "not_enabled": "HTTP 404 on device_authorization"
           },
-          "tokens": {"same_as": "browser.tokens"},
-          "inference": {"route": "openai-codex", "credential": "bearer access", "headers": {"chatgpt-account-id": "<accountId>"}},
-          "evidence": {"native": {"2026-09-23": "device login and inference with a memory-only connection; persistence and renewal not exercised"}}
+          "tokens": {
+            "same_as": "browser.tokens"
+          },
+          "inference": {
+            "route": "openai-codex",
+            "credential": "bearer access",
+            "headers": {
+              "chatgpt-account-id": "<accountId>"
+            }
+          },
+          "evidence": {
+            "native": {
+              "2026-09-23": "device login and inference with a memory-only connection; persistence and renewal not exercised"
+            }
+          }
         }
       }
     },
@@ -186,42 +435,110 @@
       "route_status": "declared provider (no contract wire receipt); present only with a managed Auth",
       "client_id": "Iv1.b507a08c87ecfe98",
       "reference": "GitHub Copilot Chat's public OAuth app; Pi 0.87.0 oauth/github-copilot.ts",
-      "headers": {"User-Agent": "GitHubCopilotChat/0.35.0", "Editor-Version": "vscode/1.107.0", "Editor-Plugin-Version": "copilot-chat/0.35.0", "Copilot-Integration-Id": "vscode-chat"},
+      "headers": {
+        "User-Agent": "GitHubCopilotChat/0.35.0",
+        "Editor-Version": "vscode/1.107.0",
+        "Editor-Plugin-Version": "copilot-chat/0.35.0",
+        "Copilot-Integration-Id": "vscode-chat"
+      },
       "methods": {
         "device": {
           "flow": "device_code",
-          "delivery": ["device"],
+          "delivery": [
+            "device"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "login, catalog, inference, persistence and early renewal observed 2026-09-23; permission review pending",
-          "fields": [{"id": "enterprise_domain", "type": "text", "required": false, "default": "github.com"}],
+          "fields": [
+            {
+              "id": "enterprise_domain",
+              "type": "text",
+              "required": false,
+              "default": "github.com"
+            }
+          ],
           "requests": {
-            "device_authorization": {"method": "POST", "url": "https://<domain>/login/device/code", "encoding": "form",
-              "params": {"client_id": "<client_id>", "scope": "read:user"}, "headers": {"User-Agent": "GitHubCopilotChat/0.35.0"},
-              "note": "Accept: application/json is required; without it GitHub answers form-urlencoded"},
-            "device_token": {"method": "POST", "url": "https://<domain>/login/oauth/access_token", "encoding": "form",
-              "params": {"client_id": "<client_id>", "device_code": "<device_code>", "grant_type": "urn:ietf:params:oauth:grant-type:device_code"},
-              "headers": {"User-Agent": "GitHubCopilotChat/0.35.0"}},
-            "copilot_token": {"method": "GET", "url": "https://api.<domain>/copilot_internal/v2/token",
-              "headers": {"Authorization": "Bearer <github_token>", "User-Agent": "GitHubCopilotChat/0.35.0", "Editor-Version": "vscode/1.107.0",
-                "Editor-Plugin-Version": "copilot-chat/0.35.0", "Copilot-Integration-Id": "vscode-chat"}},
-            "renewal": {"same_as": "copilot_token", "note": "re-mint with the stored GitHub token"}
+            "device_authorization": {
+              "method": "POST",
+              "url": "https://<domain>/login/device/code",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>",
+                "scope": "read:user"
+              },
+              "headers": {
+                "User-Agent": "GitHubCopilotChat/0.35.0"
+              },
+              "note": "Accept: application/json is required; without it GitHub answers form-urlencoded"
+            },
+            "device_token": {
+              "method": "POST",
+              "url": "https://<domain>/login/oauth/access_token",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>",
+                "device_code": "<device_code>",
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+              },
+              "headers": {
+                "User-Agent": "GitHubCopilotChat/0.35.0"
+              }
+            },
+            "copilot_token": {
+              "method": "GET",
+              "url": "https://api.<domain>/copilot_internal/v2/token",
+              "headers": {
+                "Authorization": "Bearer <github_token>",
+                "User-Agent": "GitHubCopilotChat/0.35.0",
+                "Editor-Version": "vscode/1.107.0",
+                "Editor-Plugin-Version": "copilot-chat/0.35.0",
+                "Copilot-Integration-Id": "vscode-chat"
+              }
+            },
+            "renewal": {
+              "same_as": "copilot_token",
+              "note": "re-mint with the stored GitHub token"
+            }
           },
           "device": {
             "verification": "verification_uri from the response; https",
             "default_interval_s": 5,
             "default_expires_in_s": 900,
-            "pending": ["authorization_pending"],
-            "slow_down": ["slow_down"],
-            "denied": ["access_denied"],
-            "expired": ["expired_token"],
+            "pending": [
+              "authorization_pending"
+            ],
+            "slow_down": [
+              "slow_down"
+            ],
+            "denied": [
+              "access_denied"
+            ],
+            "expired": [
+              "expired_token"
+            ],
             "human_step": "GitHub requires a person to press Authorize; automation must not bypass it"
           },
-          "tokens": {"material": "oauth", "access": "copilot token", "refresh": "the GitHub token", "expires": "expires_at (epoch seconds) × 1000", "renewal": "remint"},
-          "inference": {"route": "github-copilot", "wire": "openai-chat", "credential": "bearer access", "headers": "the four headers above",
-            "base_url": "from the token's proxy-ep=<host> field: proxy. becomes api.; accepted only under .githubcopilot.com (or .<domain> for Enterprise); otherwise https://api.individual.githubcopilot.com (github.com) or https://copilot-api.<domain>"},
+          "tokens": {
+            "material": "oauth",
+            "access": "copilot token",
+            "refresh": "the GitHub token",
+            "expires": "expires_at (epoch seconds) × 1000",
+            "renewal": "remint"
+          },
+          "inference": {
+            "route": "github-copilot",
+            "wire": "openai-chat",
+            "credential": "bearer access",
+            "headers": "the four headers above",
+            "base_url": "from the token's proxy-ep=<host> field: proxy. becomes api.; accepted only under .githubcopilot.com (or .<domain> for Enterprise); otherwise https://api.individual.githubcopilot.com (github.com) or https://copilot-api.<domain>"
+          },
           "not_done": "Copilot model-policy enablement (POST /models/{id}/policy) changes account settings; never part of login (AUTH-17)",
-          "evidence": {"native": {"2026-09-23": "github.com device login, Copilot token, catalog of 59 models, gpt-4.1 inference, fresh-process persistence, one early renewal"}}
+          "evidence": {
+            "native": {
+              "2026-09-23": "github.com device login, Copilot token, catalog of 59 models, gpt-4.1 inference, fresh-process persistence, one early renewal"
+            }
+          }
         }
       }
     },
@@ -233,25 +550,63 @@
       "methods": {
         "browser": {
           "flow": "authorization_code",
-          "delivery": ["loopback", "manual", "page_redirect"],
+          "delivery": [
+            "loopback",
+            "manual",
+            "page_redirect"
+          ],
           "subscription": false,
           "kind_note": "an account journey that mints a user-controlled API key; requests spend OpenRouter credits (AUTH-13.7)",
           "availability": "unverified",
           "availability_reason": "native login, key limit, inference and persistence observed 2026-09-23; broader support review pending",
-          "pkce": {"verifier_bytes": 64},
-          "state": null,
-          "binding": "OpenRouter echoes no state: a one-time random callback path (native) or a one-time random return marker (page) plus PKCE is the evidenced equivalent binding (AUTH-18)",
-          "requests": {
-            "authorize": {"method": "GET", "url": "https://openrouter.ai/auth", "encoding": "query",
-              "params": {"callback_url": "<callback_url>", "code_challenge": "<challenge>", "code_challenge_method": "S256"}},
-            "token": {"method": "POST", "url": "https://openrouter.ai/api/v1/auth/keys", "encoding": "json",
-              "params": {"code": "<code>", "code_verifier": "<verifier>", "code_challenge_method": "S256"}}
+          "pkce": {
+            "verifier_bytes": 64
           },
-          "return": {"native_callback": "http://127.0.0.1:<ephemeral>/oauth/callback/<24 random bytes, base64url>", "bare_code": true,
-            "page_callback": "any https page, or http on localhost; OpenRouter appends ?code="},
-          "tokens": {"material": "api_key", "minted": true, "renewal": "none", "expiry": "never (the user may set one on the approval page)"},
-          "inference": {"route": "openrouter", "credential": "api key"},
-          "evidence": {"native": {"2026-09-23": "key issuance, $1 limit inspection, model discovery, inference, fresh-process reuse"}}
+          "state": null,
+          "binding": "OpenRouter echoes no state. Native: a one-time random callback path plus PKCE. Page: PKCE plus the waiting attempt (the tab holding the verifier); a code injected into the return fails at the exchange. A fragment marker does not work: OpenRouter drops the fragment (observed 2026-09-24, below).",
+          "requests": {
+            "authorize": {
+              "method": "GET",
+              "url": "https://openrouter.ai/auth",
+              "encoding": "query",
+              "params": {
+                "callback_url": "<callback_url>",
+                "code_challenge": "<challenge>",
+                "code_challenge_method": "S256"
+              }
+            },
+            "token": {
+              "method": "POST",
+              "url": "https://openrouter.ai/api/v1/auth/keys",
+              "encoding": "json",
+              "params": {
+                "code": "<code>",
+                "code_verifier": "<verifier>",
+                "code_challenge_method": "S256"
+              }
+            }
+          },
+          "return": {
+            "native_callback": "http://127.0.0.1:<ephemeral>/oauth/callback/<24 random bytes, base64url>",
+            "bare_code": true,
+            "page_callback": "the page's own origin + path (https, or http on localhost)",
+            "observed_normalization": "2026-09-24, from the playground: callback_url https://<host>:10443/playground/#lm15-return=<m> came back as https://<host>:10443/playground?code=<code>: the fragment and the trailing slash were dropped. A page must accept its path with or without the trailing slash and must not rely on a fragment."
+          },
+          "tokens": {
+            "material": "api_key",
+            "minted": true,
+            "renewal": "none",
+            "expiry": "never (the user may set one on the approval page)"
+          },
+          "inference": {
+            "route": "openrouter",
+            "credential": "api key"
+          },
+          "evidence": {
+            "native": {
+              "2026-09-23": "key issuance, $1 limit inspection, model discovery, inference, fresh-process reuse"
+            }
+          }
         }
       }
     },
@@ -265,23 +620,82 @@
       "methods": {
         "device": {
           "flow": "device_code",
-          "delivery": ["device"],
+          "delivery": [
+            "device"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "no live lm15 receipt",
           "requests": {
-            "device_authorization": {"method": "POST", "url": "<host>/api/oauth/device_authorization", "encoding": "form", "params": {"client_id": "<client_id>"}},
-            "device_token": {"method": "POST", "url": "<host>/api/oauth/token", "encoding": "form",
-              "params": {"client_id": "<client_id>", "device_code": "<device_code>", "grant_type": "urn:ietf:params:oauth:grant-type:device_code"}},
-            "renewal": {"method": "POST", "url": "<host>/api/oauth/token", "encoding": "form",
-              "params": {"client_id": "<client_id>", "grant_type": "refresh_token", "refresh_token": "<refresh>"}}
+            "device_authorization": {
+              "method": "POST",
+              "url": "<host>/api/oauth/device_authorization",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>"
+              }
+            },
+            "device_token": {
+              "method": "POST",
+              "url": "<host>/api/oauth/token",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>",
+                "device_code": "<device_code>",
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+              }
+            },
+            "renewal": {
+              "method": "POST",
+              "url": "<host>/api/oauth/token",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>",
+                "grant_type": "refresh_token",
+                "refresh_token": "<refresh>"
+              }
+            }
           },
-          "device": {"verification": "verification_uri_complete if present, else verification_uri", "default_interval_s": 5, "default_expires_in_s": 900,
-            "pending": ["authorization_pending"], "slow_down": ["slow_down"], "denied": ["access_denied"], "expired": ["expired_token"]},
-          "renewal_errors": {"permanent": ["HTTP 401", "HTTP 403", "invalid_grant"], "transient": ["HTTP 429"]},
-          "tokens": {"material": "oauth", "requires_refresh": true},
-          "inference": {"route": "kimi-code", "wire": "anthropic", "credential": "bearer access", "base_url": "https://api.kimi.com/coding"},
-          "evidence": {"native": {}}
+          "device": {
+            "verification": "verification_uri_complete if present, else verification_uri",
+            "default_interval_s": 5,
+            "default_expires_in_s": 900,
+            "pending": [
+              "authorization_pending"
+            ],
+            "slow_down": [
+              "slow_down"
+            ],
+            "denied": [
+              "access_denied"
+            ],
+            "expired": [
+              "expired_token"
+            ]
+          },
+          "renewal_errors": {
+            "permanent": [
+              "HTTP 401",
+              "HTTP 403",
+              "invalid_grant"
+            ],
+            "transient": [
+              "HTTP 429"
+            ]
+          },
+          "tokens": {
+            "material": "oauth",
+            "requires_refresh": true
+          },
+          "inference": {
+            "route": "kimi-code",
+            "wire": "anthropic",
+            "credential": "bearer access",
+            "base_url": "https://api.kimi.com/coding"
+          },
+          "evidence": {
+            "native": {}
+          }
         }
       }
     },
@@ -293,24 +707,78 @@
       "methods": {
         "device": {
           "flow": "device_code",
-          "delivery": ["device"],
+          "delivery": [
+            "device"
+          ],
           "subscription": true,
           "availability": "unverified",
           "availability_reason": "no live lm15 receipt",
           "requests": {
-            "device_authorization": {"method": "POST", "url": "https://auth.meta.com/oidc/device/authorization/", "encoding": "form", "params": {"client_id": "<client_id>"}},
-            "device_token": {"method": "POST", "url": "https://auth.meta.com/oidc/device/token/", "encoding": "form",
-              "params": {"grant_type": "urn:ietf:params:oauth:grant-type:device_code", "device_code": "<device_code>", "client_id": "<client_id>"}},
-            "key_mint": {"method": "POST", "url": "https://api.meta.ai/muse-code/key", "encoding": "json", "params": {},
-              "headers": {"Authorization": "Bearer <identity_token>", "x-api-version": "1.0.0"}},
-            "renewal": {"same_as": "key_mint", "note": "re-mint with the stored identity token; 401/403 is permanent"}
+            "device_authorization": {
+              "method": "POST",
+              "url": "https://auth.meta.com/oidc/device/authorization/",
+              "encoding": "form",
+              "params": {
+                "client_id": "<client_id>"
+              }
+            },
+            "device_token": {
+              "method": "POST",
+              "url": "https://auth.meta.com/oidc/device/token/",
+              "encoding": "form",
+              "params": {
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+                "device_code": "<device_code>",
+                "client_id": "<client_id>"
+              }
+            },
+            "key_mint": {
+              "method": "POST",
+              "url": "https://api.meta.ai/muse-code/key",
+              "encoding": "json",
+              "params": {},
+              "headers": {
+                "Authorization": "Bearer <identity_token>",
+                "x-api-version": "1.0.0"
+              }
+            },
+            "renewal": {
+              "same_as": "key_mint",
+              "note": "re-mint with the stored identity token; 401/403 is permanent"
+            }
           },
-          "device": {"verification": "verification_uri_complete if present, else verification_uri", "default_interval_s": 5, "default_expires_in_s": 900,
-            "pending": ["authorization_pending"], "slow_down": ["slow_down"], "denied": ["access_denied"], "expired": ["expired_token"]},
-          "tokens": {"material": "oauth", "access": "minted Model API key", "refresh": "the identity token", "lifetime_s": 86400, "renewal": "remint",
-            "no_key": "a reply without api_key may carry action_url: setup the person must finish"},
-          "inference": {"route": "meta", "credential": "api key (the minted key)"},
-          "evidence": {"native": {}}
+          "device": {
+            "verification": "verification_uri_complete if present, else verification_uri",
+            "default_interval_s": 5,
+            "default_expires_in_s": 900,
+            "pending": [
+              "authorization_pending"
+            ],
+            "slow_down": [
+              "slow_down"
+            ],
+            "denied": [
+              "access_denied"
+            ],
+            "expired": [
+              "expired_token"
+            ]
+          },
+          "tokens": {
+            "material": "oauth",
+            "access": "minted Model API key",
+            "refresh": "the identity token",
+            "lifetime_s": 86400,
+            "renewal": "remint",
+            "no_key": "a reply without api_key may carry action_url: setup the person must finish"
+          },
+          "inference": {
+            "route": "meta",
+            "credential": "api key (the minted key)"
+          },
+          "evidence": {
+            "native": {}
+          }
         }
       }
     },
@@ -318,8 +786,11 @@
       "label": "Radius",
       "route": null,
       "methods": {
-        "browser": {"flow": "authorization_code", "availability": "unavailable",
-          "availability_reason": "Radius's model protocol is not implemented; login without inference would be a false supported claim (AUTH-26)"}
+        "browser": {
+          "flow": "authorization_code",
+          "availability": "unavailable",
+          "availability_reason": "Radius's model protocol is not implemented; login without inference would be a false supported claim (AUTH-26)"
+        }
       }
     }
   }

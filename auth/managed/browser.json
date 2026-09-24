@@ -801,6 +801,36 @@
       "way": "-",
       "observed": "authorization URL and page-return prompt shown; nothing sent",
       "evidence": "headless Chromium 152.0.7977.82 on lambda, driving the playground sign-in lab (website working tree 2026-09-24, lm15-ts 6c091d4 + the onExchange observer), page origin http://127.0.0.1:4399. Relayed rows went through a local run of website/relay/worker.js (relay/serve-local.mjs), not the deployed Worker; they prove the page and relay mechanics, not Cloudflare's egress. No account was signed in: each attempt was cancelled after one pending poll."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "exchange",
+      "request": "POST auth.openai.com/oauth/token",
+      "way": "direct",
+      "observed": "HTTP 200 and a saved ChatGPT subscription session: a complete sign-in from a web page, with the return URL pasted from the failed localhost:1455 page",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443), 2026-09-24; screenshot in the conversation of that date. No relay was involved in these rows."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openrouter",
+      "method": "browser",
+      "stage": "authorization",
+      "request": "navigation to openrouter.ai/auth, approval, return",
+      "way": "-",
+      "observed": "approval completed; the return dropped the fragment and the trailing slash (profiles.json openrouter observed_normalization); the exchange was not reached",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443), 2026-09-24; screenshot in the conversation of that date. No relay was involved in these rows."
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "browser",
+      "stage": "catalog+inference",
+      "request": "chatgpt.com/backend-api/codex via the deployed relay",
+      "way": "relay",
+      "observed": "not a provider result: the deployed relay (lm15-relay.mrive052.workers.dev) refused the page origin before forwarding (403 origin, unreadable to the page without CORS); retest through the relay with the new allow-list",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab served from lambda over Tailscale Serve (https://lambda.tail69222b.ts.net:10443), 2026-09-24; screenshot in the conversation of that date. No relay was involved in these rows."
     }
   ]
 }
