@@ -57,7 +57,7 @@ CHANGES_DIR = CONTRACT_ROOT / "changes"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
 ROUTER_FILE = CONTRACT_ROOT / "router" / "resolution.json"
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest", "managed")
 
 # Surfaces with their own loader and direction; a case carrying one of these
 # is not a chat-surface wire case (no canonical_request / pinned_body pair).
@@ -2004,6 +2004,12 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_router_direction(shim, case_filter)
     if direction == "ingest":
         return run_ingest_direction(shim, case_filter)
+    if direction == "managed":
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from managed import run_managed_direction
+
+        return run_managed_direction(shim, case_filter, report_factory=DirectionReport, case_result=CaseResult,
+                                     first_difference=first_difference, shim_reply_failure=shim_reply_failure)
     raise ValueError(f"unknown direction: {direction}")
 
 

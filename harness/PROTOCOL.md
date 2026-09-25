@@ -602,3 +602,72 @@ Out: `{"provider": str, "model": str, "source": "prefix"|"catalog"|"rule"}`
   `error.providers` (every candidate, catalog order, deduplicated) on
   `AmbiguousModelError`. Drives `--direction router`
   (`router/resolution.json`).
+
+### managed_run
+In: `{"store_path": str, "home": str, "env": {str: str}, "clock_ms": int,
+"sentinel": str, "http": [<reply>], "ui": [<answer>], "steps": [<step>]}`
+Out: `{"steps": [<outcome>], "events": [<event>], "store": {"document": {...}} | {"raw": str} | null}`
+- (Added 2026-09-25; `changes/2026-09-25-managed-auth-in-every-sdk.md`.)
+  One sandboxed program against the public managed-auth API (AUTH-12–26):
+  a file store at `store_path` (the harness wrote the initial file, or
+  none), the whole environment `env` (set for the run; nothing else is
+  read), a wall clock starting at `clock_ms` and a monotonic clock
+  starting at 0. Every wait a login performs is **not** slept: it advances
+  both clocks and is recorded as `{"sleep_ms": n}`.
+- `http` is the scripted auth server, consumed in order, one reply per
+  auth request whatever its URL: `{"status": n, "json": {...}}`,
+  `{"status": n, "text": str, "content_type": str}`, or
+  `{"network": "timeout"}` (sent, no reply: uncertain) /
+  `{"network": "refused"}` (never reached the provider). When the script
+  is exhausted every further request is refused. Each request is recorded,
+  before its reply, as `{"http": {"method", "url", "content_type",
+  "headers", "body"}}`: `content_type` without parameters (null when
+  none); `headers` lowercased, without accept, accept-encoding,
+  connection, content-length, content-type and host, with a
+  `lm15/<version>` User-Agent written `lm15`; `body` the parsed form
+  (object of strings) or JSON, null when there is none.
+- `ui` answers prompts in order: a string is the answer (an option id for
+  a select); `{"paste": c}` answers `c#<state>`, `{"paste_url": c}`
+  answers `<redirect_uri>?code=c&state=<state>` and
+  `{"paste_wrong_state": c}` answers `c#not-the-state-of-this-attempt`,
+  where state and redirect_uri come from the last authorization URL
+  notified; `{"cancel": true}` or an exhausted script cancels the way the
+  language cancels a prompt. Each prompt is recorded as `{"prompt":
+  {"type", "field_id", "options"?}}` (option ids, selects only) before it
+  is answered; each notice as `{"notice": ...}`: `auth_url` → `{"type",
+  "url"}`, `device_code` → `{"type", "user_code", "verification_url",
+  "expires_in_s", "interval_s"}`, `progress` → `{"type", "stage"}`,
+  `info` → `{"type"}` (prose is not compared).
+- `steps`, each recorded as `{"step": i}` before it runs:
+  `login {provider, method?, answers?, settings?, replace?,
+  allow_unverified?}`, `configure {provider, method, answers?, settings?,
+  replace?}`, `set_api_key {provider, key, replace?}` → a Connection;
+  `status {provider}` → a ConnectionStatus; `connections` → a list;
+  `logout {target}` → `{"provider", "forgot", "routes",
+  "identity_generation"}`; `cancel_login {provider}` → `"cancelled" |
+  "complete" | "none"`; `request_auth {provider, pinned?}` →
+  `{"credential": {"kind": "bearer"|"api_key", "value"} | null,
+  "headers", "base_url", "account_id", "named"}`; `methods {provider}` →
+  `[{"id", "kind", "flow", "availability", "subscription", "delivery",
+  "fields": [{"id", "type", "required", "options"}]}]`; `providers` →
+  sorted ids; `explain {provider, api_keys?}` → the managed doctor
+  (`RouterConfig(auth=…)`, `api_keys` given explicit sentinel values)
+  as `{"configured", "steps": [{"kind", "state"}]}`; `advance {ms}` → null.
+  A field `{"id_of_step": n}` is the connection id step n returned;
+  `{"of_step": n}` is its `[id, identity_generation]` pin.
+- Connection: `{"id", "provider", "instance_id", "kind", "method_id",
+  "routes", "label", "created_at", "identity_generation",
+  "credential_revision", "settings", "account_label"?}`.
+  ConnectionStatus: `{"provider", "presence", "usability", "connection",
+  "expires_at", "logged_out", "verification": {"result", "check"} | null}`.
+- A failed step is `{"ok": false, "error": {...}}`: an
+  AuthOperationError is `{"type", "code", "reason", "stage",
+  "commit_state", "recovery"}`; another lm15 error `{"type", "code"}`; a
+  cancellation `{"type": "cancelled"}` whatever the language calls it.
+  A step never aborts the run.
+- `store` is the file afterwards: parsed when it is JSON, raw otherwise,
+  null when absent.
+- The harness checks secrecy, the PKCE and state relations, then
+  normalizes (random ids, random OAuth values, numbers by value) and
+  compares strictly (`harness/managed.py`). Drives `--direction managed`
+  (`auth/managed/runs/*.json`).

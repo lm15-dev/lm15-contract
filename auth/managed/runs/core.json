@@ -1,0 +1,7318 @@
+{
+ "provenance": {
+  "source": "hand-authored",
+  "date": "2026-09-25",
+  "evidence": "changes/2026-09-25-managed-auth-in-every-sdk.md; spec/auth-managed.md AUTH-12–26; expectations captured from lm15-python and reviewed 2026-09-25"
+ },
+ "_doc": [
+  "Managed-authentication runs for the harness's `managed` direction (harness/managed.py, PROTOCOL.md § managed).",
+  "Each case is one sandboxed program: store file, environment, scripted UI answers, scripted auth-server replies",
+  "(consumed in order; an exhausted script answers every further request with a refused connection), and public",
+  "operations. `expect` holds the normalized outcome: one entry per step, the ordered trace, the store afterwards.",
+  "Secrets carry the marker in `sentinel`; the harness fails any case where it reaches a public outcome, prompt or notice. It is expected in the private channels (auth request bodies and headers, the store, a request_auth credential) — and therefore not the corpus-wide AUTH-5 sentinel, which may never appear in an expectation.",
+  "Expectations were captured from lm15-python and reviewed against AUTH-12–26 before they were pinned; a port that",
+  "disagrees is wrong unless a changes/ entry says the reference was."
+ ],
+ "sentinel": "PRIVATE-MANAGED-TOKEN",
+ "cases": [
+  {
+   "id": "xai-device-login",
+   "about": "AUTH-18 device flow with the provider's interval; saved before return; status, request auth and listing read it back.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "connections"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:30Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "ready",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-1"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       }
+      ]
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003610000,
+       "issued_at": 1790000010000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-device-slow-down",
+   "about": "slow_down adds 5 s and never shortens the interval (RFC 8628 §3.5, AUTH-18).",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "slow_down"
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:50Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 10000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 10000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:50Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003630000,
+       "issued_at": 1790000030000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-device-denied",
+   "about": "A validated denial is login_denied; the reservation is released; nothing is saved.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "access_denied",
+      "error_description": "PRIVATE-MANAGED-TOKEN-provider-text"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_denied",
+       "recovery": "restart_login",
+       "stage": "authorization",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": null,
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "absent",
+       "provider": "xai",
+       "usability": "unknown",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-device-expired-by-provider",
+   "about": "expired_token ends the attempt as login_expired.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "expired_token"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_expired",
+       "recovery": "restart_login",
+       "stage": "polling",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-device-deadline",
+   "about": "The provider's expires_in bounds the attempt; the last wait is cut to the deadline, never past it.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "interval": 5,
+      "expires_in": 12
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_expired",
+       "recovery": "restart_login",
+       "stage": "polling",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 12,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 2000
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-renewal-refresh-token",
+   "about": "AUTH-20: due at min(300 s, lifetime/10) before expiry; renewed under the lock; revision bumps, generation does not.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-2",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-2",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "advance",
+     "ms": 3299000
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "advance",
+     "ms": 2000
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-1"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:30Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "renewal_due",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "2",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T16:08:31Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "ready",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "step": 5
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 6
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "2",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-2",
+       "expires": 1790006911000,
+       "issued_at": 1790003311000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-2",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-renewal-rejected",
+   "about": "A definite rejection drops the material and marks needs_login; the next request is login_required without network.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "status": 401,
+     "json": {
+      "error": "invalid_grant"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "advance",
+     "ms": 3400000
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "committed",
+       "reason": "credential_rejected",
+       "recovery": "restart_login",
+       "stage": "renewal",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "needs_login",
+       "verification": null
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_required",
+       "recovery": "restart_login",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "needs_login"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-renewal-timeout-indeterminate",
+   "about": "AUTH-20.6: a timeout after sending may have consumed a rotating token: indeterminate, marker kept, never retried blind.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "network": "timeout"
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "advance",
+     "ms": 3400000
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "unknown",
+       "reason": "indeterminate",
+       "recovery": "restart_login",
+       "stage": "renewal",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "indeterminate",
+       "verification": null
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "unknown",
+       "reason": "indeterminate",
+       "recovery": "restart_login",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "renewal_in_flight": {
+          "revision": "1",
+          "started_at": "2026-09-21T15:10:10Z"
+         },
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "indeterminate"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003610000,
+       "issued_at": 1790000010000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-renewal-server-error-keeps",
+   "about": "A 5xx is known safe: the credential is kept and the next request tries again.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "status": 503,
+     "json": {}
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-2",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-2",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "advance",
+     "ms": 3400000
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "server",
+       "type": "ServerError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:30Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "renewal_due",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "2",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-2",
+       "expires": 1790007010000,
+       "issued_at": 1790003410000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-2",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "xai-renewal-refused-keeps",
+   "about": "A refused connection never reached the provider: the credential is kept.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "network": "refused"
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "advance",
+     "ms": 3400000
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "transport",
+       "type": "TransportError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:30Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "renewal_due",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 3
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003610000,
+       "issued_at": 1790000010000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "legacy-xai-entry-read-only",
+   "about": "An entry without a slot record is generation 1, id legacy-xai; read-only operations never rewrite the file.",
+   "store": {
+    "document": {
+     "xai": {
+      "type": "oauth",
+      "access": "PRIVATE-MANAGED-TOKEN-access-0",
+      "refresh": "PRIVATE-MANAGED-TOKEN-refresh-0",
+      "expires": 1790003000000,
+      "issued_at": 1789999400000,
+      "lifetime_s": 3600.0
+     }
+    }
+   },
+   "steps": [
+    {
+     "do": "connections"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": [
+       {
+        "created_at": "",
+        "credential_revision": "1",
+        "id": "legacy-xai",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xai (existing login)",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "",
+        "credential_revision": "1",
+        "id": "legacy-xai",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xai (existing login)",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:03:20Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "ready",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-0"
+       },
+       "headers": {},
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-0",
+       "expires": 1790003000000,
+       "issued_at": 1789999400000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-0",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "legacy-xai-entry-renewed",
+   "about": "Renewing a legacy entry writes its slot record on that first managed commit.",
+   "store": {
+    "document": {
+     "xai": {
+      "type": "oauth",
+      "access": "PRIVATE-MANAGED-TOKEN-access-0",
+      "refresh": "PRIVATE-MANAGED-TOKEN-refresh-0",
+      "expires": 1790000100000,
+      "issued_at": 1789996500000,
+      "lifetime_s": 3600.0
+     }
+    }
+   },
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-2",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-2",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "",
+        "credential_revision": "2",
+        "id": "legacy-xai",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xai (existing login)",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:20Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "ready",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-0"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "legacy-xai",
+         "created_at": "",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xai (existing login)",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "2",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-2",
+       "expires": 1790003600000,
+       "issued_at": 1790000000000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-2",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "existing-slot-renewal-due",
+   "about": "A saved slot whose credential is due renews on request.",
+   "store": {
+    "document": {
+     "xai": {
+      "type": "oauth",
+      "access": "PRIVATE-MANAGED-TOKEN-access-0",
+      "refresh": "PRIVATE-MANAGED-TOKEN-refresh-0",
+      "expires": 1790000100000,
+      "issued_at": 1789996500000,
+      "lifetime_s": 3600.0
+     },
+     "_lm15": {
+      "version": 1,
+      "slots": {
+       "xai": {
+        "generation": "1",
+        "connection_id": "cn_existingconn0001",
+        "revision": "1",
+        "kind": "account",
+        "method_id": "device",
+        "instance_id": "public",
+        "label": "xAI subscription",
+        "created_at": "2026-09-20T12:00:00Z",
+        "routes": [
+         "xai"
+        ],
+        "settings": {},
+        "state": "ready",
+        "renewal": "refresh_token"
+       }
+      }
+     }
+    }
+   },
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-2",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-2",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "xai"
+    },
+    {
+     "do": "connections"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-20T12:00:00Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T14:15:00Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "renewal_due",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "created_at": "2026-09-20T12:00:00Z",
+        "credential_revision": "2",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       }
+      ]
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-0"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-20T12:00:00Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "2",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-2",
+       "expires": 1790003600000,
+       "issued_at": 1790000000000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-2",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "replace-legacy-login",
+   "about": "Replacing names the current id; the new connection is generation 2 and the old id is remembered.",
+   "store": {
+    "document": {
+     "xai": {
+      "type": "oauth",
+      "access": "PRIVATE-MANAGED-TOKEN-access-0",
+      "refresh": "PRIVATE-MANAGED-TOKEN-refresh-0",
+      "expires": 1790003000000,
+      "issued_at": 1789999400000,
+      "lifetime_s": 3600.0
+     }
+    }
+   },
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device",
+     "replace": "legacy-xai"
+    },
+    {
+     "do": "status",
+     "provider": "xai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "connection_exists",
+       "recovery": "select_connection",
+       "stage": "reservation",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "2",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:30Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "2",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "xAI subscription",
+        "method_id": "device",
+        "provider": "xai",
+        "routes": [
+         "xai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:30Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "xai",
+       "usability": "ready",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "2",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "previous_ids": [
+          "legacy-xai"
+         ],
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003610000,
+       "issued_at": 1790000010000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "occupied-slot",
+   "about": "An occupied slot is connection_exists; a stale replace id is connection_changed; neither contacts anything.",
+   "steps": [
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-1"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-2"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-2",
+     "replace": "cn_notthecurrentid0"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-2",
+     "replace": {
+      "id_of_step": 0
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "connection_exists",
+       "recovery": "select_connection",
+       "stage": "reservation",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "connection_changed",
+       "recovery": "select_connection",
+       "stage": "reservation",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#2",
+       "identity_generation": "2",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-key-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": "cn#2",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "2",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "openai API key",
+         "method_id": "api_key",
+         "previous_ids": [
+          "cn#1"
+         ],
+         "renewal": "none",
+         "revision": "1",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "openai": {
+       "key": "PRIVATE-MANAGED-TOKEN-key-2",
+       "type": "api_key"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "logout-blocks-ambient-key",
+   "about": "R3: logout keeps a marker; the environment key is not used afterwards, across restarts.",
+   "env": {
+    "OPENAI_API_KEY": "PRIVATE-MANAGED-TOKEN-ambient"
+   },
+   "steps": [
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-1"
+    },
+    {
+     "do": "logout",
+     "target": "openai"
+    },
+    {
+     "do": "status",
+     "provider": "openai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai"
+    },
+    {
+     "do": "explain",
+     "provider": "openai"
+    },
+    {
+     "do": "connections"
+    },
+    {
+     "do": "logout",
+     "target": "openai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "forgot": true,
+       "identity_generation": "2",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": null,
+       "expires_at": null,
+       "logged_out": true,
+       "presence": "absent",
+       "provider": "openai",
+       "usability": "unknown",
+       "verification": null
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_required",
+       "recovery": "restart_login",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "configured": false,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "absent"
+        },
+        {
+         "kind": "connection",
+         "state": "absent"
+        },
+        {
+         "kind": "env:OPENAI_API_KEY",
+         "state": "shadowed"
+        }
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": []
+     },
+     {
+      "ok": true,
+      "value": {
+       "forgot": false,
+       "identity_generation": "2",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ]
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "step": 5
+     },
+     {
+      "step": 6
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "2",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "",
+         "logged_out": true,
+         "method_id": "api_key",
+         "previous_ids": [
+          "cn#1"
+         ],
+         "renewal": "none",
+         "revision": "0",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "logout-old-id-is-noop",
+   "about": "AUTH-19: logout by a replaced id never removes the newer connection.",
+   "steps": [
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-1"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-2",
+     "replace": {
+      "id_of_step": 0
+     }
+    },
+    {
+     "do": "logout",
+     "target": {
+      "id_of_step": 0
+     }
+    },
+    {
+     "do": "status",
+     "provider": "openai"
+    },
+    {
+     "do": "logout",
+     "target": {
+      "id_of_step": 1
+     }
+    },
+    {
+     "do": "status",
+     "provider": "openai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#2",
+       "identity_generation": "2",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "forgot": false,
+       "identity_generation": "2",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:20Z",
+        "credential_revision": "1",
+        "id": "cn#2",
+        "identity_generation": "2",
+        "instance_id": "public",
+        "kind": "api_key",
+        "label": "openai API key",
+        "method_id": "api_key",
+        "provider": "openai",
+        "routes": [
+         "openai"
+        ],
+        "settings": {}
+       },
+       "expires_at": "never",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "openai",
+       "usability": "ready",
+       "verification": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "forgot": true,
+       "identity_generation": "3",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": null,
+       "expires_at": null,
+       "logged_out": true,
+       "presence": "absent",
+       "provider": "openai",
+       "usability": "unknown",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "step": 5
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "3",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "",
+         "logged_out": true,
+         "method_id": "api_key",
+         "previous_ids": [
+          "cn#1",
+          "cn#2"
+         ],
+         "renewal": "none",
+         "revision": "0",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "env-recipe",
+   "about": "An env recipe stores the variable's name, never its value; the value is read at request time.",
+   "env": {
+    "GEMINI_API_KEY": "PRIVATE-MANAGED-TOKEN-gemini"
+   },
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "gemini",
+     "method": "env",
+     "answers": {
+      "name": "GEMINI_API_KEY"
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "gemini"
+    },
+    {
+     "do": "status",
+     "provider": "gemini"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "gemini key from $GEMINI_API_KEY",
+       "method_id": "env",
+       "provider": "gemini",
+       "routes": [
+        "gemini"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-gemini"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:20Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "api_key",
+        "label": "gemini key from $GEMINI_API_KEY",
+        "method_id": "env",
+        "provider": "gemini",
+        "routes": [
+         "gemini"
+        ],
+        "settings": {}
+       },
+       "expires_at": "never",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "gemini",
+       "usability": "ready",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "gemini": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "gemini key from $GEMINI_API_KEY",
+         "method_id": "env",
+         "renewal": "recipe",
+         "revision": "1",
+         "routes": [
+          "gemini"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "gemini": {
+       "name": "GEMINI_API_KEY",
+       "type": "env"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "env-recipe-unset",
+   "about": "An env recipe whose variable is unset is login_required at request time, not a fallback.",
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "gemini",
+     "method": "env",
+     "answers": {
+      "name": "GEMINI_API_KEY"
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "gemini"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "gemini key from $GEMINI_API_KEY",
+       "method_id": "env",
+       "provider": "gemini",
+       "routes": [
+        "gemini"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_required",
+       "recovery": "restart_login",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "gemini": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "gemini key from $GEMINI_API_KEY",
+         "method_id": "env",
+         "renewal": "recipe",
+         "revision": "1",
+         "routes": [
+          "gemini"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "gemini": {
+       "name": "GEMINI_API_KEY",
+       "type": "env"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "local-server-recipe",
+   "about": "A keyless local server records its URL.",
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "ollama",
+     "method": "local",
+     "answers": {
+      "base_url": "http://127.0.0.1:11434/v1"
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "ollama"
+    },
+    {
+     "do": "explain",
+     "provider": "ollama"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "local_server",
+       "label": "ollama local server",
+       "method_id": "local",
+       "provider": "ollama",
+       "routes": [
+        "ollama"
+       ],
+       "settings": {
+        "base_url": "http://127.0.0.1:11434/v1"
+       }
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": "http://127.0.0.1:11434/v1",
+       "credential": {
+        "kind": "api_key",
+        "value": "local"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "configured": true,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "absent"
+        },
+        {
+         "kind": "connection",
+         "state": "selected"
+        },
+        {
+         "kind": "placeholder",
+         "state": "shadowed"
+        }
+       ]
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "ollama": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "local_server",
+         "label": "ollama local server",
+         "method_id": "local",
+         "renewal": "none",
+         "revision": "1",
+         "routes": [
+          "ollama"
+         ],
+         "settings": {
+          "base_url": "http://127.0.0.1:11434/v1"
+         },
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "ollama": {
+       "base_url": "http://127.0.0.1:11434/v1",
+       "key": "local",
+       "type": "local"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "cloud-recipe",
+   "about": "A cloud recipe names an identity (AUTH-15); no credential is captured; an unknown name is refused.",
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "bedrock-chat",
+     "method": "cloud",
+     "answers": {
+      "named": "developer"
+     }
+    },
+    {
+     "do": "configure",
+     "provider": "bedrock-chat",
+     "method": "cloud",
+     "answers": {
+      "named": "cli"
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "bedrock-chat"
+    },
+    {
+     "do": "explain",
+     "provider": "bedrock-chat"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_denied",
+       "recovery": "provide_input",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "cloud_identity",
+       "label": "bedrock-chat via cli identity",
+       "method_id": "cloud",
+       "provider": "bedrock-chat",
+       "routes": [
+        "bedrock-chat"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": null,
+       "headers": {},
+       "named": "cli"
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "configured": true,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "absent"
+        },
+        {
+         "kind": "connection",
+         "state": "selected"
+        },
+        {
+         "kind": "env:AWS_BEARER_TOKEN_BEDROCK",
+         "state": "absent"
+        }
+       ]
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "bedrock-chat": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "cloud_identity",
+         "label": "bedrock-chat via cli identity",
+         "method_id": "cloud",
+         "renewal": "recipe",
+         "revision": "1",
+         "routes": [
+          "bedrock-chat"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "bedrock-chat": {
+       "named": "cli",
+       "type": "cloud"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "configure-needs-field",
+   "about": "A recipe with a missing required field is interaction_required before anything is written.",
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "gemini",
+     "method": "env"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "gemini",
+     "key": "  "
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "interaction_required",
+       "recovery": "provide_input",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "interaction_required",
+       "recovery": "provide_input",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": null
+   }
+  },
+  {
+   "id": "store-not-json",
+   "about": "AUTH-25: an unreadable store is storage_unavailable, never empty, never overwritten; login stops before any network.",
+   "store": {
+    "raw": "{not json"
+   },
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "connections"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "storage_unavailable",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "storage_unavailable",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "storage_unavailable",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "raw": "{not json"
+    }
+   }
+  },
+  {
+   "id": "store-unsupported-version",
+   "about": "An unknown store version is unsupported_store_version.",
+   "store": {
+    "document": {
+     "_lm15": {
+      "version": 2,
+      "slots": {}
+     }
+    }
+   },
+   "steps": [
+    {
+     "do": "status",
+     "provider": "xai"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-k"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "unsupported_store_version",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "unsupported_store_version",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {},
+       "version": 2
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "store-duplicate-member",
+   "about": "AUTH-25: duplicate member names are refused before they collapse.",
+   "store": {
+    "raw": "{\"openai\": {\"type\": \"api_key\", \"key\": \"a\"}, \"openai\": {\"type\": \"api_key\", \"key\": \"b\"}}"
+   },
+   "steps": [
+    {
+     "do": "request_auth",
+     "provider": "openai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "storage_unavailable",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     }
+    ],
+    "store": {
+     "document": {
+      "openai": {
+       "key": "b",
+       "type": "api_key"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "store-entry-not-object",
+   "about": "A provider entry that is not an object is storage_unavailable.",
+   "store": {
+    "document": {
+     "openai": "sk-plain"
+    }
+   },
+   "steps": [
+    {
+     "do": "connections"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "storage_unavailable",
+       "recovery": "repair_storage",
+       "stage": "persistence",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     }
+    ],
+    "store": {
+     "document": {
+      "openai": "sk-plain"
+     }
+    }
+   }
+  },
+  {
+   "id": "pinned-selection",
+   "about": "AUTH-20.1/R4: a bound selection follows renewals only; replacement is connection_changed, logout login_required.",
+   "steps": [
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-1"
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai",
+     "pinned": {
+      "of_step": 0
+     }
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-key-2",
+     "replace": {
+      "id_of_step": 0
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai",
+     "pinned": {
+      "of_step": 0
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai",
+     "pinned": {
+      "of_step": 2
+     }
+    },
+    {
+     "do": "logout",
+     "target": "openai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai",
+     "pinned": {
+      "of_step": 2
+     }
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-key-1"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#2",
+       "identity_generation": "2",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "connection_changed",
+       "recovery": "select_connection",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-key-2"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "forgot": true,
+       "identity_generation": "3",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ]
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_required",
+       "recovery": "restart_login",
+       "stage": "resolution",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "step": 5
+     },
+     {
+      "step": 6
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "3",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "",
+         "logged_out": true,
+         "method_id": "api_key",
+         "previous_ids": [
+          "cn#1",
+          "cn#2"
+         ],
+         "renewal": "none",
+         "revision": "0",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "unverified-needs-opt-in",
+   "about": "AUTH-13.5: an unverified method runs only on explicit opt-in; refusal touches nothing.",
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser"
+    },
+    {
+     "do": "login",
+     "provider": "nope-provider"
+    },
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "carrier-pigeon"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "method_unavailable",
+       "recovery": "choose_method",
+       "stage": "discovery",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "method_unavailable",
+       "recovery": "choose_method",
+       "stage": "discovery",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "method_unavailable",
+       "recovery": "choose_method",
+       "stage": "discovery",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": null
+   }
+  },
+  {
+   "id": "claude-hosted-login",
+   "about": "Claude's hosted return page: PKCE S256, independent state, code#state pasted, JSON exchange.",
+   "ui": [
+    {
+     "paste": "PRIVATE-MANAGED-TOKEN-code"
+    }
+   ],
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh",
+      "expires_in": 28800
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser",
+     "allow_unverified": true
+    },
+    {
+     "do": "request_auth",
+     "provider": "claude-code"
+    },
+    {
+     "do": "status",
+     "provider": "claude-code"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "Claude subscription",
+       "method_id": "browser",
+       "provider": "claude-code",
+       "routes": [
+        "claude-code"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "PRIVATE-MANAGED-TOKEN-access"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:20Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "Claude subscription",
+        "method_id": "browser",
+        "provider": "claude-code",
+        "routes": [
+         "claude-code"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T22:13:20Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "claude-code",
+       "usability": "ready",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "notice": {
+       "type": "auth_url",
+       "url": "https://claude.com/cai/oauth/authorize?code=true&client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e&response_type=code&redirect_uri=https%3A%2F%2Fplatform.claude.com%2Foauth%2Fcode%2Fcallback&scope=org%3Acreate_api_key+user%3Aprofile+user%3Ainference+user%3Asessions%3Aclaude_code+user%3Amcp_servers+user%3Afile_upload&code_challenge=%3Crandom%3E&code_challenge_method=S256&state=%3Crandom%3E"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "return",
+       "type": "manual_code"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e",
+        "code": "PRIVATE-MANAGED-TOKEN-code",
+        "code_verifier": "<random>",
+        "grant_type": "authorization_code",
+        "redirect_uri": "https://platform.claude.com/oauth/code/callback",
+        "state": "<random>"
+       },
+       "content_type": "application/json",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://platform.claude.com/v1/oauth/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "claude-code": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "Claude subscription",
+         "method_id": "browser",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "claude-code"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "claude-code": {
+       "access": "PRIVATE-MANAGED-TOKEN-access",
+       "expires": 1790028800000,
+       "issued_at": 1790000000000,
+       "lifetime_s": 28800,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "claude-wrong-state",
+   "about": "A pasted return from another attempt is invalid_login_state; nothing is exchanged or saved.",
+   "ui": [
+    {
+     "paste_wrong_state": "PRIVATE-MANAGED-TOKEN-code"
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser",
+     "allow_unverified": true
+    },
+    {
+     "do": "status",
+     "provider": "claude-code"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "invalid_login_state",
+       "recovery": "provide_input",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": null,
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "absent",
+       "provider": "claude-code",
+       "usability": "unknown",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "notice": {
+       "type": "auth_url",
+       "url": "https://claude.com/cai/oauth/authorize?code=true&client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e&response_type=code&redirect_uri=https%3A%2F%2Fplatform.claude.com%2Foauth%2Fcode%2Fcallback&scope=org%3Acreate_api_key+user%3Aprofile+user%3Ainference+user%3Asessions%3Aclaude_code+user%3Amcp_servers+user%3Afile_upload&code_challenge=%3Crandom%3E&code_challenge_method=S256&state=%3Crandom%3E"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "return",
+       "type": "manual_code"
+      }
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "claude-code": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "claude-bare-code-refused",
+   "about": "Claude's profile does not accept a bare code without its state.",
+   "ui": [
+    "PRIVATE-MANAGED-TOKEN-code"
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser",
+     "allow_unverified": true
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "invalid_login_state",
+       "recovery": "provide_input",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "notice": {
+       "type": "auth_url",
+       "url": "https://claude.com/cai/oauth/authorize?code=true&client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e&response_type=code&redirect_uri=https%3A%2F%2Fplatform.claude.com%2Foauth%2Fcode%2Fcallback&scope=org%3Acreate_api_key+user%3Aprofile+user%3Ainference+user%3Asessions%3Aclaude_code+user%3Amcp_servers+user%3Afile_upload&code_challenge=%3Crandom%3E&code_challenge_method=S256&state=%3Crandom%3E"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "return",
+       "type": "manual_code"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "claude-code": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "claude-exchange-rejected",
+   "about": "A rejected code exchange is login_denied and never retried.",
+   "ui": [
+    {
+     "paste": "PRIVATE-MANAGED-TOKEN-code"
+    }
+   ],
+   "http": [
+    {
+     "status": 400,
+     "json": {
+      "error": "invalid_grant"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser",
+     "allow_unverified": true
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "login_denied",
+       "recovery": "restart_login",
+       "stage": "exchange",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "notice": {
+       "type": "auth_url",
+       "url": "https://claude.com/cai/oauth/authorize?code=true&client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e&response_type=code&redirect_uri=https%3A%2F%2Fplatform.claude.com%2Foauth%2Fcode%2Fcallback&scope=org%3Acreate_api_key+user%3Aprofile+user%3Ainference+user%3Asessions%3Aclaude_code+user%3Amcp_servers+user%3Afile_upload&code_challenge=%3Crandom%3E&code_challenge_method=S256&state=%3Crandom%3E"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "return",
+       "type": "manual_code"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "9d1c250a-e61b-44d9-88ed-5944d1962f5e",
+        "code": "PRIVATE-MANAGED-TOKEN-code",
+        "code_verifier": "<random>",
+        "grant_type": "authorization_code",
+        "redirect_uri": "https://platform.claude.com/oauth/code/callback",
+        "state": "<random>"
+       },
+       "content_type": "application/json",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://platform.claude.com/v1/oauth/token"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "claude-code": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "cancel-at-prompt",
+   "about": "The person cancels at the paste prompt: a native cancellation, the reservation released.",
+   "ui": [
+    {
+     "cancel": true
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "claude-code",
+     "method": "browser",
+     "allow_unverified": true
+    },
+    {
+     "do": "cancel_login",
+     "provider": "claude-code"
+    },
+    {
+     "do": "status",
+     "provider": "claude-code"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "error": {
+       "type": "cancelled"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": "none"
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": null,
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "absent",
+       "provider": "claude-code",
+       "usability": "unknown",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "notice": {
+       "type": "auth_url",
+       "url": "https://claude.com/cai/oauth/authorize?code=true&client_id=9d1c250a-e61b-44d9-88ed-5944d1962f5e&response_type=code&redirect_uri=https%3A%2F%2Fplatform.claude.com%2Foauth%2Fcode%2Fcallback&scope=org%3Acreate_api_key+user%3Aprofile+user%3Ainference+user%3Asessions%3Aclaude_code+user%3Amcp_servers+user%3Afile_upload&code_challenge=%3Crandom%3E&code_challenge_method=S256&state=%3Crandom%3E"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "return",
+       "type": "manual_code"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "claude-code": {
+         "connection_id": null,
+         "created_at": "",
+         "generation": "0",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "",
+         "method_id": "",
+         "renewal": "refresh_token",
+         "revision": "0",
+         "routes": [],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "method-picker",
+   "about": "AUTH-13.6: with more than one selectable method the UI is asked; the answer must be an offered id.",
+   "ui": [
+    "api_key",
+    "PRIVATE-MANAGED-TOKEN-typed-key",
+    "no-such-method"
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "openai"
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai"
+    },
+    {
+     "do": "login",
+     "provider": "gemini"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-typed-key"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "not_committed",
+       "reason": "invalid_login_state",
+       "recovery": "choose_method",
+       "stage": "interaction",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "prompt": {
+       "field_id": "method",
+       "options": [
+        "api_key",
+        "env"
+       ],
+       "type": "select"
+      }
+     },
+     {
+      "prompt": {
+       "field_id": "key",
+       "type": "secret"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "prompt": {
+       "field_id": "method",
+       "options": [
+        "api_key",
+        "env"
+       ],
+       "type": "select"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "openai API key",
+         "method_id": "api_key",
+         "renewal": "none",
+         "revision": "1",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "openai": {
+       "key": "PRIVATE-MANAGED-TOKEN-typed-key",
+       "type": "api_key"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "codex-device-login",
+   "about": "ChatGPT device authorization: user code, polling (403 is pending), then the code+verifier exchange.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_auth_id": "PRIVATE-MANAGED-TOKEN-device-id",
+      "user_code": "CODE-7777",
+      "interval": "5"
+     }
+    },
+    {
+     "status": 403,
+     "json": {
+      "error": {
+       "code": "deviceauth_authorization_pending"
+      }
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "authorization_code": "PRIVATE-MANAGED-TOKEN-authcode",
+      "code_verifier": "PRIVATE-MANAGED-TOKEN-verifier-0123456789012345678901234567890123"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJub25lIn0.eyJleHAiOiAxNzkwODY0MDAwLCAiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjogeyJjaGF0Z3B0X2FjY291bnRfaWQiOiAiYWNjdC0wMTIzIn19.sig~PRIVATE~MANAGED~TOKEN",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh",
+      "expires_in": 864000,
+      "id_token": "PRIVATE-MANAGED-TOKEN-idtoken"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "openai-codex",
+     "method": "device",
+     "allow_unverified": true
+    },
+    {
+     "do": "request_auth",
+     "provider": "openai-codex"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "account_label": "acct-0123",
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "ChatGPT subscription",
+       "method_id": "device",
+       "provider": "openai-codex",
+       "routes": [
+        "openai-codex"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": "acct-0123",
+       "base_url": null,
+       "credential": {
+        "kind": "bearer",
+        "value": "eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJub25lIn0.eyJleHAiOiAxNzkwODY0MDAwLCAiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjogeyJjaGF0Z3B0X2FjY291bnRfaWQiOiAiYWNjdC0wMTIzIn19.sig~PRIVATE~MANAGED~TOKEN"
+       },
+       "headers": {
+        "chatgpt-account-id": "acct-0123"
+       },
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "app_EMoamEEZ73f0CkXaXp7hrann"
+       },
+       "content_type": "application/json",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.openai.com/api/accounts/deviceauth/usercode"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 900,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "CODE-7777",
+       "verification_url": "https://auth.openai.com/codex/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "device_auth_id": "PRIVATE-MANAGED-TOKEN-device-id",
+        "user_code": "CODE-7777"
+       },
+       "content_type": "application/json",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.openai.com/api/accounts/deviceauth/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "device_auth_id": "PRIVATE-MANAGED-TOKEN-device-id",
+        "user_code": "CODE-7777"
+       },
+       "content_type": "application/json",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.openai.com/api/accounts/deviceauth/token"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "app_EMoamEEZ73f0CkXaXp7hrann",
+        "code": "PRIVATE-MANAGED-TOKEN-authcode",
+        "code_verifier": "<random>",
+        "grant_type": "authorization_code",
+        "redirect_uri": "https://auth.openai.com/deviceauth/callback"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.openai.com/oauth/token"
+      }
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai-codex": {
+         "account_label": "acct-0123",
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "ChatGPT subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "openai-codex"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "openai-codex": {
+       "access": "eyJ0eXAiOiAiSldUIiwgImFsZyI6ICJub25lIn0.eyJleHAiOiAxNzkwODY0MDAwLCAiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjogeyJjaGF0Z3B0X2FjY291bnRfaWQiOiAiYWNjdC0wMTIzIn19.sig~PRIVATE~MANAGED~TOKEN",
+       "accountId": "acct-0123",
+       "expires": 1790864010000,
+       "id_token": "PRIVATE-MANAGED-TOKEN-idtoken",
+       "issued_at": 1790000010000,
+       "lifetime_s": 864000,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "copilot-device-login",
+   "about": "GitHub device flow, the Copilot token exchange (the API host comes from the token and is validated), then a re-mint when due.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "GHUB-0001",
+      "verification_uri": "https://github.com/login/device",
+      "interval": 5,
+      "expires_in": 900
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-github-token",
+      "token_type": "bearer"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "token": "tid=1;exp=9;proxy-ep=proxy.business.githubcopilot.com;PRIVATE-MANAGED-TOKEN-copilot",
+      "expires_at": 1790001800
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "token": "tid=2;proxy-ep=proxy.business.githubcopilot.com;PRIVATE-MANAGED-TOKEN-copilot-2",
+      "expires_at": 1790003600
+     }
+    }
+   ],
+   "ui": [
+    ""
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "github-copilot",
+     "method": "device",
+     "allow_unverified": true
+    },
+    {
+     "do": "request_auth",
+     "provider": "github-copilot"
+    },
+    {
+     "do": "advance",
+     "ms": 1700000
+    },
+    {
+     "do": "request_auth",
+     "provider": "github-copilot"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "GitHub Copilot",
+       "method_id": "device",
+       "provider": "github-copilot",
+       "routes": [
+        "github-copilot"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": "https://api.business.githubcopilot.com",
+       "credential": {
+        "kind": "bearer",
+        "value": "tid=1;exp=9;proxy-ep=proxy.business.githubcopilot.com;PRIVATE-MANAGED-TOKEN-copilot"
+       },
+       "headers": {
+        "Copilot-Integration-Id": "vscode-chat",
+        "Editor-Plugin-Version": "copilot-chat/0.35.0",
+        "Editor-Version": "vscode/1.107.0",
+        "User-Agent": "GitHubCopilotChat/0.35.0"
+       },
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": "https://api.business.githubcopilot.com",
+       "credential": {
+        "kind": "bearer",
+        "value": "tid=2;proxy-ep=proxy.business.githubcopilot.com;PRIVATE-MANAGED-TOKEN-copilot-2"
+       },
+       "headers": {
+        "Copilot-Integration-Id": "vscode-chat",
+        "Editor-Plugin-Version": "copilot-chat/0.35.0",
+        "Editor-Version": "vscode/1.107.0",
+        "User-Agent": "GitHubCopilotChat/0.35.0"
+       },
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "prompt": {
+       "field_id": "enterprise_domain",
+       "type": "text"
+      }
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "Iv1.b507a08c87ecfe98",
+        "scope": "read:user"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "POST",
+       "url": "https://github.com/login/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 900,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "GHUB-0001",
+       "verification_url": "https://github.com/login/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "Iv1.b507a08c87ecfe98",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "POST",
+       "url": "https://github.com/login/oauth/access_token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "Iv1.b507a08c87ecfe98",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "POST",
+       "url": "https://github.com/login/oauth/access_token"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": null,
+       "content_type": null,
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-github-token",
+        "copilot-integration-id": "vscode-chat",
+        "editor-plugin-version": "copilot-chat/0.35.0",
+        "editor-version": "vscode/1.107.0",
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "GET",
+       "url": "https://api.github.com/copilot_internal/v2/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "http": {
+       "body": null,
+       "content_type": null,
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-github-token",
+        "copilot-integration-id": "vscode-chat",
+        "editor-plugin-version": "copilot-chat/0.35.0",
+        "editor-version": "vscode/1.107.0",
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "GET",
+       "url": "https://api.github.com/copilot_internal/v2/token"
+      }
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "github-copilot": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "GitHub Copilot",
+         "method_id": "device",
+         "renewal": "remint",
+         "revision": "2",
+         "routes": [
+          "github-copilot"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "github-copilot": {
+       "access": "tid=2;proxy-ep=proxy.business.githubcopilot.com;PRIVATE-MANAGED-TOKEN-copilot-2",
+       "expires": 1790003600000,
+       "issued_at": 1790001710000,
+       "lifetime_s": 1890,
+       "refresh": "PRIVATE-MANAGED-TOKEN-github-token",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "copilot-untrusted-host",
+   "about": "AUTH-20.9: a proxy host outside GitHub's domains is never used as a base URL.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "GHUB-0001",
+      "verification_uri": "https://github.com/login/device",
+      "interval": 5,
+      "expires_in": 900
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-github-token"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "token": "tid=1;proxy-ep=proxy.evil.example;PRIVATE-MANAGED-TOKEN-copilot",
+      "expires_at": 1790001800
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "github-copilot",
+     "method": "device",
+     "allow_unverified": true,
+     "answers": {
+      "enterprise_domain": ""
+     }
+    },
+    {
+     "do": "request_auth",
+     "provider": "github-copilot"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:25Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "GitHub Copilot",
+       "method_id": "device",
+       "provider": "github-copilot",
+       "routes": [
+        "github-copilot"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": "https://api.individual.githubcopilot.com",
+       "credential": {
+        "kind": "bearer",
+        "value": "tid=1;proxy-ep=proxy.evil.example;PRIVATE-MANAGED-TOKEN-copilot"
+       },
+       "headers": {
+        "Copilot-Integration-Id": "vscode-chat",
+        "Editor-Plugin-Version": "copilot-chat/0.35.0",
+        "Editor-Version": "vscode/1.107.0",
+        "User-Agent": "GitHubCopilotChat/0.35.0"
+       },
+       "named": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "Iv1.b507a08c87ecfe98",
+        "scope": "read:user"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "POST",
+       "url": "https://github.com/login/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 900,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "GHUB-0001",
+       "verification_url": "https://github.com/login/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "Iv1.b507a08c87ecfe98",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "POST",
+       "url": "https://github.com/login/oauth/access_token"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": null,
+       "content_type": null,
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-github-token",
+        "copilot-integration-id": "vscode-chat",
+        "editor-plugin-version": "copilot-chat/0.35.0",
+        "editor-version": "vscode/1.107.0",
+        "user-agent": "GitHubCopilotChat/0.35.0"
+       },
+       "method": "GET",
+       "url": "https://api.github.com/copilot_internal/v2/token"
+      }
+     },
+     {
+      "step": 1
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "github-copilot": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:25Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "GitHub Copilot",
+         "method_id": "device",
+         "renewal": "remint",
+         "revision": "1",
+         "routes": [
+          "github-copilot"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "github-copilot": {
+       "access": "tid=1;proxy-ep=proxy.evil.example;PRIVATE-MANAGED-TOKEN-copilot",
+       "expires": 1790001800000,
+       "issued_at": 1790000005000,
+       "lifetime_s": 1795,
+       "refresh": "PRIVATE-MANAGED-TOKEN-github-token",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "kimi-device-login",
+   "about": "Kimi Code device login (JSON replies) and a rate-limited renewal that keeps the credential.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "KIMI-0001",
+      "verification_uri": "https://www.kimi.com/device",
+      "interval": 5,
+      "expires_in": 900
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh",
+      "expires_in": 3600
+     }
+    },
+    {
+     "status": 429,
+     "json": {
+      "error": "rate_limited"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "kimi-code",
+     "method": "device",
+     "allow_unverified": true
+    },
+    {
+     "do": "advance",
+     "ms": 3400000
+    },
+    {
+     "do": "request_auth",
+     "provider": "kimi-code"
+    },
+    {
+     "do": "status",
+     "provider": "kimi-code"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:25Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "Kimi Code subscription",
+       "method_id": "device",
+       "provider": "kimi-code",
+       "routes": [
+        "kimi-code"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "rate_limit",
+       "type": "RateLimitError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:25Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "Kimi Code subscription",
+        "method_id": "device",
+        "provider": "kimi-code",
+        "routes": [
+         "kimi-code"
+        ],
+        "settings": {}
+       },
+       "expires_at": "2026-09-21T15:13:25Z",
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "kimi-code",
+       "usability": "renewal_due",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "17e5f671-d194-4dfb-9706-5516cb48c098"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.kimi.com/api/oauth/device_authorization"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 900,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "KIMI-0001",
+       "verification_url": "https://www.kimi.com/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "17e5f671-d194-4dfb-9706-5516cb48c098",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.kimi.com/api/oauth/token"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "17e5f671-d194-4dfb-9706-5516cb48c098",
+        "grant_type": "refresh_token",
+        "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.kimi.com/api/oauth/token"
+      }
+     },
+     {
+      "step": 3
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "kimi-code": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:25Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "Kimi Code subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "kimi-code"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "kimi-code": {
+       "access": "PRIVATE-MANAGED-TOKEN-access",
+       "expires": 1790003605000,
+       "issued_at": 1790000005000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "meta-device-login",
+   "about": "Meta device login, then a key mint; renewal is a re-mint; a 401 from the mint is permanent.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "META-0001",
+      "verification_uri": "https://www.meta.com/device",
+      "interval": 5,
+      "expires_in": 900
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-identity"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "api_key": "PRIVATE-MANAGED-TOKEN-minted-1"
+     }
+    },
+    {
+     "status": 401,
+     "json": {}
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "meta",
+     "method": "device",
+     "allow_unverified": true
+    },
+    {
+     "do": "request_auth",
+     "provider": "meta"
+    },
+    {
+     "do": "advance",
+     "ms": 86300000
+    },
+    {
+     "do": "request_auth",
+     "provider": "meta"
+    },
+    {
+     "do": "status",
+     "provider": "meta"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:25Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "Meta (Muse subscription)",
+       "method_id": "device",
+       "provider": "meta",
+       "routes": [
+        "meta",
+        "meta-chat",
+        "meta-anthropic"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": null,
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-minted-1"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "committed",
+       "reason": "credential_rejected",
+       "recovery": "restart_login",
+       "stage": "renewal",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "created_at": "2026-09-21T14:13:25Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "Meta (Muse subscription)",
+        "method_id": "device",
+        "provider": "meta",
+        "routes": [
+         "meta",
+         "meta-chat",
+         "meta-anthropic"
+        ],
+        "settings": {}
+       },
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "meta",
+       "usability": "needs_login",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "1031625952748946"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.meta.com/oidc/device/authorization/"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 900,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "META-0001",
+       "verification_url": "https://www.meta.com/device"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "1031625952748946",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.meta.com/oidc/device/token/"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": {},
+       "content_type": "application/json",
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-identity",
+        "user-agent": "lm15",
+        "x-api-version": "1.0.0"
+       },
+       "method": "POST",
+       "url": "https://api.meta.ai/muse-code/key"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "http": {
+       "body": {},
+       "content_type": "application/json",
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-identity",
+        "user-agent": "lm15",
+        "x-api-version": "1.0.0"
+       },
+       "method": "POST",
+       "url": "https://api.meta.ai/muse-code/key"
+      }
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "meta": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:25Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "Meta (Muse subscription)",
+         "method_id": "device",
+         "renewal": "remint",
+         "revision": "1",
+         "routes": [
+          "meta",
+          "meta-chat",
+          "meta-anthropic"
+         ],
+         "settings": {},
+         "state": "needs_login"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "explain-managed",
+   "about": "AUTH-7 under a managed Auth: explicit entry, the saved connection, env keys shown and not consulted.",
+   "env": {
+    "XAI_API_KEY": "PRIVATE-MANAGED-TOKEN-ambient"
+   },
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "WXYZ-1234",
+      "verification_uri": "https://accounts.x.ai/device",
+      "verification_uri_complete": "https://accounts.x.ai/device?code=WXYZ-1234",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 400,
+     "json": {
+      "error": "authorization_pending"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-access-1",
+      "refresh_token": "PRIVATE-MANAGED-TOKEN-refresh-1",
+      "expires_in": 3600,
+      "token_type": "Bearer"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "explain",
+     "provider": "xai"
+    },
+    {
+     "do": "login",
+     "provider": "xai",
+     "method": "device"
+    },
+    {
+     "do": "explain",
+     "provider": "xai"
+    },
+    {
+     "do": "explain",
+     "provider": "xai",
+     "api_keys": [
+      "xai"
+     ]
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "configured": false,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "absent"
+        },
+        {
+         "kind": "connection",
+         "state": "absent"
+        },
+        {
+         "kind": "env:XAI_API_KEY",
+         "state": "shadowed"
+        }
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:30Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "xAI subscription",
+       "method_id": "device",
+       "provider": "xai",
+       "routes": [
+        "xai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "configured": true,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "absent"
+        },
+        {
+         "kind": "connection",
+         "state": "selected"
+        },
+        {
+         "kind": "env:XAI_API_KEY",
+         "state": "shadowed"
+        }
+       ]
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "configured": true,
+       "steps": [
+        {
+         "kind": "api_keys",
+         "state": "selected"
+        },
+        {
+         "kind": "connection",
+         "state": "shadowed"
+        },
+        {
+         "kind": "env:XAI_API_KEY",
+         "state": "shadowed"
+        }
+       ]
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "referrer": "lm15",
+        "scope": "openid profile email offline_access grok-cli:access api:access"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/device/code"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "WXYZ-1234",
+       "verification_url": "https://accounts.x.ai/device?code=WXYZ-1234"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "b1a00492-073a-47ea-816f-4c329264a828",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.x.ai/oauth2/token"
+      }
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "xai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:30Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "xAI subscription",
+         "method_id": "device",
+         "renewal": "refresh_token",
+         "revision": "1",
+         "routes": [
+          "xai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "xai": {
+       "access": "PRIVATE-MANAGED-TOKEN-access-1",
+       "expires": 1790003610000,
+       "issued_at": 1790000010000,
+       "lifetime_s": 3600,
+       "refresh": "PRIVATE-MANAGED-TOKEN-refresh-1",
+       "type": "oauth"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "cancel-login-outcomes",
+   "about": "cancel_login reports none, or complete when a commit already won (undo is logout).",
+   "steps": [
+    {
+     "do": "cancel_login",
+     "provider": "openai"
+    },
+    {
+     "do": "set_api_key",
+     "provider": "openai",
+     "key": "PRIVATE-MANAGED-TOKEN-k"
+    },
+    {
+     "do": "cancel_login",
+     "provider": "openai"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": "none"
+     },
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "api_key",
+       "label": "openai API key",
+       "method_id": "api_key",
+       "provider": "openai",
+       "routes": [
+        "openai"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": "complete"
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "openai": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "api_key",
+         "label": "openai API key",
+         "method_id": "api_key",
+         "renewal": "none",
+         "revision": "1",
+         "routes": [
+          "openai"
+         ],
+         "settings": {},
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "openai": {
+       "key": "PRIVATE-MANAGED-TOKEN-k",
+       "type": "api_key"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "discovery",
+   "about": "AUTH-13: the providers a manager can connect and their methods, from definitions only.",
+   "steps": [
+    {
+     "do": "providers"
+    },
+    {
+     "do": "methods",
+     "provider": "xai"
+    },
+    {
+     "do": "methods",
+     "provider": "claude-code"
+    },
+    {
+     "do": "methods",
+     "provider": "openai-codex"
+    },
+    {
+     "do": "methods",
+     "provider": "github-copilot"
+    },
+    {
+     "do": "methods",
+     "provider": "kimi-code"
+    },
+    {
+     "do": "methods",
+     "provider": "meta"
+    },
+    {
+     "do": "methods",
+     "provider": "openrouter"
+    },
+    {
+     "do": "methods",
+     "provider": "radius"
+    },
+    {
+     "do": "methods",
+     "provider": "openai"
+    },
+    {
+     "do": "methods",
+     "provider": "anthropic"
+    },
+    {
+     "do": "methods",
+     "provider": "gemini"
+    },
+    {
+     "do": "methods",
+     "provider": "ollama"
+    },
+    {
+     "do": "methods",
+     "provider": "bedrock-chat"
+    },
+    {
+     "do": "methods",
+     "provider": "azure"
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": [
+       "anthropic",
+       "aws-anthropic",
+       "azure",
+       "azure-anthropic",
+       "azure-chat",
+       "bedrock-anthropic",
+       "bedrock-chat",
+       "bedrock-mantle-chat",
+       "claude-code",
+       "deepseek",
+       "deepseek-anthropic",
+       "gemini",
+       "github-copilot",
+       "groq",
+       "kimi-code",
+       "meta",
+       "meta-anthropic",
+       "meta-chat",
+       "moonshotai",
+       "moonshotai-anthropic",
+       "moonshotai-responses",
+       "ollama",
+       "openai",
+       "openai-chat",
+       "openai-codex",
+       "openrouter",
+       "radius",
+       "sglang",
+       "typesafe",
+       "vertex",
+       "vertex-anthropic",
+       "vertex-express",
+       "vllm",
+       "xai",
+       "zai"
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [
+         "device"
+        ],
+        "fields": [],
+        "flow": "device_code",
+        "id": "device",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [],
+        "flow": "source_recipe",
+        "id": "external:pi-xai",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "XAI_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "manual"
+        ],
+        "fields": [],
+        "flow": "authorization_code",
+        "id": "browser",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "unverified",
+        "delivery": [
+         "loopback",
+         "manual"
+        ],
+        "fields": [],
+        "flow": "authorization_code",
+        "id": "loopback",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [],
+        "flow": "source_recipe",
+        "id": "external:claude-code-cli",
+        "kind": "account",
+        "subscription": true
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "loopback",
+         "manual"
+        ],
+        "fields": [],
+        "flow": "authorization_code",
+        "id": "browser",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "unverified",
+        "delivery": [
+         "device"
+        ],
+        "fields": [],
+        "flow": "device_code",
+        "id": "device",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [],
+        "flow": "source_recipe",
+        "id": "external:codex-cli",
+        "kind": "account",
+        "subscription": true
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "device"
+        ],
+        "fields": [
+         {
+          "id": "enterprise_domain",
+          "options": [],
+          "required": false,
+          "type": "text"
+         }
+        ],
+        "flow": "device_code",
+        "id": "device",
+        "kind": "account",
+        "subscription": true
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "device"
+        ],
+        "fields": [],
+        "flow": "device_code",
+        "id": "device",
+        "kind": "account",
+        "subscription": true
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "device"
+        ],
+        "fields": [],
+        "flow": "device_code",
+        "id": "device",
+        "kind": "account",
+        "subscription": true
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "META_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unverified",
+        "delivery": [
+         "loopback",
+         "manual"
+        ],
+        "fields": [],
+        "flow": "authorization_code",
+        "id": "browser",
+        "kind": "account",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "OPENROUTER_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "unavailable",
+        "delivery": [],
+        "fields": [],
+        "flow": "authorization_code",
+        "id": "browser",
+        "kind": "account",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "OPENAI_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "ANTHROPIC_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "GEMINI_API_KEY",
+           "GOOGLE_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "base_url",
+          "options": [],
+          "required": false,
+          "type": "text"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "local",
+        "kind": "local_server",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "named",
+          "options": [
+           "platform",
+           "workload",
+           "environment",
+           "cli"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "cloud",
+        "kind": "cloud_identity",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "AWS_BEARER_TOKEN_BEDROCK"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     },
+     {
+      "ok": true,
+      "value": [
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "named",
+          "options": [
+           "platform",
+           "workload",
+           "environment",
+           "cli"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "cloud",
+        "kind": "cloud_identity",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "key",
+          "options": [],
+          "required": true,
+          "type": "secret"
+         }
+        ],
+        "flow": "form",
+        "id": "api_key",
+        "kind": "api_key",
+        "subscription": false
+       },
+       {
+        "availability": "supported",
+        "delivery": [],
+        "fields": [
+         {
+          "id": "name",
+          "options": [
+           "AZURE_OPENAI_API_KEY"
+          ],
+          "required": true,
+          "type": "select"
+         }
+        ],
+        "flow": "source_recipe",
+        "id": "env",
+        "kind": "api_key",
+        "subscription": false
+       }
+      ]
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     },
+     {
+      "step": 5
+     },
+     {
+      "step": 6
+     },
+     {
+      "step": 7
+     },
+     {
+      "step": 8
+     },
+     {
+      "step": 9
+     },
+     {
+      "step": 10
+     },
+     {
+      "step": 11
+     },
+     {
+      "step": 12
+     },
+     {
+      "step": 13
+     },
+     {
+      "step": 14
+     }
+    ],
+    "store": null
+   }
+  }
+ ]
+}

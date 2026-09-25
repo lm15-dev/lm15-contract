@@ -841,7 +841,10 @@ reserved).
 ## AUTH-26 — Acceptance and honest support claims
 
 The initial implementation scope is **Python and TypeScript**, per R10. Other
-languages are follow-up decisions, not gates for this first rollout. Both initial
+languages are follow-up decisions, not gates for this first rollout.
+**2026-09-25: decided — Rust and Go implement the same core**
+([changes/2026-09-25-managed-auth-in-every-sdk.md](../changes/2026-09-25-managed-auth-in-every-sdk.md));
+the harness's `managed` direction grades every SDK on the same runs. Both initial
 SDKs implement the same behaviors with native mechanisms. Platform profiles are separate from
 language names. A native pass is not a browser/mobile pass; source availability
 is not a working provider integration.
