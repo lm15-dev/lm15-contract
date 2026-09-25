@@ -71,3 +71,15 @@ store is written by four languages; JavaScript has one number type).
   connection labels are, because they are stored and shown.
 - No live receipt follows from this. Live evidence remains per provider,
   per platform, with a person at the browser.
+
+## Reference corrected while writing the cases
+
+- **An invalid pasted return no longer ends the sign-in (Python).** AUTH-18
+  says a wrong return "receives a generic rejection and does not terminate
+  the legitimate wait", and AUTH-24 describes `invalid_login_state` as
+  "reject input, preserve legitimate wait". lm15-python ended the attempt
+  with `invalid_login_state` on a pasted return with the wrong state, a
+  wrong URL, or a bare code the profile refuses; lm15-ts already told the
+  person and asked again. Python now does the same (the listener, when
+  there is one, keeps listening). `claude-wrong-state` pins the recovery;
+  `claude-bare-code-refused` pins the second prompt.
