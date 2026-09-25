@@ -2,6 +2,36 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-25 — managed sign-in in every SDK; where each SDK stands
+
+Measured, not claimed: `harness/check.py --direction all` at each SDK's pin
+and `tools/managed_crossrun.py python typescript rust go`.
+
+| | Python | TypeScript | Rust | Go |
+|---|---|---|---|---|
+| Contract cases (all directions) | 1,492 / 1,492 | 1,492 / 1,492 | 1,492 / 1,492 | 1,469 / 1,492 |
+| `managed` direction (43 sign-in runs) | 43 | 43 | 43 | 43 |
+| Mixed-language runs on one store, concurrent renewal race | pass | pass | pass | pass |
+| `Auth`, recipes, seven account flows, bound client, `connect()`, terminal UI | ✓ | ✓ | ✓ | ✓ |
+| Managed router mode (AUTH-15 B), managed doctor, `kimi-code` / `github-copilot` routed | ✓ | ✓ | ✓ | ✓ |
+| Loopback return listener | ✓ | Node | native | native (not `GOOS=js`) |
+| Sign-in in a web page | — | ✓ (browser track, relays) | — (wasm build is the codec only) | — |
+| Synchronous mirror | native sync + `AsyncAuth` | n/a (async) | `lm15::blocking::{Auth, connect}` | native (blocking + `context`) |
+| `AuthOperationError`, ErrorCode `auth_operation` | ✓ | ✓ | added 2026-09-25 | added 2026-09-25 |
+
+Go's 23 failures are one stated deviation: JSON object keys are written
+sorted, so the 20 SigV4-signed Bedrock bodies, 2 batch JSONL uploads and 1
+image-edit multipart differ in bytes (not in meaning). The same sorting loses
+a user's JSON-schema property order, which decides the order a model fills
+structured output in: a behavioral gap, not only a test artifact. The fix is
+an ordered JSON object type through Go's decoder and builders.
+
+Live evidence did not change: managed-path receipts exist for Python only
+(xAI supported; Claude, ChatGPT, Copilot, OpenRouter observed but unverified
+for permission and billing). The TypeScript, Rust and Go sign-ins run the
+same requests, proven offline by the shared runs; none has its own live
+receipt yet.
+
 ## 2026-09-20 — implementation pass, execution deliberately deferred
 
 The maintainer requested Python, TypeScript/browser and Rust source catch-up,
