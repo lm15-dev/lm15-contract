@@ -1227,6 +1227,6 @@
   },
   "tunnel_notes": {
     "what_the_tunnel_sees": "page origin and IP, provider host (query and TLS SNI), timing, byte counts; not requests or replies",
-    "cloudflare_worker_limit": "Workers' outbound TCP is refused to Cloudflare IP ranges (developers.cloudflare.com/workers/runtime-apis/tcp-sockets, read 2026-09-24). Hosts on Cloudflare that day: auth.openai.com, chatgpt.com, auth.x.ai, api.x.ai, openrouter.ai, auth.kimi.com, api.kimi.com. Not: platform.claude.com, api.anthropic.com, github.com, api.github.com, api.individual.githubcopilot.com, auth.meta.com, api.meta.ai."
+    "cloudflare_worker_limit": "Tested 2026-09-25 10:28Z with a throwaway Worker (wrangler deploy --temporary, deleted after) calling connect() to port 443: REFUSED 'proxy request failed, cannot connect to the specified address' for auth.x.ai, api.x.ai, auth.openai.com, chatgpt.com, openrouter.ai, auth.kimi.com, api.kimi.com, api.anthropic.com, platform.claude.com; OPENED for github.com, api.github.com, auth.meta.com. Correction to the 2026-09-24 note: Anthropic's hosts are on Anthropic-registered addresses (160.79.104.0/?, OrgName Anthropic, PBC) that Cloudflare serves (server: cloudflare, cf-ray), so they are absent from cloudflare.com/ips yet refused like any Cloudflare-served host. The published IP list is not a reliable predictor; only a connect() test is. Workers docs: developers.cloudflare.com/workers/runtime-apis/tcp-sockets."
   }
 }
