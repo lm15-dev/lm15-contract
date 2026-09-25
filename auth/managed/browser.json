@@ -1121,6 +1121,96 @@
       "way": "tunnel",
       "observed": "direct from the page: 401 'CORS requests are not allowed for this Organization'; through the encrypted tunnel: 200, 12 models — the tunnel sends no Origin",
       "evidence": "headless Chromium 152 on lambda, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443 under its own CSP, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls 0.23 + ring on wasm32v1-none, webpki-roots), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the token was lambda's own saved Claude Code login, never printed"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "authorization+polling",
+      "request": "POST auth.x.ai/oauth2/device/code, POST auth.x.ai/oauth2/token",
+      "way": "tunnel",
+      "observed": "HTTP 200; pending; HTTP 200: signed in through the tunnel",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "xai",
+      "method": "device",
+      "stage": "catalog+inference",
+      "request": "api.x.ai",
+      "way": "direct",
+      "observed": "ok",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "device",
+      "stage": "authorization+polling+exchange",
+      "request": "auth.openai.com deviceauth/usercode, deviceauth/token, oauth/token",
+      "way": "direct",
+      "observed": "200; 403 pending; 200; 200: signed in",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "openai-codex",
+      "method": "device",
+      "stage": "catalog+inference",
+      "request": "chatgpt.com/backend-api/codex (models, responses; gpt-5.5)",
+      "way": "tunnel",
+      "observed": "ok: chatgpt.com (behind Cloudflare bot protection) answered a TLS client running in WebAssembly, from lambda's address, with no challenge",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "authorization+polling+exchange",
+      "request": "github.com/login/device/code, github.com/login/oauth/access_token, api.github.com/copilot_internal/v2/token",
+      "way": "tunnel",
+      "observed": "200; pending; 200; 200: signed in and Copilot token minted through the tunnel",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "github-copilot",
+      "method": "device",
+      "stage": "catalog+inference",
+      "request": "api.individual.githubcopilot.com (gpt-4.1)",
+      "way": "direct",
+      "observed": "ok",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "loopback",
+      "stage": "exchange",
+      "request": "POST platform.claude.com/v1/oauth/token",
+      "way": "tunnel",
+      "observed": "HTTP 200; signed in",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "exchange",
+      "request": "POST platform.claude.com/v1/oauth/token",
+      "way": "tunnel",
+      "observed": "HTTP 200; signed in",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
+    },
+    {
+      "date": "2026-09-24",
+      "provider": "claude-code",
+      "method": "browser",
+      "stage": "catalog+inference",
+      "request": "api.anthropic.com/v1/models, /v1/messages (claude-sonnet-4-5, 'Reply with exactly OK.')",
+      "way": "tunnel",
+      "observed": "ok; answered \"OK\" (26 in / 4 out tokens). Refused when sent from the page directly (Origin); through the tunnel the relay saw only ciphertext",
+      "evidence": "a person (Maxime) in desktop Chromium on XPSwhite, the playground sign-in lab at https://lambda.tail69222b.ts.net:10443, relay mode 'encrypted tunnel': TLS in the page (lm15-ts ce222c4, rustls in WebAssembly), website/relay/tunnel-local.mjs on lambda (not Cloudflare) copying ciphertext; 2026-09-24; the lab's log and a screenshot, pasted in the conversation of that date"
     }
   ],
   "live_verdicts": {
