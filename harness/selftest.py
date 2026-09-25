@@ -13,8 +13,9 @@ expectations) except for one injected mutation — and FAILS unless:
 The mutation classes pin the comparator's teeth: tool-name drift, text
 corruption, absent-vs-empty conflation, usage arithmetic, event loss,
 end-event provider_data loss (D9 presence rule), bool/int conflation,
-auth-chain state drift, AUTH-5 sentinel leakage, and opaque-payload key
-order (INV-002). A comparator weakened enough to miss any of them fails
+auth-chain state drift, AUTH-5 sentinel leakage, opaque-payload key
+order (INV-002), and in the managed direction an AUTH-21 token leak and
+store drift. A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
 
@@ -32,6 +33,7 @@ HARNESS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(HARNESS_DIR))
 
 import check
+import managed
 
 
 def fake_shim(mutation: str, target: str | None = None) -> check.Shim:
@@ -127,6 +129,14 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: c.get("feature") == "tool_result_image",
             "tool_result_image_dropped (a tool_result_image case)")),
+        "managed_sentinel_leak": ("managed", first(
+            [(c, {}) for c in managed.load_runs()],
+            lambda c, g: bool(c["expect"].get("steps")),
+            "managed_sentinel_leak (a managed run with steps)")),
+        "managed_store_drift": ("managed", first(
+            [(c, {}) for c in managed.load_runs()],
+            lambda c, g: '"state": "ready"' in json.dumps(c["expect"].get("store")),
+            "managed_store_drift (a managed run whose store ends with a ready slot)")),
         "opaque_keys_sorted": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: "canonical_request" in c and check.expected_raise(c, "build_request") is None

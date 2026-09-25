@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -63,6 +64,8 @@ MUTATIONS = (
     "build_maps_a_refused_cell", "tool_result_image_dropped", "tool_result_ids_swapped", "tool_result_error_stripped", # build_request: a pinned refusal answered with a wire request (a silent cell)
     "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
     "adaptation_unrecorded",    # build_request: the pinned adaptation happened on the wire but was not recorded (MAP-13: the invisible drop)
+    "managed_sentinel_leak",    # managed_run: the private token shows up in a public step outcome (AUTH-21)
+    "managed_store_drift",      # managed_run: the store afterwards loses a slot's state
     "opaque_keys_sorted",       # build_request: every body object written with sorted keys (a port with an unordered map; INV-002)
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
@@ -793,6 +796,68 @@ def op_video_op_parse(msg: JsonObject) -> JsonObject:
     return {"jobs": value}
 
 
+# ─── managed_run (the managed direction, harness/managed.py) ──────────
+#
+# A run is identified by everything the harness sends except the per-run
+# temporary paths; several runs share their steps and differ only in the
+# scripted HTTP replies, the UI answers or the initial store. The echo is
+# the run's recorded expectation. Its random OAuth values were masked as
+# "<random>" when it was recorded, and the harness checks PKCE and state on
+# the real values before masking, so the echo puts back one consistent set.
+
+_ECHO_VERIFIER = "selftest-verifier-" + "v" * 30          # 48 unreserved characters
+_ECHO_STATE = "selftest-state-" + "s" * 16                 # 31 characters, over 128 bits' worth
+_ECHO_CHALLENGE = base64.urlsafe_b64encode(hashlib.sha256(_ECHO_VERIFIER.encode("ascii")).digest()).rstrip(b"=").decode("ascii")
+_ECHO_RANDOM = {"code_verifier": _ECHO_VERIFIER, "state": _ECHO_STATE, "code_challenge": _ECHO_CHALLENGE}
+
+
+def _managed_key(fields: JsonObject) -> str:
+    env = {k: v for k, v in (fields.get("env") or {}).items() if k not in ("HOME", "LM15_CREDENTIALS_PATH")}
+    return json.dumps({"steps": fields.get("steps"), "http": fields.get("http", []), "ui": fields.get("ui", []),
+                       "clock_ms": fields.get("clock_ms", 1790000000000), "sentinel": fields.get("sentinel"),
+                       "env": env}, sort_keys=True)
+
+
+def _unmask(value: Any, key: str | None = None) -> Any:
+    if isinstance(value, dict):
+        return {k: _unmask(v, k) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_unmask(v) for v in value]
+    if value == "<random>" and key in _ECHO_RANDOM:
+        return _ECHO_RANDOM[key]
+    if isinstance(value, str) and "=%3Crandom%3E" in value:
+        for name, real in _ECHO_RANDOM.items():
+            value = value.replace(f"{name}=%3Crandom%3E", f"{name}={real}")
+    return value
+
+
+def op_managed_run(msg: JsonObject) -> JsonObject:
+    import managed
+    key = _managed_key(msg)
+    stored = Path(msg["store_path"]).read_text(encoding="utf-8") if Path(msg["store_path"]).is_file() else None
+    for case in managed.load_runs():
+        if _managed_key({**case, "sentinel": case["sentinel"]}) != key:
+            continue
+        initial = case.get("store")
+        wrote = None
+        if isinstance(initial, dict) and "raw" in initial:
+            wrote = initial["raw"]
+        elif isinstance(initial, dict) and "document" in initial:
+            wrote = json.dumps(initial["document"], indent=2)
+        if wrote != stored:
+            continue
+        expect = case["expect"]
+        result = {k: _unmask(json.loads(json.dumps(expect[k]))) for k in ("steps", "events", "store") if k in expect}
+        if MUTATION == "managed_sentinel_leak" and targeted(case) and result.get("steps"):
+            result["steps"][0] = {**result["steps"][0], "leaked": case["sentinel"]}
+        if MUTATION == "managed_store_drift" and targeted(case):
+            text = json.dumps(result.get("store"))
+            if '"state": "ready"' in text:
+                result["store"] = json.loads(text.replace('"state": "ready"', '"state": "broken"', 1))
+        return result
+    raise LookupError("no managed run matches this managed_run request")
+
+
 HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "capabilities": op_capabilities,
     "build_request": op_build_request,
@@ -819,6 +884,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "sigv4_sign": op_sigv4_sign,
     "token_exchange_build": op_token_exchange_build,
     "token_exchange_parse": op_token_exchange_parse,
+    "managed_run": op_managed_run,
 }
 
 

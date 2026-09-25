@@ -61,8 +61,7 @@ comparable cases, so the fake shim's echo stays green: no fixture changes.
   `answer`) would be a new wire fixture and needs a live receipt
   (AUTHORITY.md); the 177 existing cases that carry an unsorted opaque
   object already give the check its teeth.
-- `harness/selftest.py` was already red at this commit's parent: its
-  baseline runs the `managed` direction against the fake shim, which has
-  no `managed_run` op (43 "unknown op" failures). Unrelated to this change
-  and left for the managed-auth owner; every other direction's baseline is
-  green and all 41 mutations are caught.
+- `harness/selftest.py` was red from the managed direction's arrival
+  (0872d6e): its baseline ran that direction against the fake shim, which
+  had no `managed_run` op. Fixed in the next commit (the fake shim echoes
+  each run's recorded expectation; two managed mutations added).
