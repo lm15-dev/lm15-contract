@@ -2,6 +2,26 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-25 (later) — Go at parity; opaque key order is now checked
+
+Measured with `harness/check.py --direction all` at this commit, every SDK
+pinned to it:
+
+| | Python | TypeScript | Rust | Go |
+|---|---|---|---|---|
+| Contract cases (all directions) | 1,492 / 1,492 | 1,492 / 1,492 | 1,492 / 1,492 | 1,492 / 1,492 |
+
+Go's one stated deviation is gone: `JSONObject` is an ordered type through
+Go's decoder and builders, so the 23 byte-pinned cases pass and a schema's
+property order reaches the provider. The harness now checks key order
+inside opaque payloads in the request and serde directions
+(changes/2026-09-25-opaque-key-order.md); the earlier Go fails 179 request
+and 8 serde cases under it, and all four current SDKs pass. Beyond the
+check, Go's wire bodies and canonical JSON now match the reference's key
+order everywhere the harness exercises, except two Go-map-typed fields
+(`probabilities`, `rate_limit_headers`) and header order, which net/http
+writes sorted.
+
 ## 2026-09-25 — managed sign-in in every SDK; where each SDK stands
 
 Measured, not claimed: `harness/check.py --direction all` at each SDK's pin

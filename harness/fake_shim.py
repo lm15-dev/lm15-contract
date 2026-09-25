@@ -63,6 +63,7 @@ MUTATIONS = (
     "build_maps_a_refused_cell", "tool_result_image_dropped", "tool_result_ids_swapped", "tool_result_error_stripped", # build_request: a pinned refusal answered with a wire request (a silent cell)
     "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
     "adaptation_unrecorded",    # build_request: the pinned adaptation happened on the wire but was not recorded (MAP-13: the invisible drop)
+    "opaque_keys_sorted",       # build_request: every body object written with sorted keys (a port with an unordered map; INV-002)
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -227,6 +228,9 @@ def op_build_request(msg: JsonObject) -> JsonObject:
         result["adaptations"] = [dict(a) for a in pinned]
     if MUTATION == "bool_as_int" and targeted(case):
         mutate_first_bool(result["body"])
+    if MUTATION == "opaque_keys_sorted" and targeted(case):
+        # Go before 2026-09-25: JSON objects were Go maps, written sorted.
+        result["body"] = json.loads(json.dumps(result["body"], sort_keys=True))
     if MUTATION == "tool_result_image_dropped" and targeted(case):
         # The pre-MAP-10 behaviour: the image inside a tool result rendered
         # as a type-name placeholder string, HTTP 200, model none the wiser.

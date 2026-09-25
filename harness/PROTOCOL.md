@@ -530,6 +530,19 @@ Responsibility split, normative (derived from `check.py::split_url` and
   paths per case.
 - Auth header values are compared EXACTLY against the api_key the harness
   injected (never redacted on the shim side).
+- Key order is not a difference for typed objects (canonical JSON is
+  byte-identical "after key sorting", serde-rules.md) and IS one for opaque
+  payloads (INV-002; serde-rules.md omission rule 3: they "round-trip
+  exactly"). Added 2026-09-25 (changes/2026-09-25-opaque-key-order.md):
+  after the deep-equality compare passes, the `request` direction checks
+  that every object in the built body which equals, up to key order, an
+  object inside an opaque payload of the case's `canonical_request`
+  (`parameters`, `schema`, `input`, `extensions`, `data`, `value`,
+  `provider_data`, a builtin tool's `config`) lists its keys in that
+  object's order; the `serde` direction checks the round-tripped value the
+  same way against the case `value`. Objects an adapter rewrites (a
+  judgment property, INV-050's one exception) no longer equal an input
+  object and are not checked.
 
 ## Concurrency
 

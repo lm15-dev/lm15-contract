@@ -856,10 +856,81 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
                     diff = first_difference(_ABSENT, actual[key], (key,), volatile=volatile)
                     break
         if diff is None:
+            diff = opaque_order_difference(opaque_key_orders(case["canonical_request"]),
+                                           actual.get("body"), "$.body")
+        if diff is None:
             report.results.append(CaseResult(case_id, "pass"))
         else:
             report.results.append(CaseResult(case_id, "fail", diff=diff))
     return report
+
+
+# ─── Opaque key order (INV-002, serde-rules.md omission rule 3) ──────
+#
+# The comparator above reads JSON as JSON: key order is not a difference.
+# That is right for typed objects (serde-rules.md: canonical JSON is
+# byte-identical "after key sorting") and wrong for opaque payloads, which
+# "round-trip exactly": a JSON Schema's property order is the order a model
+# fills structured output in, and a signature or an upload covers the
+# bytes. Until 2026-09-25 only byte-pinned cases (SigV4, JSONL, multipart)
+# could see a port that re-ordered them. This check sees it everywhere an
+# opaque object reaches the output verbatim.
+
+# Keys whose values are opaque payloads (INV-001); a builtin tool's
+# "config" counts only under "tools". response_format itself is mapped by
+# adapters, its "schema" is the opaque part.
+OPAQUE_KEYS = frozenset({"parameters", "schema", "input", "extensions", "data", "value", "provider_data"})
+
+
+def _order_free(value: Any) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _collect_objects(value: Any, out: dict[str, set[tuple[str, ...]]]) -> None:
+    if isinstance(value, dict):
+        if len(value) >= 2:
+            out.setdefault(_order_free(value), set()).add(tuple(value))
+        for item in value.values():
+            _collect_objects(item, out)
+    elif isinstance(value, list):
+        for item in value:
+            _collect_objects(item, out)
+
+
+def opaque_key_orders(value: Any, in_tools: bool = False,
+                      out: dict[str, set[tuple[str, ...]]] | None = None) -> dict[str, set[tuple[str, ...]]]:
+    """Every object inside an opaque payload of ``value``, by its
+    order-free content, with the key order(s) it was given in."""
+    out = {} if out is None else out
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key in OPAQUE_KEYS or (in_tools and key == "config"):
+                _collect_objects(item, out)
+            else:
+                opaque_key_orders(item, in_tools or key == "tools", out)
+    elif isinstance(value, list):
+        for item in value:
+            opaque_key_orders(item, in_tools, out)
+    return out
+
+
+def opaque_order_difference(orders: dict[str, set[tuple[str, ...]]], actual: Any,
+                            root: str) -> Diff | None:
+    """The first object of ``actual`` that is, up to key order, one of the
+    opaque objects in ``orders`` but lists its keys in another order."""
+    stack: list[tuple[str, Any]] = [(root, actual)]
+    while stack:
+        path, node = stack.pop(0)
+        if isinstance(node, dict):
+            if len(node) >= 2:
+                wanted = orders.get(_order_free(node))
+                if wanted is not None and tuple(node) not in wanted:
+                    return Diff(path, list(sorted(wanted)[0]), list(node),
+                                "opaque payload key order changed (INV-002: opaque objects round-trip exactly)")
+            stack.extend((f"{path}.{k}", v) for k, v in node.items())
+        elif isinstance(node, list):
+            stack.extend((f"{path}[{i}]", v) for i, v in enumerate(node))
+    return None
 
 
 # ─── Direction: serde ────────────────────────────────────────────────
@@ -960,6 +1031,11 @@ def run_serde_direction(shim: Shim, case_filter: str | None, report_dir: Path) -
             continue
         roundtripped = reply["result"].get("value", _ABSENT)
         diff = first_difference(case["value"], roundtripped)
+        if diff is None:
+            diff = opaque_order_difference(opaque_key_orders(case["value"]), roundtripped, "$")
+            if diff is not None:
+                report.results.append(CaseResult(case_id, "fail", diff=diff))
+                continue
         if diff is None:
             report.results.append(CaseResult(case_id, "pass"))
             continue

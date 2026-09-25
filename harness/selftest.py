@@ -13,7 +13,8 @@ expectations) except for one injected mutation — and FAILS unless:
 The mutation classes pin the comparator's teeth: tool-name drift, text
 corruption, absent-vs-empty conflation, usage arithmetic, event loss,
 end-event provider_data loss (D9 presence rule), bool/int conflation,
-auth-chain state drift, and AUTH-5 sentinel leakage. A comparator weakened enough to miss any of them fails
+auth-chain state drift, AUTH-5 sentinel leakage, and opaque-payload key
+order (INV-002). A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
 
@@ -126,6 +127,14 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: c.get("feature") == "tool_result_image",
             "tool_result_image_dropped (a tool_result_image case)")),
+        "opaque_keys_sorted": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: "canonical_request" in c and check.expected_raise(c, "build_request") is None
+                         and check.opaque_order_difference(
+                             check.opaque_key_orders(c["canonical_request"]),
+                             json.loads(json.dumps(check.expected_wire_request(c)["body"], sort_keys=True)),
+                             "$.body") is not None,
+            "opaque_keys_sorted (a request case whose body carries an opaque object in unsorted key order)")),
         "tool_result_ids_swapped": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: c.get("feature") == "tool_result_pair",
