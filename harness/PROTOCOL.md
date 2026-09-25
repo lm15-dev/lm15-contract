@@ -618,7 +618,9 @@ Out: `{"steps": [<outcome>], "events": [<event>], "store": {"document": {...}} |
   auth request whatever its URL: `{"status": n, "json": {...}}`,
   `{"status": n, "text": str, "content_type": str}`, or
   `{"network": "timeout"}` (sent, no reply: uncertain) /
-  `{"network": "refused"}` (never reached the provider). When the script
+  `{"network": "refused"}` (never reached the provider). A reply may carry
+  `"delay_ms": n`: the shim waits n real milliseconds before answering, so
+  another process can race the exchange (`tools/managed_crossrun.py`). When the script
   is exhausted every further request is refused. Each request is recorded,
   before its reply, as `{"http": {"method", "url", "content_type",
   "headers", "body"}}`: `content_type` without parameters (null when

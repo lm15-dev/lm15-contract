@@ -83,3 +83,22 @@ store is written by four languages; JavaScript has one number type).
   person and asked again. Python now does the same (the listener, when
   there is one, keeps listening). `claude-wrong-state` pins the recovery;
   `claude-bare-code-refused` pins the second prompt.
+- **A request no longer fails while a sibling process is renewing (Python,
+  TypeScript).** `tools/managed_crossrun.py` runs two processes that find
+  the same token due at once. The second read the durable in-flight marker
+  outside the lock and answered `indeterminate` ("sign in again") while the
+  first was still renewing — the exact case AUTH-20.4 says to handle by
+  waiting on the lock, re-reading and reusing the sibling's result. A marker
+  seen outside the lock is now resolved under it: once the lock is held, a
+  marker that is still there means the renewing process died (still
+  `indeterminate`, pinned by `renewal-marker-left-by-a-dead-process`);
+  otherwise the fresh token is used. Every ordered pair of SDKs now sends
+  exactly one refresh request between them.
+
+## Mixed-language evidence (AUTH-26 level 2)
+
+`tools/managed_crossrun.py <sdk>...` runs whole lifecycles with successive
+legs in different SDKs on one store file (login in one, read and renew in
+another, sign out in a third), compared with the same lifecycle run entirely
+in the reference, and the concurrent renewal race for every ordered pair of
+SDKs (two processes, a slow token endpoint, one refresh request allowed).
