@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-26T12-57-07Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "request_sha256": "7b21f38ab507b21a878f87dde5495db4c7d1c47900d0a005350c9d9d3dcdef29",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "01894e377ae417d1f5c6bf19893d0031749906d99e781e4895ca258da1ae8291",
+  "response_bytes": 736,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

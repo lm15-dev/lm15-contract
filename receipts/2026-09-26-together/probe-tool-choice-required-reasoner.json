@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 500,
+  "body": {
+    "id": "p2pw38N-z1gNr-a4126c3c3da2aa1d",
+    "error": {
+      "message": "Internal server error",
+      "type": "server_error",
+      "param": null,
+      "code": null
+    }
+  },
+  "timestamp": "2026-09-26T12-55-24Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2pw38N-z1gNr-a4126c3c3da2aa1d"
+  }
+}

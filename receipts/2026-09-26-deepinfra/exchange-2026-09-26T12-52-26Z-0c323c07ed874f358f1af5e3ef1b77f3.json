@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T12-52-26Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "request_sha256": "f26da179a029ba83a4b8c9bd0af59b3709e20637dc77164ad1692bc4175cde9d",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ebfb64bb777db4025856794ad86bfe5b6d579e54105e26ef08680c6197348ca0",
+  "response_bytes": 509,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

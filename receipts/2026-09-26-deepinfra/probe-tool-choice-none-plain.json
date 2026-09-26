@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rj0Y4jC2Or77X6pgPS7imUKt",
+    "object": "chat.completion",
+    "created": 1790427788,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "<function=get_weather>{\"city\": \"Paris\"}</function>",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 146,
+      "total_tokens": 160,
+      "completion_tokens": 14,
+      "estimated_cost": 1.908e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-03-00Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rj0Y4jC2Or77X6pgPS7imUKt"
+  }
+}

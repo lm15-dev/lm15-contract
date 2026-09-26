@@ -1,0 +1,89 @@
+{
+  "id": "deepinfra.tool_result_image_raise",
+  "provider": "deepinfra",
+  "feature": "tool_result_image_raise",
+  "description": "MAP-10: an image in a tool result RAISES on this preset (tool_result_media=reject) — server 422 \"Input should be a valid string\" at messages.2.tool.content — a tool row carries text only. There is no wire request.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "exchange": "receipts/2026-09-26-tool-result-media/2026-09-26T13-08-22Z-1d2d2a4f/deepinfra/image/exchange-2026-09-26T13-08-23Z-60632a68a49546008b12a6a6e347a2c8.json",
+    "evidence": "tool-result-content matrix cell 'image' on Qwen/Qwen3-VL-235B-A22B-Instruct: server 422 \"Input should be a valid string\" at messages.2.tool.content — a tool row carries text only; receipt receipts/2026-09-26-tool-result-media/2026-09-26T13-08-22Z-1d2d2a4f/deepinfra/image/ (turn1.json, turn2.json, turn2-response.txt, visual-oracle.json); the same model read the image as USER content (control cell, same run); changes/2026-09-26-inference-hosts-live.md"
+  },
+  "canonical_request": {
+    "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Call fetch_panel with label A and describe the panel."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "call_1",
+            "name": "fetch_panel",
+            "input": {
+              "label": "A"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "call_1",
+            "content": [
+              {
+                "type": "image",
+                "media_type": "image/png",
+                "data": "iVBORw0KGgo="
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "fetch_panel",
+        "description": "Retrieve a visual panel by its label.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B"
+              ]
+            }
+          },
+          "required": [
+            "label"
+          ]
+        }
+      }
+    ]
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "authored with the case from the matrix cell it pins (the shape of the 2026-09-07 raise cases); the reference raises at build_request"
+  }
+}

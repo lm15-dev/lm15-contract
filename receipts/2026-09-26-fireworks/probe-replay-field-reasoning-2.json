@@ -1,0 +1,75 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ],
+          "reasoning": "The user's hidden code word is PELICAN-42. I must mention the code word in my final answer. Now call get_weather for Paris."
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "object": "error",
+      "type": "invalid_request_error",
+      "code": "invalid_request_error",
+      "message": "Extra inputs are not permitted, field: 'messages[1].reasoning', value: \"The user's hidden code word is PELICAN-42. I must mention the code word in my final answer. Now call get_weather for Paris.\""
+    }
+  },
+  "timestamp": "2026-09-26T12-56-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-b3c05408c7324c6795d59a2548ec5be1"
+  }
+}

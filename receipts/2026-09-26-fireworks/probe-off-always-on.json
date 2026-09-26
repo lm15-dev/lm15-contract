@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/glm-5p3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "object": "error",
+      "type": "invalid_request_error",
+      "code": "invalid_request_error",
+      "message": "GLM-5.3 is a thinking-only model; disabling thinking (reasoning_effort='none') is not supported."
+    }
+  },
+  "timestamp": "2026-09-26T12-56-47Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-a5bcef518b2041fc98e7caaf0a6bcccf"
+  }
+}

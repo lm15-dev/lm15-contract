@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RdpLGgDjMVtEXZzS03lEGA3v",
+    "object": "chat.completion",
+    "created": 1790427175,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1 2 3 4 ",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 21,
+      "total_tokens": 29,
+      "completion_tokens": 8,
+      "estimated_cost": 4.66e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T12-52-55Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RdpLGgDjMVtEXZzS03lEGA3v"
+  }
+}

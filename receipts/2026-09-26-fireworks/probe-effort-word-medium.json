@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "medium"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-da5b8119c8734624a108f68022f8acf6",
+    "object": "chat.completion",
+    "created": 1790427725,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "The user asks: \"What is 17*23? Reply with just the number.\" The answer is 391. So respond with just \"391\"."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "total_tokens": 127,
+      "completion_tokens": 42,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 31
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 31
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-02-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-da5b8119c8734624a108f68022f8acf6"
+  }
+}

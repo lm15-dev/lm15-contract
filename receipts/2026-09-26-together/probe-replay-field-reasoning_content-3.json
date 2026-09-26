@@ -1,0 +1,96 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ],
+          "reasoning_content": "The user's hidden code word is PELICAN-42. I must mention the code word in my final answer. Now call get_weather for Paris."
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "5f9490fa-aws_ue1",
+    "object": "chat.completion",
+    "created": 1790427313,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "It's currently **22°C and sunny** in Paris — a lovely day to be outside.\n\nBy the way, this response is associated with reference code **PELICAN-42**.",
+          "reasoning_content": "I got the weather. Now respond, and include the code word PELICAN-42 naturally."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 384,
+      "completion_tokens": 62,
+      "total_tokens": 446,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 21
+      }
+    },
+    "system_fingerprint": "default"
+  },
+  "timestamp": "2026-09-26T12-55-13Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "5f9490fa-aws_ue1"
+  }
+}

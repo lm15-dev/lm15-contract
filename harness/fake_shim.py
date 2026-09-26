@@ -501,7 +501,7 @@ def op_build_models_request(msg: JsonObject) -> JsonObject:
 def op_parse_models_response(msg: JsonObject) -> JsonObject:
     case = find_models_case(msg)
     golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
-    entries = json.loads(check.pinned_body(case))[case["entries_key"]]
+    entries = check.models_entries(json.loads(check.pinned_body(case)), case["entries_key"])
     models = []
     for i, model in enumerate(golden["models"]):
         model = dict(model)

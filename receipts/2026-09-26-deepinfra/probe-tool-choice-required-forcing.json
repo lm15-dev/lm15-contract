@@ -1,0 +1,107 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RAaQTyK1B73YptcAxt8Lneqy",
+    "object": "chat.completion",
+    "created": 1790427790,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-8f0ce59fefb663ce",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Paris\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a3b57b9c2d9ca023",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Tokyo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8866ac725f60cfb1",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 268,
+      "total_tokens": 366,
+      "completion_tokens": 98,
+      "estimated_cost": 7.868e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-03-09Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RAaQTyK1B73YptcAxt8Lneqy"
+  }
+}

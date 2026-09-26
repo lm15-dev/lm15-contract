@@ -1538,6 +1538,15 @@ def _is_ordered_subsequence(needles: list, haystack: list) -> bool:
     return True
 
 
+
+def models_entries(body: object, entries_key: str | None) -> list:
+    """The catalog entries of a pinned listing body: the list under
+    ``entries_key``, or the body itself when ``entries_key`` is null (a
+    server that answers a bare JSON array — Together, 2026-09-26)."""
+    if entries_key is None:
+        return body if isinstance(body, list) else []
+    return body.get(entries_key, []) if isinstance(body, dict) else []
+
 def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Model-catalog listing: build_models_request + parse_models_response.
 
@@ -1587,12 +1596,12 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
             ))
             continue
         stripped, embedded = split
-        entries = json.loads(body.decode("utf-8")).get(case["entries_key"], [])
+        entries = models_entries(json.loads(body.decode("utf-8")), case["entries_key"])
         if not _is_ordered_subsequence(embedded, entries):
             report.results.append(CaseResult(
                 f"{case_id}[parse]", "fail",
                 reason="origin.provider_data values are not an order-preserving subsequence of "
-                       f"the body's {case['entries_key']!r} entries — wire entries must be "
+                       f"the body's {case['entries_key'] or 'top-level array'!r} entries — wire entries must be "
                        "embedded verbatim, never cleaned or invented",
             ))
             continue

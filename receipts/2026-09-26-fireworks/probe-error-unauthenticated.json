@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "The API key you provided is invalid.",
+      "param": null,
+      "code": "UNAUTHORIZED",
+      "type": "error"
+    },
+    "request_id": "chatcmpl-d7cae82b3a8c40b5ac35bc9b69f7a1e3"
+  },
+  "timestamp": "2026-09-26T12-57-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-d7cae82b3a8c40b5ac35bc9b69f7a1e3"
+  }
+}

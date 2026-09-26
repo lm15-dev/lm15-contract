@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T13-08-22Z",
+  "status": 400,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-32B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "ed0477a4ab8d1115e389f850fce2fbba7a631055f7616aab33549197a210d59d",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2q12TJ-2kFHot-a4127f3b8e6688df"
+  },
+  "provenance": "adapter-built"
+}

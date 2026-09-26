@@ -1,0 +1,61 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.together.ai error envelopes captured verbatim 2026-09-26 by research/providers/together/capture.py; receipts/2026-09-26-together/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "together.unauthenticated",
+      "provider": "together",
+      "status": 401,
+      "body": {
+        "id": "p2pw6su-4YNCb4-a4126c8afbd4aa1d",
+        "error": {
+          "message": "Invalid API key provided. You can find your API key at https://api.together.ai/settings/api-keys.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_api_key"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "together",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.together.ai HTTP 401 verbatim 2026-09-26T12-55-37Z — receipts/2026-09-26-together/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "together.model_not_found",
+      "provider": "together",
+      "status": 404,
+      "body": {
+        "id": "p2pw7KW-2kFHot-a4126c919e2aaa1d",
+        "error": {
+          "message": "Unable to access model lm15-probe/no-such-model. Please visit https://api.together.ai/models to view the list of supported models.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "model_not_available"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "together",
+        "provider_code": "model_not_available",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.together.ai HTTP 404 verbatim 2026-09-26T12-55-38Z — receipts/2026-09-26-together/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-09-26T12-56-56Z",
+  "provider": "fireworks",
+  "status": 400,
+  "model": "accounts/fireworks/models/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ],
+          "reasoning": "The user's hidden code word is PELICAN-42. I must mention the code word in my final answer. Now call get_weather for Paris."
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "3fa5b8e318fb79b163eeb96ecae51647f25d5e2229894e18df288a1ced8e78d0",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "921f930fc738342447345b3d735824f6c5e29ba39988bc59d72f5abed13d2795",
+  "response_bytes": 301,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

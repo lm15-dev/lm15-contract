@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-09-26T12-58-18Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "f56906dbc6d745781a013f91316d1bd94ed12d995d583527f286e720be17a0b7",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5ffd29ae37f6a2f09f60990058c1f21ff190a0348426b89ea366c154d1e98db8",
+  "response_bytes": 1040,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

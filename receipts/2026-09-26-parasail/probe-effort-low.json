@@ -1,0 +1,74 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-f4e3f2126eda155f95de25abfe0340ee",
+    "object": "chat.completion",
+    "created": 1790427473,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "Compute 17*23=391."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 80,
+      "total_tokens": 99,
+      "completion_tokens": 19,
+      "prompt_tokens_details": {
+        "cached_tokens": 64,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 8
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-57-53Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "f4e3f2126eda155f95de25abfe0340ee"
+  }
+}

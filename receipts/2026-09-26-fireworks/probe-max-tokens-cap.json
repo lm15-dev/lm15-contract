@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-ef0fe04517fe48298e6684239c622d3f",
+    "object": "chat.completion",
+    "created": 1790427439,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need answer only count 1 to",
+          "tools": null
+        },
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 41,
+      "total_tokens": 49,
+      "completion_tokens": 8,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 8
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 8
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-19Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-ef0fe04517fe48298e6684239c622d3f"
+  }
+}

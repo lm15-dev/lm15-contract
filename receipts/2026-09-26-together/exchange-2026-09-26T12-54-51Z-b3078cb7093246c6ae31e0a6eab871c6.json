@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-09-26T12-54-51Z",
+  "provider": "together",
+  "status": 200,
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants weather in Paris. Let me call the tool.",
+          "tool_calls": [
+            {
+              "id": "call_01a0ddc8602a761395e95d8d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0ddc8602a761395e95d8d",
+          "content": "Sunny, 22°C"
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2d0de016494017ec908ca591764b127602bdea8db1bea60714ee846d0b775635",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "08ea8e78f613fe848d81231ca43a0df10d9aa2d716dcbf7195c5288c76e74113",
+  "response_bytes": 475,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

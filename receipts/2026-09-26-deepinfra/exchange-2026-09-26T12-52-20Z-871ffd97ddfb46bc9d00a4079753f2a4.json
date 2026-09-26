@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-26T12-52-20Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2d681ed5552d866694918ada21a6637a4a1c906aa3e9c66c83f3c21d6c605017",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "fee32a5863d57781f2ef758b47f8166ea8cd9e9d35fc72fb1135a5e5f008dc2f",
+  "response_bytes": 1590,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

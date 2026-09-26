@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-09-26T12-54-43Z",
+  "provider": "together",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "max_completion_tokens": 100
+    }
+  },
+  "request_sha256": "c131b087c9f641e90cf6f91dea00313500690c4ce5bc1b144a3cb373f161149b",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "3f4775ecf2a4abd5519ab7c60c97263a79eb84babbae70c435e800e471fea208",
+  "response_bytes": 1027,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

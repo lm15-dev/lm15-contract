@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "object": "error",
+      "type": "invalid_request_error",
+      "code": "invalid_request_error",
+      "message": "3 request validation errors: Input should be 'low', 'medium', 'high', 'xhigh', 'max', 'none' or 'adaptive', field: 'reasoning_effort.literal['low','medium','high','xhigh','max','none','adaptive']', value: 'bogus'; Input should be a valid integer, unable to parse string as an integer, field: 'reasoning_effort.int', value: 'bogus'; Input should be a valid boolean, unable to interpret input, field: 'reasoning_effort.bool', value: 'bogus'"
+    }
+  },
+  "timestamp": "2026-09-26T12-57-26Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-99241e87c80a4765bbf8c54f48106de9"
+  }
+}

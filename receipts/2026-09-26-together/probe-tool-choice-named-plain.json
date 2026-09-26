@@ -1,0 +1,89 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p2pw3aY-4YNCb4-a4126c45488baa1d",
+    "object": "chat.completion",
+    "created": 1790427326,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "seed": 413138238617783100,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_p1u34wi4aajbvfq1zbcx36uw",
+              "type": "function",
+              "function": {
+                "arguments": "{\"city\":\"New York\"}",
+                "name": "get_weather"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 176,
+      "completion_tokens": 20,
+      "total_tokens": 196,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-09-26T12-55-26Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2pw3aY-4YNCb4-a4126c45488baa1d"
+  }
+}

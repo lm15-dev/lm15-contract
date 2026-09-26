@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-09-26T12-52-28Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You answer in exactly two words."
+        },
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "request_sha256": "e4f594fc2344754be828429b31f2e44bcc4a64b486766a19f09810d0349d0942",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5738af220fa175851bde433189e94338e8602ebdca30732f8365630829615e29",
+  "response_bytes": 456,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

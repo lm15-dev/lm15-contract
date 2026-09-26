@@ -1,0 +1,38 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 400,
+  "body": {
+    "id": "09a70e08ea131b8b3746c6dc3fa24618",
+    "error": {
+      "message": "Harmony does not support reasoning_effort='none'",
+      "type": "BadRequestError",
+      "param": null,
+      "code": 400,
+      "request_id": "09a70e08ea131b8b3746c6dc3fa24618"
+    }
+  },
+  "timestamp": "2026-09-26T12-57-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "09a70e08ea131b8b3746c6dc3fa24618"
+  }
+}

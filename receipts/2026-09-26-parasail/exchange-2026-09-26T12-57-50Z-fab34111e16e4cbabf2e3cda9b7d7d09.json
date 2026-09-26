@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-09-26T12-57-50Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You answer in exactly two words."
+        },
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "request_sha256": "96730cfb504b09611db6d7dc91b1b3e8feb99da9541d757c03887709be064982",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "530227a352d4f1109528d73598165519fedc44a0ae9f0934b6cde84f6d95da99",
+  "response_bytes": 777,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T12-57-48Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "request_sha256": "197fdcef283273f20e71c99e38ca1b373bda17c34814b127e7bb891a407aef64",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "a47c13295ae31645a2e8a5a5336682f4c4b44491c619328235d5b9eeb0d3382c",
+  "response_bytes": 827,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

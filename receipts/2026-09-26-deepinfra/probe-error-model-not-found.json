@@ -1,0 +1,35 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "lm15-probe/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "message": "The model `lm15-probe/no-such-model` does not exist",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "model_not_found"
+    }
+  },
+  "timestamp": "2026-09-26T12-53-00Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RljjnNDtBG3P69mH966igzVN"
+  }
+}

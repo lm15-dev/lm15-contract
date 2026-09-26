@@ -1,0 +1,91 @@
+{
+  "canonical_response": {
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "call_qr3devxejnkcpw9w6mv27bfh",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 184,
+      "output_tokens": 23,
+      "total_tokens": 207,
+      "cache_read_tokens": 0
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "call_qr3devxejnkcpw9w6mv27bfh",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\"Paris\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 184,
+        "output_tokens": 23,
+        "total_tokens": 207,
+        "cache_read_tokens": 0
+      },
+      "provider_data": {
+        "id": "p2pvrov-4YNCb4-a4126b62cd38aa1d",
+        "object": "chat.completion.chunk",
+        "created": 1790427290,
+        "choices": [
+          {
+            "index": 0,
+            "text": "",
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "seed": 17162035832826878000,
+            "delta": {
+              "token_id": 128008,
+              "role": "assistant",
+              "content": ""
+            }
+          }
+        ],
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "usage": {
+          "prompt_tokens": 184,
+          "completion_tokens": 23,
+          "total_tokens": 207,
+          "cached_tokens": 0
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-54-50Z.txt"
+  }
+}

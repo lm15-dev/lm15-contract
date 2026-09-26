@@ -1,0 +1,96 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-0ec3c91521cedab50767edb46cfdff74",
+    "object": "chat.completion",
+    "created": 1790427511,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"city\": \"Kyoto\",\n  \"country\": \"Japan\"\n}",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "User: \"Name one city and its country.\" It's simple: e.g., Paris France. Provide a city and country."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 74,
+      "total_tokens": 129,
+      "completion_tokens": 55,
+      "prompt_tokens_details": {
+        "cached_tokens": 64,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 25
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-31Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "0ec3c91521cedab50767edb46cfdff74"
+  }
+}

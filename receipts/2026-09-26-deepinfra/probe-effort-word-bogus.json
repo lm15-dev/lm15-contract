@@ -1,0 +1,35 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 422,
+  "body": {
+    "error": {
+      "message": "Input should be 'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'",
+      "type": "invalid_request_error",
+      "param": "reasoning_effort",
+      "code": null
+    }
+  },
+  "timestamp": "2026-09-26T13-01-54Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

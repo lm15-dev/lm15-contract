@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-09-26T12-52-24Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "openai/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user asks for weather in Paris, we need to call the get_weather function with city \"Paris\".",
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-e3914131021c407f8726a0ee8539010e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-e3914131021c407f8726a0ee8539010e",
+          "content": "Sunny, 22°C"
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2ed6fb236f03a45c94d6732bb7ca67b30a71d6488f12f3025b046eb762d31fce",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "17734a8eacabd3d9ee13cc1b47bd87994a1243c8d59aed56bc76c154c21b2eca",
+  "response_bytes": 511,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

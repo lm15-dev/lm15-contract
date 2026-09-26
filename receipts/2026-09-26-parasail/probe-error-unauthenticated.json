@@ -1,0 +1,28 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": "Unauthorized. Invalid token format.\n",
+  "timestamp": "2026-09-26T12-58-37Z",
+  "response_headers": {
+    "Content-Type": "application/json;charset=ISO-8859-1",
+    "X-Request-Id": "ddb3ee15cfbab3665441c247fdf2c53c"
+  }
+}

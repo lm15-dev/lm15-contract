@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T13-08-23Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/glm-5p3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "33c7fb0f8b08a80a93fa30b2b69de73255f06f97c67012ca54e1aaae6cb44165",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-690f05730ffe45889b1a88bddf730c0b"
+  },
+  "provenance": "adapter-built"
+}

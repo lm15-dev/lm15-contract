@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-010f1ae1b22c4ba79914d7fe1841e74a",
+    "object": "chat.completion",
+    "created": 1790427438,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n\"city\": \"Paris\",\n\"country\": \"France\"\n}",
+          "reasoning_content": "We need to respond adhering to format json_object. Must include city and country strings. Provide any city-country pair. Ensure correct JSON minimal. Should be a JSON object with keys city and country. No extra. Provide \"Paris\",\"France\"."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 120,
+      "total_tokens": 195,
+      "completion_tokens": 75,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 48
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 48
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-010f1ae1b22c4ba79914d7fe1841e74a"
+  }
+}

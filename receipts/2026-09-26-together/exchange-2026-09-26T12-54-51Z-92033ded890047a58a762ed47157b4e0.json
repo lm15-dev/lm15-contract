@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-09-26T12-54-51Z",
+  "provider": "together",
+  "status": 200,
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "e7ec3b2b05aa5c4b9167fa4a81259bfde8df71dd48ee55b50f01feed0109a74b",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e0a140b1bf9681db1add9c5260d3c71bfdc217359612977653f160608146907a",
+  "response_bytes": 616,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

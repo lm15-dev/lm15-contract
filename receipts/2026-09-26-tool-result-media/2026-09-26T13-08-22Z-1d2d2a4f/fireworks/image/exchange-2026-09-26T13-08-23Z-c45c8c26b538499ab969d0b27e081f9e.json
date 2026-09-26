@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-09-26T13-08-23Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/glm-5p3-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/glm-5p3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "54e226ecbbb738e1933ef9531f758053acf85df92144555f643e4dd47f0704fb",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c8e2e7e98be81da438e2e2b83fae8352e06a6071458e6e067f970a2a86bc9c03",
+  "response_bytes": 763,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

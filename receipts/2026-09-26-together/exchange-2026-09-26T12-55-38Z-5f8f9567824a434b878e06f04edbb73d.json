@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-09-26T12-55-38Z",
+  "provider": "together",
+  "status": 404,
+  "model": "lm15-probe/no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "lm15-probe/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "request_sha256": "f19fbdaff535b9fd24f92f06d0f0a57de7a98136ac550c8c29abbc4d65eb0d5b",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5b36ed0ba12c414fa6f8938872940fcf0ea55d4cae9ccd962b75611fb1242a33",
+  "response_bytes": 302,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

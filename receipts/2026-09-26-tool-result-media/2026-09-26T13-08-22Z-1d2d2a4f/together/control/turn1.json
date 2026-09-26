@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-26T13-08-23Z",
+  "status": 400,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-32B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACXUlEQVR4nO3SMQ0AMQzAwIIIfygPp3MhPIgMliVLBuDhznujbj55c9UdXECA1AWIjhYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwvYApp71fEH22gCuwKExyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PIEDqeAQBUscjCJA6HkGA1PEIAqSORxAgdTyCAKnjEQRIHY8gQOp4BAFSxyMIkDoeQYDU8QgCpI5HECB1PIIAqeMRBEgdjyBA6ngEAVLHIwiQOh5BgNTxCAKkjkcQIHU8ggCp4xEESB2PYNMPfDRoJnElV9IAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "5e230f1ab3aedc10098795a0791680ccf195b55191289cc80ed1304ac2eb41bc",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2q12aA-2kFHot-a4127f3dfa2c9507"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

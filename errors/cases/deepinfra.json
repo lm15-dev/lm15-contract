@@ -1,0 +1,84 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.deepinfra.com error envelopes captured verbatim 2026-09-26 by research/providers/deepinfra/capture.py; receipts/2026-09-26-deepinfra/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "deepinfra.unauthenticated",
+      "provider": "deepinfra",
+      "status": 401,
+      "body": {
+        "error": {
+          "message": "User is not authorized to access this resource",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "invalid_api_key"
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "deepinfra",
+        "provider_code": "invalid_api_key",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.deepinfra.com HTTP 401 verbatim 2026-09-26T12-52-59Z — receipts/2026-09-26-deepinfra/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepinfra.model_not_found",
+      "provider": "deepinfra",
+      "status": 404,
+      "body": {
+        "error": {
+          "message": "The model `lm15-probe/no-such-model` does not exist",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": "model_not_found"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "deepinfra",
+        "provider_code": "model_not_found",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.deepinfra.com HTTP 404 verbatim 2026-09-26T12-53-00Z — receipts/2026-09-26-deepinfra/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "deepinfra.bad_effort",
+      "provider": "deepinfra",
+      "status": 422,
+      "body": {
+        "error": {
+          "message": "Input should be 'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'",
+          "type": "invalid_request_error",
+          "param": "reasoning_effort",
+          "code": null
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "deepinfra",
+        "provider_code": "invalid_request_error",
+        "status": 422
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.deepinfra.com HTTP 422 verbatim 2026-09-26T12-53-01Z — receipts/2026-09-26-deepinfra/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

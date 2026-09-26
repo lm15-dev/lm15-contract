@@ -63,6 +63,9 @@ MODELS = {
     "vertex": "gemini-3.7-flash", "vertex-express": "gemini-3.7-flash",
     "vertex-anthropic": "claude-haiku-4-5", "ollama": "qwen3.5:0.8b",
     "vllm": "Qwen/Qwen2.5-VL-7B-Instruct", "sglang": "Qwen/Qwen2.5-VL-7B-Instruct",
+    # open-model inference hosts (2026-09-26): a vision model each host serves
+    "deepinfra": "Qwen/Qwen3-VL-235B-A22B-Instruct", "together": "moonshotai/Kimi-K3",
+    "fireworks": "accounts/fireworks/models/glm-5p3-flash", "parasail": "Qwen/Qwen3-VL-8B-Instruct",
 }
 CELLS = ("text", "image", "mixed", "pair", "pdf", "error", "control")
 COLORS = {"red": (230, 20, 20), "green": (20, 190, 20), "blue": (20, 20, 230),

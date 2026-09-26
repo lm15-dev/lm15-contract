@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T13-08-22Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        }
+      ],
+      "max_completion_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "db555f3911be051eca4daa5b45dd7f568019f92db27d55baaab56bd906e95e35",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RfuVcsWkuV2lSGh5DZYRQ1qe"
+  },
+  "provenance": "adapter-built"
+}

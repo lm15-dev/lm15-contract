@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "high"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RdKxkQH5twfJb6eSk4fEX5W3",
+    "object": "chat.completion",
+    "created": 1790427154,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "The user asks: \"What is 17*23? Reply with just the number.\" So we need to compute 17*23 = 391? Let's compute: 17*20 = 340, 17*3 = 51, sum = 391. So answer: 391. The user wants just the number. So output \"391\".",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 67,
+      "total_tokens": 151,
+      "completion_tokens": 84,
+      "estimated_cost": 1.6759e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T12-52-32Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RdKxkQH5twfJb6eSk4fEX5W3"
+  }
+}

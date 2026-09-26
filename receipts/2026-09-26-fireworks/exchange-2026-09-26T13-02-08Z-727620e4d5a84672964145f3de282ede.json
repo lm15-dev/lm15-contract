@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-26T13-02-08Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "max"
+    }
+  },
+  "request_sha256": "4c03ebc672381341b926414621b1782eba514b0dd160fcb34b170a90d0588a54",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "902cbad6a3011d82a0e49d9c1b64203248a849ac231d173a6391e2f6e3bbc7e2",
+  "response_bytes": 781,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "xhigh"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-d2574beea28d4dfe8492b91e9fc891b0",
+    "object": "chat.completion",
+    "created": 1790427727,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "The user asks \"What is 17*23? Reply with just the number.\"\n\nWe just have to compute 17 * 23 = ?\n\nCompute: 17 * 23 = 17 * (20+3) = 340 + 51 = 391.\n\nThus answer should be 391.\n\nThe user asks to \"reply with just the number\". That's straightforward, no extra text. So reply \"391\"."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "total_tokens": 181,
+      "completion_tokens": 96,
+      "prompt_tokens_details": {
+        "cached_tokens": 40
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 85
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 85
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-02-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-d2574beea28d4dfe8492b91e9fc891b0"
+  }
+}

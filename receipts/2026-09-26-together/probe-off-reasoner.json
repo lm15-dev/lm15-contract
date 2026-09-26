@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p2pvv1k-z1gNr-a4126ba5cab2aa1d",
+    "object": "chat.completion",
+    "created": 1790427300,
+    "model": "openai/gpt-oss-120b",
+    "system_fingerprint": "default",
+    "prompt": [],
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "seed": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 79,
+      "total_tokens": 161,
+      "prompt_tokens_details": {
+        "cached_tokens": 81
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 69
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-55-00Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2pvv1k-z1gNr-a4126ba5cab2aa1d"
+  }
+}

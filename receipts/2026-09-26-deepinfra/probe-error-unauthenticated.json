@@ -1,0 +1,34 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "User is not authorized to access this resource",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "invalid_api_key"
+    }
+  },
+  "timestamp": "2026-09-26T12-52-59Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

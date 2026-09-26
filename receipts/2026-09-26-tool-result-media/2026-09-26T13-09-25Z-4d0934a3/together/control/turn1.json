@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-26T13-09-25Z",
+  "status": 400,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-8B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACWklEQVR4nO3SQQkAQRDEwBUx/qWcnH2vhBMxjxAIREDT1Jlv1N1x9567gwsIkLoABShA5nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOF7AGxH+467rjF+wKUIACZI5fECB1/IIAqeMXBEgdvyBA6vgFAVLHLwiQOn5BgNTxCwKkjl8QIHX8ggCp4xcESB2/IEDq+AUBUscvCJA6fkGA1PELAqSOXxAgdfyCAKnjFwRIHb8gQOr4BQFSxy8IkDp+QYDU8QsCpI5fECB1/IIAqeMXBEgdvyBA6vgFAVLHLwiQOn5BgNTxCwKkjl8QIHX8ggCp4xcESB2/IEDq+AUBUscvCJA6fkGA1PELAqSOXxAgdfyCAKnjFwRIHb8gQOr4BQFSxy8IkDp+QYDU8QsCpI5fECB1/IIAqeMXBEgdvyBA6vgFAVLHLwiQOn5BgNTxCwKkjl8QIHX8ggCp4xcESB2/IEDq+AUBUscv2PUD9SdoJo/NPQEAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "7df3de8dd1964921d6d915006acd92e76d058850e1d429146410d6bb8e5bce07",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2q1M2h-2kFHot-a41280c1bc3fd7a3"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

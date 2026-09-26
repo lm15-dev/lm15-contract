@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-26T12-55-07Z",
+  "provider": "together",
+  "status": 200,
+  "model": "openai/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning": {
+        "enabled": false
+      }
+    }
+  },
+  "request_sha256": "86df64a8a569cd2c7e4b2275c5a6eecb597f2c448a036de492fd0e07bb1bea63",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "db2d4160e28e64e79e8ed8e34263621e35e1f4da0cb948e2f2bf9bb26d14b255",
+  "response_bytes": 624,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

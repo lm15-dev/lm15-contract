@@ -1,0 +1,107 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-2d95182cce7838485fcfcd86ec4d77d2",
+    "object": "chat.completion",
+    "created": 1790427508,
+    "model": "meta-llama/Llama-3.3-70B-Instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-854e52da0cec0b0f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": 128008,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 238,
+      "total_tokens": 256,
+      "completion_tokens": 18,
+      "prompt_tokens_details": {
+        "cached_tokens": 208,
+        "created_cache_tokens": 16,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-27Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "2d95182cce7838485fcfcd86ec4d77d2"
+  }
+}

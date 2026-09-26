@@ -1,0 +1,75 @@
+{
+  "canonical_response": {
+    "model": "meta-llama/Llama-3.3-70B-Instruct",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Ok."
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 38,
+      "output_tokens": 3,
+      "total_tokens": 41,
+      "cache_read_tokens": 16
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "meta-llama/Llama-3.3-70B-Instruct"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "Ok"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "."
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 38,
+        "output_tokens": 3,
+        "total_tokens": 41,
+        "cache_read_tokens": 16
+      },
+      "provider_data": {
+        "id": "chatcmpl-a5ace54fcb0f932273d7e3f696f36aff",
+        "object": "chat.completion.chunk",
+        "created": 1790427459,
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "choices": [],
+        "usage": {
+          "prompt_tokens": 38,
+          "total_tokens": 41,
+          "completion_tokens": 3,
+          "prompt_tokens_details": {
+            "cached_tokens": 16,
+            "created_cache_tokens": 16
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-57-39Z.txt"
+  }
+}

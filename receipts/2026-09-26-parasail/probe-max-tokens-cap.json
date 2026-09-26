@@ -1,0 +1,71 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-d4a3ea7b20a946fad547801c7e13d931",
+    "object": "chat.completion",
+    "created": 1790427513,
+    "model": "meta-llama/Llama-3.3-70B-Instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "1 2 3 4 ",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "length",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 46,
+      "total_tokens": 54,
+      "completion_tokens": 8,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "created_cache_tokens": 32,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-33Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "d4a3ea7b20a946fad547801c7e13d931"
+  }
+}

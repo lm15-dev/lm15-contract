@@ -66,6 +66,15 @@
       "code": "validation_error",
       "contains": "The provided model identifier is invalid",
       "evidence": "receipts/2026-09-03-bedrock-chat/probe-error-model-not-found.json: HTTP 400 'The provided model identifier is invalid.'"
+    },
+    {
+      "providers": [
+        "parasail"
+      ],
+      "code": "invalid_request_error",
+      "prefix": "Deployment ",
+      "suffix": " doesn't exist or isn't accessible.",
+      "evidence": "receipts/2026-09-26-parasail/probe-error-model-not-found.json: HTTP 404 {\"message\":\"Deployment lm15-probe/no-such-model doesn't exist or isn't accessible.\",\"type\":\"invalid_request_error\",\"code\":\"invalid_request_error\"} — Parasail serves models as deployments; no word 'model' for the marker test to find"
     }
   ]
 }

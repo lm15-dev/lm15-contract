@@ -57,6 +57,13 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     # 2026-09-03 is LLM_<15 digits>_<27 alphanumerics>.  Both separators;
     # the 16-char floor keeps the docs' 11-char example from matching.
     ("meta model api key", re.compile(r"\bLLM[|_]\d{6,}[|_][A-Za-z0-9._-]{16,}")),
+    # The open-model inference hosts (2026-09-26): prefixed keys.  A DeepInfra
+    # key is 32 bare alphanumerics with no prefix — no specific pattern
+    # exists, and an entropy match would flood reviewers; its captures were
+    # checked for the literal key value before commit instead.
+    ("together api key", re.compile(r"\btgp_v1_[A-Za-z0-9_-]{20,}")),
+    ("fireworks api key", re.compile(r"\bfw_[A-Za-z0-9]{20,}\b")),
+    ("parasail api key", re.compile(r"\bpsk-[A-Za-z0-9_-]{20,}")),
     # Cloud hosts (changes/2026-09-03-cloud-hosts.md, AUTH-5): any PEM
     # private key block; the AWS test-suite pair (AKIDEXAMPLE) is not
     # AKIA-shaped and is expected in fixtures.

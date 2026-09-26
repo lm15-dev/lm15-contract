@@ -1,0 +1,70 @@
+{
+  "canonical_response": {
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "call_22KSdg9YAwRLnPm8vMSECMki",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 220,
+      "output_tokens": 14,
+      "total_tokens": 234
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\": \"Paris\"}",
+        "id": "call_22KSdg9YAwRLnPm8vMSECMki",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 220,
+        "output_tokens": 14,
+        "total_tokens": 234
+      },
+      "provider_data": {
+        "service_tier": "default",
+        "id": "chatcmpl-RW6WrxsQijjBEb39lXC1VzHE",
+        "object": "chat.completion.chunk",
+        "created": 1790427140,
+        "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        "choices": [],
+        "usage": {
+          "prompt_tokens": 220,
+          "total_tokens": 234,
+          "completion_tokens": 14,
+          "estimated_cost": 2.648e-05,
+          "prompt_tokens_details": null
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-52-20Z.txt"
+  }
+}

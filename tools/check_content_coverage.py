@@ -27,13 +27,14 @@ from pathlib import Path
 
 # bindings whose preset is `images`: documents raise, pinned by the reference's
 # tests and the ledger's document 400s (no server accepted a document there)
-IMAGES_ONLY = ("xai", "moonshotai", "moonshotai-responses", "moonshotai-anthropic", "zai")
+IMAGES_ONLY = ("xai", "moonshotai", "moonshotai-responses", "moonshotai-anthropic", "zai", "fireworks", "parasail")
 
 # binding → why its cell is open (blank by declaration, not by omission)
 OPEN: dict[str, str] = {
     "openrouter": "account 401 during the 2026-09-07 pass; preset reject until a receipt",
     "ollama": "0.8b local model timed out; source shows image rows lose ToolCallID; preset reject until a receipt",
     "vllm": "no server reachable during the pass; preset reject until a receipt",
+    "together": "credit limit (HTTP 402) during the 2026-09-26 pass; the serverless vision model is Kimi-K3 (Qwen3-VL models are dedicated-only); preset reject until a receipt",
     "sglang": "no server reachable during the pass; preset reject until a receipt",
     "azure": "hosted door (needs settings); OpenAI Responses wire, image cell 200-miss on gpt-4.1-mini only — ledger row, no case yet",
     "azure-chat": "hosted door; rate-limited during the pass; preset reject (openai) applies",

@@ -1,0 +1,32 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-eb728ce858b08a8987eaabaf491f08f6",
+    "model": "meta-llama/Llama-3.3-70B-Instruct",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "chatcmpl-tool-8b838e3c73a83b15",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 246,
+      "output_tokens": 23,
+      "total_tokens": 269,
+      "cache_read_tokens": 0
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-57-42Z.txt"
+  }
+}

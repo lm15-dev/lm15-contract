@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-26T13-08-25Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-8B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACR0lEQVR4nO3SQQnEQAAEwYhY/1JOTt6RcCL20QwUtIKmnvO+033fme78tntyAQBNBxBAAC2XCwCoRwDQcLkAgHoEAO0GEEAALZcLAKhHANBwuQCAegQA7QYQQAAtlwsAqEcA0HC5AIB6BADtBhBAAC2XCwCoRwDQcLkAgHoEAO0GEEAALZcLAKhHANBwuQCAegQA7QYQQAAtlwsAqEcA0HC5AIB6BADtBhBAAC2XCwCoRwDQcLkAgHoEAO0GEEAALZcLAKhHANBwuQCAegQA7QYQQAAtlwsAqEcA0HC5AIB6BADtBhBAAC2XCwCoRwDQcLkAgHoEAO0GEEAALZcLAKhHANBwuQCAegQA7QYQQAAtlwsAqEcA0HC5AIB6BADtBhBAAC2XC7gGdN7pesK31QfvAiivPgjQePVBgMarDwI0Xn0QoPHqgwCNVx8EaLz6IEDj1QcBGq8+CNB49UGAxqsPAjRefRCg8eqDAI1XHwRovPogQOPVBwEarz4I0Hj1QYDGqw8CNF59EKDx6oMAjVcfBGi8+iBA49UHARqvPgjQePVBgMarDwI0Xn0QoPHqgwCNVx8EaLz6IEDj1QcBGq8+CNB49UGAxqsPAjRefRCg8eqDAI1XHwRovPogQOPVBwEarz4I0Hj1QYDGqw8CNF59EKDx6oMAjVcfBGi8+iBA49UHARqvPgjQePVBgMarDwI0Xn0QoPHqgwCNVx8EaLz6IEDj1QcBGq8+CNB49UGAxqsPAjRefRCg8eqDAI1XHwRovPrgXX/sRmgmE4veKQAAAABJRU5ErkJggg=="
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "4c27712da7bf1bb9c6ccaf686e6cd8d017a11aad4230102b48a3c04fbbbef270",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "292e5a2442798e11e57cf9baa698e53b"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

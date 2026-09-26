@@ -1,0 +1,112 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-8dc30f36b272481310a833ecf0ec51ff",
+    "object": "chat.completion",
+    "created": 1790427500,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "It’s 22 °C in Paris right now and the sky is sunny.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "We have a conversation: user asks weather in Paris, we called get_weather, got 22C and sunny. We should reply with that info. The user wants \"What's the weather in Paris?\" So we respond with \"In Paris, it's 22°C and sunny.\" Probably just that."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 160,
+      "total_tokens": 245,
+      "completion_tokens": 85,
+      "prompt_tokens_details": {
+        "cached_tokens": 144,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 59
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-20Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "8dc30f36b272481310a833ecf0ec51ff"
+  }
+}

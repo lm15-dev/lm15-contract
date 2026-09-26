@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-09-26T12-57-25Z",
+  "provider": "fireworks",
+  "status": 404,
+  "model": "lm15-probe/no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "lm15-probe/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "request_sha256": "bf0b455613a300a285d879c073fedf611c78a2c1e82e2af11d3b3cecf4359eda",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "070d84558900048f26f61a41b5105f61d024c560e1ecaa0a697f653ce95348f1",
+  "response_bytes": 181,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,92 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-17f402b2fbf24c93985a9c5331e563ec",
+    "object": "chat.completion",
+    "created": 1790427424,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user just wants me to say \"ok\". This is a simple request. I should just respond with \"ok\". No tools needed.",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "chatcmpl-tool-9ea3ebc42a384425",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"test\"}"
+              },
+              "name": null
+            }
+          ],
+          "tools": null
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 292,
+      "total_tokens": 359,
+      "completion_tokens": 67,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 28
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-03Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-17f402b2fbf24c93985a9c5331e563ec"
+  }
+}

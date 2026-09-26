@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-a0b0e0be94244777bcc1c822c128f4d1",
+    "object": "chat.completion",
+    "created": 1790427430,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can’t check live weather because no weather tool is available in this session. If you enable a weather tool or provide an API, I can pull the current conditions for Paris.",
+          "reasoning_content": "We need answer user. Need use tool. We have no explicit tool namespace? Need infer available tools? We need call weather tool? The developer says use tool. We need maybe there is tool? No tools listed in prompt except maybe hidden? We can't call unless specified. In this interface, tools likely available via tool actions? We need maybe use API? There is no tool definition in conversation. We need respond? The user explicitly says \"Use the tool.\" We need use weather tool. But no tool provided. In these tasks, maybe there is a tool named \"weather\" or functions? We don't see. We can't actually call. We need maybe ask for location? Paris is clear. Need maybe say I can't access live weather without tool. But user says use tool. We need maybe invoke? We cannot. Let's inspect memory: There is no tool namespace. The environment might support functions? In this ChatCompletions, there are no functions. We need final answer. Should we fabricate? No. Could say \"I don't have access to a weather tool in this environment.\" But user asked. The instruction \"Use the tool\" maybe from benchmark expects we use tool. However no tool definitions are given. Maybe the tool is implicit? There might be a weather tool accessible via `weather` in some hidden. But we cannot call. We need answer honestly that tool unavailable. But maybe the grading expects a tool call? Let's think.\n\nWe are ChatGPT with \"tools\" in prompt? Only system says \"You are AI assistant accessed via API.\" Developer says no relevant. User asks weather. No tool definitions. Therefore cannot call tools. We should not hallucinate. We can maybe provide general answer: \"I can't check live weather without a weather tool.\" But maybe user asked \"Use the tool.\" We can say \"I don't have one available.\" That's best.\n\nBut maybe there is a built-in tool in this platform: `web.run`? Some sessions include tools like `web.run`, `python`, etc. But not listed in prompt. The assistant should not assume. If tools are available, system would include. So final answer: \"I can't retrieve live weather because no weather tool is available in this session.\" Maybe ask them to enable or provide API.\n\nNeed perhaps mention Paris, France. Final concise.",
+          "tools": null
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 41,
+      "total_tokens": 560,
+      "completion_tokens": 519,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 480
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 480
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-10Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-a0b0e0be94244777bcc1c822c128f4d1"
+  }
+}

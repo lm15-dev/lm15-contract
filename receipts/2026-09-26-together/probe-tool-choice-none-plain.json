@@ -1,0 +1,74 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p2pw3z4-fdNmn-a4126c4debeaaa1d",
+    "object": "chat.completion",
+    "created": 1790427327,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "seed": 17188891754239576000,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": "I'm a large language model, I don't have have access to real-time weather information. But I can suggest some ways for you to find the current weather in Paris.\n\nYou can check the weather in Paris by:\n\n1. Visiting a weather website such as AccuWeather, Weather.com, or the French national meteorological service, Météo-France.\n2. Using a virtual assistant like Siri, Google Assistant, or Alexa to ask for the current weather in Paris.\n3. Checking a mobile app like Dark Sky or Weather Underground for the latest weather forecast.\n\nPlease note that the weather in Paris can vary depending on the time of year and other factors, so it's always a good idea to check the forecast before planning your trip or daily activities.\n\nIf you want to know the general climate and weather patterns in Paris, I can provide you with some information. Paris has a temperate oceanic climate, with mild winters and warm summers. The average temperature in January, the coldest month, is around 6°C (43°F), while the average temperature in July, the warmest month, is around 25°C (77°F). Paris can experience some rainfall throughout the year, with the most significant amounts falling during the winter months.",
+          "tool_calls": []
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 46,
+      "completion_tokens": 253,
+      "total_tokens": 299,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-09-26T12-55-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2pw3z4-fdNmn-a4126c4debeaaa1d"
+  }
+}

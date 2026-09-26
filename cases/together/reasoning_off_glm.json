@@ -1,0 +1,93 @@
+{
+  "id": "together.reasoning_off_glm",
+  "provider": "together",
+  "feature": "reasoning_off_glm",
+  "request": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "low"
+    }
+  },
+  "description": "MAP-13 §4.2: GLM-5.3 always reasons (Z.AI: 400 on off) and Together accepts none and reasons anyway; the lowest level is sent and the substitution recorded.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.reasoning.effort",
+        "action": "substituted",
+        "asked": "off",
+        "applied": "low"
+      }
+    ]
+  },
+  "ingest": {
+    "lossy": [
+      "adapted"
+    ],
+    "canonical_request": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "What is 17*23? Reply with just the number."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "max_tokens": 1500,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    "note": "MAP-13: reading the wire back gives the request AFTER the recorded adaptation (expect_lm15.adaptations); the adaptation is lossy by design"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.together.ai 2026-09-26: receipts/2026-09-26-together/probe-off-always-on.json (HTTP 200, reasoning_content present on an explicit off); consumer-side pin — the wire side is the reference build, no live exchange of its own; changes/2026-09-26-inference-hosts-live.md",
+    "exchange": "receipts/2026-09-26-together/exchange-2026-09-26T12-55-02Z-dff2e98ffc85442694621cc132062139.json"
+  },
+  "canonical_request": {
+    "model": "zai-org/GLM-5.3-Flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is 17*23? Reply with just the number."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 1500,
+      "reasoning": {
+        "effort": "off"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "authored from the probe cells it pins (research/providers/_inference_hosts_pins.py)"
+  }
+}

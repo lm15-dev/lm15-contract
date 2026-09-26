@@ -338,7 +338,12 @@ class Capture:
             data = json.loads(raw)
         except ValueError:
             data = raw.decode("utf-8", "replace")
-        ids = [e.get("id") for e in data.get("data", [])] if status == 200 and isinstance(data, dict) else []
+        # Two catalog shapes: OpenAI's {"data": [...]} and a bare array
+        # (Together, 2026-09-26); the case says which (entries_key null = bare).
+        entries_key = None if isinstance(data, list) else "data"
+        entries = data if isinstance(data, list) else (data.get("data", []) if isinstance(data, dict) else [])
+        ids = [e.get("id") for e in entries if isinstance(e, dict)]
+        shown = ids if len(ids) <= 20 else [*ids[:20], f"… {len(ids) - 20} more"]
         if self.fixture_credential is not None:
             from lm15.credentials import credential_to_dict, format_rfc3339, parse_rfc3339
 
@@ -358,9 +363,11 @@ class Capture:
             "description": f"{self.provider} model catalog listing (GET /models)",
             "request": request_block,
             "provenance": {"source": "live-capture", "date": ts[:10],
-                           "evidence": f"{self.host} /models {ts}, HTTP {status}, {len(ids)} entries {ids}; "
-                                       f"verbatim at bodies/{self.provider}.models/{ts}.txt; {self.change_entry}"},
-            "entries_key": "data", "pinned_body": f"{ts}.txt", "expect": {"status": status},
+                           "evidence": f"{self.host} /models {ts}, HTTP {status}, {len(ids)} entries {shown}; "
+                                       f"verbatim at bodies/{self.provider}.models/{ts}.txt; {self.change_entry}",
+                           # D11 (tools/check_provenance.py): the exchange receipt of the capture.
+                           "exchange": str(self.receipts.relative_to(CONTRACT) / self.last_exchange)},
+            "entries_key": entries_key, "pinned_body": f"{ts}.txt", "expect": {"status": status},
         }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         self.write_receipt("models.json", data)
         return {"feature": "models", "status": status, "entries": ids}

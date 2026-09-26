@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning": {
+        "enabled": false
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-101a07e1423e7dba35700fdd3bb61d88",
+    "object": "chat.completion",
+    "created": 1790427481,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "The user asks \"What is 17*23? Reply with just the number.\" That's simply 391. Check: 17*23=391. So output 391."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 80,
+      "total_tokens": 127,
+      "completion_tokens": 47,
+      "prompt_tokens_details": {
+        "cached_tokens": 64,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 36
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-01Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "101a07e1423e7dba35700fdd3bb61d88"
+  }
+}

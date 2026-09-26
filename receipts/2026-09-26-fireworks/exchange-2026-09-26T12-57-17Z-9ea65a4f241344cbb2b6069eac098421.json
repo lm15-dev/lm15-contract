@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T12-57-17Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "request_sha256": "4cb246d77ac38d95be39dcb08cf22215d838f58e87a3e22175a3bb40e1567f8e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "a8a0c115dac1daa2f9b72184f28f4f39b921d868d0eb00325152d35dd69fe258",
+  "response_bytes": 769,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

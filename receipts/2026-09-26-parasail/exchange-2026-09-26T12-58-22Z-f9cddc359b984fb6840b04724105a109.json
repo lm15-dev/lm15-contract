@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T12-58-22Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "request_sha256": "09bb6317e03416c480cab13dfe49ed6e852754b3285dbd01b8fe6b4f6ec4a72e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9fe7f46037e4c6f2c6c9e7dcd559582d570f9e1911f6a6b560447954334fb0c4",
+  "response_bytes": 926,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-26T13-08-22Z",
+  "status": 200,
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]} for the attached panel."
+            },
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACSUlEQVR4nO3SMQ0AMQzAwIIIfygPp3MhPIgMliVL3r3cuTPq5nP3nruDCwiQugAFKEDmcAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XECB3uIAAucMFBMgdLiBA7nABAXKHCwiQO1xAgNzhAgLkDhcQIHe4gAC5wwUEyB0uIEDucAEBcocLCJA7XECA3OECAuQOFxAgd7iAALnDBQTIHS4gQO5wAQFyhwsIkDtcQIDc4QIC5A4XsAVEA9h25dH/bQEKUIDM0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+h8gefQ/QPLof4Dk0f8AyaP/AZJH/wMkj/4HSB79D5A8+r/tBxFWaCaF3B4OAAAAAElFTkSuQmCC"
+              }
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 1600
+    }
+  },
+  "response_sha256": "71ad4b586d7d7565cb0eab213a46c6d812d04a4334dd922952b89e8791b4cd22",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RP3Xnfs2JnE8IV6zKi8DhKV0"
+  },
+  "provenance": "adapter-built (unpatched SDK)"
+}

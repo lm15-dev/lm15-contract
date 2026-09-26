@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "object": "error",
+      "type": "invalid_request_error",
+      "code": "invalid_request_error",
+      "message": "Invalid reasoning effort: none"
+    }
+  },
+  "timestamp": "2026-09-26T12-56-46Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-ef38704283064a07914f489ad3d8158a"
+  }
+}

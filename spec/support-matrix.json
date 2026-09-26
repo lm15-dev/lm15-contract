@@ -14,7 +14,8 @@
     "2026-09-03: moonshotai-responses (Responses wire; kimi-k3 documented, stateless, web_search built-in; the same GET /models) and moonshotai-anthropic (Messages wire, bearer token; GET /models is 404 on the /anthropic root) pinned with live receipts. changes/2026-09-03-moonshotai-wires.md",
     "2026-09-04: bedrock-mantle-chat pinned with live receipts (GET /v1/models 200, 55 ids; gpt-oss and DeepSeek 200). A tenth cloud door; not a rename of bedrock-chat. changes/2026-09-04-bedrock-mantle-chat-live.md",
     "2026-09-04: Azure completion pass extended: azure live=true, files=true, batches=true, speech=true; Realtime text WebSocket, Files pending lifecycle, Batch queue/cancel, WAV speech, gpt-5-mini reasoning, prompt cache hits, and both content-filter paths live-pinned. Images remain false pending gpt-image-1-mini quota; video deliberately excluded. azure-anthropic remains quota-blocked for successful inference, but x-api-key and all Entra paths are live-proven; documented api-key is refused. changes/2026-09-04-azure-live.md, changes/2026-09-04-azure-anthropic-partial.md",
-    "2026-09-17: typesafe (TypeSafe System One / Jev) pinned with live receipts: complete only (one judgment call, no stream), models. changes/2026-09-17-judgments.md D1/D10/D11; receipts/2026-09-17-typesafe/, receipts/2026-09-17-judgments/"
+    "2026-09-17: typesafe (TypeSafe System One / Jev) pinned with live receipts: complete only (one judgment call, no stream), models. changes/2026-09-17-judgments.md D1/D10/D11; receipts/2026-09-17-typesafe/, receipts/2026-09-17-judgments/",
+    "2026-09-26: rows `deepinfra`, `together`, `fireworks`, `parasail` — the open-model inference hosts, Chat Completions wire only; batch/files/images they also sell are not registered. changes/2026-09-26-inference-hosts-live.md"
   ],
   "providers": {
     "anthropic": {
@@ -221,6 +222,28 @@
       ],
       "env_keys": []
     },
+    "deepinfra": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "DEEPINFRA_API_KEY"
+      ]
+    },
     "deepseek": {
       "supports": {
         "complete": true,
@@ -263,6 +286,28 @@
       ],
       "env_keys": [
         "DEEPSEEK_API_KEY"
+      ]
+    },
+    "fireworks": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "FIREWORKS_API_KEY"
       ]
     },
     "gemini": {
@@ -553,6 +598,28 @@
         "OPENROUTER_API_KEY"
       ]
     },
+    "parasail": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "PARASAIL_API_KEY"
+      ]
+    },
     "sglang": {
       "supports": {
         "complete": true,
@@ -572,6 +639,28 @@
         "bearer"
       ],
       "env_keys": []
+    },
+    "together": {
+      "supports": {
+        "complete": true,
+        "stream": true,
+        "live": false,
+        "files": false,
+        "batches": false,
+        "images": false,
+        "speech": false,
+        "video": false,
+        "responses_api": false,
+        "models": true,
+        "caches": false,
+        "extra": []
+      },
+      "auth_modes": [
+        "bearer"
+      ],
+      "env_keys": [
+        "TOGETHER_API_KEY"
+      ]
     },
     "typesafe": {
       "supports": {

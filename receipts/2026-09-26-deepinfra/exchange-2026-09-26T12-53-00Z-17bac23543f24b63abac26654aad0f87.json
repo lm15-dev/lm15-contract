@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-09-26T12-53-00Z",
+  "provider": "deepinfra",
+  "status": 404,
+  "model": "lm15-probe/no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "lm15-probe/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "request_sha256": "ecf2287aab329459755ead3a546a2e285401798f78ebfb537b59846476f9b182",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "8b34c2e83f18c6faa06b8cbec18e22dea34e7cf4c873e01d7150deecfcdba08f",
+  "response_bytes": 144,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

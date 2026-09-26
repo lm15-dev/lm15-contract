@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-09-26T12-57-46Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "We need to call the functions.get_weather with city=\"Paris\".",
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-bbda8fedbeb558a0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "chatcmpl-tool-bbda8fedbeb558a0",
+          "content": "Sunny, 22°C"
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "1fb32ddeb225d03ac5fffe96aaf71b5c048347e0e88c9be52c49397654183527",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e3569f9706fb3f4ed2e65faca9204c6b323bed5d5d1fa2606e847ed7274daa7c",
+  "response_bytes": 830,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

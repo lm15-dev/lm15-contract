@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-26T13-02-13Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "medium"
+    }
+  },
+  "request_sha256": "1ba5ec17bbb24ed264c7469d186dcfbde30008e14ad61482ca81e3ad45e206ef",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "78b09b8ac8280f6234dea985c47c88261754b8f9e7b307c00b94940e267f5301",
+  "response_bytes": 907,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

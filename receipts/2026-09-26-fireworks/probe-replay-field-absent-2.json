@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-b2ce42f308ed4ccab3f9e591662f60e7",
+    "object": "chat.completion",
+    "created": 1790427421,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The current weather in Paris is 22 °C and sunny.",
+          "reasoning_content": "The user asked: \"What's the weather in Paris?\" The function returned \"22C and sunny\". I should respond with that info."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 165,
+      "total_tokens": 215,
+      "completion_tokens": 50,
+      "prompt_tokens_details": {
+        "cached_tokens": 164
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 27
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 27
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-00Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-b2ce42f308ed4ccab3f9e591662f60e7"
+  }
+}

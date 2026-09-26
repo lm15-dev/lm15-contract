@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-a48e8ca0f9a447bf8a111c1db949d4c4",
+    "object": "chat.completion",
+    "created": 1790427428,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user just says \"Say ok.\" So I should respond with \"ok\".",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "chatcmpl-tool-a13fc64df0876f1c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              },
+              "name": null
+            }
+          ],
+          "tools": null
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 292,
+      "total_tokens": 348,
+      "completion_tokens": 56,
+      "prompt_tokens_details": {
+        "cached_tokens": 162
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 16
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 16
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-07Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-a48e8ca0f9a447bf8a111c1db949d4c4"
+  }
+}

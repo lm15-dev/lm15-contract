@@ -1,0 +1,414 @@
+[
+  {
+    "provider": "together",
+    "model": "Qwen/Qwen3-VL-32B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 400,
+    "outcome": "first_call_rejected",
+    "detail": "{\n  \"id\": \"p2q12Le-2kFHot-a4127f384bb92df2\",\n  \"error\": {\n    \"message\": \"Unable to access non-serverless model Qwen/Qwen3-VL-32B-Instruct. Please visit https://api.together.ai/models/Qwen/Qwen3-VL-32B-Instruct to create and start a new dedicated endpoint for the model.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": null,\n    \"code\": \"model_not_available\"\n  }\n}",
+    "wall_s": 0.38
+  },
+  {
+    "provider": "together",
+    "model": "Qwen/Qwen3-VL-32B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 1,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 400,
+    "outcome": "first_call_rejected",
+    "detail": "{\n  \"id\": \"p2q12TJ-2kFHot-a4127f3b8e6688df\",\n  \"error\": {\n    \"message\": \"Unable to access non-serverless model Qwen/Qwen3-VL-32B-Instruct. Please visit https://api.together.ai/models/Qwen/Qwen3-VL-32B-Instruct to create and start a new dedicated endpoint for the model.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": null,\n    \"code\": \"model_not_available\"\n  }\n}",
+    "wall_s": 0.17
+  },
+  {
+    "provider": "deepinfra",
+    "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"green\",\"yellow\",\"blue\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 148,
+      "total_tokens": 165,
+      "completion_tokens": 17,
+      "estimated_cost": 4.456e-05,
+      "prompt_tokens_details": null
+    },
+    "wall_s": 0.96
+  },
+  {
+    "provider": "deepinfra",
+    "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 422,
+    "outcome": "tool_result_rejected",
+    "detail": "{\"error\":{\"message\":\"Input should be a valid string\",\"type\":\"invalid_request_error\",\"param\":\"messages.2.tool.content.str\",\"code\":null}}",
+    "wall_s": 1.07
+  },
+  {
+    "provider": "together",
+    "model": "Qwen/Qwen3-VL-32B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 400,
+    "outcome": "first_call_rejected",
+    "detail": "{\n  \"id\": \"p2q12aA-2kFHot-a4127f3dfa2c9507\",\n  \"error\": {\n    \"message\": \"Unable to access non-serverless model Qwen/Qwen3-VL-32B-Instruct. Please visit https://api.together.ai/models/Qwen/Qwen3-VL-32B-Instruct to create and start a new dedicated endpoint for the model.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": null,\n    \"code\": \"model_not_available\"\n  }\n}",
+    "wall_s": 0.17
+  },
+  {
+    "provider": "fireworks",
+    "model": "accounts/fireworks/models/glm-5p3-flash",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "yellow",
+        "green",
+        "blue",
+        "magenta",
+        "red",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "green",
+        "blue",
+        "magenta",
+        "red",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\":[\"yellow\",\"green\",\"blue\",\"magenta\",\"red\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 117,
+      "total_tokens": 164,
+      "completion_tokens": 47,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 29
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 29
+      }
+    },
+    "wall_s": 1.26
+  },
+  {
+    "provider": "fireworks",
+    "model": "accounts/fireworks/models/glm-5p3-flash",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "green",
+        "yellow",
+        "blue",
+        "red",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "yellow",
+        "blue",
+        "red",
+        "magenta",
+        "cyan"
+      ]
+    },
+    "output": "{\"A\":[\"green\",\"yellow\",\"blue\",\"red\",\"magenta\",\"cyan\"]}",
+    "usage": {
+      "prompt_tokens": 322,
+      "total_tokens": 340,
+      "completion_tokens": 18,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "wall_s": 1.81
+  },
+  {
+    "provider": "deepinfra",
+    "model": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "green",
+        "yellow",
+        "magenta",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "green",
+        "yellow",
+        "magenta",
+        "cyan",
+        "blue",
+        "red"
+      ]
+    },
+    "output": "{\"A\": [\"green\", \"yellow\", \"magenta\", \"cyan\", \"blue\", \"red\"]}",
+    "usage": {
+      "prompt_tokens": 302,
+      "total_tokens": 325,
+      "completion_tokens": 23,
+      "estimated_cost": 8.064e-05,
+      "prompt_tokens_details": null
+    },
+    "wall_s": 3.21
+  },
+  {
+    "provider": "fireworks",
+    "model": "accounts/fireworks/models/glm-5p3-flash",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "cyan",
+        "red",
+        "blue",
+        "yellow",
+        "magenta",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "red",
+        "blue",
+        "yellow",
+        "magenta",
+        "green"
+      ]
+    },
+    "output": "{\"A\": [\"cyan\", \"red\", \"blue\", \"yellow\", \"magenta\", \"green\"]}",
+    "usage": {
+      "prompt_tokens": 334,
+      "total_tokens": 444,
+      "completion_tokens": 110,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 86
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 86
+      }
+    },
+    "wall_s": 2.75
+  },
+  {
+    "provider": "parasail",
+    "model": "Qwen/Qwen3-VL-8B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "cyan",
+        "yellow",
+        "green",
+        "blue",
+        "magenta",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "yellow",
+        "green",
+        "blue",
+        "magenta",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"cyan\",\"yellow\",\"green\",\"blue\",\"magenta\",\"red\"]}",
+    "usage": {
+      "prompt_tokens": 148,
+      "total_tokens": 165,
+      "completion_tokens": 17,
+      "prompt_tokens_details": null
+    },
+    "wall_s": 0.87
+  },
+  {
+    "provider": "parasail",
+    "model": "Qwen/Qwen3-VL-8B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "cyan",
+        "yellow",
+        "red",
+        "green",
+        "blue",
+        "magenta"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "yellow",
+        "red",
+        "green",
+        "blue",
+        "magenta"
+      ]
+    },
+    "output": "{\"A\": [\"cyan\", \"yellow\", \"red\", \"green\", \"blue\", \"magenta\"]}",
+    "usage": {
+      "prompt_tokens": 302,
+      "total_tokens": 325,
+      "completion_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      }
+    },
+    "wall_s": 3.85
+  },
+  {
+    "provider": "parasail",
+    "model": "Qwen/Qwen3-VL-8B-Instruct",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "red",
+        "yellow",
+        "magenta",
+        "cyan",
+        "blue",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "yellow",
+        "magenta",
+        "cyan",
+        "blue",
+        "green"
+      ]
+    },
+    "output": "{\"A\": [\"red\", \"yellow\", \"magenta\", \"cyan\", \"blue\", \"green\"]}",
+    "usage": {
+      "prompt_tokens": 355,
+      "total_tokens": 378,
+      "completion_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 272
+      }
+    },
+    "wall_s": 3.57
+  }
+]

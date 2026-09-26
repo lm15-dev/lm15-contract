@@ -1,0 +1,104 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-0109807ac6b31a0ddc738b788169be0b",
+    "object": "chat.completion",
+    "created": 1790427505,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-aff0fcf5c44fca89",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "reasoning": "The user says \"Say ok.\" So respond with \"ok\"."
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": 200012,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 123,
+      "total_tokens": 162,
+      "completion_tokens": 39,
+      "prompt_tokens_details": {
+        "cached_tokens": 48,
+        "created_cache_tokens": 64,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 13
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-09-26T12-58-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "0109807ac6b31a0ddc738b788169be0b"
+  }
+}

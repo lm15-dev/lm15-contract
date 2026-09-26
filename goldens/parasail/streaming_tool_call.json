@@ -1,0 +1,89 @@
+{
+  "canonical_response": {
+    "model": "meta-llama/Llama-3.3-70B-Instruct",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "chatcmpl-tool-a2e466490c5f2b72",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 246,
+      "output_tokens": 23,
+      "total_tokens": 269,
+      "cache_read_tokens": 224
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "meta-llama/Llama-3.3-70B-Instruct"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "chatcmpl-tool-a2e466490c5f2b72",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\": \"Paris\"}"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": ""
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 246,
+        "output_tokens": 23,
+        "total_tokens": 269,
+        "cache_read_tokens": 224
+      },
+      "provider_data": {
+        "id": "chatcmpl-ec5b2898109a2ff7c98ac4cc75d936d2",
+        "object": "chat.completion.chunk",
+        "created": 1790427464,
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "choices": [],
+        "usage": {
+          "prompt_tokens": 246,
+          "total_tokens": 269,
+          "completion_tokens": 23,
+          "prompt_tokens_details": {
+            "cached_tokens": 224,
+            "created_cache_tokens": 16
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-57-44Z.txt"
+  }
+}

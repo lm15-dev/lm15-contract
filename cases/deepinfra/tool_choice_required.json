@@ -1,0 +1,63 @@
+{
+  "id": "deepinfra.tool_choice_required",
+  "provider": "deepinfra",
+  "feature": "tool_choice_required",
+  "description": "MAP-8: a forced tool choice on DeepInfra raises (default for every model but DeepSeek V4). Receipt: required and a named function answered plain text with no call on Llama 3.3 and gpt-oss; none on Llama wrote the call into the text. No wire request: UnsupportedFeatureError at build time.",
+  "expect_lm15": {
+    "raises": {
+      "op": "build_request",
+      "type": "UnsupportedFeatureError",
+      "code": "unsupported_feature",
+      "feature": "config.tool_choice.mode"
+    }
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.deepinfra.com 2026-09-26: receipts/2026-09-26-deepinfra/probe-tool-choice-required-plain.json, receipts/2026-09-26-deepinfra/probe-tool-choice-required-reasoner.json, receipts/2026-09-26-deepinfra/probe-tool-choice-named-plain.json, receipts/2026-09-26-deepinfra/probe-tool-choice-none-plain.json (HTTP 200, finish stop, no tool_calls); consumer-side pin — the wire side is the reference build, no live exchange of its own; changes/2026-09-26-inference-hosts-live.md",
+    "exchange": "receipts/2026-09-26-deepinfra/exchange-2026-09-26T13-02-50Z-92d4aea181be41219fe2202a9b7d6ac7.json"
+  },
+  "canonical_request": {
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 300,
+      "tool_choice": {
+        "mode": "required"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "authored from the probe cells it pins (research/providers/_inference_hosts_pins.py)"
+  }
+}

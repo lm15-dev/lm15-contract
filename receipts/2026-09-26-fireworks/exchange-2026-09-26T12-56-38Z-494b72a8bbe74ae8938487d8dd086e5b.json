@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-09-26T12-56-38Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You answer in exactly two words."
+        },
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "request_sha256": "8c11d1e4f5bcc97399f16a16d304dcbda4714c6a8e9fc2d18c66ac764b6fc542",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "635d5e9195706c94e428ccfc44338f41e80bdb077cd1e5bf0d64a66bd90d893e",
+  "response_bytes": 816,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

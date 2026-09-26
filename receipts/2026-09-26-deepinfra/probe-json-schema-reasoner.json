@@ -1,0 +1,78 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RpR1SMNW35mVXZWfL4DRJj2d",
+    "object": "chat.completion",
+    "created": 1790427174,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{ \"city\": \"Paris\", \"country\": \"France\" }",
+          "reasoning_content": "The user asks: \"Name one city and its country.\" So we need to provide a city and its country. Simple answer: \"Paris, France.\" Provide one city and its country. Probably just a short answer.",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 61,
+      "total_tokens": 129,
+      "completion_tokens": 68,
+      "estimated_cost": 1.3817e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T12-52-52Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RpR1SMNW35mVXZWfL4DRJj2d"
+  }
+}

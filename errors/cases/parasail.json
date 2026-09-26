@@ -1,0 +1,81 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.parasail.io error envelopes captured verbatim 2026-09-26 by research/providers/parasail/capture.py; receipts/2026-09-26-parasail/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "parasail.unauthenticated",
+      "provider": "parasail",
+      "status": 401,
+      "body": "Unauthorized. Invalid token format.\n",
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "parasail",
+        "provider_code": null,
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.parasail.io HTTP 401 verbatim 2026-09-26T12-58-37Z — receipts/2026-09-26-parasail/probe-error-unauthenticated.json; a plain-text body under a JSON content-type (the capture tool's error fold keeps JSON objects only, so this case was added by hand from the same receipt); expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "parasail.model_not_found",
+      "provider": "parasail",
+      "status": 404,
+      "body": {
+        "id": "ef8c4e3f3f84ae0b1b8aca4511480f47",
+        "error": {
+          "message": "Deployment lm15-probe/no-such-model doesn't exist or isn't accessible.",
+          "type": "invalid_request_error",
+          "param": null,
+          "code": null,
+          "request_id": "ef8c4e3f3f84ae0b1b8aca4511480f47"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "parasail",
+        "provider_code": "invalid_request_error",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.parasail.io HTTP 404 verbatim 2026-09-26T12-58-38Z — receipts/2026-09-26-parasail/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "parasail.bad_effort",
+      "provider": "parasail",
+      "status": 400,
+      "body": {
+        "id": "dd6f308676e2055ac9e35871b5e30eeb",
+        "error": {
+          "message": "1 validation error:\n  {'type': 'literal_error', 'loc': ('body', 'reasoning_effort'), 'msg': \"Input should be 'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'\", 'input': 'bogus', 'ctx': {'expected': \"'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'\"}}",
+          "type": "Bad Request",
+          "param": "body.reasoning_effort",
+          "code": 400,
+          "request_id": "dd6f308676e2055ac9e35871b5e30eeb"
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "parasail",
+        "provider_code": "400",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "api.parasail.io HTTP 400 verbatim 2026-09-26T12-58-39Z — receipts/2026-09-26-parasail/probe-error-bad-effort.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "lm15-probe/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "error": {
+      "message": "Model not found, inaccessible, and/or not deployed",
+      "param": "model",
+      "code": "NOT_FOUND",
+      "type": "error"
+    },
+    "request_id": "chatcmpl-c33f84c42c92454d8c601b38b5eaef32"
+  },
+  "timestamp": "2026-09-26T12-57-25Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-c33f84c42c92454d8c601b38b5eaef32"
+  }
+}

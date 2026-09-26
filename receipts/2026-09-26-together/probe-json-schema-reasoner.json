@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p2pw56V-fdNmn-a4126c654a86aa1d",
+    "object": "chat.completion",
+    "created": 1790427331,
+    "model": "openai/gpt-oss-120b",
+    "system_fingerprint": "default",
+    "prompt": [],
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{\n  \"city\": \"Paris\",\n  \"country\": \"France\"\n}",
+          "tool_calls": [],
+          "reasoning": "The user asks \"Name one city and its country.\" That's straightforward, no policy issues. Provide an example like \"Paris, France\"."
+        },
+        "finish_reason": "stop",
+        "seed": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 76,
+      "completion_tokens": 56,
+      "total_tokens": 132,
+      "prompt_tokens_details": {
+        "cached_tokens": 66
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-55-31Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p2pw56V-fdNmn-a4126c654a86aa1d"
+  }
+}

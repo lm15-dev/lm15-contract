@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-26T12-57-51Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "meta-llama/Llama-3.3-70B-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100,
+      "user": "lm15-case-user"
+    }
+  },
+  "request_sha256": "bbb429bf5f3e13f42cafc2b8fea0ae73d46566bcd06b34f30ccd6ab168555c63",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "aaca65c8208caace9ee35211b9667a6ceeed36adc0e44826eb91e86ec07298f6",
+  "response_bytes": 772,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

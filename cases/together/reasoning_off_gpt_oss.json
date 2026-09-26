@@ -1,0 +1,93 @@
+{
+  "id": "together.reasoning_off_gpt_oss",
+  "provider": "together",
+  "feature": "reasoning_off_gpt_oss",
+  "request": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "low"
+    }
+  },
+  "description": "MAP-13 §4.2: gpt-oss on Together accepts reasoning_effort none, hides the trace and still bills reasoning tokens; the lowest declared level (low) is sent and the substitution recorded.",
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.reasoning.effort",
+        "action": "substituted",
+        "asked": "off",
+        "applied": "low"
+      }
+    ]
+  },
+  "ingest": {
+    "lossy": [
+      "adapted"
+    ],
+    "canonical_request": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "What is 17*23? Reply with just the number."
+            }
+          ]
+        }
+      ],
+      "config": {
+        "max_tokens": 1500,
+        "reasoning": {
+          "effort": "low"
+        }
+      }
+    },
+    "note": "MAP-13: reading the wire back gives the request AFTER the recorded adaptation (expect_lm15.adaptations); the adaptation is lossy by design"
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "api.together.ai 2026-09-26: receipts/2026-09-26-together/probe-off-reasoner.json, receipts/2026-09-26-together/probe-shape-reasoning-disabled.json (HTTP 200, no reasoning field, completion_tokens_details.reasoning_tokens > 0); consumer-side pin — the wire side is the reference build, no live exchange of its own; changes/2026-09-26-inference-hosts-live.md",
+    "exchange": "receipts/2026-09-26-together/exchange-2026-09-26T12-55-00Z-2c1d52acbfdd498e80fb1ec707392320.json"
+  },
+  "canonical_request": {
+    "model": "openai/gpt-oss-120b",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is 17*23? Reply with just the number."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "max_tokens": 1500,
+      "reasoning": {
+        "effort": "off"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "authored from the probe cells it pins (research/providers/_inference_hosts_pins.py)"
+  }
+}

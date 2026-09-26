@@ -299,7 +299,8 @@ Out: `{"models": [<ModelInfo JSON>]}`
   parse_response): the listing mapping embeds each wire entry verbatim, and
   the harness verifies that mechanically — the returned `provider_data`
   values must be an order-preserving subsequence of the pinned body's
-  entries under the case's `entries_key` (entries without a usable id are
+  entries under the case's `entries_key` (`null`: the body itself is the
+  array — a bare-array catalog, Together 2026-09-26) (entries without a usable id are
   skipped, never invented). For the golden comparison the harness strips
   `origin.provider_data` and drops an origin left as exactly
   `{"type": "provider"}` (mirroring the serde collapse); goldens pin the

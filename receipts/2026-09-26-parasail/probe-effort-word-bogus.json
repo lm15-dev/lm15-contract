@@ -1,0 +1,38 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 400,
+  "body": {
+    "id": "8bda56e023f490d801cec08aaacf7950",
+    "error": {
+      "message": "1 validation error:\n  {'type': 'literal_error', 'loc': ('body', 'reasoning_effort'), 'msg': \"Input should be 'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'\", 'input': 'bogus', 'ctx': {'expected': \"'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'\"}}",
+      "type": "Bad Request",
+      "param": "body.reasoning_effort",
+      "code": 400,
+      "request_id": "8bda56e023f490d801cec08aaacf7950"
+    }
+  },
+  "timestamp": "2026-09-26T13-02-19Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "8bda56e023f490d801cec08aaacf7950"
+  }
+}

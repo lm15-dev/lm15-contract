@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "max_tokens": 800,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-4c5edc8635fa4c079c94ce8debf9ef32",
+    "object": "chat.completion",
+    "created": 1790427422,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The current weather in Paris is **22 °C (about 72 °F) and sunny**. It’s a pleasant day—great for a walk along the Seine or a coffee at an outdoor café. If you’re heading out, sunglasses or a light hat might be handy. Enjoy!",
+          "reasoning_content": "The user asks: \"What's the weather in Paris?\" The system just gave a function call result: \"22C and sunny\". I should provide an answer. Probably confirm the weather, give a brief suggestion."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 165,
+      "total_tokens": 276,
+      "completion_tokens": 111,
+      "prompt_tokens_details": {
+        "cached_tokens": 129
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 42
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 42
+      }
+    }
+  },
+  "timestamp": "2026-09-26T12-57-02Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-4c5edc8635fa4c079c94ce8debf9ef32"
+  }
+}

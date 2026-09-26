@@ -1,0 +1,228 @@
+{
+  "canonical_response": {
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user wants the weather in Paris. I'll call the tool."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_ad925ba9ab774fd0a795404c",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 300,
+      "output_tokens": 54,
+      "total_tokens": 354,
+      "cache_read_tokens": 170,
+      "reasoning_tokens": 14
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " user"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " wants"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " the"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " in"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " Paris"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " I"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "'ll"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " call"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " the"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": " tool"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "call_ad925ba9ab774fd0a795404c",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "Paris"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 300,
+        "output_tokens": 54,
+        "total_tokens": 354,
+        "cache_read_tokens": 170,
+        "reasoning_tokens": 14
+      },
+      "provider_data": {
+        "id": "chatcmpl-bc2a12d69cc348b5a77cc5c03fda89bd",
+        "object": "chat.completion.chunk",
+        "created": 1790427393,
+        "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+        "choices": [],
+        "usage": {
+          "prompt_tokens": 300,
+          "total_tokens": 354,
+          "completion_tokens": 54,
+          "prompt_tokens_details": {
+            "cached_tokens": 170
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 14
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 14
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T12-56-33Z.txt"
+  }
+}
