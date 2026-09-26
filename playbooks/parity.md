@@ -2,6 +2,36 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-26 (evening) — Julia at parity
+
+lm15-jl brought from pin `cfed007` (2026-09-11) to this commit and measured
+with `harness/check.py --shim julia --direction all`:
+
+| | Python | TypeScript | Rust | Go | Julia |
+|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,788 / 1,788 | 1,788 / 1,788 | 1,788 / 1,788 | 1,788 / 1,788 | 1,788 / 1,788 |
+| `managed` direction (43 sign-in runs) | 43 | 43 | 43 | 43 | 43 |
+| Mixed-language store runs and concurrent renewal (`tools/managed_crossrun.py python julia typescript rust go`) | pass | pass | pass | pass | pass (40 of 40) |
+| Live smoke with real keys | — | 8/8 hosts | 8/8 hosts | 16/16 | 63 ok of 69 checks on 14 key bindings and 4 saved sign-ins (`lm15-jl receipts/2026-09-26-live-smoke`); the rest: 1 adapted and 1 provider refusal as receipted, Grok declining to repeat a phrase, an OpenRouter minted key at its $1 limit |
+
+What Julia gained, each already ratified: the four open-model hosts and
+`reasoning_off`; MAP-15 forms and the router tables as copied data;
+refusals naming their field (message media, cache resources); MAP-16;
+judgments (DataPart, `Config.probabilities`, TypeSafe, candidate-sequence
+scoring on vLLM); the Google Cloud pass (keys on `vertex`, the project from
+Google's places, settings origins); named cloud credentials, provenance and
+endpoint roots (2026-09-19); R3 blocking the ambient xAI key; managed
+sign-in (AUTH-12–26, `connect` in `LM15.Interactive`); reply faults
+INV-053/054/055; error diagnostics; the connection budget; bounded live-turn
+collection. Julia's stated deviations are in its README (functions rather
+than methods, ordered choices as pairs, HTTP.jl's missing pool-wait timeout).
+
+Found live, not a Julia defect and not changed here: OpenRouter answers a
+minted key that reached its spending limit with HTTP 403 ("Key limit
+exceeded"), which the status mapping makes `AuthError` in every SDK; a
+`BillingError` would describe it better, and would need a receipt and a
+`changes/` entry.
+
 ## 2026-09-26 (later) — four open-model hosts in every SDK
 
 Every SDK pinned to `fe5cdf9` (changes/2026-09-26-inference-hosts-live.md,

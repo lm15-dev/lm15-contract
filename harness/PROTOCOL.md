@@ -16,7 +16,7 @@ checkout's HEAD):
 | Rust | `cargo run --quiet --bin lm15-vet` |
 | Go | `go run ./cmd/lm15-vet` |
 | TypeScript | `node dist/vet.js` |
-| Julia | `julia bin/vet.jl` |
+| Julia | `julia --project=. --startup-file=no bin/vet.jl` |
 
 ## Framing
 
