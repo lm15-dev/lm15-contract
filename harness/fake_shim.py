@@ -45,6 +45,7 @@ MUTATIONS = (
     "bool_as_int",          # build_request: first boolean body leaf becomes 0/1
     "auth_state_flip",      # explain_auth: first step's state flipped
     "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
+    "auth_setting_from_drift",  # explain_auth: a setting's value right, its origin (AUTH-10 from) wrong
     "models_wrong_id",      # parse_models_response: first model's id rewritten
     "models_param_drop",    # build_models_request: one query parameter dropped
     "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
@@ -85,12 +86,16 @@ TARGET: str | None = None
 
 # ─── Corpus indexes (recorded-correct outputs) ───────────────────────
 
-def _canon_key(provider: Any, canonical_request: Any, base_url: Any = None) -> str:
+def _canon_key(provider: Any, canonical_request: Any, base_url: Any = None,
+               credential: Any = None, settings: Any = None) -> str:
     # base_url is part of the identity: cases for different OpenAI-compatible
     # servers (vLLM :8000, SGLang :30000) share canonical_requests but record
-    # different wire URLs (see check.case_base_url / PROTOCOL.md).
+    # different wire URLs (see check.case_base_url / PROTOCOL.md).  So are a
+    # pinned credential and the host settings (2026-09-26): vertex.basic_text,
+    # vertex.api_key_basic_text, vertex.access_token_string and
+    # vertex.regional_location share one canonical_request.
     return json.dumps(
-        [provider, base_url, canonical_request], sort_keys=True, separators=(",", ":")
+        [provider, base_url, canonical_request, credential, settings], sort_keys=True, separators=(",", ":")
     )
 
 
@@ -99,14 +104,16 @@ BY_CANON: dict[str, list[JsonObject]] = {}
 for _case in WIRE_CASES:
     if "canonical_request" in _case:
         BY_CANON.setdefault(
-            _canon_key(_case["provider"], _case["canonical_request"], _case.get("base_url")),
+            _canon_key(_case["provider"], _case["canonical_request"], _case.get("base_url"),
+                       _case.get("credential"), _case.get("settings")),
             [],
         ).append(_case)
 
 
 def _candidates(msg: JsonObject) -> list[JsonObject]:
     return BY_CANON.get(
-        _canon_key(msg["provider"], msg["canonical_request"], msg.get("base_url")), []
+        _canon_key(msg["provider"], msg["canonical_request"], msg.get("base_url"),
+                   msg.get("credential"), msg.get("settings")), []
     )
 
 
@@ -558,6 +565,18 @@ def _case_env_matches(case: JsonObject, msg: JsonObject) -> bool:
     return expected == actual
 
 
+def _case_files_match(case: JsonObject, msg: JsonObject) -> bool:
+    """The harness writes a case's ``~/`` files under its home and sends
+    them by absolute path; two cases may share an env and differ only in
+    their files (the 2026-09-26 project cases)."""
+    if "files" not in case:
+        return True
+    home = (msg.get("env") or {}).get("HOME", "")
+    expected = {f"{home}/{rel[2:]}": check.expand_files(text) for rel, text in case["files"].items()}
+    actual = msg.get("files") or {}
+    return {str(Path(k).resolve()): v for k, v in expected.items()} == {str(Path(k).resolve()): v for k, v in actual.items()}
+
+
 def op_explain_auth(msg: JsonObject) -> JsonObject:
     fixture = check.load_auth_fixture()
     for case in fixture["cases"]:
@@ -568,6 +587,8 @@ def op_explain_auth(msg: JsonObject) -> JsonObject:
         if case.get("api_keys_providers", []) != msg.get("api_keys_providers", []):
             continue
         if ("files" in case) != ("files" in msg):
+            continue
+        if not _case_files_match(case, msg):
             continue
         if case.get("settings") != msg.get("settings"):
             continue
@@ -581,12 +602,25 @@ def op_explain_auth(msg: JsonObject) -> JsonObject:
         expect = case["expect"]
         steps = [dict(step) for step in expect["steps"]]
         report_text = "\n".join(f"{s['kind']}: {s['state']}" for s in steps) or "empty chain"
+        reply_settings_override = None
         if targeted(case):
             if MUTATION == "auth_state_flip" and steps:
                 steps[0]["state"] = "absent" if steps[0]["state"] == "selected" else "selected"
             elif MUTATION == "auth_sentinel_leak":
                 report_text += f"\nkey: {msg['sentinel']}"
-        return {"configured": expect["configured"], "steps": steps, "report_text": report_text}
+            elif MUTATION == "auth_setting_from_drift" and expect.get("settings"):
+                # Right project, wrong reason: a port that reads gcloud's
+                # project from the ADC file would still print a value.
+                name = "project" if (expect["settings"].get("project") or {}).get("from") else next(n for n, v in expect["settings"].items() if v.get("from"))
+                drifted = json.loads(json.dumps(expect["settings"]))
+                drifted[name]["from"] = "default" if drifted[name]["from"] != "default" else "explicit"
+                reply_settings_override = drifted
+        reply = {"configured": expect["configured"], "steps": steps, "report_text": report_text}
+        if "settings" in expect:
+            reply["settings"] = json.loads(json.dumps(expect["settings"]))
+        if reply_settings_override is not None:
+            reply["settings"] = reply_settings_override
+        return reply
     raise LookupError("no auth fixture matches this (provider, env, api_keys_providers, borrowed state)")
 
 

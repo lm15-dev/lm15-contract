@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-09-26T13-47-42Z",
+  "provider": "vertex",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:streamGenerateContent",
+    "params": {
+      "alt": "sse"
+    },
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$VERTEX_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      }
+    }
+  },
+  "request_sha256": "04071337063a406742c2779747b9dd9a9a17f227f9f9d9bf328e84020a87b2da",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "30197ada77b1e8ca87ad8a43abc43b6483bc64b736908527bfb8a5d52d662983",
+  "response_bytes": 743,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

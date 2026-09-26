@@ -381,9 +381,21 @@ class CaptureTests(unittest.TestCase):
         from lm15.cloud import chains
         from lm15.credentials import BearerToken
         cap = self.capture.Capture("bedrock-chat", env_var="UNUSED_TEST_KEY", default_model="test", host="example.invalid", settings={"region": "us-east-1"})
-        with patch.object(chains.ChainContext, "online"), patch.object(chains, "resolve", return_value=BearerToken("fixture-value")):
+        # resolve() returns (credential, source) since 2026-09-19.
+        source = chains.CredentialSource(rung="adc-file", label="test")
+        with patch.object(chains.ChainContext, "online"), patch.object(chains, "resolve", return_value=(BearerToken("fixture-value"), source)):
             with self.assertRaisesRegex(ValueError, "SigV4 capture requires AWS credentials"):
                 cap.aws_fixture()
+
+    def test_bearer_capture_cannot_pin_aws_credentials_as_a_token(self):
+        from lm15.cloud import chains
+        from lm15.credentials import AwsCredentials
+        cap = self.capture.Capture("vertex", env_var="UNUSED_TEST_KEY", default_model="test", host="example.invalid",
+                                   settings={"project": "p", "location": "global"})
+        source = chains.CredentialSource(rung="imds", label="test")
+        with patch.object(chains.ChainContext, "online"), patch.object(chains, "resolve", return_value=(AwsCredentials("AKID", "SECRET"), source)):
+            with self.assertRaisesRegex(ValueError, "bearer capture requires"):
+                cap.bearer_fixture()
 
     def test_dry_run_receipt_writer_is_a_noop(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(self.capture, "CONTRACT", Path(directory)):

@@ -1,0 +1,120 @@
+{
+  "canonical_response": {
+    "model": "gemini-2.5-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "tool_call_0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          },
+          "continuation": [
+            {
+              "provider": "gemini",
+              "kind": "thought_signature",
+              "data": {
+                "value": "CiwBjz1rX5V4TKmxaYGv6rvqHTXbt5W9EZcR84HRL6iFaGWYVVeTmbjSPF1BhApoAY89a1+UESPkQrhIOm2IcYTScuqph8fmdyW4XyW0q3gd71AFT4hzl8OrdBY650tpnAWKFMc6Jj9HFBhjL2XiRBkONHVqloVjiyHdra9zvRNvcPhfk3R0vDJ9wbOiAt4IG7MVEUnqzKYKewGPPWtf0KEPC47NQZxdL/kA3aFD6BbSs0F0IbW1nl36Zz6uJxKFx5EZOZJuFbdM/csHDr21Cin3Rqh60WndyyXgeZl2c6PidM0VAhkh128h1YElJJQqBttTskBR9swkEyyS+MIL7DWJ2pCE/3IHC08u2TmSQcGXjUazAQpDAY89a18g99MrzyuH6VsvdhWfVpzZO4mIj+wtO0Xtxp17UcL+qL1NzgQLg4YtPo3IuGUwArC7CHK6rTohYj4fsvZeFg=="
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 5,
+      "total_tokens": 80,
+      "reasoning_tokens": 51
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "gemini-2.5-flash"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\"Paris\"}",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "part_index": 0,
+        "provider": "gemini",
+        "kind": "thought_signature",
+        "data": {
+          "value": "CiwBjz1rX5V4TKmxaYGv6rvqHTXbt5W9EZcR84HRL6iFaGWYVVeTmbjSPF1BhApoAY89a1+UESPkQrhIOm2IcYTScuqph8fmdyW4XyW0q3gd71AFT4hzl8OrdBY650tpnAWKFMc6Jj9HFBhjL2XiRBkONHVqloVjiyHdra9zvRNvcPhfk3R0vDJ9wbOiAt4IG7MVEUnqzKYKewGPPWtf0KEPC47NQZxdL/kA3aFD6BbSs0F0IbW1nl36Zz6uJxKFx5EZOZJuFbdM/csHDr21Cin3Rqh60WndyyXgeZl2c6PidM0VAhkh128h1YElJJQqBttTskBR9swkEyyS+MIL7DWJ2pCE/3IHC08u2TmSQcGXjUazAQpDAY89a18g99MrzyuH6VsvdhWfVpzZO4mIj+wtO0Xtxp17UcL+qL1NzgQLg4YtPo3IuGUwArC7CHK6rTohYj4fsvZeFg=="
+        }
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 24,
+        "output_tokens": 5,
+        "total_tokens": 80,
+        "reasoning_tokens": 51
+      },
+      "provider_data": {
+        "candidates": [
+          {
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "functionCall": {
+                    "name": "get_weather",
+                    "args": {
+                      "city": "Paris"
+                    }
+                  },
+                  "thoughtSignature": "CiwBjz1rX5V4TKmxaYGv6rvqHTXbt5W9EZcR84HRL6iFaGWYVVeTmbjSPF1BhApoAY89a1+UESPkQrhIOm2IcYTScuqph8fmdyW4XyW0q3gd71AFT4hzl8OrdBY650tpnAWKFMc6Jj9HFBhjL2XiRBkONHVqloVjiyHdra9zvRNvcPhfk3R0vDJ9wbOiAt4IG7MVEUnqzKYKewGPPWtf0KEPC47NQZxdL/kA3aFD6BbSs0F0IbW1nl36Zz6uJxKFx5EZOZJuFbdM/csHDr21Cin3Rqh60WndyyXgeZl2c6PidM0VAhkh128h1YElJJQqBttTskBR9swkEyyS+MIL7DWJ2pCE/3IHC08u2TmSQcGXjUazAQpDAY89a18g99MrzyuH6VsvdhWfVpzZO4mIj+wtO0Xtxp17UcL+qL1NzgQLg4YtPo3IuGUwArC7CHK6rTohYj4fsvZeFg=="
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 24,
+          "candidatesTokenCount": 5,
+          "totalTokenCount": 80,
+          "trafficType": "ON_DEMAND",
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 24
+            }
+          ],
+          "candidatesTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 5
+            }
+          ],
+          "thoughtsTokenCount": 51
+        },
+        "modelVersion": "gemini-2.5-flash",
+        "createTime": "2026-09-26T13:47:20.052364Z",
+        "responseId": "6My3aoyZA4vlqOYP6_mEkA8"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T13-47-19Z.txt"
+  }
+}

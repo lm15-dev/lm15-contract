@@ -1,0 +1,88 @@
+{
+  "canonical_response": {
+    "model": "gemini-2.5-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "Ok."
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3,
+      "output_tokens": 2,
+      "total_tokens": 20,
+      "reasoning_tokens": 15
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "gemini-2.5-flash"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "Ok."
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 3,
+        "output_tokens": 2,
+        "total_tokens": 20,
+        "reasoning_tokens": 15
+      },
+      "provider_data": {
+        "candidates": [
+          {
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": "Ok."
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 3,
+          "candidatesTokenCount": 2,
+          "totalTokenCount": 20,
+          "trafficType": "ON_DEMAND",
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 3
+            }
+          ],
+          "candidatesTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 2
+            }
+          ],
+          "thoughtsTokenCount": 15
+        },
+        "modelVersion": "gemini-2.5-flash",
+        "createTime": "2026-09-26T13:47:13.088818Z",
+        "responseId": "4cy3avK1BercqOYPy5KI0QE"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T13-47-13Z.txt"
+  }
+}

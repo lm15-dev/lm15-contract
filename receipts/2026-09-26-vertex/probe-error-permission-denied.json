@@ -1,0 +1,61 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-no-access-000000/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Say ok."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 403,
+  "body": {
+    "error": {
+      "code": 403,
+      "message": "Permission denied on resource project lm15-no-access-000000.",
+      "status": "PERMISSION_DENIED",
+      "details": [
+        {
+          "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+          "reason": "CONSUMER_INVALID",
+          "domain": "googleapis.com",
+          "metadata": {
+            "service": "aiplatform.googleapis.com",
+            "consumer": "projects/lm15-no-access-000000",
+            "containerInfo": "lm15-no-access-000000"
+          }
+        },
+        {
+          "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+          "locale": "en-US",
+          "message": "Permission denied on resource project lm15-no-access-000000."
+        },
+        {
+          "@type": "type.googleapis.com/google.rpc.Help",
+          "links": [
+            {
+              "description": "Google developers console",
+              "url": "https://console.developers.google.com"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timestamp": "2026-09-26T13-47-33Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

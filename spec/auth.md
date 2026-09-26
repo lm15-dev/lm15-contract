@@ -298,6 +298,19 @@ changes/2026-09-04-bedrock-bearer.md, changes/2026-09-06-decisions.md D1):
   shape. Stated trade-off: a decision from appearance, made only where
   the alternative is a certain 401; the doctor reports "sent as bearer
   (JWT)".
+- (amended 2026-09-26, changes/2026-09-26-vertex-live.md D2) A Google
+  OAuth access token — a plain string beginning `ya29.`, the prefix every
+  Google token endpoint issues (user refresh, service account, metadata
+  server, STS, `generateAccessToken`) — is read the same way: when the
+  `ApiKey` scheme selected is `api-key` or `x-api-key` and the policy also
+  lists `bearer`, it travels as `bearer`. The door this exists for is
+  `vertex`, whose key header now comes first: a string there is a Vertex
+  API key (`AIza…`, or `AQ.…` for a key bound to a service account; live
+  2026-09-26) unless it has a token's shape. Neither key form begins
+  `ya29.` or is a JWT. Stated trade-off: an access token of another shape
+  given as a plain string is sent as a key and answered 401 by Google;
+  `BearerToken(value)` sends it as a token, and the 401 guidance says so.
+  Before this date every plain string on `vertex` was sent as bearer.
 
 Cost, stated: a token given to a key-header-only door that does not take
 tokens (first-party `anthropic`) gets the provider's 401, not a local
@@ -414,7 +427,10 @@ and explicit verification. Without managed Auth it retains the existing walk:
   key-only use; `absent` must not be interpreted as permission to fall through;
 - prints the resolved host settings (region, location, project, resource,
   workspace) by name and value — they are not secrets and they decide
-  residency (amended 2026-09-03);
+  residency (amended 2026-09-03) — and (amended 2026-09-26) where each
+  came from, in the AUTH-10 `from` vocabulary; a setting only the
+  metadata server could supply is reported unprobed, not missing
+  (`auth/resolution.json` pins these as `expect.settings`);
 - (amended 2026-09-19) under a named credential walks exactly the rungs
   the name covers (rung 0 `api_keys` then those rungs; nothing else is a
   step, because nothing else runs) and says the chain is not walked;
@@ -443,8 +459,10 @@ and explicit verification. Without managed Auth it retains the existing walk:
 - Borrowed cloud files (amended 2026-09-03): `~/.aws/credentials`,
   `~/.aws/config` (`AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`),
   `~/.aws/sso/cache/*.json`, `~/.aws/login/cache/*.json`,
-  `$CLOUDSDK_CONFIG|~/.config/gcloud/application_default_credentials.json`.
-  Same rule: foreign formats, revalidated, never cleaned. lm15 never
+  `$CLOUDSDK_CONFIG|~/.config/gcloud/application_default_credentials.json`,
+  and (amended 2026-09-26, read for the project only) gcloud's
+  `$CLOUDSDK_CONFIG|~/.config/gcloud/active_config` and
+  `…/configurations/config_<name>`. Same rule: foreign formats, revalidated, never cleaned. lm15 never
   writes to them; refreshed cloud tokens live in memory (AUTH-3 cache),
   never in a foreign file.
 - A managed store has a versioned format (AUTH-25); its exact schema remains a
@@ -506,8 +524,9 @@ points:
 Host settings and their env fallbacks (in order): `region` ←
 `AWS_REGION`, `AWS_DEFAULT_REGION`, profile `region` — **no default,
 raise**; `workspace` ← `ANTHROPIC_AWS_WORKSPACE_ID` — no default;
-`project` ← `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, the ADC file's
-`quota_project_id`/`project_id` — no default; `location` ←
+`project` ← `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, then Google's own
+places, in google-auth's and gcloud's order (amended 2026-09-26, below) —
+no default; `location` ←
 `GOOGLE_CLOUD_LOCATION` — default `global` (stated trade-off:
 availability first; the doctor prints it); `resource` ←
 `AZURE_OPENAI_RESOURCE` (`azure`, `azure-chat`), `ANTHROPIC_FOUNDRY_RESOURCE`
@@ -518,6 +537,50 @@ is given; `authority_host` ← `AZURE_AUTHORITY_HOST`, default
 `https://cognitiveservices.azure.com/.default` is also accepted by the
 resource; a caller sets it through the setting). Settings are never part
 of the model string: `Request.model` stays `provider:model`.
+
+**Where the Google project comes from (amended 2026-09-26,
+changes/2026-09-26-vertex-live.md D1).** After the caller's value and
+`GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT` (google-auth's
+`explicit_project_id`, gcp-google-auth-default-py.md:93-114), in order:
+
+1. the `GOOGLE_APPLICATION_CREDENTIALS` file's `project_id`, then its
+   `quota_project_id` (default-py.md:327-358, :540) — `from: adc-env`;
+2. gcloud's active configuration, the project `gcloud config get project`
+   prints (google-auth runs that command, gcp-google-auth-cloud-sdk-py.md
+   :92-114; lm15 reads the files it reads, so the doctor can say it
+   offline): `CLOUDSDK_CORE_PROJECT` (`from: env:CLOUDSDK_CORE_PROJECT`;
+   gcp-gcloud-configurations.md:433-436), else `[core] project` in
+   `$CLOUDSDK_CONFIG|~/.config/gcloud` `/configurations/config_<name>`,
+   where `<name>` is `CLOUDSDK_ACTIVE_CONFIG_NAME`, else the contents of
+   `active_config` in that directory, else `default`
+   (gcp-gcloud-named-configs-py.md: config.py:776-785,
+   named_configs.py:494-575) — `from: gcloud-config`. A name outside
+   gcloud's rule `[a-z][-a-z0-9]*` (named_configs.py:37) reads nothing:
+   the name never leaves the directory;
+3. the ADC file's `quota_project_id`, then `project_id` (the only source
+   before this amendment; an `authorized_user` file carries no project to
+   google-auth, default-py.md:301-324, so it now follows gcloud's
+   configuration) — `from: adc-file`;
+4. the metadata server, `GET http://{GCE_METADATA_HOST|GCE_METADATA_ROOT|metadata.google.internal}/computeMetadata/v1/project/project-id`
+   with `Metadata-Flavor: Google` and the metadata rung's 1-second
+   timeout, skipped when `NO_GCE_CHECK` is truthy (default-py.md:391-420,
+   compute-engine-py.md:395-409) — `from: metadata`. Network I/O at
+   construction, reached only when every source above is empty (where
+   the alternative was a configuration error); the offline doctor
+   reports it `unprobed`.
+
+The project is resolved independently of which AUTH-1 rung supplies the
+credential; google-auth pairs them (a service-account file's project with
+that file). Stated trade-off: with a service-account file and a gcloud
+project both present, the file wins in both; with an `external_account`
+file (no project field) lm15 uses gcloud's configuration or the metadata
+server where google-auth calls the Resource Manager API. Not read: the
+gcloud installation properties file and the `--configuration` flag.
+
+The `from` vocabulary (the doctor and `explain_auth` report it per
+setting): `explicit`, `env:<VAR>`, `adc-env`, `gcloud-config`,
+`adc-file`, `metadata`, `aws-profile` (AWS `region` from the active
+profile), `default`; a missing required setting has no `from`.
 
 **Endpoint override (amended 2026-09-19,
 changes/2026-09-19-cloud-identity-and-endpoints.md D4).** A host's
@@ -591,9 +654,9 @@ The policies (reference: `lm15/access.py`):
 | `bedrock-anthropic` | Anthropic | aws-chain | `sigv4`(`bedrock-mantle`), `x-api-key` | bedrock-mantle | `https://bedrock-mantle.{region}.api.aws/anthropic`; no structured outputs, URL/Files sources, server tools, batches, models, `anthropic-beta` |
 | `bedrock-chat` | Chat | aws-chain | `sigv4`(`bedrock`), `bearer` | bedrock-runtime | `https://bedrock-runtime.{region}.amazonaws.com/openai/v1`; versioned ids; GET `/openai/v1/models` is 404 under SigV4 and bearer (live 2026-09-03/04) |
 | `bedrock-mantle-chat` | Chat | aws-chain | `sigv4`(`bedrock-mantle`), `bearer` | bedrock-mantle | `https://bedrock-mantle.{region}.api.aws/v1`; un-versioned ids; GET `/v1/models` lists (55, live 2026-09-04); Claude 400 "does not support this API"; Nova 404 |
-| `vertex` | Gemini | gcp-chain | `bearer` | vertex | `https://{location_host}/v1/projects/{project}/locations/{location}/publishers/google/models/{model}`; `location_host` = `aiplatform.googleapis.com` (global) / `{location}-aiplatform.googleapis.com` / `aiplatform.{us\|eu}.rep.googleapis.com`; stream `:streamGenerateContent?alt=sse` |
+| `vertex` | Gemini | gcp-chain | `x-api-key` (`x-goog-api-key`), `bearer` (amended 2026-09-26) | vertex | `https://{location_host}/v1/projects/{project}/locations/{location}/publishers/google/models/{model}`; `location_host` = `aiplatform.googleapis.com` (global) / `{location}-aiplatform.googleapis.com` / `aiplatform.{us\|eu}.rep.googleapis.com`; stream `:streamGenerateContent?alt=sse`; a Vertex API key in `x-goog-api-key` on the global and regional hosts (live 2026-09-26; no env key — `GOOGLE_API_KEY` belongs to the Gemini API and `vertex-express`, and reading it here would silently replace the ADC identity); a token-shaped string goes as bearer (AUTH-2) |
 | `vertex-express` | Gemini | key | `query-key` | vertex-express | `https://aiplatform.googleapis.com/v1/publishers/google/models/{model}`; `GOOGLE_API_KEY` |
-| `vertex-anthropic` | Anthropic | gcp-chain | `bearer` | vertex | `…/publishers/anthropic/models/{model}:rawPredict` / `:streamRawPredict`; `model_in: path`; `anthropic_version_in: body:vertex-2023-10-16`; no batches/models/Files sources |
+| `vertex-anthropic` | Anthropic | gcp-chain | `bearer` | vertex | `…/publishers/anthropic/models/{model}:rawPredict` / `:streamRawPredict`; no API keys (401 "API keys are not supported by this API", live 2026-09-26); `model_in: path`; `anthropic_version_in: body:vertex-2023-10-16`; no batches/models/Files sources |
 | `bedrock` (phase 2) | Converse | aws-chain | `sigv4`(`bedrock`), `bearer` | bedrock-runtime | `aws-event-stream` framing; `ListFoundationModels` on `bedrock.{region}.amazonaws.com` |
 | `vertex-chat` (phase 3) | Chat | gcp-chain | `bearer` | vertex | `…/endpoints/openapi` |
 

@@ -75,6 +75,9 @@ API_KEY = "test-key-123"
 # format: the fixture supplies the shape (e.g. "Bearer <anything>"), the
 # harness supplies the key. Everything else is verbatim.
 AUTH_HEADERS = frozenset({"authorization", "x-api-key", "x-goog-api-key", "api-key"})
+# The query parameter the `query-key` scheme carries (spec/vocabularies.md
+# AuthScheme; vertex-express, first recorded 2026-09-26).
+AUTH_PARAMS = frozenset({"key"})
 
 # Transport noise dropped from BOTH sides before header comparison. This list
 # is fixed; widening it weakens the oracle.
@@ -727,7 +730,8 @@ def expected_wire_request(case: JsonObject) -> JsonObject:
     side; captures store them as sent). Auth-header VALUES are rewritten to
     the harness-injected api_key, preserving the fixture's format (a
     "Bearer <anything>" fixture expects "Bearer test-key-123"). Transport
-    noise (DROP_HEADERS) is removed. Nothing else is touched: empty
+    noise (DROP_HEADERS) is removed. A ``query-key`` parameter (``key``)
+    is rewritten the same way (2026-09-26). Nothing else is touched: empty
     containers, nulls, and every body byte compare strictly.
     """
     req = case["request"]
@@ -750,6 +754,9 @@ def expected_wire_request(case: JsonObject) -> JsonObject:
             # and clock (PROTOCOL.md 2026-09-03), never rewritten.
             value = f"Bearer {API_KEY}" if str(value).startswith("Bearer ") else API_KEY
         headers[lower] = value
+
+    if not pinned_string_credential:
+        params = {k: (API_KEY if k.lower() in AUTH_PARAMS else v) for k, v in params.items()}
 
     return {
         "method": req.get("method", "POST"),

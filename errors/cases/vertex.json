@@ -1,0 +1,129 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "aiplatform.googleapis.com error envelopes captured verbatim 2026-09-26 by research/providers/vertex/capture.py; receipts/2026-09-26-vertex/probe-error-*.json"
+  },
+  "cases": [
+    {
+      "id": "vertex.unauthenticated",
+      "provider": "vertex",
+      "settings": {
+        "project": "lm15-vertex-live",
+        "location": "global"
+      },
+      "status": 401,
+      "body": {
+        "error": {
+          "code": 401,
+          "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+          "status": "UNAUTHENTICATED",
+          "details": [
+            {
+              "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+              "reason": "ACCESS_TOKEN_TYPE_UNSUPPORTED",
+              "metadata": {
+                "method": "google.cloud.aiplatform.v1.PredictionService.GenerateContent",
+                "service": "aiplatform.googleapis.com"
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "vertex",
+        "provider_code": "UNAUTHENTICATED",
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "aiplatform.googleapis.com HTTP 401 verbatim 2026-09-26T13-47-31Z — receipts/2026-09-26-vertex/probe-error-unauthenticated.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "vertex.model_not_found",
+      "provider": "vertex",
+      "settings": {
+        "project": "lm15-vertex-live",
+        "location": "global"
+      },
+      "status": 404,
+      "body": {
+        "error": {
+          "code": 404,
+          "message": "Publisher model `projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-0-does-not-exist` was not found or your project does not have access to it. Ensure you are using a valid model name and that the model is available in the specified region. For more information, see: https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations.",
+          "status": "NOT_FOUND"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "vertex",
+        "provider_code": "NOT_FOUND",
+        "status": 404
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "aiplatform.googleapis.com HTTP 404 verbatim 2026-09-26T13-47-32Z — receipts/2026-09-26-vertex/probe-error-model-not-found.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    },
+    {
+      "id": "vertex.permission_denied",
+      "provider": "vertex",
+      "settings": {
+        "project": "lm15-vertex-live",
+        "location": "global"
+      },
+      "status": 403,
+      "body": {
+        "error": {
+          "code": 403,
+          "message": "Permission denied on resource project lm15-no-access-000000.",
+          "status": "PERMISSION_DENIED",
+          "details": [
+            {
+              "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+              "reason": "CONSUMER_INVALID",
+              "domain": "googleapis.com",
+              "metadata": {
+                "service": "aiplatform.googleapis.com",
+                "consumer": "projects/lm15-no-access-000000",
+                "containerInfo": "lm15-no-access-000000"
+              }
+            },
+            {
+              "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+              "locale": "en-US",
+              "message": "Permission denied on resource project lm15-no-access-000000."
+            },
+            {
+              "@type": "type.googleapis.com/google.rpc.Help",
+              "links": [
+                {
+                  "description": "Google developers console",
+                  "url": "https://console.developers.google.com"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "vertex",
+        "provider_code": "PERMISSION_DENIED",
+        "status": 403
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-26",
+        "evidence": "aiplatform.googleapis.com HTTP 403 verbatim 2026-09-26T13-47-33Z — receipts/2026-09-26-vertex/probe-error-permission-denied.json; expected block is the reference's current mapping, DRAFT until reviewed"
+      }
+    }
+  ]
+}

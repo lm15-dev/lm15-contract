@@ -1,8 +1,21 @@
-# 2026-09-26 — Google Cloud identities on `vertex` / `vertex-express`, live-verified
+# 2026-09-26 — Google Cloud identities on `vertex` / `vertex-express`, live-verified; the project from Google's own places; API keys on `vertex`
 
-Status: DRAFT (evidence only: no case, body, golden or rule changes).
-Two proposed rule changes at the end need ratification before any port
-copies them.
+Status: D1 and D2 **RATIFIED in session 2026-09-26** — Maxime Rivest:
+"Yes, LM15 should copy them. It should find a project. Yes, LM15 should
+support API keys on the regular vertex door." Wire facts are live
+receipts (`receipts/2026-09-26-vertex/`, `receipts/2026-09-26-vertex-express/`);
+goldens are scribe drafts (AUTHORITY.md), not frozen.
+
+Contract changes: spec/auth.md AUTH-2 (token shapes), AUTH-7 (settings
+origin), AUTH-8 (gcloud configuration paths), AUTH-10 (project sources,
+the `from` vocabulary, the `vertex` and `vertex-anthropic` rows);
+spec/support-matrix.json (`vertex` auth modes); harness/PROTOCOL.md
+(`explain_auth` reply `settings`); auth/resolution.json (13 cases);
+cases/vertex (12), cases/vertex-express (2), errors/cases/vertex.json (3),
+their bodies and draft goldens; research/providers/vertex/capture.py,
+research/providers/vertex-express/capture.py; three frozen sources under
+research/cloud-hosts/sources/ (`gcp-google-auth-cloud-sdk-py.md`,
+`gcp-gcloud-configurations.md`, `gcp-gcloud-named-configs-py.md`).
 
 ## What this proves
 
@@ -50,20 +63,66 @@ OAuth word, as AUTH-21 allows; service-account emails are not printed.
 Ports (TS, Rust, Go, Julia, R) still carry the old "HTTP 400" + API-key
 text and should follow; no fixture pins the wording.
 
-## Proposed, needs ratification
+## D1 — the project from Google's own places (AUTH-10)
 
-1. **AUTH-10 project fallbacks.** After `GOOGLE_CLOUD_PROJECT` /
-   `GCLOUD_PROJECT` and the credential file, read gcloud's active
-   configuration (`CLOUDSDK_CORE_PROJECT`, then
-   `$CLOUDSDK_CONFIG/configurations/config_<active>` `[core] project`) and,
-   on the `metadata` rung, `computeMetadata/v1/project/project-id`.
-   google-auth reads both; without them `credentials={"vertex":
-   "platform"}` on Cloud Run fails with "project not set" unless the app
-   sets the variable by hand. Cost: the metadata read is a network call at
-   settings time (the doctor reports it `unprobed`).
-2. **API keys on the `vertex` door.** Google accepts a Vertex API key in
-   `x-goog-api-key` on the project-scoped global and regional URLs (curl,
-   200). Adding it as a second scheme gives key users residency control,
-   but a plain string would then be ambiguous between a key and an
-   access token (`ya29.`) unless AUTH-2 reads Google's key shape (`AIza`).
-   Today the string is sent as a bearer token and Google answers 401.
+Before: `GOOGLE_CLOUD_PROJECT`, `GCLOUD_PROJECT`, then the ADC file's
+`quota_project_id`/`project_id`. `gcloud config set project` was ignored,
+and `credentials={"vertex": "platform"}` on Cloud Run failed with
+"project not set" unless the application exported the variable by hand.
+google-auth reads gcloud's configuration and the metadata server; so does
+lm15 now, in the order AUTH-10 lists (credential file, gcloud
+configuration, ADC file, metadata server).
+
+- gcloud's configuration is read from its files, not by running
+  `gcloud config get project` as google-auth does: offline, no subprocess
+  at construction, and the doctor can report it. The layout is gcloud's
+  own code (gcloud 581.0.0, frozen excerpt).
+- The ADC file's `quota_project_id` moved after gcloud's configuration:
+  google-auth takes no project from an `authorized_user` file, and
+  `gcloud auth application-default login` copies the then-current
+  project into it, so a later `gcloud config set project` would otherwise
+  lose to a stale copy. Cost, stated: a user whose quota project and
+  gcloud project differ now gets the gcloud project, as google-auth does.
+- The metadata server is asked only when every other source is empty,
+  that is, only where the alternative was a configuration error. Cost,
+  stated: off Google Cloud, that error now arrives after at most the
+  1-second metadata timeout (plus name resolution), unless `NO_GCE_CHECK`
+  is set. Live: an e2-micro VM with no project variable resolved its
+  project this way (below).
+
+## D2 — API keys on the `vertex` door (AUTH-2, AUTH-10)
+
+Google accepts a Vertex API key in `x-goog-api-key` on the project-scoped
+global and regional hosts (curl and lm15, 2026-09-26: generateContent,
+streamGenerateContent, countTokens; `europe-west4`). The `vertex` policy
+lists `x-api-key` (the Gemini dialect's `x-goog-api-key`) first, then
+`bearer`: a plain string is a key, unless it has a token's shape — the
+JWT rule of 2026-09-19 plus Google's `ya29.` prefix. The key this run
+created begins `AQ.` (bound to a service account), not the older `AIza`:
+recognising keys by prefix would already be wrong, recognising tokens is
+not. Every token lm15's Google chain produces is a `BearerToken` value and
+unaffected.
+
+- No env key on `vertex`: `GOOGLE_API_KEY` is the Gemini API's and
+  `vertex-express`'s variable, commonly set, and reading it here would
+  silently replace the ADC identity and its billing.
+- `vertex-anthropic` keeps bearer only: rawPredict answered 401 "API
+  keys are not supported by this API" to the same key.
+- Cost, stated: before this date every plain string on `vertex` went as
+  bearer. A token of another shape given as a plain string now goes as a
+  key; the 401 guidance names `BearerToken(value)`.
+
+## Recorded cases
+
+`cases/vertex/`: `basic_text`, `streaming`, `system_prompt`, `tools`,
+`streaming_tool_call`, `multi_turn_tool_result`, `response_format_json_schema`,
+`reasoning_low`, `regional_location` (europe-west4 host and path) and
+`access_token_string` (a `ya29.` plain string → `Authorization: Bearer`),
+each sent with a token from lm15's gcp-chain and pinned with
+`credential: {"kind": "bearer_token", "value": "test-access-token-123"}`
+(or the `ya29.` string); `api_key_basic_text`, `api_key_streaming` sent
+with the Vertex key and pinned as `x-goog-api-key: $VERTEX_API_KEY` (the
+harness injects its own key). `cases/vertex-express/`: `basic_text`,
+`streaming` (`?key=`). `errors/cases/vertex.json`: an expired/invalid
+token (401 → AuthError), an unknown model (404 → UnsupportedModelError),
+a project without access (403 → AuthError).

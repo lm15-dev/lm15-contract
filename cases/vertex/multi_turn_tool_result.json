@@ -1,0 +1,188 @@
+{
+  "id": "vertex.multi_turn_tool_result",
+  "provider": "vertex",
+  "feature": "multi_turn_tool_result",
+  "description": "Vertex: live turn-1 functionCall (with its thought signature) replayed with functionResponse",
+  "base_url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google",
+  "settings": {
+    "project": "lm15-vertex-live",
+    "location": "global"
+  },
+  "credential": {
+    "kind": "bearer_token",
+    "value": "test-access-token-123"
+  },
+  "now": "2026-09-26T13:47:22Z",
+  "request": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer test-access-token-123"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "get_weather",
+                "args": {
+                  "city": "Paris"
+                },
+                "id": "tool_call_0"
+              },
+              "thoughtSignature": "CucBAY89a1/m12o1pFCn7ddxlOsRciAOxv2JF3ItiufUOy7S7P9C0lbi+W2YBTkbaaHIz+gTRy7f2mJsucA7FI0qY5JPuGUbWbV57NCn1jI4ODi6HaYJfW1RVsXn4A31gtaVCoAZsuYL7dmqmOS1FMcqdRMvXzfcyUYreyxkUKGmbh1sJb7mcj3ltNWgDFmfIljsZBZw0LXdHt3KoLDn1XZYmCw5U9DcMOyIMtZSYUKTvxq3cJPrQ+/CfDJ4qda2K2gsFiJ7tTzKHYdh+lMnXG5rLVnrTKsEw9J7mPiuTiTx7otxRTTxfYXK"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "get_weather",
+                "response": {
+                  "result": "Sunny, 22°C"
+                },
+                "id": "tool_call_0"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "description": "Get current weather for a city",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-26",
+    "evidence": "aiplatform.googleapis.com 2026-09-26T13-47-22Z, gemini-2.5-flash, HTTP 200; turn-1 call get_weather {'city': 'Paris'}, 0 thinking part(s) replayed as reasoning_content; adapter-built wire (GeminiLM, compat+access 'vertex'); verbatim body at bodies/vertex.multi_turn_tool_result/2026-09-26T13-47-22Z.txt; changes/2026-09-26-vertex-live.md",
+    "exchange": "receipts/2026-09-26-vertex/exchange-2026-09-26T13-47-22Z-e8451ac5158b49e5b6e548c2cbc84373.json"
+  },
+  "canonical_request": {
+    "model": "gemini-2.5-flash",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "What is the weather in Paris? Use the tool."
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "parts": [
+          {
+            "type": "tool_call",
+            "id": "tool_call_0",
+            "name": "get_weather",
+            "input": {
+              "city": "Paris"
+            },
+            "continuation": [
+              {
+                "provider": "gemini",
+                "kind": "thought_signature",
+                "data": {
+                  "value": "CucBAY89a1/m12o1pFCn7ddxlOsRciAOxv2JF3ItiufUOy7S7P9C0lbi+W2YBTkbaaHIz+gTRy7f2mJsucA7FI0qY5JPuGUbWbV57NCn1jI4ODi6HaYJfW1RVsXn4A31gtaVCoAZsuYL7dmqmOS1FMcqdRMvXzfcyUYreyxkUKGmbh1sJb7mcj3ltNWgDFmfIljsZBZw0LXdHt3KoLDn1XZYmCw5U9DcMOyIMtZSYUKTvxq3cJPrQ+/CfDJ4qda2K2gsFiJ7tTzKHYdh+lMnXG5rLVnrTKsEw9J7mPiuTiTx7otxRTTxfYXK"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "parts": [
+          {
+            "type": "tool_result",
+            "id": "tool_call_0",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sunny, 22°C"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "Get current weather for a city",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ],
+    "config": {
+      "max_tokens": 400
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "authored with the case (research/providers/vertex/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-09-26T13-47-22Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "text": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  }
+}

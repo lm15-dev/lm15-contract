@@ -1,0 +1,96 @@
+{
+  "canonical_response": {
+    "model": "gemini-2.5-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "text",
+          "text": "ok"
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3,
+      "output_tokens": 1,
+      "total_tokens": 21,
+      "reasoning_tokens": 17
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "gemini-2.5-flash"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": "ok"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 0,
+        "text": ""
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 3,
+        "output_tokens": 1,
+        "total_tokens": 21,
+        "reasoning_tokens": 17
+      },
+      "provider_data": {
+        "candidates": [
+          {
+            "content": {
+              "role": "model",
+              "parts": [
+                {
+                  "text": ""
+                }
+              ]
+            },
+            "finishReason": "STOP"
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 3,
+          "candidatesTokenCount": 1,
+          "totalTokenCount": 21,
+          "trafficType": "ON_DEMAND",
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 3
+            }
+          ],
+          "candidatesTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 1
+            }
+          ],
+          "thoughtsTokenCount": 17
+        },
+        "modelVersion": "gemini-2.5-flash",
+        "createTime": "2026-09-26T13:48:24.877034Z",
+        "responseId": "KM23aurDNbaH-MkPnMOc0Qs"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-09-26",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-26T13-48-24Z.txt"
+  }
+}

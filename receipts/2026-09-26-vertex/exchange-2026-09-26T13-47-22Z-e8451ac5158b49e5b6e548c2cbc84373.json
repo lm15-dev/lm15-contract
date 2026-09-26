@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-09-26T13-47-22Z",
+  "provider": "vertex",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "get_weather",
+                "args": {
+                  "city": "Paris"
+                },
+                "id": "tool_call_0"
+              },
+              "thoughtSignature": "CucBAY89a1/m12o1pFCn7ddxlOsRciAOxv2JF3ItiufUOy7S7P9C0lbi+W2YBTkbaaHIz+gTRy7f2mJsucA7FI0qY5JPuGUbWbV57NCn1jI4ODi6HaYJfW1RVsXn4A31gtaVCoAZsuYL7dmqmOS1FMcqdRMvXzfcyUYreyxkUKGmbh1sJb7mcj3ltNWgDFmfIljsZBZw0LXdHt3KoLDn1XZYmCw5U9DcMOyIMtZSYUKTvxq3cJPrQ+/CfDJ4qda2K2gsFiJ7tTzKHYdh+lMnXG5rLVnrTKsEw9J7mPiuTiTx7otxRTTxfYXK"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "get_weather",
+                "response": {
+                  "result": "Sunny, 22°C"
+                },
+                "id": "tool_call_0"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "description": "Get current weather for a city",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "e48cfcb6df6605a3d2c87b1739a9043d77594881831a614278c24174e0493024",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "dc2a3295e27d47b615945355c19c4f8758eda9705dcacf6bb5c8e8d5e62aa216",
+  "response_bytes": 764,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

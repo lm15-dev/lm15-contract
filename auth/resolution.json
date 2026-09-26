@@ -1326,6 +1326,206 @@
           }
         ]
       }
+    },
+    {
+      "id": "vertex-project-env-wins",
+      "description": "GOOGLE_CLOUD_PROJECT beats gcloud's configuration and the ADC file (google-auth explicit_project_id, default-py.md:93-114)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "GOOGLE_CLOUD_PROJECT": "env-project"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/application_default_credentials.json": "{\"type\": \"authorized_user\", \"client_id\": \"c.apps.googleusercontent.com\", \"client_secret\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"refresh_token\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"quota_project_id\": \"adc-quota-project\"}",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "unprobed"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "env-project", "from": "env:GOOGLE_CLOUD_PROJECT"}}}
+    },
+    {
+      "id": "vertex-project-service-account-file",
+      "description": "the GOOGLE_APPLICATION_CREDENTIALS service_account file's project_id beats gcloud's configuration (default-py.md:327-358, :540)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "GOOGLE_APPLICATION_CREDENTIALS": "~/keys/sa.json"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/keys/sa.json": "{\"type\": \"service_account\", \"project_id\": \"sa-file-project\", \"private_key_id\": \"k1\", \"private_key\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"client_email\": \"robot@sa-file-project.iam.gserviceaccount.com\", \"token_uri\": \"https://oauth2.googleapis.com/token\"}",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "unprobed"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "sa-file-project", "from": "adc-env"}}}
+    },
+    {
+      "id": "vertex-project-gcloud-config",
+      "description": "an authorized_user ADC file carries no project; gcloud's active configuration answers, before the file's quota_project_id (default-py.md:301-324; cloud-sdk-py.md:92-114)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/application_default_credentials.json": "{\"type\": \"authorized_user\", \"client_id\": \"c.apps.googleusercontent.com\", \"client_secret\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"refresh_token\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"quota_project_id\": \"adc-quota-project\"}",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "unprobed"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "gcloud-default-project", "from": "gcloud-config"}}}
+    },
+    {
+      "id": "vertex-project-named-configuration",
+      "description": "the active_config file names the configuration (gcloud-named-configs-py.md config.py:776-785, named_configs.py:524-575)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/active_config": "work\n",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n",
+        "~/.config/gcloud/configurations/config_work": "[core]\nproject = gcloud-work-project\n"
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "gcloud-work-project", "from": "gcloud-config"}}}
+    },
+    {
+      "id": "vertex-project-active-config-env",
+      "description": "CLOUDSDK_ACTIVE_CONFIG_NAME beats the active_config file (named_configs.py:494-521; gcloud-configurations.md:397)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "CLOUDSDK_ACTIVE_CONFIG_NAME": "default"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/active_config": "work\n",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n",
+        "~/.config/gcloud/configurations/config_work": "[core]\nproject = gcloud-work-project\n"
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "gcloud-default-project", "from": "gcloud-config"}}}
+    },
+    {
+      "id": "vertex-project-cloudsdk-core-project",
+      "description": "CLOUDSDK_CORE_PROJECT is gcloud's property variable and beats its configuration file (gcloud-configurations.md:433-436)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "CLOUDSDK_CORE_PROJECT": "core-env-project"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "core-env-project", "from": "env:CLOUDSDK_CORE_PROJECT"}}}
+    },
+    {
+      "id": "vertex-project-cloudsdk-config-dir",
+      "description": "CLOUDSDK_CONFIG moves gcloud's directory, configurations included (gcloud-configurations.md:324)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "CLOUDSDK_CONFIG": "~/alt-gcloud"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/alt-gcloud/configurations/config_default": "[core]\nproject = gcloud-work-project\n",
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "gcloud-work-project", "from": "gcloud-config"}}}
+    },
+    {
+      "id": "vertex-project-config-name-outside-rule",
+      "description": "a configuration name outside gcloud's rule [a-z][-a-z0-9]* is not read (named_configs.py:37); the name never leaves the directory",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "CLOUDSDK_ACTIVE_CONFIG_NAME": "../../x"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/configurations/config_default": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n",
+        "~/x": "[core]\naccount = someone@example.com\nproject = gcloud-default-project\n"
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": null, "from": null}}}
+    },
+    {
+      "id": "vertex-project-adc-quota-project",
+      "description": "with no gcloud configuration, the ADC file's quota_project_id (AUTH-10 before 2026-09-26, kept last among the files)",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/application_default_credentials.json": "{\"type\": \"authorized_user\", \"client_id\": \"c.apps.googleusercontent.com\", \"client_secret\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"refresh_token\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"quota_project_id\": \"adc-quota-project\"}"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "unprobed"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "adc-quota-project", "from": "adc-file"}}}
+    },
+    {
+      "id": "vertex-project-metadata-unprobed",
+      "description": "nothing on disk and the metadata server allowed: project/project-id is asked at request time; offline it is unprobed (default-py.md:391-420)",
+      "provider": "vertex",
+      "env": {
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/.keep": ""
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "unprobed"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": null, "from": "metadata", "state": "unprobed"}}}
+    },
+    {
+      "id": "vertex-project-missing",
+      "description": "NO_GCE_CHECK and nothing on disk: no project, and the door is not configured",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.config/gcloud/.keep": ""
+      },
+      "expect": {"configured": false, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "absent"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": null, "from": null}}}
+    },
+    {
+      "id": "vertex-explicit-api-key",
+      "description": "an explicit key on the vertex door (x-goog-api-key, amended 2026-09-26) is selected before the Google chain; the project still resolves",
+      "provider": "vertex",
+      "env": {
+        "NO_GCE_CHECK": "1",
+        "PATH": "~/bin",
+        "GOOGLE_CLOUD_PROJECT": "env-project"
+      },
+      "api_keys_providers": [
+        "vertex"
+      ],
+      "files": {
+        "~/.config/gcloud/application_default_credentials.json": "{\"type\": \"authorized_user\", \"client_id\": \"c.apps.googleusercontent.com\", \"client_secret\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"refresh_token\": \"SECRET-SENTINEL-DO-NOT-PRINT\", \"quota_project_id\": \"adc-quota-project\"}"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "selected"}, {"kind": "adc-env", "state": "absent"}, {"kind": "adc-file", "state": "shadowed"}, {"kind": "metadata", "state": "absent"}, {"kind": "gcloud", "state": "absent"}], "settings": {"location": {"value": "global", "from": "default"}, "project": {"value": "env-project", "from": "env:GOOGLE_CLOUD_PROJECT"}}}
+    },
+    {
+      "id": "bedrock-region-from-profile",
+      "description": "the region a cloud profile carries is reported with its origin (AUTH-10 settings from)",
+      "provider": "bedrock-chat",
+      "env": {
+        "AWS_EC2_METADATA_DISABLED": "true",
+        "PATH": "~/bin"
+      },
+      "api_keys_providers": [],
+      "files": {
+        "~/.aws/config": "[default]\nregion = eu-west-3\n",
+        "~/.aws/credentials": "[default]\naws_access_key_id = AKIDEXAMPLE\naws_secret_access_key = SECRET-SENTINEL-DO-NOT-PRINT\n"
+      },
+      "expect": {"configured": true, "steps": [{"kind": "api_keys", "state": "absent"}, {"kind": "env:AWS_BEARER_TOKEN_BEDROCK", "state": "absent"}, {"kind": "env:AWS_ACCESS_KEY_ID", "state": "absent"}, {"kind": "assume-role", "state": "absent"}, {"kind": "web-identity", "state": "absent"}, {"kind": "sso", "state": "absent"}, {"kind": "shared-credentials-file", "state": "selected"}, {"kind": "login", "state": "absent"}, {"kind": "credential_process", "state": "absent"}, {"kind": "config-file", "state": "absent"}, {"kind": "container", "state": "absent"}, {"kind": "imds", "state": "absent"}], "settings": {"region": {"value": "eu-west-3", "from": "aws-profile"}}}
     }
   ]
 }

@@ -185,7 +185,7 @@ Out: `{"types": {<TypeName>: {"fields": [str]}}, "enums": {<EnumName>: [str]}}`
 
 ### explain_auth
 In: `{"provider": str, "sentinel": str, "env": {str: str}, "api_keys_providers": [str], "credentials_path"?: str}`
-Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text": str}`
+Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "settings"?: {<name>: {"value": str|null, "from": str|null, "state"?: "unprobed"}}, "report_text": str}`
 - Drives the AUTH-7 explain surface over the AUTH-1 chain
   (`auth/resolution.json`; spec/auth.md). The harness owns EVERY input:
   - `env` is the complete environment for resolution. It is always present
@@ -217,6 +217,17 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "report_text"
   here or derived from `env`; it never touches the real home directory.
 - `settings` (additive, 2026-09-03): as on `build_request`; the report
   renders the resolved host settings by name and value (AUTH-7).
+- `settings` in the reply (additive, 2026-09-26; spec/auth.md AUTH-7,
+  AUTH-10): for a door with host settings, every setting the host
+  declares, resolved offline from the harness's `env` and `files`, with
+  its origin in the AUTH-10 `from` vocabulary (`explicit`, `env:<VAR>`,
+  `adc-env`, `gcloud-config`, `adc-file`, `metadata`, `aws-profile`,
+  `default`). A setting only the metadata server could supply is
+  `{"value": null, "from": "metadata", "state": "unprobed"}`; a missing
+  required setting is `{"value": null, "from": null}`, and the other
+  settings are still reported. A case that pins `expect.settings`
+  compares the whole map strictly; a door without host settings returns
+  `{}` or omits the key.
 - `report_text` is the implementation's full human rendering of the report
   (every rendered surface concatenated). It must be a non-empty string: the
   harness enforces AUTH-5 by asserting the sentinel appears nowhere in the

@@ -106,11 +106,29 @@ class Capture:
 
         policy = lookup(self.provider).access
         self.fixture_credential = AwsCredentials("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
+        # resolve() returns (credential, source) since 2026-09-19 (AUTH-1 provenance).
         self.credential = (self.fixture_credential if self.dry_run else
-                           resolve(policy, ChainContext.online(settings=self.settings)))
+                           resolve(policy, ChainContext.online(settings=self.settings))[0])
         if not isinstance(self.credential, AwsCredentials):
             raise ValueError("SigV4 capture requires AWS credentials; use bearer_probes.py for the bearer rung")
         self.placeholder = "<sigv4 with the fixed test pair; see case.credential/now>"
+
+    def bearer_fixture(self, value: str = "test-access-token-123") -> None:
+        """Send with a token from lm15's own cloud chain (the Google chain on
+        the Vertex doors); pin every case with a fixed ``BearerToken`` so the
+        harness expects ``Authorization: Bearer <value>`` byte for byte
+        (PROTOCOL.md pinned string credential, 2026-09-04)."""
+        from lm15.credentials import BearerToken
+        from lm15.cloud.chains import ChainContext, resolve
+        from lm15.registry import lookup
+
+        policy = lookup(self.provider).access
+        self.fixture_credential = BearerToken(value)
+        self.credential = (self.fixture_credential if self.dry_run else
+                           resolve(policy, ChainContext.online(settings=self.settings))[0])
+        if not isinstance(self.credential, BearerToken):
+            raise ValueError("bearer capture requires the chain to yield a bearer token")
+        self.placeholder = "<bearer from the cloud chain; see case.credential>"
 
     def lm(self, model_key=None, *, clock=None, credential=None):
         key = credential if credential is not None else (model_key if model_key is not None else self.key())
@@ -665,12 +683,17 @@ class Capture:
             # accepts several schemes: x-api-key vs api-key vs Entra bearer);
             # on a SigV4 door the caller's headers are added and the request
             # is re-signed below.
-            drop = {"authorization", "x-api-key", "api-key", "x-goog-api-key"} if self.fixture_credential is None else set()
+            from lm15.credentials import AwsCredentials
+
+            signed = isinstance(self.fixture_credential, AwsCredentials)
+            drop = set() if signed else {"authorization", "x-api-key", "api-key", "x-goog-api-key"}
             kept = [(k, v) for k, v in treq.headers if k.lower() not in drop and k.lower() not in {h.lower() for h in headers}]
             treq = TransportRequest(method=treq.method, url=treq.url, headers=kept + list(headers.items()),
                                     body=treq.body, connect_timeout=treq.connect_timeout,
                                     read_timeout=treq.read_timeout, write_timeout=treq.write_timeout)
-        if (raw_body is not None or headers) and self.fixture_credential is not None:
+        from lm15.credentials import AwsCredentials
+
+        if (raw_body is not None or headers) and isinstance(self.fixture_credential, AwsCredentials):
             # A SigV4 door: the signature covers the body and the signed
             # headers, so any change must be re-signed with the same (real)
             # credential and clock.

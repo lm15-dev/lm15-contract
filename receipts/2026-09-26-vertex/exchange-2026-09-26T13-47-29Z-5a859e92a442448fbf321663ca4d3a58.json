@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-09-26T13-47-29Z",
+  "provider": "vertex",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://europe-west4-aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/europe-west4/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      }
+    }
+  },
+  "request_sha256": "497c78483e56d25dbba4f029b07e4f4dcd83edf90bb3144a487df9e70890effc",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "fe151883546cef77b8b6201b0a3875e006115b2ecdb9d908b1231f06b42559f3",
+  "response_bytes": 751,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

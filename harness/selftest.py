@@ -171,6 +171,10 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         raise SystemExit("selftest: no auth case with steps — auth fixture too thin to self-test")
     targets["auth_state_flip"] = ("auth", flip_target)
     targets["auth_sentinel_leak"] = ("auth", auth_cases[0]["id"])
+    settings_target = next((c["id"] for c in auth_cases if any(v.get("from") for v in (c["expect"].get("settings") or {}).values())), None)
+    if settings_target is None:
+        raise SystemExit("selftest: no auth case pins settings — the AUTH-10 origin compare is untested")
+    targets["auth_setting_from_drift"] = ("auth", settings_target)
 
     model_cases = check.load_model_cases()
     id_target = next(
