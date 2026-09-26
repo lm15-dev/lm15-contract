@@ -1,7 +1,6 @@
 # 2026-09-26 — Four open-model hosts: DeepInfra, Together AI, Fireworks AI, Parasail
 
-Status: DRAFT for ratification (wire facts are live receipts; the decisions
-below say which ones follow an already-ratified rule and which need a human).
+Status: RATIFIED 2026-09-26 (§ Ratification).  Wire facts are live receipts.
 Provider pathway: `changes/2026-09-03-provider-registry.md`.  Dossiers:
 `research/providers/{deepinfra,together,fireworks,parasail}/README.md`.
 
@@ -42,7 +41,7 @@ the presets must answer for.
 
 | rule | receipt | follows | pin |
 |---|---|---|---|
-| DeepInfra refuses a forced tool choice except on the DeepSeek V4 family | required and named ignored on Llama 3.3 and gpt-oss (text, no call); `none` on Llama wrote the call into the text; DeepSeek V4.1 honours all three | MAP-8 (a silent cell raises), as Z.AI | `deepinfra.tool_choice_required`, `deepinfra.tool_choice_required_deepseek` |
+| DeepInfra sends a forced tool choice only to 14 receipted models, refuses it elsewhere | survey of 24 models (`research/providers/deepinfra/tool_choice_survey.py`, `receipts/2026-09-26-deepinfra/survey-tool-choice.json`): required twice, named, none, and an unprompted-call control. Honour all: DeepSeek V3.2, V4-Flash, V4.1-Flash, GLM-5.3-Flash, Kimi-K2.6, Llama-4-Scout, Qwen3.6-27B, Qwen3-Next-80B, Nemotron-3.5-Lightning, granite-4.2-8b, MiMo-V2.6-Flash, Hy3, gemini-3.1-flash-lite, claude-haiku-4-5. Ignore: Llama 3.3, Qwen3-235B-2507, Qwen3-Coder-480B, Qwen3-30B/14B, Mistral-Small-3.2, gemma-4-26B, gpt-oss. Qwen3.8-Flash: 500. MiniMax-M2.7, GLM-4.7, Seed-2.0-mini: `none` ignored. Llama 3.1 8B: calls unprompted (no evidence either way) | MAP-8 (a silent cell raises), as Z.AI | `deepinfra.tool_choice_required`, `deepinfra.tool_choice_required_deepseek`, `deepinfra.tool_choice_required_glm` |
 | Together refuses a forced tool choice on gpt-oss | HTTP 500 every time (`probe-tool-choice-required-reasoner`); a 500 is retryable | MAP-8 | `together.tool_choice_required_gpt_oss` |
 | Together clamps gpt-oss effort to low\|medium\|high | xhigh, max and `bogus` all accepted and run at the default (medium) — `max` got fewer reasoning tokens than `high` | MAP-13, as Moonshot kimi-k3 | `together.reasoning_effort_max_gpt_oss` |
 | reasoning off → the lowest level, recorded (Together gpt-oss and GLM-5.3, DeepInfra gpt-oss) | Together gpt-oss accepts `none`, hides the trace, bills ~60 reasoning tokens; Together GLM-5.3 ignores it; DeepInfra gpt-oss runs it as low | MAP-13 decision 2026-09-14 §4.2 (xAI's rule: no off switch → lowest level, recorded) | `together.reasoning_off_gpt_oss`, `together.reasoning_off_glm`, `deepinfra.reasoning_off_gpt_oss` |
@@ -116,11 +115,15 @@ from its receipts for these four.
 
 ## Stated trade-offs
 
-- **DeepInfra host-wide refusal.**  Every DeepInfra model but the DeepSeek V4
-  family is refused a forced tool call, including models that might honour
-  it (Qwen3 did not; others are unmeasured).  A user who knows better sets
-  `forced_tool_choice="send"` on their own compat.  The alternative, sending
-  it to every model, is the silent failure MAP-8 exists to prevent.
+- **DeepInfra allow-list.**  A forced tool call goes only to the 14
+  receipted models; every other model, including ones never measured, is
+  refused.  The list is exact model ids used as prefixes, so a suffixed
+  variant (`-0731`, `-Turbo`) inherits its entry, but a sibling does not:
+  DeepSeek V4-Pro, allowed by the first draft's `DeepSeek-V4` prefix, is
+  refused until measured.  MiniMax M2.7 and Seed 2.0 honour `required` but
+  not `none`; they sit with the refused, so `none` is done client-side
+  (tools not sent, recorded) and `required` raises.  A user who knows better
+  keeps the preset and sets `forced_tool_choice="send"` on a copy.
 - **Model-name knowledge in presets.**  The Together and DeepInfra rules name
   model families (`openai/gpt-oss`, `zai-org/GLM-5.3`, `deepseek-ai/DeepSeek-V4`).
   They rot when hosts add families; a new family gets the host default until a
@@ -141,15 +144,28 @@ from its receipts for these four.
 4. Chat usage: flat `cached_tokens` fallback.
 5. The Parasail MAP-15 form in the model-not-found table.
 
-The harness then pins all of it: 53 new cases (43 live captures, 7
+The harness then pins all of it: 54 new cases (43 live captures, 8
 consumer-side pins, 3 from the tool-result matrix), 11 error envelopes, 4
 auth cases, and the discovery list.
 
-## Decisions a human must ratify
+## Ratification
 
-1. The `reasoning_off` knob (follows MAP-13 §4.2; new vocabulary).
-2. DeepInfra's host-wide forced-tool-choice refusal with the DeepSeek V4
-   exception (follows MAP-8; the breadth is a judgement).
-3. Everything else follows ratified rules with receipts.
+**RATIFIED 2026-09-26.**  Two decisions were put to the maintainer, each with
+options and a recommendation; he answered "yes, 1 c, 2 c".
 
-Ratified-by: (pending)
+1. **Reasoning off on a model that cannot stop reasoning, on a server that
+   accepts `none` and reasons anyway** — option C: send the lowest level and
+   record the substitution (MAP-13 §4.2, the rule already binding for xAI),
+   carried by the new compat knob `OpenAIChatCompat.reasoning_off`
+   ("send" | "lowest", overridable per model).  Rejected: A, send `none`
+   (a paid, silent no-op); B, refuse (every caller that says "off" would
+   special-case these models).
+2. **Forced tool choice on DeepInfra** — option C: send it to the 14 models
+   the survey showed honour it, refuse it everywhere else.  Rejected: A, the
+   first draft (refuse all but DeepSeek V4, which the survey showed would
+   refuse 13 working models); B, send everywhere (silent on at least 9).
+   The survey was run after the first draft and before the decision.
+
+Everything else in this entry follows already-ratified rules with receipts.
+
+Ratified-by: Maxime Rivest, 2026-09-26 (in session)

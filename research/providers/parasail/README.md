@@ -7,7 +7,7 @@
 | implemented | 2026-09-26 | `lm15.registry.PROVIDERS["parasail"]`, `lm15.access.PARASAIL`, compat preset `parasail` |
 | offline-conformant | 2026-09-26 | auth case `parasail-env-selected`; support matrix row; `tests/test_inference_hosts.py` |
 | live-verified | 2026-09-26 | 10 live cases, 1 tool-result case, 3 error envelopes (one hand-added from its receipt), probes: `changes/2026-09-26-inference-hosts-live.md`, `receipts/2026-09-26-parasail/` |
-| supported | — | after a reviewer ratifies the change entry |
+| supported | 2026-09-26 | change entry ratified |
 
 ## Identity
 

@@ -44,19 +44,29 @@ PINS = [
     dict(host="deepinfra", feature="tool_choice_required", exchange_probe="tool-choice-required-plain",
          request=Request(model="meta-llama/Llama-3.3-70B-Instruct-Turbo", messages=SAY, tools=(WEATHER,),
                          config=Config(max_tokens=300, tool_choice=ToolChoice(mode="required"))),
-         description="MAP-8: a forced tool choice on DeepInfra raises (default for every model but DeepSeek V4). Receipt: "
-                     "required and a named function answered plain text with no call on Llama 3.3 and gpt-oss; none on Llama "
-                     "wrote the call into the text. No wire request: UnsupportedFeatureError at build time.",
+         description="MAP-8: a forced tool choice on DeepInfra raises unless the model is one of the 14 a survey showed "
+                     "honour it (ratified 2026-09-26). Receipt: required and a named function answered plain text with no call "
+                     "on Llama 3.3 (twice) and gpt-oss; none on Llama wrote the call into the text. No wire request: "
+                     "UnsupportedFeatureError at build time.",
          evidence="api.deepinfra.com 2026-09-26: " + receipts("deepinfra", "tool-choice-required-plain", "tool-choice-required-reasoner",
                                                               "tool-choice-named-plain", "tool-choice-none-plain")
                   + " (HTTP 200, finish stop, no tool_calls)"),
     dict(host="deepinfra", feature="tool_choice_required_deepseek", exchange_probe="tool-choice-required-forcing",
          request=Request(model="deepseek-ai/DeepSeek-V4.1-Flash", messages=SAY, tools=(WEATHER,),
                          config=Config(max_tokens=300, tool_choice=ToolChoice(mode="required"))),
-         description="The DeepSeek V4 family is let through (compat model_overrides): it honours required and a named function "
-                     "on DeepInfra. The wire carries tool_choice verbatim.",
+         description="DeepSeek V4.1 Flash is one of the 14 receipted models let through (compat model_overrides): it honours "
+                     "required and a named function on DeepInfra. The wire carries tool_choice verbatim.",
          evidence="api.deepinfra.com 2026-09-26: " + receipts("deepinfra", "tool-choice-required-forcing", "tool-choice-named-forcing")
                   + " (HTTP 200, finish tool_calls)"),
+    dict(host="deepinfra", feature="tool_choice_required_glm", exchange_probe="survey-zai-org-GLM-5.3-Flash-required-2",
+         request=Request(model="zai-org/GLM-5.3-Flash", messages=SAY, tools=(WEATHER,),
+                         config=Config(max_tokens=300, tool_choice=ToolChoice(mode="required"))),
+         description="GLM-5.3-Flash is let through on DeepInfra: the survey saw required (twice), a named function and none "
+                     "honoured, and no unprompted call (the control).",
+         evidence="api.deepinfra.com 2026-09-26: receipts/2026-09-26-deepinfra/survey-tool-choice.json and "
+                  + receipts("deepinfra", "survey-zai-org-GLM-5.3-Flash-required", "survey-zai-org-GLM-5.3-Flash-required-2",
+                             "survey-zai-org-GLM-5.3-Flash-named", "survey-zai-org-GLM-5.3-Flash-none",
+                             "survey-zai-org-GLM-5.3-Flash-control-auto")),
     dict(host="deepinfra", feature="reasoning_off_gpt_oss", exchange_probe="off-reasoner",
          request=Request(model="openai/gpt-oss-120b", messages=MATH, config=Config(max_tokens=1500, reasoning=Reasoning(effort="off"))),
          description="MAP-13 §4.2: gpt-oss cannot stop reasoning and DeepInfra accepts reasoning_effort none and runs it as low; "

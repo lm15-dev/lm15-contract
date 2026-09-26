@@ -7,7 +7,7 @@
 | implemented | 2026-09-26 | `lm15.registry.PROVIDERS["together"]`, `lm15.access.TOGETHER`, compat preset `together` |
 | offline-conformant | 2026-09-26 | auth case `together-env-selected`; support matrix row; `tests/test_inference_hosts.py` |
 | live-verified | 2026-09-26 | 11 live cases, 4 consumer-side pins, 2 error envelopes, probes: `changes/2026-09-26-inference-hosts-live.md`, `receipts/2026-09-26-together/` |
-| supported | — | after a reviewer ratifies the change entry |
+| supported | 2026-09-26 | change entry ratified |
 
 ## Identity
 

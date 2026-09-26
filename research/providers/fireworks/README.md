@@ -7,7 +7,7 @@
 | implemented | 2026-09-26 | `lm15.registry.PROVIDERS["fireworks"]`, `lm15.access.FIREWORKS`, compat preset `fireworks` |
 | offline-conformant | 2026-09-26 | auth case `fireworks-env-selected`; support matrix row; `tests/test_inference_hosts.py` |
 | live-verified | 2026-09-26 | 11 live cases, 1 tool-result case, 3 error envelopes, probes: `changes/2026-09-26-inference-hosts-live.md`, `receipts/2026-09-26-fireworks/` |
-| supported | — | after a reviewer ratifies the change entry |
+| supported | 2026-09-26 | change entry ratified |
 
 ## Identity
 

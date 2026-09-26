@@ -6,8 +6,8 @@
 | researched | 2026-09-26 | this dossier; `scrapes/deepinfra/pages/` (16 pages); `sources/` (terms) |
 | implemented | 2026-09-26 | `lm15.registry.PROVIDERS["deepinfra"]`, `lm15.access.DEEPINFRA`, compat preset `deepinfra` |
 | offline-conformant | 2026-09-26 | auth case `deepinfra-env-selected`; support matrix row; `tests/test_inference_hosts.py` |
-| live-verified | 2026-09-26 | 11 live cases, 3 consumer-side pins, 1 tool-result refusal, 3 error envelopes, probes: `changes/2026-09-26-inference-hosts-live.md`, `receipts/2026-09-26-deepinfra/` |
-| supported | — | after a reviewer ratifies the change entry |
+| live-verified | 2026-09-26 | 11 live cases, 4 consumer-side pins, 1 tool-result refusal, 3 error envelopes, probes: `changes/2026-09-26-inference-hosts-live.md`, `receipts/2026-09-26-deepinfra/` |
+| supported | 2026-09-26 | change entry ratified |
 
 ## Identity
 
@@ -28,7 +28,7 @@
 | reasoning replay | — | code word in `reasoning_content` recalled 1 of 3 (gpt-oss), `reasoning` 0 of 3, absent 0 of 3 (`probe-replay-field-*`) | `thinking_replay="native"` |
 | max tokens | `max_completion_tokens` accepted | cap 8 → `finish_reason: length`, 8 tokens (`probe-max-tokens-cap`) | `max_tokens_field="max_completion_tokens"` |
 | stream usage | `stream_options.include_usage` | usage on the final chunk (`streaming`) | `stream_usage="include"` |
-| tool choice | documented | **required / named ignored** on Llama 3.3 and gpt-oss (plain text, no call); `none` on Llama wrote `<function=get_weather>…` INTO the text; DeepSeek V4.1 honours all three (`probe-tool-choice-*`) | `forced_tool_choice="reject"` host-wide, `("deepseek-ai/DeepSeek-V4", "send")`; pins `tool_choice_required`, `tool_choice_required_deepseek` |
+| tool choice | documented | depends on the model: survey of 24 (`tool_choice_survey.py`, `survey-tool-choice.json`) — 14 honour required, named and none; Llama 3.x, Qwen3-235B/Coder/30B/14B, Mistral Small, Gemma 4, gpt-oss ignore them (`none` on Llama wrote `<function=get_weather>…` into the text); Qwen3.8-Flash 500; MiniMax, GLM-4.7, Seed ignore `none` | `forced_tool_choice="reject"` host-wide, `send` for the 14 (ratified 2026-09-26); pins `tool_choice_required`, `tool_choice_required_deepseek`, `tool_choice_required_glm` |
 | structured output | `response_format` json_schema | honoured on Llama and gpt-oss (exactly the schema's keys) | send |
 | images in tool results | — | **422** "Input should be a valid string" at `messages.2.tool.content` (Qwen3-VL-235B; the same model read the image as user content) | `tool_result_media="reject"`; case `tool_result_image_raise` |
 | caching | automatic; `prompt_cache_key` + `prompt_cache_options: {mode, ttl: 5m\|1h}` + `prompt_cache_breakpoint` (retention) | not exercised | `cache_control="none"`: key/retention dropped with a record — **open item** below |
