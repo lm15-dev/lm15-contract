@@ -136,6 +136,9 @@ from its receipts for these four.
 
 ## For the ports (TypeScript, Go, Rust, Julia, R)
 
+Done in TypeScript (`56dba9a`), Go (`2bb9f95`) and Rust (`9105daf`), each at
+1,788 of 1,788 (playbooks/parity.md); Julia and R not yet.
+
 1. The four registry entries, access policies, compat presets (with
    `model_overrides`), base URLs, litellm prefixes.
 2. The compat knob `reasoning_off` ("send" | "lowest"), overridable, applied

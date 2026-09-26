@@ -2,6 +2,27 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-26 (later) — four open-model hosts in every SDK
+
+Every SDK pinned to `fe5cdf9` (changes/2026-09-26-inference-hosts-live.md,
+ratified the same day), measured with `harness/check.py --direction all`:
+
+| | Python | TypeScript | Rust | Go |
+|---|---|---|---|---|
+| Contract checks (all directions) | 1,788 / 1,788 | 1,788 / 1,788 | 1,788 / 1,788 | 1,788 / 1,788 |
+| `deepinfra`, `together`, `fireworks`, `parasail` (registry, presets, litellm prefixes, sign-in labels) | ✓ | ✓ | ✓ | ✓ |
+| compat `reasoning_off` ("send" / "lowest", per model) | ✓ | ✓ | ✓ | ✓ |
+| Chat `list_models`: bare array read, unknown shape → ProviderError | ✓ | ✓ | ✓ | ✓ |
+| Chat usage: flat `cached_tokens` fallback | ✓ | ✓ | ✓ | ✓ |
+| Live against the four hosts with real keys | capture scripts (43 cases) | live smoke 8/8 | live smoke 8/8 | live smoke 16/16 checks (`receipts/2026-09-26-inference-hosts-live-smoke`) |
+
+The count grows by 205 over `3763eec`: the four hosts' cases, pins, error
+envelopes and auth cases, and the Google Cloud cases of `4c9b6cc` (vertex,
+vertex-express), which every SDK already passed. Rust has no console URLs in
+its registry, as before. The TypeScript and Rust corpus tests carried
+constants that moved with the pin (case counts); the TypeScript request test
+now rewrites the `query-key` parameter as the harness does.
+
 ## 2026-09-26 — MAP-16 (Gemini schema fields) in every SDK
 
 | | Python | TypeScript | Rust | Go |
