@@ -2,6 +2,21 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-26 — MAP-16 (Gemini schema fields) in every SDK
+
+| | Python | TypeScript | Rust | Go |
+|---|---|---|---|---|
+| Contract checks (all directions) | 1,583 / 1,583 | 1,583 / 1,583 | 1,583 / 1,583 | 1,583 / 1,583 |
+
+The count grows by 91: the new `mapping` direction (87 checks, 29 vectors ×
+tools, response format, cached prefix) and the two live Gemini cases in
+the request and response directions. Before the SDKs moved, Go failed 26
+mapping checks; the reference was changed first. Each SDK also tests the
+vectors on the Live setup frame, which the harness cannot build.
+lm15-go's live smoke sent one strict tool schema (`additionalProperties:
+false`) to OpenAI, Anthropic and Gemini and got a tool call from each
+(lm15-go `receipts/2026-09-26-live-smoke-map16`).
+
 ## 2026-09-25 (later) — Go at parity; opaque key order is now checked
 
 Measured with `harness/check.py --direction all` at this commit, every SDK
