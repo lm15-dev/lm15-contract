@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-09-26T11-30-03Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Give the value."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 64,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "f",
+              "parametersJsonSchema": {
+                "type": "object",
+                "title": "T",
+                "nullable": false,
+                "propertyOrdering": [
+                  "b",
+                  "a"
+                ],
+                "properties": {
+                  "b": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^[0-9-]+$",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "a": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9
+                    },
+                    "minItems": 1,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "b"
+                ],
+                "minProperties": 1,
+                "maxProperties": 2,
+                "example": {
+                  "additionalProperties": 1,
+                  "b": "2026-01-01"
+                },
+                "default": null
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "a2634d337d4647d8bd52bccbf04a541597f18f503cb90e25d8a1d35b74ea3b94",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2c2fba01aaca5aac4aa8ca594a08f94f3eefc97da7ae62b61f29a262e9a129c3",
+  "response_bytes": 638,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

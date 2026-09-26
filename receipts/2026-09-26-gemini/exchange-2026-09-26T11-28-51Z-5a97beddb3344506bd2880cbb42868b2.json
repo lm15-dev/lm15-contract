@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-09-26T11-28-51Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Use the tool: what is the forecast for Montreal on 2026-10-01?"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 200,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_forecast",
+              "description": "Weather forecast for a city on a date.",
+              "parametersJsonSchema": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "string",
+                    "description": "City name"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "YYYY-MM-DD"
+                  }
+                },
+                "required": [
+                  "location",
+                  "date"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "93fff02a32e922b8aeeb4096f4ad6935728d1a0ce6dfb2548947f83f3d72cceb",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9616f9695849f10ac685aaf987414e1627207e0e86189178c0991910c89babb1",
+  "response_bytes": 780,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

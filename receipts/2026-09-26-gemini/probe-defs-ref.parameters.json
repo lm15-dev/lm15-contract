@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Give the value."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 64,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "f",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "$ref": "#/$defs/S"
+                  }
+                },
+                "required": [
+                  "v"
+                ],
+                "$defs": {
+                  "S": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": 400,
+      "message": "Invalid JSON payload received. Unknown name \"$ref\" at 'tools[0].function_declarations[0].parameters.properties[0].value': Cannot find field.\nInvalid JSON payload received. Unknown name \"$defs\" at 'tools[0].function_declarations[0].parameters': Cannot find field.",
+      "status": "INVALID_ARGUMENT",
+      "details": [
+        {
+          "@type": "type.googleapis.com/google.rpc.BadRequest",
+          "fieldViolations": [
+            {
+              "field": "tools[0].function_declarations[0].parameters.properties[0].value",
+              "description": "Invalid JSON payload received. Unknown name \"$ref\" at 'tools[0].function_declarations[0].parameters.properties[0].value': Cannot find field."
+            },
+            {
+              "field": "tools[0].function_declarations[0].parameters",
+              "description": "Invalid JSON payload received. Unknown name \"$defs\" at 'tools[0].function_declarations[0].parameters': Cannot find field."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timestamp": "2026-09-26T11-29-24Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

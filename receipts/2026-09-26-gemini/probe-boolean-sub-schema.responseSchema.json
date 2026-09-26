@@ -1,0 +1,62 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Give the value."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 64,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        },
+        "responseMimeType": "application/json",
+        "responseSchema": {
+          "type": "object",
+          "properties": {
+            "v": true
+          },
+          "required": [
+            "v"
+          ]
+        }
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": 400,
+      "message": "Invalid value at 'generation_config.response_schema.properties[0].value' (type.googleapis.com/google.ai.generativelanguage.v1beta.Schema), true",
+      "status": "INVALID_ARGUMENT",
+      "details": [
+        {
+          "@type": "type.googleapis.com/google.rpc.BadRequest",
+          "fieldViolations": [
+            {
+              "field": "generation_config.response_schema.properties[0].value",
+              "description": "Invalid value at 'generation_config.response_schema.properties[0].value' (type.googleapis.com/google.ai.generativelanguage.v1beta.Schema), true"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "timestamp": "2026-09-26T11-32-24Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

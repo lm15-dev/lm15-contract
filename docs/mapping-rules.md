@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -363,7 +363,8 @@ canonical shape.
    .json_schema {name, schema, strict}`; Anthropic `output_config.format
    {type: json_schema, schema}` — `json_object` RAISES (no any-JSON
    mode); Gemini `responseMimeType` + `responseJsonSchema` or
-   `responseSchema` by the `additionalProperties` rule.
+   `responseSchema` by MAP-16 (until 2026-09-26: by the presence of
+   `additionalProperties`).
 6. `strict` goes verbatim where the wire has it and is satisfied where
    enforcement is always on (Anthropic, Gemini). `name` is a label, not
    a control: dropped where there is no slot.
@@ -926,6 +927,52 @@ still true and less precise, until a new receipt adds the new form. Code
 that catches `InvalidRequestError` sees no change; code that catches
 `UnsupportedModelError` now sees every provider in the table.
 
+## MAP-16 — A schema reaches Gemini in the field that can carry it
+
+**Written 2026-09-26 at the maintainer's request**
+(`changes/2026-09-26-gemini-schema-fields.md`); not yet ratified.
+
+Gemini carries a JSON schema in one of two fields: an OpenAPI field that
+parses only its own Schema object (`responseSchema`;
+`functionDeclarations[].parameters`), and a JSON Schema field
+(`responseJsonSchema`; `functionDeclarations[].parametersJsonSchema`).
+The schema is sent verbatim in exactly one of them (INV-002); the rule
+picks which, the same way for a response format and for a tool's
+parameters, on every Gemini wire that carries one (generateContent, a
+cached prefix's tools, a Live session's tools).
+
+1. **The JSON Schema field** when a schema node uses something only JSON
+   Schema can say. The nodes are the root, each value of `properties`,
+   `items`, and each element of `anyOf` (or `anyOf` itself when it is one
+   object). A node decides when it is a boolean (a boolean schema); has a
+   key that is not a field of Gemini's Schema object (`type`, `format`,
+   `title`, `description`, `nullable`, `enum`, `maxItems`, `minItems`,
+   `properties`, `required`, `minProperties`, `maxProperties`,
+   `minLength`, `maxLength`, `pattern`, `example`, `anyOf`,
+   `propertyOrdering`, `default`, `items`, `minimum`, `maximum`); has a
+   list `type`; or has an `enum` list with an element that is not a
+   string. `example` and `default` are values: their contents are never
+   read as keywords, nor are the property names under `properties`.
+2. **The OpenAPI field** otherwise: where lm15 always sent these schemas.
+   It also reads spellings the JSON Schema field refuses (a count or bound
+   written as a string, `null` for a field, one string where a list is
+   expected, `nullable` that is not a boolean), so a schema that works
+   there today keeps working.
+
+Every clause of rule 1 is a case where the OpenAPI field answered 400 and
+the JSON Schema field accepted the same schema; every spelling in rule 2
+is one the OpenAPI field accepted and the JSON Schema field refused (live,
+2026-09-26, 29 schemas × 4 fields,
+`receipts/2026-09-26-gemini/probe-*`). A schema neither field accepts
+goes where rule 2 sends it, and the provider's 400 is the contract.
+`mapping/gemini-schema-field.json` holds the vectors; the harness's
+`mapping` direction grades them.
+
+Stated trade-off: the rule is written from what Gemini's parser does, not
+from a published contract. A keyword Google later adds to the Schema
+object would still go to the JSON Schema field, which accepts it; a
+spelling the OpenAPI field starts refusing would need a new receipt.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -964,3 +1011,7 @@ MAP-15 was written on 2026-09-24 when the documentation showed Anthropic's
 unknown model as a different class from OpenAI's; the Anthropic case in the
 corpus had been a synthetic body, not the provider's own words
 (`lm15-contract/changes/2026-09-24-model-not-found.md`).
+MAP-16 was written on 2026-09-26 after lm15-go's first live smoke found a
+tool schema with `additionalProperties` refused by Gemini in every SDK,
+while the same schema as a response format was already routed to the JSON
+Schema field (`lm15-contract/changes/2026-09-26-gemini-schema-fields.md`).

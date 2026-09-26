@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-09-26T11-29-57Z",
+  "provider": "gemini",
+  "status": 400,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Give the value."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 64,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "f",
+              "parametersJsonSchema": {
+                "type": "object",
+                "properties": {
+                  "v": {
+                    "type": "string",
+                    "description": null
+                  }
+                },
+                "required": [
+                  "v"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "5aeee3ba6f48273a1653e0993a5f356448f8178ad85fadf3e7f669adf4dad2aa",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cb2f92088e795563335c9b23a141e5bfe837d655abefdf66576e7ac7a42f131c",
+  "response_bytes": 128,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

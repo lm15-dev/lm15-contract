@@ -1,0 +1,202 @@
+[
+  {
+    "probe": "description-not-a-string.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'generation_config.response_schema.properties[0].value.description' (TYPE_STRING), 5\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\": \"type.googleapis.c"
+  },
+  {
+    "probe": "description-not-a-string.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a string\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "description-not-a-string.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'tools[0].function_declarations[0].parameters.properties[0].value.description' (TYPE_STRING), 5\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\": \"type.g"
+  },
+  {
+    "probe": "description-not-a-string.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a string\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "type-not-a-string.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"* GenerateContentRequest.generation_config.response_schema.properties[v].items: missing field.\\n\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "type-not-a-string.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a string or list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "type-not-a-string.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"* GenerateContentRequest.tools[0].function_declarations[0].parameters.properties[v].items: missing field.\\n\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "type-not-a-string.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a string or list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "any-of-single-object.responseSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "any-of-single-object.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v.anyOf must be a list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "any-of-single-object.parameters",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "any-of-single-object.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v.anyOf must be a list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "enum-single-string.responseSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "enum-single-string.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "enum-single-string.parameters",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "enum-single-string.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a list\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "required-with-a-number.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'generation_config.response_schema.required[0]' (TYPE_STRING), 1\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\": \"type.googleapis.com/google.rpc.BadReq"
+  },
+  {
+    "probe": "required-with-a-number.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at top-level must be a string\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "required-with-a-number.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'tools[0].function_declarations[0].parameters.required[0]' (TYPE_STRING), 1\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\": \"type.googleapis.com/google"
+  },
+  {
+    "probe": "required-with-a-number.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at top-level must be a string\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "nullable-number.responseSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "nullable-number.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a boolean\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "nullable-number.parameters",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "nullable-number.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value at properties.v must be a boolean\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "properties-not-an-object.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'generation_config.response_schema' (Map), Cannot bind a list to map for field 'properties'.\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\": \"type.goog"
+  },
+  {
+    "probe": "properties-not-an-object.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value for properties at top-level must be an object\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "properties-not-an-object.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'tools[0].function_declarations[0].parameters' (Map), Cannot bind a list to map for field 'properties'.\", \"status\": \"INVALID_ARGUMENT\", \"details\": [{\"@type\":"
+  },
+  {
+    "probe": "properties-not-an-object.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"value for properties at top-level must be an object\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "items-null.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"* GenerateContentRequest.generation_config.response_schema.properties[v].items: missing field.\\n\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "items-null.responseJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"schema at properties.v.items must be a boolean or an object\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "items-null.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"* GenerateContentRequest.tools[0].function_declarations[0].parameters.properties[v].items: missing field.\\n\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "items-null.parametersJsonSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"schema at properties.v.items must be a boolean or an object\", \"status\": \"INVALID_ARGUMENT\"}"
+  },
+  {
+    "probe": "boolean-sub-schema.responseSchema",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'generation_config.response_schema.properties[0].value' (type.googleapis.com/google.ai.generativelanguage.v1beta.Schema), true\", \"status\": \"INVALID_ARGUMENT\""
+  },
+  {
+    "probe": "boolean-sub-schema.responseJsonSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "boolean-sub-schema.parameters",
+    "status": 400,
+    "summary": "{\"code\": 400, \"message\": \"Invalid value at 'tools[0].function_declarations[0].parameters.properties[0].value' (type.googleapis.com/google.ai.generativelanguage.v1beta.Schema), true\", \"status\": \"INVALI"
+  },
+  {
+    "probe": "boolean-sub-schema.parametersJsonSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "example-sub-schema-keywords.responseSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "example-sub-schema-keywords.responseJsonSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "example-sub-schema-keywords.parameters",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  },
+  {
+    "probe": "example-sub-schema-keywords.parametersJsonSchema",
+    "status": 200,
+    "summary": "finish=None content='None' reasoning=no usage_keys=[] details=None hit=None"
+  }
+]

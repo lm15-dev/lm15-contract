@@ -443,7 +443,7 @@ Exactly one per stream, final (MAP-3, mapping-rules.md).
 | `type` | string `"function"` | — | `"function"` | always | discriminator |
 | `name` | string | yes | — | always | non-empty |
 | `description` | string | no | `null` | omit-empty | |
-| `parameters` | object (opaque JSON Schema) | shape | `{"type": "object", "properties": {}}` | always (even `{}`) | strict JSON object, required; opaque payload — an explicit `{}` round-trips verbatim; absent on input deserializes to the default schema (INV-033) |
+| `parameters` | object (opaque JSON Schema) | shape | `{"type": "object", "properties": {}}` | always (even `{}`) | strict JSON object, required; opaque payload — an explicit `{}` round-trips verbatim; absent on input deserializes to the default schema (INV-033); on Gemini it goes as `parameters` or `parametersJsonSchema` by MAP-16 |
 
 ### BuiltinTool
 
@@ -582,7 +582,7 @@ has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md
 | `top_p` | float | no | `null` | omit-empty | in `[0, 1]`; int-coerced |
 | `top_k` | int | no | `null` | omit-empty | `> 0`; float-coerced. Anthropic `top_k`, Gemini `topK`; the OpenAI wires have no field and DROP it with a record (MAP-13) |
 | `stop` | array of string | no | `[]` | omit-empty | non-empty strings; bare string coerced to 1-tuple (INV-020) |
-| `response_format` | object (opaque) | no | `null` | omit-empty | strict JSON object; exactly two shapes (INV-050): `{"type": "json_object"}` or `{"type": "json_schema", "schema", "name"?, "strict"?}`. Mapping (MAP-8): OpenAI Responses `text.format` (`name` defaults to `response`); chat dialect/xAI/Groq `response_format.json_schema`; Anthropic `output_config.format` (`json_object` RAISES: no any-JSON mode; `strict` satisfied, `name` dropped as a label); Gemini `responseMimeType` + `responseJsonSchema`/`responseSchema` |
+| `response_format` | object (opaque) | no | `null` | omit-empty | strict JSON object; exactly two shapes (INV-050): `{"type": "json_object"}` or `{"type": "json_schema", "schema", "name"?, "strict"?}`. Mapping (MAP-8): OpenAI Responses `text.format` (`name` defaults to `response`); chat dialect/xAI/Groq `response_format.json_schema`; Anthropic `output_config.format` (`json_object` RAISES: no any-JSON mode; `strict` satisfied, `name` dropped as a label); Gemini `responseMimeType` + `responseJsonSchema`/`responseSchema` (MAP-16) |
 | `tool_choice` | object (ToolChoice) | no | `null` | omit-empty | |
 | `reasoning` | object (Reasoning) | no | `null` | omit-empty | |
 | `cache` | object (CacheConfig) | no | `null` | omit-empty | |

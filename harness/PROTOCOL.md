@@ -544,6 +544,20 @@ Responsibility split, normative (derived from `check.py::split_url` and
   judgment property, INV-050's one exception) no longer equal an input
   object and are not checked.
 
+## The `mapping` direction (2026-09-26)
+
+Canonical mapping rules decided by an opaque payload's content are pinned
+by vectors under `mapping/`, not by one wire case per variant. The shim
+needs no new op: the harness builds each vector with `build_request` (and
+`cache_op_build` `create`) and reads only the part of the body the rule
+governs. First file: `mapping/gemini-schema-field.json` (MAP-16). Each
+vector runs three times — as a FunctionTool's `parameters`, as a
+`json_schema` `response_format`, and as a cached prefix's tool — with
+provider `gemini`, model `gemini-2.5-flash`, and must put the schema in
+exactly the field the vector names, verbatim, key order included; the
+other field must be absent. Case ids read
+`gemini-schema-field.<id>[tools|response_format|cache_tools]`.
+
 ## Concurrency
 
 The contract pins pure transformations (build/parse/map). Concurrency and

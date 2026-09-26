@@ -14,7 +14,7 @@ The mutation classes pin the comparator's teeth: tool-name drift, text
 corruption, absent-vs-empty conflation, usage arithmetic, event loss,
 end-event provider_data loss (D9 presence rule), bool/int conflation,
 auth-chain state drift, AUTH-5 sentinel leakage, opaque-payload key
-order (INV-002), and in the managed direction an AUTH-21 token leak and
+order (INV-002), Gemini's schema field (MAP-16), and in the managed direction an AUTH-21 token leak and
 store drift. A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
@@ -137,6 +137,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, {}) for c in managed.load_runs()],
             lambda c, g: '"state": "ready"' in json.dumps(c["expect"].get("store")),
             "managed_store_drift (a managed run whose store ends with a ready slot)")),
+        "gemini_schema_field_flip": ("mapping", "gemini-schema-field.additional-properties[tools]"),
         "opaque_keys_sorted": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: "canonical_request" in c and check.expected_raise(c, "build_request") is None

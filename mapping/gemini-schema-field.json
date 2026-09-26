@@ -1,0 +1,553 @@
+{
+  "description": "MAP-16 vectors: which of Gemini's two schema fields carries a schema. openapi=true: responseSchema / functionDeclarations[].parameters (Gemini's OpenAPI Schema object); false: responseJsonSchema / parametersJsonSchema. The schema is verbatim either way. The harness's mapping direction builds each vector as a FunctionTool's parameters and as a json_schema response_format through build_request, and as a cached prefix's tool through cache_op_build. tools/test_mapping_vectors.py checks every expectation against the probe receipts: where exactly one field accepted the schema, the vector names that field.",
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-26",
+    "evidence": "docs/mapping-rules.md MAP-16; each vector sent verbatim in all four fields to gemini-2.5-flash on 2026-09-26 (receipts/2026-09-26-gemini/probe-<id>.<field>.json, research/providers/gemini/capture_schema_fields.py); changes/2026-09-26-gemini-schema-fields.md"
+  },
+  "cases": [
+    {
+      "id": "plain",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "City name"
+          }
+        },
+        "required": [
+          "city"
+        ]
+      },
+      "openapi": true,
+      "why": "every key a Schema field"
+    },
+    {
+      "id": "empty-object",
+      "schema": {},
+      "openapi": true,
+      "why": "no keys: fits (FunctionTool's explicit {} parameters, INV-033)"
+    },
+    {
+      "id": "additional-properties",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "v"
+        ],
+        "additionalProperties": false
+      },
+      "openapi": false,
+      "why": "additionalProperties is not a Schema field (the pre-2026-09-26 rule)"
+    },
+    {
+      "id": "property-named-like-a-keyword",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "$ref": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "$ref"
+        ]
+      },
+      "openapi": true,
+      "why": "property names are data, not keywords"
+    },
+    {
+      "id": "const",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "const": "x"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "const is JSON Schema only"
+    },
+    {
+      "id": "defs-ref",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "$ref": "#/$defs/S"
+          }
+        },
+        "required": [
+          "v"
+        ],
+        "$defs": {
+          "S": {
+            "type": "string"
+          }
+        }
+      },
+      "openapi": false,
+      "why": "$defs / $ref (Pydantic's shape)"
+    },
+    {
+      "id": "integer-enum",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "integer",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "the Schema's enum is a list of strings"
+    },
+    {
+      "id": "type-list",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "the Schema's type is one string"
+    },
+    {
+      "id": "uppercase-type",
+      "schema": {
+        "type": "OBJECT",
+        "properties": {
+          "v": {
+            "type": "STRING"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "Gemini's own spelling; both fields accept it, so it stays where it always went"
+    },
+    {
+      "id": "count-as-string",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": "3"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the Schema's int64 JSON form; the JSON Schema field rejects a string count"
+    },
+    {
+      "id": "bound-as-string",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "minimum": "1"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the Schema's double JSON form; the JSON Schema field rejects it"
+    },
+    {
+      "id": "null-value",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "description": null
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "null reads as absent in the Schema; the JSON Schema field rejects it"
+    },
+    {
+      "id": "gemini-fields",
+      "schema": {
+        "type": "object",
+        "title": "T",
+        "nullable": false,
+        "propertyOrdering": [
+          "b",
+          "a"
+        ],
+        "properties": {
+          "b": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^[0-9-]+$",
+            "minLength": 10,
+            "maxLength": 10
+          },
+          "a": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "b"
+        ],
+        "minProperties": 1,
+        "maxProperties": 2,
+        "example": {
+          "additionalProperties": 1,
+          "b": "2026-01-01"
+        },
+        "default": null
+      },
+      "openapi": true,
+      "why": "every Schema field; example and default are any value, not schemas"
+    },
+    {
+      "id": "nested-in-any-of",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "w": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "a sub-schema of anyOf decides for the whole schema"
+    },
+    {
+      "id": "nested-in-items",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "const": "x"
+            }
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "a sub-schema of items decides"
+    },
+    {
+      "id": "nested-deep",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "object",
+            "properties": {
+              "w": {
+                "type": "object",
+                "properties": {
+                  "z": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "a sub-schema of properties, two levels down, decides"
+    },
+    {
+      "id": "items-tuple",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "array",
+            "items": [
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400; items must be one schema"
+    },
+    {
+      "id": "required-not-a-list",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string"
+          }
+        },
+        "required": "v"
+      },
+      "openapi": true,
+      "why": "the OpenAPI field reads one string as a one-element list; the JSON Schema field wants a list"
+    },
+    {
+      "id": "nullable-not-boolean",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "nullable": "yes"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the OpenAPI field reads it; the JSON Schema field wants a boolean"
+    },
+    {
+      "id": "description-not-a-string",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "description": 5
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400; the rule leaves it where lm15 always sent it, and the provider's 400 is the contract"
+    },
+    {
+      "id": "type-not-a-string",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": 5
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400 (only a list type moves)"
+    },
+    {
+      "id": "any-of-single-object",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "anyOf": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the OpenAPI field reads one object as a one-element anyOf; the JSON Schema field wants a list"
+    },
+    {
+      "id": "enum-single-string",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "enum": "x"
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the OpenAPI field reads one string as a one-element enum; the JSON Schema field wants a list"
+    },
+    {
+      "id": "required-with-a-number",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "v",
+          1
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400"
+    },
+    {
+      "id": "nullable-number",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "nullable": 1
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "the OpenAPI field reads it; the JSON Schema field wants a boolean"
+    },
+    {
+      "id": "properties-not-an-object",
+      "schema": {
+        "type": "object",
+        "properties": [
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400"
+    },
+    {
+      "id": "items-null",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "array",
+            "items": null
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "both fields answer 400 (an array needs items)"
+    },
+    {
+      "id": "boolean-sub-schema",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": true
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": false,
+      "why": "a JSON Schema boolean schema; the OpenAPI field has no such thing"
+    },
+    {
+      "id": "example-sub-schema-keywords",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "string",
+            "example": {
+              "const": 1
+            }
+          }
+        },
+        "required": [
+          "v"
+        ]
+      },
+      "openapi": true,
+      "why": "example is a value, not a schema: its keys are never read as keywords"
+    }
+  ]
+}

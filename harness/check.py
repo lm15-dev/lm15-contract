@@ -54,10 +54,11 @@ GOLDENS_DIR = CONTRACT_ROOT / "goldens"
 SERDE_FILE = CONTRACT_ROOT / "serde" / "canonical.json"
 SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
+MAPPING_DIR = CONTRACT_ROOT / "mapping"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
 
 ROUTER_FILE = CONTRACT_ROOT / "router" / "resolution.json"
-DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest", "managed")
+DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest", "mapping", "managed")
 
 # Surfaces with their own loader and direction; a case carrying one of these
 # is not a chat-surface wire case (no canonical_request / pinned_body pair).
@@ -2048,6 +2049,83 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
 
 # ─── Main ────────────────────────────────────────────────────────────
 
+# ─── Direction: mapping (canonical mapping-rule vectors) ────────────
+#
+# A mapping rule decided by the schema's content, pinned by vectors rather
+# than one wire case each: the vectors are canonical facts (the rule's text
+# plus the receipts it was read from), so they carry no pinned wire of
+# their own. The shim builds with its ordinary ops; the harness reads only
+# the part of the built body the rule governs.
+
+GEMINI_SCHEMA_SURFACES = ("tools", "response_format", "cache_tools")
+
+
+def load_gemini_schema_vectors() -> list[JsonObject]:
+    return json.loads((MAPPING_DIR / "gemini-schema-field.json").read_text(encoding="utf-8"))["cases"]
+
+
+def _gemini_schema_request(schema: Any, surface: str) -> JsonObject:
+    request: JsonObject = {"model": "gemini-2.5-flash",
+                           "messages": [{"role": "user", "parts": [{"type": "text", "text": "Give the value."}]}]}
+    if surface == "response_format":
+        request["config"] = {"response_format": {"type": "json_schema", "schema": schema}}
+    else:
+        request["tools"] = [{"type": "function", "name": "f", "parameters": schema}]
+    return request
+
+
+def _gemini_schema_slot(body: Any, surface: str) -> tuple[Any, str, str] | None:
+    """(the object holding the schema, its OpenAPI field, its JSON Schema field)."""
+    if not isinstance(body, dict):
+        return None
+    if surface == "response_format":
+        holder = body.get("generationConfig")
+        return (holder, "responseSchema", "responseJsonSchema") if isinstance(holder, dict) else None
+    tools = body.get("tools")
+    for tool in tools if isinstance(tools, list) else []:
+        decls = tool.get("functionDeclarations") if isinstance(tool, dict) else None
+        if isinstance(decls, list) and decls and isinstance(decls[0], dict):
+            return decls[0], "parameters", "parametersJsonSchema"
+    return None
+
+
+def run_mapping_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
+    """MAP-16 (docs/mapping-rules.md): the field Gemini's schema goes in."""
+    report = DirectionReport("mapping")
+    for vector in load_gemini_schema_vectors():
+        bare = f"gemini-schema-field.{vector['id']}"
+        for surface in GEMINI_SCHEMA_SURFACES:
+            case_id = f"{bare}[{surface}]"
+            if case_filter and case_filter not in (case_id, bare):
+                continue
+            request = _gemini_schema_request(vector["schema"], surface)
+            if surface == "cache_tools":
+                reply = shim.call("cache_op_build", provider="gemini", api_key=API_KEY, cache_op="create",
+                                  prefix_request=request)
+            else:
+                reply = shim.call("build_request", provider="gemini", canonical_request=request, stream=False,
+                                  api_key=API_KEY)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            slot = _gemini_schema_slot(reply["result"].get("body"), surface)
+            if slot is None:
+                report.results.append(CaseResult(case_id, "fail", reason="the built body has no place for the schema"))
+                continue
+            holder, openapi_field, json_field = slot
+            want, other = (openapi_field, json_field) if vector["openapi"] else (json_field, openapi_field)
+            if other in holder:
+                report.results.append(CaseResult(case_id, "fail", diff=Diff(
+                    f"$.body…{other}", "<absent>", _short(holder[other]),
+                    f"MAP-16: this schema goes in {want}, not {other}")))
+                continue
+            diff = first_difference(vector["schema"], holder.get(want, _ABSENT), (want,))
+            if diff is None:
+                diff = opaque_order_difference(opaque_key_orders({"schema": vector["schema"]}), holder[want], f"$.{want}")
+            report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+    return report
+
+
 def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path,
                   auth_scope: str = "all") -> DirectionReport:
     if direction == "request":
@@ -2080,6 +2158,8 @@ def run_direction(shim: Shim, direction: str, case_filter: str | None, report_di
         return run_router_direction(shim, case_filter)
     if direction == "ingest":
         return run_ingest_direction(shim, case_filter)
+    if direction == "mapping":
+        return run_mapping_direction(shim, case_filter)
     if direction == "managed":
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         from managed import run_managed_direction

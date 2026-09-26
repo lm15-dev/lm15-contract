@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-09-26T11-29-58Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Give the value."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 64,
+        "thinkingConfig": {
+          "thinkingBudget": 0
+        },
+        "responseMimeType": "application/json",
+        "responseSchema": {
+          "type": "object",
+          "title": "T",
+          "nullable": false,
+          "propertyOrdering": [
+            "b",
+            "a"
+          ],
+          "properties": {
+            "b": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^[0-9-]+$",
+              "minLength": 10,
+              "maxLength": 10
+            },
+            "a": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9
+              },
+              "minItems": 1,
+              "maxItems": 3
+            }
+          },
+          "required": [
+            "b"
+          ],
+          "minProperties": 1,
+          "maxProperties": 2,
+          "example": {
+            "additionalProperties": 1,
+            "b": "2026-01-01"
+          },
+          "default": null
+        }
+      }
+    }
+  },
+  "request_sha256": "58c82ca3336859dd20856f377657903294ddfcf5fc9d2bf512bdbd560e457d27",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "714787acb6d8d2e3612c5d2ac003154dd8897235bc0d3bfdd4879eec7b59940e",
+  "response_bytes": 577,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

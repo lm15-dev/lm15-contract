@@ -67,6 +67,7 @@ MUTATIONS = (
     "managed_sentinel_leak",    # managed_run: the private token shows up in a public step outcome (AUTH-21)
     "managed_store_drift",      # managed_run: the store afterwards loses a slot's state
     "opaque_keys_sorted",       # build_request: every body object written with sorted keys (a port with an unordered map; INV-002)
+    "gemini_schema_field_flip", # mapping: a MAP-16 vector's schema sent in Gemini's other field
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -214,7 +215,39 @@ class PinnedRaise(Exception):
         self.error = error
 
 
+# ─── mapping vectors (MAP-16) ───────────────────────────────────────
+#
+# A mapping vector has no wire case: the echo builds the one part of the
+# body the harness reads, from the vector's expectation.
+
+def _mapping_echo(request: Any) -> JsonObject | None:
+    if not isinstance(request, dict) or request.get("model") != "gemini-2.5-flash":
+        return None
+    tools = request.get("tools") or []
+    fmt = (request.get("config") or {}).get("response_format")
+    schema = tools[0].get("parameters") if tools else (fmt or {}).get("schema")
+    dumped = json.dumps(schema)
+    vector = next((v for v in check.load_gemini_schema_vectors() if json.dumps(v["schema"]) == dumped), None)
+    if vector is None:
+        return None
+    openapi = vector["openapi"]
+    if MUTATION == "gemini_schema_field_flip" and TARGET in (None, f"gemini-schema-field.{vector['id']}"):
+        openapi = not openapi
+    body: JsonObject = {"contents": [{"role": "user", "parts": [{"text": "Give the value."}]}]}
+    if tools:
+        body["tools"] = [{"functionDeclarations": [{"name": "f", ("parameters" if openapi else "parametersJsonSchema"): schema}]}]
+    else:
+        body["generationConfig"] = {"responseMimeType": "application/json",
+                                    ("responseSchema" if openapi else "responseJsonSchema"): schema}
+    return {"method": "POST", "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+            "params": {}, "headers": {}, "body": body}
+
+
 def op_build_request(msg: JsonObject) -> JsonObject:
+    if msg.get("provider") == "gemini" and not _candidates(msg):
+        echo = _mapping_echo(msg.get("canonical_request"))
+        if echo is not None:
+            return echo
     case = find_wire_case(msg)
     raises = check.expected_raise(case, "build_request")
     if raises is not None:
@@ -746,6 +779,10 @@ def find_cache_case(msg: JsonObject) -> JsonObject:
 
 
 def op_cache_op_build(msg: JsonObject) -> JsonObject:
+    if msg.get("provider") == "gemini" and msg.get("cache_op") == "create":
+        echo = _mapping_echo(msg.get("prefix_request"))
+        if echo is not None:
+            return echo
     case, step = find_surface_step("cache", msg, "cache_op")
     result = _echo_wire(step)
     if MUTATION == "cache_model_drop" and targeted(case) and isinstance(result.get("body"), dict):
