@@ -18,7 +18,7 @@ imports NOTHING from lm15: stdlib only.
   type only (D9, changes/2026-09-06-decisions.md); never by content.
 
 Usage:
-    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|router|ingest|all]
+    python harness/check.py --shim python [--direction request|response|stream|error|serde|auth|models|router|ingest|mapping|managed|all]
                             [--case ID] [--auth-scope core|cloud|all] [--report-dir harness/reports]
 
 ``--auth-scope`` applies to the auth direction only: ``core`` runs the cases

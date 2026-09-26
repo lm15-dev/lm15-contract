@@ -41,7 +41,7 @@ when its direction is green with zero skips added, and stays green.
 | 2 | errors (`spec/vocabularies.md` ErrorCode, hierarchy shape) | `--direction error` |
 | 3a | core auth (`spec/auth.md`: AUTH-1 `key`, `oauth`, `oauth-unless-explicit`; AUTH-2 credential values; AUTH-5; AUTH-7 doctor; AUTH-8 borrowed CLI files; AUTH-10 access policies) | `--direction auth --auth-scope core` (the non-cloud cases); `auth/resolution.json` |
 | 3b | cloud chains (AUTH-1 cloud chains, AUTH-11 rung kinds, SigV4, RS256) | `--direction token`; `--direction auth --auth-scope cloud` (the cloud cases); `auth/sigv4-vectors.json`, `auth/token-vectors.json` |
-| 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises) |
+| 4 | dialects, request side: Anthropic, OpenAI Responses, OpenAI Chat (+ compat presets), Gemini | `--direction request` (including build-time raises); `--direction mapping` (content-decided mapping rules: MAP-16, where a schema goes on Gemini) |
 | 5 | dialects, response side + stream assembly (MAP-1..4, MAP-9) | `--direction response`, `--direction stream` (incl. the pinned assembly refusal) |
 | 5c | the router (`playbooks/api-family.md` § The core loop; AUTH-1 resolution order; `changes/2026-09-08-router-error-codes.md`) | `--direction router` (`router/resolution.json`: the three rungs, their precedence, `unknown_model` / `ambiguous_model` with payload) |
 | 4b | Chat Completions ingest (MAP-12: a chat request body → canonical Request, one preset's spellings; `tools/openai-chat-ingest-verdicts.json`) | `--direction ingest` (the round trip over every chat-dialect wire case, lossy cells pinned per case; the ingest-surface refusals). Provisional; does not gate 1.0 |
