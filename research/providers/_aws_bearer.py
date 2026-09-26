@@ -94,7 +94,7 @@ def main(argv: list[str]) -> int:
 
     region = os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION") or "us-east-1"
     env = {k: v for k, v in os.environ.items() if k != "AWS_BEARER_TOKEN_BEDROCK"}  # mint from keys, not from a key
-    cred = resolve(lookup("bedrock-chat").access, ChainContext.online(env=env, settings={"region": region}))
+    cred, _source = resolve(lookup("bedrock-chat").access, ChainContext.online(env=env, settings={"region": region}))
     if not isinstance(cred, AwsCredentials):
         sys.exit(f"the aws-chain yielded {cred.kind}, not AWS credentials; nothing to mint from")
     token = mint(cred.access_key_id, cred.secret_access_key, cred.session_token, region, datetime.now(timezone.utc))
