@@ -87,8 +87,9 @@ configuration, ADC file, metadata server).
   that is, only where the alternative was a configuration error. Cost,
   stated: off Google Cloud, that error now arrives after at most the
   1-second metadata timeout (plus name resolution), unless `NO_GCE_CHECK`
-  is set. Live: an e2-micro VM with no project variable resolved its
-  project this way (below).
+  is set. Python and Go ask at construction; TypeScript and Rust, whose
+  construction is synchronous and I/O is not, ask once before the first
+  request (AUTH-10 allows either).
 
 ## D2 — API keys on the `vertex` door (AUTH-2, AUTH-10)
 
@@ -126,3 +127,30 @@ harness injects its own key). `cases/vertex-express/`: `basic_text`,
 `streaming` (`?key=`). `errors/cases/vertex.json`: an expired/invalid
 token (401 → AuthError), an unknown model (404 → UnsupportedModelError),
 a project without access (403 → AuthError).
+
+## Ports (2026-09-26)
+
+TypeScript (`b962fde`), Go (`6ab1ca0`) and Rust (`fab039c`) implement D1,
+D2, the settings origin and the Google diagnostics. Graded against this
+contract with `--no-check-pin`: every `vertex`, `vertex-express` and
+auth-resolution case passes in all three; their only failures are the
+four open-model hosts of `changes/2026-09-26-inference-hosts-live.md`
+(and the managed `discovery` list that includes them), which no port
+carries yet. Their `CONTRACT_PIN` stays at `3763eec` until those hosts
+are ported; moving it earlier would pin a contract the ports fail.
+Rust carries the OAuth word in the message only (`AuthError::Rejected`
+has no code field; a public enum change was not worth it for this).
+
+Live, per language, through lm15's own chain against `lm15-vertex-live`
+(the same 13 setups in each: gcloud login with the project from gcloud's
+configuration, the gcloud rung alone, a service-account key, `"environment"`,
+an impersonated service account, workload identity federation direct and
+through a service account, a plain access-token string, a Vertex API key
+on `vertex` (complete, stream, europe-west4) and on `vertex-express`), all
+200 in Python, TypeScript, Go and Rust. The three refusals (a revoked ADC
+login, nothing configured, no project off Google Cloud) name their fix in
+all four. On an Ubuntu 24.04 VM with an attached service account and no
+project anywhere (no variable, no gcloud configuration), each of the four
+resolved the project from the metadata server and answered through the
+default chain, the named `"platform"` identity, and a stream (12/12).
+

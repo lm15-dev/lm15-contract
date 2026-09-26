@@ -564,10 +564,14 @@ changes/2026-09-26-vertex-live.md D1).** After the caller's value and
 4. the metadata server, `GET http://{GCE_METADATA_HOST|GCE_METADATA_ROOT|metadata.google.internal}/computeMetadata/v1/project/project-id`
    with `Metadata-Flavor: Google` and the metadata rung's 1-second
    timeout, skipped when `NO_GCE_CHECK` is truthy (default-py.md:391-420,
-   compute-engine-py.md:395-409) — `from: metadata`. Network I/O at
-   construction, reached only when every source above is empty (where
-   the alternative was a configuration error); the offline doctor
-   reports it `unprobed`.
+   compute-engine-py.md:395-409) — `from: metadata`. Network I/O, reached
+   only when every source above is empty (where the alternative was a
+   configuration error): at construction where construction may block
+   (Python, Go), otherwise once, before the first request's URL is
+   rendered (TypeScript, Rust: construction is synchronous and their I/O
+   is not), where a request built by hand before then is refused by name.
+   Either way no answer is a `NotConfiguredError` naming the other
+   sources; the offline doctor reports it `unprobed`.
 
 The project is resolved independently of which AUTH-1 rung supplies the
 credential; google-auth pairs them (a service-account file's project with
