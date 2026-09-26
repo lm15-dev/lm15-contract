@@ -1,90 +1,93 @@
 # lm15-contract
 
-This repository defines shared lm15 behavior. Read [AUTHORITY.md](AUTHORITY.md)
-first. Implementations must follow the contract, not change fixtures to pass.
+The specification and test corpus that every lm15 implementation is graded
+against. lm15 is one request and response model for AI model providers,
+implemented separately in Python, TypeScript, Rust and Go (and Julia, R and
+earlier ports in progress). This repository is what makes them the same
+library: the same program builds the same request and reads the same answer
+in every language, because each one passes the checks defined here.
 
-| Path | Purpose |
+**This repository is the authority, not any implementation.** Read
+[AUTHORITY.md](AUTHORITY.md) first: it says which evidence wins when things
+disagree (live provider behavior, then provider documentation, then the
+recorded fixtures, then any implementation, including the Python
+reference) and how each kind of fixture may change.
+
+## Where the languages stand
+
+| Implementation | Release | Contract pin | Checks |
+|---|---|---|---|
+| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 1.0.1 | see its `CONTRACT_PIN` | all pass |
+| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 1.0.0-rc.1 | `3763eec` | 1,583 / 1,583 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.1 | `3763eec` | 1,583 / 1,583 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.1 | `3763eec` | 1,583 / 1,583 |
+
+Measured 2026-09-26 with `harness/check.py --direction all` at each pin.
+[playbooks/parity.md](playbooks/parity.md) is the dated ledger.
+
+## What's inside
+
+| Path | What it holds |
 |---|---|
-| `AUTHORITY.md` | Evidence rules and source precedence |
-| `spec/` | Canonical types, invariants, vocabularies, scope, and authentication |
-| `docs/` | Normative serde rules and mapping rules (MAP-1..MAP-10); moved here from lm15-python on 2026-09-07 |
-| `cases/`, `bodies/`, `errors/` | Provider requests and captured responses |
-| `goldens/` | Expected canonical responses and stream events |
-| `serde/canonical.json` | Canonical JSON vectors |
-| `auth/` | Credential resolution, signing, token-exchange vectors, and the review-draft managed-auth acceptance suite |
-| `receipts/`, `changes/` | Capture evidence and change records |
-| `spec/support-matrix.json` | Provider support and evidence status |
-| `harness/` | Shared test protocol, runner, and comparator tests |
-| `tools/` | Provenance, secrecy, coverage, and spec checks; the verdict registries (`extensions-verdicts.json`, INV-049; `openai-chat-ingest-verdicts.json`, MAP-12) |
-| `playbooks/port.md` | Port order, test gates, and review rules |
-| `playbooks/api-family.md` | Public API guide (ratified 2026-09-06) |
+| [`spec/`](spec/) | The canonical types, closed vocabularies and numbered invariants (`types.md`, `vocabularies.md`, `invariants.md`), credentials and sign-in (`auth.md`, `auth-managed.md`), the scope of 1.0 (`SCOPE.md`), and each provider's support and evidence (`support-matrix.json`). |
+| [`docs/`](docs/) | The normative rules for exact JSON (`serde-rules.md`) and for mapping to and from each provider's wire (`mapping-rules.md`, MAP-1 to MAP-16). |
+| `cases/`, `bodies/`, `errors/` | Recorded provider traffic: the request each case must build, the exact bytes the provider answered, and error envelopes. |
+| `goldens/` | The canonical response and stream events each recorded answer must read as. |
+| `serde/`, `mapping/`, `consumer/`, `router/`, `auth/` | Vectors: JSON round trips, content-decided mapping rules, bounded collection, model-string routing, credential resolution, signing, token exchange and the sign-in runs. |
+| `receipts/` | The evidence behind each live capture: when, against which model, and hashes of the exact exchange. |
+| `changes/` | One record per decision or rule change, with its evidence. |
+| `harness/` | The language-neutral grader: [PROTOCOL.md](harness/PROTOCOL.md) (what an implementation's test shim speaks), `check.py` (the runner and comparator), `selftest.py` (proof the comparator catches drift). |
+| `tools/` | Checks on the contract itself: provenance, secrecy, coverage, drift between spec and reference. |
+| `research/`, `scrapes/` | Capture scripts and provider documentation snapshots. |
+| [`playbooks/`](playbooks/) | [port.md](playbooks/port.md) (how to write a new language, module by module), [api-family.md](playbooks/api-family.md) (the public API shape every language follows). |
 
-## Managed authentication (2026-09-22 ratified core)
+## How an implementation is graded
 
-Start with [the ratified decisions](changes/2026-09-22-managed-authentication-ratification.md)
-(one page), then the [decision record](changes/2026-09-22-managed-authentication.md),
-the [core spec AUTH-12–26](spec/auth-managed.md), its
-[reserved rules](spec/auth-managed-reserved.md) (design notes, not binding until
-their trigger and explicit promotion are met) and [worked examples](docs/auth-examples.md).
-[Acceptance scenarios and vectors](auth/managed/README.md) specify what Python
-and TypeScript must prove first. Existing subscription access is preserved;
-explicit keys win, otherwise subscription access precedes ambient keys. The
-private store schema remains a [reserved design](spec/auth-store.schema.json).
-The Python implementation and the decisions it forced are recorded in
-[the implementation record](changes/2026-09-22-managed-authentication-python.md);
-no provider support promotion follows from it.
-
-## Check the contract
-
-Run these commands from this repository:
+Each implementation ships a small program, its *vet shim*, that reads JSON
+requests on stdin (build this request, parse this reply, replay this stream,
+explain this credential...) and answers on stdout. The harness drives it in
+a sandbox with no network and does all the comparing itself, in 18
+directions: requests, responses, streams, errors, serialization,
+credentials, token exchange, models, realtime sessions, files, batches,
+media generation, video, stored caches, routing, Chat Completions ingest,
+mapping vectors and sign-in.
 
 ```bash
-python3 tools/check_provenance.py
-python3 tools/check_secrecy.py
+python3 harness/check.py --shim python --direction all   # or typescript, rust, go
+```
+
+The harness refuses to grade an implementation against any commit other
+than the one in its `CONTRACT_PIN`; use a clean checkout at that commit for
+a reproducible result (`--no-check-pin` is for local development only).
+Shims are registered in [harness/shims.json](harness/shims.json).
+
+## Checking the contract itself
+
+```bash
+python3 tools/check_provenance.py     # every fixture says where it came from
+python3 tools/check_secrecy.py        # no credential anywhere
 python3 tools/audit.py
-python3 tools/spec_drift.py
+python3 tools/spec_drift.py           # needs ../lm15-python
 python3 tools/check_content_coverage.py
-python3 harness/selftest.py
+python3 tools/check_gateway.py
+python3 -m unittest discover -s tools -p 'test_*.py'
+python3 harness/selftest.py           # the comparator catches every injected mutation
 ```
 
-`spec_drift.py` needs the Python reference at `../lm15-python` for its full check.
-The comparator self-test does not prove that any implementation passes.
+CI runs all of these on every push. The self-test proves the comparator has
+teeth; it does not prove any implementation passes.
 
-## Check the Python reference
+## Changing the contract
 
-Install `../lm15-python` in its `.venv`, then run:
+- **Recorded traffic** (`cases/`, `bodies/`) changes only with a new live
+  capture and its receipt, recorded in a `changes/` entry.
+- **Canonical fixtures** (`serde/`, goldens, `expect_lm15`) change only
+  with a citation of the rule that makes the new value right.
+- **A normative rule** changes only with a `changes/` entry explaining
+  why, in the same commit; rules are ratified by the maintainer.
+- Changes land here first; the Python reference moves its pin with the
+  matching code, then each port.
 
-```bash
-python3 harness/check.py --shim python --direction all
-```
-
-The harness checks `lm15-python/CONTRACT_PIN` against this repository's HEAD.
-Use a clean contract checkout at that commit for a reproducible result.
-`--no-check-pin` supports local development only; it is not a release gate.
-
-Land reviewed contract changes first. Update the Python pin with the matching
-implementation changes. Publish the contract commit before dependent CI runs.
-
-## Readiness boundaries
-
-- A passing reference suite does not prove that a language port passes.
-- Each port must pass its own gates against its declared contract version.
-- Keep failing port tests visible. Do not remove new fixtures to claim parity.
-- Documentation evidence is not a successful live capture. Check each provider's
-  support row and change record, including partial captures.
-- The public API guide (`playbooks/api-family.md`) and the two
-  authentication amendments (`changes/2026-09-04-bedrock-bearer.md`,
-  `changes/2026-09-04-bedrock-mantle-chat-live.md`) were ratified
-  2026-09-06. See `changes/2026-09-06-ratification.md`.
-- The 88 new goldens (2026-09-03/04) stay `scribe-draft` until the
-  independent re-review adds their `reviewed` line. A green harness run
-  does not approve them.
-
-## Migration history
-
-The corpus moved from `lm15-python2/conformance` on 2026-06-09. See
-`changes/2026-06-09-initial-migration.md`. Some legacy Python checks still use
-local fixtures. The shared harness reads this repository directly.
-
-The Python serialization suite reads `serde/canonical.json` directly since
-2026-09-02. See `changes/2026-09-02-one-copy.md`.
+Goldens drafted from the reference stay marked `scribe-draft` until an
+independent review adds a `reviewed` line; a green harness run does not
+approve them.
