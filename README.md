@@ -17,10 +17,10 @@ reference) and how each kind of fixture may change.
 
 | Implementation | Release | Contract pin | Checks |
 |---|---|---|---|
-| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 1.0.1 | see its `CONTRACT_PIN` | all pass |
-| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 1.0.0-rc.1 | `3763eec` | 1,583 / 1,583 |
-| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.1 | `3763eec` | 1,583 / 1,583 |
-| [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.1 | `3763eec` | 1,583 / 1,583 |
+| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 1.1.0 | `fe5cdf9` | 1,788 / 1,788 |
+| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 1.0.0-rc.2 | `fe5cdf9` | 1,788 / 1,788 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.2 | `fe5cdf9` | 1,788 / 1,788 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.2 | `fe5cdf9` | 1,788 / 1,788 |
 
 Measured 2026-09-26 with `harness/check.py --direction all` at each pin.
 [playbooks/parity.md](playbooks/parity.md) is the dated ledger.
