@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-54-23Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "1ab671ae899558f3b507342cfe6268c0365f83f87812068b7d3b1e315413c69a",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "84a4737ee739077fdaacfadfe7867df85c64aed4fed36d8a008387790aa32ef8",
+  "response_bytes": 674,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

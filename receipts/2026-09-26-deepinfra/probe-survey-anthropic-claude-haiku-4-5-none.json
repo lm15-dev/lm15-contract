@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "anthropic/claude-haiku-4-5",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R2xEubv94iOe4AHIWV7PNoBn",
+    "object": "chat.completion",
+    "created": 1790430840,
+    "model": "anthropic/claude-haiku-4-5",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time weather data or the ability to use tools to check current weather conditions. I can't browse the internet or access live weather services.\n\nTo check the weather in Paris, you can:\n\n1. **Google Weather** - Search \"Paris weather\" on Google\n2. **Weather websites** - Visit weather.com, weather.fr, or meteofrance.com\n3. **Weather apps** - Use apps like Weather.com, AccuWeather, or your phone's built-in weather app\n4. **News websites** - Many news sites display current weather\n\nIs there anything else I can help you with regarding Paris?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 18,
+      "total_tokens": 161,
+      "completion_tokens": 143,
+      "estimated_cost": 0.000733,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-53-58Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R2xEubv94iOe4AHIWV7PNoBn"
+  }
+}

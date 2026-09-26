@@ -1,0 +1,91 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RQpfvSkrMLDhQO19B0ljqNn5",
+    "object": "chat.completion",
+    "created": 1790430774,
+    "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user wants me to just say ok.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-9f9fa1dc2633e5ec",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "total_tokens": 293,
+      "completion_tokens": 208,
+      "estimated_cost": 6.3126e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 9
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-47Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RQpfvSkrMLDhQO19B0ljqNn5"
+  }
+}

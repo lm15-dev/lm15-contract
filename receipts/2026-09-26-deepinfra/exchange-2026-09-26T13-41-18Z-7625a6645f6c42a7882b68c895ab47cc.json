@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-41-18Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "zai-org/GLM-5.3-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "a61b96b5c82012acfb5e8f3b2b2d1aad4ed1da8b5c347feba0a6692a8da67873",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "65362979b7327ba99a195d9337542b4999fe9540c8ee771250419cb28be7d00b",
+  "response_bytes": 677,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

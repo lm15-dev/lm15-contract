@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-51-36Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "a13e08dfd45c9f096dbb853cb9b1301be796c8ab7beef456437303667527bf6c",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "f5b541d73ba40c7fa95a7be5ee795e9d10c75b55bc3e281bd195529e1170fa4c",
+  "response_bytes": 694,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

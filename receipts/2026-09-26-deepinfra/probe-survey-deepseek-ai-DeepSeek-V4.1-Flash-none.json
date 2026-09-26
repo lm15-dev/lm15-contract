@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RCGImPfQrvKPRc4mDIpY8POd",
+    "object": "chat.completion",
+    "created": 1790430861,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have a weather tool available in this conversation, so I can't fetch live weather data for Paris right now.\n\nTo get current conditions, you could:\n- Check a weather site like **weather.com**, **accuweather.com**, or **wunderground.com**\n- Search **\"Paris weather\"** on Google or Bing\n- Ask a voice assistant like Siri, Alexa, or Google Assistant\n\nIf you let me know what you're looking for (current conditions, a forecast, or historical averages for a specific date), I can help you interpret the data once you have it.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 15,
+      "total_tokens": 138,
+      "completion_tokens": 123,
+      "estimated_cost": 5.376e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-54-18Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RCGImPfQrvKPRc4mDIpY8POd"
+  }
+}

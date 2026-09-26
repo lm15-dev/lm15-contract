@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-49-43Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "request_sha256": "971518ebeea3df203e5466b887223380ac169370025e437b715d99173989ec65",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c99a18a7683f49166660a6104e876f41a068420fcc6e2da420aead826c4e26ea",
+  "response_bytes": 884,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

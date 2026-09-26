@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-46-27Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "ibm-granite/granite-4.2-8b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "request_sha256": "d334eb40bcb3e7bb22f6ad4c142fc68d2e57969f0ed2675576311f56c396b18e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "df17340043328dca0e06648ce6499407182003b00f65d5045db077c8c6970221",
+  "response_bytes": 1672,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

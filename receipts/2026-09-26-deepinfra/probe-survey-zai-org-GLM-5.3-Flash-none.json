@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RnnEH3uJ2ZcD1mfqbntLAIe2",
+    "object": "chat.completion",
+    "created": 1790430597,
+    "model": "zai-org/GLM-5.3-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I'd be happy to check the weather for you, but I don't actually have access to a weather tool in this conversation — no tools are connected or available to me right now.\n\nTo get the current weather in Paris, you could:\n\n- Check a site like weather.com, meteofrance.com, or Google (just search \"Paris weather\")\n- Ask a voice assistant or check your phone's weather app\n\nIf you have a weather tool or API you'd like me to use, let me know and set it up, and I'll be glad to query it! Is there anything else I can help with?",
+          "reasoning_content": "User asks weather; I have no actual tool available in this context. There's no tool defined in tools section. So explain I can't access real-time data.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "total_tokens": 182,
+      "completion_tokens": 159,
+      "estimated_cost": 4.1475e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 33
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-49-52Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RnnEH3uJ2ZcD1mfqbntLAIe2"
+  }
+}

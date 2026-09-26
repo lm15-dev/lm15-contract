@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RzhMP8vHTMV7hmmSZnzpocTp",
+    "object": "chat.completion",
+    "created": 1790430526,
+    "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_mCutXdVwH12OiVhQeLCnrkhC",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 212,
+      "total_tokens": 228,
+      "completion_tokens": 16,
+      "estimated_cost": 4.88e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-48-45Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RzhMP8vHTMV7hmmSZnzpocTp"
+  }
+}

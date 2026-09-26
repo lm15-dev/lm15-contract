@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V3.2",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RW18Lnw26mTAX8L7VsqWJHbD",
+    "object": "chat.completion",
+    "created": 1790430800,
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don’t have access to real-time weather data or a tool to fetch live weather updates directly. For current weather in Paris, I recommend checking a reliable website or app like:\n\n- Weather.com\n- AccuWeather\n- The Weather Channel  \n- Your device's built-in weather app\n\nYou could also do a quick web search for “Paris weather” to get the latest forecast, temperature, and conditions.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 21,
+      "total_tokens": 106,
+      "completion_tokens": 85,
+      "estimated_cost": 3.7760000000000004e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-53-20Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RW18Lnw26mTAX8L7VsqWJHbD"
+  }
+}

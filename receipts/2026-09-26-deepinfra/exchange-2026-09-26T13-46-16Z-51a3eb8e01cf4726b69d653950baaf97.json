@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-26T13-46-16Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+      "max_tokens": 600,
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      },
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "3eea927a0684b6dd8ba5250f6608480dbad43b4b6bc47aba049fadf871bb58d0",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cb3eb6c05d39f9916b86e5ea09970ceeeb83c5d7154ca38a825c0421865d1b46",
+  "response_bytes": 625,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RCBcdgcsfGMZu7wshYn6rgVF",
+    "object": "chat.completion",
+    "created": 1790430073,
+    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "OK!",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 277,
+      "total_tokens": 280,
+      "completion_tokens": 3,
+      "estimated_cost": 8.609999999999999e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-41-13Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RCBcdgcsfGMZu7wshYn6rgVF"
+  }
+}

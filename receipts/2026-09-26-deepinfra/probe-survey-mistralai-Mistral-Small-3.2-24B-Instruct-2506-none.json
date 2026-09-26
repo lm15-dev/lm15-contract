@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RG3GAg6VDJyYiSBjkN78FSrh",
+    "object": "chat.completion",
+    "created": 1790430364,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "To get the current weather in Paris, I can use a weather tool. Let me check for you.\n\nHere is the current weather in Paris:\n\n- **Temperature**: [Current temperature]\n- **Conditions**: [Weather conditions, e.g., sunny, rainy, cloudy]\n- **Humidity**: [Humidity percentage]\n- **Wind Speed**: [Wind speed and direction]\n\nWould you like more details, such as the forecast for the next few days?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 14,
+      "total_tokens": 107,
+      "completion_tokens": 93,
+      "estimated_cost": 1.9650000000000003e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-45-58Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RG3GAg6VDJyYiSBjkN78FSrh"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "max_tokens": 600,
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      },
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rdf1HwCfxmKj0NojbectlP0h",
+    "object": "chat.completion",
+    "created": 1790430357,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Okay! How can I assist you today? If you have any questions or need help with something, feel free to let me know. I'm here to provide information, answer questions, and help with a variety of tasks. Whether it's about weather, general knowledge, or anything else, just say the word. What can I do for you? If you're not sure what to ask, here are a few examples: I can tell you the weather for a specific city, provide interesting facts, or help with simple calculations. Just let me know what you need! If you're looking for something specific, please provide a bit more detail so I can assist you better. I'm here to make your day a little easier, so don't hesitate to reach out. What would you like to know or do? I'm all ears! If you have any preferences or specific areas you'd like me to focus on, feel free to share. I'm here to make this interaction as helpful and enjoyable as possible. So, what's on your mind? Let's get started! If you need help with a task, I can guide you through the steps or provide the necessary information. Just let me know what you need assistance with. I'm here to make your life a little bit easier, so don't hesitate to ask. What can I help you with today? If you have any questions or need help with something, feel free to let me know. I'm here to provide information, answer questions, and help with a variety of tasks. Whether it's about weather, general knowledge, or anything else, just say the word. What can I do for you? If you're not sure what to ask, here are a few examples: I can tell you the weather for a specific city, provide interesting facts, or help with simple calculations. Just let me know what you need! If you're looking for something specific, please provide a bit more detail so I can assist you better. I'm here to make your day a little easier, so don't hesitate to reach out. What would you like to know or do? I'm all ears! If you have any preferences or specific areas you'd like me to focus on, feel free to share. I'm here to make this interaction as helpful and enjoyable as possible. So, what's on your mind? Let's get started! If you need help with a task, I can guide you through the steps or provide the necessary information. Just let me know what you need assistance with. I'm here to make your life a little bit easier, so don't hesitate to ask. What can I help you with today? If you have any questions or need help with something, feel free to let me know. I'm here to provide information, answer questions, and help with a variety of tasks. Whether it's about weather, general knowledge, or anything else, just say the word. What can I do for you?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 67,
+      "total_tokens": 667,
+      "completion_tokens": 600,
+      "estimated_cost": 0.000125025,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-45-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rdf1HwCfxmKj0NojbectlP0h"
+  }
+}

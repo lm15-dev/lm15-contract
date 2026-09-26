@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-53-50Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "google/gemini-3.1-flash-lite",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "google/gemini-3.1-flash-lite",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "913e330bf77f64abd71b0725b06521401371c9d88e5207202199b8fb3788ec59",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ce844242fe90c3fcbbec99161d03e50e3e1bf9328237a5e1d86f481d3fdccf07",
+  "response_bytes": 501,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

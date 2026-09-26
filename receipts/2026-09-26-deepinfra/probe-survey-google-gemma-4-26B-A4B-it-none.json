@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "google/gemma-4-26B-A4B-it",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rn4YNdr34THCfiEXwHPh8GBb",
+    "object": "chat.completion",
+    "created": 1790430370,
+    "model": "google/gemma-4-26B-A4B-it",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I do not have access to a weather tool or the internet to provide real-time weather updates. Therefore, I cannot tell you the current weather in Paris.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 24,
+      "total_tokens": 57,
+      "completion_tokens": 33,
+      "estimated_cost": 1.2899999999999998e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-46-08Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rn4YNdr34THCfiEXwHPh8GBb"
+  }
+}

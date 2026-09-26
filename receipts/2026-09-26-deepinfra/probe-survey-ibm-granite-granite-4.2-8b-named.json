@@ -1,0 +1,93 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "max_tokens": 600,
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      },
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RSZKSuceLNAeGfZJEWSeOEgQ",
+    "object": "chat.completion",
+    "created": 1790430721,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "Okay, the user said \"Say ok.\" I need to respond appropriately. Since they just want me to say ok, I should reply with \"ok\" directly. No tools are needed here because it's a simple acknowledgment. Let me make sure there's no hidden request or need for a tool call. Nope, just respond with \"ok.\"\n",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-aba3594de1b74739",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 376,
+      "completion_tokens": 105,
+      "estimated_cost": 3.099e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 256,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-00Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RSZKSuceLNAeGfZJEWSeOEgQ"
+  }
+}

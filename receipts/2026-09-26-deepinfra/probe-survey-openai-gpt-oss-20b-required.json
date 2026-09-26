@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RQrEsY9yywXSIxqhOUFYNBGs",
+    "object": "chat.completion",
+    "created": 1790430427,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "User says \"Say ok.\" They likely want the assistant to respond with \"ok\". The assistant should just say \"ok\".",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 112,
+      "total_tokens": 148,
+      "completion_tokens": 36,
+      "estimated_cost": 8.400000000000001e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-47-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RQrEsY9yywXSIxqhOUFYNBGs"
+  }
+}

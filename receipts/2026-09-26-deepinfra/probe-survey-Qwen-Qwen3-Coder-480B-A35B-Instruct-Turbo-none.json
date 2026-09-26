@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rjv9nl6NsVp5eNAr2KQaCnGh",
+    "object": "chat.completion",
+    "created": 1790430076,
+    "model": "Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time weather data or tools to check current weather conditions. To get the current weather in Paris, I'd recommend:\n\n1. Checking a weather website like Weather.com or AccuWeather\n2. Using a weather app on your phone\n3. Searching \"Paris weather\" in your web browser\n4. Asking a voice assistant with internet access\n\nIs there anything else about Paris I can help you with that doesn't require real-time information?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "total_tokens": 115,
+      "completion_tokens": 96,
+      "estimated_cost": 0.0001017,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-41-16Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rjv9nl6NsVp5eNAr2KQaCnGh"
+  }
+}

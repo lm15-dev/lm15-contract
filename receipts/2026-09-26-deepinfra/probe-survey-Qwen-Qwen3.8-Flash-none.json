@@ -1,0 +1,92 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-Flash",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R8qCtALYcyQ6dstvgHlxxJOW",
+    "object": "chat.completion",
+    "created": 1790430029,
+    "model": "Qwen/Qwen3.8-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need to answer user's request: \"What is the weather in Paris? Use the tool.\" Need call get_weather city Paris. Then final answer likely concise with data. Need maybe use same language? User English. Then respond.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_794727641fdf4f40b32d6a83",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Paris\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 326,
+      "total_tokens": 401,
+      "completion_tokens": 75,
+      "estimated_cost": 6.548800000000001e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 47,
+        "text_tokens": 75
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-40-27Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R8qCtALYcyQ6dstvgHlxxJOW"
+  }
+}

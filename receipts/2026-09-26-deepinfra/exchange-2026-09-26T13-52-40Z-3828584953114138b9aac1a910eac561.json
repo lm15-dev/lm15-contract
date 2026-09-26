@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-52-40Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "1e7133cb2d6ffd5f764a83be48b6c7f66a65cd1a15baae211e4ea17bef31e9bd",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e32a87e5b490ea77d94c42938c3694e8f3c3780a76a8f9ce10929c80ed7e3643",
+  "response_bytes": 738,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

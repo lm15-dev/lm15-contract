@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-4.7",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R8uYWcXbBcGWXwQjfXZnaJTl",
+    "object": "chat.completion",
+    "created": 1790430610,
+    "model": "zai-org/GLM-4.7",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Searching for the weather in Paris using the available tool. I will call the `get_weather` function to provide you with the current conditions.\n\n",
+          "reasoning_content": "1.  **Understand the Goal:** The user wants to know the current weather in Paris.\n\n2.  **Identify the Constraints:** The user explicitly requested to \"Use the tool\".\n\n3.  **Identify the Available Tools:** I have access to `get_weather`.\n\n4.  **Analyze the Tool:**\n    *   Name: `get_weather`\n    *   Description: Get current weather information for a specific location.\n    *   Parameters:\n        *   `location` (required): The city name, e.g., \"San Francisco, CA\".\n\n5.  **Determine Parameters:** The location is \"Paris\".\n\n6.  **Execute Tool Call:** Call `get_weather` with `location=\"Paris\"`.\n\n7.  **Wait for Tool Output:** (Simulated)\n    *   *Input:* Call `get_weather(location=\"Paris\")`\n    *   *Output:* JSON string containing weather data (Temperature, Conditions, Humidity, etc.).\n\n8.  **Formulate Response:**\n    *   Parse the JSON output.\n    *   Extract key details (Temperature, Description/Conditions).\n    *   Present the information clearly to the user.\n\n    *Self-Correction/Refinement during thought process:*\n    *   Should I assume Paris, France? Usually, yes, unless specified otherwise (like Paris, Texas). The tool usually defaults to the major city.\n    *   I don't have the *actual* live weather data in my internal context right now because I am a language model processing a prompt. However, since I need to simulate the *interaction* with the tool, I must indicate that I am calling the tool.\n    *   *Correction:* As an AI, I cannot *actually* make a live internet call in this specific thought block depending on the specific environment setup, but in this specific \"function calling\" context, I must emit the function call syntax so the system can execute it.\n\n9.  **Final Action:** Emit the function call for `get_weather`.",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 16,
+      "total_tokens": 481,
+      "completion_tokens": 465,
+      "estimated_cost": 0.0008201500000000001,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-50-10Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R8uYWcXbBcGWXwQjfXZnaJTl"
+  }
+}

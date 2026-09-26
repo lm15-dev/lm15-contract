@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "anthropic/claude-haiku-4-5",
+      "max_tokens": 600,
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      },
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R7EgRX6A8ttdOnwF9kDRMcZ7",
+    "object": "chat.completion",
+    "created": 1790430837,
+    "model": "anthropic/claude-haiku-4-5",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "toolu_vrtx_016QiTRYxiKdAsjLZrkbuy8T",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 657,
+      "total_tokens": 691,
+      "completion_tokens": 34,
+      "estimated_cost": 0.000827,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-53-56Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R7EgRX6A8ttdOnwF9kDRMcZ7"
+  }
+}

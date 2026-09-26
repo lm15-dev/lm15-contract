@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rrl7DXs6BLWT2ouSyHgmUlDZ",
+    "object": "chat.completion",
+    "created": 1790430766,
+    "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user wants me to say ok. But I don't have a tool called \"message\" - I only have get_weather. The instruction says I must call \"message\" if there is one. There isn't one. So just respond normally.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "total_tokens": 139,
+      "completion_tokens": 54,
+      "estimated_cost": 2.4318e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-40Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rrl7DXs6BLWT2ouSyHgmUlDZ"
+  }
+}

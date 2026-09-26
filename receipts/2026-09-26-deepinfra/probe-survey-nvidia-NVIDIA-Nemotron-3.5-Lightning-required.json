@@ -1,0 +1,280 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RCrvVdRa2ZawG49tLj3oJvbl",
+    "object": "chat.completion",
+    "created": 1790430705,
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-b69dd62990c12ad5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-af884026d174ba8b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a25f619dbe9c30c0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b343d7037654cc2b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-af70c16e55f228d6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9e1bf43df85a7f13",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b97d0ddad86e7721",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a4a6567a9566011c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8ad3c878267ffb03",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-93c0965b69f1ef0f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8e1b72ab27ee6dcb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8578217fc850aed0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bd13c448f3927621",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bb717cae340903a8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b3518e9450b7f6e8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-adb8874e30024478",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-86ec3bc849c66a4e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b7fae0ffa0886885",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ac11d078137f2549",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bc17c6037001ed9e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-867ce12ef46d02b8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-944b97e038ad24b5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bdd74a02772da947",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-950ce9f57e507e74",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a0f0a84bc5ec4ec3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Nowhere\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 871,
+      "completion_tokens": 600,
+      "estimated_cost": 0.00014168,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-51-45Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RCrvVdRa2ZawG49tLj3oJvbl"
+  }
+}

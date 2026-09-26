@@ -1,0 +1,61 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "microsoft/phi-4",
+      "max_tokens": 600,
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      },
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 405,
+  "body": {
+    "error": {
+      "message": "Tool calling is not supported for model: microsoft/phi-4",
+      "type": "invalid_request_error",
+      "param": "tools",
+      "code": null
+    }
+  },
+  "timestamp": "2026-09-26T13-46-12Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rz7LSn6iV0VAWyvDmqAcIWT0"
+  }
+}

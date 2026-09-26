@@ -1,0 +1,91 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RRh7kquCHY4KxVREeWADyQk7",
+    "object": "chat.completion",
+    "created": 1790430694,
+    "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user is asking about the weather in Paris and explicitly wants me to use the tool. I'll call the get_weather function with \"Paris\" as the city parameter.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_7b7c0e9c8e5b489dba",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Paris\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 198,
+      "total_tokens": 258,
+      "completion_tokens": 60,
+      "estimated_cost": 0.00017724,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 34
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-51-30Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RRh7kquCHY4KxVREeWADyQk7"
+  }
+}

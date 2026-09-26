@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Raixw1qLI5Ag2ZP5PSUHsNpW",
+    "object": "chat.completion",
+    "created": 1790430745,
+    "model": "ByteDance/Seed-2.0-mini",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "Got it, the user just said \"Say ok.\" So I need to respond with \"ok.\" That's straightforward. No tools needed here. Just a simple reply.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 416,
+      "total_tokens": 453,
+      "completion_tokens": 37,
+      "estimated_cost": 5.640000000000001e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 35
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Raixw1qLI5Ag2ZP5PSUHsNpW"
+  }
+}

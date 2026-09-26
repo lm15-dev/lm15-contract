@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R0peyY4RTiXqIqFIY8i5xSGL",
+    "object": "chat.completion",
+    "created": 1790430759,
+    "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I appreciate you asking, but I'm unable to check the current weather in Paris because I don't have access to a weather tool or real-time data in this conversation.\n\nHere are some alternatives you could try:\n\n1. **Search the web** by typing something like \"weather in Paris today\" into a search engine.\n2. **Use a weather app** like Weather.com, AccuWeather, or your device's built-in weather app.\n3. **Ask a voice assistant** like Siri, Google Assistant, or Alexa.\n\nIf you'd like, I can provide general climate information about Paris (e.g., what the weather is typically like in a certain month). Just let me know! 🌤️",
+          "reasoning_content": "The user is asking about the weather in Paris and wants me to use a tool. However, I don't have any weather tools available in this conversation. Let me let the user know.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 18,
+      "total_tokens": 202,
+      "completion_tokens": 184,
+      "estimated_cost": 4.8636e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 38
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-33Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R0peyY4RTiXqIqFIY8i5xSGL"
+  }
+}

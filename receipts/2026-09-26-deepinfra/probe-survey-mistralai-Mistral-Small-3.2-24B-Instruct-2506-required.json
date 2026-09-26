@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "max_tokens": 600,
+      "tool_choice": "required",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rr4Er87hPqpH2JUpPgiArHoQ",
+    "object": "chat.completion",
+    "created": 1790430316,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Okay, how can I assist you today? If you have any questions or need help with something, feel free to let me know. I'm here to provide information, answer questions, and help with a variety of tasks. Whether it's about the weather, general knowledge, or something else, I'm here to help. Just let me know what you need. If you're not sure what to ask, that's okay too. I can suggest some things we could talk about or do. For example, we could talk about current events, learn something new, or even play a word game. What would you like to do? If you have a specific question or topic in mind, please share it with me. I'm ready to assist you. If you're looking for information on a particular subject, I can help with that as well. Just let me know what you're interested in, and I'll do my best to provide you with the information you need. If you have any other questions or need further assistance, please don't hesitate to ask. I'm here to help. If you're not sure what to ask, that's okay too. I can suggest some things we could talk about or do. For example, we could talk about current events, learn something new, or even play a word game. What would you like to do? If you have a specific question or topic in mind, please share it with me. I'm ready to assist you. If you're looking for information on a particular subject, I can help with that as well. Just let me know what you're interested in, and I'll do my best to provide you with the information you need. If you have any other questions or need further assistance, please don't hesitate to ask. I'm here to help. If you're not sure what to ask, that's okay too. I can suggest some things we could talk about or do. For example, we could talk about current events, learn something new, or even play a word game. What would you like to do? If you have a specific question or topic in mind, please share it with me. I'm ready to assist you. If you're looking for information on a particular subject, I can help with that as well. Just let me know what you're interested in, and I'll do my best to provide you with the information you need. If you have any other questions or need further assistance, please don't hesitate to ask. I'm here to help. If you're not sure what to ask, that's okay too. I can suggest some things we could talk about or do. For example, we could talk about current events, learn something new, or even play a word game. What would you like to do? If you have a specific question or topic in mind, please share it with me. I'm ready to assist you. If you're looking for information on a particular subject,",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 67,
+      "total_tokens": 667,
+      "completion_tokens": 600,
+      "estimated_cost": 0.000125025,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-09-26T13-44-28Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rr4Er87hPqpH2JUpPgiArHoQ"
+  }
+}

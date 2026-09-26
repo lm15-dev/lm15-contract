@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RpdXCn3MJVQPPxfQhQWHVHI8",
+    "object": "chat.completion",
+    "created": 1790430658,
+    "model": "moonshotai/Kimi-K2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": " I don't have access to any weather tools or real-time data, so I can't check the current weather in Paris for you.\n\nTo get up-to-date weather information, I'd recommend:\n- Checking a weather website like **Weather.com**, **AccuWeather**, or **Météo-France**\n- Asking a voice assistant like Siri, Google Assistant, or Alexa\n- Searching \"Paris weather\" in your browser\n\nIf you tell me what the forecast says, I'd be happy to help you plan what to pack or suggest activities based on the conditions!",
+          "reasoning_content": " The user is asking for the weather in Paris and explicitly says \"Use the tool.\" However, I don't actually have access to any tools or real-time data APIs in this environment. I should clarify that I don't have access to weather tools or the ability to browse the internet for current weather information.\n\nWait, let me reconsider. Sometimes in these prompts, there might be an expectation that I simulate using a tool or I should explain that I cannot fulfill the request. But looking at the instructions, I don't see any tools available to me in this context. I should be honest about my limitations.\n\nActually, looking more carefully at the conversation format - this seems like a standard chat. The user might be testing whether I'll make up information or acknowledge I can't check current weather.\n\nI should respond that I don't have access to tools to check real-time weather data and suggest they check a weather service or provide general information about typical Paris weather if appropriate.\n\nWait, I need to check if there are any function calling capabilities available. The system prompt doesn't mention any tools, and I don't see any function definitions. So I should simply state that I don't have access to weather tools or real-time data.\n\nBest response: Acknowledge that I don't have access to weather tools or real-time internet browsing, so I can't provide the current weather in Paris. Suggest checking a weather website or app.\n\nAlternatively, if I want to be more helpful, I could provide a general description of Paris weather by season, but the user specifically asked for current weather and said \"use the tool\" which implies they think I have one. I should be clear that I don't have that capability.",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "total_tokens": 462,
+      "completion_tokens": 443,
+      "estimated_cost": 0.00156475,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-50-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RpdXCn3MJVQPPxfQhQWHVHI8"
+  }
+}

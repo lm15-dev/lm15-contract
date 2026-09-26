@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RKRjrac9L2k9ekgEjKktjfD0",
+    "object": "chat.completion",
+    "created": 1790430726,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "Okay, the user said \"Say ok.\" I need to respond appropriately. Since they just want a confirmation, I should reply with \"ok\" or something similar. No tools are needed here because it's a simple request. Just acknowledge their message.\n",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 326,
+      "completion_tokens": 55,
+      "estimated_cost": 1.849e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 256,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RKRjrac9L2k9ekgEjKktjfD0"
+  }
+}

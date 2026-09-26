@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-09-26T13-49-00Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "max_tokens": 600,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "0e20220cbb6f89eaec37b73f0fbd929fbe36473887c0944c52e5d3f8c8c2acb5",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "f439679ed7ea19ef88b2f77fe97769e80b179c649b6e0a10029d3273f6d7cf68",
+  "response_bytes": 468,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

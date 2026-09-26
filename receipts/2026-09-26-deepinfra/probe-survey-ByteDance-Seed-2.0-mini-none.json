@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rd98zmrcNpBxfSWwYEBXmHPh",
+    "object": "chat.completion",
+    "created": 1790430743,
+    "model": "ByteDance/Seed-2.0-mini",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Okay, let's use the weather lookup tool to pull the current weather data for Paris, France.\n**Tool Call:**\n```\nweather_api(location=\"Paris, France\")\n```\nOnce the tool returns the weather details, I will share the full forecast and conditions with you immediately.",
+          "reasoning_content": "Got it, let's see. The user is asking about the weather in Paris and wants to use a tool. First, I need to recall that common weather tools are things like OpenWeatherMap, but since I'm a chatbot that can simulate tool calls. Wait, actually, I should format it properly as a tool request. Let me structure it: I need to call a weather API tool for Paris, France. Let me make the tool call clear. Let's say the tool is a weather lookup tool, the parameters are location \"Paris, France\". Let me write that correctly. Oh right, the user asked to use the tool, so I should respond by invoking the weather tool for Paris. Let me phrase it properly:\n\n\"Okay, let's use the weather lookup tool to check the current weather in Paris, France.\n**Tool Call:**\n```\nweather_api(location=\"Paris, France\")\n```\nOnce the tool returns the weather data, I'll share the detailed forecast with you right away!\"\n\nWait, that makes sense. Let me make sure it's natural. Yeah, the user wants to use the tool, so I initiate the tool call for Paris's weather. That's the right approach.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 59,
+      "total_tokens": 368,
+      "completion_tokens": 309,
+      "estimated_cost": 0.0001295,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 250
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-20Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rd98zmrcNpBxfSWwYEBXmHPh"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "max_tokens": 600,
+      "tool_choice": "none",
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RzFXdxDNk5k0Af9CRQ59NUn9",
+    "object": "chat.completion",
+    "created": 1790430725,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time tools or live data (including current weather), so I cannot provide the exact weather in Paris right now. For the most accurate and up-to-date weather information, please check a reliable source such as:\n\n- A weather website (e.g., [weather.com](https://weather.com), [meteo.fr](https://meteo.fr))\n- A weather app on your phone (e.g., Apple Weather, Google Weather, local meteorological service)\n- A quick search engine query like \"weather in Paris today\"\n\nThese sources pull live data from official meteorological services. Let me know if you'd help with anything else I *can* assist with! 😊",
+          "reasoning_content": "Okay, the user is asking for the weather in Paris and mentions \"Use the tool.\" I need to check if there's a tool available for weather queries. Since I'm a large language model without live tools, I can't access real-time data. I should inform them I can't provide current weather but suggest checking a reliable weather service. Keep it helpful and concise.\n",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "total_tokens": 262,
+      "completion_tokens": 236,
+      "estimated_cost": 5.9839999999999996e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 16,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-09-26T13-52-02Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RzFXdxDNk5k0Af9CRQ59NUn9"
+  }
+}
