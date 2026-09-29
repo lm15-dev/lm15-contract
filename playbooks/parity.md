@@ -13,8 +13,10 @@ with `harness/check.py --direction all` on this commit:
 | Contract checks (all directions) | 1,828 / 1,828 | 1,828 / 1,828 (1,788 before its fix) | 1,828 / 1,828 | 1,828 / 1,828 | 1,828 / 1,828 |
 | Code change needed | none | `src/json.ts` member order record | none | none | none |
 
-Only lm15-ts moves its pin here, with its fix. Python, Rust, Go and Julia
-pass this commit unchanged; their pins move at their next release.
+Only lm15-ts moves its pin here, with its fix (released as 1.0.0-rc.3 on
+2026-09-29, pinned at `442295a`, this change plus its ratification).
+Python, Rust, Go and Julia pass this commit unchanged; their pins move at
+their next release.
 
 ## 2026-09-26 (evening) — Julia at parity
 
