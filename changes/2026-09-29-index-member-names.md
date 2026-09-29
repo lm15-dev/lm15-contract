@@ -2,8 +2,7 @@
 
 **Status: VECTORS + HARNESS (enforce the existing rule INV-002 / serde-rules
 omission rule 3; the one spec edit is a clarifying sentence under INV-002,
-for the maintainer to ratify). No recorded fixture, golden or mapping rule
-changes.**
+ratified below). No recorded fixture, golden or mapping rule changes.**
 
 ## The gap
 
@@ -102,3 +101,8 @@ reaches the wire in its order.
 - **Live traffic.** No case was recorded: the property is lm15's own, not
   a provider's, and the behavioural consequence (a model writes in schema
   order) is already evidenced (changes/2026-09-25-opaque-key-order.md).
+
+Ratified-by: Maxime Rivest, 2026-09-29 (in session): the INV-002 sentence,
+and the member order record (`Symbol.for("lm15.memberOrder")`, its protocol
+in lm15-ts `src/json.ts`) as a permanent public protocol of lm15-ts, shared
+with lmcc.
