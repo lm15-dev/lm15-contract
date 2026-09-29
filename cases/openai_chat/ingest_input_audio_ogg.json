@@ -1,0 +1,54 @@
+{
+  "id": "openai_chat.ingest_input_audio_ogg",
+  "provider": "openai_chat",
+  "feature": "ingest_input_audio_ogg",
+  "surface": "ingest",
+  "description": "An input_audio block in ogg, as DSPy renders an ogg/opus recording and as Gemini's Chat Completions server accepts it. The format reads as its true media type (audio/ogg), never relabelled; a builder that cannot send it raises (MAP-10), Gemini sends it as inlineData.",
+  "body": {
+    "model": "gemini-3.8-flash",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Transcribe."
+          },
+          {
+            "type": "input_audio",
+            "input_audio": {
+              "data": "T2dnUwACAAAAAAAAAAA=",
+              "format": "ogg"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "expect_lm15": {
+    "canonical_request": {
+      "model": "gemini-3.8-flash",
+      "messages": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "type": "text",
+              "text": "Transcribe."
+            },
+            {
+              "type": "audio",
+              "media_type": "audio/ogg",
+              "data": "T2dnUwACAAAAAAAAAAA="
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-29",
+    "evidence": "MAP-12 rule 4 as amended by changes/2026-09-29-input-audio-formats.md; the format value follows research/cloud-hosts/sources/vertex-openai-compat.md (input_audio.format: 'Using Gemini, all valid MIME types are supported'); the expectation was written by hand and checked against the reference shim on 2026-09-29"
+  }
+}

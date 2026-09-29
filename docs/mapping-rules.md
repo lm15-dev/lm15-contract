@@ -648,8 +648,12 @@ caller.
 4. **Content blocks.** `text` → TextPart; `image_url` → ImagePart (a
    data URI becomes inline data with the URI's media type; another URL
    stays a URL with the media type guessed from its path, else the
-   default — the wire carries none); `input_audio` → AudioPart
-   (`audio/wav` | `audio/mpeg`); `file` → DocumentPart by `file_id` or by
+   default — the wire carries none); `input_audio` → AudioPart, its
+   `format` read as the true media type (`wav` → `audio/wav`, `mp3` |
+   `mpeg` → `audio/mpeg`, `ogg`, `opus`, `flac`, `aac`, `aiff`, `webm` →
+   `audio/<format>`; any other format is malformed, rule 6; amended
+   2026-09-29, `changes/2026-09-29-input-audio-formats.md`); `file` →
+   DocumentPart by `file_id` or by
    the `file_data` data URI (`filename` refused: no slot); `refusal` →
    RefusalPart. A `prompt_cache_breakpoint` on the system row's text
    block is `CacheConfig(prefix="stable")`; on the last text block of
