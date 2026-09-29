@@ -57,7 +57,7 @@ class OpaqueOrderVectors(unittest.TestCase):
         cls.check = check
         cls.doc = json.loads((ROOT / "mapping" / "opaque-order.json").read_text(encoding="utf-8"))
         cls.generated = subprocess.run([sys.executable, str(ROOT / "tools" / "make_opaque_order_vectors.py"), "--check"],
-                                       capture_output=True, text=True)
+                                       capture_output=True, text=True, encoding="utf-8")
 
     def test_the_file_is_the_generator_output(self) -> None:
         # Every parse body is re-derived from its recorded source: a hand
