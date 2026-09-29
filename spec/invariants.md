@@ -26,6 +26,11 @@ rationale is the designed reason, ratified, not a guess.
   Validation is iterative and non-coercing; the caller's container is stored
   as-is. WHY: opaque payloads must round-trip byte-exact (serde-rules.md
   omission rule 3); copying/coercing would create second wire forms.
+  Member order is part of byte-exact, including an order the host's own
+  object type would change: a JavaScript object enumerates array-index
+  names (`"10"`) first, so a JavaScript port carries the order it read or
+  was given (changes/2026-09-25-opaque-key-order.md,
+  changes/2026-09-29-index-member-names.md).
 - **INV-003 — bool is never a number.** `True` is rejected wherever an
   int/float is expected and never coerces under the Number rule.
   WHY: Python's `bool subclasses int` is a Python accident, not a canonical

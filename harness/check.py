@@ -1040,7 +1040,9 @@ def run_serde_direction(shim: Shim, case_filter: str | None, report_dir: Path) -
         roundtripped = reply["result"].get("value", _ABSENT)
         diff = first_difference(case["value"], roundtripped)
         if diff is None:
-            diff = opaque_order_difference(opaque_key_orders(case["value"]), roundtripped, "$")
+            # A tool's own "config" is a builtin tool's opaque config.
+            diff = opaque_order_difference(opaque_key_orders(case["value"], in_tools=case["kind"] == "tool"),
+                                           roundtripped, "$")
             if diff is not None:
                 report.results.append(CaseResult(case_id, "fail", diff=diff))
                 continue
@@ -2106,8 +2108,16 @@ def _gemini_schema_slot(body: Any, surface: str) -> tuple[Any, str, str] | None:
 
 
 def run_mapping_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
-    """MAP-16 (docs/mapping-rules.md): the field Gemini's schema goes in."""
+    """Vectors under mapping/: MAP-16 (docs/mapping-rules.md, the field
+    Gemini's schema goes in) and INV-002 (opaque objects keep a member
+    order JavaScript would change, mapping/opaque-order.json)."""
     report = DirectionReport("mapping")
+    _run_gemini_schema_vectors(shim, case_filter, report)
+    _run_opaque_order_vectors(shim, case_filter, report)
+    return report
+
+
+def _run_gemini_schema_vectors(shim: Shim, case_filter: str | None, report: DirectionReport) -> None:
     for vector in load_gemini_schema_vectors():
         bare = f"gemini-schema-field.{vector['id']}"
         for surface in GEMINI_SCHEMA_SURFACES:
@@ -2139,7 +2149,148 @@ def run_mapping_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
             if diff is None:
                 diff = opaque_order_difference(opaque_key_orders({"schema": vector["schema"]}), holder[want], f"$.{want}")
             report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
-    return report
+
+
+# ─── mapping: opaque objects JavaScript would reorder (INV-002) ──────
+#
+# A JavaScript object enumerates array-index names ("0", "10", "2024";
+# ECMA-262 OrdinaryOwnPropertyKeys) first, ascending, then the others in
+# insertion order. opaque_order_difference only sees objects that equal an
+# input object, so an adapter that rewrites one (or drops it) passes it
+# silently; these vectors are written so each such object must be found,
+# by its member names, and in its order (changes/2026-09-29-index-member-names.md).
+
+OPAQUE_ORDER_FILE = MAPPING_DIR / "opaque-order.json"
+_INDEX_NAME = re.compile(r"(0|[1-9][0-9]{0,9})")
+
+
+def is_index_name(key: str) -> bool:
+    """An array index as ECMAScript defines it: canonical digits below 2**32 - 1."""
+    return bool(_INDEX_NAME.fullmatch(key)) and int(key) < 2**32 - 1
+
+
+def javascript_order(keys: list[str]) -> list[str]:
+    """The order a JavaScript object enumerates ``keys`` in, inserted in this order."""
+    index = sorted((k for k in keys if is_index_name(k)), key=int)
+    return index + [k for k in keys if not is_index_name(k)]
+
+
+def reordered_objects(value: Any) -> list[tuple[str, ...]]:
+    """The member orders, in ``value``, that a JavaScript object would change."""
+    out: list[tuple[str, ...]] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, dict):
+            keys = list(node)
+            if keys != javascript_order(keys) and tuple(keys) not in out:
+                out.append(tuple(keys))
+            for item in node.values():
+                walk(item)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item)
+
+    walk(value)
+    return out
+
+
+def _objects_within(value: Any, path: str) -> list[tuple[str, dict]]:
+    """Every object in ``value`` with its path, looking inside strings that
+    hold a JSON object or array (a Chat Completions ``arguments``, a
+    DataPart sent as text): what the provider reads is inside them."""
+    out: list[tuple[str, dict]] = []
+    stack: list[tuple[str, Any]] = [(path, value)]
+    while stack:
+        at, node = stack.pop(0)
+        if isinstance(node, dict):
+            out.append((at, node))
+            stack.extend((f"{at}.{k}", v) for k, v in node.items())
+        elif isinstance(node, list):
+            stack.extend((f"{at}[{i}]", v) for i, v in enumerate(node))
+        elif isinstance(node, str) and node[:1] in ("{", "["):
+            try:
+                inner = json.loads(node)
+            except ValueError:
+                continue
+            stack.append((f"{at}<json>", inner))
+    return out
+
+
+def member_order_difference(wanted: list[tuple[str, ...]], actual: Any, root: str) -> Diff | None:
+    """Each order in ``wanted`` must be held by at least one object of
+    ``actual`` with exactly those member names, and every such object must
+    list them in that order."""
+    objects = _objects_within(actual, root)
+    for order in wanted:
+        names = set(order)
+        found = [(at, obj) for at, obj in objects if len(obj) == len(order) and set(obj) == names]
+        if not found:
+            return Diff(root, list(order), "<absent>",
+                        "no object with these member names reached the result (INV-002: opaque objects round-trip exactly)")
+        for at, obj in found:
+            if tuple(obj) != order:
+                return Diff(at, list(order), list(obj),
+                            "member order changed: array-index names moved first (INV-002: opaque objects round-trip exactly)")
+    return None
+
+
+def load_opaque_order_vectors() -> JsonObject:
+    return json.loads(OPAQUE_ORDER_FILE.read_text(encoding="utf-8"))
+
+
+def _run_opaque_order_vectors(shim: Shim, case_filter: str | None, report: DirectionReport) -> None:
+    doc = load_opaque_order_vectors()
+    models: dict[str, str] = doc["providers"]
+    for vector in doc["build"]:
+        bare = f"opaque-order.{vector['id']}"
+        wanted = reordered_objects(vector["request"])
+        for provider in vector.get("providers") or list(models):
+            case_id = f"{bare}[{provider}]"
+            if case_filter and case_filter not in (case_id, bare):
+                continue
+            request = {"model": models[provider], **vector["request"]}
+            reply = shim.call("build_request", provider=provider, canonical_request=request, stream=False, api_key=API_KEY)
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            diff = member_order_difference(wanted, reply["result"].get("body"), "$.body")
+            report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+    for vector in doc["parse"]:
+        case_id = f"opaque-order.{vector['id']}"
+        if case_filter and case_filter != case_id:
+            continue
+        body_b64 = base64.b64encode(vector["body"].encode("utf-8")).decode("ascii")
+        if vector["stream"]:
+            reply = shim.call("replay_stream", provider=vector["provider"], canonical_request=vector["canonical_request"],
+                              body_b64=body_b64)
+        else:
+            reply = shim.call("parse_response", provider=vector["provider"], canonical_request=vector["canonical_request"],
+                              status=200, body_b64=body_b64)
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        if reply["result"].get("unmapped"):
+            report.results.append(CaseResult(case_id, "fail", reason=f"unmapped: {reply['result']['unmapped']}"))
+            continue
+        response = reply["result"].get("canonical_response", _ABSENT)
+        parts = (response.get("message") or {}).get("parts") if isinstance(response, dict) else None
+        calls = [p for p in parts or [] if isinstance(p, dict) and p.get("type") == "tool_call"]
+        if len(calls) != 1:
+            report.results.append(CaseResult(case_id, "fail", reason=f"expected one tool call in the response, found {len(calls)}"))
+            continue
+        diff = first_difference(vector["tool_input"], calls[0].get("input", _ABSENT), ("input",))
+        if diff is None:
+            diff = member_order_difference(reordered_objects(vector["tool_input"]), calls[0]["input"], "$.input")
+        if diff is None and vector["stream"]:
+            # A stream's events may carry the whole input again (a done
+            # event): any that does must carry it in order too.
+            wanted = reordered_objects(vector["tool_input"])
+            for at, obj in _objects_within(reply["result"].get("events", []), "$.events"):
+                hit = next((o for o in wanted if len(obj) == len(o) and set(obj) == set(o) and tuple(obj) != o), None)
+                if hit is not None:
+                    diff = Diff(at, list(hit), list(obj), "member order changed in a stream event (INV-002)")
+                    break
+        report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
 
 
 def run_direction(shim: Shim, direction: str, case_filter: str | None, report_dir: Path,

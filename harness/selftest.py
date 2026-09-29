@@ -138,6 +138,9 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             lambda c, g: '"state": "ready"' in json.dumps(c["expect"].get("store")),
             "managed_store_drift (a managed run whose store ends with a ready slot)")),
         "gemini_schema_field_flip": ("mapping", "gemini-schema-field.additional-properties[tools]"),
+        "index_names_first": ("mapping", "opaque-order.response-format-schema[openai]"),
+        "index_names_first_read": ("mapping", "opaque-order.read-openai-chat-stream"),
+        "index_names_first_serde": ("serde", "part.tool_call_index_member_names"),
         "opaque_keys_sorted": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: "canonical_request" in c and check.expected_raise(c, "build_request") is None

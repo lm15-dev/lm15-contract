@@ -69,6 +69,9 @@ MUTATIONS = (
     "managed_store_drift",      # managed_run: the store afterwards loses a slot's state
     "opaque_keys_sorted",       # build_request: every body object written with sorted keys (a port with an unordered map; INV-002)
     "gemini_schema_field_flip", # mapping: a MAP-16 vector's schema sent in Gemini's other field
+    "index_names_first",        # mapping build: every body object enumerated as a JavaScript object would (array-index names first; INV-002)
+    "index_names_first_read",   # mapping parse: the tool call's input read into a JavaScript object's order
+    "index_names_first_serde",  # serde_roundtrip: the value round-tripped through a JavaScript object's order
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -250,7 +253,49 @@ def _mapping_echo(request: Any) -> JsonObject | None:
             "params": {}, "headers": {}, "body": body}
 
 
+# ─── mapping vectors (INV-002, mapping/opaque-order.json) ───────────
+#
+# The echo puts the canonical request in the body verbatim (build) or the
+# vector's tool input in a one-part response (parse): every object keeps
+# its order, so the unmutated echo is green.
+
+def javascript_object(value: Any) -> Any:
+    """``value`` as a JavaScript object would hold it: array-index names first."""
+    if isinstance(value, dict):
+        return {k: javascript_object(value[k]) for k in check.javascript_order(list(value))}
+    if isinstance(value, list):
+        return [javascript_object(v) for v in value]
+    return value
+
+
+def _order_build_echo(msg: JsonObject) -> JsonObject | None:
+    doc = check.load_opaque_order_vectors()
+    request = msg.get("canonical_request")
+    for vector in doc["build"]:
+        if request == {"model": doc["providers"].get(msg.get("provider")), **vector["request"]}:
+            body: Any = {"echo": request}
+            if MUTATION == "index_names_first" and TARGET in (None, f"opaque-order.{vector['id']}"):
+                body = javascript_object(body)
+            return {"method": "POST", "url": "https://fake.invalid/", "params": {}, "headers": {}, "body": body}
+    return None
+
+
+def _order_parse_echo(msg: JsonObject) -> JsonObject | None:
+    for vector in check.load_opaque_order_vectors()["parse"]:
+        if base64.b64encode(vector["body"].encode("utf-8")).decode("ascii") == msg.get("body_b64"):
+            tool_input = vector["tool_input"]
+            if MUTATION == "index_names_first_read" and TARGET in (None, f"opaque-order.{vector['id']}"):
+                tool_input = javascript_object(tool_input)
+            response = {"message": {"role": "assistant", "parts": [
+                {"type": "tool_call", "id": "call_1", "name": "record", "input": tool_input}]}}
+            return {"events": [], "canonical_response": response} if vector["stream"] else {"canonical_response": response}
+    return None
+
+
 def op_build_request(msg: JsonObject) -> JsonObject:
+    order_echo = _order_build_echo(msg)
+    if order_echo is not None:
+        return order_echo
     if msg.get("provider") == "gemini" and not _candidates(msg):
         echo = _mapping_echo(msg.get("canonical_request"))
         if echo is not None:
@@ -340,6 +385,9 @@ def _strip_error_flag(body: JsonObject) -> None:
 
 
 def op_parse_response(msg: JsonObject) -> JsonObject:
+    order_echo = _order_parse_echo(msg)
+    if order_echo is not None:
+        return order_echo
     case = find_parse_case(msg)
     golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     raises = check.expected_raise(case, "parse_response")
@@ -409,6 +457,9 @@ def op_ingest_openai_chat(msg: JsonObject) -> JsonObject:
 
 
 def op_replay_stream(msg: JsonObject) -> JsonObject:
+    order_echo = _order_parse_echo(msg)
+    if order_echo is not None:
+        return order_echo
     case = find_parse_case(msg)
     golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     events = golden.get("events", [])
@@ -464,6 +515,10 @@ def op_normalize_error(msg: JsonObject) -> JsonObject:
 
 
 def op_serde_roundtrip(msg: JsonObject) -> JsonObject:
+    if MUTATION == "index_names_first_serde":
+        case = next((c for c in check.load_serde_cases() if c["kind"] == msg.get("kind") and c["value"] == msg.get("value")), None)
+        if case is not None and (TARGET is None or case["id"] == TARGET):
+            return {"value": javascript_object(msg["value"])}
     return {"value": msg["value"]}
 
 

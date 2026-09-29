@@ -2481,6 +2481,183 @@
         "date": "2026-09-17",
         "evidence": "changes/2026-09-17-judgments.md D2/D3; INV-052; serde-rules.md 'Data parts'"
       }
+    },
+    {
+      "id": "tool.function_index_member_names",
+      "kind": "tool",
+      "value": {
+        "type": "function",
+        "name": "record",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "reasoning": {
+              "type": "string"
+            },
+            "10": {
+              "type": "string"
+            },
+            "9": {
+              "type": "string"
+            },
+            "item": {
+              "type": "object",
+              "properties": {
+                "z": {
+                  "type": "string"
+                },
+                "0": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "tool.builtin_index_member_names",
+      "kind": "tool",
+      "value": {
+        "type": "builtin",
+        "name": "web_search",
+        "config": {
+          "context_size": "low",
+          "10": "x"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "part.tool_call_index_member_names",
+      "kind": "part",
+      "value": {
+        "type": "tool_call",
+        "id": "call_1",
+        "name": "record",
+        "input": {
+          "reasoning": "It is 2024.",
+          "2024": {
+            "b": 1,
+            "0": 2
+          },
+          "1": [
+            {
+              "y": 1,
+              "3": 2
+            }
+          ]
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "part.data_index_member_names",
+      "kind": "part",
+      "value": {
+        "type": "data",
+        "value": {
+          "b": 1,
+          "10": 2
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "config.index_member_names",
+      "kind": "config",
+      "value": {
+        "response_format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "reasoning": {
+                "type": "string"
+              },
+              "2024": {
+                "type": "integer"
+              },
+              "1": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "reasoning",
+              "2024",
+              "1"
+            ]
+          },
+          "name": "answer",
+          "strict": true
+        },
+        "extensions": {
+          "logit_bias": {
+            "1234": -100,
+            "15": 5
+          },
+          "metadata": {
+            "b": "x",
+            "10": "y"
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "continuation_state.index_member_names",
+      "kind": "continuation_state",
+      "value": {
+        "provider": "openai",
+        "kind": "response_item_id",
+        "data": {
+          "id": "item_1",
+          "0": "x"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
+    },
+    {
+      "id": "file_info.index_member_names",
+      "kind": "file_info",
+      "value": {
+        "id": "file_abc",
+        "readiness": "ready",
+        "provider_data": {
+          "type": "file",
+          "10": "x"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-09-29",
+        "evidence": "INV-002; serde-rules.md omission rule 3 (opaque payloads round-trip exactly, key order included); array-index member names after other names, which a JavaScript object enumerates first; changes/2026-09-29-index-member-names.md"
+      }
     }
   ]
 }

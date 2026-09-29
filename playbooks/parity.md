@@ -2,6 +2,20 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-29 — member order JavaScript would change (INV-002)
+
+changes/2026-09-29-index-member-names.md: 40 new checks (33 in the
+`mapping` direction, `mapping/opaque-order.json`; 7 in `serde`), measured
+with `harness/check.py --direction all` on this commit:
+
+| | Python | TypeScript | Rust | Go | Julia |
+|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,828 / 1,828 | 1,828 / 1,828 (1,788 before its fix) | 1,828 / 1,828 | 1,828 / 1,828 | 1,828 / 1,828 |
+| Code change needed | none | `src/json.ts` member order record | none | none | none |
+
+Only lm15-ts moves its pin here, with its fix. Python, Rust, Go and Julia
+pass this commit unchanged; their pins move at their next release.
+
 ## 2026-09-26 (evening) — Julia at parity
 
 lm15-jl brought from pin `cfed007` (2026-09-11) to this commit and measured

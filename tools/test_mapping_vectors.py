@@ -1,4 +1,8 @@
-"""mapping/gemini-schema-field.json against the receipts it was read from.
+"""The mapping/ vectors: mapping/gemini-schema-field.json against the
+receipts it was read from, and mapping/opaque-order.json against its
+generator and the recorded replies its bodies come from.
+
+mapping/gemini-schema-field.json:
 
 Every vector was sent verbatim in Gemini's four schema fields on 2026-09-26
 (research/providers/gemini/capture_schema_fields.py). Where exactly one
@@ -39,6 +43,64 @@ class GeminiSchemaFieldVectors(unittest.TestCase):
                 if openapi_ok != json_ok:
                     self.assertEqual(vector["openapi"], openapi_ok,
                                      f"only the {'OpenAPI' if openapi_ok else 'JSON Schema'} fields accepted {vector['id']}")
+
+
+class OpaqueOrderVectors(unittest.TestCase):
+    """mapping/opaque-order.json (INV-002; changes/2026-09-29-index-member-names.md)."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import subprocess
+        import sys
+        sys.path.insert(0, str(ROOT / "harness"))
+        import check  # noqa: E402
+        cls.check = check
+        cls.doc = json.loads((ROOT / "mapping" / "opaque-order.json").read_text(encoding="utf-8"))
+        cls.generated = subprocess.run([sys.executable, str(ROOT / "tools" / "make_opaque_order_vectors.py"), "--check"],
+                                       capture_output=True, text=True)
+
+    def test_the_file_is_the_generator_output(self) -> None:
+        # Every parse body is re-derived from its recorded source: a hand
+        # edit, or a source that changed, fails here.
+        self.assertEqual(self.generated.returncode, 0, self.generated.stderr)
+
+    def test_every_vector_holds_an_order_javascript_would_change(self) -> None:
+        for vector in self.doc["build"]:
+            with self.subTest(vector=vector["id"]):
+                self.assertTrue(self.check.reordered_objects(vector["request"]))
+        for vector in self.doc["parse"]:
+            with self.subTest(vector=vector["id"]):
+                self.assertTrue(self.check.reordered_objects(vector["tool_input"]))
+
+    def test_member_names_identify_one_order(self) -> None:
+        # The harness finds each object by its member names; two objects
+        # with the same names and different orders would be ambiguous.
+        for vector in self.doc["build"]:
+            with self.subTest(vector=vector["id"]):
+                orders = self.check.reordered_objects(vector["request"])
+                self.assertEqual(len({frozenset(o) for o in orders}), len(orders))
+
+    def test_parse_bodies_come_from_recorded_replies(self) -> None:
+        for vector in self.doc["parse"]:
+            with self.subTest(vector=vector["id"]):
+                self.assertTrue(vector["derived_from"].startswith("bodies/"))
+                self.assertTrue((ROOT / vector["derived_from"]).is_file())
+
+    def test_array_index_names(self) -> None:
+        is_index = self.check.is_index_name
+        for name in ("0", "1", "10", "2024", "4294967294"):
+            self.assertTrue(is_index(name), name)
+        for name in ("", "01", "-1", "1.0", "1e3", " 1", "4294967295", "99999999999", "a1", "\u0661"):
+            self.assertFalse(is_index(name), name)
+        self.assertEqual(self.check.javascript_order(["b", "10", "9", "a", "0"]), ["0", "9", "10", "b", "a"])
+
+    def test_the_order_check_looks_inside_json_strings(self) -> None:
+        wanted = [("reasoning", "2024")]
+        good = {"arguments": json.dumps({"reasoning": "r", "2024": 1})}
+        bad = {"arguments": json.dumps({"2024": 1, "reasoning": "r"})}
+        self.assertIsNone(self.check.member_order_difference(wanted, good, "$"))
+        self.assertIsNotNone(self.check.member_order_difference(wanted, bad, "$"))
+        self.assertIsNotNone(self.check.member_order_difference(wanted, {"x": 1}, "$"))  # absent
 
 
 if __name__ == "__main__":
