@@ -828,6 +828,7 @@ subscription doors with `LM15_CLAUDE_CODE_VERSION` /
 minimum-version guidance, and a settings entry for a door that reads none
 refused) — the three fixes approved in session ("Yes, we should do all
 these and we should do it well"); the names, the guidance sentence and the
-refusal of an unread settings entry were chosen by the implementer and are
-stated for assent in changes/2026-09-30-claude-code-client-version.md;
-live receipts under receipts/2026-09-30-claude-code/.
+refusal of an unread settings entry were chosen by the implementer, stated
+in changes/2026-09-30-claude-code-client-version.md, and ratified in session
+("Yep, I approve and push and release"); live receipts under
+receipts/2026-09-30-claude-code/.

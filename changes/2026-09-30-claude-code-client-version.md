@@ -5,8 +5,8 @@ docs/mapping-rules.md MAP-7 rule 6 (the unset `max_tokens` on the Messages
 API); harness/PROTOCOL.md gains `compare_headers` and the `client_version`
 setting. Approved in session ("Yes, we should do all these and we should do
 it well"); the names, the guidance sentence and the refusal of an unread
-settings entry were chosen by the implementer and are stated below for
-assent.
+settings entry were chosen by the implementer, stated below, and ratified
+in session on 2026-09-30 ("Yep, I approve and push and release").
 
 ## Found
 
