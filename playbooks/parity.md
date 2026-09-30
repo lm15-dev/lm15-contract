@@ -2,6 +2,37 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-30 — the Claude Code release as a setting; Claude's default max_tokens
+
+changes/2026-09-30-claude-code-client-version.md (AUTH-10 `backend_settings`:
+`client_version` on `claude-code` and `openai-codex`, default Claude Code
+2.1.285, `LM15_CLAUDE_CODE_VERSION` / `LM15_CODEX_CLIENT_VERSION`, the
+minimum-version guidance, an unread settings entry refused; MAP-7 rule 6: an
+unset `max_tokens` on a Claude model is its output ceiling; the harness
+compares `compare_headers`). Nine new checks: two live claude-code cases,
+three hand-authored `defaulted` cases (one amended), one error case pinning
+its message, two auth cases. Every SDK moves its pin to `bd9586d`, measured
+with `harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 (`tools/check-contract.py`) |
+| Commit (local, not pushed) | `f1b20a7` | `c62e326` | `7282332` | `e094ce9` | `c93467c` | `2e32cd4` |
+
+The claude-code cases now compare `user-agent`: before this pin no port
+could fail on a stale Claude Code release. R's `PYTHON_REFERENCE` moves to
+lm15-python `f1b20a7`; its parity probes: 30 pass, the 2 known differences
+unchanged. Julia's `conformance/auth/resolution.json` and Python's
+`conformance/auth_resolution.json` are re-copied from `auth/resolution.json`.
+No release yet.
+
+Not moved: Java, Ruby, .NET and Swift, the early ports still pinned to
+`cfed007` (2026-09-11). Each takes only the new default release, 2.1.285
+(lm15-java `6479467`, lm15-dotnet `5a4c813`, lm15-ruby `0f223a0`, lm15-swift
+`a1f53be`; a one-value change, their test suites not run here), so their
+claude-code door is not refused; the setting, the guidance and the ceiling
+default wait for their catch-up.
+
 ## 2026-09-29 (later) — input_audio formats in every SDK
 
 changes/2026-09-29-input-audio-formats.md (MAP-12 rule 4: `input_audio`
