@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-09-30T13-26-55Z",
+  "provider": "claude-code",
+  "status": 200,
+  "model": "claude-opus-5-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "anthropic-dangerous-direct-browser-access": "true",
+      "x-app": "cli",
+      "user-agent": "claude-cli/2.1.280",
+      "anthropic-beta": "claude-code-20250219,oauth-2025-04-20",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16,
+      "system": [
+        {
+          "type": "text",
+          "text": "You are Claude Code, Anthropic's official CLI for Claude."
+        }
+      ]
+    }
+  },
+  "request_sha256": "d20d8dba5328d9313acbc14f71cd03080228d2fe05760553a44be6327c66ef69",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "320b56498adbccdcfcb245fe48e3e0836c678c9bd23c0f7cda1e39256145b0f9",
+  "response_bytes": 530,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

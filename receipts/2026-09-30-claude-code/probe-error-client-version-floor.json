@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "anthropic-dangerous-direct-browser-access": "true",
+      "x-app": "cli",
+      "user-agent": "claude-cli/2.1.170",
+      "anthropic-beta": "claude-code-20250219,oauth-2025-04-20",
+      "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 16,
+      "system": [
+        {
+          "type": "text",
+          "text": "You are Claude Code, Anthropic's official CLI for Claude."
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "type": "error",
+    "error": {
+      "type": "invalid_request_error",
+      "message": "Claude Code 2.1.170 does not support this model; version 2.1.280 or newer is required. Run 'claude update', or update the Claude desktop app, then try again.",
+      "details": {
+        "error_code": "claude_code_version_too_old"
+      }
+    },
+    "request_id": "req_011CfZhc1BHxdursHSzbTi8a"
+  },
+  "timestamp": "2026-09-30T13-26-53Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

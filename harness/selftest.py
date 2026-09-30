@@ -161,6 +161,10 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             [(c, g) for c, g in cases],
             lambda c, g: "request" in c and _has_bool(check.expected_wire_request(c)["body"]),
             "bool_as_int (a wire fixture with a boolean body leaf)")),
+        "pinned_header_stale": ("request", first(
+            [(c, {}) for c in check.load_wire_cases()],
+            lambda c, g: "user-agent" in check.pinned_headers(c),
+            "pinned_header_stale (a request case whose compare_headers pins user-agent)")),
         "pinned_credential_scheme_drift": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],
             lambda c, g: isinstance(c.get("credential"), dict) and c["credential"].get("kind") == "bearer_token"

@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-09-30T13-30-07Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-sonnet-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 64000,
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 16384
+      }
+    }
+  },
+  "request_sha256": "bf760f3a75f09eab7df4360534b800d88b5d5a30e3a16e0914ae0a6d29d931f4",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "361c021112685a205050376ccf1a0f4fb98c9ae154772412f2da75a24e2b3d44",
+  "response_bytes": 1359,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

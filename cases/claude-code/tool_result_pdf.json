@@ -13,7 +13,7 @@
       "content-type": "application/json",
       "anthropic-dangerous-direct-browser-access": "true",
       "x-app": "cli",
-      "user-agent": "claude-cli/2.1.170",
+      "user-agent": "claude-cli/2.1.285",
       "anthropic-beta": "claude-code-20250219,oauth-2025-04-20",
       "authorization": "Bearer $LM15_CAPTURE_CREDENTIAL"
     },
@@ -113,9 +113,10 @@
   },
   "provenance": {
     "source": "live-capture",
-    "date": "2026-09-07",
-    "exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/claude-code/pdf/exchange-2026-09-07T19-13-02Z-5adff03921314cd68affb57c86b61890.json",
-    "evidence": "claude-code 2026-09-07T19-13-02Z, claude-sonnet-5, HTTP 200; tool-result-content matrix cell 'pdf' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/claude-code.tool_result_pdf/2026-09-07T19-13-02Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/claude-code/pdf/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].content[1].caller — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); changes/2026-09-07-tool-result-content.md"
+    "date": "2026-09-30",
+    "exchange": "receipts/2026-09-30-claude-code/exchange-2026-09-30T13-27-04Z-037f5842dfe84c93b009786c9d11d8c8.json",
+    "response_exchange": "receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/claude-code/pdf/exchange-2026-09-07T19-13-02Z-5adff03921314cd68affb57c86b61890.json",
+    "evidence": "request side re-validated 2026-09-30T13-27-04Z: the wire the reference adapter builds today, which differs from the 2026-09-07 capture only in header user-agent: 'claude-cli/2.1.170' -> 'claude-cli/2.1.285', HTTP 200, ok: oracle received {'A': ['blue', 'red', 'yellow', 'cyan', 'magenta', 'green']}; response receipts/2026-09-30-claude-code/revalidate-tool_result_pdf-2026-09-30T13-27-04Z-response.txt; changes/2026-09-30-claude-code-client-version.md.  The pinned body and golden are the 2026-09-07 capture's (response_exchange): claude-code 2026-09-07T19-13-02Z, claude-sonnet-5, HTTP 200; tool-result-content matrix cell 'pdf' (research/tool-result-content/20-results.md), hidden oracle received by the model; verbatim turn-2 body at bodies/claude-code.tool_result_pdf/2026-09-07T19-13-02Z.txt; turn-1 body and oracle in receipts/2026-09-07-tool-result-media/2026-09-07T19-12-45Z-bb4e64d4/claude-code/pdf/; the live wire was raw-patched, the pinned wire is the adapter's after MAP-10; differences from the sent wire, all allowed: $.messages[1].content[1].caller — replayed-assistant-turn: response-only field dropped by the canonical replay (as every multi_turn_tool_result case); changes/2026-09-07-tool-result-content.md"
   },
   "canonical_request": {
     "model": "claude-sonnet-5",
@@ -204,5 +205,8 @@
     "date": "2026-09-07",
     "evidence": "authored by research/providers/media_tool_results.py (cell pdf); the assistant turn is the model's own, parsed from turn-1"
   },
-  "pinned_body": "2026-09-07T19-13-02Z.txt"
+  "pinned_body": "2026-09-07T19-13-02Z.txt",
+  "compare_headers": [
+    "user-agent"
+  ]
 }

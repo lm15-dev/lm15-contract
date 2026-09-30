@@ -1,0 +1,40 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-09-30",
+    "exchange": "receipts/2026-09-30-claude-code/exchange-2026-09-30T13-26-53Z-85cfc49a162e4da696826a9955d2bcc2.json",
+    "evidence": "api.anthropic.com (Claude Code OAuth) HTTP 400 verbatim 2026-09-30T13-26-53Z, claude-opus-5-5 with user-agent claude-cli/2.1.170; receipts/2026-09-30-claude-code/probe-error-client-version-floor.json; the same refusal first seen 2026-09-23 (req_011CfKMizsVsBFXTfU7EVVhQ); changes/2026-09-30-claude-code-client-version.md"
+  },
+  "cases": [
+    {
+      "id": "claude-code.client_version_floor",
+      "provider": "claude-code",
+      "status": 400,
+      "body": {
+        "type": "error",
+        "error": {
+          "type": "invalid_request_error",
+          "message": "Claude Code 2.1.170 does not support this model; version 2.1.280 or newer is required. Run 'claude update', or update the Claude desktop app, then try again.",
+          "details": {
+            "error_code": "claude_code_version_too_old"
+          }
+        },
+        "request_id": "req_011CfZhc1BHxdursHSzbTi8a"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "claude-code",
+        "provider_code": "invalid_request_error",
+        "status": 400,
+        "message": "Claude Code 2.1.170 does not support this model; version 2.1.280 or newer is required. Run 'claude update', or update the Claude desktop app, then try again.\n\n  To fix:\n    - lm15 sends this version itself; updating Claude Code does not change it\n    - Set the claude-code setting client_version to 2.1.280 or newer (or LM15_CLAUDE_CODE_VERSION=2.1.280)\n"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-09-30",
+        "exchange": "receipts/2026-09-30-claude-code/exchange-2026-09-30T13-26-53Z-85cfc49a162e4da696826a9955d2bcc2.json",
+        "evidence": "verbatim body of receipts/2026-09-30-claude-code/probe-error-client-version-floor.json; expected.message is the refusal plus the AUTH-10 guidance sentence (changes/2026-09-30-claude-code-client-version.md D3), reviewed 2026-09-30"
+      }
+    }
+  ]
+}

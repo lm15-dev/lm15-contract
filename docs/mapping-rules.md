@@ -280,6 +280,24 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
 6. **`total_budget` is gone.** `Config.max_tokens` is the ceiling: on
    Anthropic's manual class the adapter adds the thinking budget to it;
    on the adaptive class it is the total (provider semantics).
+   **Unset on the Messages API**, which requires the field (amended
+   2026-09-30, changes/2026-09-30-claude-code-client-version.md D5): a
+   Claude model is sent its own output ceiling, the value OpenAI and
+   Gemini apply when their field is omitted — 128000 for the 4.6
+   generation and every later Claude, including a Claude name the table
+   has not met (a lower real ceiling is a loud 400 naming it); 64000 for
+   the 4.5 generation; 8192 for `claude-3-5`; 4096 for `claude-3`. On the
+   manual class that ceiling is the WIRE value and the visible part is
+   what the thinking budget leaves (a budget at or above the ceiling
+   keeps 16384 visible, and the server's 400 names the limit). Any other
+   model name on an Anthropic-dialect server (DeepSeek, Kimi, Muse) is
+   sent 16384 visible: those servers publish their own ceilings. The
+   visible value is recorded `defaulted` (MAP-13). Evidence: Anthropic's
+   Models API `max_tokens` (receipts 2026-09-01, 2026-09-30) and models
+   overview; the ceiling is not a rate-limit cost (OTPM counts tokens
+   produced, `scrapes/anthropic/pages/rate-limits.md`). A table by name
+   (rule 10). Until 2026-09-30 every 4.x and later model got 16384, which
+   a reply with reasoning on routinely exhausted.
 7. **`summary`** is visibility: `None` = provider default; `"auto"` =
    show the thinking where a knob exists (OpenAI `summary: auto`; Gemini
    `includeThoughts: true`; Groq preset `reasoning_format: parsed` —

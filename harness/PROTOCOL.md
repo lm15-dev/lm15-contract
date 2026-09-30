@@ -113,8 +113,10 @@ UTC) is the clock the shim MUST use for every time-dependent byte
 (`x-amz-date`, JWT `iat`/`exp`, credential scope); a shim that reads the
 wall clock fails the cloud-host cases. `settings` is
 `{"region"?, "workspace"?, "project"?, "location"?, "resource"?,
-"authority_host"?, "scope"?}` (AUTH-10); the shim constructs the adapter
-with exactly these and reads no environment. For `sigv4` the harness
+"authority_host"?, "scope"?}` (AUTH-10) on a cloud door, and (additive,
+2026-09-30) `{"client_version"?}` on a door without a host that declares
+it (AUTH-10 backend settings: `claude-code`, `openai-codex`); the shim
+constructs the adapter with exactly these and reads no environment. For `sigv4` the harness
 compares `authorization`, `x-amz-date`, and `x-amz-security-token`
 exactly; the fixed keys are the AWS test-suite pair
 `AKIDEXAMPLE` / `wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY`
@@ -219,7 +221,9 @@ Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "settings"?: 
   renders the resolved host settings by name and value (AUTH-7).
 - `settings` in the reply (additive, 2026-09-26; spec/auth.md AUTH-7,
   AUTH-10): for a door with host settings, every setting the host
-  declares, resolved offline from the harness's `env` and `files`, with
+  declares — and (additive, 2026-09-30) for a door without a host, every
+  backend setting it declares (`client_version`, `from` one of
+  `explicit`, `env:<VAR>`, `default`) — resolved offline from the harness's `env` and `files`, with
   its origin in the AUTH-10 `from` vocabulary (`explicit`, `env:<VAR>`,
   `adc-env`, `gcloud-config`, `adc-file`, `metadata`, `aws-profile`,
   `default`). A setting only the metadata server could supply is
@@ -529,6 +533,14 @@ Responsibility split, normative (derived from `check.py::split_url` and
   required repeats would need a protocol extension (changes/ entry) first.
 
 ## Comparison semantics (harness-side)
+
+- `compare_headers` (additive, 2026-09-30; spec/auth.md AUTH-10 backend
+  settings): a wire case may list header names from the harness's
+  transport-noise set (`user-agent`, `accept`, `accept-encoding`,
+  `content-length`, `host`) that it pins anyway because the server reads
+  them. The harness then compares those headers verbatim on both sides.
+  First use: `claude-code`'s `user-agent: claude-cli/<client_version>`,
+  whose release a model can require; a port with a stale table fails.
 
 - Strict typed deep-equality. `true != 1`, `1 != 1.0` (exception: a float
   with zero fractional part compares equal to the same-valued int ONLY in

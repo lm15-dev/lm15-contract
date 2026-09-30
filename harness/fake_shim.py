@@ -64,6 +64,7 @@ MUTATIONS = (
     "assembly_guesses_name",    # replay_stream: a pinned StreamAssemblyError answered with a Response (a name invented)
     "build_maps_a_refused_cell", "tool_result_image_dropped", "tool_result_ids_swapped", "tool_result_error_stripped", # build_request: a pinned refusal answered with a wire request (a silent cell)
     "pinned_credential_scheme_drift",  # build_request: a pinned bearer_token sent under the door's key header instead of Authorization
+    "pinned_header_stale",      # build_request: a compare_headers header (claude-code's user-agent) sent with an older value
     "adaptation_unrecorded",    # build_request: the pinned adaptation happened on the wire but was not recorded (MAP-13: the invisible drop)
     "managed_sentinel_leak",    # managed_run: the private token shows up in a public step outcome (AUTH-21)
     "managed_store_drift",      # managed_run: the store afterwards loses a slot's state
@@ -339,6 +340,11 @@ def op_build_request(msg: JsonObject) -> JsonObject:
         # to its injected key would pass it.
         value = result["headers"].pop("authorization")
         result["headers"]["x-api-key"] = value.removeprefix("Bearer ")
+    if MUTATION == "pinned_header_stale" and targeted(case):
+        # A port whose table still claims an old Claude Code release: the
+        # server refuses newer models (2026-09-30).  DROP_HEADERS alone
+        # would never see it; compare_headers does.
+        result["headers"]["user-agent"] = "claude-cli/2.1.170"
     return result
 
 

@@ -1,0 +1,73 @@
+{
+  "id": "anthropic.max_tokens_defaulted_reasoning",
+  "provider": "anthropic",
+  "feature": "max_tokens_defaulted_reasoning",
+  "description": "MAP-7 rule 6 on the manual class (amended 2026-09-30): max_tokens there covers budget_tokens plus the answer, so with no Config.max_tokens the WIRE value is the model's ceiling (64000 for claude-sonnet-4-5) and the visible part recorded as `defaulted` is what the thinking budget leaves: 64000 - 16384 (effort high) = 47616. Before, the budget was added on top of 16384. Consumer-side; no live wire.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 64000,
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 16384
+      }
+    }
+  },
+  "expect_lm15": {
+    "adaptations": [
+      {
+        "field": "config.max_tokens",
+        "action": "defaulted",
+        "applied": 47616
+      }
+    ]
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-30",
+    "evidence": "docs/mapping-rules.md MAP-7 rule 6 (changes/2026-09-30-claude-code-client-version.md D5): on the manual class the default is the ceiling on the wire and the visible part is what the budget leaves; ceiling 64000 from receipts/2026-09-30-claude-code/models-max-tokens.json. The same wire was sent live 2026-09-30T13-30-07Z (claude-sonnet-4-5, budget_tokens 16384, max_tokens 64000, non-streaming): HTTP 200, thinking then 'ok' — receipts/2026-09-30-anthropic/probe-max-tokens-defaulted-reasoning.json, exchange receipts/2026-09-30-anthropic/exchange-2026-09-30T13-30-07Z-5518e6dd11c24ef3ab9788e92cbbcae7.json"
+  },
+  "canonical_request": {
+    "model": "claude-sonnet-4-5",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Say ok."
+          }
+        ]
+      }
+    ],
+    "config": {
+      "reasoning": {
+        "effort": "high"
+      }
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-09-30",
+    "evidence": "the smallest manual-class request with reasoning on and no max_tokens"
+  }
+}

@@ -27,7 +27,7 @@
         }
       ],
       "stream": false,
-      "max_tokens": 16384,
+      "max_tokens": 64000,
       "output_config": {
         "format": {
           "type": "json_schema",
@@ -89,9 +89,10 @@
   },
   "provenance": {
     "source": "live-capture",
-    "date": "2026-09-19",
-    "evidence": "api.anthropic.com 2026-09-19T12-50-50Z, claude-haiku-4-5, HTTP 200; changes/2026-09-19-jev-state.md D3; types.md §DataPart ('JSON text on wires that take only text'); adapter-built wire (AnthropicLM, compat+access 'anthropic'); verbatim body at bodies/anthropic.data_part_text/2026-09-19T12-50-50Z.txt; changes/2026-09-19-jev-state.md",
-    "exchange": "receipts/2026-09-19-anthropic/exchange-2026-09-19T12-50-50Z-e4de055a0d6749318206120b54fd6f85.json"
+    "date": "2026-09-30",
+    "exchange": "receipts/2026-09-30-anthropic/exchange-2026-09-30T13-27-05Z-0778daf508e64d6fb89fddc120459005.json",
+    "response_exchange": "receipts/2026-09-19-anthropic/exchange-2026-09-19T12-50-50Z-e4de055a0d6749318206120b54fd6f85.json",
+    "evidence": "request side re-validated 2026-09-30T13-27-05Z: the wire the reference adapter builds today, which differs from the 2026-09-19 capture only in body max_tokens: 16384 -> 64000, HTTP 200, ok: 1 data part(s), finish stop; response receipts/2026-09-30-anthropic/revalidate-data_part_text-2026-09-30T13-27-05Z-response.txt; changes/2026-09-30-claude-code-client-version.md.  The pinned body and golden are the 2026-09-19 capture's (response_exchange): api.anthropic.com 2026-09-19T12-50-50Z, claude-haiku-4-5, HTTP 200; changes/2026-09-19-jev-state.md D3; types.md §DataPart ('JSON text on wires that take only text'); adapter-built wire (AnthropicLM, compat+access 'anthropic'); verbatim body at bodies/anthropic.data_part_text/2026-09-19T12-50-50Z.txt; changes/2026-09-19-jev-state.md"
   },
   "canonical_request": {
     "model": "claude-haiku-4-5",
@@ -180,7 +181,7 @@
       {
         "field": "config.max_tokens",
         "action": "defaulted",
-        "applied": 16384
+        "applied": 64000
       },
       {
         "field": "config.probabilities",

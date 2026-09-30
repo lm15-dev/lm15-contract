@@ -28,6 +28,10 @@ declare -A PAGES=(
   ["files-get-content.md"]="https://platform.claude.com/docs/en/api/files/download.md"
   ["errors.md"]="https://platform.claude.com/docs/en/api/errors.md"
   ["rate-limits.md"]="https://platform.claude.com/docs/en/api/rate-limits.md"
+  # 2026-09-30: each model's max output (MAP-7 rule 6's default max_tokens)
+  # and which models are retired.
+  ["models-overview.md"]="https://platform.claude.com/docs/en/about-claude/models/overview.md"
+  ["model-deprecations.md"]="https://platform.claude.com/docs/en/about-claude/model-deprecations.md"
   ["service-tiers.md"]="https://platform.claude.com/docs/en/api/service-tiers.md"
   ["versioning.md"]="https://platform.claude.com/docs/en/api/versioning.md"
   ["beta-headers.md"]="https://platform.claude.com/docs/en/api/beta-headers.md"

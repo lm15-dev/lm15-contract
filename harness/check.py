@@ -80,8 +80,26 @@ AUTH_HEADERS = frozenset({"authorization", "x-api-key", "x-goog-api-key", "api-k
 AUTH_PARAMS = frozenset({"key"})
 
 # Transport noise dropped from BOTH sides before header comparison. This list
-# is fixed; widening it weakens the oracle.
+# is fixed; widening it weakens the oracle.  A case names, in
+# ``compare_headers``, the entries it pins anyway because the server reads
+# them (claude-code's ``user-agent``: the Claude Code release a model can
+# require; PROTOCOL.md, 2026-09-30).
 DROP_HEADERS = frozenset({"user-agent", "accept", "accept-encoding", "content-length", "host"})
+
+
+def pinned_headers(case: JsonObject) -> frozenset[str]:
+    """The DROP_HEADERS entries this case compares (``compare_headers``)."""
+    names = case.get("compare_headers") or []
+    if not isinstance(names, list) or not all(isinstance(n, str) for n in names):
+        raise ValueError(f"{case.get('id')}: compare_headers must be a list of header names")
+    lowered = frozenset(n.lower() for n in names)
+    stray = sorted(lowered - DROP_HEADERS)
+    if stray:
+        raise ValueError(f"{case.get('id')}: compare_headers {stray} are compared anyway; list only {sorted(DROP_HEADERS)}")
+    missing = sorted(n for n in lowered if n not in {str(k).lower() for k in (case.get("request") or {}).get("headers", {})})
+    if missing:
+        raise ValueError(f"{case.get('id')}: compare_headers {missing} are not in the pinned request")
+    return lowered
 
 VOLATILE_CLASSES = frozenset({"id", "timestamp", "usage-count", "duration"})
 
@@ -744,10 +762,11 @@ def expected_wire_request(case: JsonObject) -> JsonObject:
     # a SigV4 case expects its signature: the harness sends that credential,
     # not the injected api_key, and does not rewrite.
     pinned_string_credential = isinstance(case.get("credential"), dict) and case["credential"].get("kind") in ("api_key", "bearer_token")
+    keep = pinned_headers(case)
     headers: dict[str, str] = {}
     for name, value in req.get("headers", {}).items():
         lower = str(name).lower()
-        if lower in DROP_HEADERS:
+        if lower in DROP_HEADERS and lower not in keep:
             continue
         if lower in AUTH_HEADERS and not str(value).startswith("AWS4-HMAC-SHA256 ") and not pinned_string_credential:
             # A SigV4 signature is reproduced from the case's fixed credential
@@ -769,8 +788,9 @@ def expected_wire_request(case: JsonObject) -> JsonObject:
     }
 
 
-def actual_wire_request(result: JsonObject) -> JsonObject:
-    """The shim's build_request output, with DROP_HEADERS removed.
+def actual_wire_request(result: JsonObject, keep: frozenset[str] = frozenset()) -> JsonObject:
+    """The shim's build_request output, with DROP_HEADERS removed (except
+    the ``keep`` names a case pins, ``pinned_headers``).
 
     No other normalization: names arrive lowercased per PROTOCOL.md, and a
     non-lowercase name is a real difference. body_b64 (the documented
@@ -780,7 +800,8 @@ def actual_wire_request(result: JsonObject) -> JsonObject:
     out = {key: result[key] for key in result}
     headers = out.get("headers")
     if isinstance(headers, dict):
-        out["headers"] = {k: v for k, v in headers.items() if str(k).lower() not in DROP_HEADERS}
+        out["headers"] = {k: v for k, v in headers.items()
+                          if str(k).lower() not in DROP_HEADERS or str(k).lower() in keep}
     return out
 
 
@@ -846,7 +867,7 @@ def run_request_direction(shim: Shim, case_filter: str | None) -> DirectionRepor
             report.results.append(shim_reply_failure(case_id, reply))
             continue
         expected = expected_wire_request(case)
-        actual = actual_wire_request(reply["result"])
+        actual = actual_wire_request(reply["result"], pinned_headers(case))
         volatile = case.get("volatile") or {}
         diff = compare_adaptations(case, actual.pop("adaptations", None))
         if diff is not None:
@@ -1578,7 +1599,7 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(f"{case_id}[build]", reply))
         else:
-            diff = first_difference(expected_wire_request(case), actual_wire_request(reply["result"]))
+            diff = first_difference(expected_wire_request(case), actual_wire_request(reply["result"], pinned_headers(case)))
             if diff is None:
                 report.results.append(CaseResult(f"{case_id}[build]", "pass"))
             else:
@@ -1769,7 +1790,7 @@ def _compare_build(report: DirectionReport, label: str, spec: JsonObject, reply:
     if isinstance(fixture_b64, str):
         expected["body_b64"] = fixture_b64
     expected = _normalize_multipart(expected)
-    actual = _normalize_multipart(actual_wire_request(reply["result"]))
+    actual = _normalize_multipart(actual_wire_request(reply["result"], pinned_headers(spec)))
     diff = first_difference(expected, actual)
     if diff is None:
         report.results.append(CaseResult(label, "pass"))

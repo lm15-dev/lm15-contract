@@ -1,18 +1,18 @@
 {
-  "id": "anthropic.max_tokens_defaulted",
-  "provider": "anthropic",
+  "id": "deepseek-anthropic.max_tokens_defaulted",
+  "provider": "deepseek-anthropic",
   "feature": "max_tokens_defaulted",
-  "description": "MAP-13 `defaulted`; MAP-7 rule 6 (amended 2026-09-30): the Messages API requires max_tokens; when Config.max_tokens is absent a Claude model's output ceiling is sent and RECORDED — 128000 for the 4.6 generation and every later or unknown Claude name, 64000 for the 4.5 generation (this case, claude-sonnet-4-5), 8192 for claude-3-5, 4096 for claude-3 — and any other model name (a DeepSeek, Kimi or Muse model on an Anthropic-dialect server) 16384. Until 2026-09-14 the default was a silent 1024; until 2026-09-30 every 4.x and later model got 16384, which a reply with reasoning on routinely exhausted. A value above a model's real ceiling is a loud 400 naming it, never a silent truncation. Consumer-side; no live wire (the live evidence is claude-code.max_tokens_defaulted and anthropic.data_part_text, 2026-09-30).",
+  "description": "MAP-7 rule 6 (amended 2026-09-30): a model name that is not Claude's on an Anthropic-dialect server keeps 16384 when Config.max_tokens is absent — the Claude ceilings are Anthropic's, and these servers publish their own, lower ones (a 128000 default would turn every ordinary call into a 400). Consumer-side; no live wire.",
   "request": {
     "method": "POST",
-    "url": "https://api.anthropic.com/v1/messages",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
     "headers": {
       "anthropic-version": "2023-06-01",
       "content-type": "application/json",
-      "x-api-key": "$ANTHROPIC_API_KEY"
+      "x-api-key": "$DEEPSEEK_API_KEY"
     },
     "body": {
-      "model": "claude-sonnet-4-5",
+      "model": "deepseek-v4-flash",
       "messages": [
         {
           "role": "user",
@@ -25,7 +25,7 @@
         }
       ],
       "stream": false,
-      "max_tokens": 64000
+      "max_tokens": 16384
     }
   },
   "expect_lm15": {
@@ -33,7 +33,7 @@
       {
         "field": "config.max_tokens",
         "action": "defaulted",
-        "applied": 64000
+        "applied": 16384
       }
     ]
   },
@@ -43,7 +43,7 @@
     "evidence": "docs/mapping-rules.md MAP-7 rule 6 (changes/2026-09-30-claude-code-client-version.md D5); ceilings from Anthropic's Models API max_tokens (receipts/2026-09-30-claude-code/models-max-tokens.json: 128000 for 4.6 and later, 64000 for 4.5) and scrapes/anthropic/pages/models-overview.md (Max output); first authored 2026-09-14 (changes/2026-09-14-adapt-visibly.md §3a)"
   },
   "canonical_request": {
-    "model": "claude-sonnet-4-5",
+    "model": "deepseek-v4-flash",
     "messages": [
       {
         "role": "user",
@@ -58,7 +58,7 @@
   },
   "canonical_request_provenance": {
     "source": "hand-authored",
-    "date": "2026-09-14",
-    "evidence": "the smallest request with no max_tokens"
+    "date": "2026-09-30",
+    "evidence": "the smallest request with no max_tokens on a non-Claude model"
   }
 }

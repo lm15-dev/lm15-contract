@@ -520,6 +520,7 @@ points:
 | `base_url` | this access path's default base URL | construction, when the caller left the dialect default |
 | `host` (amended 2026-09-03, 2026-09-19) | a host descriptor: URL template over the settings below (a root and a door path), `endpoint_env` (the vendor's endpoint variables, in order), `model_in` (`body`\|`path`), `anthropic_version_in` (`header`\|`body:<value>`), `stream_framing` (`sse`\|`aws-event-stream`), `required_headers` (`name: {setting}`), `sigv4_service` | URL build, payload, stream decoder |
 | `settings` (amended 2026-09-03; the typed face of `backend_options`) | `region`, `workspace`, `project`, `location`, `resource`, `authority_host`, `scope`; each with its env fallbacks in order | construction; the doctor prints them |
+| `backend_settings` (amended 2026-09-30) | the `backend_options` a caller may set on a door **without** a host: a name and its env fallbacks, in order; the default is the table's `backend_options` value (one authority). Today `client_version` on `claude-code` (`LM15_CLAUDE_CODE_VERSION`) and `openai-codex` (`LM15_CODEX_CLIENT_VERSION`) | construction; the doctor prints them |
 
 Host settings and their env fallbacks (in order): `region` ←
 `AWS_REGION`, `AWS_DEFAULT_REGION`, profile `region` — **no default,
@@ -646,9 +647,9 @@ The policies (reference: `lm15/access.py`):
 | Policy | Dialect | credential | auth_header | backend | Notable fields |
 |---|---|---|---|---|---|
 | `anthropic` | Anthropic | key | `x-api-key` | api | files, batches, models |
-| `claude-code` | Anthropic | oauth (preserved under R1) | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<v>`; `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
+| `claude-code` | Anthropic | oauth (preserved under R1) | bearer | claude-code | betas `claude-code-20250219,oauth-2025-04-20`; `x-app: cli`; `user-agent: claude-cli/<client_version>` (backend setting, default 2.1.285); `anthropic-dangerous-direct-browser-access: true`; system prefix "You are Claude Code, Anthropic's official CLI for Claude."; no files/batch/live |
 | `openai` | Responses | key | bearer | api | full surface |
-| `openai-codex` | Responses | oauth (preserved under R1) | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` option; instructions prefix "You are a helpful assistant."; complete/stream/models only |
+| `openai-codex` | Responses | oauth (preserved under R1) | bearer | chatgpt-codex | base `https://chatgpt.com/backend-api/codex`; `OpenAI-Beta: responses=experimental`; `originator`; `client_version` backend setting; instructions prefix "You are a helpful assistant."; complete/stream/models only |
 | `openai_chat` | Chat | key | bearer | api | complete, stream, models |
 | `xai` | Chat (+ provider adapter) | oauth-unless-explicit; scoped managed selection under AUTH-15 | bearer | api | base `https://api.x.ai/v1`; images, video, models |
 | `gemini` | Gemini | key | `x-goog-api-key` | api | full surface incl. caches |
@@ -668,13 +669,59 @@ Host policies above are declared from documentation
 (changes/2026-09-03-cloud-hosts.md, `research/cloud-hosts/`); each row
 becomes wire-evidenced with its own `changes/` entry and receipts.
 
+**Backend settings (amended 2026-09-30,
+changes/2026-09-30-claude-code-client-version.md).** A subscription door
+claims a client release: `claude-code` sends `user-agent:
+claude-cli/<client_version>`, and Anthropic's server reads it — a model
+can require a newer release, and the refusal is a 400 ("Claude Code
+2.1.170 does not support this model; version 2.1.280 or newer is
+required", live 2026-09-23 and 2026-09-30). The release moves faster than
+lm15 ships, so it is a setting, not only a table constant:
+
+1. The table's `backend_options.client_version` is the default: the latest
+   release when last receipted (`claude-code` 2.1.285, receipted
+   2026-09-30; `openai-codex` 0.147.0, unchanged).
+2. A caller sets it through the router's per-provider `settings` entry
+   (`{"claude-code": {"client_version": "2.1.290"}}`, the same field that
+   carries a cloud door's host settings) or on the adapter it builds by
+   hand (`settings=`; the Python `claude_code_version=` keyword is the same
+   setting under its older name, and two different values are a
+   configuration error). The router, and only the router, then reads the
+   setting's env variables; then the default. Origins are reported in the
+   `from` vocabulary (`explicit`, `env:<VAR>`, `default`).
+3. The resolved value is written to `backend_options.client_version`. On
+   the `claude-code` backend it is also the `user-agent` header's version;
+   on `chatgpt-codex` it is the `/models` query parameter.
+4. A settings entry for a door that declares no such name is a
+   `NotConfiguredError` listing the names it does declare — the settings
+   field is keyed by provider, and an entry nothing reads would otherwise
+   be dropped with nothing said (the same rule as an `api_keys` key naming
+   no provider). Before 2026-09-30 a door without a host ignored its
+   settings entry.
+5. The `claude-code` door's minimum-version refusal (`invalid_request_error`
+   whose message matches `Claude Code (\S+) does not support this model;
+   version (\S+) or newer is required`) keeps the server's message and adds
+   lm15's guidance, because the server's advice ("run 'claude update'") does
+   not move what lm15 claims: `\n\n  To fix:\n    - lm15 sends this version
+   itself; updating Claude Code does not change it\n    - Set the claude-code
+   setting client_version to <required> or newer (or
+   LM15_CLAUDE_CODE_VERSION=<required>)\n` (`errors/cases/claude-code.json`
+   pins the message exactly). No automatic retry with the required
+   version: which release lm15 claims stays the caller's decision.
+
+The header is compared by the harness on the cases that pin it
+(`compare_headers`, harness/PROTOCOL.md): before 2026-09-30 `user-agent`
+was transport noise to the comparator, so no port could fail on a stale
+release.
+
 The `chatgpt-codex` backend branches, exhaustively: (1) payload —
 `instructions` defaults to the prefix, `store: false`, `stream: true`,
 no max-token knob; (2) `complete` materializes the stream (streaming-first
 backend); (3) errors — a `{"detail": "..."}` envelope is classified before
 the OpenAI envelope; (4) `/models` takes `client_version` and lists
-`models[].slug`. The `claude-code` backend has no branches beyond the
-policy fields.
+`models[].slug`. The `claude-code` backend has two branches beyond the
+policy fields: its `client_version` is the `user-agent` version, and its
+minimum-version refusal carries the guidance above.
 
 Managed authentication is composed through a scoped manager and an explicit
 credential binding (AUTH-12/15/20), including account-dependent destinations and
@@ -774,3 +821,13 @@ receipt for `azure-anthropic` by Pamela Fox (Microsoft), 2026-09-18,
 `pamelafox/python-stack-foundry-models`; see
 changes/2026-09-19-cloud-identity-and-endpoints.md and
 auth/named-credentials.json.
+
+Amended 2026-09-30 (AUTH-10: `backend_settings`, `client_version` on the
+subscription doors with `LM15_CLAUDE_CODE_VERSION` /
+`LM15_CODEX_CLIENT_VERSION`, the `claude-code` default release 2.1.285, the
+minimum-version guidance, and a settings entry for a door that reads none
+refused) — the three fixes approved in session ("Yes, we should do all
+these and we should do it well"); the names, the guidance sentence and the
+refusal of an unread settings entry were chosen by the implementer and are
+stated for assent in changes/2026-09-30-claude-code-client-version.md;
+live receipts under receipts/2026-09-30-claude-code/.
