@@ -17,14 +17,22 @@ with `harness/check.py --direction all`, network cut:
 | | Python | TypeScript | Rust | Go | Julia | R |
 |---|---|---|---|---|---|---|
 | Contract checks (all directions) | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 | 1,838 / 1,838 (`tools/check-contract.py`) |
-| Commit (local, not pushed) | `f1b20a7` | `c62e326` | `7282332` | `e094ce9` | `c93467c` | `2e32cd4` |
+| Commit | `f1b20a7` | `c62e326` | `7282332` | `e094ce9` | `c93467c` | `2e32cd4` |
 
 The claude-code cases now compare `user-agent`: before this pin no port
 could fail on a stale Claude Code release. R's `PYTHON_REFERENCE` moves to
 lm15-python `f1b20a7`; its parity probes: 30 pass, the 2 known differences
 unchanged. Julia's `conformance/auth/resolution.json` and Python's
 `conformance/auth_resolution.json` are re-copied from `auth/resolution.json`.
-No release yet.
+
+**Released 2026-09-30**, every SDK at `57e33d1` (the ratification commit;
+text only, the same 1,838 of 1,838): Python 1.2.0 (PyPI), TypeScript
+1.0.0-rc.4 (npm), Rust 1.0.0-rc.4 (crates.io), Go v1.1.0-rc.3, R 1.0.1
+(GitHub release). Julia's pending 1.0.0 registration (General#169598, still
+waiting for a maintainer to approve the name) was moved to LM15.jl `85eaaac`,
+so the first Julia release carries this change. Each release was installed
+fresh from its registry and called `claude-code:claude-opus-5-5` with no
+settings: HTTP 200, `stop`, `max_tokens` defaulted to 128000.
 
 Not moved: Java, Ruby, .NET and Swift, the early ports still pinned to
 `cfed007` (2026-09-11). Each takes only the new default release, 2.1.285
