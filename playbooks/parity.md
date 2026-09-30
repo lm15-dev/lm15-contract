@@ -2,6 +2,28 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-09-29 (later) — input_audio formats in every SDK
+
+changes/2026-09-29-input-audio-formats.md (MAP-12 rule 4: `input_audio`
+reads `ogg`, `opus`, `flac`, `aac`, `aiff`, `webm` and `mpeg` as their true
+media types; case `openai_chat.ingest_input_audio_ogg`). Every SDK's main
+moves its pin to `307925a` (`8ee6322` merges it with an identical tree),
+measured with `harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,829 / 1,829 | 1,829 / 1,829 | 1,829 / 1,829 | 1,829 / 1,829 | 1,829 / 1,829 | 1,829 / 1,829 (`tools/check-contract.py`) |
+| Change | lm15-python#16 | lm15-ts#1 | lm15-rs#1 | lm15-go#1 | LM15.jl#1 | lm15-r#1 |
+
+Rust and Julia also move past the member-order commit (INV-002), which they
+passed unchanged. R's
+`PYTHON_REFERENCE` moves to lm15-python `2a85094`, the reference at this pin;
+its parity probes: 30 pass, the 2 known differences unchanged. No release
+yet: the README's table still lists each SDK's released pin.
+
+Left open, as the change record says: `m4a` / `mp4`, until a receipt shows
+which spelling Gemini accepts.
+
 ## 2026-09-29 — member order JavaScript would change (INV-002)
 
 changes/2026-09-29-index-member-names.md: 40 new checks (33 in the
