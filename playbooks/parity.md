@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-02 — a tool with no description is left off the wire (MAP-17)
+
+changes/2026-10-02-tool-description-absent.md: every SDK sent a description-less
+function tool as `"description": null`, which Anthropic and Groq refuse with a 400.
+Six live-captured cases (`tool_no_description` on anthropic, openai, openai-chat and
+gemini; `live_tool_no_description` on openai and gemini). Every SDK's main moves its
+pin to `f6465c8`, measured with `harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,899 / 1,899 | 1,899 / 1,899 | 1,899 / 1,899 | 1,899 / 1,899 | 1,899 / 1,899 | 1,899 / 1,899 (`tools/check-contract.py`) |
+| Commit | `a47e85a` | `f94716a` | `af52acc` | `5450004` | `4d6d4ce` | `9f24822` |
+| Code change the cases asked for | omit the key | omit the key | omit the key (Chat and Gemini already did; `""` now absent too) | omit the key (`""` was already absent) | omit the key | omit the key |
+
+Each SDK also gains a native test for what canonical JSON cannot carry (`""`) and
+the paths no case pins (Gemini cached prefix, a batch body, both live setup frames).
+R's `PYTHON_REFERENCE` moves to lm15-python `a47e85a`; its parity probes: 30 pass,
+the 2 known differences unchanged. No release yet. Julia 1.0.0's pending
+registration is at an earlier commit and does not carry this fix.
+
+Not moved: Java, Ruby, .NET and Swift. Java's tool builders send the same `null`
+(`AnthropicBody.java`, `ResponsesRequest.java`, `GeminiContents.java`,
+`OpenAILiveCodec.java`); not fixed here.
+
 ## 2026-10-02 — router tables pinned; provider tables generated
 
 changes/2026-10-02-router-tables-pinned.md: 46 router cases (every built-in
