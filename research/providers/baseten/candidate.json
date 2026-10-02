@@ -1,0 +1,71 @@
+{
+  "id": "baseten",
+  "name": "Baseten",
+  "dialect": "openai-chat",
+  "base_url": "https://inference.baseten.co/v1",
+  "env_key": "BASETEN_API_KEY",
+  "console_url": "https://app.baseten.co/settings/api_keys",
+  "terms_url": "https://www.baseten.co/terms-and-conditions/",
+  "litellm_prefix": "baseten",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://inference.baseten.co/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key BASETEN_API_KEY: named in the docs page (2026-10-02)",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:baseten",
+      "pi:baseten"
+    ],
+    "base_urls": [
+      "https://inference.baseten.co/v1"
+    ],
+    "env_keys": [
+      "BASETEN_API_KEY"
+    ],
+    "model_hints": [
+      "baseten/MiniMaxAI/MiniMax-M2.5",
+      "baseten/deepseek-ai/DeepSeek-V3-0324",
+      "baseten/deepseek-ai/DeepSeek-V3.1",
+      "baseten/moonshotai/Kimi-K2-Instruct-0905",
+      "baseten/moonshotai/Kimi-K2-Thinking",
+      "baseten/moonshotai/Kimi-K2.5",
+      "baseten/nvidia/Nemotron-120B-A12B",
+      "baseten/openai/gpt-oss-120b",
+      "baseten/zai-org/GLM-4.6",
+      "baseten/zai-org/GLM-4.7",
+      "baseten/zai-org/GLM-5",
+      "baseten/zai-org/GLM-5.3",
+      "deepseek-ai/DeepSeek-V4-Flash-0731",
+      "deepseek-ai/DeepSeek-V4-Pro",
+      "deepseek-ai/DeepSeek-V4-Pro-0813",
+      "deepseek-ai/DeepSeek-V4.1-Flash",
+      "deepseek-ai/DeepSeek-V4.1-Flash-Fast",
+      "moonshotai/Kimi-K2.5",
+      "moonshotai/Kimi-K2.6",
+      "moonshotai/Kimi-K2.7-Code",
+      "moonshotai/Kimi-K3",
+      "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B",
+      "nvidia/Nemotron-120B-A12B",
+      "openai/gpt-oss-120b",
+      "thinkingmachines/inkling",
+      "thinkingmachines/inkling-small",
+      "zai-org/GLM-4.7",
+      "zai-org/GLM-5",
+      "zai-org/GLM-5.1",
+      "zai-org/GLM-5.2",
+      "zai-org/GLM-5.2-Fast",
+      "zai-org/GLM-5.3",
+      "zai-org/GLM-5.3-Fast",
+      "zai-org/GLM-5.3-Flash"
+    ]
+  },
+  "docs_url": "https://docs.baseten.co/inference/model-apis/overview"
+}

@@ -1,0 +1,720 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RXk4rnXRLkBFiJgTivqu8tRK",
+    "object": "chat.completion",
+    "created": 1790962062,
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-9a03bb3d9b03ee07",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Seattle\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-938e8fbd381204dd",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Tokyo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8d233deb47e97248",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Sydney\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-95c55ec1ecaee5f4",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Rio de Janeiro\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9426f06073f88b88",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Cairo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9c978ee61ad11378",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8dfaa11dd712c3e0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b461fe1a9d985f62",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Istanbul\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bf9ffed64e5eea9b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Moscow\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b289c2cd8ea2e8c5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Beijing\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b038d02d1c949e1e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Cape Town\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9c58cc8684fae9c0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Dubai\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b7ff1226493639a2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"San Francisco\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9b7c50ff30666459",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Mexico City\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a93f541072d83997",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Buenos Aires\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-84318b3a01cde103",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Berlin\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-80af18080309ab84",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Paris\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-94bcc2fc3e1363f0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Bangkok\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b39a84cd5fc981ab",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Lagos\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ac9ca94ad8b28f7e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Toronto\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b7ec425bb765307b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Vancouver\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a63e9698bc9bd358",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Chicago\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b913c701e8762c08",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Los Angeles\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9096f2fb7c2b49ea",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Miami\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-81bd90989f7bd15b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Las Vegas\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a52df19eb8806db5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Toronto\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a03c9ed73653b6f3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Montreal\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8d1cee12995e2318",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Calgary\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8ee0ef1badd085cc",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Ottawa\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bdf6f9353d8b9186",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Edmonton\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a056b7204001e464",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Halifax\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b9207bf66abd08cb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Winnipeg\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9e2c2c8a44432bce",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Saskatoon\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a80c91f24511fb30",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Regina\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ac2f472b1bbbab3c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Québec\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-82728b5b9c962371",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Charlottetown\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8cf159ca45769ae8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-98f723350f45ff10",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Yellowknife\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-834901ddb0acb5b2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Iqaluit\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bd7b353ffc71ba81",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Inuvik\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-863d0e9bdd77d0a7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Fort McMurray\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8318f002ab5ecfb0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whitehorse\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-aed74ec5d7e3c857",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a12bece547fb1e0a",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8d0837d799843892",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a9cfe14d740b7c37",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8f2185640bc8d68b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a4b2bba1f662fee9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bc4f024e0e9a8ed2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8019b841150e72dd",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a796a671c31ec822",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-80a8565ee1de4602",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b267d9b03d1d7f16",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ae8bca534b0a9619",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8320d2bc3582a15f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a9d06c0972d1dd07",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-89d612f0b2aa04a9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b56d8a49f658a917",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a420dfd5d6d72888",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8ecab910c894962d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b714cd925143df12",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b7e43a850a2db74b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9b10c9aa12722e4a",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-972a2d43951781cb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9a6a9aa340266c6a",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8366a7990b1f3127",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-af0f2daa5c6f5a97",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-83a8c7183f34e4b2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-894e477861c77f5a",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-81f851b868ab52f9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-983838a109f57457",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a6092a6eb5c5f926",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a00e36ca147e1304",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a868b7087cd9963f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-92fb2a39df9b8716",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bd65e96064925b4f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a156e4bd89b916fe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9815e8626a4f28a6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-97012e07a834dcdb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b6534ced21912252",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 2271,
+      "completion_tokens": 2000,
+      "estimated_cost": 0.00033626,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-27-27Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RXk4rnXRLkBFiJgTivqu8tRK"
+  }
+}

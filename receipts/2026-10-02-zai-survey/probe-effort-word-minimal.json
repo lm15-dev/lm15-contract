@@ -1,0 +1,33 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "minimal"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1210",
+      "message": "This model always engages in thinking and cannot be disabled; please use low, high, or max"
+    }
+  },
+  "timestamp": "2026-10-02T16-45-14Z",
+  "response_headers": {
+    "X-Request-ID": "8335da29-1cac-4d95-aab1-3fed2d7c832e"
+  }
+}

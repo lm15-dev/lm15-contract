@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "max"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwpUQ-fdNmn-a4452931ea34f3e9",
+    "object": "chat.completion",
+    "created": 1790959352,
+    "model": "openai/gpt-oss-120b",
+    "system_fingerprint": "default",
+    "prompt": [],
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "tool_calls": [],
+          "reasoning": "The user asks: \"What is 17*23? Reply with just the number.\" This is a simple arithmetic. 17*23 = 391. Need to respond with just the number: \"391\"."
+        },
+        "finish_reason": "stop",
+        "seed": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 54,
+      "total_tokens": 136,
+      "prompt_tokens_details": {
+        "cached_tokens": 66
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 44
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-42-32Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwpUQ-fdNmn-a4452931ea34f3e9"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.6-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RHuLFfT1AF659DpgEQO8tgKW",
+    "object": "chat.completion",
+    "created": 1790959835,
+    "model": "Qwen/Qwen3.6-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "\n\nOk.",
+          "reasoning_content": "Thinking Process:\n1.  **Analyze User Input:** The user says \"Say ok.\"\n2.  **Identify Intent:** The user wants me to simply output the word \"ok\".\n3.  **Formulate Response:** \"Ok.\" or \"OK.\" or \"ok\". I will just say \"Ok.\" as requested.\n4.  **Check Constraints:** No special constraints. Simple request.\n5.  **Output Generation:** \"Ok.\"✅\n",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 375,
+      "completion_tokens": 104,
+      "estimated_cost": 0.00041952000000000005,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-50-34Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RHuLFfT1AF659DpgEQO8tgKW"
+  }
+}

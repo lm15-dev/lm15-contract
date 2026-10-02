@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RXXlbQ5l1Tn5l1yiQsJkE3SN",
+    "object": "chat.completion",
+    "created": 1790961072,
+    "model": "MiniMaxAI/MiniMax-M3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to any weather-checking tools in this conversation, so I'm unable to look up the current weather in Paris for you.\n\nTo check the weather in Paris, I'd recommend:\n\n- **Weather websites**: weather.com, accuweather.com, or the French meteorological service at meteofrance.com\n- **Search engines**: Simply search \"weather Paris\" on Google or your preferred search engine\n- **Built-in weather apps**: Most smartphones and computers come with a weather app where you can search for \"Paris\"\n- **Voice assistants**: Ask Siri, Google Assistant, or Alexa for the current Paris weather\n\nIf you'd like, I can still help with related topics like:\n- General climate information about Paris by season\n- Tips on what to pack for a trip to Paris\n- Best times of year to visit\n\nLet me know how I can help!",
+          "reasoning_content": "The user is asking about the weather in Paris and wants me to use a tool. However, I don't have any tools available to me in this conversation. I should let the user know that I don't have access to weather information tools, but I can still provide some helpful information about how they might check the weather in Paris.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "total_tokens": 429,
+      "completion_tokens": 242,
+      "estimated_cost": 0.00028988800000000003,
+      "prompt_tokens_details": {
+        "cached_tokens": 128,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-11-02Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RXXlbQ5l1Tn5l1yiQsJkE3SN"
+  }
+}

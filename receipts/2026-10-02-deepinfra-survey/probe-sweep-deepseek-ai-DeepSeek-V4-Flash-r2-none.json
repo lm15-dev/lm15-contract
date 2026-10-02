@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RkEn3PyEObnbRQW9LLzAWkus",
+    "object": "chat.completion",
+    "created": 1790962286,
+    "model": "deepseek-ai/DeepSeek-V4-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I need to check the current weather in Paris. Let me use the web search tool to find this information.\n\nI just checked, but I don't have real-time access to a weather API or live data in this environment. However, I can guide you on how to get the current weather in Paris:\n\n1. **Use a weather website or app** like Weather.com, AccuWeather, or Meteo France.\n2. **Ask a voice assistant** like Siri, Google Assistant, or Alexa.\n3. **Search online** by typing \"weather in Paris today\" into a search engine.\n\nAlternatively, if you have a specific tool or API available (such as a weather API with a key), please share its endpoint or parameters, and I can help you construct a query to retrieve the data.\n\nWould you like me to simulate a search or suggest how to integrate a weather tool?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 15,
+      "total_tokens": 195,
+      "completion_tokens": 180,
+      "estimated_cost": 3.375000000000001e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-31-26Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RkEn3PyEObnbRQW9LLzAWkus"
+  }
+}

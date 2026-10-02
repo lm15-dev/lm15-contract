@@ -1,0 +1,32 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "lm15-survey/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1211",
+      "message": "Unknown Model, please check the model code."
+    }
+  },
+  "timestamp": "2026-10-02T16-45-07Z",
+  "response_headers": {
+    "X-Request-ID": "c468c220-637f-42ce-9d56-884aa30af985"
+  }
+}

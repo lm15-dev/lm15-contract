@@ -1,0 +1,83 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwf5D-4YNCb4-a445286bd81bf3e9",
+    "object": "chat.completion",
+    "created": 1790959321,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "seed": 3749793884625205000,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_xznnl7xj0lw3yszxy3zalfqb",
+              "type": "function",
+              "function": {
+                "arguments": "{\"city\":\"Paris\"}",
+                "name": "get_weather"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 184,
+      "completion_tokens": 23,
+      "total_tokens": 207,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-10-02T16-42-00Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwf5D-4YNCb4-a445286bd81bf3e9"
+  }
+}

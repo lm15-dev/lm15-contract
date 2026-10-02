@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.6-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RJ1ntPZ8Wt2cCFv7ARBLcesm",
+    "object": "chat.completion",
+    "created": 1790959833,
+    "model": "Qwen/Qwen3.6-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "\n\n<tool_code>\n{\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris\"}}\n</tool_code>",
+          "reasoning_content": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"What is the weather in Paris? Use the tool.\"\n   - Key elements: Location = Paris, Request = Weather, Instruction = \"Use the tool.\"\n\n2.  **Identify Available Tools:**\n   - I need to check what tools are available. Since I'm an AI assistant, I typically have access to a weather tool or function. Let's assume there's a `get_weather` or similar tool available.\n   - I should simulate or call the appropriate tool. Since I don't have direct live tool execution capabilities in this interface, I need to follow the standard protocol: acknowledge the request, use the tool if available, or explain that I need to use a tool but can't execute it directly, OR I can simulate the tool call format expected by the system.\n   - Wait, the prompt says \"Use the tool.\" This implies I should explicitly use a tool-calling format if supported, or I should just provide the",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 21,
+      "total_tokens": 266,
+      "completion_tokens": 245,
+      "estimated_cost": 0.0007907200000000002,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-50-30Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RJ1ntPZ8Wt2cCFv7ARBLcesm"
+  }
+}

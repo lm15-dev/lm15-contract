@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rma8S7pz7tcorqEeIAY8ZvQ4",
+    "object": "chat.completion",
+    "created": 1790960314,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Okay! How can I assist you today?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 67,
+      "total_tokens": 77,
+      "completion_tokens": 10,
+      "estimated_cost": 7.025e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-58-33Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rma8S7pz7tcorqEeIAY8ZvQ4"
+  }
+}

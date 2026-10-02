@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "ok",
+          "reasoning_content": "The user just wants me to say \"ok\". This is a simple request with no need for tool calls.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959489,
+    "id": "20261003004445563572f5a40f4ce4",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261003004445563572f5a40f4ce4",
+    "usage": {
+      "completion_tokens": 25,
+      "completion_tokens_details": {
+        "reasoning_tokens": 21
+      },
+      "prompt_tokens": 158,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 183
+    }
+  },
+  "timestamp": "2026-10-02T16-44-45Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "59ba077d-b0be-4f12-b691-5837f739db6e"
+  }
+}

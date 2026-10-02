@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6b59a68cc7bd4d719aec5c120c48beef",
+    "object": "chat.completion",
+    "created": 1790959458,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need answer simple. Need count ",
+          "tools": null
+        },
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 41,
+      "total_tokens": 49,
+      "completion_tokens": 8,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 8
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 8
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-6b59a68cc7bd4d719aec5c120c48beef"
+  }
+}

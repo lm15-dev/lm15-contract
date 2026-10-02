@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-10-02T16-44-22Z",
+  "provider": "zai",
+  "status": 400,
+  "model": "glm-5.3-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "developer",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_tokens": 50
+    }
+  },
+  "request_sha256": "9000c49878d17a8236db81b011d6b71c8fad5ad390a9c63daa370b8044d961f1",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "a6ab191017f1a9b94c723aecc18214b8be3bd16d0b31475a6999f5ef095ad4cd",
+  "response_bytes": 64,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

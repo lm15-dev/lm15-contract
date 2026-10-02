@@ -1,0 +1,93 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-24bd1bf5-058b-4658-854f-c7f5ba4ed44a",
+    "object": "chat.completion",
+    "created": 1790959607,
+    "model": "qwen/qwen3.6-27b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "reasoning": "The user wants to know the weather in Paris and I should use the get_weather tool to fetch that information.\n",
+          "tool_calls": [
+            {
+              "id": "h0mzz6cpj",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.063897906,
+      "prompt_tokens": 279,
+      "prompt_time": 0.020342149,
+      "completion_tokens": 51,
+      "completion_time": 0.100821962,
+      "total_tokens": 330,
+      "total_time": 0.121164111,
+      "completion_tokens_details": {
+        "reasoning_tokens": 23
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_ddcc9cf349",
+    "x_groq": {
+      "id": "req_01m3yr5qvdefgsexdzq9z136gq",
+      "seed": 1491651724
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-46-47Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr5qvdefgsexdzq9z136gq"
+  }
+}

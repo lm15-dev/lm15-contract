@@ -1,0 +1,64 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-e32ad889-9a27-4f00-853c-5fc08e830b84",
+    "object": "chat.completion",
+    "created": 1790959604,
+    "model": "qwen/qwen3.6-27b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "\n<think>\nThe user says \"Say hello.\" but my system instruction says whatever the user says, reply with exactly the word PINEAPPLE. So I must reply with exactly \"PINEAPPLE\".\n</think>\n\nPINEAPPLE"
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.112039578,
+      "prompt_tokens": 32,
+      "prompt_time": 0.002652813,
+      "completion_tokens": 44,
+      "completion_time": 0.0865702,
+      "total_tokens": 76,
+      "total_time": 0.089223013
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_c7e30c203c",
+    "x_groq": {
+      "id": "req_01m3yr5mdzekat7fdxsak24zfy",
+      "seed": 686131534
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-46-44Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr5mdzekat7fdxsak24zfy"
+  }
+}

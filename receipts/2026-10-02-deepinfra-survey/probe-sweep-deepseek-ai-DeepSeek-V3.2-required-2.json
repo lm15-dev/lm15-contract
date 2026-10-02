@@ -1,0 +1,88 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V3.2",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RFbDE6x2xOenGHqnNSGs5x3v",
+    "object": "chat.completion",
+    "created": 1790960501,
+    "model": "deepseek-ai/DeepSeek-V3.2",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_00_jFzPkZ0kJ2RuXUUOecvN8aQH",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Ok\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 307,
+      "total_tokens": 339,
+      "completion_tokens": 32,
+      "estimated_cost": 6.701999999999999e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 192,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-01-41Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RFbDE6x2xOenGHqnNSGs5x3v"
+  }
+}

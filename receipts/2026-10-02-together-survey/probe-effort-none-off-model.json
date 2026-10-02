@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "a019739c-aws_ue2",
+    "object": "chat.completion",
+    "created": 1790959364,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": null
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 17,
+      "completion_tokens": 2,
+      "total_tokens": 19,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "system_fingerprint": "default"
+  },
+  "timestamp": "2026-10-02T16-42-43Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "a019739c-aws_ue2"
+  }
+}

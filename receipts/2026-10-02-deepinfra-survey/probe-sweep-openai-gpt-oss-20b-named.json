@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RkbWuKx1K3h7RtjSxqrfmUaA",
+    "object": "chat.completion",
+    "created": 1790960477,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "The user says: \"Say ok.\" They want a reply: \"ok\" presumably. Just a short message \"Ok.\" They didn't ask for a function. So just reply \"Ok.\"",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 112,
+      "total_tokens": 162,
+      "completion_tokens": 50,
+      "estimated_cost": 1.036e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T17-01-15Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RkbWuKx1K3h7RtjSxqrfmUaA"
+  }
+}

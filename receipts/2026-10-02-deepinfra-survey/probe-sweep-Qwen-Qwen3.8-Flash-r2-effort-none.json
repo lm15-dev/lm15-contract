@@ -1,0 +1,63 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RRIRQy27gNGRFN0PttFO5LW3",
+    "object": "chat.completion",
+    "created": 1790960655,
+    "model": "Qwen/Qwen3.8-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "We need answer user's request: calculate 17*23, reply just number. Compute: 23*17=23*10+23*7=230+161=391. Need final only number. Ensure no extra.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 76,
+      "total_tokens": 142,
+      "completion_tokens": 66,
+      "estimated_cost": 3.38e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 60,
+        "text_tokens": 66
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-04-15Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RRIRQy27gNGRFN0PttFO5LW3"
+  }
+}

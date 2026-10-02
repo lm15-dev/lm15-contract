@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RW7VQgfg5FtLcpHyfqW2nIya",
+    "object": "chat.completion",
+    "created": 1790960333,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok, how can I assist you today? If you have any questions or need help with something, feel free to let me know. I'm here to provide you with the information and support you need. Whether it's about the weather, general knowledge, or any other topic, I'm here to help. So, what can I do for you? Just let me know and I'll do my best to assist you. If you're not sure what to ask, that's okay too. I can suggest some things you might be interested in. For example, you can ask me about the current weather in your city, or you can ask me a trivia question. The possibilities are endless. So, what would you like to know or do? I'm all ears. Or should I say, I'm all text? Either way, I'm here and ready to assist you. So, let's get started. What's on your mind? I'm looking forward to our conversation. Let's make it a productive and enjoyable one. Thank you for using my services. I truly appreciate it. Now, let's get down to business. What can I do for you today? I'm waiting for your response. Don't keep me in suspense. Let's make this happen. I'm here and ready to go. So, what's your pleasure? I'm at your service. Let's make this a memorable conversation. I'm all yours. So, what's the plan? I'm listening. Let's do this. I'm here for you. What's your command? I'm ready to execute. Let's make it happen. I'm at your beck and call. So, what's the word? I'm all ears. Let's get this show on the road. I'm here and ready to roll. So, what's the verdict? I'm waiting. Let's make it a great day. I'm here for you. What's your wish? I'm your genie. Let's make it happen. I'm at your service. So, what's the deal? I'm listening. Let's make it a productive conversation. I'm here for you. What's your request? I'm ready to assist. Let's make it a memorable day. I'm here for you. What's your command? I'm ready to obey. Let's make it happen. I'm at your service. So, what's the plan? I'm listening. Let's get this show on the road. I'm here and ready to go. So, what's the word? I'm all ears. Let's make it a great day. I'm here for you. What's your wish? I'm your genie. Let's make it happen. I'm at your service. So, what's the deal? I'm listening. Let's make it a productive conversation. I'm here for you. What's your request? I'm",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 67,
+      "total_tokens": 667,
+      "completion_tokens": 600,
+      "estimated_cost": 0.000125025,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-58-35Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RW7VQgfg5FtLcpHyfqW2nIya"
+  }
+}

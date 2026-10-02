@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-00-13Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "ibm-granite/granite-4.2-8b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "21d958976b79dac9eb19e96a1d07ee824023d45d9c95c576878e12946172006f",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5467ef3b5564e4446071d42ed26aa25ba7383afbf7308eaa3915b835e022e26c",
+  "response_bytes": 496,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

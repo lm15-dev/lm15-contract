@@ -1,0 +1,34 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "message": "Invalid API Key",
+      "type": "invalid_request_error",
+      "code": "invalid_api_key"
+    }
+  },
+  "timestamp": "2026-10-02T16-46-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr61pwe23vt1x6qazt6qwn"
+  }
+}

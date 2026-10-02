@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R1fWVeWYWBFTN5LYoxy1go7g",
+    "object": "chat.completion",
+    "created": 1790960391,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time data, external tools (including weather APIs), or the ability to check current conditions. I cannot provide live weather information for Paris.\n\nTo get the most accurate and up-to-date weather for Paris right now, please check a reliable source such as:\n\n1. **Weather websites/apps**: e.g., [weather.com](https://weather.com), [meteo.fr](https://meteo.fr), [BBC Weather](https://www.bbc.com/weather), or your device's built-in weather app.\n2. **Search engines**: Simply search \"weather in Paris\" on Google, Bing, etc. (they usually show a current summary + forecast at the top of results).\n3. **Local French weather service**: [Météo France](https://www.meteo.fr) is the official French meteorological service (in French and English options).\n\nThese sources pull live data from reliable meteorological services. Let me know if you'd help interpreting a weather report you find, or have another question! 😊",
+          "reasoning_content": "Okay, the user is asking about the weather in Paris and mentions \"Use the tool.\" I need to check if I have a tool available for fetching weather data. Since I'm a text-based AI, I don't have real-time tools or internet access. I should inform them I can't provide live weather and suggest checking a reliable weather service.\n",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "total_tokens": 334,
+      "completion_tokens": 308,
+      "estimated_cost": 7.856000000000001e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-59-42Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R1fWVeWYWBFTN5LYoxy1go7g"
+  }
+}

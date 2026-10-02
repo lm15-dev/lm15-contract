@@ -1,0 +1,22 @@
+# Vercel AI Gateway — provider dossier
+
+| State | Date | Evidence |
+|---|---|---|
+| candidate | 2026-10-02 | `candidate.json` (survey kit) |
+| researched | | `scrapes/vercel-ai-gateway/`; terms and privacy frozen under `sources/`; the terms verdict below |
+| surveyed | | `receipts/<date>-vercel-ai-gateway-survey/`; `SURVEY.md` |
+| implemented | | registry row, access policy, compat preset in lm15-python |
+| offline-conformant | | support-matrix row; auth case; tables exported; every SDK green at the pin |
+| live-verified | | `receipts/<date>-vercel-ai-gateway/`, cases, error envelopes, the change entry |
+| supported | | the change entry ratified |
+
+## Identity
+
+- lm15 provider string: `vercel-ai-gateway`. (Fill from the docs: service, base URL, console, env key, what is not registered.)
+
+## Terms-of-service verdict
+
+TODO before any live capture: what the terms forbid recording, whether a third-party client may use the key,
+where data is stored. Sources frozen under `sources/` with sha256 (playbooks/provider.md § 3).
+
+## Open items

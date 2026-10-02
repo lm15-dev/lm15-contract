@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RpiOjX9jNxjA0HmTwP56IYSC",
+    "object": "chat.completion",
+    "created": 1790962211,
+    "model": "ByteDance/Seed-2.0-mini",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok.",
+          "reasoning_content": "Let's think about this. The user's prompt is just \"Say ok.\" There's no mention of any tools or functions being needed. All the system instructions about using functions are for when there's a request that requires accessing external information like weather data, but here the task is very simple: just respond with \"ok.\" So there's no need to call any functions here, just provide a direct, plain reply as requested.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 416,
+      "total_tokens": 505,
+      "completion_tokens": 89,
+      "estimated_cost": 7.72e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 87
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-30-09Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RpiOjX9jNxjA0HmTwP56IYSC"
+  }
+}

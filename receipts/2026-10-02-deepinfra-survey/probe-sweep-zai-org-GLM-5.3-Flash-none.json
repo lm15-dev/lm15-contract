@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R4o8Oi6WtEdy5mo77XNrzUId",
+    "object": "chat.completion",
+    "created": 1790959888,
+    "model": "zai-org/GLM-5.3-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't actually have a weather tool available in this conversation—there's no function defined for me to call, so I can't retrieve live weather data.\n\nTo check the weather in Paris, you could:\n- Check a weather site like weather.com or Météo-France (meteofrance.com)\n- Ask your device's assistant\n- Search \"Paris weather\" in a search engine\n\nIf you have a weather tool you'd like me to use, it may need to be enabled or provided in this chat first. Is there anything else I can help with?",
+          "reasoning_content": "No weather tool is actually available. I should say I can't check live weather—no tool provided in this conversation.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "total_tokens": 164,
+      "completion_tokens": 141,
+      "estimated_cost": 3.6975000000000004e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 24
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-51-25Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R4o8Oi6WtEdy5mo77XNrzUId"
+  }
+}

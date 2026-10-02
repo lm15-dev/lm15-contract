@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "max_completion_tokens": 800,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-bf83a4aedab34b70bd5f9651a3cb56fd",
+    "object": "chat.completion",
+    "created": 1790959534,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The weather in Paris right now is sunny with a temperature around 22 °C. Enjoy the nice day!",
+          "reasoning_content": "We need to respond to user: \"What's the weather in Paris?\" The function returned \"22C and sunny\". Provide a friendly answer."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 165,
+      "total_tokens": 225,
+      "completion_tokens": 60,
+      "prompt_tokens_details": {
+        "cached_tokens": 164
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 28
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-45-34Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-bf83a4aedab34b70bd5f9651a3cb56fd"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "ok",
+          "reasoning_content": "The user just wants me to say \"ok\". That's a simple request, no tools needed.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959534,
+    "id": "202610030045293bda66dbc2f44067",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202610030045293bda66dbc2f44067",
+    "usage": {
+      "completion_tokens": 23,
+      "completion_tokens_details": {
+        "reasoning_tokens": 20
+      },
+      "prompt_tokens": 158,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 181
+    }
+  },
+  "timestamp": "2026-10-02T16-45-29Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "e63b5f0d-c4e0-41d8-8b3a-e0c21329d0ee"
+  }
+}

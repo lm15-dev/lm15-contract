@@ -1,0 +1,46 @@
+{
+  "id": "xiaomi",
+  "name": "Xiaomi",
+  "dialect": "openai-chat",
+  "base_url": "https://api.xiaomimimo.com/v1",
+  "env_key": "XIAOMI_API_KEY",
+  "console_url": "https://platform.xiaomimimo.com/#/console/api-keys",
+  "terms_url": null,
+  "litellm_prefix": "xiaomi_mimo",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://api.xiaomimimo.com/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key XIAOMI_API_KEY: not visible in the docs page (rendered by JavaScript) — confirm at sign-up",
+    "the console and docs are a single-page app (any path answers 200): confirm the URLs and the terms page by hand",
+    "terms_url: find the terms of service that cover the API before any live capture",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:xiaomi_mimo",
+      "pi:xiaomi"
+    ],
+    "base_urls": [
+      "https://api.xiaomimimo.com/v1"
+    ],
+    "env_keys": [
+      "XIAOMI_API_KEY",
+      "XIAOMI_MIMO_API_KEY"
+    ],
+    "model_hints": [
+      "mimo-v2.5",
+      "mimo-v2.5-pro",
+      "mimo-v2.5-pro-ultraspeed",
+      "mimo-v2.6-flash",
+      "mimo-v2.6-pro",
+      "mimo-v2.6-pro-ultraspeed"
+    ]
+  },
+  "docs_url": "https://platform.xiaomimimo.com/#/docs/welcome"
+}

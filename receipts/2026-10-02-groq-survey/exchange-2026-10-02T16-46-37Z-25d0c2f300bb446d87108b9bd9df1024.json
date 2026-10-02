@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-10-02T16-46-37Z",
+  "provider": "groq",
+  "status": 200,
+  "model": "qwen/qwen3.6-27b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "request_sha256": "5f780d35d80cf08558c3ff30e219a814d5d0a0672ed19809f10eb4d14b8f80f3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "eef409532efc27b812081a0b108dccede229d5a070783f07db1a10b70e4b42e6",
+  "response_bytes": 621,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

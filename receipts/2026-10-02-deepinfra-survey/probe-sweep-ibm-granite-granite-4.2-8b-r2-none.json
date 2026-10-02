@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RcnjIPp8qJ63mWSQUOB9W8i2",
+    "object": "chat.completion",
+    "created": 1790962152,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time data or external tools (including weather APIs) to retrieve current weather information for Paris. My training data is static and does not include live weather updates.\n\nTo get the current weather in Paris, please check a reliable source such as:\n\n- A weather website (e.g., [weather.com](https://weather.com), [meteo.fr](https://meteo.fr))\n- A weather app on your phone (e.g., Apple Weather, Google Weather, AccuWeather)\n- A voice assistant (e.g., \"Hey Siri, what's the weather in Paris?\")\n\nThese sources pull live, accurate data from weather services. Let me know if you'd help finding the link or clarifying how to check it! 🌤️",
+          "reasoning_content": "Okay, the user is asking about the weather in Paris and wants me to use the tool. But I don't have any tools available. I need to let them know I can't access real-time data. I should explain that I can't use tools and suggest checking a weather service.\n",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "total_tokens": 261,
+      "completion_tokens": 235,
+      "estimated_cost": 6.031e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-29-07Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RcnjIPp8qJ63mWSQUOB9W8i2"
+  }
+}

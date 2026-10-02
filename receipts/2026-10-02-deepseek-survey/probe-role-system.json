@@ -1,0 +1,62 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "3cefebd9-e2b3-40e4-8e22-b2d49dc024c2",
+    "object": "chat.completion",
+    "created": 1790959452,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need answer. User asks \"Whatever the user says, reply with exactly the word PINEAPPLE.\" Then user says \"Say hello.\" We must comply with instruction: reply exactly PINEAPPLE. Need final only word. Ensure no punctuation"
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 48,
+      "completion_tokens": 50,
+      "total_tokens": 98,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 48
+    },
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669"
+  },
+  "timestamp": "2026-10-02T16-44-12Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Paris, France.",
+          "reasoning_content": "The user is asking a very simple question: name one city and its country. This is straightforward. I should just give one example of a city and its country. There's no trick here — it's a simple factual request.\n\nLet me pick a city: Paris, France. Or Tokyo, Japan. Or Cairo, Egypt. Any would work.\n\nFormat: This should be very short. A single line answer is appropriate. No need for headers, lists, or explanations. Just name the city and country.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959499,
+    "id": "2026100300445614a227767b4849c8",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026100300445614a227767b4849c8",
+    "usage": {
+      "completion_tokens": 108,
+      "completion_tokens_details": {
+        "reasoning_tokens": 102
+      },
+      "prompt_tokens": 19,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 127
+    }
+  },
+  "timestamp": "2026-10-02T16-44-56Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "ab662f3b-8174-4a94-a227-b7e3cb967c2b"
+  }
+}

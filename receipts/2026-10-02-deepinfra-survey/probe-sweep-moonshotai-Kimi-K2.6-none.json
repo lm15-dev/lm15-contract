@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RirRtpWRlqvqFEPCPamVuArT",
+    "object": "chat.completion",
+    "created": 1790960065,
+    "model": "moonshotai/Kimi-K2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": " I don't have access to tools or real-time data to check the current weather in Paris. \n\nTo get the current weather in Paris, you can:\n- Check a weather website like [weather.com](https://weather.com) or [AccuWeather](https://accuweather.com)\n- Search \"Paris weather\" on Google or your preferred search engine\n- Use a weather app on your phone\n\nIf you need help interpreting a weather forecast or want general information about Paris's typical climate by season, I'd be happy to help with that!",
+          "reasoning_content": " The user is asking for the weather in Paris and explicitly says \"Use the tool.\" This suggests they want me to use a function/tool to get the weather information. However, in this environment, I don't actually have access to any external tools, APIs, or internet browsing capabilities to fetch real-time weather data. \n\nI should clarify that I don't have access to tools or real-time data to check the current weather in Paris. I can provide general information about Paris weather patterns or help them find weather information, but I cannot retrieve live weather data.\n\nWait, let me reconsider. The user might be testing whether I have function calling capabilities. In some interfaces, AI models do have access to tools. But in this standard text-based interface, I don't have tool calling enabled. I should be honest about my limitations.\n\nActually, looking at the instruction \"Use the tool\" - this is very specific. In some contexts (like OpenAI's function calling or similar), the model is expected to indicate it wants to call a tool. But since I'm responding directly in a text completion interface without",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "total_tokens": 346,
+      "completion_tokens": 327,
+      "estimated_cost": 0.0011587499999999998,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-54-25Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RirRtpWRlqvqFEPCPamVuArT"
+  }
+}

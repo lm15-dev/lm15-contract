@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 50,
+      "user": "lm15-survey"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "",
+          "reasoning_content": "The user has said \"Say ok.\" — that's a direct instruction to just say \"ok\". This is a very simple request. The person wants me to respond with \"ok\". There's no harmful content, no complexity, nothing to reason about",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959465,
+    "id": "2026100300442349e235c721fd4b3b",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026100300442349e235c721fd4b3b",
+    "usage": {
+      "completion_tokens": 50,
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      },
+      "prompt_tokens": 15,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 65
+    }
+  },
+  "timestamp": "2026-10-02T16-44-23Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "99db8542-6953-4ba1-967a-6cf0da0a7477"
+  }
+}

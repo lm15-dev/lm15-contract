@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-00-41Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "ByteDance/Seed-2.0-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "62a9d17b1fc9ed5736656f51f64ea751b50f54f6e6d15a7d69ef530ce7525fbf",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "fcfe463096192726365b994997a8a0ca0ef6e3e6d94a12e8ed49921c4949df3e",
+  "response_bytes": 543,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

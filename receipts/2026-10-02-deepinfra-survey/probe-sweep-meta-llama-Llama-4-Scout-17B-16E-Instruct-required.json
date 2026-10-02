@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RIEBVsaFmcJvU3gTM5sZAcmX",
+    "object": "chat.completion",
+    "created": 1790959791,
+    "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-881fab9b35b5f3ad",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\t\"city\": \"London\" }"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 613,
+      "total_tokens": 641,
+      "completion_tokens": 28,
+      "estimated_cost": 6.97e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-49-51Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RIEBVsaFmcJvU3gTM5sZAcmX"
+  }
+}

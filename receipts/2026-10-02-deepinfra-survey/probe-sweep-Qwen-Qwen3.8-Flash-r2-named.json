@@ -1,0 +1,61 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 500,
+  "body": {
+    "error": {
+      "message": "{\"error\":{\"message\":\"<400> InternalError.Algo.InvalidParameter: The tool_choice parameter does not support being set to required or object in thinking mode\",\"type\":\"invalid_request_error\",\"param\":null,\"code\":\"invalid_parameter_error\"},\"id\":\"chatcmpl-34b61286-39c6-4f1d-b29b-37ae507cb85f\",\"request_id\":\"34b61286-39c6-4f1d-b29b-37ae507cb85f\"}",
+      "type": "api_error",
+      "param": null,
+      "code": null
+    }
+  },
+  "timestamp": "2026-10-02T17-04-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R1UF7WtXHXuadIuqkiXDN0bD"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-01-12Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "tencent/Hy3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "tencent/Hy3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "2774f96fa156397fc069452b32f35b0801f30f685c48b6e2f4d65a8ecad749fe",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b65a1254c804759040bbee8bdd6748929f4b97da151263455060b5f1d0c9a22a",
+  "response_bytes": 531,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

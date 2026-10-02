@@ -1,0 +1,103 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "max_completion_tokens": 800,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-d1a3929b-e5de-428a-a7a4-b2d217129f03",
+    "object": "chat.completion",
+    "created": 1790959640,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The current weather in Paris is **22 °C and sunny**.",
+          "reasoning": "The user asked \"What's the weather in Paris?\" We responded with the weather. It's done."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.002987597,
+      "prompt_tokens": 154,
+      "prompt_time": 0.008737245,
+      "completion_tokens": 43,
+      "completion_time": 0.044210461,
+      "total_tokens": 197,
+      "total_time": 0.052947706,
+      "completion_tokens_details": {
+        "reasoning_tokens": 20
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_99996fee8e",
+    "x_groq": {
+      "id": "req_01m3yr6qzreg78f3kqf6dhjyzz",
+      "seed": 755949436
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-47-20Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr6qzreg78f3kqf6dhjyzz"
+  }
+}

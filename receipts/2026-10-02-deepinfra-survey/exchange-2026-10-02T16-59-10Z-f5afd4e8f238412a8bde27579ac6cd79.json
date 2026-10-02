@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T16-59-10Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "microsoft/phi-4",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "microsoft/phi-4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "708f27043fa700d84c17b6692c992e79018a96ac3e2ddaba66a19978115c4046",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "f2aaac49cebb4a215394042fe553f14555606f4a206bb24a5bd540081c303a6b",
+  "response_bytes": 428,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

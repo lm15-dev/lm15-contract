@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "google/gemma-4-26B-A4B-it",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RYQprB7wmtCiZnyu4gDjskSk",
+    "object": "chat.completion",
+    "created": 1790962035,
+    "model": "google/gemma-4-26B-A4B-it",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I do not have access to a weather tool or a search engine by default, and no specific tool endpoint was provided in our context. Therefore, I cannot provide the current weather in Paris.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 24,
+      "total_tokens": 63,
+      "completion_tokens": 39,
+      "estimated_cost": 1.494e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T17-27-14Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RYQprB7wmtCiZnyu4gDjskSk"
+  }
+}

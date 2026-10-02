@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R8pSBYZ3CartZeIbJisB5L9Y",
+    "object": "chat.completion",
+    "created": 1790960438,
+    "model": "ByteDance/Seed-2.0-mini",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "Got it, the user asked me to say \"ok\". I just need to respond with ok. Wait, no, wait, let me check. Oh right, the prompt is just to say ok. So the response is simply Ok? Wait, lowercase? No, the user wrote \"Say ok.\" so I can just reply with \"Ok.\" or \"ok\". Wait, let's do it naturally. Yeah, just \"Ok.\"",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 416,
+      "total_tokens": 507,
+      "completion_tokens": 91,
+      "estimated_cost": 7.8e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 89
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-00-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R8pSBYZ3CartZeIbJisB5L9Y"
+  }
+}

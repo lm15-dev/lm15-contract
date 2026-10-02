@@ -1,0 +1,32 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    }
+  },
+  "status": 200,
+  "body": "data: {\"id\":\"p3dwdCG-fdNmn-a4452844de5df3e9\",\"object\":\"chat.completion.chunk\",\"created\":1790959314,\"choices\":[{\"index\":0,\"text\":\"Ok\",\"logprobs\":null,\"finish_reason\":null,\"seed\":null,\"delta\":{\"token_id\":11839,\"role\":\"assistant\",\"content\":\"Ok\"}}],\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"usage\":null}\n\ndata: {\"id\":\"p3dwdCG-fdNmn-a4452844de5df3e9\",\"object\":\"chat.completion.chunk\",\"created\":1790959314,\"choices\":[{\"index\":0,\"text\":\".\",\"logprobs\":null,\"finish_reason\":null,\"seed\":null,\"delta\":{\"token_id\":13,\"role\":\"assistant\",\"content\":\".\"}}],\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"usage\":null}\n\ndata: {\"id\":\"p3dwdCG-fdNmn-a4452844de5df3e9\",\"object\":\"chat.completion.chunk\",\"created\":1790959314,\"choices\":[{\"index\":0,\"text\":\"\",\"logprobs\":null,\"finish_reason\":\"stop\",\"seed\":340655576904912260,\"delta\":{\"token_id\":128009,\"role\":\"assistant\",\"content\":\"\"}}],\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"usage\":{\"prompt_tokens\":38,\"completion_tokens\":3,\"total_tokens\":41,\"cached_tokens\":0}}\n\ndata: [DONE]\n\n",
+  "timestamp": "2026-10-02T16-41-54Z",
+  "response_headers": {
+    "Content-Type": "text/event-stream;charset=utf-8",
+    "x-request-id": "p3dwdCG-fdNmn-a4452844de5df3e9"
+  }
+}

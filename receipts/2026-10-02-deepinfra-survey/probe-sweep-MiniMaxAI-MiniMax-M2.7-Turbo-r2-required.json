@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RhgOLPEc1cxtqbWko9GjkpAr",
+    "object": "chat.completion",
+    "created": 1790961059,
+    "model": "MiniMaxAI/MiniMax-M3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user just said \"Say ok.\" This is a simple request. I should respond with \"ok\" as requested.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 406,
+      "total_tokens": 434,
+      "completion_tokens": 28,
+      "estimated_cost": 0.000115808,
+      "prompt_tokens_details": {
+        "cached_tokens": 128,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-10-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RhgOLPEc1cxtqbWko9GjkpAr"
+  }
+}

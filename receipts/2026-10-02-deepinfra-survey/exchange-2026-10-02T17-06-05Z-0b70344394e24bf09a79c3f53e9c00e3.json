@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-06-05Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "zai-org/GLM-5.3-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "5ef18eef49389e69b652252ea41c901823a849cc172ce6e1deff8da3cbfbd5c6",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "13aafe4a3a8304ad84e48782ed3c0cae7f84fada3e6d5b78bccf9c4e45eee40f",
+  "response_bytes": 635,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

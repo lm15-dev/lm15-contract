@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-13-31Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "9e076d4653222e8cbb76719c21a63400f49479269bdfeb107ceb82f39a928d55",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "7f69d6047af9bf390135c843285a9d033f4cda6e1d607b244d228d579ab59fff",
+  "response_bytes": 458,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

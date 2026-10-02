@@ -1,0 +1,78 @@
+{
+  "id": "mistral",
+  "name": "Mistral",
+  "dialect": "openai-chat",
+  "base_url": "https://api.mistral.ai/v1",
+  "env_key": "MISTRAL_API_KEY",
+  "console_url": "https://console.mistral.ai/api-keys",
+  "terms_url": "https://legal.mistral.ai/terms/get-started/",
+  "litellm_prefix": "mistral",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://api.mistral.ai/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key MISTRAL_API_KEY: not visible in the docs page (rendered by JavaScript) — confirm at sign-up",
+    "Mistral's own Conversations API is a different wire (kind C); this candidate is its Chat Completions endpoint. Its 401 body is {\"detail\": …}, not an OpenAI error envelope: check the error mapping in the report",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:codestral",
+      "litellm:mistral",
+      "litellm:text-completion-codestral",
+      "pi:mistral"
+    ],
+    "base_urls": [],
+    "env_keys": [
+      "MISTRAL_API_KEY"
+    ],
+    "model_hints": [
+      "codestral-latest",
+      "codestral/codestral-2405",
+      "codestral/codestral-latest",
+      "devstral-2512",
+      "devstral-latest",
+      "devstral-medium-2507",
+      "devstral-medium-latest",
+      "devstral-small-2505",
+      "devstral-small-2507",
+      "labs-devstral-small-2512",
+      "magistral-medium-latest",
+      "ministral-3b-latest",
+      "ministral-8b-latest",
+      "mistral-large-2411",
+      "mistral-large-2512",
+      "mistral-large-latest",
+      "mistral-medium-2505",
+      "mistral-medium-2508",
+      "mistral-medium-2604",
+      "mistral-medium-3.5",
+      "mistral-medium-latest",
+      "mistral-nemo",
+      "mistral-small-2506",
+      "mistral-small-2603",
+      "mistral-small-latest",
+      "mistral/codestral-2405",
+      "mistral/codestral-2508",
+      "mistral/codestral-latest",
+      "mistral/codestral-mamba-latest",
+      "mistral/devstral-2512",
+      "mistral/devstral-latest",
+      "mistral/devstral-medium-2507",
+      "mistral/devstral-medium-latest",
+      "mistral/devstral-small-2505",
+      "mistral/devstral-small-2507",
+      "mistral/devstral-small-latest",
+      "mistral/glm-5-2",
+      "mistral/labs-devstral-small-2512",
+      "mistral/labs-leanstral-1-5",
+      "mistral/labs-leanstral-1-5-1"
+    ]
+  },
+  "docs_url": "https://docs.mistral.ai/api"
+}

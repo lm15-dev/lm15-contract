@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T16-50-20Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "Qwen/Qwen3.8-Flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "d764a1a2e50425508a3fb16246b7b853231b5cb3eb97a28efc2b627e9e8ab148",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d40c137cb9e582b51916cea86e2a3036ca57ccbb1891332f90d36cbfcfbe5d38",
+  "response_bytes": 689,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

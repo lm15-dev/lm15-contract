@@ -1,0 +1,47 @@
+{
+  "id": "minimax",
+  "name": "MiniMax",
+  "dialect": "openai-chat",
+  "base_url": "https://api.minimax.io/v1",
+  "env_key": "MINIMAX_API_KEY",
+  "console_url": "https://platform.minimax.io/console/access",
+  "terms_url": "https://platform.minimax.io/protocol/terms-of-service",
+  "litellm_prefix": "minimax",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://api.minimax.io/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key MINIMAX_API_KEY: not visible in the docs page (rendered by JavaScript) — confirm at sign-up",
+    "MiniMax also serves the Anthropic Messages wire (Pi uses …/anthropic): a second lm15 row, minimax-anthropic, once the survey kit speaks that wire",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:minimax",
+      "pi:minimax",
+      "pi:minimax-cn"
+    ],
+    "base_urls": [],
+    "env_keys": [
+      "MINIMAX_API_KEY",
+      "MINIMAX_CN_API_KEY"
+    ],
+    "model_hints": [
+      "MiniMax-M2.7",
+      "MiniMax-M2.7-highspeed",
+      "MiniMax-M3",
+      "minimax/MiniMax-M2",
+      "minimax/MiniMax-M2.1",
+      "minimax/MiniMax-M2.1-lightning",
+      "minimax/MiniMax-M2.5",
+      "minimax/MiniMax-M2.5-lightning",
+      "minimax/MiniMax-M3"
+    ]
+  },
+  "docs_url": "https://platform.minimax.io/docs/api-reference/text-openai-api"
+}

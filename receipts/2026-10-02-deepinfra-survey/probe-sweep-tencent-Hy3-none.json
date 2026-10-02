@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "tencent/Hy3",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RFkH2FADrluGhQ1wShs0ddsk",
+    "object": "chat.completion",
+    "created": 1790960468,
+    "model": "tencent/Hy3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don’t have access to a live weather tool or real-time data, so I can’t pull the current conditions for Paris directly.  \n\nYou can check the latest Paris weather quickly on sites like:\n- [Weather.com](https://weather.com)\n- [AccuWeather](https://www.accuweather.com)\n- A search for “Paris weather” on Google or your phone’s weather app\n\nIf you’d like, tell me the **date** you’re asking about and I can describe typical weather patterns for Paris in that season.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "total_tokens": 144,
+      "completion_tokens": 118,
+      "estimated_cost": 6.591999999999999e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-01-06Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RFkH2FADrluGhQ1wShs0ddsk"
+  }
+}

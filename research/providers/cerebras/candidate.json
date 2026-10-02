@@ -1,0 +1,48 @@
+{
+  "id": "cerebras",
+  "name": "Cerebras",
+  "dialect": "openai-chat",
+  "base_url": "https://api.cerebras.ai/v1",
+  "env_key": "CEREBRAS_API_KEY",
+  "console_url": "https://cloud.cerebras.ai/platform/apikeys",
+  "terms_url": "https://www.cerebras.ai/terms-of-service",
+  "litellm_prefix": "cerebras",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://api.cerebras.ai/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key CEREBRAS_API_KEY: named in the docs page (2026-10-02)",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:cerebras",
+      "pi:cerebras"
+    ],
+    "base_urls": [
+      "https://api.cerebras.ai/v1"
+    ],
+    "env_keys": [
+      "CEREBRAS_API_KEY"
+    ],
+    "model_hints": [
+      "cerebras/gemma-4-31b",
+      "cerebras/gpt-oss-120b",
+      "cerebras/llama-3.3-70b",
+      "cerebras/llama3.1-70b",
+      "cerebras/llama3.1-8b",
+      "cerebras/qwen-3-32b",
+      "cerebras/qwen-3.8-27b",
+      "cerebras/zai-glm-4.6",
+      "cerebras/zai-glm-4.7",
+      "gpt-oss-120b",
+      "qwen-3.8-27b"
+    ]
+  },
+  "docs_url": "https://inference-docs.cerebras.ai/api-reference/chat-completions"
+}

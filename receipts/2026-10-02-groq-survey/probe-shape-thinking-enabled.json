@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "thinking": {
+        "type": "enabled"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "property 'thinking' is unsupported",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-10-02T16-47-08Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr6c8xe32s4z828xq5q39v"
+  }
+}

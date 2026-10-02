@@ -1,0 +1,95 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "max_tokens": 800,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "The weather in Paris is currently **22°C and sunny** ☀️ — beautiful conditions! Perfect weather for a stroll along the Seine or a visit to a café terrace.",
+          "reasoning_content": "The tool returned the weather in Paris: 22C and sunny. Simple response.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959578,
+    "id": "202610030046179accf93622ca43d1",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202610030046179accf93622ca43d1",
+    "usage": {
+      "completion_tokens": 54,
+      "completion_tokens_details": {
+        "reasoning_tokens": 17
+      },
+      "prompt_tokens": 182,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 236
+    }
+  },
+  "timestamp": "2026-10-02T16-46-16Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "1c50729b-ec91-4aec-96f4-0f2ef30f80cd"
+  }
+}

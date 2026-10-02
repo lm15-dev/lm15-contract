@@ -1,0 +1,103 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What's the weather in Paris?"
+        },
+        {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "id": "call_probe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_probe",
+          "content": "22C and sunny"
+        }
+      ],
+      "max_completion_tokens": 800,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-c467c768-7a95-4eee-a479-748331820782",
+    "object": "chat.completion",
+    "created": 1790959641,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The current weather in Paris is 22 °C and sunny.",
+          "reasoning": "We have a user question: \"What's the weather in Paris?\" The assistant responded with calling the function get_weather with city Paris. Then the function returned \"22C and sunny\". The assistant should now respond with that information. The conversation shows that the assistant called the function and got the result. According to the system instructions: \"You are ChatGPT, a large language model trained by OpenAI.\" The user asked for weather. The assistant used function. Now we need to provide an answer to the user. The function call returned \"22C and sunny\". So the assistant should say: \"The weather in Paris is 22°C and sunny.\" Possibly mention the source or something. But just answer.\n\nWe should comply with policies. No issues. The answer is safe."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.00301687,
+      "prompt_tokens": 154,
+      "prompt_time": 0.008623017,
+      "completion_tokens": 178,
+      "completion_time": 0.194766539,
+      "total_tokens": 332,
+      "total_time": 0.203389556,
+      "completion_tokens_details": {
+        "reasoning_tokens": 156
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_99996fee8e",
+    "x_groq": {
+      "id": "req_01m3yr6s28ef5b6ceaqg085y2q",
+      "seed": 1884974
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-47-21Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr6s28ef5b6ceaqg085y2q"
+  }
+}

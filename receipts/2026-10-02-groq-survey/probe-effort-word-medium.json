@@ -1,0 +1,65 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "medium"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-ca242e55-9042-47c5-9cc6-61a6120deca1",
+    "object": "chat.completion",
+    "created": 1790959624,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning": "The user wants the product of 17*23. It's 391. Should reply just the number."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.031359727,
+      "prompt_tokens": 84,
+      "prompt_time": 0.00396564,
+      "completion_tokens": 32,
+      "completion_time": 0.034573027,
+      "total_tokens": 116,
+      "total_time": 0.038538667,
+      "completion_tokens_details": {
+        "reasoning_tokens": 22
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_92d51d08e5",
+    "x_groq": {
+      "id": "req_01m3yr6843ekqsbx8f9rvbqj45",
+      "seed": 243503546
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-47-04Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr6843ekqsbx8f9rvbqj45"
+  }
+}

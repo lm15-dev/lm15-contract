@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwiis-4YNCb4-a44528b95f70f3e9",
+    "object": "chat.completion",
+    "created": 1790959333,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "seed": 7944857689931595000,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": "{\"city\": \"Tokyo\", \"country\": \"Japan\"}",
+          "tool_calls": []
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 42,
+      "completion_tokens": 15,
+      "total_tokens": 57,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-10-02T16-42-13Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwiis-4YNCb4-a44528b95f70f3e9"
+  }
+}

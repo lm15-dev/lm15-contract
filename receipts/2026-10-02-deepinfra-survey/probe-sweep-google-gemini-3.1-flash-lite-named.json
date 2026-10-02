@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "google/gemini-3.1-flash-lite",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RyOOVzBIOeSgjVJMET3gSnDf",
+    "object": "chat.completion",
+    "created": 1790960525,
+    "model": "google/gemini-3.1-flash-lite",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_1257260",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"ok\"}"
+              },
+              "extra_content": {
+                "google": {
+                  "thought_signature": "AY89a1/+M/BuI/d6jqIwWNzPCPbDusOyg3LkK0HXnY0LZzb077kAfvPMC4B+v/5hRlBE7jJlqmkQ7/m/tvYc2lGV54LJsCM3Z4lYh3Oppf0+B6GNATuo9B0o"
+                }
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "total_tokens": 42,
+      "completion_tokens": 16,
+      "estimated_cost": 3.0499999999999996e-05,
+      "prompt_tokens_details": null,
+      "extra_properties": {
+        "google": {
+          "traffic_type": "ON_DEMAND"
+        }
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-02-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RyOOVzBIOeSgjVJMET3gSnDf"
+  }
+}

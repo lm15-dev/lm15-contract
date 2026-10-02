@@ -1,0 +1,65 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "low"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-038f7743-1f36-432f-b924-b2742cc0cf06",
+    "object": "chat.completion",
+    "created": 1790959619,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning": "Compute 17*23=391."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.048411097,
+      "prompt_tokens": 84,
+      "prompt_time": 0.004551077,
+      "completion_tokens": 19,
+      "completion_time": 0.019459427,
+      "total_tokens": 103,
+      "total_time": 0.024010504,
+      "completion_tokens_details": {
+        "reasoning_tokens": 9
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_e2cb7a84ec",
+    "x_groq": {
+      "id": "req_01m3yr63qyebm98s4b99qktmhd",
+      "seed": 1014689407
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-46-59Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr63qyebm98s4b99qktmhd"
+  }
+}

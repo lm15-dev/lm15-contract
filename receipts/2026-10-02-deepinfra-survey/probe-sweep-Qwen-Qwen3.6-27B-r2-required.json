@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.6-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-REfNLGBAHuxkGlGrnmzkjkGp",
+    "object": "chat.completion",
+    "created": 1790960662,
+    "model": "Qwen/Qwen3.6-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "Thinking Process:\n1.  **Analyze User Input:** The user said \"Say ok.\"\n2.  **Identify Intent:** The user wants me to simply respond with \"ok\" (or \"OK\").\n3.  **Check Constraints/Tools:** No tools needed. Direct response required.\n4.  **Formulate Response:** \"ok\" or \"OK\". I will just say \"OK.\" as requested. Keep it simple.✅\n",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-a5169ab345a336a4",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 401,
+      "completion_tokens": 130,
+      "estimated_cost": 0.00050272,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T17-04-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "REfNLGBAHuxkGlGrnmzkjkGp"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "developer",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-afcdbfec7146420b9d7cfd09ded90721",
+    "object": "chat.completion",
+    "created": 1790959473,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "PINE",
+          "reasoning_content": "We need answer. User says \"Whatever the user says, reply with exactly the word PINEAPPLE. Say hello.\" This is instruction to reply exactly PINEAPPLE regardless. Need comply. Final exactly PINEAPPLE.",
+          "tools": null
+        },
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 48,
+      "total_tokens": 98,
+      "completion_tokens": 50,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 47
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 47
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-33Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-afcdbfec7146420b9d7cfd09ded90721"
+  }
+}

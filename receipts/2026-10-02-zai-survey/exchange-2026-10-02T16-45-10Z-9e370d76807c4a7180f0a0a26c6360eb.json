@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T16-45-10Z",
+  "provider": "zai",
+  "status": 200,
+  "model": "glm-5.3-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "high"
+    }
+  },
+  "request_sha256": "2d4468c2654f0b43b0fa00f6a45dbe8f6214bb0ac934e2174d5a5dfb61b48ab8",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2c7981b77fbb81ff36fda818c49e7857e68b3a174c1106781b9b25196d083118",
+  "response_bytes": 450,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

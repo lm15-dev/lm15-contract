@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "lm15-survey/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "id": "p3dwkaM-2kFHot-a44528dd2871f3e9",
+    "error": {
+      "message": "Unable to access model lm15-survey/no-such-model. Please visit https://api.together.ai/models to view the list of supported models.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "model_not_available"
+    }
+  },
+  "timestamp": "2026-10-02T16-42-19Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwkaM-2kFHot-a44528dd2871f3e9"
+  }
+}

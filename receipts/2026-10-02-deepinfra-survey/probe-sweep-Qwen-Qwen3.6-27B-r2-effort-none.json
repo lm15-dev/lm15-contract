@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.6-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RQWyLqberwuR3cdwH5Lpx8Ow",
+    "object": "chat.completion",
+    "created": 1790960715,
+    "model": "Qwen/Qwen3.6-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 27,
+      "total_tokens": 31,
+      "completion_tokens": 4,
+      "estimated_cost": 2.144e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T17-05-15Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RQWyLqberwuR3cdwH5Lpx8Ow"
+  }
+}

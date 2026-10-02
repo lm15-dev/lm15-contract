@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "MiniMaxAI/MiniMax-M2.7-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R1gPTNf0Ehhxu6SmxQgZvFux",
+    "object": "chat.completion",
+    "created": 1790960270,
+    "model": "MiniMaxAI/MiniMax-M3",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to any tools in this conversation, so I'm unable to look up real-time weather information for Paris. I can suggest some alternatives:\n\n1. **Check a weather website**: Sites like [weather.com](https://weather.com), [AccuWeather](https://www.accuweather.com), or the [BBC Weather](https://www.bbc.co.uk/weather) page for Paris.\n2. **Use a search engine**: A quick search for \"Paris weather\" will give you current conditions and forecast.\n3. **Ask a voice assistant**: Siri, Google Assistant, or Alexa can provide instant weather updates.\n\nThat said, here's some **general climate information** about Paris:\n- **Summer (June–August)**: Warm, averaging 15–25°C (59–77°F), with occasional heatwaves.\n- **Winter (December–February)**: Cool and damp, averaging 3–7°C (37–45°F); snow is rare.\n- **Spring & Autumn**: Mild and pleasant, with average temperatures around 10–18°C (50–64°F).\n- Rain can occur year-round, so an umbrella is always handy!\n\nWould you like help with anything else?",
+          "reasoning_content": "The user is asking about the weather in Paris and requesting that I use a tool. However, I don't have any tools available to me in this conversation. I should let the user know that I don't have access to a weather tool or current data, and I cannot check real-time weather information.\n\nLet me be clear about my limitations here. I should:\n1. Acknowledge the request\n2. Explain that I don't have tools available\n3. Offer alternatives or general information\n\nI could provide some general climate information about Paris, but I should be clear that I cannot provide real-time weather data.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 187,
+      "total_tokens": 555,
+      "completion_tokens": 368,
+      "estimated_cost": 0.0004284880000000001,
+      "prompt_tokens_details": {
+        "cached_tokens": 128,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-57-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R1gPTNf0Ehhxu6SmxQgZvFux"
+  }
+}

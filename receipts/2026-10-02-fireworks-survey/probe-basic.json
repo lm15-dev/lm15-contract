@@ -1,0 +1,59 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-92dd2b942d854c029bc1644d8af0fa7e",
+    "object": "chat.completion",
+    "created": 1790959463,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user just said \"Say ok.\" This is a simple request. I should just say \"ok\" or \"Ok.\" Nothing more needed.",
+          "tools": null
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 33,
+      "total_tokens": 65,
+      "completion_tokens": 32,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 29
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 29
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-23Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-92dd2b942d854c029bc1644d8af0fa7e"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R7ul3vclbLZV5CfKG1PgcMhh",
+    "object": "chat.completion",
+    "created": 1790959807,
+    "model": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "total_tokens": 25,
+      "completion_tokens": 2,
+      "estimated_cost": 2.9e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-50-07Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R7ul3vclbLZV5CfKG1PgcMhh"
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ByteDance/Seed-2.0-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RxdPPynH7GsNglBSePKM36vb",
+    "object": "chat.completion",
+    "created": 1790962208,
+    "model": "ByteDance/Seed-2.0-mini",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "Got it, let's see. The user asked about Paris's weather and said to use the tool. First, wait, I need to use the weather tool right? Wait, actually, first I should activate the weather plugin. Oh right, the user wants to use the weather tool for Paris. Let me structure it properly. Wait, the user's question is asking for Paris weather, so I need to call the get_current_weather tool with location Paris, France probably? Let me make sure. Let's do the correct tool call format. Oh right, the tool is get_current_weather, parameters location \"Paris, France, unit maybe standard? Or wait, usually people might use Celsius, but wait the standard is okay, or just let's set location as Paris, maybe specify unit for Paris, France. Wait, actually the standard tool usage. Let me write it properly. So the assistant should call the get_current_weather tool with {\"location\": \"Paris, France\". Wait, no, the standard way. Let me format it correctly as a tool use block. Wait, the proper JSON within <|FunctionCallBegin|> and <|FunctionCallEnd|>. So:\n\n<|FunctionCallBegin|>[{\"name\":\"get_current_weather\",\"parameters\":{\"location\":\"Paris, France\"}}]<|FunctionCallEnd|>\n\nThat's right, that's the correct tool call. Wait, should I include unit? Maybe if they want Fahrenheit or Celsius, but the default is usually okay, but maybe specify unit as 'celsius'? Wait, no, the tool's parameters might accept unit, but since the user didn't specify, just location is okay. Yeah, that's right. Let me make sure the JSON is valid. Yep, that's the right tool call for Paris weather.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_4hrhhfegmkmtn8u8tpv0m8vv",
+              "type": "function",
+              "function": {
+                "name": "get_current_weather",
+                "arguments": "{\"location\":\"Paris, France\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 59,
+      "total_tokens": 458,
+      "completion_tokens": 399,
+      "estimated_cost": 0.00016550000000000004,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 369
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-30-03Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RxdPPynH7GsNglBSePKM36vb"
+  }
+}

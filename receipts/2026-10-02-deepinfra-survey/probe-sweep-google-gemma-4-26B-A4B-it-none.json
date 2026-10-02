@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "google/gemma-4-26B-A4B-it",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RaJ6Y2HlDdhH67SmlShLKUWm",
+    "object": "chat.completion",
+    "created": 1790960339,
+    "model": "google/gemma-4-26B-A4B-it",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I do not have access to a weather tool or any other external tools by default. To provide you with the weather in Paris, I would need you to provide a specific tool definition and endpoint in the context.",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 24,
+      "total_tokens": 67,
+      "completion_tokens": 43,
+      "estimated_cost": 1.63e-05,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-58-58Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RaJ6Y2HlDdhH67SmlShLKUWm"
+  }
+}

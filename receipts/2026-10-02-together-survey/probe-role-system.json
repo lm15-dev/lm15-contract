@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwdc7-fdNmn-a445284d6fecf3e9",
+    "object": "chat.completion",
+    "created": 1790959316,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "seed": 5648387168591479000,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": "PINEAPPLE",
+          "tool_calls": []
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 52,
+      "completion_tokens": 4,
+      "total_tokens": 56,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-10-02T16-41-56Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwdc7-fdNmn-a445284d6fecf3e9"
+  }
+}

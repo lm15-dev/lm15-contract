@@ -1,0 +1,78 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "max_completion_tokens": 200,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "place",
+          "strict": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R1ziN4dRIBbBY2gVBjVznfNC",
+    "object": "chat.completion",
+    "created": 1790959465,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "{ \n  \"city\": \"Tokyo\",\n  \"country\": \"Japan\"\n}",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 17,
+      "total_tokens": 36,
+      "completion_tokens": 19,
+      "estimated_cost": 7.78e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-44-24Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R1ziN4dRIBbBY2gVBjVznfNC"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "developer",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_tokens": 50
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1214",
+      "message": "Incorrect role information"
+    }
+  },
+  "timestamp": "2026-10-02T16-44-22Z",
+  "response_headers": {
+    "X-Request-ID": "55aae496-79b6-40e8-a1e7-508c80bba6a4"
+  }
+}

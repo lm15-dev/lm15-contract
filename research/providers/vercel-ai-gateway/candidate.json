@@ -1,0 +1,76 @@
+{
+  "id": "vercel-ai-gateway",
+  "name": "Vercel AI Gateway",
+  "dialect": "openai-chat",
+  "base_url": "https://ai-gateway.vercel.sh/v1",
+  "env_key": "AI_GATEWAY_API_KEY",
+  "console_url": "https://vercel.com/dashboard/ai-gateway",
+  "terms_url": "https://vercel.com/legal/terms",
+  "litellm_prefix": "vercel_ai_gateway",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://ai-gateway.vercel.sh/v1/chat/completions without a key answered 401 (2026-10-02): the endpoint exists",
+    "env_key AI_GATEWAY_API_KEY: named in the docs page (2026-10-02)",
+    "a gateway: model ids are vendor/model and the behaviour depends on the upstream; survey two upstreams (an OpenAI model and an open model) as plain and reasoner",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:vercel_ai_gateway",
+      "pi:vercel-ai-gateway"
+    ],
+    "base_urls": [],
+    "env_keys": [
+      "AI_GATEWAY_API_KEY"
+    ],
+    "model_hints": [
+      "alibaba/qwen-3-14b",
+      "alibaba/qwen-3-235b",
+      "alibaba/qwen-3-30b",
+      "alibaba/qwen-3-32b",
+      "alibaba/qwen-3.6-max-preview",
+      "alibaba/qwen3-235b-a22b-thinking",
+      "alibaba/qwen3-coder",
+      "alibaba/qwen3-coder-30b-a3b",
+      "alibaba/qwen3-coder-next",
+      "alibaba/qwen3-coder-plus",
+      "alibaba/qwen3-max",
+      "alibaba/qwen3-max-preview",
+      "alibaba/qwen3-max-thinking",
+      "alibaba/qwen3-next-80b-a3b-instruct",
+      "alibaba/qwen3-next-80b-a3b-thinking",
+      "alibaba/qwen3-vl-235b-a22b-instruct",
+      "alibaba/qwen3-vl-instruct",
+      "alibaba/qwen3-vl-thinking",
+      "alibaba/qwen3.5-flash",
+      "alibaba/qwen3.5-plus",
+      "alibaba/qwen3.6-27b",
+      "alibaba/qwen3.6-plus",
+      "alibaba/qwen3.7-flash",
+      "alibaba/qwen3.7-max",
+      "alibaba/qwen3.7-plus",
+      "alibaba/qwen3.8-2.4t-a95b",
+      "alibaba/qwen3.8-27b",
+      "alibaba/qwen3.8-flash",
+      "alibaba/qwen3.8-max",
+      "alibaba/qwen3.8-max-0902",
+      "alibaba/qwen3.8-max-prime",
+      "alibaba/qwen3.8-omni-flash",
+      "amazon/nova-2-lite",
+      "amazon/nova-lite",
+      "amazon/nova-micro",
+      "amazon/nova-pro",
+      "anthropic/claude-3-haiku",
+      "anthropic/claude-fable-5",
+      "anthropic/claude-fable-5.1",
+      "anthropic/claude-haiku-4.5"
+    ]
+  },
+  "docs_url": "https://vercel.com/docs/ai-gateway/sdks-and-apis/openai-chat-completions"
+}

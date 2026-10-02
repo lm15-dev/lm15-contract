@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-10-02T16-44-34Z",
+  "provider": "deepseek",
+  "status": 400,
+  "model": "lm15-survey/no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "lm15-survey/no-such-model",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 10
+    }
+  },
+  "request_sha256": "b69e924328d411244bdb32d1926b29439591c138253a8715e154644c7587438d",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b8fd4106cb9fc65468fb19ebe44084d3ccf87fd423d3414192883aa1fa04c2c4",
+  "response_bytes": 258,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

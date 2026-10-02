@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50,
+      "user": "lm15-survey"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwecx-fdNmn-a4452862ce9ef3e9",
+    "object": "chat.completion",
+    "created": 1790959319,
+    "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+    "prompt": [],
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "seed": 18172463548707303000,
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "tool_calls": []
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 38,
+      "completion_tokens": 3,
+      "total_tokens": 41,
+      "cached_tokens": 0
+    }
+  },
+  "timestamp": "2026-10-02T16-41-59Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwecx-fdNmn-a4452862ce9ef3e9"
+  }
+}

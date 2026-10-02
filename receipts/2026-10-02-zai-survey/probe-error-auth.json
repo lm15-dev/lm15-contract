@@ -1,0 +1,33 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "error": {
+      "code": "401",
+      "message": "token expired or incorrect"
+    }
+  },
+  "timestamp": "2026-10-02T16-45-05Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-ID": "c71055ef-b6af-4d86-b914-3b599a59438c"
+  }
+}

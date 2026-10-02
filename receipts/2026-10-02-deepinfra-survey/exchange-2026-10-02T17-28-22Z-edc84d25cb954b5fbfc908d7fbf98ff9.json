@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-28-22Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "9f7b9973b4ba2ac9ac6f5d0d31fd9792d398863596436e36089338bda2cf77e7",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b405b3c6184a7aa73993a38c2c85c0fc61923418d6e49b1d33b5e5265eaa83eb",
+  "response_bytes": 491,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

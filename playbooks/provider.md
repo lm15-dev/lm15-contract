@@ -39,6 +39,7 @@ whose evidence it cannot cite:
 |---|---|
 | candidate | who asked, and why |
 | researched | `scrapes/<p>/`; terms and privacy frozen with sha256 under `sources/`; the terms verdict written |
+| surveyed | `receipts/<date>-<p>-survey/` and `research/providers/<p>/SURVEY.md` (the survey kit, § 3) |
 | implemented | registry row, access policy, compat preset in lm15-python |
 | offline-conformant | support-matrix row; auth case; tables exported; every SDK green at the pin |
 | live-verified | `receipts/<date>-<p>/`, cases, error envelopes, the change entry's receipt table |
@@ -54,6 +55,22 @@ change entry flags as such, never silently supported.
 forbid recording (Parasail § 2.2(h): no published performance data, so its
 receipts carry no latency), whether a subscription may be used by a third
 party, where data is stored. Freeze them. A verdict "not allowed" ends here.
+
+**Survey (contract)** — a Chat Completions server, before any lm15 code:
+
+- `python3 research/providers/survey.py init <p>` writes `<p>/candidate.json`
+  (prefilled from the landscape; not evidence) and the dossier skeleton.
+  Confirm the base URL and key variable in the docs; `survey.py models <p>`
+  lists the models to choose the roles from.
+- `survey.py run <p> --env-file ../.env`: ~45 small requests, raw bodies, as a
+  declared provider; `survey.py sweep <p> --models … --repeat 2` for a host
+  with many model families (forced tool choice and reasoning off, per model,
+  the worst of two samples deciding).
+- `survey.py report <p>` writes `SURVEY.md`: every knob with its basis and
+  evidence (`research/providers/_survey_rules.py`, tested by
+  `tools/test_provider_survey.py`), the decisions only you can make, and the
+  code to paste for steps 1–5 below. A **decided** value still goes through
+  the live captures of step 7; a **needs you** value is decided before them.
 
 **Reference (lm15-python)**
 

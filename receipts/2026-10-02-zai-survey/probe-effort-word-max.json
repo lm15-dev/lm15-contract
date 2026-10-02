@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 1500,
+      "reasoning_effort": "max"
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "391",
+          "reasoning_content": "The user is asking for 17 * 23. Let me calculate this.\n\n17 * 23 = 17 * 20 + 17 * 3 = 340 + 51 = 391\n\nThey want just the number.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959519,
+    "id": "202610030045181c8856e1fe0d48c0",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202610030045181c8856e1fe0d48c0",
+    "usage": {
+      "completion_tokens": 53,
+      "completion_tokens_details": {
+        "reasoning_tokens": 49
+      },
+      "prompt_tokens": 25,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 78
+    }
+  },
+  "timestamp": "2026-10-02T16-45-18Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "890cfaa8-9698-4dd0-a020-63b5cc6dc61e"
+  }
+}

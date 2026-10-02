@@ -1,0 +1,208 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RzEdcrGpmadEGWkM3DIB1Qrr",
+    "object": "chat.completion",
+    "created": 1790960412,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "Okay, the user said \"Say ok.\" I need to respond appropriately. Since they just want me to say ok, I should probably just respond with \"ok\" without using any tools. The tools provided are for getting weather, which isn't needed here. So I'll just reply with \"ok.\"\n",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-a3c4aeafa740402a",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a3e9ec0a8876079c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8d792c1a1d1e99be",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bd294f1d6b4080a1",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-900f94955a05b4ff",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8bd0f8dce010bbbd",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-832accf3f0987261",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9a76012228b743f7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-acb50a9ecaa0c2b6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8f351b825b7bb4bf",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a6fb419c00ded3e3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a3658b6dda8e95cf",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ab554a659cb81629",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b0ec1c1d0a35c8fc",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-89b3d1f2e50217f7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9aa22faccf356c6e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 871,
+      "completion_tokens": 600,
+      "estimated_cost": 0.00016626000000000002,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-59-55Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RzEdcrGpmadEGWkM3DIB1Qrr"
+  }
+}

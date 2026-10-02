@@ -1,0 +1,34 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "'reasoning_effort' : value is not one of the allowed values ['none','default','minimal','low','medium','high','xhigh','max']",
+      "type": "invalid_request_error"
+    }
+  },
+  "timestamp": "2026-10-02T16-47-07Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr6b87exk8wfb3mydwhdhr"
+  }
+}

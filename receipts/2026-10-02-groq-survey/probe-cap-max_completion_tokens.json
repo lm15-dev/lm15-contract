@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-4874aed8-2d16-44df-9bc3-4ac383110c23",
+    "object": "chat.completion",
+    "created": 1790959597,
+    "model": "qwen/qwen3.6-27b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "\n<think>\nThe user wants me to count from "
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.004142813,
+      "prompt_tokens": 22,
+      "prompt_time": 0.001484604,
+      "completion_tokens": 8,
+      "completion_time": 0.015916227,
+      "total_tokens": 30,
+      "total_time": 0.017400831
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_c7e30c203c",
+    "x_groq": {
+      "id": "req_01m3yr5e5bepztv0pc1m89fff9",
+      "seed": 1197905099
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-46-37Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr5e5bepztv0pc1m89fff9"
+  }
+}

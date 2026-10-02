@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-10-02T16-44-53Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "openai/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "thinking": {
+        "type": "enabled"
+      }
+    }
+  },
+  "request_sha256": "e0938a73d2cc32f33169eb869820c2e5d7b4e8f901c3127638f4ea1fe0f270ac",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "0c14350777ab51a3eefb637298c7552b97262b9f044ffbd89e2ca5e72bb7a642",
+  "response_bytes": 604,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

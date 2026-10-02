@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R16xEQkDm8tRaA7BquWX1CXz",
+    "object": "chat.completion",
+    "created": 1790960335,
+    "model": "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 18,
+      "total_tokens": 22,
+      "completion_tokens": 4,
+      "estimated_cost": 2.15e-06,
+      "prompt_tokens_details": null
+    }
+  },
+  "timestamp": "2026-10-02T16-58-54Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R16xEQkDm8tRaA7BquWX1CXz"
+  }
+}

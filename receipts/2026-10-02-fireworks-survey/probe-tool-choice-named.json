@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-fefccc48ec36490cb9627ad46b8f00e2",
+    "object": "chat.completion",
+    "created": 1790959489,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user wants me to say ok. Simple.\n\nJust respond \"ok\".\n\nActually the instruction says to use tools if needed. No tool needed here.",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "chatcmpl-tool-be56d18d5c137262",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"x\"}"
+              },
+              "name": null
+            }
+          ],
+          "tools": null
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 292,
+      "total_tokens": 361,
+      "completion_tokens": 69,
+      "prompt_tokens_details": {
+        "cached_tokens": 162
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 30
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 30
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-48Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-fefccc48ec36490cb9627ad46b8f00e2"
+  }
+}

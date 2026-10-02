@@ -1,0 +1,736 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R4aA9TgiIKtLXVo3hB4MuSmI",
+    "object": "chat.completion",
+    "created": 1790962101,
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-b7fda2e409b97b76",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a8110299e94919fe",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Tokyo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bff60c882680e0a7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Sydney\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b4c9e29ed969fb75",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b9a7d817b0425048",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"São Paulo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8b2c4d2db094da45",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Cairo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b782826315a4ef71",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Moscow\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-83e2da59eef174df",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Dubai\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9cd1f6d2d90b262f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Toronto\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9b4f35588c9f4629",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Rio de Janeiro\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9cedb1af56e325b4",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Cape Town\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bdfb792ff1ae98f2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Beijing\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b061bdeef5affff6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Mexico City\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b8a262f3b3491399",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Seoul\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-87282c1787f2f781",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Paris\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8c3be5549f1b325f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Berlin\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-80364169a72bb800",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Bangkok\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bf8316978adec47c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Singapore\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b1231d2059213682",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Mumbai\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9b2c598fdaf70413",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Cairo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a9aa46f8568abfe3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Casablanca\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a4aa2dc507761ab0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Johannesburg\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9089837470a35b1e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Lagos\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a9c3b2ea272dc858",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Oslo\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-99f9f08e19124c9b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Helsinki\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a53b6314560bc9d9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Vienna\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9457c34e09c3d75c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Rome\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-933f481289517841",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Madrid\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-aadfb5e4e2a38534",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Warsaw\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-80859301cee6a4d9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Amsterdam\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-be4a3b01f135d954",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Brussels\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-88bf4a09e01aa33d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Lisbon\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b118047af6bac4d3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Athens\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-95f2d41db7b6bcd3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Dublin\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9710411db56d6912",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Stockholm\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8ae191cb8ee1a01c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Zurich\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b6128d47ee0feb99",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Vancouver\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-843aa3330ea09d50",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Montreal\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8f259e1d1c6ee4bc",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Calgary\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a79c8559f6df3191",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Quebec City\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b9e9f1a0ad5185c6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Ottawa\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8140f1b0e949ca79",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Edmonton\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8cecfe90c2442703",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Halifax\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8ffd86e06c041832",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Winnipeg\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-89fe3933ab7e94a8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Victoria\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8bc87473d097da65",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Iqaluit\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-906af5c127ab2ce0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Yellowknife\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a316fa0804360934",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whitehorse\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-ad6821a893c5e3ff",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"St. John's\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a2bf458d2b755f5d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Charlottetown\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9eb2af3e10a0daf3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Regina\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8a346f4af99592cb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Saskatoon\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b0fe55f971bebaf8",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Victoria\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9821e791218631d9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kamloops\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8f9173a97d92eab7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kelowna\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-add8200b02a4147b",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Vancouver\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b367882c6f6e71e4",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whistler\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bfb41b2f7782937c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Banff\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8c6c05f3379489da",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jasper\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a1ecff8e569987e2",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Revelstoke\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b06b8566f6bf0793",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kootenay\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-85ab61e513bcdce7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whistler\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b55610bfc6121623",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Banff\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bb72f0f83edfa3c5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jasper\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-898ef172dfa4abd5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Revelstoke\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8017b2ea2343b5e0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kootenay\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-857fd2cc2b1df0b5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whistler\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a84115af37f09249",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Banff\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-80f47ce44dc6d71c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jasper\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8a2faa3c9fb068ad",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Revelstoke\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b7b0bdd0e77f1d2e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kootenay\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-845d35a00cb803bb",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whistler\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-af406e1fe290e0de",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Banff\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8f0b98c51e218a04",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jasper\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a5cb0c0b6632e864",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Revelstoke\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-91283ce242de7ec7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kootenay\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bc07386dd89adaf3",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Whistler\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b66a86e37480338c",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Banff\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9c54ae12a9a733ed",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jasper\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9f8322546bd5a613",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Revelstoke\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8a116dfaf171d301",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Kootenay\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9ead6c9b27c862c6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 2271,
+      "completion_tokens": 2000,
+      "estimated_cost": 0.00033626,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-27-51Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R4aA9TgiIKtLXVo3hB4MuSmI"
+  }
+}

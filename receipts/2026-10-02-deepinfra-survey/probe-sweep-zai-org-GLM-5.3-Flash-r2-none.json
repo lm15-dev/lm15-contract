@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RvknUBLUBnzqnCsiDDiCXlyR",
+    "object": "chat.completion",
+    "created": 1790960760,
+    "model": "zai-org/GLM-5.3-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have a weather tool available in this conversation, so I can't check the live weather in Paris for you.\n\nTo get current conditions, you could:\n- Check **weather.com**, **meteofrance.com**, or **bbc.com/weather**\n- Search \"Paris weather\" on Google, which shows current conditions directly\n- Ask a voice assistant (Alexa, Google Assistant, Siri)\n\nIf you have a weather tool you'd like me to use, it would need to be connected to this conversation—but as of now, no tools are available to me. Is there anything else I can help with?",
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "total_tokens": 148,
+      "completion_tokens": 125,
+      "estimated_cost": 3.2975e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-05-53Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RvknUBLUBnzqnCsiDDiCXlyR"
+  }
+}

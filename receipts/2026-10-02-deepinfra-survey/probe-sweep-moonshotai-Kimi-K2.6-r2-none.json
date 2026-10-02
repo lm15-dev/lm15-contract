@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-RrKVdbm9RWGPPL7qyunA12UW",
+    "object": "chat.completion",
+    "created": 1790960932,
+    "model": "moonshotai/Kimi-K2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": " I don't have access to tools or real-time weather data, so I can't check the current weather in Paris right now.\n\nTo get accurate, up-to-date weather information for Paris, I'd recommend:\n\n- **Checking a weather website** like Weather.com, AccuWeather, or Météo-France (the official French meteorological service)\n- **Using a search engine** – simply searching \"Paris weather\" will show current conditions and forecasts\n- **Asking a voice assistant** like Siri, Google Assistant, or Alexa, which typically have live weather integrations\n- **Using a weather app** on your phone\n\nIf you're planning a trip, I can tell you about Paris's general climate patterns by season, average temperatures, or what to pack — just let me know what you need!",
+          "reasoning_content": " The user is asking for the weather in Paris and explicitly says \"Use the tool.\" However, I don't have access to any tools in this environment - I'm a text-based AI without real-time internet access or weather APIs. I should clarify that I don't have tools available to check current weather, but I can provide general information about Paris climate or suggest how they can check the weather themselves.\n\nI should not pretend to use a tool I don't have, nor should I hallucinate current weather data. I need to be honest about my limitations while being helpful.",
+          "name": null,
+          "tool_calls": []
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "total_tokens": 290,
+      "completion_tokens": 271,
+      "estimated_cost": 0.00096275,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-08-52Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "RrKVdbm9RWGPPL7qyunA12UW"
+  }
+}

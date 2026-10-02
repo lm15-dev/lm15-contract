@@ -1,0 +1,208 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "ibm-granite/granite-4.2-8b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-Rn79tpQREdxCJPGreUS5uVsj",
+    "object": "chat.completion",
+    "created": 1790960378,
+    "model": "ibm-granite/granite-4.2-8b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "Okay, the user said \"Say ok.\" I need to respond appropriately. Since there's no tool needed for this, I should just reply with \"ok\" or confirm. But maybe they want me to use a tool? No, the instruction says if the task can't be completed with tools, inform them. But \"say ok\" is straightforward. I'll respond with \"ok\" as per their request.\n",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-ab53731c7e7f0605",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b19f396142374e93",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Los Angeles\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9e20670e5af17b2f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Chicago\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-975168a35c847dbd",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Houston\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-afdfce3be0d87d41",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Phoenix\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8917b96ce02b9191",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Philadelphia\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-9951985c3f8039f0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"San Antonio\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a013b0679536e68e",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"San Diego\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-85b15e89fe9039a1",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Dallas\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-a293c5a56a77b0ae",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"San Jose\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8771e923181cddb9",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Austin\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-8da468405a8a37c5",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Jacksonville\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bab74a62f800bea6",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Fort Worth\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-b88bbe78bd690d77",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Columbus\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-93c07f4ab48654ad",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Charlotte\"}"
+              }
+            },
+            {
+              "id": "chatcmpl-tool-bef66590abaa89d7",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Seattle\"}"
+              }
+            }
+          ]
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "total_tokens": 871,
+      "completion_tokens": 600,
+      "estimated_cost": 0.00016626000000000002,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-59-23Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "Rn79tpQREdxCJPGreUS5uVsj"
+  }
+}

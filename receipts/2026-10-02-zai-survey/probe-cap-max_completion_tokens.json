@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Count from 1 to 50 separated by spaces."
+        }
+      ],
+      "max_completion_tokens": 8
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50",
+          "reasoning_content": "The user wants me to count from 1 to 50 with numbers separated by spaces. This is a simple task.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959447,
+    "id": "20261003004405aeb79c8f9e4c45c1",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261003004405aeb79c8f9e4c45c1",
+    "usage": {
+      "completion_tokens": 125,
+      "completion_tokens_details": {
+        "reasoning_tokens": 24
+      },
+      "prompt_tokens": 23,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 148
+    }
+  },
+  "timestamp": "2026-10-02T16-44-05Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "aa25b94f-aa80-4ac1-b771-8159cd23317e"
+  }
+}

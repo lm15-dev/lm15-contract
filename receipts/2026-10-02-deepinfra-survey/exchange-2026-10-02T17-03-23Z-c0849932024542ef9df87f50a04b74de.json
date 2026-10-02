@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T17-03-23Z",
+  "provider": "deepinfra",
+  "status": 200,
+  "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "10fa8c9d39693e0deecae630103f5761d8e3162b61de69efdd2a26476a6a4f25",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d6f1760571efd228185dd3a0c61dbac6fe34c9e0a6373eaaa18bb950bbfc4e2f",
+  "response_bytes": 457,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

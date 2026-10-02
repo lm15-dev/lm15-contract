@@ -1,0 +1,65 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "high"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-f8cec7af-5b3d-4e50-b7cd-c37a9832643b",
+    "object": "chat.completion",
+    "created": 1790959621,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning": "The user asks: \"What is 17*23? Reply with just the number.\" So the answer: 17 * 23 = 391. The instruction: \"Reply with just the number.\" So output: 391. No additional text.\n\nWe must be careful: The user says \"Reply with just the number.\" So no explanation. Just \"391\". Ensure no leading/trailing spaces. No punctuation? They likely accept \"391\" as the number. Possibly include newline at end. It's okay. Just \"391\". That is the correct answer.\n\nWe need to check if any policy prohibits. It's a simple math. It's allowed. So comply.\n\nThus output: 391."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.031654579,
+      "prompt_tokens": 84,
+      "prompt_time": 0.004716183,
+      "completion_tokens": 150,
+      "completion_time": 0.183367198,
+      "total_tokens": 234,
+      "total_time": 0.188083381,
+      "completion_tokens_details": {
+        "reasoning_tokens": 140
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_92d51d08e5",
+    "x_groq": {
+      "id": "req_01m3yr64tveey84e5xshx439rj",
+      "seed": 1364074995
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-47-00Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr64tveey84e5xshx439rj"
+  }
+}

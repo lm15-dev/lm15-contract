@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "5be90d22-d274-460f-9490-eaeac0a6fdf9",
+    "object": "chat.completion",
+    "created": 1790959464,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need answer user asks weather in Paris use tool. We need call tool? We have no explicit tool namespace listed in prompt, but likely there is a weather tool? In this environment, tools maybe unavailable? We need infer. We can use tool? The instructions say \"Use the tool.\" We need call a tool. But available tools? In this interface, no tools are listed. However as ChatGPT, maybe there is no tool. Need respond? Let's inspect: The user says \"What is the weather in Paris? Use the tool.\" We need maybe use a weather tool. If no tool defined, can't. But we should maybe simulate? We must be truthful. We can say I don't have access to a weather tool in this environment. But they explicitly ask use the tool. In some tasks, there might be hidden tool like web search? We can attempt to call functions? There is no functions namespace in prompt. In OpenAI API, tools can be defined by developer. Here none. So cannot call. We should mention cannot access live weather and suggest checking weather service. But maybe expected to use tool? Could produce a function call? The framework may allow tool_call if tools defined, but not here. If I emit tool call with unknown name, likely error. Best final: I don't have a weather tool available here, so I can't fetch current Paris weather. If you enable one, I can. But user asked \"Use the tool\" maybe we should"
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 41,
+      "completion_tokens": 300,
+      "total_tokens": 341,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 300
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 41
+    },
+    "system_fingerprint": "aeb56401ca74e127821c4f9126dcb669"
+  },
+  "timestamp": "2026-10-02T16-44-24Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

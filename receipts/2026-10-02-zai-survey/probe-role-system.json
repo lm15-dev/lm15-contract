@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_tokens": 50
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "PINEAPPLE",
+          "reasoning_content": "The user said \"Say hello.\" but my instructions are to reply with exactly the word PINEAPPLE no matter what the user says. So I should reply with \"PINEAPPLE\".",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959461,
+    "id": "2026100300441940c1be44e909447c",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026100300441940c1be44e909447c",
+    "usage": {
+      "completion_tokens": 42,
+      "completion_tokens_details": {
+        "reasoning_tokens": 37
+      },
+      "prompt_tokens": 30,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 72
+    }
+  },
+  "timestamp": "2026-10-02T16-44-19Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "6051829d-dbb4-4cbd-b8e8-68bc56ef50b1"
+  }
+}

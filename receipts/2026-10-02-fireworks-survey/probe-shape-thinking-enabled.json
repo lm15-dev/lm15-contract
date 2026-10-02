@@ -1,0 +1,61 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "thinking": {
+        "type": "enabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-728be78707774180a563807dc4616f37",
+    "object": "chat.completion",
+    "created": 1790959517,
+    "model": "accounts/fireworks/models/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "The user asks for multiplication. 17*23 = 391. Wait calculate: 20*23 = 460, minus 3*23 = 69, so 460-69 = 391. Yes.\n\nJust reply with number."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 85,
+      "total_tokens": 146,
+      "completion_tokens": 61,
+      "prompt_tokens_details": {
+        "cached_tokens": 40
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 50
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-45-17Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-728be78707774180a563807dc4616f37"
+  }
+}

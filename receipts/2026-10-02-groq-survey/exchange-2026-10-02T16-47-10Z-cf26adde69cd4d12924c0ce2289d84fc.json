@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-10-02T16-47-10Z",
+  "provider": "groq",
+  "status": 400,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning": {
+        "effort": "low"
+      }
+    }
+  },
+  "request_sha256": "9c2aa57c3b5a96240d9b022a7d966358d22c337a627d73b30981d54ecf201923",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "267ad5b9a8e5622aab4575c5c56f05394027fccf11da7fc59d3950de9e2d87d7",
+  "response_bytes": 91,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

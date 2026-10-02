@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-01df01a3b58645129d7cc8f296d1a41c",
+    "object": "chat.completion",
+    "created": 1790959492,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "We need answer user asks weather in Paris, use tool. Need inspect available tools? No explicit tool list in prompt? We have no tools? The system says API, maybe tools available? I need know. In this interface, likely no tool namespace shown. But user explicitly says use tool. As assistant, I cannot use external tools unless available. However maybe there is a weather tool not listed? In these tasks, we might have tools like web? I need decide. Since no tool available in current environment? The prompt says \"Use the tool.\" We need maybe invoke a function? There is no function definitions in conversation. In prior tasks, there might be hidden tool \"weather\"? But not shown. I cannot call tools. Need respond honestly. Maybe mention I don't have access to weather tools? But user asks direct. Could answer from general knowledge? Weather changes. Need current weather. We can't. Need maybe say I can't check live weather without a tool, but if they provide location/date or enable weather tool. However the instruction \"Use the tool\" suggests expected tool call. Since no tools, final maybe: \"I can't access live weather data in this environment.\" But perhaps they expect me to call a weather tool; if unavailable, maybe not.\n\nLet's consider possibility there is a tool \"weather\" in the platform but omitted from prompt due to interface? In ChatGPT, tools are defined in system. Here none. We cannot hallucinate. Should I produce",
+          "tools": null
+        },
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 41,
+      "total_tokens": 341,
+      "completion_tokens": 300,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 300
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 300
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-51Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-01df01a3b58645129d7cc8f296d1a41c"
+  }
+}

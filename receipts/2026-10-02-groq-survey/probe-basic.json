@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "qwen/qwen3.6-27b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-f18c77f4-7e55-425a-9885-1342b1575623",
+    "object": "chat.completion",
+    "created": 1790959601,
+    "model": "qwen/qwen3.6-27b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "\n<think>\nThe user simply asked me to say \"ok.\" This is a straightforward request. I'll just respond with \"ok.\"\n</think>\n\nok."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.064067956,
+      "prompt_tokens": 13,
+      "prompt_time": 0.000602857,
+      "completion_tokens": 30,
+      "completion_time": 0.057498443,
+      "total_tokens": 43,
+      "total_time": 0.0581013
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_ddcc9cf349",
+    "x_groq": {
+      "id": "req_01m3yr5j0pe95arvefgprtdyw7",
+      "seed": 1318010311
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-10-02T16-46-41Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m3yr5j0pe95arvefgprtdyw7"
+  }
+}

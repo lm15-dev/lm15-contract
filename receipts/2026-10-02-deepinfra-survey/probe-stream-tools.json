@@ -1,0 +1,52 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    }
+  },
+  "status": 200,
+  "body": "data: {\"service_tier\":null,\"id\":\"chatcmpl-R8BRjRRKpL6DYbl6FmF75oke\",\"object\":\"chat.completion.chunk\",\"created\":1790959457,\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"tool_calls\":null},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"service_tier\":\"default\",\"id\":\"chatcmpl-R8BRjRRKpL6DYbl6FmF75oke\",\"object\":\"chat.completion.chunk\",\"created\":1790959457,\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"call_kv5XGqcG5O58IpDHArXVWUU5\",\"function\":{\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\",\"name\":\"get_weather\"},\"type\":\"function\"}]},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"service_tier\":\"default\",\"id\":\"chatcmpl-R8BRjRRKpL6DYbl6FmF75oke\",\"object\":\"chat.completion.chunk\",\"created\":1790959457,\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"tool_calls\":null},\"logprobs\":null,\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":220,\"total_tokens\":234,\"completion_tokens\":14,\"estimated_cost\":null,\"prompt_tokens_details\":null}}\n\ndata: {\"service_tier\":\"default\",\"id\":\"chatcmpl-R8BRjRRKpL6DYbl6FmF75oke\",\"object\":\"chat.completion.chunk\",\"created\":1790959457,\"model\":\"meta-llama/Llama-3.3-70B-Instruct-Turbo\",\"choices\":[],\"usage\":{\"prompt_tokens\":220,\"total_tokens\":234,\"completion_tokens\":14,\"estimated_cost\":0.00002648,\"prompt_tokens_details\":null}}\n\ndata: [DONE]\n\n",
+  "timestamp": "2026-10-02T16-44-17Z",
+  "response_headers": {
+    "Content-Type": "text/event-stream; charset=utf-8",
+    "x-request-id": "R8BRjRRKpL6DYbl6FmF75oke"
+  }
+}

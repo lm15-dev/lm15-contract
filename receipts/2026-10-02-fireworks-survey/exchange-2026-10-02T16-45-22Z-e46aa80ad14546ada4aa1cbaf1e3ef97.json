@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-02T16-45-22Z",
+  "provider": "fireworks",
+  "status": 200,
+  "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "c7279e14436fb3e33686417d046e34d9fda7b04de59ec020c94b27117f6c0797",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d8e17ad8d1fd39eb9c6331da2f6ad684d8fcdbd8e379bac3d8d38a4a4b4a5ea9",
+  "response_bytes": 472,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.fireworks.ai/inference/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $FIREWORKS_API_KEY"
+    },
+    "body": {
+      "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50,
+      "user": "lm15-survey"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-8b0fd00830a446eab47488677e90f7e8",
+    "object": "chat.completion",
+    "created": 1790959477,
+    "model": "accounts/fireworks/models/deepseek-v4p1-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "We need answer user says \"Say ok.\" Need comply exactly maybe \"ok\". We should output ok. Ensure no extra.",
+          "tools": null
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 33,
+      "total_tokens": 61,
+      "completion_tokens": 28,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 25
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 25
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-44-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "X-Request-Id": "chatcmpl-8b0fd00830a446eab47488677e90f7e8"
+  }
+}

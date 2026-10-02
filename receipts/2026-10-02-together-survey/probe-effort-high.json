@@ -1,0 +1,60 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_completion_tokens": 1500,
+      "reasoning_effort": "high"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "p3dwmLM-fdNmn-a44528eff88ff3e9",
+    "object": "chat.completion",
+    "created": 1790959342,
+    "model": "openai/gpt-oss-120b",
+    "system_fingerprint": "default",
+    "prompt": [],
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "tool_calls": [],
+          "reasoning": "The user asks: \"What is 17*23? Reply with just the number.\"\n\nWe need to compute 17 * 23.\n\n17 * 23 = (17 * 20) + (17 * 3) = 340 + 51 = 391.\n\nDouble-check: 23*17 = 23*10=230 +23*7=161 is 230+161=391. Yes.\n\nWe must output just the number: \"391\". No extra text. This matches instructions. It's a straightforward arithmetic request.\n\nThus answer: 391."
+        },
+        "finish_reason": "stop",
+        "seed": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 82,
+      "completion_tokens": 127,
+      "total_tokens": 209,
+      "prompt_tokens_details": {
+        "cached_tokens": 66
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 117
+      }
+    }
+  },
+  "timestamp": "2026-10-02T16-42-22Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "x-request-id": "p3dwmLM-fdNmn-a44528eff88ff3e9"
+  }
+}

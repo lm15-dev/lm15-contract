@@ -1,0 +1,57 @@
+{
+  "id": "nvidia",
+  "name": "NVIDIA",
+  "dialect": "openai-chat",
+  "base_url": "https://integrate.api.nvidia.com/v1",
+  "env_key": "NVIDIA_API_KEY",
+  "console_url": "https://build.nvidia.com/settings/api-keys",
+  "terms_url": null,
+  "litellm_prefix": "nvidia_nim",
+  "models": {
+    "plain": null,
+    "reasoner": null,
+    "off": null,
+    "replayer": null,
+    "always_on": null
+  },
+  "_review": [
+    "base_url: POST https://integrate.api.nvidia.com/v1/chat/completions without a key answered 404 — confirm the documented root with a key",
+    "env_key NVIDIA_API_KEY: not visible in the docs page (rendered by JavaScript) — confirm at sign-up",
+    "terms_url: find the terms of service that cover the API before any live capture",
+    "models: pick the roles with `survey.py models <id> --env-file ../.env` once a key exists; delete this list when confirmed."
+  ],
+  "_upstream": {
+    "keys": [
+      "litellm:nvidia_nim",
+      "pi:nvidia"
+    ],
+    "base_urls": [
+      "https://integrate.api.nvidia.com/v1"
+    ],
+    "env_keys": [
+      "NVIDIA_API_KEY"
+    ],
+    "model_hints": [
+      "google/gemma-3-12b-it",
+      "google/gemma-3-4b-it",
+      "meta/llama-3.2-11b-vision-instruct",
+      "meta/llama-3.2-90b-vision-instruct",
+      "meta/muse-glimmer-30b",
+      "mistralai/mistral-7b-instruct-v0.3",
+      "moonshotai/kimi-k2.6",
+      "moonshotai/kimi-k3",
+      "nvidia/cosmos-reason2-8b",
+      "nvidia/llama-3.1-nemotron-70b-instruct",
+      "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+      "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "nvidia/nemotron-3-super-120b-a12b",
+      "nvidia/nemotron-3-ultra-550b-a55b",
+      "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "openai/gpt-oss-20b",
+      "poolside/laguna-xs-2.1",
+      "z-ai/glm-5.3",
+      "z-ai/glm-5.3-flash"
+    ]
+  },
+  "docs_url": "https://docs.api.nvidia.com/nim/reference/llm-apis"
+}

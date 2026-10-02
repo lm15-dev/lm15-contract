@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_tokens": 100
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "Ok.",
+          "reasoning_content": "The user is asking me to say \"ok\". This is a very simple, harmless request. There's nothing problematic about this. The user just wants me to respond with \"ok\" - perhaps testing, perhaps playing around, perhaps wanting a minimal response.\n\nThe appropriate response is simply \"Ok\" or \"ok\". No need for elaboration, no need for caveats. Just do what they asked. Adding extra text would go against the spirit of the request.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1790959454,
+    "id": "2026100300441112a01cf6fd384ce4",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026100300441112a01cf6fd384ce4",
+    "usage": {
+      "completion_tokens": 97,
+      "completion_tokens_details": {
+        "reasoning_tokens": 93
+      },
+      "prompt_tokens": 15,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 112
+    }
+  },
+  "timestamp": "2026-10-02T16-44-11Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "71784e2d-9412-4843-b0df-9408fed83c12"
+  }
+}

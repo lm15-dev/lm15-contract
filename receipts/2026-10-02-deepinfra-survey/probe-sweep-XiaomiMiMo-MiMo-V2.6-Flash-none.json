@@ -1,0 +1,82 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepinfra.com/v1/openai/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPINFRA_API_KEY"
+    },
+    "body": {
+      "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "service_tier": "default",
+    "id": "chatcmpl-R72ZvZrLEszVfSYOHskn4Nz0",
+    "object": "chat.completion",
+    "created": 1790960456,
+    "model": "XiaomiMiMo/MiMo-V2.6-Flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I appreciate you wanting to check the weather in Paris! However, I don't currently have access to any weather tools or external data sources in this conversation to provide you with real-time weather information.\n\nHere are some alternatives I'd suggest:\n\n1. **Weather websites**: You can visit sites like [weather.com](https://www.weather.com) or [AccuWeather](https://www.accuweather.com).\n2. **Search engine**: Simply Google \"weather in Paris\" for an instant forecast.\n3. **Weather apps**: Apps like The Weather Channel, Weather Underground, or Apple/Google's built-in weather apps.\n\nIf you'd like, I can share general/typical weather patterns for Paris by season! 🌤️",
+          "reasoning_content": "The user is asking me to check the weather in Paris using a tool. However, I don't have access to any weather tools or external APIs in this conversation. I should let the user know that I don't have the ability to check real-time weather data.",
+          "name": null,
+          "tool_calls": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 18,
+      "total_tokens": 222,
+      "completion_tokens": 204,
+      "estimated_cost": 5.964e-05,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 53
+      }
+    }
+  },
+  "timestamp": "2026-10-02T17-00-48Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "R72ZvZrLEszVfSYOHskn4Nz0"
+  }
+}
