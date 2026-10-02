@@ -1,0 +1,1111 @@
+{
+  "_doc": [
+    "Reviewed classification of every Pi and LiteLLM provider against lm15 (tools/provider_landscape.py).",
+    "status: supported | partial | missing | out-of-scope | not-a-provider. supported/partial list the lm15 provider strings",
+    "(spec/support-matrix.json) that serve the service; partial needs a note and may carry model_rules [glob, lm15 provider]",
+    "matched against upstream model ids in order. out-of-scope and not-a-provider need a note. `service` groups ids across",
+    "the two libraries in the report; `distinct_from` silences the stale-name check for a provider that only shares a name.",
+    "Upstream providers that offer only surfaces lm15 rules out are classified automatically and need no entry.",
+    "Classification is judgment over upstream listings, not live evidence; support claims live in the support matrix."
+  ],
+  "providers": {
+    "litellm:a2a": {
+      "status": "not-a-provider",
+      "note": "agent-to-agent protocol bridge"
+    },
+    "litellm:a2a_agent": {
+      "status": "not-a-provider",
+      "note": "agent-to-agent protocol bridge"
+    },
+    "litellm:abliteration": {
+      "status": "missing"
+    },
+    "litellm:ai21": {
+      "status": "missing",
+      "service": "ai21"
+    },
+    "litellm:ai21_chat": {
+      "status": "missing",
+      "service": "ai21"
+    },
+    "litellm:aihubmix": {
+      "status": "missing",
+      "note": "aggregator"
+    },
+    "litellm:aiml": {
+      "status": "missing"
+    },
+    "litellm:aiohttp_openai": {
+      "status": "not-a-provider",
+      "note": "LiteLLM transport variant of its openai provider"
+    },
+    "litellm:amazon_nova": {
+      "status": "missing",
+      "note": "Amazon Nova first-party API (not Bedrock)"
+    },
+    "litellm:anthropic": {
+      "status": "supported",
+      "lm15": [
+        "anthropic"
+      ]
+    },
+    "litellm:anthropic_text": {
+      "status": "out-of-scope",
+      "note": "legacy prompt-string /completions wire; lm15 speaks chat/messages (classification judgment, not a contract ruling)"
+    },
+    "litellm:anyscale": {
+      "status": "missing",
+      "note": "LiteLLM still lists it; Anyscale Endpoints was reported discontinued in 2024 — verify before any work"
+    },
+    "litellm:apertis": {
+      "status": "missing",
+      "note": "aggregator"
+    },
+    "litellm:assemblyai": {
+      "status": "missing",
+      "note": "speech-to-text; lm15 has no transcription surface"
+    },
+    "litellm:auto_router": {
+      "status": "not-a-provider",
+      "note": "LiteLLM's own routing layer"
+    },
+    "litellm:aws_polly": {
+      "status": "missing",
+      "note": "text-to-speech"
+    },
+    "litellm:aws_textract": {
+      "status": "missing",
+      "note": "document OCR; no lm15 surface"
+    },
+    "litellm:azure": {
+      "status": "supported",
+      "lm15": [
+        "azure",
+        "azure-chat"
+      ]
+    },
+    "litellm:azure_ai": {
+      "status": "partial",
+      "lm15": [
+        "azure-chat",
+        "azure-anthropic"
+      ],
+      "note": "Azure AI Foundry models: Claude through azure-anthropic, the rest through the Foundry /openai/v1 root of azure-chat — per-model coverage not receipted",
+      "model_rules": [
+        [
+          "*claude*",
+          "azure-anthropic"
+        ],
+        [
+          "*",
+          "azure-chat"
+        ]
+      ]
+    },
+    "litellm:azure_ai/agents": {
+      "status": "not-a-provider",
+      "note": "Azure AI Foundry agent service"
+    },
+    "litellm:azure_ai/doc-intelligence": {
+      "status": "missing",
+      "note": "document OCR; no lm15 surface"
+    },
+    "litellm:azure_speech": {
+      "status": "missing",
+      "note": "Azure AI Speech service (not Azure OpenAI TTS, which lm15 azure covers)"
+    },
+    "litellm:azure_text": {
+      "status": "out-of-scope",
+      "note": "legacy prompt-string /completions wire; lm15 speaks chat/messages (classification judgment, not a contract ruling)"
+    },
+    "litellm:baseten": {
+      "status": "missing"
+    },
+    "litellm:bedrock": {
+      "status": "partial",
+      "lm15": [
+        "bedrock-anthropic",
+        "bedrock-chat"
+      ],
+      "note": "LiteLLM's Invoke/Converse provider. Converse API (lm15 `bedrock`, phase 2 in spec/auth.md) is not implemented; Claude reaches lm15 through bedrock-anthropic and OpenAI-compatible models through bedrock-chat — model ids may differ by door",
+      "model_rules": [
+        [
+          "*anthropic.claude*",
+          "bedrock-anthropic"
+        ],
+        [
+          "*openai.gpt-oss*",
+          "bedrock-chat"
+        ]
+      ]
+    },
+    "litellm:bedrock_converse": {
+      "status": "partial",
+      "lm15": [
+        "bedrock-anthropic",
+        "bedrock-chat"
+      ],
+      "note": "Converse API (lm15 `bedrock`, phase 2 in spec/auth.md) is not implemented; Claude reaches lm15 through bedrock-anthropic and OpenAI-compatible models through bedrock-chat — model ids may differ by door",
+      "model_rules": [
+        [
+          "*anthropic.claude*",
+          "bedrock-anthropic"
+        ],
+        [
+          "*openai.gpt-oss*",
+          "bedrock-chat"
+        ]
+      ]
+    },
+    "litellm:bedrock_mantle": {
+      "status": "partial",
+      "lm15": [
+        "bedrock-mantle-chat",
+        "bedrock-anthropic"
+      ],
+      "note": "Mantle's Chat and Anthropic wires are registered; its Responses wire is not",
+      "model_rules": [
+        [
+          "*claude*",
+          "bedrock-anthropic"
+        ],
+        [
+          "*",
+          "bedrock-mantle-chat"
+        ]
+      ]
+    },
+    "litellm:black_forest_labs": {
+      "status": "missing",
+      "note": "image generation (FLUX)"
+    },
+    "litellm:bytez": {
+      "status": "missing"
+    },
+    "litellm:cerebras": {
+      "status": "missing"
+    },
+    "litellm:charity_engine": {
+      "status": "missing"
+    },
+    "litellm:chatgpt": {
+      "status": "supported",
+      "lm15": [
+        "openai-codex"
+      ],
+      "note": "ChatGPT subscription login"
+    },
+    "litellm:chutes": {
+      "status": "missing"
+    },
+    "litellm:clarifai": {
+      "status": "missing"
+    },
+    "litellm:cloudflare": {
+      "status": "missing",
+      "service": "cloudflare-workers-ai"
+    },
+    "litellm:codestral": {
+      "status": "missing",
+      "note": "Mistral's Codestral endpoint",
+      "service": "mistral"
+    },
+    "litellm:cognition": {
+      "status": "missing"
+    },
+    "litellm:cohere": {
+      "status": "missing",
+      "note": "chat is cohere_chat; embeddings/rerank are out of scope",
+      "service": "cohere"
+    },
+    "litellm:cohere_chat": {
+      "status": "missing",
+      "service": "cohere"
+    },
+    "litellm:cometapi": {
+      "status": "missing",
+      "note": "aggregator"
+    },
+    "litellm:compactifai": {
+      "status": "missing"
+    },
+    "litellm:crusoe": {
+      "status": "missing"
+    },
+    "litellm:cursor": {
+      "status": "missing",
+      "note": "Cursor BYOK integration (LiteLLM-specific; not verified as a model API)"
+    },
+    "litellm:custom": {
+      "status": "not-a-provider",
+      "note": "LiteLLM custom-handler hook; lm15 equivalent: a declared provider or an LM implementation"
+    },
+    "litellm:custom_openai": {
+      "status": "not-a-provider",
+      "note": "any OpenAI-compatible base URL; lm15 equivalent: RouterConfig(providers=(ProviderDefinition.chat(...),))"
+    },
+    "litellm:darkbloom": {
+      "status": "missing"
+    },
+    "litellm:dashscope": {
+      "status": "missing",
+      "note": "Alibaba Cloud Model Studio (DashScope) pay-as-you-go API",
+      "service": "qwen"
+    },
+    "litellm:databricks": {
+      "status": "missing",
+      "note": "Databricks model serving"
+    },
+    "litellm:datarobot": {
+      "status": "missing",
+      "note": "DataRobot"
+    },
+    "litellm:deepgram": {
+      "status": "missing",
+      "note": "speech-to-text; lm15 has no transcription surface"
+    },
+    "litellm:deepinfra": {
+      "status": "supported",
+      "lm15": [
+        "deepinfra"
+      ]
+    },
+    "litellm:deepseek": {
+      "status": "supported",
+      "lm15": [
+        "deepseek",
+        "deepseek-anthropic"
+      ]
+    },
+    "litellm:docker_model_runner": {
+      "status": "missing",
+      "note": "local server"
+    },
+    "litellm:dotprompt": {
+      "status": "not-a-provider",
+      "note": "prompt-management integration"
+    },
+    "litellm:elevenlabs": {
+      "status": "missing",
+      "note": "speech-to-text and text-to-speech"
+    },
+    "litellm:empiriolabs": {
+      "status": "missing"
+    },
+    "litellm:empower": {
+      "status": "missing"
+    },
+    "litellm:fal_ai": {
+      "status": "missing",
+      "note": "image/video generation"
+    },
+    "litellm:featherless_ai": {
+      "status": "missing"
+    },
+    "litellm:fireworks_ai": {
+      "status": "supported",
+      "lm15": [
+        "fireworks"
+      ]
+    },
+    "litellm:fireworks_ai-embedding-models": {
+      "status": "supported",
+      "lm15": [
+        "fireworks"
+      ],
+      "note": "LiteLLM pricing group of Fireworks; its embeddings are out of scope"
+    },
+    "litellm:friendliai": {
+      "status": "missing"
+    },
+    "litellm:galadriel": {
+      "status": "missing"
+    },
+    "litellm:gdc": {
+      "status": "missing",
+      "note": "Gemini on Google Distributed Cloud (air-gapped)"
+    },
+    "litellm:gemini": {
+      "status": "supported",
+      "lm15": [
+        "gemini"
+      ]
+    },
+    "litellm:gigachat": {
+      "status": "missing"
+    },
+    "litellm:github": {
+      "status": "missing",
+      "note": "GitHub Models"
+    },
+    "litellm:github_copilot": {
+      "status": "missing",
+      "note": "subscription login (OAuth), like openai-codex",
+      "service": "github-copilot"
+    },
+    "litellm:gmi": {
+      "status": "missing"
+    },
+    "litellm:gradient_ai": {
+      "status": "missing"
+    },
+    "litellm:groq": {
+      "status": "supported",
+      "lm15": [
+        "groq"
+      ]
+    },
+    "litellm:helicone": {
+      "status": "missing",
+      "note": "observability gateway"
+    },
+    "litellm:heroku": {
+      "status": "missing"
+    },
+    "litellm:hosted_vllm": {
+      "status": "supported",
+      "lm15": [
+        "vllm"
+      ],
+      "note": "LiteLLM's name for a vLLM OpenAI-compatible server"
+    },
+    "litellm:huggingface": {
+      "status": "missing",
+      "note": "Hugging Face inference-providers router",
+      "service": "huggingface"
+    },
+    "litellm:humanloop": {
+      "status": "not-a-provider",
+      "note": "prompt-management integration"
+    },
+    "litellm:hyperbolic": {
+      "status": "missing"
+    },
+    "litellm:inception": {
+      "status": "missing"
+    },
+    "litellm:jina_ai": {
+      "status": "out-of-scope",
+      "note": "embeddings and rerank only: representation and scoring, nothing round-trips through Parts (SCOPE.md embeddings principle, extended by classification judgment)"
+    },
+    "litellm:lambda_ai": {
+      "status": "missing"
+    },
+    "litellm:langflow": {
+      "status": "not-a-provider",
+      "note": "agent/workflow platform"
+    },
+    "litellm:langfuse": {
+      "status": "not-a-provider",
+      "note": "prompt-management integration"
+    },
+    "litellm:langgraph": {
+      "status": "not-a-provider",
+      "note": "agent framework runtime"
+    },
+    "litellm:lemonade": {
+      "status": "missing",
+      "note": "local server"
+    },
+    "litellm:libertai": {
+      "status": "missing"
+    },
+    "litellm:litellm_agent": {
+      "status": "not-a-provider",
+      "note": "LiteLLM agent runtime"
+    },
+    "litellm:litellm_proxy": {
+      "status": "not-a-provider",
+      "note": "LiteLLM's own proxy; OpenAI-compatible, so reachable through a declared provider"
+    },
+    "litellm:llamafile": {
+      "status": "missing",
+      "note": "local server"
+    },
+    "litellm:llamagate": {
+      "status": "missing"
+    },
+    "litellm:lm_studio": {
+      "status": "missing",
+      "note": "local server; reachable today through a declared provider (website migration docs)"
+    },
+    "litellm:manus": {
+      "status": "not-a-provider",
+      "note": "Manus agent API (tasks, not model calls)"
+    },
+    "litellm:maritalk": {
+      "status": "missing"
+    },
+    "litellm:meta": {
+      "status": "supported",
+      "lm15": [
+        "meta",
+        "meta-chat",
+        "meta-anthropic"
+      ]
+    },
+    "litellm:meta_llama": {
+      "status": "missing",
+      "note": "Meta's Llama API (api.llama.com), a different service from lm15 meta (api.meta.ai)"
+    },
+    "litellm:minimax": {
+      "status": "missing",
+      "service": "minimax"
+    },
+    "litellm:mistral": {
+      "status": "missing",
+      "service": "mistral"
+    },
+    "litellm:modelscope": {
+      "status": "missing"
+    },
+    "litellm:mongodb": {
+      "status": "out-of-scope",
+      "note": "vector store / cache backend"
+    },
+    "litellm:moonshot": {
+      "status": "supported",
+      "lm15": [
+        "moonshotai",
+        "moonshotai-responses",
+        "moonshotai-anthropic"
+      ]
+    },
+    "litellm:morph": {
+      "status": "missing"
+    },
+    "litellm:nano-gpt": {
+      "status": "missing",
+      "note": "aggregator",
+      "service": "nanogpt"
+    },
+    "litellm:nanogpt": {
+      "status": "missing",
+      "note": "aggregator",
+      "service": "nanogpt"
+    },
+    "litellm:nebius": {
+      "status": "missing"
+    },
+    "litellm:neosantara": {
+      "status": "missing"
+    },
+    "litellm:nlp_cloud": {
+      "status": "missing"
+    },
+    "litellm:novita": {
+      "status": "missing"
+    },
+    "litellm:nscale": {
+      "status": "missing"
+    },
+    "litellm:nvidia_nim": {
+      "status": "missing",
+      "note": "NVIDIA NIM / build.nvidia.com",
+      "service": "nvidia"
+    },
+    "litellm:nvidia_riva": {
+      "status": "missing",
+      "note": "NVIDIA Riva speech (STT/TTS)",
+      "service": "nvidia-riva"
+    },
+    "litellm:oci": {
+      "status": "missing",
+      "note": "Oracle Cloud generative AI"
+    },
+    "litellm:ollama": {
+      "status": "supported",
+      "lm15": [
+        "ollama"
+      ],
+      "note": "LiteLLM's /api/generate wire; lm15 uses Ollama's /v1 OpenAI-compatible wire"
+    },
+    "litellm:ollama_chat": {
+      "status": "supported",
+      "lm15": [
+        "ollama"
+      ],
+      "note": "LiteLLM's /api/chat wire; lm15 uses Ollama's /v1 OpenAI-compatible wire"
+    },
+    "litellm:oobabooga": {
+      "status": "missing",
+      "note": "local server"
+    },
+    "litellm:openai": {
+      "status": "supported",
+      "lm15": [
+        "openai",
+        "openai-chat"
+      ]
+    },
+    "litellm:openrouter": {
+      "status": "supported",
+      "lm15": [
+        "openrouter"
+      ]
+    },
+    "litellm:ovhcloud": {
+      "status": "missing"
+    },
+    "litellm:palm": {
+      "status": "out-of-scope",
+      "note": "PaLM API, retired by Google"
+    },
+    "litellm:parasail": {
+      "status": "supported",
+      "lm15": [
+        "parasail"
+      ]
+    },
+    "litellm:perplexity": {
+      "status": "missing",
+      "note": "Perplexity (Sonar)"
+    },
+    "litellm:petals": {
+      "status": "missing",
+      "note": "distributed inference network"
+    },
+    "litellm:pinstripes": {
+      "status": "missing"
+    },
+    "litellm:poe": {
+      "status": "missing",
+      "note": "aggregator"
+    },
+    "litellm:predibase": {
+      "status": "missing"
+    },
+    "litellm:publicai": {
+      "status": "missing"
+    },
+    "litellm:pydantic_ai_agents": {
+      "status": "not-a-provider",
+      "note": "agent framework runtime"
+    },
+    "litellm:qwen_ai_platform": {
+      "status": "missing",
+      "note": "Alibaba Cloud Model Studio (DashScope) pay-as-you-go API",
+      "service": "qwen"
+    },
+    "litellm:qwencloud": {
+      "status": "missing",
+      "note": "Alibaba Cloud Model Studio (DashScope) pay-as-you-go API",
+      "service": "qwen"
+    },
+    "litellm:ragflow": {
+      "status": "not-a-provider",
+      "note": "RAG application platform"
+    },
+    "litellm:recraft": {
+      "status": "missing",
+      "note": "image generation"
+    },
+    "litellm:reducto": {
+      "status": "missing",
+      "note": "document OCR; no lm15 surface"
+    },
+    "litellm:replicate": {
+      "status": "missing",
+      "note": "Replicate"
+    },
+    "litellm:runwayml": {
+      "status": "missing",
+      "note": "video generation"
+    },
+    "litellm:sagemaker": {
+      "status": "missing",
+      "note": "customer-deployed SageMaker endpoints",
+      "service": "sagemaker"
+    },
+    "litellm:sagemaker_chat": {
+      "status": "missing",
+      "note": "customer-deployed SageMaker endpoints",
+      "service": "sagemaker"
+    },
+    "litellm:sagemaker_nova": {
+      "status": "missing",
+      "note": "customer-deployed SageMaker endpoints",
+      "service": "sagemaker"
+    },
+    "litellm:sambanova": {
+      "status": "missing"
+    },
+    "litellm:sap": {
+      "status": "missing",
+      "note": "SAP Generative AI Hub"
+    },
+    "litellm:sarvam": {
+      "status": "missing"
+    },
+    "litellm:scaleway": {
+      "status": "missing"
+    },
+    "litellm:scx-ai": {
+      "status": "missing"
+    },
+    "litellm:snowflake": {
+      "status": "missing",
+      "note": "Snowflake Cortex"
+    },
+    "litellm:soniox": {
+      "status": "missing",
+      "note": "speech-to-text; lm15 has no transcription surface"
+    },
+    "litellm:stability": {
+      "status": "missing",
+      "note": "image generation and editing"
+    },
+    "litellm:synthetic": {
+      "status": "missing"
+    },
+    "litellm:tencent": {
+      "status": "missing"
+    },
+    "litellm:tensormesh": {
+      "status": "missing"
+    },
+    "litellm:text-completion-codestral": {
+      "status": "missing",
+      "note": "Codestral fill-in-the-middle; lm15 has no FIM surface",
+      "service": "mistral"
+    },
+    "litellm:text-completion-inception": {
+      "status": "out-of-scope",
+      "note": "legacy prompt-string /completions wire; lm15 speaks chat/messages (classification judgment, not a contract ruling)"
+    },
+    "litellm:text-completion-openai": {
+      "status": "out-of-scope",
+      "note": "legacy prompt-string /completions wire; lm15 speaks chat/messages (classification judgment, not a contract ruling)"
+    },
+    "litellm:together_ai": {
+      "status": "supported",
+      "lm15": [
+        "together"
+      ]
+    },
+    "litellm:topaz": {
+      "status": "missing",
+      "note": "image/video enhancement"
+    },
+    "litellm:transcribe": {
+      "status": "missing",
+      "note": "speech-to-text; lm15 has no transcription surface"
+    },
+    "litellm:triton": {
+      "status": "missing",
+      "note": "NVIDIA Triton inference server"
+    },
+    "litellm:typesafe": {
+      "status": "supported",
+      "lm15": [
+        "typesafe"
+      ]
+    },
+    "litellm:v0": {
+      "status": "missing"
+    },
+    "litellm:valkey": {
+      "status": "out-of-scope",
+      "note": "vector store / cache backend"
+    },
+    "litellm:venice": {
+      "status": "missing",
+      "service": "venice"
+    },
+    "litellm:veniceai": {
+      "status": "missing",
+      "service": "venice"
+    },
+    "litellm:vercel_ai_gateway": {
+      "status": "missing",
+      "note": "gateway in front of other providers",
+      "service": "vercel-ai-gateway"
+    },
+    "litellm:vertex_ai": {
+      "status": "supported",
+      "lm15": [
+        "vertex",
+        "vertex-express"
+      ]
+    },
+    "litellm:vertex_ai-ai21_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-anthropic_models": {
+      "status": "supported",
+      "lm15": [
+        "vertex-anthropic"
+      ],
+      "note": "Claude on Vertex (LiteLLM pricing group)"
+    },
+    "litellm:vertex_ai-deepseek_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-image-models": {
+      "status": "supported",
+      "lm15": [
+        "vertex"
+      ],
+      "note": "Imagen on Vertex; lm15 vertex registers no image surface"
+    },
+    "litellm:vertex_ai-language-models": {
+      "status": "supported",
+      "lm15": [
+        "vertex",
+        "vertex-express"
+      ],
+      "note": "Gemini on Vertex (LiteLLM pricing group)"
+    },
+    "litellm:vertex_ai-llama_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-minimax_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-mistral_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-moonshot_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-openai_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-qwen_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai-text-models": {
+      "status": "out-of-scope",
+      "note": "PaLM text models on Vertex, retired by Google"
+    },
+    "litellm:vertex_ai-video-models": {
+      "status": "supported",
+      "lm15": [
+        "vertex"
+      ],
+      "note": "Veo on Vertex; lm15 vertex registers no video surface"
+    },
+    "litellm:vertex_ai-zai_models": {
+      "status": "missing",
+      "note": "Vertex Model Garden partner/open models: the OpenAI-compatible `endpoints/openapi` door is lm15 `vertex-chat`, phase 3 in spec/auth.md",
+      "service": "vertex-partner-models"
+    },
+    "litellm:vertex_ai/agent_engine": {
+      "status": "not-a-provider",
+      "note": "Vertex AI agent runtime"
+    },
+    "litellm:vertex_ai_beta": {
+      "status": "not-a-provider",
+      "note": "LiteLLM-internal alias of vertex_ai for v1beta1 endpoints"
+    },
+    "litellm:vllm": {
+      "status": "missing",
+      "note": "LiteLLM's in-process vLLM library; lm15's `vllm` is the OpenAI-compatible server (= LiteLLM hosted_vllm)",
+      "distinct_from": [
+        "vllm"
+      ]
+    },
+    "litellm:volcengine": {
+      "status": "missing"
+    },
+    "litellm:voyage": {
+      "status": "out-of-scope",
+      "note": "embeddings and rerank only: representation and scoring, nothing round-trips through Parts (SCOPE.md embeddings principle, extended by classification judgment)"
+    },
+    "litellm:wandb": {
+      "status": "missing"
+    },
+    "litellm:watsonx": {
+      "status": "missing",
+      "note": "IBM watsonx.ai"
+    },
+    "litellm:watsonx_text": {
+      "status": "out-of-scope",
+      "note": "legacy prompt-string /completions wire; lm15 speaks chat/messages (classification judgment, not a contract ruling)"
+    },
+    "litellm:xai": {
+      "status": "supported",
+      "lm15": [
+        "xai"
+      ]
+    },
+    "litellm:xiaomi_mimo": {
+      "status": "missing",
+      "note": "Xiaomi MiMo",
+      "service": "xiaomi"
+    },
+    "litellm:zai": {
+      "status": "supported",
+      "lm15": [
+        "zai"
+      ]
+    },
+    "pi:amazon-bedrock": {
+      "status": "partial",
+      "lm15": [
+        "bedrock-anthropic",
+        "bedrock-chat"
+      ],
+      "note": "Pi speaks only the Bedrock Converse API (lm15 `bedrock`, phase 2 in spec/auth.md), which lm15 does not implement; Claude reaches lm15 through bedrock-anthropic and OpenAI-compatible models through bedrock-chat — model ids may differ by door",
+      "model_rules": [
+        [
+          "*anthropic.claude*",
+          "bedrock-anthropic"
+        ],
+        [
+          "*openai.gpt-oss*",
+          "bedrock-chat"
+        ]
+      ]
+    },
+    "pi:ant-ling": {
+      "status": "missing",
+      "note": "Ant Group Ling models"
+    },
+    "pi:anthropic": {
+      "status": "supported",
+      "lm15": [
+        "anthropic",
+        "claude-code"
+      ],
+      "note": "Pi's anthropic also carries the Claude Pro/Max login = lm15 claude-code"
+    },
+    "pi:azure-openai-responses": {
+      "status": "supported",
+      "lm15": [
+        "azure"
+      ]
+    },
+    "pi:baseten": {
+      "status": "missing"
+    },
+    "pi:cerebras": {
+      "status": "missing"
+    },
+    "pi:cloudflare-ai-gateway": {
+      "status": "missing",
+      "note": "gateway in front of other providers",
+      "service": "cloudflare-ai-gateway"
+    },
+    "pi:cloudflare-workers-ai": {
+      "status": "missing",
+      "service": "cloudflare-workers-ai"
+    },
+    "pi:deepseek": {
+      "status": "supported",
+      "lm15": [
+        "deepseek",
+        "deepseek-anthropic"
+      ]
+    },
+    "pi:fireworks": {
+      "status": "supported",
+      "lm15": [
+        "fireworks"
+      ]
+    },
+    "pi:github-copilot": {
+      "status": "missing",
+      "note": "subscription login (OAuth), like openai-codex",
+      "service": "github-copilot"
+    },
+    "pi:google": {
+      "status": "supported",
+      "lm15": [
+        "gemini"
+      ]
+    },
+    "pi:google-vertex": {
+      "status": "supported",
+      "lm15": [
+        "vertex",
+        "vertex-express"
+      ]
+    },
+    "pi:groq": {
+      "status": "supported",
+      "lm15": [
+        "groq"
+      ]
+    },
+    "pi:huggingface": {
+      "status": "missing",
+      "note": "Hugging Face inference-providers router",
+      "service": "huggingface"
+    },
+    "pi:kimi-coding": {
+      "status": "missing",
+      "note": "Kimi Code subscription plan on the Anthropic wire; lm15 moonshotai-anthropic is the pay-as-you-go API",
+      "service": "kimi-coding"
+    },
+    "pi:meta": {
+      "status": "supported",
+      "lm15": [
+        "meta",
+        "meta-chat",
+        "meta-anthropic"
+      ]
+    },
+    "pi:minimax": {
+      "status": "missing",
+      "service": "minimax"
+    },
+    "pi:minimax-cn": {
+      "status": "missing",
+      "note": "China-region host",
+      "service": "minimax"
+    },
+    "pi:mistral": {
+      "status": "missing",
+      "service": "mistral"
+    },
+    "pi:moonshotai": {
+      "status": "supported",
+      "lm15": [
+        "moonshotai",
+        "moonshotai-responses",
+        "moonshotai-anthropic"
+      ]
+    },
+    "pi:moonshotai-cn": {
+      "status": "partial",
+      "lm15": [
+        "moonshotai"
+      ],
+      "note": "China-region host api.moonshot.cn on the same wire: lm15 moonshotai with a base_urls override — no receipt",
+      "model_rules": [
+        [
+          "*",
+          "moonshotai"
+        ]
+      ]
+    },
+    "pi:nvidia": {
+      "status": "missing",
+      "note": "NVIDIA NIM / build.nvidia.com",
+      "service": "nvidia"
+    },
+    "pi:openai": {
+      "status": "supported",
+      "lm15": [
+        "openai",
+        "openai-chat",
+        "openai-codex"
+      ],
+      "note": "Pi's openai also carries the ChatGPT subscription login = lm15 openai-codex"
+    },
+    "pi:openai-codex": {
+      "status": "supported",
+      "lm15": [
+        "openai-codex"
+      ]
+    },
+    "pi:opencode": {
+      "status": "missing",
+      "note": "OpenCode Zen gateway",
+      "service": "opencode"
+    },
+    "pi:opencode-go": {
+      "status": "missing",
+      "note": "OpenCode Go subscription gateway",
+      "service": "opencode"
+    },
+    "pi:openrouter": {
+      "status": "supported",
+      "lm15": [
+        "openrouter"
+      ]
+    },
+    "pi:qwen-token-plan": {
+      "status": "missing",
+      "note": "Alibaba Model Studio token/coding plan (subscription keys)",
+      "service": "qwen-token-plan"
+    },
+    "pi:qwen-token-plan-cn": {
+      "status": "missing",
+      "note": "Alibaba Model Studio token/coding plan, China region",
+      "service": "qwen-token-plan"
+    },
+    "pi:qwen-token-plan-individual": {
+      "status": "missing",
+      "note": "Alibaba Model Studio token/coding plan, individual tier",
+      "service": "qwen-token-plan"
+    },
+    "pi:radius": {
+      "status": "missing",
+      "note": "Pi's own hosted gateway (radius.pi.dev): proprietary pi-messages wire, Pi OAuth",
+      "service": "radius"
+    },
+    "pi:together": {
+      "status": "supported",
+      "lm15": [
+        "together"
+      ]
+    },
+    "pi:typesafe": {
+      "status": "supported",
+      "lm15": [
+        "typesafe"
+      ]
+    },
+    "pi:vercel-ai-gateway": {
+      "status": "missing",
+      "note": "gateway in front of other providers",
+      "service": "vercel-ai-gateway"
+    },
+    "pi:xai": {
+      "status": "supported",
+      "lm15": [
+        "xai"
+      ],
+      "note": "Pi's xai also carries the Grok/X subscription login = lm15 xai-oauth"
+    },
+    "pi:xiaomi": {
+      "status": "missing",
+      "note": "Xiaomi MiMo",
+      "service": "xiaomi"
+    },
+    "pi:xiaomi-token-plan-ams": {
+      "status": "missing",
+      "note": "Xiaomi MiMo token plan, AMS region",
+      "service": "xiaomi-token-plan"
+    },
+    "pi:xiaomi-token-plan-cn": {
+      "status": "missing",
+      "note": "Xiaomi MiMo token plan, CN region",
+      "service": "xiaomi-token-plan"
+    },
+    "pi:xiaomi-token-plan-sgp": {
+      "status": "missing",
+      "note": "Xiaomi MiMo token plan, SGP region",
+      "service": "xiaomi-token-plan"
+    },
+    "pi:zai": {
+      "status": "supported",
+      "lm15": [
+        "zai"
+      ]
+    },
+    "pi:zai-coding-cn": {
+      "status": "missing",
+      "note": "Z.AI coding plan, China region",
+      "service": "zai-coding"
+    }
+  }
+}
