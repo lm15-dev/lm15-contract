@@ -25,7 +25,7 @@ Ranked by how many of the two libraries carry the service, then by model count. 
 | vercel-ai-gateway | `vercel-ai-gateway` | `vercel_ai_gateway` | anthropic, openai-chat, typesafe | 349 | gateway in front of other providers |
 | mistral | `mistral` | `codestral`, `mistral`, `text-completion-codestral` | openai-chat | 111 | Mistral's Codestral endpoint; Codestral fill-in-the-middle; lm15 has no FIM surface |
 | huggingface | `huggingface` | `huggingface` | openai-chat | 76 | Hugging Face inference-providers router |
-| github-copilot | `github-copilot` | `github_copilot` | anthropic, openai, openai-chat | 62 | subscription login (OAuth), like openai-codex |
+| github-copilot | `github-copilot` | `github_copilot` | anthropic, openai, openai-chat | 62 | no registry row; reachable only as the managed-login declared provider `github-copilot` (lm15/login/declared.py, AUTH-26: no wire receipt) |
 | cloudflare-workers-ai | `cloudflare-workers-ai` | `cloudflare` | openai-chat | 49 |  |
 | baseten | `baseten` | `baseten` | openai-chat | 34 |  |
 | nvidia | `nvidia` | `nvidia_nim` | openai-chat | 19 | NVIDIA NIM / build.nvidia.com |
@@ -78,7 +78,7 @@ Ranked by how many of the two libraries carry the service, then by model count. 
 | amazon_nova | — | `amazon_nova` | — | 4 | Amazon Nova first-party API (not Bedrock) |
 | aws_polly | — | `aws_polly` | — | 4 | text-to-speech |
 | heroku | — | `heroku` | — | 4 |  |
-| kimi-coding | `kimi-coding` | — | anthropic | 4 | Kimi Code subscription plan on the Anthropic wire; lm15 moonshotai-anthropic is the pay-as-you-go API |
+| kimi-coding | `kimi-coding` | — | anthropic | 4 | Kimi Code subscription on the Anthropic wire: no registry row; reachable only as the managed-login declared provider `kimi-code` (lm15/login/declared.py, AUTH-26: no wire receipt) |
 | meta_llama | — | `meta_llama` | openai-chat | 4 | Meta's Llama API (api.llama.com), a different service from lm15 meta (api.meta.ai) |
 | zai-coding | `zai-coding-cn` | — | openai-chat | 4 | Z.AI coding plan, China region |
 | ant-ling | `ant-ling` | — | openai-chat | 3 | Ant Group Ling models |
