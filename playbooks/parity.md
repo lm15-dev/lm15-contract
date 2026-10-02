@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-02 — router tables pinned; provider tables generated
+
+changes/2026-10-02-router-tables-pinned.md: 46 router cases (every built-in
+rule and its byte-short boundary; every litellm prefix through the new
+`resolve_openai_chat_model` op); `tables/providers.json` published, and
+TypeScript, Rust and Go now generate their provider tables from it
+(`tools/gen_tables.py --check` in each CI). Every SDK's main moves its pin to
+`dd3d3be`, measured with `harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,884 / 1,884 | 1,884 / 1,884 | 1,884 / 1,884 | 1,884 / 1,884 | 1,884 / 1,884 | 1,884 / 1,884 (`tools/check-contract.py`) |
+| Commit | `c84bd74` | `562fdbf` | `4a15bd0` | `c2af04c` | `ce7a1f0` | `5740f90` |
+| Code change the cases asked for | none | none | rule `jev-` | none | litellm door: bare prefix kept, declared spellings read | none |
+
+R's `PYTHON_REFERENCE` moves to lm15-python `c84bd74`; its parity probes: 30
+pass, the 2 known differences unchanged; `R CMD check --as-cran`: 1 NOTE (new
+submission; two README links answered 503 during the check). R gains
+`provider_definition()` / `new_router(providers =)`. The website (`3545920`)
+reads its provider list from the pinned SDK registry and offers xai,
+deepinfra, together, fireworks and parasail. No release yet.
+
+Not moved: Java, Ruby, .NET and Swift (still at `cfed007`).
+
 ## 2026-09-30 — the Claude Code release as a setting; Claude's default max_tokens
 
 changes/2026-09-30-claude-code-client-version.md (AUTH-10 `backend_settings`:
