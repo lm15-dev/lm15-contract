@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-10-02T21-07-32Z",
+  "provider": "deepseek-anthropic",
+  "status": 200,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Montreal? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 512,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": null,
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "71f13fc96ffc2694c1adb01895319392f688101944133c2eb343238016c5891d",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2f61f99688962c6d413cd943d4ed652f7f5483c1f55dce372d0448306888e609",
+  "response_bytes": 648,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

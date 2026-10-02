@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-10-02T21-07-19Z",
+  "provider": "openai-chat",
+  "status": 200,
+  "model": "gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Montreal? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 512,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": null,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "511cc806a99021a7c67b9ebd246e586378a1054bd0e9a2ddfb3159f6a521fe31",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "f2a9eb76b0e7f34172c151e262fbdaff0c5d25842d2e61dc4867f434efa415ea",
+  "response_bytes": 1088,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

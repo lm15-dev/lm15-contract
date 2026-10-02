@@ -1,0 +1,35 @@
+{
+  "id": "openai.live_tool_no_description",
+  "provider": "openai",
+  "feature": "live_tool_no_description",
+  "surface": "live",
+  "description": "MAP-17: a function tool with no description reaches the live setup frame without a description key, and the server accepts it and calls the tool",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-10-02",
+    "evidence": "api.openai.com live session 2026-10-02T21-10-08Z, gpt-realtime-mini; setup built by the reference adapter, sent verbatim, 22 verbatim server frames ending in a tool call at bodies/openai.live_tool_no_description/2026-10-02T21-10-08Z.jsonl; changes/2026-10-02-tool-description-absent.md",
+    "exchange": "receipts/2026-10-02-tool-description/openai/exchange-2026-10-02T21-10-08Z-a0d803021e8245ce8723e4c3388c2b8d.json"
+  },
+  "live_config": {
+    "model": "gpt-realtime-mini",
+    "system": "Use tools when asked. Be terse.",
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ]
+  },
+  "pinned_body": "2026-10-02T21-10-08Z.jsonl"
+}

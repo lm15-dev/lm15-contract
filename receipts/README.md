@@ -34,6 +34,7 @@ Rules:
 | `2026-09-03-deepseek-anthropic/` | `changes/2026-09-03-deepseek-anthropic-live.md` (15 discovery probes that shaped `AnthropicCompat`, then the capture's probes and SUMMARY) |
 | `2026-09-03-zai/` | `changes/2026-09-03-zai-live.md` (probe receipts, the unfunded-account 429, models listing, SUMMARY) |
 | `2026-09-03-deepseek/` | `changes/2026-09-03-deepseek-live.md` (probe receipts, models listing, SUMMARY of the capture) |
+| `2026-10-02-tool-description/` | `changes/2026-10-02-tool-description-absent.md` (MAP-17: `null` vs absent tool description on 11 HTTP wires and both live sessions, then the six `tool_no_description` captures; `SUMMARY-probe-2026-10-02T21-08-08Z.json` misreads Gemini Live, corrected by the rerun, see the entry) |
 
 History: these folders lived in `lm15-dev/curl-fixtures/` (seven of them
 never committed there) and `lm15-dev/model-listings/` (no repository) until

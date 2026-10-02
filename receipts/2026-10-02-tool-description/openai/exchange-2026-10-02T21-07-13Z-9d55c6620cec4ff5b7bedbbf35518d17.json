@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-10-02T21-07-13Z",
+  "provider": "openai",
+  "status": 200,
+  "model": "gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Montreal? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 512,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": null,
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "7a5243d3c39af689c666d46a054c38fbb9721666b464ac68ab711835c326b50f",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "dccd7fbdd815e1344dec2af499e16f873704134bb75dbb22c33032d863755f5f",
+  "response_bytes": 2331,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

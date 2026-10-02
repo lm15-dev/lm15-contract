@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-10-02T21-08-26Z",
+  "provider": "gemini",
+  "surface": "live",
+  "status": "accepted",
+  "probe": "live-setup-null",
+  "sent": {
+    "setup_frames": [
+      {
+        "setup": {
+          "model": "models/gemini-3.1-flash-live-preview",
+          "tools": [
+            {
+              "functionDeclarations": [
+                {
+                  "name": "get_weather",
+                  "description": null,
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "city"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "generationConfig": {
+            "responseModalities": [
+              "AUDIO"
+            ]
+          },
+          "outputAudioTranscription": {}
+        }
+      }
+    ],
+    "client_frames": []
+  },
+  "request_sha256": "79cb57b90d5295cda78cc3ec5881846a304dbe1b7293b5128d94a2d8290bfba4",
+  "request_hash_format": "sha256 of UTF-8 compact JSON {setup, frames}: the client frames as sent (they carry no credential)",
+  "response_sha256": "ec157fb15db42a932bf681f5b89c30c02f667d8947d043c6cd75d8359f970a4b",
+  "response_bytes": 68,
+  "response_hash_format": "sha256 of the server rows as JSONL (verbatim frames)",
+  "server": [
+    {
+      "dir": "server",
+      "frame_b64": "ewogICJzZXR1cENvbXBsZXRlIjoge30KfQo="
+    }
+  ]
+}

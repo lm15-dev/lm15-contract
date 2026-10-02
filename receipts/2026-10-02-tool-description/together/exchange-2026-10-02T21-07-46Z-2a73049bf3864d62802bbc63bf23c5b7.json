@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-10-02T21-07-46Z",
+  "provider": "together",
+  "status": 503,
+  "model": "openai/gpt-oss-120b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.together.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TOGETHER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Montreal? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 512,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "ba5ea59017b541a9173a58d969444726fe28c147b34736c7de8d633a8570c7a6",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "11de718af70f2b4241e85b09a83a7d1290e1aeb1b856c58fa1f4015cebc2a7c4",
+  "response_bytes": 171,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

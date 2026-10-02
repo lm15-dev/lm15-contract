@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-10-02T21-07-39Z",
+  "provider": "moonshotai",
+  "status": 200,
+  "model": "kimi-k2.6",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Montreal? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 512,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "5bd2857cb6c7da154398db903a8a222cb2d0665614d1b5a25c0d0855ad85c54f",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "7d3f5cdee73f3b6a0e28a7c1a0e3f0f2a5b3da2331d3e2fa96838dd2b3dae71a",
+  "response_bytes": 800,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

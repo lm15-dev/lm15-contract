@@ -1,0 +1,35 @@
+{
+  "id": "gemini.live_tool_no_description",
+  "provider": "gemini",
+  "feature": "live_tool_no_description",
+  "surface": "live",
+  "description": "MAP-17: a function tool with no description reaches the live setup frame without a description key, and the server accepts it and calls the tool",
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-10-02",
+    "evidence": "generativelanguage.googleapis.com live session 2026-10-02T21-10-12Z, gemini-3.1-flash-live-preview; setup built by the reference adapter, sent verbatim, 3 verbatim server frames ending in a tool call at bodies/gemini.live_tool_no_description/2026-10-02T21-10-12Z.jsonl; changes/2026-10-02-tool-description-absent.md",
+    "exchange": "receipts/2026-10-02-tool-description/gemini/exchange-2026-10-02T21-10-12Z-edb9f0374acc43a5be48aa7ecb3f2767.json"
+  },
+  "live_config": {
+    "model": "gemini-3.1-flash-live-preview",
+    "system": "Use tools when asked. Be terse.",
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "city"
+          ]
+        }
+      }
+    ]
+  },
+  "pinned_body": "2026-10-02T21-10-12Z.jsonl"
+}

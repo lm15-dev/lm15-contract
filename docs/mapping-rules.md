@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -995,6 +995,50 @@ from a published contract. A keyword Google later adds to the Schema
 object would still go to the JSON Schema field, which accepts it; a
 spelling the OpenAPI field starts refusing would need a new receipt.
 
+## MAP-17 — A tool's absent description is left off the wire
+
+**Written 2026-10-02 at the maintainer's request**
+(`changes/2026-10-02-tool-description-absent.md`); not yet ratified.
+
+1. **A `FunctionTool` whose `description` is `null` or `""` reaches every
+   wire with no description key at all — never `"description": null`.**
+   This holds wherever a function tool is declared: Anthropic
+   `tools[]`, OpenAI Responses `tools[]`, Chat Completions
+   `tools[].function`, Gemini `functionDeclarations[]` (generateContent,
+   a cached prefix's tools, a Live setup), and the OpenAI Realtime
+   `session.update`. The other keys keep their documented order.
+2. **`""` is the same value as `null`.** Canonical JSON drops both
+   (`spec/types.md` FunctionTool, omit-empty), so a request and its
+   serde round trip must build the same wire; an empty string is never
+   sent as an empty description.
+3. **A description that is present is sent verbatim**, in the slot the
+   dialect documents.
+
+Why: the references document the field as an optional string
+(Anthropic, Chat Completions), as optional string-or-null (OpenAI
+Responses), or as required (Gemini, whose servers nevertheless accept a
+declaration without one). Two servers enforce the type and refuse `null`
+with a 400 —
+Anthropic (`tools.0.custom.description: Input should be a valid string`)
+and Groq (`'tools.0.function.description' : Value is not nullable`) —
+while leaving the key out was accepted by every server probed (live
+2026-10-02, 11 HTTP wires including Vertex, and both live sessions,
+`receipts/2026-10-02-tool-description/`). Before this rule every SDK
+copied the reference's `null`, so a tool built with only a name and a
+schema — the shape `FunctionTool(name=..., parameters=...)` invites, and
+the shape MAP-12 ingest produces from a Chat Completions tool whose
+description is `null` — failed on Anthropic and Groq and nowhere else.
+
+Scope: this rule is about one field. The other `null`s in the corpus
+are meanings a wire defines (a Chat Completions assistant row's
+`content: null` beside its tool calls; a TypeSafe criterion with no
+description), not absent optional values; an audit of every dialect's
+build of a minimal tool request on 2026-10-02 found the tool description
+was the only `null` lm15 put on a wire.
+
+Pinned by `cases/{anthropic,openai,openai-chat,gemini}/tool_no_description.json`
+and `cases/{openai,gemini}/live_tool_no_description.json`.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -1037,3 +1081,7 @@ MAP-16 was written on 2026-09-26 after lm15-go's first live smoke found a
 tool schema with `additionalProperties` refused by Gemini in every SDK,
 while the same schema as a response format was already routed to the JSON
 Schema field (`lm15-contract/changes/2026-09-26-gemini-schema-fields.md`).
+MAP-17 was written on 2026-10-02 after a user report that a tool with no
+description made Anthropic refuse the request in Python and Julia; every SDK
+sent `null` because every port had copied the reference
+(`lm15-contract/changes/2026-10-02-tool-description-absent.md`).

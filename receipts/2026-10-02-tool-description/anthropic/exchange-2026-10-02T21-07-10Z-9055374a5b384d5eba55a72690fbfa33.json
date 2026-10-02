@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-10-02T21-07-10Z",
+  "provider": "anthropic",
+  "status": 400,
+  "model": "claude-haiku-4-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "What is the weather in Montreal? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 512,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": null,
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "5e74806b22bfc5369cb589075b2f62fca118e55bbc7f9791358c553afbd61056",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "44bf521eda0f271363e845481424ae851f5fa02146665037c1476c5393c26406",
+  "response_bytes": 172,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -442,7 +442,7 @@ Exactly one per stream, final (MAP-3, mapping-rules.md).
 |---|---|---|---|---|---|
 | `type` | string `"function"` | — | `"function"` | always | discriminator |
 | `name` | string | yes | — | always | non-empty |
-| `description` | string | no | `null` | omit-empty | |
+| `description` | string | no | `null` | omit-empty | on every provider wire too: absent (`null` or `""`) means no description key, never `null` (MAP-17) |
 | `parameters` | object (opaque JSON Schema) | shape | `{"type": "object", "properties": {}}` | always (even `{}`) | strict JSON object, required; opaque payload — an explicit `{}` round-trips verbatim; absent on input deserializes to the default schema (INV-033); on Gemini it goes as `parameters` or `parametersJsonSchema` by MAP-16 |
 
 ### BuiltinTool

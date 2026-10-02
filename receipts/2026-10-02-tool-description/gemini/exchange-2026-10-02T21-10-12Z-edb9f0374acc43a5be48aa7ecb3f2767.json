@@ -1,0 +1,75 @@
+{
+  "timestamp": "2026-10-02T21-10-12Z",
+  "provider": "gemini",
+  "surface": "live",
+  "status": "tool call",
+  "probe": "live_tool_no_description",
+  "sent": {
+    "setup_frames": [
+      {
+        "setup": {
+          "model": "models/gemini-3.1-flash-live-preview",
+          "systemInstruction": {
+            "parts": [
+              {
+                "text": "Use tools when asked. Be terse."
+              }
+            ]
+          },
+          "tools": [
+            {
+              "functionDeclarations": [
+                {
+                  "name": "get_weather",
+                  "parameters": {
+                    "type": "object",
+                    "properties": {
+                      "city": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "city"
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "generationConfig": {
+            "responseModalities": [
+              "AUDIO"
+            ]
+          },
+          "outputAudioTranscription": {}
+        }
+      }
+    ],
+    "client_frames": [
+      {
+        "realtimeInput": {
+          "text": "What is the weather in Montreal? Use the tool."
+        }
+      }
+    ]
+  },
+  "request_sha256": "33de30274ca281dadb044104d7eb41c6f3059044b0c1d2f37bc48d938f9d21dd",
+  "request_hash_format": "sha256 of UTF-8 compact JSON {setup, frames}: the client frames as sent (they carry no credential)",
+  "response_sha256": "ac7e9ea440c7ef060e4884bcdfe0d436ad589bdf9b0b34c3a19a7129778dd58e",
+  "response_bytes": 432,
+  "response_hash_format": "sha256 of the server rows as JSONL (verbatim frames)",
+  "server": [
+    {
+      "dir": "server",
+      "frame_b64": "ewogICJzZXR1cENvbXBsZXRlIjoge30KfQo="
+    },
+    {
+      "dir": "server",
+      "frame_b64": "ewogICJzZXJ2ZXJDb250ZW50Ijoge30KfQo="
+    },
+    {
+      "dir": "server",
+      "frame_b64": "ewogICJ0b29sQ2FsbCI6IHsKICAgICJmdW5jdGlvbkNhbGxzIjogWwogICAgICB7CiAgICAgICAgIm5hbWUiOiAiZ2V0X3dlYXRoZXIiLAogICAgICAgICJhcmdzIjogewogICAgICAgICAgImNpdHkiOiAiTW9udHJlYWwiCiAgICAgICAgfSwKICAgICAgICAiaWQiOiAiZmNfMjkwMjE1NzIzNjg0OTY0NjI1MyIKICAgICAgfQogICAgXQogIH0KfQo="
+    }
+  ]
+}

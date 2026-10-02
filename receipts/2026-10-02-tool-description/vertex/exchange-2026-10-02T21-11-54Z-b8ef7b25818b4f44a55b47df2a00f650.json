@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-10-02T21-11-54Z",
+  "provider": "verte<bearer from the cloud chain; see case.credential>",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-verte<bearer from the cloud chain; see case.credential>-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "te<bearer from the cloud chain; see case.credential>t": "What is the weather in Montreal? Use the tool."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "ma<bearer from the cloud chain; see case.credential>OutputTokens": 512
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              },
+              "description": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "2e5dc9e9d4a593625aa7ff765b9ff8ebb5ae980061ceeb518f312103f47d84b2",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "093929f6425ddc3739968cd3fb91d6026026291d7f8961b71b9ed8e8ad2a0fc7",
+  "response_bytes": 1292,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

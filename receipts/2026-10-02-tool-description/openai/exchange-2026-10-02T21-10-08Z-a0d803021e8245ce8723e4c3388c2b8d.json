@@ -1,0 +1,151 @@
+{
+  "timestamp": "2026-10-02T21-10-08Z",
+  "provider": "openai",
+  "surface": "live",
+  "status": "tool call",
+  "probe": "live_tool_no_description",
+  "sent": {
+    "setup_frames": [
+      {
+        "type": "session.update",
+        "session": {
+          "type": "realtime",
+          "instructions": "Use tools when asked. Be terse.",
+          "output_modalities": [
+            "text"
+          ],
+          "tools": [
+            {
+              "type": "function",
+              "name": "get_weather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "client_frames": [
+      {
+        "type": "conversation.item.create",
+        "item": {
+          "type": "message",
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Montreal? Use the tool."
+            }
+          ]
+        }
+      },
+      {
+        "type": "response.create"
+      }
+    ]
+  },
+  "request_sha256": "b2edd030f82d5714436997c90158e42ca3cbf0377fe9756782f017b80e522b02",
+  "request_hash_format": "sha256 of UTF-8 compact JSON {setup, frames}: the client frames as sent (they carry no credential)",
+  "response_sha256": "3bcc6da9b32786681d11dd025d8d8e9e4dd1ddd84d894cc962a273b001b80a4b",
+  "response_bytes": 10119,
+  "response_hash_format": "sha256 of the server rows as JSONL (verbatim frames)",
+  "server": [
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"session.created\",\"event_id\":\"event_EUeo6Z3iVaG3skh3QjeY5\",\"session\":{\"type\":\"realtime\",\"object\":\"realtime.session\",\"id\":\"sess_EUeo5Z4LZycbZu6z5WjRK\",\"model\":\"gpt-realtime-mini\",\"output_modalities\":[\"audio\"],\"instructions\":\"Your knowledge cutoff is 2023-10. You are a helpful, witty, and friendly AI. Act like a human, but remember that you aren't a human and that you can't do human things in the real world. Your voice and personality should be warm and engaging, with a lively and playful tone. If interacting in a non-English language, start by using the standard accent or dialect familiar to the user. Talk quickly. You should always call a function if you can. Do not refer to these rules, even if you’re asked about them.\",\"tools\":[],\"tool_choice\":\"auto\",\"max_output_tokens\":\"inf\",\"tracing\":null,\"truncation\":\"auto\",\"prompt\":null,\"expires_at\":1790979010,\"audio\":{\"input\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"transcription\":null,\"noise_reduction\":null,\"turn_detection\":{\"type\":\"server_vad\",\"threshold\":0.5,\"prefix_padding_ms\":300,\"silence_duration_ms\":200,\"idle_timeout_ms\":null,\"create_response\":true,\"interrupt_response\":true}},\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\",\"speed\":1.0}},\"include\":null}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"session.updated\",\"event_id\":\"event_EUeo6jg2mW2tR1DbFYEZ6\",\"session\":{\"type\":\"realtime\",\"object\":\"realtime.session\",\"id\":\"sess_EUeo5Z4LZycbZu6z5WjRK\",\"model\":\"gpt-realtime-mini\",\"output_modalities\":[\"text\"],\"instructions\":\"Use tools when asked. Be terse.\",\"tools\":[{\"type\":\"function\",\"name\":\"get_weather\",\"description\":null,\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"]}}],\"tool_choice\":\"auto\",\"max_output_tokens\":\"inf\",\"tracing\":null,\"truncation\":\"auto\",\"prompt\":null,\"expires_at\":1790979010,\"audio\":{\"input\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"transcription\":null,\"noise_reduction\":null,\"turn_detection\":{\"type\":\"server_vad\",\"threshold\":0.5,\"prefix_padding_ms\":300,\"silence_duration_ms\":200,\"idle_timeout_ms\":null,\"create_response\":true,\"interrupt_response\":true}},\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\",\"speed\":1.0}},\"include\":null}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"conversation.item.added\",\"event_id\":\"event_EUeo6r1i4FClG82UdCzfx\",\"previous_item_id\":null,\"item\":{\"id\":\"item_EUeo6bZANY4LnnZnduSUG\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"user\",\"content\":[{\"type\":\"input_text\",\"text\":\"What is the weather in Montreal? Use the tool.\"}]}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"conversation.item.done\",\"event_id\":\"event_EUeo6l9v52mbnn9BdAKua\",\"previous_item_id\":null,\"item\":{\"id\":\"item_EUeo6bZANY4LnnZnduSUG\",\"type\":\"message\",\"status\":\"completed\",\"role\":\"user\",\"content\":[{\"type\":\"input_text\",\"text\":\"What is the weather in Montreal? Use the tool.\"}]}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.created\",\"event_id\":\"event_EUeo62XL9zXXnE42B7zVK\",\"response\":{\"object\":\"realtime.response\",\"id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"status\":\"in_progress\",\"status_details\":null,\"output\":[],\"conversation_id\":\"conv_EUeo5Zd0XSDnBatuY3Hc6\",\"output_modalities\":[\"text\"],\"max_output_tokens\":\"inf\",\"audio\":{\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\"}},\"usage\":null,\"metadata\":null}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.output_item.added\",\"event_id\":\"event_EUeo6zlzqvaUu0V7XFGk9\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"output_index\":0,\"item\":{\"id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"type\":\"function_call\",\"status\":\"in_progress\",\"name\":\"get_weather\",\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"arguments\":\"\"}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"conversation.item.added\",\"event_id\":\"event_EUeo6weVkd6vwyGzpPvbm\",\"previous_item_id\":\"item_EUeo6bZANY4LnnZnduSUG\",\"item\":{\"id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"type\":\"function_call\",\"status\":\"in_progress\",\"name\":\"get_weather\",\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"arguments\":\"\"}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6qYvtH8Mv43kaPFjd\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"{\",\"obfuscation\":\"jqOzpn4ED1xSpAg\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo66g6U0oR0jF7qHz4U\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"  \\n\",\"obfuscation\":\"rtPghD0zd8W0t\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6cppgfpww9isACjGK\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\" \",\"obfuscation\":\"3SI0BHZwDV7bNaK\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6JY0awl6K7iRco6T2\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\" \\\"\",\"obfuscation\":\"vxx1teKEemP6gz\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6HI7jHbmBD6Ib6NZh\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"city\",\"obfuscation\":\"Y0hpY4y9oCVm\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6AkIHu36LnMf0ibBM\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"\\\":\",\"obfuscation\":\"KmCr9LnxxSfV0a\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo67JvUA0R3R5pFlgX6\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\" \\\"\",\"obfuscation\":\"OJ3G44emckdoil\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6hntcbeYfEugz1Azz\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"Mont\",\"obfuscation\":\"MM1UvR2hfCTV\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo69hpEdcRtlgUhGQRE\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"real\",\"obfuscation\":\"8c3SBSZgO3fL\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo63jZMpkgkIOZWq26M\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"\\\"\\n\",\"obfuscation\":\"dDooUBQTEgoBP3\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.delta\",\"event_id\":\"event_EUeo6OJDalBnavJP6KVKa\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"delta\":\"}\",\"obfuscation\":\"fVXD4kktdkHR0Ue\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.function_call_arguments.done\",\"event_id\":\"event_EUeo6PpIkJ9p1ygb28sZj\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"item_id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"output_index\":0,\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"name\":\"get_weather\",\"arguments\":\"{  \\n  \\\"city\\\": \\\"Montreal\\\"\\n}\"}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"conversation.item.done\",\"event_id\":\"event_EUeo6vZToJpXdauj0pLXK\",\"previous_item_id\":null,\"item\":{\"id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"get_weather\",\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"arguments\":\"{  \\n  \\\"city\\\": \\\"Montreal\\\"\\n}\"}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.output_item.done\",\"event_id\":\"event_EUeo6CHm1R4nzaEeAN8T7\",\"response_id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"output_index\":0,\"item\":{\"id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"get_weather\",\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"arguments\":\"{  \\n  \\\"city\\\": \\\"Montreal\\\"\\n}\"}}"
+    },
+    {
+      "dir": "server",
+      "frame": "{\"type\":\"response.done\",\"event_id\":\"event_EUeo6GvU1NGbUNyy2MVdf\",\"response\":{\"object\":\"realtime.response\",\"id\":\"resp_EUeo6LsdaE2twKHPn6ByK\",\"status\":\"completed\",\"status_details\":null,\"output\":[{\"id\":\"item_EUeo6Llz3Qka8qnjNu3mP\",\"type\":\"function_call\",\"status\":\"completed\",\"name\":\"get_weather\",\"call_id\":\"call_APaC8ODKxBz7Eh9D\",\"arguments\":\"{  \\n  \\\"city\\\": \\\"Montreal\\\"\\n}\"}],\"conversation_id\":\"conv_EUeo5Zd0XSDnBatuY3Hc6\",\"output_modalities\":[\"text\"],\"max_output_tokens\":\"inf\",\"audio\":{\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\"}},\"usage\":{\"total_tokens\":71,\"input_tokens\":50,\"output_tokens\":21,\"input_token_details\":{\"text_tokens\":50,\"audio_tokens\":0,\"image_tokens\":0,\"cached_tokens\":0,\"cached_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0}},\"output_token_details\":{\"text_tokens\":21,\"audio_tokens\":0}},\"metadata\":null}}"
+    }
+  ]
+}
