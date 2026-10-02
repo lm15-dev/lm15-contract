@@ -467,13 +467,18 @@ def check_ingest_verdicts(root: Path, cases: list[tuple[Path, dict]], problems: 
 
 def shim_surface_dump(python2: Path) -> tuple[dict | None, str]:
     """Call the reference vet shim's surface_dump op. Returns (result, reason)."""
+    return shim_op(python2, "surface_dump")
+
+
+def shim_op(python2: Path, op: str) -> tuple[dict | None, str]:
+    """Call one argument-free op of the reference vet shim. Returns (result, reason)."""
     shim_python = python2 / ".venv" / "bin" / "python"
     if not shim_python.is_file():
         return None, f"no shim interpreter at {shim_python}"
     try:
         proc = subprocess.run(
             [str(shim_python), "-m", "lm15.vet"],
-            input='{"op": "surface_dump", "id": "audit"}\n',
+            input=json.dumps({"op": op, "id": "audit"}) + "\n",
             capture_output=True, text=True, cwd=python2, timeout=120,
             encoding="utf-8",
         )
@@ -519,6 +524,51 @@ def check_support_matrix(root: Path, python2: Path, problems: list[str]) -> str:
                     problems.append(f"SUPPORT-MATRIX: {provider}.{key} drift — pinned "
                                     f"{pinned[provider].get(key)!r}, reference {reflected[provider].get(key)!r}")
     return f"support matrix: {len(pinned)} provider(s) pinned and matching"
+
+
+TABLES_PATH = Path("tables") / "providers.json"
+
+
+def check_provider_tables(root: Path, python2: Path, problems: list[str]) -> str:
+    """HARD: tables/providers.json must equal the reference's provider_tables
+    op, value for value. Ports generate their registry, access-policy,
+    compat-preset and router tables from this file at their CONTRACT_PIN
+    (tables/README.md), so a stale file would hand every port a stale table.
+    A skipped comparison (no shim) is report-only, as for the support matrix."""
+    path = root / TABLES_PATH
+    if not path.is_file():
+        problems.append(f"PROVIDER-TABLES: {TABLES_PATH} is missing")
+        return "provider tables: MISSING"
+    pinned = json.loads(path.read_text(encoding="utf-8"))
+    reflected, reason = shim_op(python2, "provider_tables")
+    if reflected is None:
+        print(f"REPORT provider-tables: comparison skipped — {reason}")
+        return f"provider tables: comparison skipped ({reason})"
+    if json.dumps(pinned, ensure_ascii=False) != json.dumps(reflected, ensure_ascii=False):  # order-sensitive
+        for line in (table_differences(pinned, reflected) or ["member order differs"])[:20]:
+            problems.append(f"PROVIDER-TABLES: {line}")
+        problems.append("PROVIDER-TABLES: regenerate with `python3 tools/export_provider_tables.py`")
+        return "provider tables: DRIFT"
+    return f"provider tables: {len(pinned['providers'])} provider(s) and their presets match the reference"
+
+
+def table_differences(pinned: object, reflected: object, path: str = "$") -> list[str]:
+    """Every leaf where the published table and the reference differ."""
+    if isinstance(pinned, dict) and isinstance(reflected, dict):
+        out: list[str] = []
+        for key in list(pinned) + [k for k in reflected if k not in pinned]:
+            if key not in reflected:
+                out.append(f"{path}.{key}: published but not in the reference")
+            elif key not in pinned:
+                out.append(f"{path}.{key}: in the reference but not published")
+            else:
+                out.extend(table_differences(pinned[key], reflected[key], f"{path}.{key}"))
+        if not out and list(pinned) != list(reflected):
+            out.append(f"{path}: key order differs (published {list(pinned)}, reference {list(reflected)})")
+        return out
+    if isinstance(pinned, list) and isinstance(reflected, list) and len(pinned) == len(reflected):
+        return [d for i, (a, b) in enumerate(zip(pinned, reflected)) for d in table_differences(a, b, f"{path}[{i}]")]
+    return [] if pinned == reflected else [f"{path}: published {json.dumps(pinned)[:120]}, reference {json.dumps(reflected)[:120]}"]
 
 
 def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> str:
@@ -624,6 +674,7 @@ def main(argv: list[str] | None = None) -> int:
         check_ingest_verdicts(root, cases, problems),
         check_surface_coverage(root, python2, problems),
         check_support_matrix(root, python2, problems),
+        check_provider_tables(root, python2, problems),
     ]
 
     for problem in problems:

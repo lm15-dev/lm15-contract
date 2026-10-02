@@ -671,6 +671,35 @@ Out: `{"provider": str, "model": str, "source": "prefix"|"catalog"|"rule"}`
   `AmbiguousModelError`. Drives `--direction router`
   (`router/resolution.json`).
 
+### resolve_openai_chat_model
+In: `{"model": str, "env": {str: str}}`
+Out: `{"provider": str, "model": str, "source": "prefix"|"rule"}`
+- (Added 2026-10-02; `changes/2026-10-02-router-tables-pinned.md`.) The
+  router's OpenAI-SDK / litellm door (Python `resolve_openai_chat`,
+  TypeScript `resolveOpenAIChat`, the same function in every port): the
+  model string is read by `openai_chat_model_string` — an lm15
+  `provider:model` string unchanged; litellm's `provider/model` through
+  the port's copy of `LITELLM_PROVIDER_PREFIXES`, first segment only; a
+  bare name by the built-in rules, except that a bare OpenAI name goes to
+  `openai-chat` — then resolved as `resolve_model` does. Same purity, same
+  output and the same failure envelope (`UnknownModelError` /
+  `unknown_model` with `error.model` for a prefix the table lacks). Drives
+  the `--direction router` cases that carry
+  `"op": "resolve_openai_chat_model"`.
+
+### provider_tables
+In: `{}`
+Out: the object in `tables/providers.json` (`schema`, `providers`,
+`declared_login`, `compat`, `routing`, `login`).
+- (Added 2026-10-02, reference only: ports need not implement it.) The
+  reference's provider tables as data: the registry rows with their whole
+  access policies, the managed-login declared providers, the three
+  dialects' compat presets with their base-URL and alias tables, the
+  router's `DEFAULT_RULES` and `LITELLM_PROVIDER_PREFIXES`, and the
+  managed-login service labels. `tools/audit.py` fails when
+  `tables/providers.json` differs from this output; ports generate their
+  copies from that file (`tables/README.md`).
+
 ### managed_run
 In: `{"store_path": str, "home": str, "env": {str: str}, "clock_ms": int,
 "sentinel": str, "http": [<reply>], "ui": [<answer>], "steps": [<step>]}`

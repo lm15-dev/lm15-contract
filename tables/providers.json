@@ -1,0 +1,2770 @@
+{
+  "schema": 1,
+  "providers": [
+    {
+      "id": "openai",
+      "dialect": "openai-responses",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "openai",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": true,
+          "files": true,
+          "batches": true,
+          "images": true,
+          "speech": true,
+          "video": true,
+          "responses_api": true,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [
+          "azure-openai"
+        ],
+        "env_keys": [
+          "OPENAI_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.openai.com/api-keys",
+      "note": "OpenAI Responses API"
+    },
+    {
+      "id": "openai-chat",
+      "dialect": "openai-chat",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "openai-chat",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "OPENAI_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.openai.com/api-keys",
+      "note": "OpenAI Chat Completions dialect (the de-facto standard other servers speak)"
+    },
+    {
+      "id": "anthropic",
+      "dialect": "anthropic",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": true,
+          "batches": true,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "x-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "ANTHROPIC_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.anthropic.com",
+      "note": "Anthropic Messages API"
+    },
+    {
+      "id": "gemini",
+      "dialect": "gemini",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "gemini",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": true,
+          "files": true,
+          "batches": true,
+          "images": true,
+          "speech": true,
+          "video": true,
+          "responses_api": false,
+          "models": true,
+          "caches": true,
+          "extra": []
+        },
+        "auth_modes": [
+          "query-api-key",
+          "x-goog-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "GEMINI_API_KEY",
+          "GOOGLE_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://aistudio.google.com/apikey",
+      "note": "Google Gemini API"
+    },
+    {
+      "id": "xai",
+      "dialect": "openai-chat",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "xai",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": true,
+          "speech": false,
+          "video": true,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer",
+          "xai-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "XAI_API_KEY"
+        ],
+        "credential_policy": "oauth-unless-explicit",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": "Log in again: run lm15.auth.login_xai() (SuperGrok / X Premium subscription auth)",
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.x.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.x.ai",
+      "note": "xAI Grok (Chat Completions dialect; XAI_API_KEY or subscription OAuth)"
+    },
+    {
+      "id": "typesafe",
+      "dialect": "typesafe",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "typesafe",
+        "supports": {
+          "complete": true,
+          "stream": false,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "TYPESAFE_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.typesafe.ai/keys",
+      "note": "TypeSafe System One (Jev): judgments over declared keys with probabilities; no text generation"
+    },
+    {
+      "id": "claude-code",
+      "dialect": "anthropic",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "claude-code",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "claude-code-oauth",
+          "bearer-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "oauth",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [
+          [
+            "anthropic-dangerous-direct-browser-access",
+            "true"
+          ],
+          [
+            "anthropic-beta",
+            "claude-code-20250219,oauth-2025-04-20"
+          ],
+          [
+            "x-app",
+            "cli"
+          ],
+          [
+            "user-agent",
+            "claude-cli/2.1.285"
+          ]
+        ],
+        "host": null,
+        "login_hint": "Log in again: run `claude` and use /login (Claude subscription auth)",
+        "backend": "claude-code",
+        "backend_options": {
+          "client_version": "2.1.285"
+        },
+        "system_prefix": "You are Claude Code, Anthropic's official CLI for Claude.",
+        "base_url": null,
+        "backend_settings": [
+          {
+            "name": "client_version",
+            "env": [
+              "LM15_CLAUDE_CODE_VERSION"
+            ],
+            "default": null
+          }
+        ]
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": null,
+      "note": "Claude subscription through the local `claude` CLI login"
+    },
+    {
+      "id": "openai-codex",
+      "dialect": "openai-responses",
+      "kind": "adapter-owned",
+      "compat": null,
+      "access": {
+        "provider": "openai-codex",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "chatgpt-oauth",
+          "bearer-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "oauth",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [
+          [
+            "OpenAI-Beta",
+            "responses=experimental"
+          ],
+          [
+            "originator",
+            "lm15"
+          ]
+        ],
+        "host": null,
+        "login_hint": "Log in again: run `codex login` (ChatGPT subscription auth)",
+        "backend": "chatgpt-codex",
+        "backend_options": {
+          "client_version": "0.147.0"
+        },
+        "system_prefix": "You are a helpful assistant.",
+        "base_url": "https://chatgpt.com/backend-api/codex",
+        "backend_settings": [
+          {
+            "name": "client_version",
+            "env": [
+              "LM15_CODEX_CLIENT_VERSION"
+            ],
+            "default": null
+          }
+        ]
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": null,
+      "note": "ChatGPT subscription through the local `codex` CLI login"
+    },
+    {
+      "id": "groq",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "groq",
+      "access": {
+        "provider": "groq",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "GROQ_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.groq.com/openai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.groq.com/keys",
+      "note": "Groq Cloud (Chat Completions dialect)"
+    },
+    {
+      "id": "openrouter",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "openrouter",
+      "access": {
+        "provider": "openrouter",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "OPENROUTER_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://openrouter.ai/api/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://openrouter.ai/keys",
+      "note": "OpenRouter (Chat Completions dialect)"
+    },
+    {
+      "id": "deepseek",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "deepseek",
+      "access": {
+        "provider": "deepseek",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "DEEPSEEK_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.deepseek.com",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.deepseek.com/api_keys",
+      "note": "DeepSeek (Chat Completions dialect; thinking mode on by default)"
+    },
+    {
+      "id": "deepseek-anthropic",
+      "dialect": "anthropic",
+      "kind": "bound",
+      "compat": "deepseek",
+      "access": {
+        "provider": "deepseek-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "x-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "DEEPSEEK_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.deepseek.com/anthropic/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.deepseek.com/api_keys",
+      "note": "DeepSeek over the Anthropic Messages wire (same key as `deepseek`; no model listing)"
+    },
+    {
+      "id": "zai",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "zai",
+      "access": {
+        "provider": "zai",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "ZAI_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.z.ai/api/paas/v4",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://z.ai/manage-apikey/apikey-list",
+      "note": "Z.AI GLM (Chat Completions dialect; general endpoint, not the Coding Plan)"
+    },
+    {
+      "id": "moonshotai",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "moonshotai",
+      "access": {
+        "provider": "moonshotai",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "MOONSHOTAI_API_KEY",
+          "MOONSHOT_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.moonshot.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.kimi.ai/console/api-keys",
+      "note": "Moonshot AI Kimi (Chat Completions dialect; kimi-k3 takes reasoning effort low|high|max, kimi-k2.6 takes effort off; Moonshot's docs call the key MOONSHOT_API_KEY — read after MOONSHOTAI_API_KEY)"
+    },
+    {
+      "id": "moonshotai-responses",
+      "dialect": "openai-responses",
+      "kind": "bound",
+      "compat": "moonshotai",
+      "access": {
+        "provider": "moonshotai-responses",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": true,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "MOONSHOTAI_API_KEY",
+          "MOONSHOT_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.moonshot.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.kimi.ai/console/api-keys",
+      "note": "Moonshot AI Kimi over the Responses wire (same key as `moonshotai`; kimi-k3 only; stateless — reasoning replays as summary text; web_search built-in)"
+    },
+    {
+      "id": "moonshotai-anthropic",
+      "dialect": "anthropic",
+      "kind": "bound",
+      "compat": "moonshotai",
+      "access": {
+        "provider": "moonshotai-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "MOONSHOTAI_API_KEY",
+          "MOONSHOT_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.moonshot.ai/anthropic/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://platform.kimi.ai/console/api-keys",
+      "note": "Moonshot AI Kimi over the Anthropic Messages wire (same key as `moonshotai`, bearer token; kimi-k3 only)"
+    },
+    {
+      "id": "deepinfra",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "deepinfra",
+      "access": {
+        "provider": "deepinfra",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "DEEPINFRA_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.deepinfra.com/v1/openai",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://deepinfra.com/dash/api_keys",
+      "note": "DeepInfra open-model inference (Chat Completions dialect; models are vendor/name ids)"
+    },
+    {
+      "id": "together",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "together",
+      "access": {
+        "provider": "together",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "TOGETHER_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.together.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://api.together.ai/settings/projects/~current/api-keys",
+      "note": "Together AI open-model inference (Chat Completions dialect; gpt-oss refuses a forced tool choice client-side — Together answers it with HTTP 500)"
+    },
+    {
+      "id": "fireworks",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "fireworks",
+      "access": {
+        "provider": "fireworks",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "FIREWORKS_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.fireworks.ai/inference/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://app.fireworks.ai/settings/users/api-keys",
+      "note": "Fireworks AI open-model inference (Chat Completions dialect; models are accounts/fireworks/models/<name> ids)"
+    },
+    {
+      "id": "parasail",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "parasail",
+      "access": {
+        "provider": "parasail",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "PARASAIL_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.parasail.io/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://www.saas.parasail.io/keys",
+      "note": "Parasail open-model inference (Chat Completions dialect; serverless models)"
+    },
+    {
+      "id": "meta",
+      "dialect": "openai-responses",
+      "kind": "bound",
+      "compat": "meta",
+      "access": {
+        "provider": "meta",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": true,
+          "batches": false,
+          "images": true,
+          "speech": false,
+          "video": false,
+          "responses_api": true,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "META_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.meta.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://dev.meta.ai/",
+      "note": "Meta Model API — Muse Spark over the Responses wire (reasoning replay, web_search), plus Files, Images (muse-image-1.0) and Models; Meta's docs call the key MODEL_API_KEY — export it as META_API_KEY"
+    },
+    {
+      "id": "meta-chat",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "meta",
+      "access": {
+        "provider": "meta-chat",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "META_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.meta.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://dev.meta.ai/",
+      "note": "Meta Model API over the Chat Completions wire (same key as `meta`; no cross-turn reasoning)"
+    },
+    {
+      "id": "meta-anthropic",
+      "dialect": "anthropic",
+      "kind": "bound",
+      "compat": "meta",
+      "access": {
+        "provider": "meta-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "META_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.meta.ai/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://dev.meta.ai/",
+      "note": "Meta Model API over the Anthropic Messages wire (same key as `meta`; bearer token)"
+    },
+    {
+      "id": "azure",
+      "dialect": "openai-responses",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "azure",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": true,
+          "files": true,
+          "batches": true,
+          "images": false,
+          "speech": true,
+          "video": false,
+          "responses_api": true,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "api-key",
+          "entra-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "AZURE_OPENAI_API_KEY"
+        ],
+        "credential_policy": "azure-chain",
+        "auth_scheme": [
+          "api-key",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://{resource}.openai.azure.com/openai/v1",
+          "settings": [
+            {
+              "name": "resource",
+              "env": [
+                "AZURE_OPENAI_RESOURCE"
+              ],
+              "default": null
+            },
+            {
+              "name": "authority_host",
+              "env": [
+                "AZURE_AUTHORITY_HOST"
+              ],
+              "default": "https://login.microsoftonline.com"
+            },
+            {
+              "name": "scope",
+              "env": [],
+              "default": "https://ai.azure.com/.default"
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": [
+            "AZURE_OPENAI_ENDPOINT"
+          ]
+        },
+        "login_hint": null,
+        "backend": "azure-openai",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://portal.azure.com/",
+      "note": "Azure OpenAI v1 Responses wire ({resource}.openai.azure.com, or AZURE_OPENAI_ENDPOINT = the Foundry root the console shows; model = deployment name; api-key or Entra token)"
+    },
+    {
+      "id": "azure-chat",
+      "dialect": "openai-chat",
+      "kind": "hosted",
+      "compat": "openai",
+      "access": {
+        "provider": "azure-chat",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "api-key",
+          "entra-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "AZURE_OPENAI_API_KEY"
+        ],
+        "credential_policy": "azure-chain",
+        "auth_scheme": [
+          "api-key",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://{resource}.openai.azure.com/openai/v1",
+          "settings": [
+            {
+              "name": "resource",
+              "env": [
+                "AZURE_OPENAI_RESOURCE"
+              ],
+              "default": null
+            },
+            {
+              "name": "authority_host",
+              "env": [
+                "AZURE_AUTHORITY_HOST"
+              ],
+              "default": "https://login.microsoftonline.com"
+            },
+            {
+              "name": "scope",
+              "env": [],
+              "default": "https://ai.azure.com/.default"
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": [
+            "AZURE_OPENAI_ENDPOINT"
+          ]
+        },
+        "login_hint": null,
+        "backend": "azure-openai",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://portal.azure.com/",
+      "note": "Azure OpenAI v1 Chat Completions wire (same resource or AZURE_OPENAI_ENDPOINT; also Foundry-sold models such as DeepSeek, Kimi and Grok)"
+    },
+    {
+      "id": "azure-anthropic",
+      "dialect": "anthropic",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "azure-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "x-api-key",
+          "entra-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "ANTHROPIC_FOUNDRY_API_KEY"
+        ],
+        "credential_policy": "azure-chain",
+        "auth_scheme": [
+          "x-api-key",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://{resource}.services.ai.azure.com/anthropic/v1",
+          "settings": [
+            {
+              "name": "resource",
+              "env": [
+                "ANTHROPIC_FOUNDRY_RESOURCE"
+              ],
+              "default": null
+            },
+            {
+              "name": "authority_host",
+              "env": [
+                "AZURE_AUTHORITY_HOST"
+              ],
+              "default": "https://login.microsoftonline.com"
+            },
+            {
+              "name": "scope",
+              "env": [],
+              "default": "https://ai.azure.com/.default"
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": [
+            "ANTHROPIC_FOUNDRY_BASE_URL"
+          ]
+        },
+        "login_hint": null,
+        "backend": "azure-foundry",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://ai.azure.com/",
+      "note": "Claude in Microsoft Foundry ({resource}.services.ai.azure.com/anthropic or ANTHROPIC_FOUNDRY_BASE_URL; x-api-key or Entra token)"
+    },
+    {
+      "id": "aws-anthropic",
+      "dialect": "anthropic",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "aws-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "sigv4",
+          "x-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "ANTHROPIC_AWS_API_KEY"
+        ],
+        "credential_policy": "aws-chain",
+        "auth_scheme": [
+          "sigv4",
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://aws-external-anthropic.{region}.api.aws/v1",
+          "settings": [
+            {
+              "name": "region",
+              "env": [
+                "AWS_REGION",
+                "AWS_DEFAULT_REGION"
+              ],
+              "default": null
+            },
+            {
+              "name": "workspace",
+              "env": [
+                "ANTHROPIC_AWS_WORKSPACE_ID"
+              ],
+              "default": null
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [
+            [
+              "anthropic-workspace-id",
+              "workspace"
+            ]
+          ],
+          "sigv4_service": "aws-external-anthropic",
+          "endpoint_env": [
+            "AWS_ENDPOINT_URL_AWS_EXTERNAL_ANTHROPIC",
+            "AWS_ENDPOINT_URL"
+          ]
+        },
+        "login_hint": null,
+        "backend": "aws-external-anthropic",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.aws.amazon.com/",
+      "note": "Claude Platform on AWS (Anthropic-operated; SigV4 or ANTHROPIC_AWS_API_KEY; needs AWS_REGION and ANTHROPIC_AWS_WORKSPACE_ID)"
+    },
+    {
+      "id": "bedrock-anthropic",
+      "dialect": "anthropic",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "bedrock-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "sigv4",
+          "x-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "AWS_BEARER_TOKEN_BEDROCK"
+        ],
+        "credential_policy": "aws-chain",
+        "auth_scheme": [
+          "sigv4",
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://bedrock-mantle.{region}.api.aws/anthropic/v1",
+          "settings": [
+            {
+              "name": "region",
+              "env": [
+                "AWS_REGION",
+                "AWS_DEFAULT_REGION"
+              ],
+              "default": null
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": "bedrock-mantle",
+          "endpoint_env": [
+            "AWS_ENDPOINT_URL_BEDROCK_MANTLE",
+            "AWS_ENDPOINT_URL"
+          ]
+        },
+        "login_hint": null,
+        "backend": "bedrock-mantle",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.aws.amazon.com/bedrock/",
+      "note": "Claude in Amazon Bedrock (bedrock-mantle, Opus 4.7 and later; SigV4 or AWS_BEARER_TOKEN_BEDROCK; needs AWS_REGION)"
+    },
+    {
+      "id": "bedrock-chat",
+      "dialect": "openai-chat",
+      "kind": "hosted",
+      "compat": "bedrock",
+      "access": {
+        "provider": "bedrock-chat",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "sigv4",
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "AWS_BEARER_TOKEN_BEDROCK"
+        ],
+        "credential_policy": "aws-chain",
+        "auth_scheme": [
+          "sigv4",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://bedrock-runtime.{region}.amazonaws.com/openai/v1",
+          "settings": [
+            {
+              "name": "region",
+              "env": [
+                "AWS_REGION",
+                "AWS_DEFAULT_REGION"
+              ],
+              "default": null
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": "bedrock",
+          "endpoint_env": [
+            "AWS_ENDPOINT_URL_BEDROCK_RUNTIME",
+            "AWS_ENDPOINT_URL"
+          ]
+        },
+        "login_hint": null,
+        "backend": "bedrock-runtime",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.aws.amazon.com/bedrock/",
+      "note": "Amazon Bedrock over the OpenAI Chat Completions wire (bedrock-runtime /openai/v1; SigV4 or AWS_BEARER_TOKEN_BEDROCK)"
+    },
+    {
+      "id": "bedrock-mantle-chat",
+      "dialect": "openai-chat",
+      "kind": "hosted",
+      "compat": "bedrock-mantle",
+      "access": {
+        "provider": "bedrock-mantle-chat",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "sigv4",
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "AWS_BEARER_TOKEN_BEDROCK"
+        ],
+        "credential_policy": "aws-chain",
+        "auth_scheme": [
+          "sigv4",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://bedrock-mantle.{region}.api.aws/v1",
+          "settings": [
+            {
+              "name": "region",
+              "env": [
+                "AWS_REGION",
+                "AWS_DEFAULT_REGION"
+              ],
+              "default": null
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": "bedrock-mantle",
+          "endpoint_env": [
+            "AWS_ENDPOINT_URL_BEDROCK_MANTLE",
+            "AWS_ENDPOINT_URL"
+          ]
+        },
+        "login_hint": null,
+        "backend": "bedrock-mantle",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.aws.amazon.com/bedrock/",
+      "note": "Amazon Bedrock Chat Completions on bedrock-mantle (un-versioned ids, GET /v1/models; SigV4 or AWS_BEARER_TOKEN_BEDROCK)"
+    },
+    {
+      "id": "vertex",
+      "dialect": "gemini",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "vertex",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "x-goog-api-key",
+          "google-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "gcp-chain",
+        "auth_scheme": [
+          "x-api-key",
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://{location_host}/v1/projects/{project}/locations/{location}/publishers/google",
+          "settings": [
+            {
+              "name": "project",
+              "env": [
+                "GOOGLE_CLOUD_PROJECT",
+                "GCLOUD_PROJECT"
+              ],
+              "default": null
+            },
+            {
+              "name": "location",
+              "env": [
+                "GOOGLE_CLOUD_LOCATION"
+              ],
+              "default": "global"
+            }
+          ],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": []
+        },
+        "login_hint": null,
+        "backend": "vertex",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.cloud.google.com/vertex-ai",
+      "note": "Gemini on Google Cloud (Agent Platform); ADC chain; needs GOOGLE_CLOUD_PROJECT, GOOGLE_CLOUD_LOCATION defaults to global"
+    },
+    {
+      "id": "vertex-express",
+      "dialect": "gemini",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "vertex-express",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "query-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "GOOGLE_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "query-key"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://aiplatform.googleapis.com/v1/publishers/google",
+          "settings": [],
+          "paths": {},
+          "model_in": "body",
+          "anthropic_version_in": "header",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": []
+        },
+        "login_hint": null,
+        "backend": "vertex-express",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.cloud.google.com/vertex-ai/studio",
+      "note": "Agent Platform express mode: GOOGLE_API_KEY as ?key=, no project or location"
+    },
+    {
+      "id": "vertex-anthropic",
+      "dialect": "anthropic",
+      "kind": "hosted",
+      "compat": null,
+      "access": {
+        "provider": "vertex-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "google-oauth"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "gcp-chain",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": {
+          "base_url": "https://{location_host}/v1/projects/{project}/locations/{location}",
+          "settings": [
+            {
+              "name": "project",
+              "env": [
+                "GOOGLE_CLOUD_PROJECT",
+                "GCLOUD_PROJECT"
+              ],
+              "default": null
+            },
+            {
+              "name": "location",
+              "env": [
+                "GOOGLE_CLOUD_LOCATION"
+              ],
+              "default": "global"
+            }
+          ],
+          "paths": {
+            "messages": "/publishers/anthropic/models/{model}:rawPredict",
+            "messages/stream": "/publishers/anthropic/models/{model}:streamRawPredict"
+          },
+          "model_in": "path",
+          "anthropic_version_in": "body:vertex-2023-10-16",
+          "stream_framing": "sse",
+          "required_headers": [],
+          "sigv4_service": null,
+          "endpoint_env": []
+        },
+        "login_hint": null,
+        "backend": "vertex",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": null,
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://console.cloud.google.com/vertex-ai/model-garden",
+      "note": "Claude on Google Cloud (rawPredict; model in the path, anthropic_version in the body)"
+    },
+    {
+      "id": "ollama",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "ollama",
+      "access": {
+        "provider": "ollama",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "http://localhost:11434/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": "ollama",
+      "console_url": null,
+      "note": "local ollama server (keyless)"
+    },
+    {
+      "id": "vllm",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "vllm",
+      "access": {
+        "provider": "vllm",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "http://localhost:8000/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": "EMPTY",
+      "console_url": null,
+      "note": "local vLLM server (keyless)"
+    },
+    {
+      "id": "sglang",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "sglang",
+      "access": {
+        "provider": "sglang",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "http://localhost:30000/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": "EMPTY",
+      "console_url": null,
+      "note": "local SGLang server (keyless)"
+    }
+  ],
+  "declared_login": [
+    {
+      "id": "kimi-code",
+      "dialect": "anthropic",
+      "kind": "bound",
+      "compat": {},
+      "access": {
+        "provider": "kimi-code",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.kimi.com/coding",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": null,
+      "note": "Kimi Code subscription over the Anthropic Messages wire (managed login only; no lm15 wire receipt yet)"
+    },
+    {
+      "id": "github-copilot",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "thinking_format": "reasoning_effort"
+      },
+      "access": {
+        "provider": "github-copilot",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [
+          [
+            "User-Agent",
+            "GitHubCopilotChat/0.35.0"
+          ],
+          [
+            "Editor-Version",
+            "vscode/1.107.0"
+          ],
+          [
+            "Editor-Plugin-Version",
+            "copilot-chat/0.35.0"
+          ],
+          [
+            "Copilot-Integration-Id",
+            "vscode-chat"
+          ]
+        ],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://api.individual.githubcopilot.com",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": null,
+      "note": "GitHub Copilot over the Chat Completions wire (managed login only; the account's host comes from the token; no lm15 wire receipt yet)"
+    }
+  ],
+  "compat": {
+    "chat": {
+      "openai": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "openai"
+      },
+      "ollama": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "reasoning_efforts": [
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "lmstudio": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "none",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none"
+      },
+      "groq": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "builtin_tools": "groq",
+        "tool_result_media": "reject",
+        "cache_control": "none"
+      },
+      "openrouter": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "openrouter",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "openai"
+      },
+      "xai": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "deepseek",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "none"
+      },
+      "vllm": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "token_scoring": "logprob_token_ids"
+      },
+      "sglang": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none"
+      },
+      "deepseek": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "deepseek",
+        "thinking_replay": "native",
+        "assistant_reasoning_content": "include_empty",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "user_field": "user_id"
+      },
+      "qwen": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "qwen",
+        "strict_tools": "omit",
+        "cache_control": "none"
+      },
+      "bedrock": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "user_field": "user",
+        "forced_tool_choice": "send",
+        "json_schema": "send",
+        "model_overrides": [
+          [
+            "openai.gpt-oss",
+            {
+              "forced_tool_choice": "reject",
+              "json_schema": "reject"
+            }
+          ],
+          [
+            "google.gemma",
+            {
+              "forced_tool_choice": "reject"
+            }
+          ]
+        ]
+      },
+      "bedrock_mantle": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "user_field": "user",
+        "forced_tool_choice": "send",
+        "json_schema": "send",
+        "model_overrides": [
+          [
+            "openai.gpt-oss",
+            {
+              "forced_tool_choice": "reject",
+              "json_schema": "reject"
+            }
+          ]
+        ]
+      },
+      "zai": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "deepseek",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "none",
+        "user_field": "user_id",
+        "forced_tool_choice": "reject",
+        "json_schema": "reject"
+      },
+      "meta": {
+        "instruction_role": "developer",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "openai_implicit",
+        "user_field": "safety_identifier"
+      },
+      "moonshotai": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "kimi",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "openai_implicit",
+        "user_field": "safety_identifier",
+        "reasoning_efforts": [
+          "low",
+          "high",
+          "max"
+        ]
+      },
+      "deepinfra": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "forced_tool_choice": "reject",
+        "model_overrides": [
+          [
+            "openai/gpt-oss",
+            {
+              "reasoning_off": "lowest"
+            }
+          ],
+          [
+            "deepseek-ai/DeepSeek-V3.2",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "deepseek-ai/DeepSeek-V4-Flash",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "deepseek-ai/DeepSeek-V4.1-Flash",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "zai-org/GLM-5.3-Flash",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "moonshotai/Kimi-K2.6",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "Qwen/Qwen3.6-27B",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "Qwen/Qwen3-Next-80B-A3B-Instruct",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "nvidia/NVIDIA-Nemotron-3.5-Lightning",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "ibm-granite/granite-4.2-8b",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "XiaomiMiMo/MiMo-V2.6-Flash",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "tencent/Hy3",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "google/gemini-3.1-flash-lite",
+            {
+              "forced_tool_choice": "send"
+            }
+          ],
+          [
+            "anthropic/claude-haiku-4-5",
+            {
+              "forced_tool_choice": "send"
+            }
+          ]
+        ]
+      },
+      "together": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "reject",
+        "cache_control": "none",
+        "model_overrides": [
+          [
+            "openai/gpt-oss",
+            {
+              "forced_tool_choice": "reject",
+              "reasoning_efforts": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "reasoning_off": "lowest"
+            }
+          ],
+          [
+            "zai-org/GLM-5.3",
+            {
+              "reasoning_off": "lowest"
+            }
+          ]
+        ]
+      },
+      "fireworks": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "none"
+      },
+      "parasail": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "none"
+      }
+    },
+    "chat_base_urls": {
+      "openai": "https://api.openai.com/v1",
+      "ollama": "http://localhost:11434/v1",
+      "lmstudio": "http://localhost:1234/v1",
+      "groq": "https://api.groq.com/openai/v1",
+      "openrouter": "https://openrouter.ai/api/v1",
+      "xai": "https://api.x.ai/v1",
+      "vllm": "http://localhost:8000/v1",
+      "sglang": "http://localhost:30000/v1",
+      "deepseek": "https://api.deepseek.com",
+      "zai": "https://api.z.ai/api/paas/v4",
+      "meta": "https://api.meta.ai/v1",
+      "moonshotai": "https://api.moonshot.ai/v1",
+      "deepinfra": "https://api.deepinfra.com/v1/openai",
+      "together": "https://api.together.ai/v1",
+      "fireworks": "https://api.fireworks.ai/inference/v1",
+      "parasail": "https://api.parasail.io/v1"
+    },
+    "responses": {
+      "openai": {
+        "developer_role": "developer",
+        "max_output_tokens_field": "max_output_tokens",
+        "reasoning_format": "responses_reasoning",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "openai"
+      },
+      "openrouter": {
+        "developer_role": "developer",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "openrouter",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "openai",
+        "tool_result_media": "reject"
+      },
+      "ollama": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "none",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "lmstudio": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "none",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "vllm": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "reasoning_effort",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "sglang": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "reasoning_effort",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "qwen": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "qwen",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "deepseek": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "deepseek",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "zai": {
+        "developer_role": "system",
+        "max_output_tokens_field": "max_tokens",
+        "reasoning_format": "zai",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "none",
+        "tool_result_media": "reject"
+      },
+      "meta": {
+        "developer_role": "developer",
+        "max_output_tokens_field": "max_output_tokens",
+        "reasoning_format": "responses_reasoning",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "openai_implicit",
+        "commentary_phase": "tag",
+        "edit_image_field": "indexed",
+        "builtin_tools": "verbatim",
+        "tool_result_media": "native"
+      },
+      "moonshotai": {
+        "developer_role": "developer",
+        "max_output_tokens_field": "max_output_tokens",
+        "reasoning_format": "responses_reasoning",
+        "tool_result_name": "omit",
+        "strict_tools": "omit",
+        "cache_control": "openai_implicit",
+        "builtin_tools": "verbatim",
+        "tool_result_media": "images"
+      }
+    },
+    "responses_base_urls": {
+      "openai": "https://api.openai.com/v1",
+      "ollama": "http://localhost:11434/v1",
+      "lmstudio": "http://localhost:1234/v1",
+      "vllm": "http://localhost:8000/v1",
+      "sglang": "http://localhost:30000/v1",
+      "openrouter": "https://openrouter.ai/api/v1",
+      "meta": "https://api.meta.ai/v1",
+      "moonshotai": "https://api.moonshot.ai/v1"
+    },
+    "anthropic": {
+      "anthropic": {},
+      "deepseek": {
+        "thinking_format": "deepseek",
+        "cache_control": "none",
+        "structured_output": "reject",
+        "parallel_tool_calls": "reject",
+        "tool_result_media": "reject",
+        "model_prefixes": [
+          "deepseek-"
+        ]
+      },
+      "meta": {
+        "thinking_format": "adaptive",
+        "cache_control": "none",
+        "structured_output": "send",
+        "parallel_tool_calls": "send",
+        "tool_result_media": "native"
+      },
+      "moonshotai": {
+        "thinking_format": "effort",
+        "thinking_replay": "unsigned",
+        "cache_control": "none",
+        "structured_output": "send",
+        "parallel_tool_calls": "reject",
+        "sampling_params": "reject",
+        "tool_result_media": "images",
+        "reasoning_efforts": [
+          "low",
+          "high",
+          "max"
+        ],
+        "model_prefixes": [
+          "kimi-"
+        ]
+      }
+    },
+    "anthropic_base_urls": {
+      "anthropic": "https://api.anthropic.com/v1",
+      "deepseek": "https://api.deepseek.com/anthropic/v1",
+      "meta": "https://api.meta.ai/v1",
+      "moonshotai": "https://api.moonshot.ai/anthropic/v1"
+    },
+    "preset_aliases": {
+      "openai_chat": "openai",
+      "chat": "openai",
+      "chat_completions": "openai",
+      "responses": "openai",
+      "openai_responses": "openai",
+      "lm_studio": "lmstudio",
+      "dashscope_qwen": "qwen",
+      "z_ai": "zai"
+    }
+  },
+  "routing": {
+    "default_rules": [
+      {
+        "prefix": "claude-",
+        "provider": "anthropic",
+        "note": "Anthropic Claude family"
+      },
+      {
+        "prefix": "gpt-",
+        "provider": "openai",
+        "note": "OpenAI GPT family (Responses API; use openai-chat: for Chat Completions)"
+      },
+      {
+        "prefix": "o1",
+        "provider": "openai",
+        "note": "OpenAI o1 reasoning family"
+      },
+      {
+        "prefix": "o3",
+        "provider": "openai",
+        "note": "OpenAI o3 reasoning family"
+      },
+      {
+        "prefix": "o4",
+        "provider": "openai",
+        "note": "OpenAI o4 reasoning family"
+      },
+      {
+        "prefix": "gemini-",
+        "provider": "gemini",
+        "note": "Google Gemini family"
+      },
+      {
+        "prefix": "gemma-",
+        "provider": "gemini",
+        "note": "Google Gemma open models, served by the Gemini API (live /models listing 2026-09-01)"
+      },
+      {
+        "prefix": "nano-banana",
+        "provider": "gemini",
+        "note": "Google image models on the Gemini API (live /models listing 2026-09-01)"
+      },
+      {
+        "prefix": "grok-",
+        "provider": "xai",
+        "note": "xAI Grok family (XAI_API_KEY or subscription OAuth)"
+      },
+      {
+        "prefix": "sora-",
+        "provider": "openai",
+        "note": "OpenAI Sora video generation"
+      },
+      {
+        "prefix": "veo-",
+        "provider": "gemini",
+        "note": "Google Veo video generation"
+      },
+      {
+        "prefix": "chat-latest",
+        "provider": "openai",
+        "note": "OpenAI rolling chat alias (live /models listing 2026-09-01)"
+      },
+      {
+        "prefix": "jev-",
+        "provider": "typesafe",
+        "note": "TypeSafe Jev (live /v1/models listing 2026-09-17: jev-latest, jev-preview; versioned ids jev-1.13.0 accepted)"
+      }
+    ],
+    "litellm_prefixes": {
+      "openai": "openai-chat",
+      "anthropic": "anthropic",
+      "gemini": "gemini",
+      "groq": "groq",
+      "openrouter": "openrouter",
+      "deepseek": "deepseek",
+      "xai": "xai",
+      "ollama": "ollama",
+      "ollama_chat": "ollama",
+      "hosted_vllm": "vllm",
+      "moonshot": "moonshotai",
+      "azure": "azure-chat",
+      "deepinfra": "deepinfra",
+      "together_ai": "together",
+      "fireworks_ai": "fireworks",
+      "parasail": "parasail"
+    }
+  },
+  "login": {
+    "service_labels": {
+      "anthropic": "Anthropic",
+      "claude-code": "Anthropic",
+      "openai": "OpenAI",
+      "openai-chat": "OpenAI",
+      "openai-codex": "OpenAI",
+      "gemini": "Google",
+      "vertex": "Google Cloud",
+      "vertex-anthropic": "Google Cloud",
+      "vertex-express": "Google Cloud",
+      "azure": "Microsoft Azure",
+      "azure-chat": "Microsoft Azure",
+      "azure-anthropic": "Microsoft Azure",
+      "aws-anthropic": "AWS",
+      "bedrock-anthropic": "AWS",
+      "bedrock-chat": "AWS",
+      "bedrock-mantle-chat": "AWS",
+      "meta": "Meta",
+      "meta-chat": "Meta",
+      "meta-anthropic": "Meta",
+      "moonshotai": "Moonshot AI",
+      "moonshotai-anthropic": "Moonshot AI",
+      "moonshotai-responses": "Moonshot AI",
+      "kimi-code": "Moonshot AI",
+      "deepseek": "DeepSeek",
+      "deepseek-anthropic": "DeepSeek",
+      "groq": "Groq",
+      "openrouter": "OpenRouter",
+      "xai": "xAI",
+      "zai": "Z.AI",
+      "typesafe": "TypeSafe",
+      "ollama": "Local",
+      "vllm": "Local",
+      "sglang": "Local",
+      "github-copilot": "GitHub",
+      "deepinfra": "DeepInfra",
+      "together": "Together AI",
+      "fireworks": "Fireworks AI",
+      "parasail": "Parasail"
+    }
+  }
+}

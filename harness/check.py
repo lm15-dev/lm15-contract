@@ -1333,8 +1333,14 @@ def run_auth_direction(shim: Shim, case_filter: str | None, auth_scope: str = "a
 
 # ─── Direction: router (model-string resolution) ─────────────────────
 
+# The router door a case goes through: the plain resolve, or the OpenAI-SDK /
+# litellm door (resolve_openai_chat). Same inputs, same comparison.
+ROUTER_OPS = frozenset({"resolve_model", "resolve_openai_chat_model"})
+
+
 def run_router_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
-    """Model-string resolution through the shim's resolve_model (PROTOCOL.md).
+    """Model-string resolution through the shim's resolve_model, or
+    resolve_openai_chat_model when the case names it (PROTOCOL.md).
 
     The harness supplies the model string, an always-empty env (so the
     real process environment never leaks in) and, when the case carries
@@ -1351,10 +1357,14 @@ def run_router_direction(shim: Shim, case_filter: str | None) -> DirectionReport
         case_id = case["id"]
         if case_filter and case_id != case_filter:
             continue
+        op = case.get("op", "resolve_model")
+        if op not in ROUTER_OPS:
+            report.results.append(CaseResult(case_id, "fail", reason=f"case names op {op!r}, not one of {sorted(ROUTER_OPS)}"))
+            continue
         fields: JsonObject = {"model": case["model"], "env": {}}
         if "catalog" in case:
             fields["catalog"] = case["catalog"]
-        reply = shim.call("resolve_model", **fields)
+        reply = shim.call(op, **fields)
         expect = case["expect"]
         if "error" in expect:
             if reply.get("ok"):

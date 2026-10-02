@@ -80,6 +80,8 @@ MUTATIONS = (
     "router_resolves_instead_of_refusing",  # resolve_model: an unknown string routed anyway
     "router_provider_underscore",  # resolve_model: the underscore spelling as an OUTPUT value
     "router_alias_not_resolved",   # resolve_model: a catalog alias sent on the wire unresolved
+    "router_rule_delimiter_dropped",  # resolve_model: a built-in rule matched one byte short of its prefix ("jevons" by "jev")
+    "router_litellm_prefix_kept",  # resolve_openai_chat_model: litellm's provider/ prefix left on the wire model id
     "ingest_drops_config",         # ingest_openai_chat: the body's generation knobs read back as no config (a silent drop)
     "ingest_maps_a_refused_key",   # ingest_openai_chat: a pinned refusal answered with a Request (n, functions, ... absorbed)
 )
@@ -408,9 +410,11 @@ def op_parse_response(msg: JsonObject) -> JsonObject:
     return {"canonical_response": resp}
 
 
-def op_resolve_model(msg: JsonObject) -> JsonObject:
+def op_resolve_model(msg: JsonObject, *, op: str = "resolve_model") -> JsonObject:
     fixture = check.load_router_fixture()
     for case in fixture["cases"]:
+        if case.get("op", "resolve_model") != op:
+            continue
         if case["model"] != msg["model"] or case.get("catalog") != msg.get("catalog"):
             continue
         expect = case["expect"]
@@ -426,6 +430,10 @@ def op_resolve_model(msg: JsonObject) -> JsonObject:
                     error.pop("providers", None)
                 elif MUTATION == "router_resolves_instead_of_refusing":
                     return {"provider": "openai", "model": msg["model"], "source": "rule"}
+                elif MUTATION == "router_rule_delimiter_dropped":
+                    # The 2026-10-02 lm15-rs bug: rule "jev" for "jev-", so a
+                    # name one byte short of the rule routes anyway.
+                    return {"provider": "typesafe", "model": msg["model"], "source": "rule"}
             raise PinnedRaise(error)
         result = dict(expect)
         if targeted(case):
@@ -433,8 +441,16 @@ def op_resolve_model(msg: JsonObject) -> JsonObject:
                 result["provider"] = result["provider"].replace("-", "_")
             elif MUTATION == "router_alias_not_resolved":
                 result["model"] = msg["model"]
+            elif MUTATION == "router_litellm_prefix_kept":
+                # A litellm table that maps the provider but sends the whole
+                # `prefix/model` string on the wire.
+                result["model"] = msg["model"]
         return result
-    raise LookupError("no router fixture matches this (model, catalog)")
+    raise LookupError(f"no router fixture matches this ({op}, model, catalog)")
+
+
+def op_resolve_openai_chat_model(msg: JsonObject) -> JsonObject:
+    return op_resolve_model(msg, op="resolve_openai_chat_model")
 
 
 def find_ingest_case(msg: JsonObject) -> JsonObject:
@@ -1000,6 +1016,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "serde_roundtrip": op_serde_roundtrip,
     "explain_auth": op_explain_auth,
     "resolve_model": op_resolve_model,
+    "resolve_openai_chat_model": op_resolve_openai_chat_model,
     "build_models_request": op_build_models_request,
     "parse_models_response": op_parse_models_response,
     "replay_live": op_replay_live,

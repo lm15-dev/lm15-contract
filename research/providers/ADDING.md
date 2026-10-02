@@ -1,7 +1,11 @@
 # Adding providers and models to lm15 — a study
 
-Status: STUDY, 2026-10-02. Not ratified, binds nobody. A candidate for
-`playbooks/provider.md`. Every claim below cites the file it was read from;
+Status: STUDY, 2026-10-02, kept as written. **Superseded** by
+`playbooks/provider.md` (ratified the same day); recommendations 1–5 of § 7
+were carried out by `changes/2026-10-02-router-tables-pinned.md`, which
+resolves F1–F5 (F2's lm15-rs `jev` rule fixed; F5 settled by publishing
+`tables/providers.json` and generating the TypeScript, Rust and Go tables
+from it). Every claim below cites the file it was read from;
 the worked example throughout is `changes/2026-09-26-inference-hosts-live.md`
 (DeepInfra, Together, Fireworks, Parasail: four providers in one day).
 

@@ -2,9 +2,9 @@
   "provenance": {
     "source": "hand-authored",
     "date": "2026-09-08",
-    "evidence": "changes/2026-09-08-router-error-codes.md (ratified 2026-09-08); spec/vocabularies.md § ErrorCode (unknown_model, ambiguous_model) and § Open string namespaces (provider spelling); playbooks/api-family.md § The core loop (the router's three rungs: prefix, catalog, rule). Expected values derived from the reference's lm15.router after the fix and confirmed against the Rust port's lm15-vet; both shims green at authoring."
+    "evidence": "changes/2026-09-08-router-error-codes.md (ratified 2026-09-08); spec/vocabularies.md § ErrorCode (unknown_model, ambiguous_model) and § Open string namespaces (provider spelling); playbooks/api-family.md § The core loop (the router's three rungs: prefix, catalog, rule). Expected values derived from the reference's lm15.router after the fix and confirmed against the Rust port's lm15-vet; both shims green at authoring. 2026-10-02: rule, rule-boundary and resolve_openai_chat_model cases added by changes/2026-10-02-router-tables-pinned.md; expected values written by hand from DEFAULT_RULES and LITELLM_PROVIDER_PREFIXES (the reference tables every port copies under port.md rule 2), then run through every shim."
   },
-  "description": "Model-string resolution fixtures exercised through each implementation's resolve_model op (PROTOCOL.md). The harness supplies the model string and, when the case carries one, an explicit catalog of canonical ModelInfo values; it always supplies an empty env so no real environment leaks in. resolve is pure: no network, no credential lookup. A pass compares Resolution.provider / model / source strictly, or — for an error case — the failure reply's error class, code and the payload fields the vocabulary pins (model; providers for ambiguous_model). Source values: prefix (rung 1), catalog (rung 2), rule (rung 3).",
+  "description": "Model-string resolution fixtures exercised through each implementation's resolve_model op (PROTOCOL.md). The harness supplies the model string and, when the case carries one, an explicit catalog of canonical ModelInfo values; it always supplies an empty env so no real environment leaks in. resolve is pure: no network, no credential lookup. A pass compares Resolution.provider / model / source strictly, or — for an error case — the failure reply's error class, code and the payload fields the vocabulary pins (model; providers for ambiguous_model). Source values: prefix (rung 1), catalog (rung 2), rule (rung 3). A case with \"op\": \"resolve_openai_chat_model\" goes through that op instead (the router's OpenAI-SDK/litellm door: provider/model read through the litellm prefix table, a bare OpenAI name to openai-chat); the comparison is the same.",
   "cases": [
     {
       "id": "prefix-routes",
@@ -256,6 +256,476 @@
           "class": "UnknownModelError",
           "code": "unknown_model",
           "model": "mystery-model"
+        }
+      }
+    },
+    {
+      "id": "rule-o1-family",
+      "model": "o1-mini",
+      "expect": {
+        "provider": "openai",
+        "model": "o1-mini",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-o3-family",
+      "model": "o3-pro",
+      "expect": {
+        "provider": "openai",
+        "model": "o3-pro",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-o4-family",
+      "model": "o4-mini",
+      "expect": {
+        "provider": "openai",
+        "model": "o4-mini",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-gemma-family",
+      "model": "gemma-4-26b-it",
+      "expect": {
+        "provider": "gemini",
+        "model": "gemma-4-26b-it",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-nano-banana-family",
+      "model": "nano-banana-pro-preview",
+      "expect": {
+        "provider": "gemini",
+        "model": "nano-banana-pro-preview",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-sora-family",
+      "model": "sora-2",
+      "expect": {
+        "provider": "openai",
+        "model": "sora-2",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-veo-family",
+      "model": "veo-3.1-generate-preview",
+      "expect": {
+        "provider": "gemini",
+        "model": "veo-3.1-generate-preview",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-chat-latest",
+      "model": "chat-latest",
+      "expect": {
+        "provider": "openai",
+        "model": "chat-latest",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-jev-family",
+      "model": "jev-latest",
+      "expect": {
+        "provider": "typesafe",
+        "model": "jev-latest",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-o1-bare-name",
+      "model": "o1",
+      "expect": {
+        "provider": "openai",
+        "model": "o1",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-boundary-claude",
+      "model": "claudette-1",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "claudette-1"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-gpt",
+      "model": "gpt4all",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "gpt4all"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-gemini",
+      "model": "gemini",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "gemini"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-gemma",
+      "model": "gemma3",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "gemma3"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-grok",
+      "model": "grok",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "grok"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-sora",
+      "model": "sora2",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "sora2"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-veo",
+      "model": "veo3",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "veo3"
+        }
+      }
+    },
+    {
+      "id": "rule-boundary-jev",
+      "model": "jevons-1",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "jevons-1"
+        }
+      }
+    },
+    {
+      "id": "rule-case-sensitive",
+      "model": "Claude-haiku-4-5",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "Claude-haiku-4-5"
+        }
+      }
+    },
+    {
+      "id": "colon-in-bare-id-matches-no-rule",
+      "model": "gemma3:4b",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "gemma3:4b"
+        }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-openai",
+      "op": "resolve_openai_chat_model",
+      "model": "openai/gpt-4.1-mini",
+      "expect": {
+        "provider": "openai-chat",
+        "model": "gpt-4.1-mini",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-anthropic",
+      "op": "resolve_openai_chat_model",
+      "model": "anthropic/claude-haiku-4-5",
+      "expect": {
+        "provider": "anthropic",
+        "model": "claude-haiku-4-5",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-gemini",
+      "op": "resolve_openai_chat_model",
+      "model": "gemini/gemini-2.5-flash",
+      "expect": {
+        "provider": "gemini",
+        "model": "gemini-2.5-flash",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-groq",
+      "op": "resolve_openai_chat_model",
+      "model": "groq/llama-3.3-70b-versatile",
+      "expect": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-openrouter",
+      "op": "resolve_openai_chat_model",
+      "model": "openrouter/openai/gpt-4.1-mini",
+      "expect": {
+        "provider": "openrouter",
+        "model": "openai/gpt-4.1-mini",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-deepseek",
+      "op": "resolve_openai_chat_model",
+      "model": "deepseek/deepseek-chat",
+      "expect": {
+        "provider": "deepseek",
+        "model": "deepseek-chat",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-xai",
+      "op": "resolve_openai_chat_model",
+      "model": "xai/grok-4",
+      "expect": {
+        "provider": "xai",
+        "model": "grok-4",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-ollama",
+      "op": "resolve_openai_chat_model",
+      "model": "ollama/llama3.2",
+      "expect": {
+        "provider": "ollama",
+        "model": "llama3.2",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-ollama-chat",
+      "op": "resolve_openai_chat_model",
+      "model": "ollama_chat/llama3.2",
+      "expect": {
+        "provider": "ollama",
+        "model": "llama3.2",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-hosted-vllm",
+      "op": "resolve_openai_chat_model",
+      "model": "hosted_vllm/Qwen/Qwen3-8B",
+      "expect": {
+        "provider": "vllm",
+        "model": "Qwen/Qwen3-8B",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-moonshot",
+      "op": "resolve_openai_chat_model",
+      "model": "moonshot/kimi-k2.6",
+      "expect": {
+        "provider": "moonshotai",
+        "model": "kimi-k2.6",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-azure",
+      "op": "resolve_openai_chat_model",
+      "model": "azure/my-gpt-deployment",
+      "expect": {
+        "provider": "azure-chat",
+        "model": "my-gpt-deployment",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-deepinfra",
+      "op": "resolve_openai_chat_model",
+      "model": "deepinfra/deepseek-ai/DeepSeek-V3.2",
+      "expect": {
+        "provider": "deepinfra",
+        "model": "deepseek-ai/DeepSeek-V3.2",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-together-ai",
+      "op": "resolve_openai_chat_model",
+      "model": "together_ai/openai/gpt-oss-20b",
+      "expect": {
+        "provider": "together",
+        "model": "openai/gpt-oss-20b",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-fireworks-ai",
+      "op": "resolve_openai_chat_model",
+      "model": "fireworks_ai/accounts/fireworks/models/gpt-oss-20b",
+      "expect": {
+        "provider": "fireworks",
+        "model": "accounts/fireworks/models/gpt-oss-20b",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-parasail",
+      "op": "resolve_openai_chat_model",
+      "model": "parasail/meta-llama/Llama-3.3-70B-Instruct",
+      "expect": {
+        "provider": "parasail",
+        "model": "meta-llama/Llama-3.3-70B-Instruct",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-first-segment-only",
+      "op": "resolve_openai_chat_model",
+      "model": "groq/openai/gpt-oss-20b",
+      "expect": {
+        "provider": "groq",
+        "model": "openai/gpt-oss-20b",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-bare-openai-name-is-chat-completions",
+      "op": "resolve_openai_chat_model",
+      "model": "gpt-4.1-mini",
+      "expect": {
+        "provider": "openai-chat",
+        "model": "gpt-4.1-mini",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-bare-name-routes-by-rule",
+      "op": "resolve_openai_chat_model",
+      "model": "claude-haiku-4-5",
+      "expect": {
+        "provider": "anthropic",
+        "model": "claude-haiku-4-5",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "openai-chat-lm15-string-passes-through",
+      "op": "resolve_openai_chat_model",
+      "model": "groq:llama-3.3-70b-versatile",
+      "expect": {
+        "provider": "groq",
+        "model": "llama-3.3-70b-versatile",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-explicit-responses-door-kept",
+      "op": "resolve_openai_chat_model",
+      "model": "openai:gpt-4.1-mini",
+      "expect": {
+        "provider": "openai",
+        "model": "gpt-4.1-mini",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "openai-chat-litellm-bedrock-refused",
+      "op": "resolve_openai_chat_model",
+      "model": "bedrock/anthropic.claude-sonnet-5",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "bedrock/anthropic.claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-vertex-refused",
+      "op": "resolve_openai_chat_model",
+      "model": "vertex_ai/gemini-2.5-pro",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "vertex_ai/gemini-2.5-pro"
+        }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-spelling-is-exact",
+      "op": "resolve_openai_chat_model",
+      "model": "together-ai/openai/gpt-oss-20b",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "together-ai/openai/gpt-oss-20b"
+        }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-unknown-prefix",
+      "op": "resolve_openai_chat_model",
+      "model": "nope/some-model",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "nope/some-model"
+        }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-empty-rest",
+      "op": "resolve_openai_chat_model",
+      "model": "groq/",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "groq/"
         }
       }
     }

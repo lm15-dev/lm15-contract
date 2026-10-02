@@ -322,6 +322,14 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     targets["router_resolves_instead_of_refusing"] = ("router", unknown_target)
     targets["router_provider_underscore"] = ("router", hyphen_target)
     targets["router_alias_not_resolved"] = ("router", alias_target)
+    boundary_target = next((c["id"] for c in router_cases if c["id"] == "rule-boundary-jev"), None)
+    litellm_target = next((c["id"] for c in router_cases if c.get("op") == "resolve_openai_chat_model"
+                           and "/" in c["model"] and c["expect"].get("model") not in (None, c["model"])), None)
+    if None in (boundary_target, litellm_target):
+        raise SystemExit("selftest: router corpus too thin to self-test (need rule-boundary-jev and a "
+                         "resolve_openai_chat_model case that strips a litellm prefix)")
+    targets["router_rule_delimiter_dropped"] = ("router", boundary_target)
+    targets["router_litellm_prefix_kept"] = ("router", litellm_target)
 
     sigv4_cases = json.loads(check.SIGV4_FILE.read_text(encoding="utf-8"))["cases"]
     token_cases = json.loads(check.TOKEN_FILE.read_text(encoding="utf-8"))["cases"]
