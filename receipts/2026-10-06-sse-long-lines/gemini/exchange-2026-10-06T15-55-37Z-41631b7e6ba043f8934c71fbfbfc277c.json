@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-10-06T15-55-37Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image:streamGenerateContent",
+    "params": {
+      "alt": "sse"
+    },
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "A detailed photograph of a busy coral reef at midday: dozens of fish species, sea turtles, fine sand texture, light rays through the water, sharp focus everywhere."
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "responseModalities": [
+          "IMAGE"
+        ],
+        "imageConfig": {
+          "imageSize": "4K"
+        }
+      }
+    }
+  },
+  "request_sha256": "c6ccfb171508c0770ddfcadbb6f469c05e715d62ed7c8f28558b64b12573ff96",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c5c8cda12873876e5e89bde5fd9ae24ded875adea70357760a1ec89dda4b0ffa",
+  "response_bytes": 29674249,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

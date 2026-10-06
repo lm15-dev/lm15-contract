@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-10-06T15-53-46Z",
+  "provider": "openai",
+  "status": 200,
+  "model": "gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENAI_API_KEY"
+    },
+    "body": {
+      "model": "gpt-4.1-mini",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "A detailed photograph of a busy coral reef at midday: dozens of fish species, sea turtles, fine sand texture, light rays through the water, sharp focus everywhere. Generate the image."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "max_output_tokens": 2048,
+      "tools": [
+        {
+          "type": "image_generation",
+          "quality": "high",
+          "size": "1536x1024"
+        }
+      ]
+    }
+  },
+  "request_sha256": "bd17332d6bbc7eda2cbdca6ebf2ba59b2f51d6cc0333ee5c2729e9f5db06217b",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "a08b10bd1c5c71550c67ee25ff55a06e2d22b828e2f747c056d2f7cd67d624d5",
+  "response_bytes": 8359820,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

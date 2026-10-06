@@ -401,6 +401,29 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   the same Response from either path, or the difference is stated here.
   Ratified 2026-09-06; see changes/2026-09-06-ratification.md (D8).
 
+- **INV-056 — A stream takes any event a complete reply would.** An SDK's
+  server-sent-events reader sets no default limit on the length of a line
+  or of an event: a provider event of any size is read, as a non-streamed
+  body of any size is. Splitting a body into lines is linear in its bytes:
+  a line arriving over many reads is searched for its end once and copied
+  once, never rescanned or regrown from its start. A caller may set a
+  limit on the low-level parser where an SDK exposes one; going over a
+  limit the caller set is a `TransportError`. WHY: every SDK refused a
+  line over 64 KiB and an event over 1 MiB, and real streams are larger.
+  OpenAI Responses repeats the whole response, system prompt included, in
+  `response.created`, `response.in_progress` and `response.completed` (a
+  user's long answer failed at the last event, 68,021 > 65,536); its
+  image tool puts a 4.2 MB image in one line; Gemini sends a 4K image as
+  one 29.7 MB line (receipts/2026-10-06-sse-long-lines). The limit broke
+  this section's parity (the complete call had none) without bounding
+  memory: a stream is accumulated into the whole Response anyway, so a
+  per-line cap never limited what a server can make an SDK hold. A bound on
+  memory is a bound on the whole reply, applied alike to complete and
+  stream calls: the contract defines none, and an SDK's transport may have
+  one (R's `transport_curl(max_response_bytes = 128 MiB)`). Amended
+  2026-10-06; see
+  changes/2026-10-06-sse-event-bound.md.
+
 The serde kind strings accepted by the vet `serde_roundtrip`/`validate` ops
 are enumerated in harness/PROTOCOL.md (§ "Serde kinds").
 
@@ -422,3 +445,6 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
 Amended 2026-09-24 (INV-053: codings a browser negotiated and decoded) —
 ratified in session; see changes/2026-09-24-inv-053-browser-fetch.md and
 changes/2026-09-24-ratification.md.
+Amended 2026-10-06 (INV-056: no default SSE line or event limit) — decided
+in session ("yes, fix that completely"), not yet ratified; see
+changes/2026-10-06-sse-event-bound.md.
