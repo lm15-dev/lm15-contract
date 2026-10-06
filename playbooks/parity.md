@@ -2,6 +2,36 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-06 — a stream takes any event a complete reply would (INV-056)
+
+changes/2026-10-06-sse-event-bound.md: every SDK refused an SSE line over 64 KiB
+and an event over 1 MiB (R: 1 MiB / 8 MiB); live probes measured a 75 KB echo line
+from a long system prompt, a 4.2 MB OpenAI image line and a 29.7 MB Gemini 4K image
+line. One live case, `openai.streaming_long_line` (three 1.1 MB lines). Every SDK's
+main moves its pin to `0f3ea82`, measured with `harness/check.py --direction all`,
+network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,901 / 1,901 | 1,901 / 1,901 | 1,901 / 1,901 | 1,901 / 1,901 | 1,901 / 1,901 | 1,901 / 1,901 (`tools/check-contract.py`) |
+| Commit | `a13422a` | `dd75423` | `e68d37e` | `4b298fc` | `f08e2f7` | `2b78714`, `d314d36`, `e6efb9a` |
+| Default cap now | none (`parse_sse` kwargs opt-in) | none (`SseLimits` opt-in) | none (`usize::MAX`) | none (`Limits{}`) | none (`nothing`) | none; the transport's 128 MiB whole-reply bound stays |
+| Line splitting | was quadratic (rescan), now linear | was quadratic (re-merge + rescan), now linear | was quadratic (rescan), now linear | linear (bufio); a set cap now stops an unterminated line | linear but per byte; now whole runs | was quadratic (re-concatenate + rescan), now linear |
+
+End to end over real HTTP (a local server replaying the pinned body, and a
+Gemini-shaped stream with one 30,000,000-character image line, sent in 16 KiB
+chunks), after warm-up, image checked by SHA-256: Python 0.27 s (async 0.28 s),
+TypeScript 0.64 s, Go 0.29 s, Rust 0.27 s, Julia 1.7 s, R 4.4 s (R was 45 s
+until base64 and JSON validation stopped re-encoding the image: `d314d36`).
+Every SDK refused both streams before. No release yet. R's `PYTHON_REFERENCE`
+moves to lm15-python `a13422a`; parity probes: 30 pass, the 2 known differences
+unchanged.
+
+Not moved: Java, Ruby, .NET and Swift have the same limits
+(`dev/lm15/sse/Sse.java` `MAX_LINE_BYTES`/`MAX_EVENT_BYTES`; `lib/lm15/sse.rb`
+and `docs/API.md` default 65,536; `src/LM15/Sse/Sse.cs` `MaxLineBytes`/
+`MaxEventBytes`; `Sources/LM15/Streams.swift` `SseLimits` defaults); not fixed here.
+
 ## 2026-10-02 — a tool with no description is left off the wire (MAP-17)
 
 changes/2026-10-02-tool-description-absent.md: every SDK sent a description-less
