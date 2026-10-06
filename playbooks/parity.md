@@ -23,9 +23,17 @@ Gemini-shaped stream with one 30,000,000-character image line, sent in 16 KiB
 chunks), after warm-up, image checked by SHA-256: Python 0.27 s (async 0.28 s),
 TypeScript 0.64 s, Go 0.29 s, Rust 0.27 s, Julia 1.7 s, R 4.4 s (R was 45 s
 until base64 and JSON validation stopped re-encoding the image: `d314d36`).
-Every SDK refused both streams before. No release yet. R's `PYTHON_REFERENCE`
-moves to lm15-python `a13422a`; parity probes: 30 pass, the 2 known differences
-unchanged.
+Every SDK refused both streams before. R's `PYTHON_REFERENCE` moves to
+lm15-python `a13422a` (then `80c7b3a`, the 1.2.1 release); parity probes: 30
+pass, the 2 known differences unchanged.
+
+Released 2026-10-06: Python 1.2.1 (PyPI), TypeScript 1.0.0-rc.5 (npm), Rust
+1.0.0-rc.5 (crates.io), Go v1.1.0-rc.4, R 1.1.0 (GitHub; also adds
+`provider_definition()`); Julia's pending 1.0.0 registration (General #169598)
+moved to `34c1167`. Each installed fresh from its registry and streamed
+`openai:gpt-4.1-mini` live with a 74 KB system prompt ("OK", 18,244 input
+tokens); Python 1.2.0, Go v1.1.0-rc.3 and Julia's previous registered commit
+refuse that stream ("SSE line exceeds limit (75483 > 65536)").
 
 Not moved: Java, Ruby, .NET and Swift have the same limits
 (`dev/lm15/sse/Sse.java` `MAX_LINE_BYTES`/`MAX_EVENT_BYTES`; `lib/lm15/sse.rb`
