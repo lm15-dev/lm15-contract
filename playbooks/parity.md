@@ -2,6 +2,24 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-10 (later) — a structured answer reads through `.text`; a budget alone fills `effort`
+
+changes/2026-10-10-first-attempt.md, from the coding-agent benchmark's first-run
+failures: a schema with a boolean or enum property answered as a `DataPart` left
+`.text`/`.json` empty (about 50 failed first runs), and `Reasoning(thinking_budget=)`
+without `effort` was refused (17). No case changes; each SDK pins the rules in its own
+tests. Every SDK's main moves its pin to `8eedbae`:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 |
+| Commit | `a8c8295` | `8e6e928` | `06a57f5` | `7a74edd` | `fe7fd84` | `4032a15` |
+| A budget alone | `Reasoning(thinking_budget=)` | `{ thinkingBudget }` | `Reasoning::with_budget` | `ReasoningBudget`, `Config.Validate` | `Reasoning(; thinking_budget=)` | `reasoning(thinking_budget = )` |
+
+TypeScript's judgments test pinned `response.text === undefined` for a judgment answer;
+it now pins the JSON text (the amendment). R's parity probes: 30 pass, the 2 known
+differences unchanged. Not moved: Java, Ruby, .NET and Swift.
+
 ## 2026-10-10 — a refused key is `auth` everywhere (MAP-18); a misplaced key is never repeated (AUTH-1, AUTH-5)
 
 changes/2026-10-10-bad-key-and-misplaced-key.md: Gemini and xAI answer a key they
