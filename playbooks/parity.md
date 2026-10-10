@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-10 — a refused key is `auth` everywhere (MAP-18); a misplaced key is never repeated (AUTH-1, AUTH-5)
+
+changes/2026-10-10-bad-key-and-misplaced-key.md: Gemini and xAI answer a key they
+refuse with HTTP 400 and every SDK raised `InvalidRequestError`; the corpus pinned a
+hand-authored Gemini 403 that Gemini does not send. A key given where a cloud identity
+name goes was repeated in the refusal by Python, Go, Julia, R and Rust (cloud door).
+Three new error cases (`gemini.auth_api_key_invalid`,
+`gemini.invalid_argument_other_reason`, `xai.auth_incorrect_key`) and two
+named-credential vectors. Every SDK's main moves its pin to `880f72c`, measured with
+`harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 | 1,904 / 1,904 (`tools/check-contract.py`) |
+| Commit | `1a85be2` | `7be6142` | `4cfc567` | `c8c4cba` | `cfa2a0d` | `f85f4a6` |
+| Repeated a misplaced key before | adapter, doctor, cloud door, router config | no | cloud door | adapter, doctor, cloud door, router config | adapter | cloud door |
+
+Each SDK carries `spec/auth-failed.json` verbatim (Julia reads a copy of the file) and
+gains a native test that its table equals the contract's and that a planted secret
+given as a named credential never reaches a message. R's `PYTHON_REFERENCE` moves to
+the Python 1.2.2 commit; parity probes: 30 pass, the 2 known differences unchanged.
+
+Not moved: Java, Ruby, .NET and Swift.
+
 ## 2026-10-06 — a stream takes any event a complete reply would (INV-056)
 
 changes/2026-10-06-sse-event-bound.md: every SDK refused an SSE line over 64 KiB
