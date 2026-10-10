@@ -1,0 +1,31 @@
+{
+  "_doc": [
+    "MAP-18 (docs/mapping-rules.md): the pinned forms of a provider's 'this key is not valid' answer that",
+    "arrive without HTTP 401. A provider error whose provider_code equals `code`, whose message satisfies",
+    "every text test given (`prefix`: starts with; `contains`: includes; `suffix`: ends with, all",
+    "case-sensitive) and, when the form gives `reason`, whose body carries that reason in a Google",
+    "`google.rpc.ErrorInfo` detail (error.details[] entry whose @type ends with 'google.rpc.ErrorInfo'),",
+    "is AuthError (auth). Checked before every other test, on every path that turns an HTTP reply into a",
+    "ProviderError. Ports carry this table as data, verbatim. A form is added only with a live receipt",
+    "and is never widened beyond the answer it was captured from. `providers` records where a form was",
+    "observed; matching does not use it."
+  ],
+  "forms": [
+    {
+      "providers": [
+        "gemini"
+      ],
+      "code": "INVALID_ARGUMENT",
+      "reason": "API_KEY_INVALID",
+      "evidence": "receipts/2026-10-10-auth-failed/gemini.json: HTTP 400 {\"error\":{\"status\":\"INVALID_ARGUMENT\",\"message\":\"API key not valid. Please pass a valid API key.\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.ErrorInfo\",\"reason\":\"API_KEY_INVALID\",...}]}}"
+    },
+    {
+      "providers": [
+        "xai"
+      ],
+      "code": "invalid-argument",
+      "prefix": "Incorrect API key provided",
+      "evidence": "receipts/2026-10-10-auth-failed/xai.json: HTTP 400 {\"code\":\"invalid-argument\",\"error\":\"Incorrect API key provided. You can obtain an API key from https://console.x.ai.\"}"
+    }
+  ]
+}

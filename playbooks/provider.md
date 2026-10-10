@@ -26,7 +26,7 @@ day it ships); a **bare-name rule** (`DEFAULT_RULES`, only for a family whose
 name no other provider uses); a **per-model override**
 (`OpenAIChatCompat.model_overrides`, with the receipt that shows the family
 differs); a **model-class detector** in the adapter (Claude output ceilings,
-adaptive thinking); a **not-found form** (`spec/model-not-found.json`, MAP-15);
+adaptive thinking); a **not-found form** (`spec/model-not-found.json`, MAP-15); a **bad-key form** (`spec/auth-failed.json`, MAP-18);
 **metadata** through a catalog package (advisory only). lm15 keeps no model
 list.
 
@@ -109,7 +109,9 @@ party, where data is stored. Freeze them. A verdict "not allowed" ends here.
     a search of every capture for the literal key before commit).
 13. `tools/check_content_coverage.py`: a `tool_result_image` case, a refusal
     case, or an `OPEN` entry with the reason (MAP-10).
-14. `spec/model-not-found.json` when the not-found wording is new.
+14. `spec/model-not-found.json` when the not-found wording is new;
+    `spec/auth-failed.json` when a bad key is not answered with 401
+    (`research/auth-failed/capture.py` probes every route; MAP-18).
 15. `changes/<date>-<p>-live.md`: the receipt table, every decision with its
     options and the one taken, the trade-offs, ratification.
 16. `research/landscape/classification.json`: the entry moves to

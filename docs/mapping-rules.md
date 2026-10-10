@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -1039,6 +1039,54 @@ was the only `null` lm15 put on a wire.
 Pinned by `cases/{anthropic,openai,openai-chat,gemini}/tool_no_description.json`
 and `cases/{openai,gemini}/live_tool_no_description.json`.
 
+## MAP-18 — A provider's "this key is not valid" is `auth`
+
+**Written 2026-10-10 at the maintainer's request**
+(`changes/2026-10-10-bad-key-and-misplaced-key.md`); not yet ratified.
+
+When a provider answers that the credential it was sent is not valid, the
+error is `AuthError` (`auth`), whichever status the provider used (401, 403
+or 400). A program catches one class for a wrong or expired key, on every
+provider; before this rule, the same mistake was `AuthError` on seventeen
+providers and `InvalidRequestError` on Gemini and xAI, which answer it with
+HTTP 400.
+
+Recognized, first match wins, before every other test (context length,
+not-found, the dialect's code table), on every path that turns an HTTP
+reply into a `ProviderError` (complete, stream, and the auxiliary
+endpoints):
+
+1. **HTTP 401**, as before.
+2. **A pinned form** from `spec/auth-failed.json`: the error's
+   `provider_code` equals the form's `code`, its message passes each text
+   test the form gives (`prefix`, `contains`, `suffix`; exact,
+   case-sensitive), and, when the form gives `reason`, the body carries that
+   reason in a Google `google.rpc.ErrorInfo` detail (an `error.details[]`
+   entry whose `@type` ends with `google.rpc.ErrorInfo`). Ports carry the
+   table as data, verbatim; matching does not depend on which provider
+   answered.
+
+A form enters the table only with a live receipt and is never widened
+beyond the answer it was captured from. Google's form matches the
+machine-readable reason, not the sentence: `API_KEY_INVALID` is what
+Google's error model documents as stable, and it also covers its
+expired-key answer, which shares the reason. xAI sends no reason; its form
+matches the sentence.
+
+Stated trade-off: as with MAP-15, a provider that rewords a form without a
+reason falls back to `InvalidRequestError`, the parent class it had before
+this rule, until a new receipt adds the new form.
+
+Evidence: `receipts/2026-10-10-auth-failed/`, one request with a fixed fake
+key to each of 18 HTTP routes reachable from the lab. Sixteen answered 401;
+Gemini answered 400 `INVALID_ARGUMENT` with reason `API_KEY_INVALID`; xAI
+answered 400 `invalid-argument` (on 2026-09-01 its keyless answer was 401
+`unauthenticated:no-credentials`, which rule 1 already maps).
+
+Pinned by `errors/cases/gemini.json` `gemini.auth_api_key_invalid` and
+`gemini.invalid_argument_other_reason` (a 400 with another reason stays
+`InvalidRequestError`), and `errors/cases/xai.json` `xai.auth_incorrect_key`.
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -1085,3 +1133,8 @@ MAP-17 was written on 2026-10-02 after a user report that a tool with no
 description made Anthropic refuse the request in Python and Julia; every SDK
 sent `null` because every port had copied the reference
 (`lm15-contract/changes/2026-10-02-tool-description-absent.md`).
+MAP-18 was written on 2026-10-10 after a coding-agent benchmark found every
+LM15 program that classified a bad Gemini key calling it an invalid
+request, where the vendor SDKs and LiteLLM said authentication; the corpus
+pinned a 403 that Gemini does not send for a bad key
+(`lm15-contract/changes/2026-10-10-bad-key-and-misplaced-key.md`).

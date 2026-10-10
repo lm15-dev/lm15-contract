@@ -227,6 +227,15 @@ explicit `api_keys` entry for one provider is refused at construction
 (two answers to "who am I"); a name on a non-cloud door is refused; an
 unknown name is refused before the first request.
 
+(amended 2026-10-10, `changes/2026-10-10-bad-key-and-misplaced-key.md`)
+**A value that is not one of the four names is treated as a key put in
+the wrong place**, because that is what it usually is: `credential=`
+reads like "my credential". The refusal never repeats the value (AUTH-5)
+and says where a key goes: the language's `api_key` argument (or the
+router's `api_keys` entry). A refusal may repeat a value only when it is
+one of the four names. Pinned by `auth/named-credentials.json`
+`anthropic-key-given-as-credential` and `vertex-key-given-as-credential`.
+
 | name | `azure-chain` | `aws-chain` | `gcp-chain` |
 |---|---|---|---|
 | `platform` | managed-identity | container, then imds | metadata |
@@ -377,6 +386,10 @@ side; each implementation enforces the runtime side in its test suite.
 Secret material includes (amended 2026-09-03) signed JWT assertions,
 token-exchange request and response bodies, and metadata/IMDS/MSI
 credential responses: each is a bearer-equivalent for its lifetime.
+Key material includes (amended 2026-10-10) **any value a caller passed in
+a slot meant for a name**: a key given as a named credential is still a
+key, so a refusal of an unrecognized name does not repeat it (AUTH-1 named
+credentials).
 
 ## AUTH-6 — Error taxonomy
 

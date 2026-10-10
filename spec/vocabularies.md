@@ -142,7 +142,7 @@ CLASS name, `code` is the ErrorCode literal.
 
 | Value | Canonical class | Notes |
 |---|---|---|
-| `auth` | `AuthError` | 401/403 |
+| `auth` | `AuthError` | 401/403; also a provider's 400 that says the key is not valid, by a pinned form (MAP-18, 2026-10-10; `spec/auth-failed.json`) |
 | `auth_operation` | `AuthOperationError` | **2026-09-22 ratified core:** local managed-auth lifecycle failure; root-level, not a provider 401. Closed reasons, commit state and recovery in AUTH-24 of `auth-managed.md`. Not automatically retryable. |
 | `billing` | `BillingError` | 402 |
 | `rate_limit` | `RateLimitError` | 429 |

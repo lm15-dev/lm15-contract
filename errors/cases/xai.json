@@ -67,6 +67,27 @@
     "date": "2026-09-24",
     "evidence": "api.x.ai HTTP 404 verbatim, team id redacted \u2014 receipts/2026-09-24-model-not-found/xai.json (xAI's answer changed from 400 invalid-argument since 2026-09-01)"
    }
+  },
+  {
+   "id": "xai.auth_incorrect_key",
+   "provider": "xai",
+   "status": 400,
+   "body": {
+    "code": "invalid-argument",
+    "error": "Incorrect API key provided. You can obtain an API key from https://console.x.ai."
+   },
+   "expected": {
+    "class": "AuthError",
+    "code": "auth",
+    "provider": "xai",
+    "provider_code": "invalid-argument",
+    "status": 400
+   },
+   "provenance": {
+    "source": "live-capture",
+    "date": "2026-10-10",
+    "evidence": "api.x.ai HTTP 400 verbatim to a fixed fake key \u2014 receipts/2026-10-10-auth-failed/xai.json; AuthError under MAP-18 (lm15-python 1.2.1 raised InvalidRequestError)"
+   }
   }
  ]
 }

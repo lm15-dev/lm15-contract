@@ -1,0 +1,34 @@
+{
+ "sent": {
+  "model": "gemini-2.5-flash",
+  "prompt": "Say ok.",
+  "api_key": "lm15-invalid-key-0000000000",
+  "via": "lm15-python 1.2.1 LMRouter().complete(), request built and sent unchanged"
+ },
+ "status": 400,
+ "body": {
+  "error": {
+   "code": 400,
+   "message": "API key not valid. Please pass a valid API key.",
+   "status": "INVALID_ARGUMENT",
+   "details": [
+    {
+     "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+     "reason": "API_KEY_INVALID",
+     "domain": "googleapis.com",
+     "metadata": {
+      "service": "generativelanguage.googleapis.com"
+     }
+    },
+    {
+     "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+     "locale": "en-US",
+     "message": "API key not valid. Please pass a valid API key."
+    }
+   ]
+  }
+ },
+ "timestamp": "2026-10-10T13:43:37.500471+00:00",
+ "lm15_python_before": "InvalidRequestError",
+ "redacted": "nothing (the key sent is fake and fixed)"
+}
