@@ -266,7 +266,10 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    grading table — minimal 1024, low 2048, medium 8192, high 16384,
    xhigh 24576, max 32768 — Anthropic's manual class (4.5 and earlier:
    `budget_tokens`) and Gemini 2.5 (`thinkingBudget`). The design's one
-   invented mapping; stated, receipted on both.
+   invented mapping; stated, receipted on both. (amended 2026-10-10) The
+   same table read the other way fills `effort` when a caller gives only
+   a `thinking_budget`: the highest level at or below the budget,
+   `minimal` below 1024 (`spec/types.md` §Reasoning).
 4. **`effort="off"`** sends the native disable (OpenAI `none`; Anthropic
    omits `thinking`; Gemini 2.5 `thinkingBudget: 0`; compat disable
    forms) and RAISES where the provider cannot disable or accepts the

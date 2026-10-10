@@ -518,7 +518,7 @@ kind-correct wire form, or raise when the wire cannot express it:
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
-| `effort` | string (ReasoningEffort) | yes | — | always | closed vocabulary; the one dial (MAP-7 rule 2). Required since 2026-09-02: `Reasoning()` no longer means off |
+| `effort` | string (ReasoningEffort) | yes | — | always | closed vocabulary; the one dial (MAP-7 rule 2). Required since 2026-09-02: `Reasoning()` no longer means off. (amended 2026-10-10) A constructor given only `thinking_budget` fills `effort` from MAP-7 rule 3's table: the highest level whose budget is at or below the given one, `minimal` below 1024; the field is always present once built |
 | `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007); a token cap on budget wires only (Anthropic manual class `budget_tokens`, floor 1024 server-side; Gemini `thinkingBudget`); RAISES on OpenAI, xAI, the chat dialect, and Anthropic's adaptive class |
 | `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, RAISE elsewhere |
 
@@ -690,6 +690,12 @@ document order; the block boundary survives in the stream
 
 Convenience: `.text` (text + citation/thinking treated as metadata),
 `.tool_calls`, `.citations`, `.parse_json(default=...)`, `.json`.
+(amended 2026-10-10) When the answer is a `DataPart` and the message holds
+no `TextPart`, `.text` is that part's value as compact canonical JSON (the
+rendering of changes/2026-09-19-jev-state.md D3), so `.text`,
+`.parse_json()` and `.json` read a structured answer whichever form the
+wire gave it (MAP-14 answers a schema with a judgment property as a
+`DataPart`). `.data` is unchanged: the `DataPart`'s value, else `.json`.
 
 #### Scores after a client-side stop
 
