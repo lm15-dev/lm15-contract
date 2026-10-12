@@ -6507,6 +6507,289 @@
    }
   },
   {
+   "id": "meta-mint-subscription",
+   "about": "The Muse Code mint reply as observed live 2026-10-12 (receipts/2026-10-12-muse-code/): its base_url is where requests go and its plan is the connection's account label; a renewal whose reply names an address outside meta.ai is refused before the key is sent there.",
+   "http": [
+    {
+     "status": 200,
+     "json": {
+      "device_code": "PRIVATE-MANAGED-TOKEN-device",
+      "user_code": "META-0002",
+      "verification_uri": "https://auth.meta.com/oauth/device/",
+      "verification_uri_complete": "https://auth.meta.com/oauth/device/?code=META-0002",
+      "interval": 5,
+      "expires_in": 600
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "access_token": "PRIVATE-MANAGED-TOKEN-identity",
+      "token_type": "Bearer"
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "api_key": "PRIVATE-MANAGED-TOKEN-minted-1",
+      "base_url": "https://api.meta.ai/v1/",
+      "has_payment_method": true,
+      "require_payment": false,
+      "is_subs_active": true,
+      "can_subscribe": false,
+      "subs_tier_id": "1",
+      "subs_tier_name": "Muse Code Power Usage",
+      "is_subs_upgrade_available": true,
+      "action_url": null,
+      "subs_usage": {
+       "window": {
+        "used_percent": 1,
+        "window_duration_mins": 300,
+        "resets_at": 1791859361
+       },
+       "weekly": {
+        "used_percent": 0,
+        "resets_at": 1792368000
+       }
+      }
+     }
+    },
+    {
+     "status": 200,
+     "json": {
+      "api_key": "PRIVATE-MANAGED-TOKEN-minted-1",
+      "base_url": "https://api.example.com/v1",
+      "is_subs_active": true,
+      "subs_tier_name": "Muse Code Power Usage"
+     }
+    }
+   ],
+   "steps": [
+    {
+     "do": "login",
+     "provider": "meta",
+     "method": "device",
+     "allow_unverified": true
+    },
+    {
+     "do": "request_auth",
+     "provider": "meta"
+    },
+    {
+     "do": "advance",
+     "ms": 86300000
+    },
+    {
+     "do": "request_auth",
+     "provider": "meta"
+    },
+    {
+     "do": "status",
+     "provider": "meta"
+    }
+   ],
+   "clock_ms": 1791800000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "account_label": "Muse Code Power Usage",
+       "created_at": "2026-10-12T10:13:25Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "account",
+       "label": "Meta (Muse subscription)",
+       "method_id": "device",
+       "provider": "meta",
+       "routes": [
+        "meta",
+        "meta-chat",
+        "meta-anthropic"
+       ],
+       "settings": {}
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "account_id": null,
+       "base_url": "https://api.meta.ai/v1",
+       "credential": {
+        "kind": "api_key",
+        "value": "PRIVATE-MANAGED-TOKEN-minted-1"
+       },
+       "headers": {},
+       "named": null
+      }
+     },
+     {
+      "ok": true,
+      "value": null
+     },
+     {
+      "error": {
+       "code": "auth_operation",
+       "commit_state": "committed",
+       "reason": "credential_rejected",
+       "recovery": "restart_login",
+       "stage": "renewal",
+       "type": "AuthOperationError"
+      },
+      "ok": false
+     },
+     {
+      "ok": true,
+      "value": {
+       "connection": {
+        "account_label": "Muse Code Power Usage",
+        "created_at": "2026-10-12T10:13:25Z",
+        "credential_revision": "1",
+        "id": "cn#1",
+        "identity_generation": "1",
+        "instance_id": "public",
+        "kind": "account",
+        "label": "Meta (Muse subscription)",
+        "method_id": "device",
+        "provider": "meta",
+        "routes": [
+         "meta",
+         "meta-chat",
+         "meta-anthropic"
+        ],
+        "settings": {}
+       },
+       "expires_at": null,
+       "logged_out": false,
+       "presence": "saved",
+       "provider": "meta",
+       "usability": "needs_login",
+       "verification": null
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "1031625952748946"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.meta.com/oidc/device/authorization/"
+      }
+     },
+     {
+      "notice": {
+       "expires_in_s": 600,
+       "interval_s": 5,
+       "type": "device_code",
+       "user_code": "META-0002",
+       "verification_url": "https://auth.meta.com/oauth/device/?code=META-0002"
+      }
+     },
+     {
+      "sleep_ms": 5000
+     },
+     {
+      "http": {
+       "body": {
+        "client_id": "1031625952748946",
+        "device_code": "PRIVATE-MANAGED-TOKEN-device",
+        "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+       },
+       "content_type": "application/x-www-form-urlencoded",
+       "headers": {
+        "user-agent": "lm15"
+       },
+       "method": "POST",
+       "url": "https://auth.meta.com/oidc/device/token/"
+      }
+     },
+     {
+      "notice": {
+       "stage": "exchange",
+       "type": "progress"
+      }
+     },
+     {
+      "http": {
+       "body": {},
+       "content_type": "application/json",
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-identity",
+        "user-agent": "lm15",
+        "x-api-version": "1.0.0"
+       },
+       "method": "POST",
+       "url": "https://api.meta.ai/muse-code/key"
+      }
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "http": {
+       "body": {},
+       "content_type": "application/json",
+       "headers": {
+        "authorization": "Bearer PRIVATE-MANAGED-TOKEN-identity",
+        "user-agent": "lm15",
+        "x-api-version": "1.0.0"
+       },
+       "method": "POST",
+       "url": "https://api.meta.ai/muse-code/key"
+      }
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "meta": {
+         "account_label": "Muse Code Power Usage",
+         "connection_id": "cn#1",
+         "created_at": "2026-10-12T10:13:25Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "account",
+         "label": "Meta (Muse subscription)",
+         "method_id": "device",
+         "renewal": "remint",
+         "revision": "1",
+         "routes": [
+          "meta",
+          "meta-chat",
+          "meta-anthropic"
+         ],
+         "settings": {},
+         "state": "needs_login"
+        }
+       },
+       "version": 1
+      }
+     }
+    }
+   }
+  },
+  {
    "id": "explain-managed",
    "about": "AUTH-7 under a managed Auth: explicit entry, the saved connection, env keys shown and not consulted.",
    "env": {

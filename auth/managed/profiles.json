@@ -703,7 +703,7 @@
       "label": "Meta",
       "route": "meta",
       "client_id": "1031625952748946",
-      "reference": "Pi 0.87.0 oauth/meta.ts (Muse Code CLI registration)",
+      "reference": "Muse Code 1.4.6 (`muse login`; the Muse Code CLI registration); Pi 0.87.0 oauth/meta.ts first",
       "methods": {
         "device": {
           "flow": "device_code",
@@ -712,7 +712,7 @@
           ],
           "subscription": true,
           "availability": "unverified",
-          "availability_reason": "no live lm15 receipt",
+          "availability_reason": "login, key mint, renewal re-mint and inference (muse-wonder-full-1.0) observed 2026-10-12; Meta's Model API terms (2026-10-09, section 3.2) reserve the Muse Code key for Muse Code, so lm15 does not claim support",
           "requests": {
             "device_authorization": {
               "method": "POST",
@@ -770,14 +770,21 @@
             "refresh": "the identity token",
             "lifetime_s": 86400,
             "renewal": "remint",
-            "no_key": "a reply without api_key may carry action_url: setup the person must finish"
+            "no_key": "a reply without api_key may carry action_url: setup the person must finish",
+            "lifetime_note": "the reply names no expiry; a re-mint answers the same key (live 2026-10-12), so the daily re-mint revokes nothing",
+            "base_url": "the reply's base_url, trailing slash removed, when it is https on meta.ai or a *.meta.ai host with no userinfo or query; absent: none (the route's own base URL). Any other value is a LoginDenied (at renewal: needs_login) before the key is sent anywhere",
+            "account_label": "is_subs_active true: subs_tier_name, else 'Muse Code subscription'; is_subs_active false: 'no Muse Code subscription (pay-as-you-go)'; absent: none"
           },
           "inference": {
             "route": "meta",
-            "credential": "api key (the minted key)"
+            "credential": "api key (the minted key)",
+            "base_url": "material base_url when present",
+            "models": "the key serves meta, meta-chat and meta-anthropic wires; muse-wonder-full-1.0 needs the Power or Maximum Usage plan"
           },
           "evidence": {
-            "native": {}
+            "native": {
+              "2026-10-12": "device login and mint (stdlib probe sending these requests), lm15-python re-mint, lm15-python complete and stream on muse-wonder-full-1.0; receipts/2026-10-12-muse-code/"
+            }
           }
         }
       }
