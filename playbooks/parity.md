@@ -2,6 +2,25 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-12 — the Muse Code subscription through the `meta` login
+
+changes/2026-10-12-muse-code-subscription.md: live on a Power Usage plan, the `meta`
+device login reaches `muse-wonder-full-1.0`. The mint reply's `base_url` is now where
+requests go (refused unless https on `meta.ai`), and its plan is the connection's
+`account_label`. The method stays `unverified` (Meta's terms § 3.2). One new managed run,
+`meta-mint-subscription`. The six SDKs with managed login move their pin to `88bb560`,
+measured with `harness/check.py --direction all`, network cut:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,905 / 1,905 | 1,905 / 1,905 | 1,905 / 1,905 | 1,905 / 1,905 | 1,905 / 1,905 | 1,905 / 1,905 (`tools/check-contract.py`) |
+| Commit | `5bfb7a9` | `4e9c9e9` | `8d87808` | `ec9232d` | `27e1913` | `16ddea7` |
+
+Julia carries the new `profiles.json` verbatim (`src/data/login_profiles.json` and the
+conformance copy) and reads the method's reason from it; the others carry the reason text.
+Julia also refuses a `base_url` with a `#fragment`, which the reference accepts; no reply
+has carried one. Not moved: Java, Ruby, .NET and Swift (no managed login).
+
 ## 2026-10-10 (later) — a structured answer reads through `.text`; a budget alone fills `effort`
 
 changes/2026-10-10-first-attempt.md, from the coding-agent benchmark's first-run
