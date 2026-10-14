@@ -1,8 +1,8 @@
 {
   "id": "typesafe.image_refused",
   "provider": "typesafe",
-  "feature": "judgments",
-  "description": "A media part has no wire slot on systemone (MAP-10) → refuse",
+  "feature": "judgments_image",
+  "description": "An image addressed by URL → refuse at the part: systemone assets are inline bytes; lm15 never fetches (2026-10-14 D4; until then every media part was refused here, 2026-09-17 D8)",
   "expect_lm15": {
     "raises": {
       "op": "build_request",
@@ -14,7 +14,7 @@
   "provenance": {
     "source": "hand-authored",
     "date": "2026-09-17",
-    "evidence": "changes/2026-09-17-judgments.md D8 (MAP-13 condition b: Jev cannot generate / has no wire slot)"
+    "evidence": "changes/2026-09-17-judgments.md D8 (MAP-13 condition b: Jev cannot generate / has no wire slot); re-grounded 2026-10-14: changes/2026-10-14-jev-images.md D4 (MAP-10 rule 1: inline PNG or JPEG bytes reach the wire, or the build raises; lm15 never fetches or converts media)"
   },
   "canonical_request": {
     "model": "jev-latest",

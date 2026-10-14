@@ -682,13 +682,14 @@ class Capture:
             # Replace the credential header(s) with the caller's (a door that
             # accepts several schemes: x-api-key vs api-key vs Entra bearer);
             # on a SigV4 door the caller's headers are added and the request
-            # is re-signed below.
+            # is re-signed below.  A None value removes that header (a probe
+            # of what the server says when an opt-in header is missing).
             from lm15.credentials import AwsCredentials
 
             signed = isinstance(self.fixture_credential, AwsCredentials)
             drop = set() if signed else {"authorization", "x-api-key", "api-key", "x-goog-api-key"}
             kept = [(k, v) for k, v in treq.headers if k.lower() not in drop and k.lower() not in {h.lower() for h in headers}]
-            treq = TransportRequest(method=treq.method, url=treq.url, headers=kept + list(headers.items()),
+            treq = TransportRequest(method=treq.method, url=treq.url, headers=kept + [(k, v) for k, v in headers.items() if v is not None],
                                     body=treq.body, connect_timeout=treq.connect_timeout,
                                     read_timeout=treq.read_timeout, write_timeout=treq.write_timeout)
         from lm15.credentials import AwsCredentials

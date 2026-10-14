@@ -1,0 +1,132 @@
+{
+  "id": "typesafe.judgments_image_parts",
+  "provider": "typesafe",
+  "feature": "judgments_image_parts",
+  "description": "A user message holding images beside other parts is the array of its parts in order (D2): text verbatim, each image its reference; a PNG and a JPEG asset; a backtick path reaches an element",
+  "base_url": "https://api.typesafe.ai",
+  "request": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "typesafe-danger-zone-images": "true",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": [
+        "Listing: a red ball.",
+        "<lm15-image-1>",
+        "<lm15-image-2>"
+      ],
+      "assets": {
+        "<lm15-image-1>": {
+          "type": "image",
+          "format": "png",
+          "data_base64": "iVBORw0KGgoAAAANSUhEUgAAAUAAAAEYCAMAAAAak98CAAAACVBMVEX/////oaH/AQHygf/tAAAB30lEQVR42u3dW26DQAxA0dD9L7rqR6U0bZqHxxjjc1bAXHkiFAFzuQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAczbZ9/LRt1ZfUx227q4rVl9bA/XoaPvaonob/ei6fhHc8n0/CP7yWT8Ibr+eT8Npb+b5UX/gxvDd+hvBbpJ+Cge1rG6/pN7zggn6jCy7pN7jgon5jCy7rN7Tgwn4jCy7tN7Bg7P75t2l31Kv7jSu4vN+wTZzQb1TB9Rt42CZO6TdoBHMGcNAIJvUbM4JZAzhmBNP6DRnBvAEcMoKJ/UaMYOYAjhjB1H4TRlDAmNwdPGAPJ/c7/wgKGJO9g0+/h9P7nX0EBRSwVP5P4Ml/BAUM2qHfufewgAIK2JqAAgrYmoACCtiagAIK2JqAAtbyf6CAxXYIWL1EAQ9NwCBPJkQZQAFreT4wygAKWMtT+lEGMMibSlEGMMjbmlEGMMgb61EGMMhXO6IM4AELVi9pX76ddbSC0/r5fuDBClYvpnvB6qV0L1i9kO4Fq5fRvWD1IroXrF5C94LVCyjnPJEoJ9qE2b5RTvUKc65cmJMNw5ytGeZ01zjnC8c54XoBZ6wDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAHj4BF+0/A2+2FlIAAAAASUVORK5CYII="
+        },
+        "<lm15-image-2>": {
+          "type": "image",
+          "format": "jpg",
+          "data_base64": "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"
+        }
+      },
+      "questions": {
+        "first_matches": {
+          "type": "noul",
+          "instructions": "Does the first image match the listing?"
+        },
+        "second_blue": {
+          "type": "noul",
+          "instructions": "Is the shape in `[2]` a blue square?"
+        },
+        "same_shape": {
+          "type": "noul",
+          "instructions": "Do the two images show the same shape?"
+        }
+      }
+    }
+  },
+  "expect": {
+    "status": 200
+  },
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-10-14",
+    "evidence": "api.typesafe.ai 2026-10-14T23-19-17Z, jev-latest, HTTP 200; changes/2026-10-14-jev-images.md D2/D3; docs.typesafe.ai/images 'State'; adapter-built wire (TypeSafeLM, compat+access 'typesafe'); verbatim body at bodies/typesafe.judgments_image_parts/2026-10-14T23-19-17Z.txt; changes/2026-10-14-jev-images.md",
+    "exchange": "receipts/2026-10-14-typesafe/exchange-2026-10-14T23-19-17Z-65a2cc6b900d4fde8e631f83c597cdb4.json"
+  },
+  "canonical_request": {
+    "model": "jev-latest",
+    "messages": [
+      {
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Listing: a red ball."
+          },
+          {
+            "type": "image",
+            "media_type": "image/png",
+            "data": "iVBORw0KGgoAAAANSUhEUgAAAUAAAAEYCAMAAAAak98CAAAACVBMVEX/////oaH/AQHygf/tAAAB30lEQVR42u3dW26DQAxA0dD9L7rqR6U0bZqHxxjjc1bAXHkiFAFzuQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAczbZ9/LRt1ZfUx227q4rVl9bA/XoaPvaonob/ei6fhHc8n0/CP7yWT8Ibr+eT8Npb+b5UX/gxvDd+hvBbpJ+Cge1rG6/pN7zggn6jCy7pN7jgon5jCy7rN7Tgwn4jCy7tN7Bg7P75t2l31Kv7jSu4vN+wTZzQb1TB9Rt42CZO6TdoBHMGcNAIJvUbM4JZAzhmBNP6DRnBvAEcMoKJ/UaMYOYAjhjB1H4TRlDAmNwdPGAPJ/c7/wgKGJO9g0+/h9P7nX0EBRSwVP5P4Ml/BAUM2qHfufewgAIK2JqAAgrYmoACCtiagAIK2JqAAtbyf6CAxXYIWL1EAQ9NwCBPJkQZQAFreT4wygAKWMtT+lEGMMibSlEGMMjbmlEGMMgb61EGMMhXO6IM4AELVi9pX76ddbSC0/r5fuDBClYvpnvB6qV0L1i9kO4Fq5fRvWD1IroXrF5C94LVCyjnPJEoJ9qE2b5RTvUKc65cmJMNw5ytGeZ01zjnC8c54XoBZ6wDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAHj4BF+0/A2+2FlIAAAAASUVORK5CYII="
+          },
+          {
+            "type": "image",
+            "media_type": "image/jpeg",
+            "data": "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"
+          }
+        ]
+      }
+    ],
+    "config": {
+      "response_format": {
+        "type": "json_schema",
+        "name": "judgments",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "first_matches": {
+              "type": "boolean",
+              "description": "Does the first image match the listing?"
+            },
+            "second_blue": {
+              "type": "boolean",
+              "description": "Is the shape in `[2]` a blue square?"
+            },
+            "same_shape": {
+              "type": "boolean",
+              "description": "Do the two images show the same shape?"
+            }
+          },
+          "required": [
+            "first_matches",
+            "second_blue",
+            "same_shape"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "probabilities": "if_available"
+    }
+  },
+  "canonical_request_provenance": {
+    "source": "hand-authored",
+    "date": "2026-10-14",
+    "evidence": "authored with the case (research/providers/typesafe/capture.py); wire side generated by the reference adapter and live-validated (receipt above)"
+  },
+  "pinned_body": "2026-10-14T23-19-17Z.txt",
+  "expect_lm15": {
+    "parts": {
+      "data": {
+        "min": 1
+      }
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "required": true
+    }
+  }
+}

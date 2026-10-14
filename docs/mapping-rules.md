@@ -873,7 +873,16 @@ optionally a probability per key. The request is an ordinary
    part's value (object, array, scalar); a `system`, a second message
    or a second part is refused with the native place named
    (changes/2026-09-19-jev-state.md D1/D2; the 09-17 `{system,
-   messages}` wrapper is withdrawn). openai (both dialects): the schema goes verbatim (receipted:
+   messages}` wrapper is withdrawn). An image part is the reference
+   string `<lm15-image-N>` (N counts the message's image parts from 1,
+   in order) and its bytes the top-level `assets` entry under that
+   key, `{"type": "image", "format": "png"|"jpg", "data_base64"}`;
+   a message holding an image beside other parts is the array of its
+   parts in order; a request whose body carries `assets` sends
+   `TypeSafe-Danger-Zone-Images: true`; a URL- or file-id-addressed
+   image, a format other than PNG/JPEG, and every other media kind are
+   refused at the part (changes/2026-10-14-jev-images.md D1–D4).
+   openai (both dialects): the schema goes verbatim (receipted:
    `strict` honours `anyOf`/`const`/`title`). anthropic: a judgment
    property carrying both `type` and `anyOf` has its `type` moved into
    every branch (the wire 400s on the combination; receipted). gemini: a

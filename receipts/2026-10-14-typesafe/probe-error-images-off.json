@@ -1,0 +1,39 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-latest",
+      "state": "<lm15-image-1>",
+      "assets": {
+        "<lm15-image-1>": {
+          "type": "image",
+          "format": "png",
+          "data_base64": "iVBORw0KGgoAAAANSUhEUgAAAUAAAAEACAMAAAD1Fl/0AAAACVBMVEX/////oaH/AQHygf/tAAAB10lEQVR42u3dW26DQAxA0dD9L7rqR6U0bZqHxxjjc1bAXHkiFAFzuQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHB82/bx07ZVX1Ift+2uKlZfWgP362n42KN6Gv7ruXwS3vF8Pgn/8Fo+CW+8nk/Ca2/l+1J94cfw3vgZwm+RfgoGtq9tvKbf8IIL+o0uuKTf4IKL+o0tuKzf0IIL+40suLTfwIKx++ffpt1Rr+43ruDyfsM2cUK/UQXXb+Bhmzil36ARzBnAQSOY1G/MCGYN4JgRTOs3ZATzBnDICCb2GzGCmQM4YgRT+00YQQFjcnfwgD2c3O/8IyhgTPYOPv0eTu939hEUUMBS+T+BJ/8RFDBoh37n3sMCCihgawIKKGBrAgooYGsCCihgawIKWMv/gQIW2yFg9RIFPDQBgzyZEGUABazl+cAoAyhgLU/pRxnAIG8qRRnAIG9rRhnAIG+sRxnAIF/tiDKAByxYvaR9+XbW0QpO6+f7gQcrWL2Y7gWrl9K9YPVCuhesXkb3gtWL6F6wegndC1YvoJzzRKKcaBNm+0Y51SvMuXJhTjYMc7ZmmNNd45wvHOeE6wWcsQ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAANT4BLAiPwNLFhHrAAAAAElFTkSuQmCC"
+        }
+      },
+      "questions": {
+        "red": {
+          "type": "noul",
+          "instructions": "Is the shape red?"
+        }
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": {
+      "error_type": "api_usage_error",
+      "message": "Images are experimental. Send the header TypeSafe-Danger-Zone-Images: true to use them."
+    }
+  },
+  "timestamp": "2026-10-14T23-18-56Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

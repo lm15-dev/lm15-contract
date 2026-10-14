@@ -11,6 +11,14 @@ string, an object (with a named context key and backtick paths), an
 array — over the MAP-14 judgment convention (changes/2026-09-17-judgments.md);
 the error probes are the documented envelopes (401 authentication_error,
 400 api_usage_error unknown model, 422 pydantic detail list).
+
+Images (changes/2026-10-14-jev-images.md): ``judgments_image_state`` and
+``judgments_image_parts`` send the two drawings under ``images/`` (320x280:
+the server refused 320x256 and 300x270 with "Invalid image dimensions."
+on 2026-10-14 although its docs give a 256-pixel side minimum) and ask
+questions only a model that received the pixels answers right (shape,
+colour, which image);
+``error-images-off`` is the same image request without the opt-in header.
 """
 from __future__ import annotations
 
@@ -21,7 +29,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _capture import Capture  # noqa: E402
 from lm15 import Config, Message, Request  # noqa: E402
 from lm15.judgments import choice, judgments, score, yes_no  # noqa: E402
-from lm15.types import data  # noqa: E402
+from lm15.types import data, image  # noqa: E402
 
 cap = Capture("typesafe", env_var="TYPESAFE_API_KEY", default_model="jev-latest", host="api.typesafe.ai",
               change_slug="judgments")
@@ -47,6 +55,56 @@ WINE = judgments(
     ageing=yes_no("Does the note say the wine will improve with age?"),
 )
 DATA_OK = {"parts": {"data": {"min": 1}}, "finish_reason": "stop", "usage": {"required": True}}
+
+IMAGES = Path(__file__).resolve().parent / "images"
+IMAGES_CHANGE = "changes/2026-10-14-jev-images.md"
+
+
+def red_circle():
+    return image(data=(IMAGES / "red-circle.png").read_bytes(), media_type="image/png")
+
+
+def blue_square():
+    return image(data=(IMAGES / "blue-square.jpg").read_bytes(), media_type="image/jpeg")
+
+
+def image_cases(model: str, force: bool, want) -> list[dict]:
+    rows = []
+    entry, cap.change_entry = cap.change_entry, IMAGES_CHANGE
+    try:
+        if want("judgments_image_state"):
+            rows.append(cap.write_case(
+                "judgments_image_state",
+                Request(model=model, messages=(Message.user(red_circle()),),
+                        config=Config(response_format=judgments(
+                            shape=choice("What shape is drawn in the image?",
+                                         {"circle": None, "square": None, "triangle": None}),
+                            red=yes_no("Is the shape red?")),
+                            probabilities="if_available")),
+                stream=False,
+                description="One user image part is the state (D1): the state is its reference string, the PNG bytes "
+                            "an asset under that reference; the request carries TypeSafe-Danger-Zone-Images: true (D3)",
+                expect_lm15=DATA_OK,
+                evidence_note="changes/2026-10-14-jev-images.md D1/D3; docs.typesafe.ai/images 'Sending images in a request'",
+                force=force))
+        if want("judgments_image_parts"):
+            rows.append(cap.write_case(
+                "judgments_image_parts",
+                Request(model=model, messages=(Message.user(["Listing: a red ball.", red_circle(), blue_square()]),),
+                        config=Config(response_format=judgments(
+                            first_matches=yes_no("Does the first image match the listing?"),
+                            second_blue=yes_no("Is the shape in `[2]` a blue square?"),
+                            same_shape=yes_no("Do the two images show the same shape?")),
+                            probabilities="if_available")),
+                stream=False,
+                description="A user message holding images beside other parts is the array of its parts in order (D2): "
+                            "text verbatim, each image its reference; a PNG and a JPEG asset; a backtick path reaches an element",
+                expect_lm15=DATA_OK,
+                evidence_note="changes/2026-10-14-jev-images.md D2/D3; docs.typesafe.ai/images 'State'",
+                force=force))
+    finally:
+        cap.change_entry = entry
+    return rows
 
 
 def cases(model: str, force: bool, want) -> list[dict]:
@@ -103,6 +161,7 @@ def cases(model: str, force: bool, want) -> list[dict]:
             expect_lm15=DATA_OK,
             evidence_note="changes/2026-09-19-jev-state.md D1",
             force=force))
+    rows += image_cases(model, force, want)
     if want("models"):
         rows.append(cap.models_case(force))
     return rows
@@ -118,6 +177,11 @@ def probes(model: str, want) -> list[dict]:
     if want("error-validation"):
         rows.append(cap.probe("error-validation", base, raw_body={"model": model, "state": NOTE,
                                                                   "questions": {"q": {"type": "choice", "instructions": "x"}}}))
+    if want("error-images-off"):
+        # The documented gate, live: the same image request with the opt-in header removed.
+        image_request = Request(model=model, messages=(Message.user(red_circle()),),
+                                config=Config(response_format=judgments(red=yes_no("Is the shape red?"))))
+        rows.append(cap.probe("error-images-off", image_request, headers={"Authorization": f"Bearer {cap.key()}", "TypeSafe-Danger-Zone-Images": None}))
     if want("pinned-version"):
         rows.append(cap.probe("pinned-version", Request(model="jev-1.13.0", messages=base.messages, config=base.config)))
     return rows
