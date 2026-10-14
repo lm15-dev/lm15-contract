@@ -2,6 +2,25 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-14 — images reach Jev
+
+changes/2026-10-14-jev-images.md: an image part in the one user message is a reference
+string in Jev's `state` and its bytes a top-level `assets` entry; a message holding an
+image beside other parts is the array of its parts (D2, awaiting ratification); a
+request carrying `assets` sends `TypeSafe-Danger-Zone-Images: true`. Six new checks (two
+live request cases, three refusals, one error envelope). The six SDKs move their pin to
+`10645e5`, measured with `harness/check.py --direction all` (R through
+`tools/check-contract.py --compare-python`; network not cut this time, the harness is
+offline by construction):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,911 / 1,911 | 1,911 / 1,911 | 1,911 / 1,911 | 1,911 / 1,911 | 1,911 / 1,911 | 1,911 / 1,911 |
+| Commit | `70ba392` | `05aabb9` | `000dda5` | `4ba7bef` | `15bdac1` | `164fabe` |
+
+Rust's corpus test counts error vectors (108 → 109). Not moved: Java, Ruby, .NET and Swift
+(no typesafe provider).
+
 ## 2026-10-12 — the Muse Code subscription through the `meta` login
 
 changes/2026-10-12-muse-code-subscription.md: live on a Power Usage plan, the `meta`
