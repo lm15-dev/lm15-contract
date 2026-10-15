@@ -2,6 +2,28 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-15 — bounding boxes
+
+changes/2026-10-15-bounding-box.md (D1 and D3 awaiting ratification): an object of the
+four numbers `top`, `bottom`, `left`, `right` is a judgment that declares no keys —
+answered, never scored. Jev 1.14 asks it as a Box question (the opt-in header goes with
+it, image or not); the other wires send the schema verbatim; on a scoring server the
+generated call answers it beside the measured judgments. Nine new checks (live cases
+`typesafe.judgments_box`, `typesafe.judgments_box_text_state`, `anthropic.judgments_box`,
+`vertex.judgments_box` in the request and response directions, and the error vector
+`typesafe.box_older_model`). Found while porting: Go's scoring driver dropped every
+property it did not measure (boxes and ordinary structured output alike); it now makes
+the generated call the other five make. The six SDKs move their pin to `6dc1c5c`,
+measured with `harness/check.py --direction all` (R through `tools/check-contract.py
+--compare-python`, against Python `7e85489`):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,921 / 1,921 | 1,921 / 1,921 | 1,921 / 1,921 | 1,921 / 1,921 | 1,921 / 1,921 | 1,921 / 1,921 |
+| Commit | `7e85489` | `684c062` | `2d9a2ff` | `46e5d8a` | `308ff75` | `beb0317` |
+
+Not moved: Java, Ruby, .NET and Swift (no judgments).
+
 ## 2026-10-15 — a saved cloud recipe's settings reach the request
 
 changes/2026-10-15-saved-cloud-settings.md (lm15-python #21, Rolf Fredheim): the managed
