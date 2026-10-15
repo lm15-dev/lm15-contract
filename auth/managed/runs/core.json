@@ -2,7 +2,7 @@
  "provenance": {
   "source": "hand-authored",
   "date": "2026-09-25",
-  "evidence": "changes/2026-09-25-managed-auth-in-every-sdk.md; spec/auth-managed.md AUTH-12–26; expectations captured from lm15-python and reviewed 2026-09-25"
+  "evidence": "changes/2026-09-25-managed-auth-in-every-sdk.md; spec/auth-managed.md AUTH-12–26; expectations captured from lm15-python and reviewed 2026-09-25; changes/2026-10-15-saved-cloud-settings.md (cloud-recipe-settings: a saved recipe's settings, refined by an explicit entry under either spelling; captured from lm15-python with the fix, read against D1-D3)"
  },
  "_doc": [
   "Managed-authentication runs for the harness's `managed` direction (harness/managed.py, PROTOCOL.md § managed).",
@@ -4019,6 +4019,173 @@
       },
       "bedrock-chat": {
        "named": "cli",
+       "type": "cloud"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "cloud-recipe-settings",
+   "about": "A saved cloud recipe carries its host settings (AUTH-15): the managed router builds the door with them, ahead of the environment; an explicit settings entry, under either spelling of the provider, refines them setting by setting; an explicit key selects no connection, so none of its settings apply.",
+   "env": {
+    "NO_GCE_CHECK": "1",
+    "GOOGLE_CLOUD_PROJECT": "env-project"
+   },
+   "steps": [
+    {
+     "do": "configure",
+     "provider": "vertex-anthropic",
+     "method": "cloud",
+     "answers": {
+      "named": "environment"
+     },
+     "settings": {
+      "project": "saved-project",
+      "location": "us-east5"
+     }
+    },
+    {
+     "do": "route",
+     "model": "vertex-anthropic:example-model"
+    },
+    {
+     "do": "route",
+     "model": "vertex-anthropic:example-model",
+     "settings": {
+      "vertex_anthropic": {
+       "project": "explicit-project"
+      }
+     }
+    },
+    {
+     "do": "route",
+     "model": "vertex-anthropic:example-model",
+     "settings": {
+      "vertex-anthropic": {
+       "location": "europe-west1"
+      }
+     }
+    },
+    {
+     "do": "route",
+     "model": "vertex-anthropic:example-model",
+     "api_keys": [
+      "vertex-anthropic"
+     ],
+     "settings": {
+      "vertex-anthropic": {
+       "location": "europe-west1"
+      }
+     }
+    }
+   ],
+   "clock_ms": 1790000000000,
+   "expect": {
+    "steps": [
+     {
+      "ok": true,
+      "value": {
+       "created_at": "2026-09-21T14:13:20Z",
+       "credential_revision": "1",
+       "id": "cn#1",
+       "identity_generation": "1",
+       "instance_id": "public",
+       "kind": "cloud_identity",
+       "label": "vertex-anthropic via environment identity",
+       "method_id": "cloud",
+       "provider": "vertex-anthropic",
+       "routes": [
+        "vertex-anthropic"
+       ],
+       "settings": {
+        "location": "us-east5",
+        "project": "saved-project"
+       }
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "settings": {
+        "location": "us-east5",
+        "project": "saved-project"
+       }
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "settings": {
+        "location": "us-east5",
+        "project": "explicit-project"
+       }
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "settings": {
+        "location": "europe-west1",
+        "project": "saved-project"
+       }
+      }
+     },
+     {
+      "ok": true,
+      "value": {
+       "settings": {
+        "location": "europe-west1",
+        "project": "env-project"
+       }
+      }
+     }
+    ],
+    "events": [
+     {
+      "step": 0
+     },
+     {
+      "step": 1
+     },
+     {
+      "step": 2
+     },
+     {
+      "step": 3
+     },
+     {
+      "step": 4
+     }
+    ],
+    "store": {
+     "document": {
+      "_lm15": {
+       "slots": {
+        "vertex-anthropic": {
+         "connection_id": "cn#1",
+         "created_at": "2026-09-21T14:13:20Z",
+         "generation": "1",
+         "instance_id": "public",
+         "kind": "cloud_identity",
+         "label": "vertex-anthropic via environment identity",
+         "method_id": "cloud",
+         "renewal": "recipe",
+         "revision": "1",
+         "routes": [
+          "vertex-anthropic"
+         ],
+         "settings": {
+          "location": "us-east5",
+          "project": "saved-project"
+         },
+         "state": "ready"
+        }
+       },
+       "version": 1
+      },
+      "vertex-anthropic": {
+       "named": "environment",
        "type": "cloud"
       }
      }

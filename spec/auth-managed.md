@@ -214,6 +214,12 @@ or an explicitly chosen default cloud chain, plus its declared settings and allo
 destination policy. Executing that selected recipe uses the existing cloud rules,
 including their settings/environment behavior and provenance. A chain can change
 its selected principal when its inputs change; the UI/doctor MUST name this fact.
+The recipe's saved settings are the route's host settings, ahead of the
+environment; the router's explicit settings entry for the route (under either
+spelling of the provider) refines them setting by setting, and a setting it does
+not name keeps its saved value. An explicit credential or named identity selects
+no connection, so none of a connection's settings apply (amended 2026-10-15,
+changes/2026-10-15-saved-cloud-settings.md).
 A strict single-principal deployment uses a deterministic named credential or its
 own credential provider.
 

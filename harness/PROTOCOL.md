@@ -751,7 +751,13 @@ Out: `{"steps": [<outcome>], "events": [<event>], "store": {"document": {...}} |
   "fields": [{"id", "type", "required", "options"}]}]`; `providers` →
   sorted ids; `explain {provider, api_keys?}` → the managed doctor
   (`RouterConfig(auth=…)`, `api_keys` given explicit sentinel values)
-  as `{"configured", "steps": [{"kind", "state"}]}`; `advance {ms}` → null.
+  as `{"configured", "steps": [{"kind", "state"}]}`; `route {model,
+  settings?, api_keys?}` (added 2026-10-15,
+  `changes/2026-10-15-saved-cloud-settings.md`) → `{"settings"}`: the
+  managed router (`RouterConfig(auth=…, env, settings, api_keys)` given
+  explicit sentinel values, `settings` passed verbatim, keys spelled as
+  the case spells them) builds the model's client offline and reports the
+  host settings it was built with, by name; `advance {ms}` → null.
   A field `{"id_of_step": n}` is the connection id step n returned;
   `{"of_step": n}` is its `[id, identity_generation]` pin.
 - Connection: `{"id", "provider", "instance_id", "kind", "method_id",
