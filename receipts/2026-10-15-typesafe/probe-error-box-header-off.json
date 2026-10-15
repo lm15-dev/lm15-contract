@@ -1,0 +1,32 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-preview",
+      "state": "A kitchen with a coffee mug.",
+      "questions": {
+        "red": {
+          "type": "box",
+          "instructions": "the red square in the image"
+        }
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": {
+      "error_type": "api_usage_error",
+      "message": "Images are experimental. Send the header TypeSafe-Danger-Zone-Images: true to use them."
+    }
+  },
+  "timestamp": "2026-10-15T22-22-53Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

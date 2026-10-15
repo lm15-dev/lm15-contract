@@ -109,6 +109,29 @@
         "date": "2026-10-14",
         "evidence": "api.typesafe.ai HTTP 400 verbatim 2026-10-14T23-18-56Z — receipts/2026-10-14-typesafe/probe-error-images-off.json (an image request without TypeSafe-Danger-Zone-Images; lm15 always sends the header with an image, changes/2026-10-14-jev-images.md D3, so no lm15 build meets it; the mapping is pinned for a caller who sends the wire by hand)"
       }
+    },
+    {
+      "id": "typesafe.box_older_model",
+      "provider": "typesafe",
+      "status": 400,
+      "body": {
+        "detail": {
+          "error_type": "api_usage_error",
+          "message": "Invalid request."
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "typesafe",
+        "provider_code": "api_usage_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-10-15",
+        "evidence": "api.typesafe.ai HTTP 400 verbatim 2026-10-15T22-22-50Z — receipts/2026-10-15-typesafe/probe-box-on-jev-latest.json (a Box question on jev-latest = jev-1.13.0; Box needs Jev 1.14, changes/2026-10-15-bounding-box.md D5: lm15 keeps no list of models that may ask boxes, so this 400 is what a caller meets)"
+      }
     }
   ]
 }

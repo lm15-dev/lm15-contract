@@ -19,6 +19,14 @@ on 2026-10-14 although its docs give a 256-pixel side minimum) and ask
 questions only a model that received the pixels answers right (shape,
 colour, which image);
 ``error-images-off`` is the same image request without the opt-in header.
+
+Bounding boxes (changes/2026-10-15-bounding-box.md): ``judgments_box``
+sends ``images/shapes.png`` (640x480: a red square with edges top 0.20,
+bottom 0.60, left 0.55, right 0.85; a blue circle top 0.583, bottom 0.917,
+left 0.10, right 0.35) and asks for both boxes and a yes/no, on
+``jev-preview`` — Box needs Jev 1.14.  The probes record what lm15 does not
+prevent: a Box on ``jev-latest`` (1.13 on 2026-10-15), a Box with no image
+in the request, and a Box sent without the opt-in header.
 """
 from __future__ import annotations
 
@@ -28,7 +36,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from _capture import Capture  # noqa: E402
 from lm15 import Config, Message, Request  # noqa: E402
-from lm15.judgments import choice, judgments, score, yes_no  # noqa: E402
+from lm15.judgments import bounding_box, choice, judgments, score, yes_no  # noqa: E402
 from lm15.types import data, image  # noqa: E402
 
 cap = Capture("typesafe", env_var="TYPESAFE_API_KEY", default_model="jev-latest", host="api.typesafe.ai",
@@ -66,6 +74,71 @@ def red_circle():
 
 def blue_square():
     return image(data=(IMAGES / "blue-square.jpg").read_bytes(), media_type="image/jpeg")
+
+
+BOX_CHANGE = "changes/2026-10-15-bounding-box.md"
+BOX_MODEL = "jev-preview"  # docs.typesafe.ai/primitives/box: "Box questions need Jev 1.14"
+SHAPES_BOXES = judgments(
+    red=bounding_box("the red square in the image"),
+    blue=bounding_box("the blue circle in the image"),
+    has_red=yes_no("Is there a red square in the image?"),
+)
+
+
+def shapes():
+    return image(data=(IMAGES / "shapes.png").read_bytes(), media_type="image/png")
+
+
+def box_cases(force: bool, want) -> list[dict]:
+    rows = []
+    entry, cap.change_entry = cap.change_entry, BOX_CHANGE
+    try:
+        if want("judgments_box"):
+            rows.append(cap.write_case(
+                "judgments_box",
+                Request(model=BOX_MODEL, messages=(Message.user(shapes()),),
+                        config=Config(response_format=SHAPES_BOXES, probabilities="if_available")),
+                stream=False,
+                description="Two bounding-box judgments and a yes/no over one image (D1-D3): each box is a Jev Box "
+                            "question (no criteria), the header goes with it, the answer's box is the value verbatim "
+                            "with no distribution; the yes/no keeps its distribution",
+                expect_lm15=DATA_OK,
+                evidence_note="changes/2026-10-15-bounding-box.md D1-D3; docs.typesafe.ai/primitives/box",
+                force=force))
+        if want("judgments_box_text_state"):
+            rows.append(cap.write_case(
+                "judgments_box_text_state",
+                Request(model=BOX_MODEL, messages=(Message.user("A kitchen with a coffee mug."),),
+                        config=Config(response_format=judgments(mug=bounding_box("the coffee mug")))),
+                stream=False,
+                description="A box question with no image in the request (D2, D5): the opt-in header still goes with it "
+                            "(the gate covers Box questions), lm15 does not refuse the unanswerable question, and Jev "
+                            "answers a box around most of the frame with a confidence near 0",
+                expect_lm15=DATA_OK,
+                evidence_note="changes/2026-10-15-bounding-box.md D2/D5; probe error-box-header-off is this request without the header",
+                force=force))
+    finally:
+        cap.change_entry = entry
+    return rows
+
+
+def box_probes(want) -> list[dict]:
+    rows = []
+    request = Request(model=BOX_MODEL, messages=(Message.user(shapes()),),
+                      config=Config(response_format=judgments(red=bounding_box("the red square in the image"))))
+    if want("box-on-jev-latest"):
+        # Box needs Jev 1.14; jev-latest is 1.13 today and answers a bare 400.
+        rows.append(cap.probe("box-on-jev-latest", Request(model="jev-latest", messages=request.messages, config=request.config)))
+    if want("box-without-image"):
+        # No image in the request: a 200 with a box around the whole frame and a low confidence.
+        rows.append(cap.probe("box-without-image", Request(model=BOX_MODEL, messages=(Message.user("A kitchen with a coffee mug."),),
+                                                          config=request.config)))
+    if want("error-box-header-off"):
+        # The gate covers Box questions too, with or without an image (D2).
+        rows.append(cap.probe("error-box-header-off", Request(model=BOX_MODEL, messages=(Message.user("A kitchen with a coffee mug."),),
+                                                             config=request.config),
+                              headers={"Authorization": f"Bearer {cap.key()}", "TypeSafe-Danger-Zone-Images": None}))
+    return rows
 
 
 def image_cases(model: str, force: bool, want) -> list[dict]:
@@ -162,6 +235,7 @@ def cases(model: str, force: bool, want) -> list[dict]:
             evidence_note="changes/2026-09-19-jev-state.md D1",
             force=force))
     rows += image_cases(model, force, want)
+    rows += box_cases(force, want)
     if want("models"):
         rows.append(cap.models_case(force))
     return rows
@@ -184,6 +258,7 @@ def probes(model: str, want) -> list[dict]:
         rows.append(cap.probe("error-images-off", image_request, headers={"Authorization": f"Bearer {cap.key()}", "TypeSafe-Danger-Zone-Images": None}))
     if want("pinned-version"):
         rows.append(cap.probe("pinned-version", Request(model="jev-1.13.0", messages=base.messages, config=base.config)))
+    rows += box_probes(want)
     return rows
 
 

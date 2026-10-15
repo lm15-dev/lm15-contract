@@ -859,7 +859,14 @@ optionally a probability per key. The request is an ordinary
    - an integer `enum` `[0, …, n-1]` or `anyOf` of `{"const": <int>,
      "title"?, "description"?}` in that order — an **ordered** judgment
      (levels); keys `"0"…"n-1"`, `title` is the level name, `description`
-     the level description.
+     the level description;
+   - an object schema (`type: "object"` or none) whose `properties` are
+     exactly `top`, `bottom`, `left`, `right`, each `type: "number"` — a
+     **bounding box** (changes/2026-10-15-bounding-box.md D1): the
+     smallest rectangle around what the description names in the
+     request's image, each edge a fraction of the image from its top-left
+     corner (`top`/`bottom` of its height, `left`/`right` of its width).
+     A box declares no keys: it is answered, never scored.
    The property's own `description` is the question. Any other property
    is ordinary structured output: it is answered, never scored. A schema
    with no judgment property is not a judgment request and answers with a
@@ -881,7 +888,10 @@ optionally a probability per key. The request is an ordinary
    parts in order; a request whose body carries `assets` sends
    `TypeSafe-Danger-Zone-Images: true`; a URL- or file-id-addressed
    image, a format other than PNG/JPEG, and every other media kind are
-   refused at the part (changes/2026-10-14-jev-images.md D1–D4).
+   refused at the part (changes/2026-10-14-jev-images.md D1–D4). A box
+   → `box` (`instructions` only, no `criteria`); the opt-in header goes
+   with an image **or** a box question (changes/2026-10-15-bounding-box.md
+   D2: live, a box without an image needs it too).
    openai (both dialects): the schema goes verbatim (receipted:
    `strict` honours `anyOf`/`const`/`title`). anthropic: a judgment
    property carrying both `type` and `anyOf` has its `type` moved into
@@ -890,14 +900,22 @@ optionally a probability per key. The request is an ordinary
    folded into the property description as `key = description; …` (the
    wire ignores `const` and answered `"Bordeaux-blend"`; receipted, thinking
    off). These two rewrites are the INV-050 exception and are
-   translations (MAP-13 rule 2), not adaptations.
+   translations (MAP-13 rule 2), not adaptations; a box is never
+   rewritten (it uses no `anyOf`), and on a server that scores named
+   tokens (§4) a box is answered by the generated-JSON call beside the
+   measured keyed judgments.
 3. **The answer.** `DataPart.value` is the model's JSON object (typesafe:
-   `{name: key | level index | bool}` assembled from the answers).
+   `{name: key | level index | bool | box}` assembled from the answers;
+   a box is Jev's `box` object verbatim, checked to be exactly the four
+   edges, each a finite number in `[0, 1]`).
    `probabilities` and `method` follow `config.probabilities`: typesafe
    always delivers `provider_classification` (a noul becomes
    `{"true": p, "false": 1-p}`); a wire that measures nothing delivers
    none — `if_available` records `dropped` on `config.probabilities`,
-   `required` refuses before the wire (condition b). Jev's `confidence`
+   `required` refuses before the wire (condition b). The policy concerns
+   only judgments with declared keys: a box never has a distribution, and
+   a request whose judgments are all boxes records and refuses nothing
+   (changes/2026-10-15-bounding-box.md D3). Jev's `confidence`
    and `score` stay verbatim in `provider_data.typesafe.answers`; the
    expected level is Σ p·i and is computed, never stored.
 4. **Candidate-sequence likelihood** (openai-chat on a server that

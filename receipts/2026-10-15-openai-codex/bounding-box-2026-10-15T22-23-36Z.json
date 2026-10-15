@@ -1,0 +1,113 @@
+{
+  "provider": "openai-codex",
+  "model": "openai-codex:gpt-5.6-luna",
+  "timestamp": "2026-10-15T22-23-36Z",
+  "finish_reason": "stop",
+  "schema_sent": {
+    "type": "object",
+    "properties": {
+      "red": {
+        "type": "object",
+        "description": "the red square in the image",
+        "properties": {
+          "top": {
+            "type": "number",
+            "description": "Top edge, as a fraction of the image's height from the top, from 0 to 1"
+          },
+          "bottom": {
+            "type": "number",
+            "description": "Bottom edge, as a fraction of the image's height from the top, from 0 to 1"
+          },
+          "left": {
+            "type": "number",
+            "description": "Left edge, as a fraction of the image's width from the left, from 0 to 1"
+          },
+          "right": {
+            "type": "number",
+            "description": "Right edge, as a fraction of the image's width from the left, from 0 to 1"
+          }
+        },
+        "required": [
+          "top",
+          "bottom",
+          "left",
+          "right"
+        ],
+        "additionalProperties": false
+      },
+      "blue": {
+        "type": "object",
+        "description": "the blue circle in the image",
+        "properties": {
+          "top": {
+            "type": "number",
+            "description": "Top edge, as a fraction of the image's height from the top, from 0 to 1"
+          },
+          "bottom": {
+            "type": "number",
+            "description": "Bottom edge, as a fraction of the image's height from the top, from 0 to 1"
+          },
+          "left": {
+            "type": "number",
+            "description": "Left edge, as a fraction of the image's width from the left, from 0 to 1"
+          },
+          "right": {
+            "type": "number",
+            "description": "Right edge, as a fraction of the image's width from the left, from 0 to 1"
+          }
+        },
+        "required": [
+          "top",
+          "bottom",
+          "left",
+          "right"
+        ],
+        "additionalProperties": false
+      },
+      "has_red": {
+        "type": "boolean",
+        "description": "Is there a red square in the image?"
+      }
+    },
+    "required": [
+      "red",
+      "blue",
+      "has_red"
+    ],
+    "additionalProperties": false
+  },
+  "answer": {
+    "red": {
+      "top": 0.2,
+      "bottom": 0.6,
+      "left": 0.55,
+      "right": 0.85
+    },
+    "blue": {
+      "top": 0.5833,
+      "bottom": 0.9188,
+      "left": 0.1,
+      "right": 0.3516
+    },
+    "has_red": true
+  },
+  "parts": [
+    "thinking",
+    "data"
+  ],
+  "usage": {
+    "input_tokens": 694,
+    "output_tokens": 222,
+    "total_tokens": 916,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 0,
+    "reasoning_tokens": 151
+  },
+  "adaptations": [
+    {
+      "field": "config.probabilities",
+      "action": "dropped"
+    }
+  ],
+  "note": "router-level receipt (subscription sign-in; not replayable by the harness); the Responses dialect built the wire and the schema went verbatim"
+}

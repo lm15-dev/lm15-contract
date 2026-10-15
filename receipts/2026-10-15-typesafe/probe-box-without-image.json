@@ -1,0 +1,46 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.typesafe.ai/v1/systemone",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "typesafe-danger-zone-images": "true",
+      "authorization": "Bearer $TYPESAFE_API_KEY"
+    },
+    "body": {
+      "model": "jev-preview",
+      "state": "A kitchen with a coffee mug.",
+      "questions": {
+        "red": {
+          "type": "box",
+          "instructions": "the red square in the image"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "jev-1.14.0",
+    "answers": {
+      "red": {
+        "type": "box",
+        "box": {
+          "top": 0.04,
+          "bottom": 0.96,
+          "left": 0.05,
+          "right": 0.55
+        },
+        "confidence": 0.02
+      }
+    },
+    "usage": {
+      "input_tokens": 279,
+      "output_tokens": 20
+    }
+  },
+  "timestamp": "2026-10-15T22-22-51Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}
