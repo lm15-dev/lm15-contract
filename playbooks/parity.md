@@ -2,6 +2,24 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-15 — a saved cloud recipe's settings reach the request
+
+changes/2026-10-15-saved-cloud-settings.md (lm15-python #21, Rolf Fredheim): the managed
+router builds a cloud door with the selected connection's saved settings, refined setting
+by setting by the router's explicit entry under either spelling (D2-D3 awaiting
+ratification). One new check (`managed` case `cloud-recipe-settings`, through the new
+`route` step). All six ports had the omission; only Python also ignored the underscore
+spelling. The six SDKs move their pin to `1cbdc12`, measured with `harness/check.py
+--direction all` (R through `tools/check-contract.py --compare-python`, against Python
+`ac4ca7c`):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,912 / 1,912 | 1,912 / 1,912 | 1,912 / 1,912 | 1,912 / 1,912 | 1,912 / 1,912 | 1,912 / 1,912 |
+| Commit | `ac4ca7c` | `59e81c1` | `1bc5f88` | `c53bb73` | `1416def` | `ba65b6e` |
+
+Not moved: Java, Ruby, .NET and Swift (no managed login).
+
 ## 2026-10-14 — images reach Jev
 
 changes/2026-10-14-jev-images.md: an image part in the one user message is a reference
