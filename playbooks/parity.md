@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-10-31 — one meaning per usage counter
+
+changes/2026-10-31-usage-one-meaning.md (decided in session, to ratify): every usage
+counter means one thing on every provider (MAP-19, INV-029), and
+`InferencePricing.estimate` is exact or unknown, with `PricingTier` for long prompts
+(INV-057). 113 usage objects in 101 goldens migrated from their recorded bodies; 47 new
+checks (45 `mapping/usage.json` vectors through the new `estimate_cost` op and
+`parse_response`, 2 `model_info` serde vectors). Every SDK computes the 20 estimates to
+the bit. Found while porting: the Gemini Live completion path summed usage frames with a
+field-wise maximum in Python (where it also raised on the first frame, `max(None, n)`)
+and Go; both now keep the turn's latest usage, as the other four did. The six SDKs move
+their pin to `cfc3edc`, measured with `harness/check.py --direction all` (R through
+`tools/check-contract.py --compare-python`, against Python `94f9ac8`: 30 agree, the 2
+known differences):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 |
+| Version | 2.0.0 | 2.0.0 | 1.0.0-rc.12 | v1.1.0-rc.11 | 1.0.0 (registration to move) | 2.0.0 |
+| Commit | `94f9ac8` | `c8c4f67` | `5798658` | `596ba26` | `475726f` | `22c6861` |
+
+Not moved: Java, Ruby, .NET and Swift (their usage stays provider-verbatim until a port
+picks up MAP-19).
+
 ## 2026-10-15 — bounding boxes
 
 changes/2026-10-15-bounding-box.md (D1 and D3 awaiting ratification): an object of the

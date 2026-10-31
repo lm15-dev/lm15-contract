@@ -15,17 +15,18 @@ reference) and how each kind of fixture may change.
 
 ## Where the languages stand
 
-| Implementation | Release | Contract pin | Checks |
+| Implementation | Version at the pin | Contract pin | Checks |
 |---|---|---|---|
-| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 1.1.0 | `fe5cdf9` | 1,788 / 1,788 |
-| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 1.0.0-rc.3 | `442295a` | 1,828 / 1,828 |
-| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.2 | `fe5cdf9` | 1,788 / 1,788 |
-| [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.2 | `fe5cdf9` | 1,788 / 1,788 |
+| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.12 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.11 | `cfc3edc` | 1,968 / 1,968 |
+| [LM15.jl](https://github.com/lm15-dev/LM15.jl) | 1.0.0 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 
-Measured with `harness/check.py --direction all` at each pin (2026-09-26;
-TypeScript 2026-09-29, after the 40 member-order checks of
-`changes/2026-09-29-index-member-names.md`, which Python, Rust and Go also
-pass unchanged ahead of their next pin).
+Measured with `harness/check.py --direction all` at the pin on 2026-10-31
+(R through its `tools/check-contract.py`). Versions are the ones each
+repository is set to at that commit; publishing them is a separate step.
 [playbooks/parity.md](playbooks/parity.md) is the dated ledger.
 
 ## What's inside
