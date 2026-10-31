@@ -140,6 +140,10 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         "gemini_schema_field_flip": ("mapping", "gemini-schema-field.additional-properties[tools]"),
         "index_names_first": ("mapping", "opaque-order.response-format-schema[openai]"),
         "index_names_first_read": ("mapping", "opaque-order.read-openai-chat-stream"),
+        "estimate_double_counts": ("mapping", "usage.estimate.cached_history"),
+        "estimate_unknown_as_zero": ("mapping", "usage.estimate.cache_read_unknown"),
+        "usage_parts_unchecked": ("mapping", "usage.usage_reject.cache_exceeds_input"),
+        "usage_split_kept": ("mapping", "usage.parse.openai_chat.total_disagrees"),
         "index_names_first_serde": ("serde", "part.tool_call_index_member_names"),
         "opaque_keys_sorted": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],

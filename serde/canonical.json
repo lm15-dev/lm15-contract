@@ -1296,6 +1296,83 @@
       }
     },
     {
+      "id": "model_info.pricing-tiers",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-6.1-sol",
+        "provider": "openai",
+        "api_family": "openai-responses",
+        "inference": {
+          "input_modalities": [
+            "text",
+            "image"
+          ],
+          "output_modalities": [
+            "text"
+          ],
+          "context_window": 1050000,
+          "max_output_tokens": 128000,
+          "pricing": {
+            "input_per_million": 2.0,
+            "output_per_million": 10.0,
+            "cache_read_per_million": 0.1,
+            "cache_write_per_million": 2.5,
+            "currency": "USD",
+            "tiers": [
+              {
+                "above_input_tokens": 272000,
+                "input_per_million": 4.0,
+                "output_per_million": 15.0,
+                "cache_read_per_million": 0.2,
+                "cache_write_per_million": 5.0
+              }
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-10-31",
+        "evidence": "spec/types.md InferencePricing and PricingTier (canonical JSON, omission rule, Number rule); INV-057; rates are gpt-6.1-sol's published list prices on 2026-10-31 (developers.openai.com/api/docs/pricing: short context <=272K input tokens, long context above); changes/2026-10-31-usage-one-meaning.md; canonical-only fixture, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
+      "id": "model_info.pricing-tier-partial",
+      "kind": "model_info",
+      "value": {
+        "id": "tiered-1",
+        "provider": "exampleai",
+        "api_family": "anthropic-messages",
+        "inference": {
+          "input_modalities": [
+            "text"
+          ],
+          "output_modalities": [
+            "text"
+          ],
+          "pricing": {
+            "input_per_million": 0.1,
+            "output_per_million": 0.5,
+            "currency": "USD",
+            "tiers": [
+              {
+                "above_input_tokens": 100000,
+                "input_per_million": 0.5
+              },
+              {
+                "above_input_tokens": 200000
+              }
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-10-31",
+        "evidence": "spec/types.md PricingTier (each rate optional, omitted when absent; a tier with no rate keeps only its threshold); INV-057; changes/2026-10-31-usage-one-meaning.md; canonical-only fixture, no wire receipt required per AUTHORITY.md"
+      }
+    },
+    {
       "id": "batch_request.minimal",
       "kind": "batch_request",
       "provenance": {

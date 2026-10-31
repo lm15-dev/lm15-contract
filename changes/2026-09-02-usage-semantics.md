@@ -1,5 +1,9 @@
 # 2026-09-02 — Usage counters are provider-verbatim, and the spec says so
 
+**Superseded 2026-10-31** by `2026-10-31-usage-one-meaning.md` (MAP-19):
+every counter now means one thing on every provider, and the provider's own
+numbers stay in `provider_data`. Kept as the record of the earlier rule.
+
 Ratification: accepted in advance — Maxime Rivest, in session ("i accept
 all your recommendations"), for the recommendation in
 `2026-09-02-review-followup.md` (review §4 item 3). Transcribed here;

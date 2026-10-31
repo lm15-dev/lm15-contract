@@ -165,12 +165,19 @@ rationale is the designed reason, ratified, not a guess.
   specify allowed or parallel"`; `none` means tools are not used at all.
 - **INV-029 — Usage semantics.** Every counter is int-or-absent and
   `>= 0`; absent (`null`) means "not reported", DISTINCT from reported `0`.
-  `total_tokens`, when not provided, auto-computes as
-  `input_tokens + output_tokens` only when BOTH are present; an explicit
-  total is preserved verbatim (provider telemetry). Arithmetic must treat
-  absent as unknown, never zero. WHY: providers report different token
-  taxonomies; conflating unknown with zero corrupted pricing/telemetry
-  (Usage docstring; usage-none-vs-zero changes entry).
+  Parts never exceed their wholes, checked between present counters:
+  `cache_read_tokens + cache_write_tokens <= input_tokens`,
+  `input_audio_tokens <= input_tokens`, `reasoning_tokens <= output_tokens`,
+  `output_audio_tokens <= output_tokens`; an explicit `total_tokens` equals
+  `input_tokens + output_tokens` when both are present. `total_tokens`,
+  when not provided, is computed as `input_tokens + output_tokens` only
+  when BOTH are present. Arithmetic must treat absent as unknown, never
+  zero. WHY: providers report different token taxonomies; conflating
+  unknown with zero corrupted pricing/telemetry (usage-none-vs-zero changes
+  entry); and a counter that means one thing everywhere (MAP-19) is only
+  checkable if its parts fit inside it (amended 2026-10-31,
+  changes/2026-10-31-usage-one-meaning.md; until then an explicit total
+  was kept verbatim and nothing related the counters).
 - **INV-030 — `Request.tools` / `LiveConfig.tools` names are unique.**
   WHY: tool dispatch is by name; duplicates make calls ambiguous
   (`__post_init__` raises `"... cannot contain duplicate tool names"`;
@@ -424,6 +431,15 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   2026-10-06; see
   changes/2026-10-06-sse-event-bound.md.
 
+- **INV-057 — Pricing tiers are in one order.** `InferencePricing.tiers`
+  is strictly ascending by `above_input_tokens`, each threshold a positive
+  integer; construction refuses any other order, a repeated threshold, or
+  a tier without a threshold. Rates are `>= 0` everywhere. WHY: one
+  canonical JSON per value (two orders of the same tiers would be two
+  forms), and `estimate` picks the highest threshold exceeded, which needs
+  no tie rule when thresholds are distinct (added 2026-10-31,
+  changes/2026-10-31-usage-one-meaning.md).
+
 The serde kind strings accepted by the vet `serde_roundtrip`/`validate` ops
 are enumerated in harness/PROTOCOL.md (§ "Serde kinds").
 
@@ -448,3 +464,6 @@ changes/2026-09-24-ratification.md.
 Amended 2026-10-06 (INV-056: no default SSE line or event limit) — decided
 in session ("yes, fix that completely"), not yet ratified; see
 changes/2026-10-06-sse-event-bound.md.
+Amended 2026-10-31 (INV-029: parts within wholes, total = input + output;
+INV-057 added) — decided in session ("I agree, go do it all"), the entry
+awaiting its ratification stamp; see changes/2026-10-31-usage-one-meaning.md.

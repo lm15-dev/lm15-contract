@@ -616,44 +616,50 @@ Request entirely. On read, a present non-object `tool_choice`/`reasoning`/
 
 ### Usage
 
-All counters are `int | null`; `null` means "not reported by the provider",
-distinct from a reported `0`. `Usage()` serializes to `{}` and is omitted by
-enclosing serializers.
+Every counter means the same thing on every provider (MAP-19,
+`docs/mapping-rules.md`; ratified in principle 2026-10-31,
+`changes/2026-10-31-usage-one-meaning.md`). Counters are `int | null`;
+`null` means "not reported", distinct from a reported `0`. `Usage()`
+serializes to `{}` and is omitted by enclosing serializers.
 
-| Field | JSON type | Req | Default | Omission | Constraints |
+| Field | JSON type | Req | Default | Omission | Meaning |
 |---|---|---|---|---|---|
-| `input_tokens` | int | no | `null` | omit-empty | `>= 0`; float-coerced |
-| `output_tokens` | int | no | `null` | omit-empty | `>= 0` |
-| `total_tokens` | int | no | `null` (auto-computed: see INV-029) | omit-empty | `>= 0`; preserved verbatim when provider-reported |
-| `cache_read_tokens` | int | no | `null` | omit-empty | `>= 0` |
-| `cache_write_tokens` | int | no | `null` | omit-empty | `>= 0`; Anthropic `cache_creation_input_tokens`; OpenAI `input_tokens_details.cache_write_tokens` / chat `prompt_tokens_details.cache_write_tokens` (added 2026-09-01) |
-| `reasoning_tokens` | int | no | `null` | omit-empty | `>= 0`; only when the provider reports an EXACT separate count |
-| `input_audio_tokens` | int | no | `null` | omit-empty | `>= 0`; OpenAI `*_tokens_details.audio_tokens`; Gemini `promptTokensDetails[modality=AUDIO]` (mapped 2026-09-02) |
-| `output_audio_tokens` | int | no | `null` | omit-empty | `>= 0`; OpenAI `output_tokens_details.audio_tokens`; Gemini `candidatesTokensDetails`/`responseTokensDetails[modality=AUDIO]` (mapped 2026-09-02) |
+| `input_tokens` | int | no | `null` | omit-empty | every token the model read for this response: the prompt, the parts of it read from or written to the prompt cache, and tokens the provider added for its own tools. `>= 0`; float-coerced |
+| `output_tokens` | int | no | `null` | omit-empty | every token the model generated: text, tool calls, audio, and reasoning (shown or hidden). `>= 0` |
+| `total_tokens` | int | no | `null` (computed: INV-029) | omit-empty | `input_tokens + output_tokens`. `>= 0` |
+| `cache_read_tokens` | int | no | `null` | omit-empty | the part of `input_tokens` read from the prompt cache. `>= 0` |
+| `cache_write_tokens` | int | no | `null` | omit-empty | the part of `input_tokens` written to the prompt cache (Anthropic `cache_creation_input_tokens`; OpenAI `input_tokens_details.cache_write_tokens` / chat `prompt_tokens_details.cache_write_tokens`). `>= 0` |
+| `reasoning_tokens` | int | no | `null` | omit-empty | the part of `output_tokens` spent reasoning; only when the provider reports an exact count. `>= 0` |
+| `input_audio_tokens` | int | no | `null` | omit-empty | the part of `input_tokens` that is audio (OpenAI `*_tokens_details.audio_tokens`; Gemini `AUDIO` modality entries). `>= 0` |
+| `output_audio_tokens` | int | no | `null` | omit-empty | the part of `output_tokens` that is audio. `>= 0` |
 
-**Counters are provider-verbatim (normative, 2026-09-02).** Every counter
-is the provider's own number under the provider's own taxonomy; lm15
-never re-derives one counter from another (the single exception is
-INV-029's `total_tokens = input + output` when the provider reports no
-total). This is what a bill reconciles against, and it is what makes the
-same field mean different things across providers. The inclusion rules,
-each pinned by a golden:
+**Parts within wholes (INV-029).** `cache_read_tokens + cache_write_tokens`
+and `input_audio_tokens` never exceed `input_tokens`; `reasoning_tokens` and
+`output_audio_tokens` never exceed `output_tokens`; an explicit
+`total_tokens` equals `input_tokens + output_tokens` when both are present.
+Construction refuses a value that breaks one; relations are checked only
+between present counters. The billing buckets follow: uncached input is
+`input_tokens - cache_read_tokens - cache_write_tokens`.
 
-| Provider | `input_tokens` includes cached tokens? | `output_tokens` includes reasoning tokens? | `total_tokens` |
-|---|---|---|---|
-| OpenAI, both dialects | yes (`cache_off`: 3091 input, 3088 written ⊂ input) | yes (`reasoning_tokens` ⊂ `output_tokens`) | provider: input + output |
-| Anthropic | **no** — `cache_read_tokens` and `cache_write_tokens` are disjoint from `input_tokens` (`cache_history`: input 3, write 3275) | yes (`reasoning_budget`: 220 output, 188 reasoning) | not reported; lm15 sums input + output, so it **excludes** cache tokens |
-| Gemini | yes (`cache_resource`: 3598 input, 3580 read ⊂ input) | **no** — `thoughtsTokenCount` is outside `candidatesTokenCount` (`thinking_level`: 48 output, 155 reasoning, total 222 = 19 + 48 + 155) | provider: prompt + candidates + thoughts |
-| xAI | yes (`basic_text`: 639 input, 512 read) | **no** (`structured_output`: 254 + 9 + 111 = 374) | provider: prompt + completion + reasoning |
+**Exact or absent.** An adapter fills each counter with the provider's own
+count or an exact sum of the provider's counts (MAP-19). A counter whose
+parts the provider did not all report is absent, never a partial sum. When
+the provider's numbers contradict the declared rule (a part larger than its
+whole, or a provider total that is not input + output), the adapter
+withholds the affected whole: `input_tokens` and/or `output_tokens` are
+absent and the provider's total stays. The provider's own numbers are always
+in `Response.provider_data`, verbatim; that is what a bill reconciles
+against.
 
-Consequences a port must reproduce: a cross-provider sum of
-`output_tokens` is not comparable; "tokens billed" on Anthropic is
-`input + cache_read + cache_write + output`, on the others it is
-`total_tokens`. Normalising in the adapters was considered and rejected
-(independent review 2026-09-02, §4 item 3): it would break reconciliation
-against every provider's bill and touch dozens of goldens. Stated
-trade-off: `Usage` alone cannot tell a consumer which rule applies; the
-provider string on the `Response` can.
+**Changed in 2.0.** Until 2026-10-31 the counters were each provider's own
+(`changes/2026-09-02-usage-semantics.md`, superseded): `input_tokens`
+excluded cached tokens on Anthropic and `output_tokens` excluded reasoning on
+Gemini and xAI, so the same field meant different things. Records written
+under that rule are not valid 2.0 Usage when they break INV-029 (a 1.x
+Anthropic record whose cache counters exceed its input is refused, with a
+message naming this change); one that happens to satisfy it reads with the
+new meaning. Stated trade-off: an old record that satisfies INV-029 is not
+detectable as old.
 
 ### Response
 
@@ -1131,6 +1137,118 @@ it opens, a cancelled response's on the interrupted turn.
 |---|---|---|---|---|
 | `type` | string `"error"` | — | `"error"` | always |
 | `error` | object (ErrorDetail) | yes | — | always |
+
+## Model metadata
+
+Optional, advisory metadata a catalog supplies (lm15 names no catalog and
+ships no prices; `lm15-python/docs/model-hydration.md` is the hydration
+protocol). It never changes what a request builds. Normative from
+2026-10-31; before, these tables lived in that document only.
+
+### ModelInfo
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `id` | string | yes | — | always | non-empty |
+| `provider` | string | yes | — | always | non-empty |
+| `api_family` | string | yes | — | always | non-empty |
+| `aliases` | array of string | no | `[]` | omit-empty | non-empty strings |
+| `origin` | object (ModelOrigin) | no | `{"type": "provider"}` | omitted at the default | |
+| `inference` | object (InferenceModelInfo) | no | `null` | omit-empty | |
+| `compat` | — | no | `null` | never | runtime-only configuration; never serialized, always reads as `null` |
+| `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object |
+
+### ModelOrigin
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `type` | string | no | `"provider"` | always | non-empty (`provider`, `fine-tune`, `distillation`, …) |
+| `id` | string | no | `null` | omit-empty | non-empty when present |
+| `base_model` | string | no | `null` | omit-empty | non-empty when present |
+| `provider_data` | object (opaque) | no | `null` | omit-empty | strict JSON object |
+
+### InferenceModelInfo
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `input_modalities` | array of string | no | `["text"]` | always | non-empty strings |
+| `output_modalities` | array of string | no | `["text"]` | always | non-empty strings |
+| `context_window` | int | no | `null` | omit-empty | `> 0` |
+| `max_output_tokens` | int | no | `null` | omit-empty | `> 0` |
+| `supports_reasoning` | bool | no | `false` | omit-default | |
+| `reasoning_efforts` | array of string | no | `[]` | omit-empty | non-empty strings |
+| `pricing` | object (InferencePricing) | no | `null` | omit-empty | |
+| `extensions` | object (opaque) | no | `null` | omit-empty | strict JSON object |
+
+### InferencePricing
+
+List prices per million tokens of each billing bucket of a call (Usage,
+"Parts within wholes"): uncached input, cache reads, cache writes, output
+(reasoning included).
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `input_per_million` | float | no | `null` | omit-empty | `>= 0`; the uncached-input rate |
+| `output_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `cache_read_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `cache_write_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `currency` | string | no | `"USD"` | always | non-empty |
+| `dimensions` | object (opaque) | no | `null` | omit-empty | strict JSON object; catalog data `estimate` does not read |
+| `tiers` | array of PricingTier | no | `[]` | omit-empty | strictly ascending `above_input_tokens` (INV-057) |
+
+**An absent rate is unknown.** Never zero, and never the input rate: a
+catalog that knows a bucket costs the same as plain input (no cache-write
+surcharge, no cache-read discount) states that rate.
+
+**`estimate(usage)` — exact or unknown (normative, 2026-10-31).** Every SDK
+exposes it under its own idiom (Python `pricing.estimate(usage) -> float |
+None`, TypeScript `InferencePricing.estimate(p, usage) -> number |
+undefined`, Rust `Option<f64>`, Go `(float64, bool)`, Julia `nothing`, R
+`NULL`). Given a Usage it returns:
+
+1. unknown when `input_tokens` or `output_tokens` is absent;
+2. unknown when `input_audio_tokens` or `output_audio_tokens` is above 0
+   (audio has its own prices, which these rates do not carry);
+3. the rates: the base fields, or those of the highest tier whose
+   `above_input_tokens` is strictly less than `input_tokens` (the whole
+   call is repriced, not only the tokens past the threshold);
+4. an absent `cache_read_tokens` (or `cache_write_tokens`) is read as 0 when
+   its rate is present and equal to the input rate (the split cannot change
+   the price); otherwise the result is unknown;
+5. the buckets in this order: uncached input, cache reads, cache writes,
+   output. A bucket with 0 tokens contributes nothing and needs no rate; a
+   bucket with tokens and no rate makes the result unknown;
+6. otherwise the sum, starting from `0.0` and adding, in that order, each
+   bucket's `tokens × rate / 1000000` (IEEE-754 double arithmetic, so every
+   implementation agrees to the bit; `mapping/usage.json` compares exactly).
+
+Not covered, never guessed: price differences `Usage` cannot show (service
+tiers such as flex, priority and batch; regional multipliers; a longer cache
+lifetime's write rate; server-side tool fees). The number is the standard
+list price of the reported tokens. Replaced 2026-10-31: the 1.x
+`estimate` summed `input × input rate` with the cache products, which charged
+the cached tokens twice wherever `input_tokens` already included them,
+skipped unknown counters (so it was neither a bound nor exact), and took
+its counts as separate arguments in Python and Rust.
+
+### PricingTier
+
+The rates of a call whose prompt is longer than a threshold (OpenAI "Long
+context: >272K input tokens"; Anthropic Haiku 5.5 "a request whose prompt
+is over 100,000 tokens pays higher prices", counting cache reads and
+writes). `input_tokens` is the whole prompt (MAP-19), which is what both
+count.
+
+| Field | JSON type | Req | Default | Omission | Constraints |
+|---|---|---|---|---|---|
+| `above_input_tokens` | int | yes | — | always | `> 0`; the tier applies when `input_tokens` is greater |
+| `input_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `output_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `cache_read_per_million` | float | no | `null` | omit-empty | `>= 0` |
+| `cache_write_per_million` | float | no | `null` | omit-empty | `>= 0` |
+
+A rate absent from a tier is unknown at that tier; it is not taken from the
+base rates.
 
 ## Callback view
 

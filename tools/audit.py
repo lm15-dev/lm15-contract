@@ -70,6 +70,7 @@ KIND_COVERS: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
     "error_detail": (("ErrorDetail",), ("ErrorCode", "ERROR_CODES")),
     "delta": (("*Delta",), ("DeltaType", "DELTA_TYPES")),
     "usage": (("Usage",), ()),
+    "model_info": (("ModelInfo", "ModelOrigin", "InferenceModelInfo", "InferencePricing", "PricingTier"), ()),
     "stream_event": (("Stream*Event",), ("StreamEventType",)),
     "request": (("Request",), ()),
     "response": (("Response",), ("FinishReason", "FINISH_REASONS")),
@@ -632,6 +633,53 @@ def check_surface_coverage(root: Path, python2: Path, problems: list[str]) -> st
             f"{policy_count} policy enum(s) checked against spec separately (not serde/runtime coverage)")
 
 
+# ─── Golden usage (INV-029, MAP-19 rule 3) ───────────────────────────
+
+_USAGE_COUNTERS = ("input_tokens", "output_tokens", "total_tokens", "cache_read_tokens", "cache_write_tokens",
+                   "reasoning_tokens", "input_audio_tokens", "output_audio_tokens")
+
+
+def _golden_usages(node: object, path: str = "$"):
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == "provider_data":
+                continue  # the provider's own object, verbatim
+            if key == "usage" and isinstance(value, dict) and any(k in value for k in _USAGE_COUNTERS):
+                yield f"{path}.{key}", value
+            else:
+                yield from _golden_usages(value, f"{path}.{key}")
+    elif isinstance(node, list):
+        for index, item in enumerate(node):
+            yield from _golden_usages(item, f"{path}[{index}]")
+
+
+def check_golden_usage(root: Path, problems: list[str]) -> str:
+    """HARD since 2026-10-31: every canonical Usage in a golden satisfies
+    INV-029 (parts within wholes, total = input + output), and none
+    withholds its split (MAP-19 rule 3: a total with no input or output).
+    A withheld split in a recorded reply means the wire counts in a way its
+    rule does not declare: fix the rule (a preset's ``reasoning_usage``, a
+    dialect rule) with the receipt, never the golden."""
+    count = 0
+    for golden in sorted((root / "goldens").glob("*/*.json")):
+        data = json.loads(golden.read_text(encoding="utf-8"))
+        for path, usage in _golden_usages(data):
+            count += 1
+            where = f"{golden.relative_to(root)} {path}"
+            i, o, t = usage.get("input_tokens"), usage.get("output_tokens"), usage.get("total_tokens")
+            if i is not None and (usage.get("cache_read_tokens", 0) + usage.get("cache_write_tokens", 0) > i
+                                  or usage.get("input_audio_tokens", 0) > i):
+                problems.append(f"USAGE {where}: a part of input_tokens exceeds it (INV-029)")
+            if o is not None and (usage.get("reasoning_tokens", 0) > o or usage.get("output_audio_tokens", 0) > o):
+                problems.append(f"USAGE {where}: a part of output_tokens exceeds it (INV-029)")
+            if t is not None and i is not None and o is not None and t != i + o:
+                problems.append(f"USAGE {where}: total_tokens is not input_tokens + output_tokens (INV-029)")
+            if t is not None and (i is None or o is None):
+                problems.append(f"USAGE {where}: the split is withheld (MAP-19 rule 3): the recorded reply counts "
+                                "in a way its wire rule does not declare")
+    return f"golden usage: {count} Usage object(s), INV-029 and MAP-19 rule 3 checked"
+
+
 # ─── main ────────────────────────────────────────────────────────────
 
 def main(argv: list[str] | None = None) -> int:
@@ -675,6 +723,7 @@ def main(argv: list[str] | None = None) -> int:
         check_surface_coverage(root, python2, problems),
         check_support_matrix(root, python2, problems),
         check_provider_tables(root, python2, problems),
+        check_golden_usage(root, problems),
     ]
 
     for problem in problems:

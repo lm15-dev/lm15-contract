@@ -2140,11 +2140,13 @@ def _gemini_schema_slot(body: Any, surface: str) -> tuple[Any, str, str] | None:
 
 def run_mapping_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Vectors under mapping/: MAP-16 (docs/mapping-rules.md, the field
-    Gemini's schema goes in) and INV-002 (opaque objects keep a member
-    order JavaScript would change, mapping/opaque-order.json)."""
+    Gemini's schema goes in), INV-002 (opaque objects keep a member
+    order JavaScript would change, mapping/opaque-order.json), and MAP-19
+    with InferencePricing.estimate (mapping/usage.json)."""
     report = DirectionReport("mapping")
     _run_gemini_schema_vectors(shim, case_filter, report)
     _run_opaque_order_vectors(shim, case_filter, report)
+    _run_usage_vectors(shim, case_filter, report)
     return report
 
 
@@ -2321,6 +2323,69 @@ def _run_opaque_order_vectors(shim: Shim, case_filter: str | None, report: Direc
                 if hit is not None:
                     diff = Diff(at, list(hit), list(obj), "member order changed in a stream event (INV-002)")
                     break
+        report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+
+
+USAGE_VECTORS_FILE = MAPPING_DIR / "usage.json"
+
+
+def _run_usage_vectors(shim: Shim, case_filter: str | None, report: DirectionReport) -> None:
+    """mapping/usage.json: estimate costs compared exactly (the spec fixes the
+    order of the arithmetic, so every IEEE-754 implementation agrees to the
+    bit), Usage and pricing refusals, and MAP-19 usage from parse bodies."""
+    doc = json.loads(USAGE_VECTORS_FILE.read_text(encoding="utf-8"))
+
+    def wanted(case_id: str) -> bool:
+        return not case_filter or case_filter == case_id
+
+    for vector in doc["estimate"]:
+        case_id = f"usage.estimate.{vector['id']}"
+        if not wanted(case_id):
+            continue
+        reply = shim.call("estimate_cost", pricing=vector["pricing"], usage=vector["usage"])
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        got = reply["result"].get("cost", _ABSENT)
+        expected = vector["cost"]
+        same = (got is None and expected is None) or (
+            isinstance(got, (int, float)) and not isinstance(got, bool) and expected is not None and float(got) == expected)
+        report.results.append(CaseResult(case_id, "pass") if same
+                              else CaseResult(case_id, "fail", diff=Diff("$.cost", expected, got, "estimate differs")))
+    for vector in doc["usage_accept"]:
+        case_id = f"usage.usage_accept.{vector['id']}"
+        if not wanted(case_id):
+            continue
+        reply = shim.call("serde_roundtrip", kind="usage", value=vector["usage"])
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        diff = first_difference(vector["usage"], reply["result"].get("value", _ABSENT))
+        report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+    for group, op, field in (("usage_reject", "serde_roundtrip", "usage"), ("pricing_reject", "estimate_cost", "pricing")):
+        for vector in doc[group]:
+            case_id = f"usage.{group}.{vector['id']}"
+            if not wanted(case_id):
+                continue
+            if op == "serde_roundtrip":
+                reply = shim.call(op, kind="usage", value=vector["usage"])
+            else:
+                reply = shim.call(op, pricing=vector["pricing"], usage={"input_tokens": 1, "output_tokens": 1})
+            report.results.append(CaseResult(case_id, "fail", reason=f"accepted an invalid {field} ({vector['why']})")
+                                  if reply.get("ok") else CaseResult(case_id, "pass"))
+    for vector in doc["parse"]:
+        case_id = f"usage.parse.{vector['id']}"
+        if not wanted(case_id):
+            continue
+        body_b64 = base64.b64encode(vector["body"].encode("utf-8")).decode("ascii")
+        reply = shim.call("parse_response", provider=vector["provider"], canonical_request=vector["canonical_request"],
+                          status=200, body_b64=body_b64)
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        response = reply["result"].get("canonical_response")
+        actual = response.get("usage", {}) if isinstance(response, dict) else _ABSENT
+        diff = first_difference(vector["usage"], actual, ("usage",))
         report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
 
 

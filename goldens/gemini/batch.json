@@ -221,8 +221,9 @@
         "finish_reason": "stop",
         "usage": {
           "input_tokens": 8,
-          "output_tokens": 1,
+          "output_tokens": 35,
           "total_tokens": 43,
+          "cache_read_tokens": 0,
           "reasoning_tokens": 34
         },
         "provider_data": {
@@ -276,8 +277,9 @@
         "finish_reason": "stop",
         "usage": {
           "input_tokens": 8,
-          "output_tokens": 1,
+          "output_tokens": 33,
           "total_tokens": 41,
+          "cache_read_tokens": 0,
           "reasoning_tokens": 32
         },
         "provider_data": {
@@ -343,6 +345,6 @@
   "provenance": {
     "source": "scribe-draft",
     "date": "2026-09-02",
-    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the gemini.batch surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (changes/2026-09-06-decisions.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 2 message-level gemini:response_id continuations."
+    "evidence": "derived from the pinned body via python -m lm15.vet @ lm15-python HEAD when the gemini.batch surface case landed (2026-08-31/09-01); block added 2026-09-02 after the independent review found it missing (goldens/REVIEW-2026-09-02-independent.md §2); DRAFT — not frozen, see AUTHORITY.md. Re-reviewed 2026-09-06 for D5/D8/D9 (changes/2026-09-06-decisions.md, changes/2026-09-06-ratification.md): change verified by tools/migrate_goldens_2026_09_06.py to be exactly removed 2 message-level gemini:response_id continuations. Re-reviewed 2026-10-31 for MAP-19 (changes/2026-10-31-usage-one-meaning.md): usage verified by tools/migrate_goldens_2026_10_31.py to be exactly $.entries[0].response.usage: output_tokens 1 → 35, cache_read_tokens absent → 0; $.entries[1].response.usage: output_tokens 1 → 33, cache_read_tokens absent → 0."
   }
 }

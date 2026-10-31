@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -104,15 +104,8 @@ raw read failure — even after a finish-reason frame — is before completion
 and keeps its own class (a retryable `TransportError`).
 
 **Usage counters at the wire boundary (INV-029).** An adapter never invents
-`0` for a counter the provider did not send; absent stays `None` and
-`Usage` auto-sums `total_tokens` only when both primaries are present. One
-stated exception: Gemini's proto3-JSON wire omits zero-valued fields, so
-inside a present `usageMetadata` an absent `promptTokenCount` or
-`candidatesTokenCount` is a reported `0` (pinned by the reviewed golden
-`gemini.max_output_tokens`: `candidatesTokenCount` absent, `totalTokenCount`
-= prompt + thoughts). When `usageMetadata` itself is absent, every counter
-is `None`. Secondary Gemini counters (cache, thoughts) stay verbatim: absent
-is "not reported".
+`0` for a counter the provider did not send; absent stays `None`. What
+each counter means, and how each wire's numbers become it, is MAP-19.
 
 ---
 
@@ -1117,6 +1110,102 @@ Pinned by `errors/cases/gemini.json` `gemini.auth_api_key_invalid` and
 `gemini.invalid_argument_other_reason` (a 400 with another reason stays
 `InvalidRequestError`), and `errors/cases/xai.json` `xai.auth_incorrect_key`.
 
+---
+
+## MAP-19 — A usage counter means one thing on every provider
+
+**Written 2026-10-31 at the maintainer's request** ("not have the illusion
+of standardization, but be truly standardized"; "I agree, go do it all";
+`changes/2026-10-31-usage-one-meaning.md`); the entry awaits its
+ratification stamp. Supersedes `changes/2026-09-02-usage-semantics.md`.
+
+The meanings are in `spec/types.md` § Usage: `input_tokens` is everything
+the model read (cache reads, cache writes and provider tool tokens
+included), `output_tokens` everything it generated (reasoning and audio
+included), the other counters are parts of one of the two, and
+`total_tokens` is their sum.
+
+1. **The provider's numbers stay.** `Response.provider_data` (and a stream
+   end event's, MAP-3) holds the provider's own usage object, verbatim. A
+   bill reconciles against it; the canonical counters are for programs.
+2. **Exact or absent.** A canonical counter is one provider count or an
+   exact sum of provider counts. When a count it needs is not reported, it
+   is absent: never a partial sum, never a guess.
+3. **Withhold what the numbers do not determine.** After mapping, when a
+   part exceeds its whole (cache read + write, or input audio, above input;
+   reasoning or output audio above output), the wire is not counting the
+   way its rule below declares, and the whole is absent. When the provider
+   reports a total that is not input + output, the provider counted tokens
+   the rule does not place: input and output are both absent and the
+   provider's total stays. Never an error: the parts and `provider_data`
+   stay visible. This is the alarm that catches a wrong declaration;
+   `tools/audit.py` fails any golden that withholds.
+4. **Chat Completions.** `input_tokens` = `prompt_tokens`;
+   `cache_read_tokens` = `prompt_tokens_details.cached_tokens`, else a flat
+   `usage.cached_tokens` (Together); `cache_write_tokens` =
+   `prompt_tokens_details.cache_write_tokens`; `reasoning_tokens` =
+   `completion_tokens_details.reasoning_tokens`; audio from the two
+   breakdowns' `audio_tokens`. `prompt_tokens` includes the cached tokens
+   (the details object is its breakdown). `output_tokens` follows the
+   preset's `reasoning_usage`: `in_completion`, the dialect's rule
+   (`completion_tokens`, which already includes reasoning), or `separate`
+   (`completion_tokens + reasoning_tokens`; when the body reports no
+   reasoning count, `completion_tokens` if the body's total is
+   `prompt_tokens + completion_tokens`, else absent). Only `xai` is
+   `separate` today.
+5. **Anthropic Messages** (every server on the wire). The wire's
+   `input_tokens` is only the tokens after the last cache breakpoint; the
+   two cache counters are counted beside it. `input_tokens` =
+   `input_tokens + cache_read_input_tokens + cache_creation_input_tokens`,
+   absent unless all three are reported. `cache_read_tokens` /
+   `cache_write_tokens` are the two counters; `output_tokens` is the wire's
+   (thinking included); `reasoning_tokens` =
+   `output_tokens_details.thinking_tokens`. A server's `total_tokens` is
+   read when present (Moonshot sends one) and checked by rule 3.
+6. **Gemini** (generateContent, streams, Live, batch). `input_tokens` =
+   `promptTokenCount + toolUsePromptTokenCount`; `output_tokens` =
+   `candidatesTokenCount` (Live: `responseTokenCount`) +
+   `thoughtsTokenCount`; `reasoning_tokens` = `thoughtsTokenCount`;
+   `cache_read_tokens` = `cachedContentTokenCount` (part of the prompt);
+   `cache_write_tokens` absent (Gemini reports none). Audio: the `AUDIO`
+   entries of the prompt and tool-use breakdowns (input) and of the
+   candidates or response breakdown (output), absent when there is no such
+   entry. The wire is proto3 JSON, which omits zero-valued fields: inside a
+   present `usageMetadata` an absent counter is `0`. When `usageMetadata`
+   is absent, every counter is absent.
+7. **OpenAI Responses and Realtime.** Already one meaning: `input_tokens`
+   includes `input_tokens_details.cached_tokens` and `cache_write_tokens`,
+   `output_tokens` includes `output_tokens_details.reasoning_tokens`
+   (Realtime spells the details `*_token_details`). Rule 3 applies.
+8. **TypeSafe.** `input_tokens` and `output_tokens` as sent; the wire
+   reports nothing else.
+
+Evidence (all in the corpus; counts are recorded usage objects):
+
+| Wire / server | Rule | Receipt |
+|---|---|---|
+| Anthropic, DeepSeek, Meta (Anthropic wire) | cache beside `input_tokens` | 3, 6 and 9 objects where a cache counter exceeds `input_tokens` (`anthropic.cache_history`: input 3, written 3275) |
+| Moonshot (Anthropic wire) | same, and its total = all four | 15 objects whose own `prompt_tokens` = `input_tokens + cache_read_input_tokens` and `total_tokens` = that + `output_tokens` |
+| OpenAI (both wires), Fireworks, Parasail, Meta, Moonshot, DeepSeek, Bedrock, xAI | `prompt_tokens` includes cached | the same prompt reports the same count cached and uncached (`openai.prompt_cache_breakpoint`: 3087 both turns; `parasail.basic_text` / `.streaming`: 38 with 0 and 16 cached; `deepseek.tools` / `.streaming_tool_call`: 363 with 0 and 256); DeepSeek's `prompt_cache_hit_tokens + prompt_cache_miss_tokens` = `prompt_tokens`; xAI's `text_tokens` = `prompt_tokens` with `cached_tokens` within it |
+| Z.AI, Together, Azure | `prompt_tokens` includes cached | documentation, not a receipt (Z.AI computes `cached_tokens / prompt_tokens` as the cache ratio, `scrapes/zai/pages/guide--cache.md`; Together: "how many prompt tokens came from the cache", `scrapes/together/pages/prompt-caching.md`; Azure serves OpenAI's schema) |
+| Chat servers with reasoning, except xAI | reasoning inside `completion_tokens` | every object with reasoning > 0 has `total_tokens = prompt_tokens + completion_tokens` (DeepSeek, Fireworks, Groq, Meta, Moonshot, Parasail, Together, Z.AI, Azure, OpenAI) |
+| xAI | reasoning beside `completion_tokens` | all 8 objects: `total_tokens = prompt + completion + reasoning` (`xai.structured_output`: 254 + 9 + 111 = 374) |
+| Gemini, Vertex | thoughts and tool use beside prompt and answer | all 151 objects with a total and a count: `totalTokenCount = prompt + toolUse + candidates + thoughts`; 6 with tool use (`gemini.code_execution`) |
+| Gemini, proto3 zeros | absent = 0 | `gemini.max_output_tokens` (no `candidatesTokenCount`, total = prompt + thoughts); `gemini.reasoning_off` (no `thoughtsTokenCount`, total = prompt + answer) |
+
+Presets with no recorded reasoning count (`bedrock`, `bedrock_mantle`,
+`deepinfra`, `ollama`, `vllm`, `sglang`, `lmstudio`, `qwen`, `openrouter`)
+take the dialect's `in_completion` rule as a hypothesis (THEORY §3.17):
+rule 3 withholds output the day one of them counts reasoning beside the
+completion and reports a total.
+
+Pinned by every golden carrying usage (migrated by
+`tools/migrate_goldens_2026_10_31.py`, which reads each from its recorded
+body and imports no implementation) and by the `parse` vectors of
+`mapping/usage.json` (rules 3 to 7 on hand-authored edge bodies).
+
+---
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -1168,3 +1257,7 @@ LM15 program that classified a bad Gemini key calling it an invalid
 request, where the vendor SDKs and LiteLLM said authentication; the corpus
 pinned a 403 that Gemini does not send for a bad key
 (`lm15-contract/changes/2026-10-10-bad-key-and-misplaced-key.md`).
+MAP-19 was written on 2026-10-31 after a cost check found the estimate
+charging OpenAI's cached tokens twice, and the maintainer chose one meaning
+per counter over the provider-verbatim rule of 2026-09-02
+(`lm15-contract/changes/2026-10-31-usage-one-meaning.md`).

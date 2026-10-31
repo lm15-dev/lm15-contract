@@ -73,6 +73,10 @@ MUTATIONS = (
     "index_names_first",        # mapping build: every body object enumerated as a JavaScript object would (array-index names first; INV-002)
     "index_names_first_read",   # mapping parse: the tool call's input read into a JavaScript object's order
     "index_names_first_serde",  # serde_roundtrip: the value round-tripped through a JavaScript object's order
+    "estimate_double_counts",   # estimate_cost: the 1.x sum (input x input rate + every cache product)
+    "estimate_unknown_as_zero", # estimate_cost: an unknown estimate answered 0.0 (a lower bound posing as a price)
+    "usage_parts_unchecked",    # serde_roundtrip usage: a Usage breaking INV-029 accepted (a 1.x record read with the 2.0 meaning)
+    "usage_split_kept",         # parse_response (mapping/usage.json): a withheld split answered with the wire's numbers
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -295,6 +299,53 @@ def _order_parse_echo(msg: JsonObject) -> JsonObject | None:
     return None
 
 
+# ─── mapping vectors (MAP-19, mapping/usage.json) ───────────────────
+
+def _usage_doc() -> JsonObject:
+    return json.loads(check.USAGE_VECTORS_FILE.read_text(encoding="utf-8"))
+
+
+def op_estimate_cost(msg: JsonObject) -> JsonObject:
+    doc = _usage_doc()
+    for vector in doc["pricing_reject"]:
+        if msg.get("pricing") == vector["pricing"]:
+            raise ValueError(f"invalid pricing: {vector['why']}")
+    for vector in doc["estimate"]:
+        if msg.get("pricing") == vector["pricing"] and msg.get("usage") == vector["usage"]:
+            cost = vector["cost"]
+            if TARGET in (None, f"usage.estimate.{vector['id']}"):
+                if MUTATION == "estimate_double_counts" and cost is not None:
+                    p, u = vector["pricing"], vector["usage"]
+                    cost = sum(u.get(k, 0) * (p.get(r) or 0) / 1_000_000 for k, r in (
+                        ("input_tokens", "input_per_million"), ("output_tokens", "output_per_million"),
+                        ("cache_read_tokens", "cache_read_per_million"), ("cache_write_tokens", "cache_write_per_million")))
+                if MUTATION == "estimate_unknown_as_zero" and cost is None:
+                    cost = 0.0
+            return {"cost": cost}
+    raise LookupError("no estimate vector matches this (pricing, usage)")
+
+
+def _usage_reject(value: Any) -> JsonObject | None:
+    for vector in _usage_doc()["usage_reject"]:
+        if value == vector["usage"]:
+            if MUTATION == "usage_parts_unchecked" and TARGET in (None, f"usage.usage_reject.{vector['id']}"):
+                return {"value": value}
+            raise ValueError(f"INV-029: {vector['why']}")
+    return None
+
+
+def _usage_parse_echo(msg: JsonObject) -> JsonObject | None:
+    for vector in _usage_doc()["parse"]:
+        if base64.b64encode(vector["body"].encode("utf-8")).decode("ascii") == msg.get("body_b64"):
+            usage = dict(vector["usage"])
+            if MUTATION == "usage_split_kept" and TARGET in (None, f"usage.parse.{vector['id']}"):
+                wire = json.loads(vector["body"]).get("usage") or {}
+                usage.setdefault("input_tokens", wire.get("prompt_tokens", wire.get("input_tokens", 0)))
+                usage.setdefault("output_tokens", wire.get("completion_tokens", wire.get("output_tokens", 0)))
+            return {"canonical_response": {"usage": usage}}
+    return None
+
+
 def op_build_request(msg: JsonObject) -> JsonObject:
     order_echo = _order_build_echo(msg)
     if order_echo is not None:
@@ -393,7 +444,7 @@ def _strip_error_flag(body: JsonObject) -> None:
 
 
 def op_parse_response(msg: JsonObject) -> JsonObject:
-    order_echo = _order_parse_echo(msg)
+    order_echo = _order_parse_echo(msg) or _usage_parse_echo(msg)
     if order_echo is not None:
         return order_echo
     case = find_parse_case(msg)
@@ -537,6 +588,10 @@ def op_normalize_error(msg: JsonObject) -> JsonObject:
 
 
 def op_serde_roundtrip(msg: JsonObject) -> JsonObject:
+    if msg.get("kind") == "usage":
+        rejected = _usage_reject(msg.get("value"))
+        if rejected is not None:
+            return rejected
     if MUTATION == "index_names_first_serde":
         case = next((c for c in check.load_serde_cases() if c["kind"] == msg.get("kind") and c["value"] == msg.get("value")), None)
         if case is not None and (TARGET is None or case["id"] == TARGET):
@@ -1014,6 +1069,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "replay_stream": op_replay_stream,
     "normalize_error": op_normalize_error,
     "serde_roundtrip": op_serde_roundtrip,
+    "estimate_cost": op_estimate_cost,
     "explain_auth": op_explain_auth,
     "resolve_model": op_resolve_model,
     "resolve_openai_chat_model": op_resolve_openai_chat_model,
