@@ -21,7 +21,7 @@ known differences):
 |---|---|---|---|---|---|---|
 | Contract checks (all directions) | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 |
 | Version | 2.0.0 | 2.0.0 | 2.0.0 | v2.0.0 (module `…/lm15-go/v2`) | 2.0.0, as `LanguageModel15` | 2.0.0 |
-| Commit | `94f9ac8` | `c8c4f67` | `89f7c81` | `820e7b4` | `014356f` | `22c6861` |
+| Commit | `94f9ac8` | `c8c4f67` | `5080a71` | `cb3df52` | `014356f` | `22c6861` |
 
 Not moved: Java, Ruby, .NET and Swift (their usage stays provider-verbatim until a port
 picks up MAP-19).
