@@ -15,6 +15,7 @@ Goal: a person who knows lm15 in two of these languages opens the third and is a
 5. **Zero dependencies where the language allows it.** Python stdlib, TypeScript `fetch` + `WebSocket`, Go `net/http` + `x/net/websocket` or `nhooyr` (state which). Rust uses `reqwest` + `tokio` + `serde`; zero-dep is not a Rust idiom, so this is a stated deviation for the whole port, once.
 6. **Positional layout is frozen at 1.0. Every field added later is keyword-only (or the language's equivalent: options struct / builder).**
 7. **Prefer `reject` to a new send-as value. A compat knob exists only when the wire has no other way, the goal is unreachable without it, and at least two providers need it. Otherwise it is an `extensions` passthrough.**
+8. **The major version is the contract's generation, in every language** (2026-11-01). A change that alters what an existing field means, or removes something, raises the major version of every SDK together; the minor and patch numbers, and whether a release is a candidate (`-rc.N`), stay each SDK's own. A person who knows lm15 2.x in one language knows what 2.x means in another. Generation 2 begins with MAP-19 (`changes/2026-10-31-usage-one-meaning.md`). Go carries the major in its module path (`/v2`), as Go requires.
 
 ## Managed authentication — 2026-09-22 RATIFIED CORE
 

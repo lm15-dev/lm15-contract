@@ -1,5 +1,9 @@
 # 2026-10-31 — A usage counter means one thing on every provider; the estimate is exact or unknown
 
+Ratification: RATIFIED 2026-11-01 — Maxime Rivest, in session ("i approve
+the usage counting decision"), after the change was implemented and passed
+in all six SDKs. Transcribed.
+
 Request: Maxime Rivest, 2026-10-31, in session. After a cost check for an
 app found `InferencePricing.estimate` charging OpenAI's cached tokens twice:
 "one thing in LM fifteen that's very important is to not have the illusion
@@ -7,8 +11,7 @@ of standardization, but be truly standardized"; "look at what we've been
 taking right decision and what's been the deepest goal and the guiding star
 of this project … if we need a 2.0 version, we'll do a 2.0 version"; then,
 on the recommendation below, "I agree, go do it all and do it most
-excellently". **Decided in session; this entry awaits its ratification
-stamp.** It reverses `2026-09-02-usage-semantics.md`, which was accepted in
+excellently". It reverses `2026-09-02-usage-semantics.md`, which was accepted in
 a batch ("i accept all your recommendations").
 
 ## The problem
@@ -78,14 +81,17 @@ a rule that protected a secondary promise by breaking the first is replaced.
    `spec/types.md` (they lived only in `lm15-python/docs/model-hydration.md`);
    the reference's `surface_dump` reflects them, so `spec_drift` and the
    surface audit (serde kind `model_info`) now cover them.
-6. **A new major version wherever one was released as stable**: Python
-   2.0.0, TypeScript 2.0.0 and R 2.0.0. Rust (1.0.0-rc), Go (v1.1.0-rc)
-   and Julia (1.0.0, registration pending) have published no stable
-   version with the old meaning, so their next pre-release (or the pending
-   registration) carries the change; Go keeps its module path because no
-   stable v1 exists (v1.0.0 and v1.0.1 are retracted). The field names
-   stay: they now carry the meaning they always seemed to, so an
-   Anthropic, Gemini or xAI number changes.
+6. **Major version 2 in every language** (amended 2026-11-01, at the
+   maintainer's question "should they not all be 2.0 so lm15 users that are
+   cross language won't be confused?"; the rule is now
+   `playbooks/api-family.md` rule 8: the major version is the contract's
+   generation). Python 2.0.0, TypeScript 2.0.0, R 2.0.0, Julia 2.0.0
+   (`LanguageModel15`, registered directly at 2.0.0); Rust 2.0.0-rc.1 and
+   Go v2.0.0-rc.1, which stay release candidates until each is declared
+   stable. Go's module path becomes `github.com/lm15-dev/lm15-go/v2`, as
+   Go requires for a major version above 1. The field names stay: they now
+   carry the meaning they always seemed to, so an Anthropic, Gemini or xAI
+   number changes.
 
 ## Evidence
 
@@ -147,9 +153,10 @@ writes"), read 2026-10-31.
 ## Stated trade-offs
 
 1. **Breaking, for every SDK user reading Anthropic input or Gemini/xAI
-   output.** The numbers grow to their true meaning. The major versions
-   (decision 6) say so; the names stay because they were always the right
-   names.
+   output.** The numbers grow to their true meaning. Major version 2
+   (decision 6) says so in every language; the names stay because they
+   were always the right names. Go users also change their import path
+   (`/v2`), and Rust and Go skip a stable 1.0.
 2. **Old saved records.** A 1.x Usage that breaks INV-029 (most Anthropic
    records with cache writes, Gemini and xAI records with reasoning) is
    refused on load with a message naming this change; one that happens to

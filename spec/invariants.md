@@ -465,5 +465,5 @@ Amended 2026-10-06 (INV-056: no default SSE line or event limit) — decided
 in session ("yes, fix that completely"), not yet ratified; see
 changes/2026-10-06-sse-event-bound.md.
 Amended 2026-10-31 (INV-029: parts within wholes, total = input + output;
-INV-057 added) — decided in session ("I agree, go do it all"), the entry
-awaiting its ratification stamp; see changes/2026-10-31-usage-one-meaning.md.
+INV-057 added) — ratified 2026-11-01 in session ("i approve the usage
+counting decision"); see changes/2026-10-31-usage-one-meaning.md.

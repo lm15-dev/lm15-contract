@@ -617,7 +617,7 @@ Request entirely. On read, a present non-object `tool_choice`/`reasoning`/
 ### Usage
 
 Every counter means the same thing on every provider (MAP-19,
-`docs/mapping-rules.md`; ratified in principle 2026-10-31,
+`docs/mapping-rules.md`; ratified 2026-11-01,
 `changes/2026-10-31-usage-one-meaning.md`). Counters are `int | null`;
 `null` means "not reported", distinct from a reported `0`. `Usage()`
 serializes to `{}` and is omitted by enclosing serializers.

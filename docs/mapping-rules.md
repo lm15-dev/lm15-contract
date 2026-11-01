@@ -1116,8 +1116,8 @@ Pinned by `errors/cases/gemini.json` `gemini.auth_api_key_invalid` and
 
 **Written 2026-10-31 at the maintainer's request** ("not have the illusion
 of standardization, but be truly standardized"; "I agree, go do it all";
-`changes/2026-10-31-usage-one-meaning.md`); the entry awaits its
-ratification stamp. Supersedes `changes/2026-09-02-usage-semantics.md`.
+`changes/2026-10-31-usage-one-meaning.md`); ratified 2026-11-01.
+Supersedes `changes/2026-09-02-usage-semantics.md`.
 
 The meanings are in `spec/types.md` § Usage: `input_tokens` is everything
 the model read (cache reads, cache writes and provider tool tokens
