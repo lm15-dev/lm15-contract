@@ -20,8 +20,8 @@ known differences):
 | | Python | TypeScript | Rust | Go | Julia | R |
 |---|---|---|---|---|---|---|
 | Contract checks (all directions) | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 | 1,968 / 1,968 |
-| Version | 2.0.0 | 2.0.0 | 1.0.0-rc.12 | v1.1.0-rc.11 | 1.0.0 (registration to move) | 2.0.0 |
-| Commit | `94f9ac8` | `c8c4f67` | `5798658` | `596ba26` | `475726f` | `22c6861` |
+| Version | 2.0.0 | 2.0.0 | 1.0.0-rc.12 | v1.1.0-rc.11 | 1.0.0, as `LanguageModel15` (to register) | 2.0.0 |
+| Commit | `94f9ac8` | `c8c4f67` | `5798658` | `596ba26` | `7adc4e0` | `22c6861` |
 
 Not moved: Java, Ruby, .NET and Swift (their usage stays provider-verbatim until a port
 picks up MAP-19).

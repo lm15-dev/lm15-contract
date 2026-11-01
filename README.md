@@ -21,7 +21,7 @@ reference) and how each kind of fixture may change.
 | [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 | [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 1.0.0-rc.12 | `cfc3edc` | 1,968 / 1,968 |
 | [lm15-go](https://github.com/lm15-dev/lm15-go) | v1.1.0-rc.11 | `cfc3edc` | 1,968 / 1,968 |
-| [LM15.jl](https://github.com/lm15-dev/LM15.jl) | 1.0.0 | `cfc3edc` | 1,968 / 1,968 |
+| [LM15.jl](https://github.com/lm15-dev/LM15.jl) (package `LanguageModel15`) | 1.0.0 | `cfc3edc` | 1,968 / 1,968 |
 | [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 
 Measured with `harness/check.py --direction all` at the pin on 2026-10-31
