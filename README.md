@@ -19,8 +19,8 @@ reference) and how each kind of fixture may change.
 |---|---|---|---|
 | [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 | [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
-| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.0.0-rc.1 | `cfc3edc` | 1,968 / 1,968 |
-| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.0.0-rc.1 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 | [LanguageModel15.jl](https://github.com/lm15-dev/LanguageModel15.jl) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 | [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.0.0 | `cfc3edc` | 1,968 / 1,968 |
 
