@@ -2,6 +2,33 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-11-05 — a stream's final copy completes its fragments (MAP-20)
+
+changes/2026-11-05-stream-final-copy.md (decided in session, to ratify): a stream's final
+copy of an item completes what its fragments did not deliver, and a fragment that
+contradicts it is refused; a reasoning summary streams with the complete path's newlines;
+`response.incomplete` ends a Responses stream; a Gemini part's slot is its place in the
+stream. 11 live stream cases; 164 new checks, most of them stream checks that need no
+hand-written answer (`<case>~final-copy` and the `split`, `merge`, `rechunk`,
+`final-only`, `contradict` variants). Before the fix the stream direction failed 38 checks
+in Python and 42 in TypeScript and Go. Found while porting: the realtime completion path
+counted a call's arguments three times in Python and Go (R already completed from the
+final copy); Julia and R already ended a stream on `response.incomplete`; Rust's vet shim
+built the Codex door without the harness account id for `build_request` (no chat-surface
+Codex case existed before). The six SDKs move their pin to `77f22f4`, measured with
+`harness/check.py --direction all` (R through `tools/check-contract.py --compare-python`,
+against Python `47651a7`: 30 agree, the 2 known differences):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 2,132 / 2,132 | 2,132 / 2,132 | 2,132 / 2,132 | 2,132 / 2,132 | 2,132 / 2,132 | 2,132 / 2,132 |
+| Version | 2.1.0 | 2.1.0 | 2.1.0 | v2.1.0 | 2.1.0 | 2.1.0 |
+| Commit | `47651a7` | `063393a` | `4604765` | `97b9e7f` | `b0a1820` | `7cf982b` |
+| The per-stream reader | `BaseProviderLM.stream_reader` | `ProviderLM.streamReader`, `StreamReader` | `Dialect::stream_reader`, `wire::StreamReader` | unexported, behind `Stream` and `ParseStreamBody` | `stream_reader`, `feed!` (not exported) | `.new_stream_reader` (internal) |
+
+Not moved: Java, Ruby, .NET and Swift (they keep the fragment-only stream readers until a
+port picks up MAP-20).
+
 ## 2026-10-31 — one meaning per usage counter
 
 changes/2026-10-31-usage-one-meaning.md (decided in session, to ratify): every usage
