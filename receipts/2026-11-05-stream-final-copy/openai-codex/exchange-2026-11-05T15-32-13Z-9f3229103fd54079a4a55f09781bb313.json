@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-11-05T15-32-13Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-6.1-sol",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "test-account",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CHATGPT_OAUTH_TOKEN"
+    },
+    "body": {
+      "model": "gpt-6.1-sol",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Say ok."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "c9f0e15caabc285aeac54b9e93d0ec9e8f4de07be1c9c09ae4023257b78a9a67",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9baa6844773075fd9a160656f0caad93f7c511114449c0096305d9bb77fa0ebc",
+  "response_bytes": 6980,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

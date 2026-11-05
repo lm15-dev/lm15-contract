@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-11-05T15-37-04Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-6.1-sol",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "test-account",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CHATGPT_OAUTH_TOKEN"
+    },
+    "body": {
+      "model": "gpt-6.1-sol",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "A wildlife survey counts herons at 4 ponds over 6 days with detection rates 0.6, 0.7, 0.8 and 0.9 by pond. Daily raw counts at pond A: 3,5,4,6,2,5; B: 7,6,8,5,7,6; C: 2,3,2,4,3,3; D: 9,8,10,9,8,9. Estimate the true mean population per pond, compare the ponds, check whether any pond shows a trend, and plan a better survey. Think it through carefully."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "reasoning": {
+        "effort": "high",
+        "summary": "detailed"
+      },
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "28232f38e406727c25b01002a90bcc1d6158fa834f935e932b793e35410e31c7",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "3b5a046d4fa2ffe4f373d39eb208cfdefdc5b7ac033e2d173f1412facf36c5ff",
+  "response_bytes": 444507,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

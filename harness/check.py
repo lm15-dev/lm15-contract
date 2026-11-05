@@ -47,6 +47,7 @@ from pathlib import Path
 from typing import Any
 
 CONTRACT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # harness/stream_checks.py
 CASES_DIR = CONTRACT_ROOT / "cases"
 BODIES_DIR = CONTRACT_ROOT / "bodies"
 ERRORS_DIR = CONTRACT_ROOT / "errors" / "cases"
@@ -1174,6 +1175,8 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             # (partial_response, events) must match exactly. A shim that
             # answers ok=true here invented a fact.
             report.results.append(compare_raise(case_id, reply, raises, golden, volatile))
+            if want_stream:
+                run_stream_checks(shim, case, golden, None, report)
             continue
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(case_id, reply))
@@ -1205,7 +1208,81 @@ def run_parse_direction(shim: Shim, direction: str, case_filter: str | None) -> 
             report.results.append(CaseResult(case_id, "pass"))
         else:
             report.results.append(CaseResult(case_id, "fail", diff=diff))
+        if want_stream:
+            run_stream_checks(shim, case, golden, result, report)
     return report
+
+
+# ─── Stream checks without a hand-written answer (INV-051, MAP-20) ───
+
+def _stream_fields(case: JsonObject) -> JsonObject:
+    return {"provider": case["provider"], **host_fields(case),
+            "canonical_request": case["canonical_request"], **case_base_url(case)}
+
+
+def run_stream_checks(shim: Shim, case: JsonObject, golden: JsonObject, replay: JsonObject | None,
+                      report: DirectionReport) -> None:
+    """``<case>~final-copy`` and ``<case>~<variant>`` results (PROTOCOL.md
+    § Stream checks). ``replay`` is the shim's ``replay_stream`` result for
+    the pinned body, or None when the case pins a refusal."""
+    import stream_checks
+
+    dialect = stream_checks.dialect_of(case)
+    if dialect is None or case.get("framing"):
+        return
+    body = pinned_body(case)
+    volatile = case.get("volatile") or {}
+    raises = expected_raise(case, "replay_stream")
+
+    frames = stream_checks.parse_frames(body)
+    snapshot = stream_checks.final_copy(dialect, frames) if frames is not None else None
+    if snapshot is not None and raises is None and replay is not None:
+        label = f"{case['id']}~final-copy"
+        if not snapshot.get("output"):
+            report.results.append(CaseResult(label, "skip", reason="the final copy restates no output"))
+        else:
+            reply = shim.call("parse_response", status=200,
+                              body_b64=base64.b64encode(json.dumps(snapshot).encode("utf-8")).decode("ascii"),
+                              **_stream_fields(case))
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(label, reply))
+            elif reply["result"].get("unmapped"):
+                report.results.append(CaseResult(label, "fail", reason=f"unmapped provider fields: {reply['result']['unmapped']}"))
+            else:
+                # INV-051: the stream's Response IS the complete call's, field
+                # for field (MAP-9.6 withholds nothing on this dialect). Both
+                # sides come from the same shim and the same bytes: no
+                # volatile path applies.
+                diff = first_difference(reply["result"]["canonical_response"],
+                                        replay.get("canonical_response", _ABSENT), ("canonical_response",),
+                                        volatile={}, usage_int_float=True)
+                report.results.append(CaseResult(label, "pass") if diff is None else
+                                      CaseResult(label, "fail", reason="stream Response differs from its final copy's (INV-051)", diff=diff))
+
+    for name, variant_body, expect in stream_checks.variants(dialect, body):
+        label = f"{case['id']}~{name}"
+        reply = shim.call("replay_stream", body_b64=base64.b64encode(variant_body).decode("ascii"), **_stream_fields(case))
+        want = {"type": "StreamAssemblyError", "code": "stream_assembly"} if expect == "refuse" else raises
+        if want is not None:
+            error = reply.get("error") or {}
+            if reply.get("ok"):
+                report.results.append(CaseResult(label, "fail", reason=f"assembled a Response; expected {want['type']}/{want['code']}"
+                                                 + (" (MAP-20: fragments contradict the final copy)" if expect == "refuse" else "")))
+            elif error.get("type") != want["type"] or error.get("code") != want["code"]:
+                report.results.append(CaseResult(label, "fail", reason=f"raised {error.get('type')}/{error.get('code')}; expected {want['type']}/{want['code']}"))
+            else:
+                report.results.append(CaseResult(label, "pass"))
+            continue
+        if not reply.get("ok"):
+            report.results.append(shim_reply_failure(label, reply))
+            continue
+        if reply["result"].get("unmapped"):
+            report.results.append(CaseResult(label, "fail", reason=f"unmapped provider fields: {reply['result']['unmapped']}"))
+            continue
+        diff = first_difference(golden["canonical_response"], reply["result"].get("canonical_response", _ABSENT),
+                                ("canonical_response",), volatile=volatile, usage_int_float=True)
+        report.results.append(CaseResult(label, "pass") if diff is None else
+                              CaseResult(label, "fail", reason=f"the {name} variant assembles differently", diff=diff))
 
 
 # ─── Direction: auth ─────────────────────────────────────────────────

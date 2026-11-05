@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-11-05T15-52-54Z",
+  "provider": "gemini",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent",
+    "params": {
+      "alt": "sse"
+    },
+    "headers": {
+      "content-type": "application/json",
+      "x-goog-api-key": "$GEMINI_API_KEY"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Get the weather in Paris and in Oslo. Call the tool for both cities at once, in parallel."
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "description": "Get current weather for a city",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "9fd12c02891e74293e8d0a55954a4b48a77ed18773282f569f5a6e37fde48070",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "594627359d5d487635505d152bef0e22da8caf1b503fdb828f8627add38aa820",
+  "response_bytes": 3446,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,413 @@
+{
+  "_doc": [
+    "Every kind of thing a pinned stream body carries, per dialect, and what lm15 does with it (changes/2026-11-05-stream-final-copy.md).",
+    "tools/check_stream_events.py fails when a pinned stream body carries a kind this table does not list: a new event type, delta type, part key or chunk key is a decision, made here, before a case pins it.",
+    "status: 'read' = lm15 maps what it carries (as says to what); 'duplicate' = it restates content lm15 reads elsewhere (of says where), so reading it too would count that content twice; 'ignored' = it carries nothing a Response holds (why says so), or a fact a rule withholds (why names the rule); 'gap' = it carries content the complete path reads and the stream path drops, an open INV-051 difference (why says which), and a pinned body that carries it fails the tool.",
+    "role (Responses only, MAP-20): 'fragment' = a piece of a value the item's final copy restates; 'final-copy' = the per-item restatement a reader completes fragments from.",
+    "Kinds: responses = the event's type, and type:item.type for output_item events; anthropic = the event's type, and type:block-or-delta type; chat = chunk.<key>, choice.<key> and delta.<key> for keys with a non-null value; gemini = chunk.<key>, candidate.<key> and part.<key>.",
+    "A row whose kind no pinned body carries is documented behaviour the corpus does not pin; the tool lists those rows without failing."
+  ],
+  "dialects": {
+    "responses": {
+      "response.created": {
+        "status": "read",
+        "as": "StreamStartEvent (id, model)"
+      },
+      "response.queued": {
+        "status": "ignored",
+        "why": "a status (background mode): the response so far, no content"
+      },
+      "response.in_progress": {
+        "status": "ignored",
+        "why": "restates the response so far, which has no output yet"
+      },
+      "response.output_item.added": {
+        "status": "read",
+        "as": "per item type below"
+      },
+      "response.output_item.added:function_call": {
+        "status": "read",
+        "as": "ToolCallDelta: call id, name, and any arguments it already carries",
+        "role": "fragment"
+      },
+      "response.output_item.added:message": {
+        "status": "ignored",
+        "why": "opens a message item; its text arrives as output_text.delta fragments and in the item's final copy"
+      },
+      "response.output_item.added:reasoning": {
+        "status": "read",
+        "as": "an empty ThinkingDelta: a reasoning item is a thinking part even with no visible summary (MAP-7.9)"
+      },
+      "response.output_item.done": {
+        "status": "read",
+        "as": "per item type below"
+      },
+      "response.output_item.done:function_call": {
+        "status": "read",
+        "as": "the call's arguments the fragments did not deliver, with its id and name (MAP-20)",
+        "role": "final-copy"
+      },
+      "response.output_item.done:message": {
+        "status": "read",
+        "as": "the message text (output_text and refusal contents, in order) the fragments did not deliver (MAP-20)",
+        "role": "final-copy"
+      },
+      "response.output_item.done:reasoning": {
+        "status": "read",
+        "as": "the summary text (parts joined with a newline) the fragments did not deliver (MAP-20), then the item's id and encrypted_content as ContinuationDelta (MAP-7 rule 8)",
+        "role": "final-copy"
+      },
+      "response.content_part.added": {
+        "status": "ignored",
+        "why": "opens a content part; its text arrives as fragments and in the item's final copy"
+      },
+      "response.content_part.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:message (MAP-20 reads the final copy once, per item)"
+      },
+      "response.output_text.delta": {
+        "status": "read",
+        "as": "TextDelta, with the fragment's token logprobs",
+        "role": "fragment"
+      },
+      "response.output_text.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:message"
+      },
+      "response.output_text.annotation.added": {
+        "status": "read",
+        "as": "CitationDelta"
+      },
+      "response.refusal.delta": {
+        "status": "read",
+        "as": "TextDelta (no RefusalDelta exists: a streamed refusal is text, a stated INV-051 difference)",
+        "role": "fragment"
+      },
+      "response.refusal.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:message"
+      },
+      "response.function_call_arguments.delta": {
+        "status": "read",
+        "as": "ToolCallDelta input fragment",
+        "role": "fragment"
+      },
+      "response.function_call_arguments.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:function_call (MAP-20; the Codex backend sends parallel calls' arguments only in these two)"
+      },
+      "response.reasoning_summary_part.added": {
+        "status": "ignored",
+        "why": "opens a summary part; the reader joins parts with a newline before the first fragment of each later part (summary_index)"
+      },
+      "response.reasoning_summary_part.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:reasoning"
+      },
+      "response.reasoning_summary_text.delta": {
+        "status": "read",
+        "as": "ThinkingDelta",
+        "role": "fragment"
+      },
+      "response.reasoning_summary_text.done": {
+        "status": "duplicate",
+        "of": "response.output_item.done:reasoning"
+      },
+      "response.reasoning_text.delta": {
+        "status": "read",
+        "as": "ThinkingDelta (reasoning content; the complete path reads only the summary, a stated INV-051 difference)"
+      },
+      "response.output_audio.delta": {
+        "status": "read",
+        "as": "AudioDelta"
+      },
+      "response.output_image.delta": {
+        "status": "read",
+        "as": "ImageDelta"
+      },
+      "response.image.delta": {
+        "status": "read",
+        "as": "ImageDelta"
+      },
+      "response.metadata": {
+        "status": "ignored",
+        "why": "the Codex backend's moderation metadata about the turn, no content"
+      },
+      "response.completed": {
+        "status": "read",
+        "as": "StreamEndEvent (finish reason, usage, provider_data); its output is the final copy of the whole response, which the harness's final-copy check reads (INV-051)"
+      },
+      "response.incomplete": {
+        "status": "read",
+        "as": "StreamEndEvent: the finish reason from status and incomplete_details, as on the complete path (length for the output limit), and usage; the final copy of the whole response, like response.completed"
+      },
+      "response.failed": {
+        "status": "duplicate",
+        "of": "error (OpenAI sends an error event, then response.failed with the same error: receipts/2026-11-05-stream-final-copy/openai)"
+      },
+      "error": {
+        "status": "read",
+        "as": "StreamErrorEvent"
+      },
+      "response.error": {
+        "status": "read",
+        "as": "StreamErrorEvent"
+      }
+    },
+    "anthropic": {
+      "message_start": {
+        "status": "read",
+        "as": "StreamStartEvent (id, model) and its usage"
+      },
+      "content_block_start": {
+        "status": "read",
+        "as": "per block type below"
+      },
+      "content_block_start:text": {
+        "status": "read",
+        "as": "opens a text part (any text it carries is the first fragment)"
+      },
+      "content_block_start:thinking": {
+        "status": "read",
+        "as": "opens a thinking part"
+      },
+      "content_block_start:redacted_thinking": {
+        "status": "read",
+        "as": "a thinking part whose data rides as continuation"
+      },
+      "content_block_start:tool_use": {
+        "status": "read",
+        "as": "ToolCallDelta: call id and name"
+      },
+      "content_block_delta": {
+        "status": "read",
+        "as": "per delta type below"
+      },
+      "content_block_delta:text_delta": {
+        "status": "read",
+        "as": "TextDelta"
+      },
+      "content_block_delta:thinking_delta": {
+        "status": "read",
+        "as": "ThinkingDelta"
+      },
+      "content_block_delta:signature_delta": {
+        "status": "read",
+        "as": "the thinking block's signature, as continuation"
+      },
+      "content_block_delta:input_json_delta": {
+        "status": "read",
+        "as": "ToolCallDelta input fragment"
+      },
+      "content_block_delta:citations_delta": {
+        "status": "read",
+        "as": "CitationDelta"
+      },
+      "content_block_stop": {
+        "status": "ignored",
+        "why": "closes a block; it restates nothing (Anthropic sends no final copy)"
+      },
+      "message_delta": {
+        "status": "read",
+        "as": "StreamEndEvent (stop reason, usage)"
+      },
+      "message_stop": {
+        "status": "read",
+        "as": "a bare end (MAP-3)"
+      },
+      "ping": {
+        "status": "ignored",
+        "why": "keep-alive"
+      },
+      "error": {
+        "status": "read",
+        "as": "StreamErrorEvent"
+      }
+    },
+    "chat": {
+      "chunk.id": {
+        "status": "ignored",
+        "why": "withheld on the stream path (MAP-9 rule 6, MAP-9.6)"
+      },
+      "chunk.object": {
+        "status": "ignored",
+        "why": "the constant chat.completion.chunk"
+      },
+      "chunk.created": {
+        "status": "ignored",
+        "why": "a timestamp no Response field holds"
+      },
+      "chunk.model": {
+        "status": "ignored",
+        "why": "withheld on the stream path (MAP-9.6: a chunk's model may be the dated snapshot)"
+      },
+      "chunk.system_fingerprint": {
+        "status": "ignored",
+        "why": "server build metadata"
+      },
+      "chunk.service_tier": {
+        "status": "ignored",
+        "why": "billing metadata no Response field holds"
+      },
+      "chunk.usage": {
+        "status": "read",
+        "as": "StreamEndEvent usage"
+      },
+      "chunk.obfuscation": {
+        "status": "ignored",
+        "why": "random padding"
+      },
+      "chunk.x_groq": {
+        "status": "ignored",
+        "why": "Groq timing and queue metadata"
+      },
+      "chunk.latency_checkpoint": {
+        "status": "ignored",
+        "why": "server timing metadata"
+      },
+      "chunk.routing": {
+        "status": "ignored",
+        "why": "router metadata (which backend served the chunk)"
+      },
+      "chunk.prompt_filter_results": {
+        "status": "ignored",
+        "why": "Azure content-filter annotations on the prompt; a filtered answer is reported by finish_reason"
+      },
+      "chunk.error": {
+        "status": "read",
+        "as": "StreamErrorEvent"
+      },
+      "choice.index": {
+        "status": "ignored",
+        "why": "lm15 reads choices[0] (one choice per request)"
+      },
+      "choice.finish_reason": {
+        "status": "read",
+        "as": "StreamEndEvent finish reason"
+      },
+      "choice.logprobs": {
+        "status": "read",
+        "as": "the text fragment's token logprobs"
+      },
+      "choice.content_filter_results": {
+        "status": "ignored",
+        "why": "Azure content-filter annotations; a filtered answer is reported by finish_reason"
+      },
+      "choice.matched_stop": {
+        "status": "ignored",
+        "why": "SGLang: the stop token id that ended the turn (finish_reason says it stopped)"
+      },
+      "choice.stop_reason": {
+        "status": "ignored",
+        "why": "vLLM-style servers: the stop token id (finish_reason says it stopped)"
+      },
+      "choice.seed": {
+        "status": "ignored",
+        "why": "the sampling seed the server used"
+      },
+      "choice.text": {
+        "status": "duplicate",
+        "of": "delta.content (Together repeats each fragment there)"
+      },
+      "choice.usage": {
+        "status": "duplicate",
+        "of": "chunk.usage (Moonshot sends it in both)"
+      },
+      "choice.role": {
+        "status": "ignored",
+        "why": "always assistant"
+      },
+      "choice.obfuscation": {
+        "status": "ignored",
+        "why": "random padding"
+      },
+      "delta.role": {
+        "status": "ignored",
+        "why": "always assistant"
+      },
+      "delta.content": {
+        "status": "read",
+        "as": "TextDelta"
+      },
+      "delta.reasoning_content": {
+        "status": "read",
+        "as": "ThinkingDelta"
+      },
+      "delta.reasoning": {
+        "status": "read",
+        "as": "ThinkingDelta"
+      },
+      "delta.tool_calls": {
+        "status": "read",
+        "as": "ToolCallDelta (index, id, name, arguments fragments)"
+      },
+      "delta.token_id": {
+        "status": "ignored",
+        "why": "Together: the sampled token's id"
+      }
+    },
+    "gemini": {
+      "chunk.usageMetadata": {
+        "status": "read",
+        "as": "StreamEndEvent usage"
+      },
+      "chunk.modelVersion": {
+        "status": "ignored",
+        "why": "the stream keeps the request's model (MAP-4)"
+      },
+      "chunk.responseId": {
+        "status": "ignored",
+        "why": "withheld on the stream path (MAP-9.6: Gemini's stream Response carries no id)"
+      },
+      "chunk.createTime": {
+        "status": "ignored",
+        "why": "a timestamp no Response field holds"
+      },
+      "chunk.promptFeedback": {
+        "status": "read",
+        "as": "a blocked prompt's StreamErrorEvent"
+      },
+      "candidate.finishReason": {
+        "status": "read",
+        "as": "StreamEndEvent finish reason"
+      },
+      "candidate.finishMessage": {
+        "status": "read",
+        "as": "the message of the error a refused candidate raises (finishReason SAFETY and the like); otherwise prose explaining the finish reason"
+      },
+      "candidate.index": {
+        "status": "ignored",
+        "why": "lm15 reads candidates[0] (one candidate per request)"
+      },
+      "candidate.groundingMetadata": {
+        "status": "gap",
+        "why": "the complete path reads it as citations (CitationPart); the stream path does not read it. No pinned stream carries it; open (changes/2026-11-05-stream-final-copy.md)"
+      },
+      "part.text": {
+        "status": "read",
+        "as": "TextDelta, or ThinkingDelta when the part is a thought"
+      },
+      "part.thought": {
+        "status": "read",
+        "as": "marks the part's text as thinking"
+      },
+      "part.thoughtSignature": {
+        "status": "read",
+        "as": "the part's signature, as continuation"
+      },
+      "part.functionCall": {
+        "status": "read",
+        "as": "a whole ToolCallDelta (Gemini sends each call whole)"
+      },
+      "part.inlineData": {
+        "status": "read",
+        "as": "ImageDelta or AudioDelta"
+      }
+    }
+  },
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-11-05",
+    "evidence": "each row read from the reference's stream mapping (lm15-python lm15/providers/openai.py, anthropic.py, openai_chat.py, gemini.py at the commit that implements MAP-20) and, for every seen row, from the pinned bodies that carry it (tools/check_stream_events.py lists them); changes/2026-11-05-stream-final-copy.md"
+  }
+}

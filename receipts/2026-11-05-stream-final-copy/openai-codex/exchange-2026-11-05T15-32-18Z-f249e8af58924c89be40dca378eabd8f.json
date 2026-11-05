@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-11-05T15-32-18Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-6.1-sol",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "test-account",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CHATGPT_OAUTH_TOKEN"
+    },
+    "body": {
+      "model": "gpt-6.1-sol",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "What is the weather in Paris? Use the tool."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "99cc53529dce4e7d5e7a20b161c4831fd40368e249e82471a4e1b50b3b042e81",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cc4080eb6bab9164de88d1a7c6eb78d0d1019006b0c3b51f6b8b4d6c296ee287",
+  "response_bytes": 8790,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

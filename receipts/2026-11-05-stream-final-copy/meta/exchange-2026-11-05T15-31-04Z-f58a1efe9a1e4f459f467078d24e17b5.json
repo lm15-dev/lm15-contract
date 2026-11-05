@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-11-05T15-31-04Z",
+  "provider": "meta",
+  "status": 200,
+  "model": "muse-spark-1.3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.meta.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $META_API_KEY"
+    },
+    "body": {
+      "model": "muse-spark-1.3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Get the weather in Paris and in Oslo. Call the tool for both cities at once, in parallel."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "1239959b80862c3970e9ee725893d37a38b93a1f48dcddcbe946cbd4768458c8",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ba1a13bd8cb9fb0272c7b88ab5793b7dcd8cf54867a00854314724f3912eabda",
+  "response_bytes": 7413,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

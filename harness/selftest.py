@@ -14,7 +14,9 @@ The mutation classes pin the comparator's teeth: tool-name drift, text
 corruption, absent-vs-empty conflation, usage arithmetic, event loss,
 end-event provider_data loss (D9 presence rule), bool/int conflation,
 auth-chain state drift, AUTH-5 sentinel leakage, opaque-payload key
-order (INV-002), Gemini's schema field (MAP-16), and in the managed direction an AUTH-21 token leak and
+order (INV-002), Gemini's schema field (MAP-16), the stream checks (a
+final copy ignored, a contradiction assembled, a stream that differs from
+its final copy, assembly that depends on where fragments were cut), and in the managed direction an AUTH-21 token leak and
 store drift. A comparator weakened enough to miss any of them fails
 this script, and with it CI (.github/workflows/contract.yml). This needs only
 the contract repo — the fake shim reads fixtures and goldens, never lm15.
@@ -138,6 +140,23 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             lambda c, g: '"state": "ready"' in json.dumps(c["expect"].get("store")),
             "managed_store_drift (a managed run whose store ends with a ready slot)")),
         "gemini_schema_field_flip": ("mapping", "gemini-schema-field.additional-properties[tools]"),
+        # The stream checks (MAP-20, INV-051; PROTOCOL.md § Stream checks).
+        "stream_final_copy_ignored": ("stream", first(
+            streams,
+            lambda c, g: c["provider"] == "openai-codex" and c["feature"] == "streaming_tool_call",
+            "stream_final_copy_ignored (a Responses stream whose call arguments arrive in fragments)") + "~final-only"),
+        "stream_contradiction_assembled": ("stream", first(
+            streams,
+            lambda c, g: c["provider"] == "meta" and c["feature"] == "streaming_parallel_tool_calls",
+            "stream_contradiction_assembled (a Responses stream with fragments)") + "~contradict"),
+        "stream_final_copy_diverges": ("stream", first(
+            streams,
+            lambda c, g: c["feature"] == "streaming_reasoning_summary",
+            "stream_final_copy_diverges (a stream whose reasoning summary has several parts)") + "~final-copy"),
+        "stream_split_sensitive": ("stream", first(
+            streams,
+            lambda c, g: c["provider"] == "deepseek" and c["feature"] == "streaming_parallel_tool_calls",
+            "stream_split_sensitive (a chat stream with parallel calls)") + "~split"),
         "index_names_first": ("mapping", "opaque-order.response-format-schema[openai]"),
         "index_names_first_read": ("mapping", "opaque-order.read-openai-chat-stream"),
         "estimate_double_counts": ("mapping", "usage.estimate.cached_history"),
@@ -406,7 +425,7 @@ def main() -> int:
 
         # 2. Every mutation must be caught red on its target case.
         for mutation, (direction, case_id) in pick_targets().items():
-            bare_id = case_id.split("[", 1)[0]
+            bare_id = case_id.split("[", 1)[0].split("~", 1)[0]
             report = run_direction(mutation, direction, bare_id, report_dir)
             result = next((r for r in report.results if r.case_id == case_id), None)
             if result is None:

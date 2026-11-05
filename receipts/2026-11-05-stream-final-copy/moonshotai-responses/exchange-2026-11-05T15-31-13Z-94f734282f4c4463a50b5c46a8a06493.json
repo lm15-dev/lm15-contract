@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-11-05T15-31-13Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Get the weather in Paris and in Oslo. Call the tool for both cities at once, in parallel."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "957c2493959b257624124205c930f89da0a557444feea07b2b3584cc703fbe48",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ff143bf971f20c767c75421d38bf8e917d81c2c80193df601a67b3a68f1e5ed7",
+  "response_bytes": 19266,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

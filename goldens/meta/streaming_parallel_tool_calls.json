@@ -1,0 +1,231 @@
+{
+  "canonical_response": {
+    "id": "resp_6aeca139121e897b9c114a52",
+    "model": "muse-spark-1.3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_6aeca139121e897b9c114a52:rs_01a1ac55c80e741a9e755fe962359cf9"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "text": "I'll get the weather for Paris and Oslo in parallel."
+        },
+        {
+          "type": "tool_call",
+          "id": "call_01a1ac55e39373de871a35bef701ad7f",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        },
+        {
+          "type": "tool_call",
+          "id": "call_01a1ac55e43c730791372d070ddfc8ea",
+          "name": "get_weather",
+          "input": {
+            "city": "Oslo"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 556,
+      "output_tokens": 998,
+      "total_tokens": 1554,
+      "cache_read_tokens": 113,
+      "reasoning_tokens": 881
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "resp_6aeca139121e897b9c114a52",
+      "model": "muse-spark-1.3"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": ""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "part_index": 0,
+        "provider": "openai",
+        "kind": "reasoning_item",
+        "data": {
+          "id": "rs_6aeca139121e897b9c114a52:rs_01a1ac55c80e741a9e755fe962359cf9"
+        }
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 1,
+        "text": "I'll get the weather for Paris and Oslo in parallel."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 2,
+        "input": "",
+        "id": "call_01a1ac55e39373de871a35bef701ad7f",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 2,
+        "input": "{\"city\":\"Paris\"}"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 3,
+        "input": "",
+        "id": "call_01a1ac55e43c730791372d070ddfc8ea",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 3,
+        "input": "{\"city\":\"Oslo\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 556,
+        "output_tokens": 998,
+        "total_tokens": 1554,
+        "cache_read_tokens": 113,
+        "reasoning_tokens": 881
+      },
+      "provider_data": {
+        "background": false,
+        "completed_at": 1793892672.0,
+        "created_at": 1793892665.0,
+        "error": null,
+        "id": "resp_6aeca139121e897b9c114a52",
+        "incomplete_details": null,
+        "instructions": null,
+        "model": "muse-spark-1.3",
+        "object": "response",
+        "output": [
+          {
+            "id": "rs_6aeca139121e897b9c114a52:rs_01a1ac55c80e741a9e755fe962359cf9",
+            "status": "completed",
+            "summary": [],
+            "type": "reasoning"
+          },
+          {
+            "content": [
+              {
+                "annotations": [],
+                "logprobs": [],
+                "text": "I'll get the weather for Paris and Oslo in parallel.",
+                "type": "output_text"
+              }
+            ],
+            "id": "rs_01a1ac55e33a7574aa34480daab77115",
+            "phase": "commentary",
+            "role": "assistant",
+            "status": "completed",
+            "type": "message"
+          },
+          {
+            "arguments": "{\"city\":\"Paris\"}",
+            "call_id": "call_01a1ac55e39373de871a35bef701ad7f",
+            "id": "fc_01a1ac55e39373de871a35bef701ad7f",
+            "name": "get_weather",
+            "status": "completed",
+            "type": "function_call"
+          },
+          {
+            "arguments": "{\"city\":\"Oslo\"}",
+            "call_id": "call_01a1ac55e43c730791372d070ddfc8ea",
+            "id": "fc_01a1ac55e43c730791372d070ddfc8ea",
+            "name": "get_weather",
+            "status": "completed",
+            "type": "function_call"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "reasoning": {
+          "effort": "high"
+        },
+        "service_tier": "default",
+        "status": "completed",
+        "store": true,
+        "temperature": 1.0,
+        "tool_choice": "auto",
+        "tools": [
+          {
+            "description": "Get current weather for a city",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "type": "object"
+            },
+            "type": "function"
+          }
+        ],
+        "top_logprobs": 0,
+        "top_p": 1.0,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 556,
+          "input_tokens_details": {
+            "cached_tokens": 113
+          },
+          "output_tokens": 998,
+          "output_tokens_details": {
+            "reasoning_tokens": 881
+          },
+          "total_tokens": 1554
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-05",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-05T15-31-04Z.txt"
+  }
+}

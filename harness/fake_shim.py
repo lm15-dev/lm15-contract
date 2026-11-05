@@ -31,11 +31,16 @@ HARNESS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(HARNESS_DIR))
 
 import check  # harness/check.py — corpus loaders, expected_wire_request, golden_path
+import stream_checks  # harness/stream_checks.py — the stream checks' variant bodies and final copies
 
 JsonObject = dict[str, Any]
 
 MUTATIONS = (
     "none",
+    "stream_final_copy_ignored",       # replay_stream final-only variant: restated arguments lost (the 2026-11-05 Codex bug)
+    "stream_contradiction_assembled",  # replay_stream contradict variant: a Response instead of the refusal (MAP-20 rule 3)
+    "stream_final_copy_diverges",      # parse_response of a stream's final copy: a summary part joined without its newline
+    "stream_split_sensitive",          # replay_stream split variant: a fragment boundary changes the text
     "wrong_tool_name",      # parse: first tool_call part's name rewritten
     "garbage_text",         # parse: first text part's text replaced with garbage
     "absent_empty",         # parse: emit provider_data: {} where the golden has it ABSENT
@@ -145,14 +150,38 @@ def find_wire_case(msg: JsonObject) -> JsonObject:
 
 
 def find_parse_case(msg: JsonObject) -> JsonObject:
+    return find_parse_case_and_shape(msg)[0]
+
+
+def find_parse_case_and_shape(msg: JsonObject) -> tuple[JsonObject, str]:
+    """The case whose body this is, and what the body is: ``pinned``, a
+    stream variant's name, or ``final-copy`` (harness/stream_checks.py).
+    The echo of a variant is the case's golden; of a final copy, the stream
+    case's golden Response (INV-051 says they are equal)."""
     candidates = _candidates(msg)
+    body = msg.get("body_b64")
     for case in candidates:
         if "pinned_body" in case:
-            pinned = base64.b64encode(check.pinned_body(case)).decode("ascii")
-            if pinned == msg.get("body_b64"):
-                return case
+            pinned = check.pinned_body(case)
+            if base64.b64encode(pinned).decode("ascii") == body:
+                return case, "pinned"
+    raw = base64.b64decode(body) if isinstance(body, str) else b""
+    for case in candidates:
+        if "pinned_body" not in case or not check.is_stream_case(case):
+            continue
+        dialect = stream_checks.dialect_of(case)
+        if dialect is None:
+            continue
+        pinned = check.pinned_body(case)
+        frames = stream_checks.parse_frames(pinned)
+        snapshot = stream_checks.final_copy(dialect, frames) if frames is not None else None
+        if snapshot is not None and json.dumps(snapshot).encode("utf-8") == raw:
+            return case, "final-copy"
+        for name, variant, _ in stream_checks.variants(dialect, pinned):
+            if variant == raw:
+                return case, name
     if candidates:
-        return candidates[0]
+        return candidates[0], "pinned"
     raise LookupError("no case fixture matches this canonical_request")
 
 
@@ -447,8 +476,16 @@ def op_parse_response(msg: JsonObject) -> JsonObject:
     order_echo = _order_parse_echo(msg) or _usage_parse_echo(msg)
     if order_echo is not None:
         return order_echo
-    case = find_parse_case(msg)
+    case, shape = find_parse_case_and_shape(msg)
     golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
+    if shape == "final-copy":
+        resp = golden["canonical_response"]
+        if MUTATION == "stream_final_copy_diverges" and targeted(case):
+            # The pre-MAP-20 stream: a reasoning summary's parts run together,
+            # so the complete path's newline is the difference.
+            mutate_first(resp, lambda n: n.get("type") == "thinking" and "\n" in str(n.get("text")),
+                         lambda n: n.update(text=n["text"].replace("\n", "", 1)))
+        return {"canonical_response": resp}
     raises = check.expected_raise(case, "parse_response")
     if raises is not None:
         # A complete-path refusal (MAP-9, 2026-09-07): the golden carries
@@ -533,9 +570,20 @@ def op_replay_stream(msg: JsonObject) -> JsonObject:
     order_echo = _order_parse_echo(msg)
     if order_echo is not None:
         return order_echo
-    case = find_parse_case(msg)
+    case, shape = find_parse_case_and_shape(msg)
     golden = json.loads(check.golden_path(case).read_text(encoding="utf-8"))
     events = golden.get("events", [])
+    if shape == "contradict" and not (MUTATION == "stream_contradiction_assembled" and targeted(case)):
+        raise PinnedRaise({"type": "StreamAssemblyError", "code": "stream_assembly", "message": "pinned refusal (MAP-20)"})
+    if shape not in ("pinned", "contradict") and targeted(case):
+        resp = json.loads(json.dumps(golden.get("canonical_response", {})))
+        if MUTATION == "stream_final_copy_ignored" and shape == "final-only":
+            mutate_first(resp, lambda n: n.get("type") == "tool_call", lambda n: n.update(input={}))
+            return {"events": events, "canonical_response": resp}
+        if MUTATION == "stream_split_sensitive" and shape == "split":
+            mutate_first(resp, lambda n: n.get("type") in ("text", "tool_call"),
+                         lambda n: n.update(text=n["text"][:-1]) if n.get("type") == "text" else n.update(input={"partial_json": "{"}))
+            return {"events": events, "canonical_response": resp}
     raises = check.expected_raise(case, "replay_stream")
     if raises is not None:
         if MUTATION == "assembly_guesses_name" and targeted(case):

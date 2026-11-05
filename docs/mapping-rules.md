@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-20 a stream's fragments and final copies; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -1206,6 +1206,118 @@ body and imports no implementation) and by the `parse` vectors of
 
 ---
 
+## MAP-20 — A stream's final copy completes its fragments, and never contradicts them
+
+**Written 2026-11-05** after a user's coding agent found every SDK
+assembling parallel tool calls on the Codex backend with input `{}`
+(`changes/2026-11-05-stream-final-copy.md`; maintainer, in session: "ok
+perfect, go do it completely"). Not yet ratified.
+
+A provider streams a value in **fragments** (pieces in arrival order) and
+may restate it whole in a **final copy**. Nothing guarantees the two
+overlap: the Codex backend sent two parallel calls' arguments only in
+their final copies and no fragment at all, while the same backend sent a
+single call's arguments in five fragments and then the final copy.
+
+1. **The final copy is the truth; fragments are its preview.** At an
+   item's final copy the stream reader emits what the item's fragments did
+   not deliver: the whole value when no fragment came, the rest when the
+   fragments are its beginning, nothing when they are all of it. A
+   streaming caller therefore sees every character once, and the stream's
+   Response equals the complete call's (INV-051).
+2. **Final copies, per dialect.**
+   - **OpenAI Responses** (every door that speaks it: OpenAI, Azure,
+     Codex, Meta, Moonshot): `response.output_item.done` is each item's
+     final copy, and the only one read. It restates a `function_call`'s
+     `arguments` (with its `call_id` and `name`, which the completion
+     fragment carries), a `message`'s text (its `output_text` and
+     `refusal` contents, in order: both stream as text into the item's
+     slot), and a `reasoning` item's summary (its parts joined with a
+     newline, as the complete path joins them). The per-run restatements
+     — `function_call_arguments.done`, `output_text.done`,
+     `refusal.done`, `content_part.done`, `reasoning_summary_text.done`,
+     `reasoning_summary_part.done` — duplicate it and are not read for
+     content; reading them too counted the arguments twice, which the
+     realtime completion path did (three times over) until this rule.
+     `response.completed` / `response.incomplete` restate the whole
+     response; adapters read their finish reason and usage, and the
+     harness reads their output to check INV-051 (PROTOCOL.md § Stream
+     checks).
+   - **Anthropic Messages, Chat Completions, Gemini**: no final copy. The
+     fragments are the whole value (`content_block_stop` and a chat
+     chunk's `finish_reason` restate nothing).
+   - **OpenAI Realtime** (the live completion path and live sessions):
+     `response.output_item.done` as on Responses; live sessions already
+     emitted their tool call there and only there.
+3. **Fragments that contradict their final copy are refused.** When the
+   fragments delivered are not the beginning of the final copy, the
+   stream raises `StreamAssemblyError` (ErrorCode `stream_assembly`) with
+   `part_index` the item's slot: lm15 does not choose between two things
+   the provider said. Arguments are compared as JSON when their text
+   differs: the same value, its object members in the same order (INV-002),
+   is not a contradiction and adds nothing. No live stream has
+   contradicted itself; the rule exists so that one never assembles a
+   value nobody sent. The reader finds it before assembly, so the error
+   carries no `partial`; the fragments a streaming caller already received
+   stay received.
+4. **A reasoning summary's parts are joined with a newline on both paths.**
+   The complete path joins `summary[*].text` with `\n`; the stream reader
+   emits the newline before the first fragment of each later part
+   (`summary_index`), and a part with no fragment is completed from the
+   final copy, newline included. Before this rule a streamed summary of
+   several parts ran together (`**First idea****Second idea**`) where the
+   complete call gave `**First idea**\n**Second idea**`
+   (`openai-codex.streaming_reasoning_summary`, 13 summary parts over 6
+   reasoning items).
+5. **State.** A dialect's per-event mapping keeps no state; a stream
+   reader keeps what one stream needs (what each slot's fragments
+   delivered) and nothing across streams. Every path that reads a stream
+   goes through the reader: the sync and async streams, the realtime
+   completion path, and the vet shim. (MAP-3's "adapters stay stateless"
+   is the per-event mapping; the coalescer and the reader are the two
+   per-stream stages.)
+
+**Two neighbours fixed under the same evidence (2026-11-05):**
+
+- **A Responses stream that ends with `response.incomplete`** (the output
+  limit, a content filter) ends the turn: its end event's finish reason
+  reads `status` and `incomplete_details` as the complete path does
+  (`length` for `max_output_tokens`), with its usage. Four SDKs ignored
+  it: a stream that then closed without `[DONE]` had no end event and
+  raised `StreamAssemblyError` (MAP-3); one that sent `[DONE]` ended `stop`
+  with no usage. Pinned by `meta.streaming_incomplete`.
+- **A Gemini part's slot is its place in the stream, not in its chunk.**
+  Every chunk numbers its parts from 0. The first part of a chunk
+  continues the previous chunk's last part when both are text, or both
+  thought text: that is how a long text arrives. Every other part opens
+  the next slot, in arrival order. gemini-2.5-pro and
+  gemini-3-flash-preview send each parallel call in a chunk of its own,
+  and every call landed in slot 0, their arguments run together into one
+  unreadable input. Pinned by `gemini.streaming_parallel_tool_calls_chunked`
+  and the `rechunk` stream variant.
+
+**Verified without a hand-written answer** (PROTOCOL.md § Stream checks):
+the harness reads each OpenAI Responses stream's final copy of the whole
+response with `parse_response` and requires the stream's Response to equal
+it (`<case>~final-copy`), and replays legal re-shapings of every pinned
+stream (`split`, `merge`, `rechunk`, `final-only`, `contradict`), which must
+assemble to the case's own outcome, or, for `contradict`, raise
+`stream_assembly`. `tools/check_stream_events.py` fails when a pinned stream
+carries an event, delta, part or key `mapping/stream-events.json` has not
+classified as read, duplicate (of what) or ignored (why).
+
+**What this rule does not cover, stated:** a message item's annotations
+(citations stream as whole `annotation.added` events and are not completed
+from the final copy); `reasoning_text` content (the complete path reads
+only the summary); a Responses message with several content parts (one
+TextPart on the stream, one per part on the complete path); a streamed
+refusal (text on the stream, a RefusalPart on the complete path; there is
+no refusal delta); Gemini's `groundingMetadata` on the stream path (read
+by the complete path only; `gap` in the table). Each is an INV-051
+difference that predates this rule; none is pinned by a recorded stream.
+
+---
+
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
 ratified as written rules on 2026-06-10 after the adversarial golden review
 flagged anthropic.container, openai.code_interpreter (MAP-1) and
@@ -1261,3 +1373,8 @@ MAP-19 was written on 2026-10-31 after a cost check found the estimate
 charging OpenAI's cached tokens twice, and the maintainer chose one meaning
 per counter over the provider-verbatim rule of 2026-09-02
 (`lm15-contract/changes/2026-10-31-usage-one-meaning.md`).
+MAP-20 was written on 2026-11-05 after a user's coding agent found parallel
+tool calls arriving with empty inputs on the Codex backend in every SDK;
+the corpus had no stream with two calls, and no harness check compared a
+stream with its own final copy
+(`lm15-contract/changes/2026-11-05-stream-final-copy.md`).

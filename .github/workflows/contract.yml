@@ -32,6 +32,8 @@ jobs:
         run: python3 tools/spec_drift.py
       - name: "Content coverage (MAP-10: every binding pins its tool-result media cell or declares it open)"
         run: python3 tools/check_content_coverage.py
+      - name: Every kind a pinned stream carries is decided (MAP-20)
+        run: python3 tools/check_stream_events.py
       - name: Gateway capture record (schema, example day, blob and redaction invariants)
         run: python3 tools/check_gateway.py
       - name: Provider landscape (Pi and LiteLLM providers classified against the support matrix; report current)

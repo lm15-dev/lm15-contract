@@ -1,0 +1,121 @@
+{
+  "canonical_response": {
+    "id": "resp_6aeca69773fe5d996675402e",
+    "model": "muse-spark-1.3",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "",
+          "continuation": [
+            {
+              "provider": "openai",
+              "kind": "reasoning_item",
+              "data": {
+                "id": "rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "finish_reason": "length",
+    "usage": {
+      "input_tokens": 22,
+      "output_tokens": 40,
+      "total_tokens": 62,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 38
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "resp_6aeca69773fe5d996675402e",
+      "model": "muse-spark-1.3"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": ""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "part_index": 0,
+        "provider": "openai",
+        "kind": "reasoning_item",
+        "data": {
+          "id": "rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185"
+        }
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "length",
+      "usage": {
+        "input_tokens": 22,
+        "output_tokens": 40,
+        "total_tokens": 62,
+        "cache_read_tokens": 0,
+        "reasoning_tokens": 38
+      },
+      "provider_data": {
+        "background": false,
+        "created_at": 1793894038.0,
+        "error": null,
+        "id": "resp_6aeca69773fe5d996675402e",
+        "incomplete_details": {
+          "reason": "max_output_tokens"
+        },
+        "instructions": null,
+        "max_output_tokens": 40,
+        "model": "muse-spark-1.3",
+        "object": "response",
+        "output": [
+          {
+            "id": "rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185",
+            "status": "incomplete",
+            "summary": [],
+            "type": "reasoning"
+          }
+        ],
+        "parallel_tool_calls": true,
+        "reasoning": {
+          "effort": "high"
+        },
+        "service_tier": "default",
+        "status": "incomplete",
+        "store": true,
+        "temperature": 1.0,
+        "tool_choice": "auto",
+        "tools": [],
+        "top_logprobs": 0,
+        "top_p": 1.0,
+        "truncation": "disabled",
+        "usage": {
+          "input_tokens": 22,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 40,
+          "output_tokens_details": {
+            "reasoning_tokens": 38
+          },
+          "total_tokens": 62
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-05",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-05T15-53-57Z.txt"
+  }
+}

@@ -407,6 +407,19 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   (verified 2026-09-06: no reader in lm15-python); a consumer must see
   the same Response from either path, or the difference is stated here.
   Ratified 2026-09-06; see changes/2026-09-06-ratification.md (D8).
+  **Checked without a hand-written answer (2026-11-05,
+  changes/2026-11-05-stream-final-copy.md, not yet ratified):** an OpenAI
+  Responses stream ends by restating the whole response
+  (`response.completed` / `response.incomplete`); the harness reads that
+  final copy with `parse_response` and requires the stream's Response to
+  equal it field for field (`<case>~final-copy`, PROTOCOL.md § Stream
+  checks), and replays legal re-shapings of every pinned stream, which
+  must assemble to the same Response. Where a stream restates an item, the
+  final copy completes the item's fragments (MAP-20). The differences
+  this invariant states (MAP-9.6) are joined by those MAP-20 lists as not
+  covered: a message item's annotations completed from its final copy,
+  `reasoning_text` content, a message with several content parts, a
+  streamed refusal, and Gemini `groundingMetadata` on the stream path.
 
 - **INV-056 — A stream takes any event a complete reply would.** An SDK's
   server-sent-events reader sets no default limit on the length of a line

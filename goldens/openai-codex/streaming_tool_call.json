@@ -1,0 +1,251 @@
+{
+  "canonical_response": {
+    "id": "resp_0a501c56cb5b4d2d016aeca1829b6c87d1ab16aa79fcdb5c9c",
+    "model": "gpt-6.1-sol",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "call_fba562cd742d4758b76d8d9cc80b40c1",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 64,
+      "output_tokens": 18,
+      "total_tokens": 82,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "reasoning_tokens": 0
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "resp_0a501c56cb5b4d2d016aeca1829b6c87d1ab16aa79fcdb5c9c",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "",
+        "id": "call_fba562cd742d4758b76d8d9cc80b40c1",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "city"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "\":\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "Paris"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 64,
+        "output_tokens": 18,
+        "total_tokens": 82,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "reasoning_tokens": 0
+      },
+      "provider_data": {
+        "id": "resp_0a501c56cb5b4d2d016aeca1829b6c87d1ab16aa79fcdb5c9c",
+        "object": "response",
+        "created_at": 1793892738,
+        "completed_at": 1793892740,
+        "status": "completed",
+        "background": false,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "moderation": null,
+        "model": "gpt-6.1-sol",
+        "access_programs": {
+          "cyber": "standard"
+        },
+        "previous_response_id": null,
+        "instructions": "You are a helpful assistant.",
+        "output": [
+          {
+            "type": "function_call",
+            "id": "fc_0a501c56cb5b4d2d016aeca184381c87d1bbeeac7cc3ec9133",
+            "call_id": "call_fba562cd742d4758b76d8d9cc80b40c1",
+            "name": "get_weather",
+            "arguments": "{\"city\":\"Paris\"}",
+            "status": "completed"
+          }
+        ],
+        "error": null,
+        "incomplete_details": null,
+        "tools": [
+          {
+            "type": "function",
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "output_schema": null,
+            "strict": true
+          }
+        ],
+        "tool_choice": "auto",
+        "parallel_tool_calls": true,
+        "prompt_cache_key": "89d7caed-5fcf-4e5f-b045-03aa7ecba70f",
+        "prompt_cache_retention": "24h",
+        "text": {
+          "format": {
+            "type": "text"
+          },
+          "verbosity": "medium"
+        },
+        "top_p": 0.98,
+        "top_logprobs": 0,
+        "temperature": 1.0,
+        "reasoning": {
+          "context": "all_turns",
+          "effort": "medium",
+          "summary": null,
+          "mode": "standard"
+        },
+        "user": null,
+        "usage": {
+          "input_tokens": 64,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens": 18,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 82,
+          "attribution": {
+            "items": {
+              "fc_0a501c56cb5b4d2d016aeca184381c87d1bbeeac7cc3ec9133": {
+                "input_tokens": 2,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 18
+              },
+              "msg_0a501c56cb5b4d2d016aeca1829c3087d1b7acf04fa37ed391": {
+                "input_tokens": 15,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0,
+                "content": [
+                  {
+                    "input_tokens": 15,
+                    "cached_tokens": 0,
+                    "cache_write_tokens": 0,
+                    "output_tokens": 0
+                  }
+                ]
+              }
+            },
+            "request_fields": {
+              "instructions": {
+                "input_tokens": 10,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              },
+              "tools": {
+                "input_tokens": 37,
+                "cached_tokens": 0,
+                "cache_write_tokens": 0,
+                "output_tokens": 0
+              }
+            }
+          }
+        },
+        "tool_usage": {
+          "image_gen": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "input_tokens_details": {
+              "text_tokens": 0,
+              "image_tokens": 0
+            },
+            "output_tokens_details": {
+              "image_tokens": 0,
+              "text_tokens": 0
+            }
+          },
+          "web_search": {
+            "num_requests": 0
+          }
+        },
+        "safety_identifier": "user-REDACTED",
+        "store": false,
+        "metadata": {},
+        "max_output_tokens": null,
+        "max_tool_calls": null,
+        "service_tier": "default",
+        "truncation": "disabled",
+        "image": {
+          "context_compression": "disabled"
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-05",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-05T15-32-18Z.txt"
+  }
+}

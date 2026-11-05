@@ -1,0 +1,142 @@
+{
+  "canonical_response": {
+    "model": "gemini-2.5-flash",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "tool_call",
+          "id": "tool_call_0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          },
+          "continuation": [
+            {
+              "provider": "gemini",
+              "kind": "thought_signature",
+              "data": {
+                "value": "CmIBaRR9EzgEHZVtRE3vGFgemM39X+KPRSfpSrKgkuJL+66BsmMvFrXC6OyoXaesJWRgbHCWdP3uuTgEqMqkwyw/B0+TD7Tnh/Iwjy4nXCujhJfNAgx//g4bsxbIu7rj0fcjLgqJAgFpFH0T1H+WZBP+Fv/v/14TVMPSYdeenV9VmpBY1y/lXRBT80RP5reTOrKHXcZAhySJIC2hk3+L/kcmDYWFhgkwD5lN4r+BX7habaWo62GKC4t52GObgJAYPxme5qK+8/hUrq5OPSugth76N0+jASPcrXmU4Gsca8COsM078VGjAiChC4dld6P2JSLRca4V/d+NDczz/LZvaZR2XVIOYudsjVYvlkNkNPodexHL29SbDUJJjRMHXPuuNn35xU2ioTh7KYW6QGreiySg90RTXF1lKEqYb1U8cP9RklAS5q8SntPB83r5Z+KOUonjapwzTG3XbXrGIo97ZNI0zbro2R83IZJy2uqBZPYKWgFpFH0TGlYNbwxBdOFxC9Cbt53oCcU9V/u/k49CDqZweEiepZ73vkGXDTUQykuwbXCrlv2nUPq8fLX3Lbif9aqVPrdyLgYSBjM/gLExxJWmcCkZRnGFYEmpbQ=="
+              }
+            }
+          ]
+        },
+        {
+          "type": "tool_call",
+          "id": "tool_call_1",
+          "name": "get_weather",
+          "input": {
+            "city": "Oslo"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 60,
+      "output_tokens": 110,
+      "total_tokens": 170,
+      "cache_read_tokens": 0,
+      "reasoning_tokens": 79
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "gemini-2.5-flash"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\":\"Paris\"}",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "continuation",
+        "part_index": 0,
+        "provider": "gemini",
+        "kind": "thought_signature",
+        "data": {
+          "value": "CmIBaRR9EzgEHZVtRE3vGFgemM39X+KPRSfpSrKgkuJL+66BsmMvFrXC6OyoXaesJWRgbHCWdP3uuTgEqMqkwyw/B0+TD7Tnh/Iwjy4nXCujhJfNAgx//g4bsxbIu7rj0fcjLgqJAgFpFH0T1H+WZBP+Fv/v/14TVMPSYdeenV9VmpBY1y/lXRBT80RP5reTOrKHXcZAhySJIC2hk3+L/kcmDYWFhgkwD5lN4r+BX7habaWo62GKC4t52GObgJAYPxme5qK+8/hUrq5OPSugth76N0+jASPcrXmU4Gsca8COsM078VGjAiChC4dld6P2JSLRca4V/d+NDczz/LZvaZR2XVIOYudsjVYvlkNkNPodexHL29SbDUJJjRMHXPuuNn35xU2ioTh7KYW6QGreiySg90RTXF1lKEqYb1U8cP9RklAS5q8SntPB83r5Z+KOUonjapwzTG3XbXrGIo97ZNI0zbro2R83IZJy2uqBZPYKWgFpFH0TGlYNbwxBdOFxC9Cbt53oCcU9V/u/k49CDqZweEiepZ73vkGXDTUQykuwbXCrlv2nUPq8fLX3Lbif9aqVPrdyLgYSBjM/gLExxJWmcCkZRnGFYEmpbQ=="
+        }
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 1,
+        "input": "{\"city\":\"Oslo\"}",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 60,
+        "output_tokens": 110,
+        "total_tokens": 170,
+        "cache_read_tokens": 0,
+        "reasoning_tokens": 79
+      },
+      "provider_data": {
+        "candidates": [
+          {
+            "content": {
+              "parts": [
+                {
+                  "functionCall": {
+                    "name": "get_weather",
+                    "args": {
+                      "city": "Paris"
+                    }
+                  },
+                  "thoughtSignature": "CmIBaRR9EzgEHZVtRE3vGFgemM39X+KPRSfpSrKgkuJL+66BsmMvFrXC6OyoXaesJWRgbHCWdP3uuTgEqMqkwyw/B0+TD7Tnh/Iwjy4nXCujhJfNAgx//g4bsxbIu7rj0fcjLgqJAgFpFH0T1H+WZBP+Fv/v/14TVMPSYdeenV9VmpBY1y/lXRBT80RP5reTOrKHXcZAhySJIC2hk3+L/kcmDYWFhgkwD5lN4r+BX7habaWo62GKC4t52GObgJAYPxme5qK+8/hUrq5OPSugth76N0+jASPcrXmU4Gsca8COsM078VGjAiChC4dld6P2JSLRca4V/d+NDczz/LZvaZR2XVIOYudsjVYvlkNkNPodexHL29SbDUJJjRMHXPuuNn35xU2ioTh7KYW6QGreiySg90RTXF1lKEqYb1U8cP9RklAS5q8SntPB83r5Z+KOUonjapwzTG3XbXrGIo97ZNI0zbro2R83IZJy2uqBZPYKWgFpFH0TGlYNbwxBdOFxC9Cbt53oCcU9V/u/k49CDqZweEiepZ73vkGXDTUQykuwbXCrlv2nUPq8fLX3Lbif9aqVPrdyLgYSBjM/gLExxJWmcCkZRnGFYEmpbQ=="
+                },
+                {
+                  "functionCall": {
+                    "name": "get_weather",
+                    "args": {
+                      "city": "Oslo"
+                    }
+                  }
+                }
+              ],
+              "role": "model"
+            },
+            "finishReason": "STOP",
+            "index": 0,
+            "finishMessage": "Model generated function call(s)."
+          }
+        ],
+        "usageMetadata": {
+          "promptTokenCount": 60,
+          "candidatesTokenCount": 31,
+          "totalTokenCount": 170,
+          "promptTokensDetails": [
+            {
+              "modality": "TEXT",
+              "tokenCount": 60
+            }
+          ],
+          "thoughtsTokenCount": 79,
+          "serviceTier": "standard"
+        },
+        "modelVersion": "gemini-2.5-flash",
+        "responseId": "T6HsasffJP23xdIPoKr7kAU"
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-05",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-05T15-31-27Z.txt"
+  }
+}

@@ -143,6 +143,9 @@ Refusal (MAP-9, a tool call whose fragments never carried a name):
 `ok: false`, `error: {"type": "StreamAssemblyError", "code": "stream_assembly",
 "message", "partial_response": <Response JSON without the unnamed call(s)>,
 "events": [<StreamEvent JSON>]}`. The shim must not guess a name.
+- The shim reads the body with the adapter's per-stream reader (MAP-20:
+  a dialect with final copies completes each item's fragments from them),
+  the same reader the SDK's streams use.
 - `events` is the full canonical event trace, in order, serialized with the
   canonical stream-event serde. `canonical_response` is the materialized
   final Response (same rules as parse_response).
@@ -498,6 +501,40 @@ call sites (openai.py, openai_chat.py, anthropic.py, gemini.py):
   `parse_response`/`replay_stream` surface it as the top-level `"unmapped"`
   array (the rest of provider_data is not serialized), and the harness fails
   any case with a non-empty `unmapped`.
+
+## Stream checks (2026-11-05)
+
+The `stream` direction runs, after each stream case's golden compare, the
+checks of `harness/stream_checks.py`. They need no new op and no
+hand-written answer (`changes/2026-11-05-stream-final-copy.md`, MAP-20,
+INV-051):
+
+- **`<case>~final-copy`** — OpenAI Responses only (the one dialect whose
+  stream restates the whole response). The harness takes the `response`
+  object of the stream's last `response.completed` / `response.incomplete`
+  event and sends it to `parse_response` (status 200, the case's provider
+  and request); the canonical Response must equal the one `replay_stream`
+  assembled from the same body, strictly, with no volatile path (both come
+  from the same shim and the same bytes; MAP-9.6 withholds nothing on this
+  dialect). A final copy with no `output` is a counted skip. Not run for a
+  case that pins a refusal.
+- **`<case>~<variant>`** — a legal re-shaping of the pinned body, sent to
+  `replay_stream`. `split`, `merge`, `rechunk` and `final-only` must reach
+  the case's own outcome: the golden's `canonical_response` (the case's
+  volatile paths apply; the event trace is not compared, since the events
+  differ by construction), or the case's pinned raise (type and code).
+  `contradict` must answer `ok: false` with `StreamAssemblyError` /
+  `stream_assembly`. What each variant changes, and what it never touches
+  (media chunks, fragments with logprobs, signatures, chunks that also
+  carry a finish reason or usage), is in the module's docstring. A
+  variant that would not change a body is not run.
+
+A shim needs nothing for these beyond `replay_stream` and `parse_response`;
+a shim whose stream path and complete path disagree, or whose stream
+assembly depends on where the provider cut its fragments, fails here.
+`tools/check_stream_events.py` is the corpus side: every event, delta,
+part or key a pinned stream carries is classified in
+`mapping/stream-events.json`.
 
 ## Volatile path syntax
 

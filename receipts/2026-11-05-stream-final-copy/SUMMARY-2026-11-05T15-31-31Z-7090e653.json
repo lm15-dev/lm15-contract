@@ -1,0 +1,126 @@
+[
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-30-56Z",
+    "model": "gpt-6.1-sol",
+    "parse": "4 stream events",
+    "door": "openai-codex",
+    "wire_events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 2,
+      "response.function_call_arguments.done": 2,
+      "response.output_item.done": 2,
+      "response.metadata": 1,
+      "response.completed": 1
+    },
+    "calls": 2
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-00Z",
+    "model": "gpt-5.4-mini",
+    "parse": "2 stream events",
+    "door": "openai",
+    "wire_events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "error": 1,
+      "response.failed": 1
+    },
+    "calls": 0,
+    "skipped": "0 call(s): not parallel; body kept under receipts/, no case written"
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-04Z",
+    "model": "muse-spark-1.3",
+    "parse": "9 stream events",
+    "door": "meta",
+    "wire_events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 4,
+      "response.output_item.done": 4,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 1,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.function_call_arguments.delta": 2,
+      "response.function_call_arguments.done": 2,
+      "response.completed": 1
+    },
+    "calls": 2
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-13Z",
+    "model": "kimi-k3",
+    "parse": "58 stream events",
+    "door": "moonshotai-responses",
+    "wire_events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 4,
+      "response.reasoning_summary_part.added": 1,
+      "response.reasoning_summary_text.delta": 32,
+      "response.reasoning_summary_text.done": 1,
+      "response.reasoning_summary_part.done": 1,
+      "response.output_item.done": 4,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 9,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.function_call_arguments.delta": 11,
+      "response.function_call_arguments.done": 2,
+      "response.completed": 1
+    },
+    "calls": 2
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-25Z",
+    "model": "claude-haiku-4-5",
+    "parse": "12 stream events",
+    "door": "anthropic",
+    "wire_events": {
+      "message_start": 1,
+      "content_block_start": 2,
+      "ping": 1,
+      "content_block_delta": 8,
+      "content_block_stop": 2,
+      "message_delta": 1,
+      "message_stop": 1
+    },
+    "calls": 2
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-27Z",
+    "model": "gemini-2.5-flash",
+    "parse": "5 stream events",
+    "door": "gemini",
+    "wire_events": {
+      "gemini.chunk": 1
+    },
+    "calls": 2
+  },
+  {
+    "feature": "streaming_parallel_tool_calls",
+    "status": 200,
+    "timestamp": "2026-11-05T15-31-29Z",
+    "model": "deepseek-v4-flash",
+    "parse": "30 stream events",
+    "door": "deepseek",
+    "wire_events": {
+      "chat.chunk": 30
+    },
+    "calls": 2
+  }
+]
