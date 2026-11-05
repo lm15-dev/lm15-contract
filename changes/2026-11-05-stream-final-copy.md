@@ -1,9 +1,13 @@
 # 2026-11-05 — A stream's final copy completes its fragments (MAP-20); stream checks that need no hand-written answer
 
-**Status: DECISION (maintainer, in session 2026-11-05: "ok perfect, go do it
+Ratification: RATIFIED 2026-11-05 — Maxime Rivest, in session ("i
+approve"), after the change was implemented, passed 2,132 of 2,132 checks
+in all six SDKs and was released as 2.1.0. Transcribed.
+
+**Status (when written): DECISION (maintainer, in session 2026-11-05: "ok perfect, go do it
 completely and most excellently", on the plan below) + normative rule MAP-20
 in `docs/mapping-rules.md`, the INV-051 amendment in `spec/invariants.md` and
-the `stream_assembly` row in `spec/vocabularies.md`, not yet ratified. Wire
+the `stream_assembly` row in `spec/vocabularies.md`, ratified the same day (above). Wire
 evidence: live receipts below.**
 
 ## The finding

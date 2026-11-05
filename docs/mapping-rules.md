@@ -1211,7 +1211,7 @@ body and imports no implementation) and by the `parse` vectors of
 **Written 2026-11-05** after a user's coding agent found every SDK
 assembling parallel tool calls on the Codex backend with input `{}`
 (`changes/2026-11-05-stream-final-copy.md`; maintainer, in session: "ok
-perfect, go do it completely"). Not yet ratified.
+perfect, go do it completely"); ratified 2026-11-05 ("i approve").
 
 A provider streams a value in **fragments** (pieces in arrival order) and
 may restate it whole in a **final copy**. Nothing guarantees the two

@@ -408,7 +408,7 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
   the same Response from either path, or the difference is stated here.
   Ratified 2026-09-06; see changes/2026-09-06-ratification.md (D8).
   **Checked without a hand-written answer (2026-11-05,
-  changes/2026-11-05-stream-final-copy.md, not yet ratified):** an OpenAI
+  changes/2026-11-05-stream-final-copy.md, ratified 2026-11-05):** an OpenAI
   Responses stream ends by restating the whole response
   (`response.completed` / `response.incomplete`); the harness reads that
   final copy with `parse_response` and requires the stream's Response to

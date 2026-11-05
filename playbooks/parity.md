@@ -4,7 +4,7 @@ Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
 ## 2026-11-05 — a stream's final copy completes its fragments (MAP-20)
 
-changes/2026-11-05-stream-final-copy.md (decided in session, to ratify): a stream's final
+changes/2026-11-05-stream-final-copy.md (ratified 2026-11-05, "i approve"): a stream's final
 copy of an item completes what its fragments did not deliver, and a fragment that
 contradicts it is refused; a reasoning summary streams with the complete path's newlines;
 `response.incomplete` ends a Responses stream; a Gemini part's slot is its place in the
