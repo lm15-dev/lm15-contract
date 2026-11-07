@@ -1,0 +1,75 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-4-5-20250929",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024,
+        "display": "summarized"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-sonnet-4-5-20250929",
+    "id": "msg_011CgneVATP6xGkAH48rfmwA",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Let me denote the number of pens as p and the number of notebooks as n.\n\nWe have:\n- 3p + 7n = 50\n- p ≥ 1\n- n ≥ 1\n\nI want to maximize p.\n\nFrom 3p + 7n = 50, I get:\n3p = 50 - 7n\np = (50 - 7n)/3\n\nFor p to be an integer, (50 - 7n) must be divisible by 3.\n\n50 - 7n ≡ 0 (mod 3)\n50 ≡ 7n (mod 3)\n2 ≡ n (mod 3)\n\nSo n must be of the form n = 2, 5, 8, 11, ...\n\nTo maximize p, I need to minimize n. The minimum value is n = 1.\nLet me check if n = 1 works:\np = (50 - 7)/3 = 43/3 = 14.33... (not an integer)\n\nLet me try n = 2:\np = (50 - 14)/3 = 36/3 = 12\n\nLet me verify: 3(12) + 7(2) = 36 + 14 = 50 ✓\n\nSo the maximum number of pens is 12.",
+        "signature": "EpoHCroBCBMYAipAi8N34HMm6WrcWnY4JYo1Z2iORb0N16rUlIrZZjB3ryPbtPyB2Wmuj5C2WUpQrey2fsv2u4NwCPDmfAyuRTLXBzIaY2xhdWRlLXNvbm5ldC00LTUtMjAyNTA5Mjk4AEIIdGhpbmtpbmdaJDcwNTIwMmIxLTc5Y2EtNGVmMC05NjA0LTA4ZjIxY2RkNjAyZpoBHAoaY2xhdWRlLXNvbm5ldC00LTUtMjAyNTA5MjmoAc/qudcGEgwHo83rYD3jroEJSnMaDJr2H5aR2dw9CWXblyIwq5Bto67/NwctzMeGPVNmqn/VGzpWzeHWQwQvJXqyfYjHg6aTwZlAAnO6vU5nQhqjKowFWoskXhDLFNYOfqH/T8Mlo2AGRE0DovIqmoepVuDFEVif4tdZX9gBaIXQDTaK//04ZY0wAUH78MTvd5mzqfknC7wZOsGUXAmME6vVELQjSYDARHc4+5seY4UFTTJFmHkOQaqMYygXhPbN3mTOH5aFBDBMUvDZvROHeHkLW3XpC/97S/lrqEltnZR6JH7lBTb3scOLGCwQ1LvtwDsh73rF3cW3ed5fqqQSUPaM6zsJwuTB3bj8nz7aE9KPmGk+v2LraY+PeF9qDzrubQpe5Ed5OGV9u0jnfZVjxyi4Hsy/5KPTV9nXW7k/RjqBtED9jX5BMvBn6ZxOFlTEOE4+lsk/uIsMx9z1MyHep0aG77hgeQxfAsrji7OwgAahFY3PLx53KaFk8HS9cZq/w6unI7fZ/SNbNN99YObbpNFlmaIc84JRA58fdtI5P4lWu1ktUqOPrxvtm48CCt8e8W1+4idCkBmL8KGsmtzCNvlAipmgMa9HT5QQU7P3z/CokuKeCXjt0SwzwMo5S5owDYbL7ONWUI4NZZZs+QITpAXN36FZkC6bf88JlPFLw/XXkZay4iy9+ZyHEnxQnBD2knLsAZd4ZsP7odC9TLJHFRTTeXQJ6rOU1qOBQSKKIhLsIYjAHI/psoDWECPTEI+sRiqqU5m5Rk+O5h3A0Z+UHzX9YmMK9QJLvfCg4BlrXcOdpK/Xiin8yFnLzXXUJOLWjvD+5QWK4tFy4Bpa7Oo9jHISeNwrZwRIs3c6zchsQF7QA5d7yIAMizC0hB75nj59P7ayI64F6988gYvaDFbEi/zkRebSnHCDNs3+kUg2rI/9yVbznE1wbkf0A29DhwzZ+hecn/udPuGAlfEj6W83D9hvgRgB"
+      },
+      {
+        "type": "text",
+        "text": "12"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 72,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 339,
+      "output_tokens_details": {
+        "thinking_tokens": 332
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-48-11Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

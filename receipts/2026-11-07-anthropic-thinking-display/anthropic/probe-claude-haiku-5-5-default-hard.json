@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-5-5",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-5-5",
+    "id": "msg_011CgneX9LTqjmfzsn4FpM4q",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "CAQS3woKEAgTGAI4AUIIdGhpbmtpbmcSDHU+4NkmcMvvi3cRuxoMjCaatusTnv6x5R6CIjAW5OUG1OIy8LrGY/8H65KgRUvZNacV1+2jG++wYoLCAjUCVfu9LiqVgKCkDmTgE50q/Ak19H3ZH7TX0oDKQtH2oxpY/6kA8FCol0+RVXYXyq+bQqOtDmih00Vmv5WoU9/uj4CyhSPGJOwrEhjhzOyhzhjle//sCJz7pNq+KNiGnerJAF/UC+AIsKn2UOXxBAqNZFlGd8r5zD3ly/g+eg7N8neJI8bvssZP5eESVsdWtVTe2JkPL4HUkVkBRuq8OVhbFm5AZY/e5UIf/63xKUpt2Zv3AX/NMTp9knKDu5Fqg0gw/+ksYVSTktCRDNvcPRQxM3Ea3fbZmIEWt9MB/X7fXUv3zrY6XO9TiE4j/LUBtDG2JNEiUZXKgKzuRcTJT9gJdOpsEvjpz6Xbs/pf2wvkcZj46jUHKIgGsDzIvUrjRq9eSO++lWcz3S5mrvs41uOjFzzO8etzmbrovGeZbZf4IT/7/6z4/H0vTMI5cOjlD5Vn7jErayD6nQH377S5ynryL+7Kj/Pd5u3EP9OHgzwshkFC+jEKuNLSvKqMWYWW97HeBcrkU55CHTBXVbQMxhadYP1iLNOPgM2VOXo4CRt3+u9tM+8mNYdb5AEpaoOrIhfRJGNmjMiS6zfr27ej0UV0tisazonZhUNG3Top8M7Al9quYwoBxHMWmsNCsDf5e2QqVxujYS4rF3DSiirNr5KZ/OQ//dOcedNVLx+ps/4JidIkTI57+wBkVAzIemsmW5mxraXnm8I0AB9BPaAgWDKo4NVpYcghf/q7KwGgE35aiawaKlsk2ZaJMQIc9uVehK/Jt8vZwViFyo1fS4zsi+YlKQX6+pWoPrqcd03FmsWbrJTn/QHc7GtwDz2JCht7EiXalbQffnrcKdT36HDaCkVd42WT32jI6mD2p0yomT9/FpvxvVSU+W1slb1OC0NHFFmX6cHKKKYy7luPp+S3N52rHf0wat1O0jB0SViAq89KTvjE2Esgnb57u/hW+a6q+8tKq1bF3k3tDBzRUrrSOWbUmbvngNRh9zR7erSu9COhhzYXaNiaGhMPtVyzQaWjAIiGiXPYme9isHlyFPSlPg/dbHw0V21jNqFwwN//6nBdLWjEphk5urvBg/x6AqKZCI+LFPdcD6t1/FBExcDAFOKj3lEPBXD1RM1P9a4xXuV8CiyH56qP/EUPl4GCvU4lfkaqbB5I8Ot2OJBrkBAQr8Kd91BgnLO1xa+kjYqikQXEYCRth2a8TfqKi4B77V8RsaXnmRG/+Sz4jBIz/r4cqOWSNsgilMdmpKv6ez5Xoc+5UCbzIG29E6PV+GPG/wueKnGJeW8TCOXplgu4nPwyX/gURQ7ith2ZhJsOwHJFGd/0dsUN/PBJShr145vqthjSdNtvIVZmGcAU8nWfd0auKDnA0KvaxAoSI8Jo+PqXpxi7hgxtK4a6cYMiZia+GuyLeR41UVgaaS54vP8tjlexoag/mj8NHRNsozQ3JIsas5bn/60L2GThilz8zdo+S+EVozDCX69l5V8bkOS/iUW/oKBxrOej5tco7OJk2aAujtSDk/SerSvjH9P3a+22EHEUtP/s26zG1Mv7ftq4ume9D4PcNZulIe/Mic8IfDNlTsaAJANafau2TvewXDb/34hYoAxxX1MmakBudczu6k3IxGDZVDNW0Av/D6b4YQm9QR1xPJB04LmiBYrDoxbfMnVFVworj6wvjVQ64U7RDeKV4F5sUeWPQwLv+yBPETYQHfKnaeQybAgxhXL2lWYR+IGwGAE="
+      },
+      {
+        "type": "text",
+        "text": "There are no such pairs.\n\nRewriting the equation gives $(a+1)(b+1) = 2027$. Since 2027 is prime (no prime up to $\\sqrt{2027} \\approx 45$ divides it), its only factorizations are $1 \\times 2027$. Positive integers $a, b$ would require both factors to be at least 2, so no solutions exist.\n\n**Answer: []**"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 63,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 581,
+      "output_tokens_details": {
+        "thinking_tokens": 451
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-48-38Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

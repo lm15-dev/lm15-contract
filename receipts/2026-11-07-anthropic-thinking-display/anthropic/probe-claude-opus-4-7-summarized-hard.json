@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-4-7",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-opus-4-7",
+    "id": "msg_011CgneZTEnb2bVV7znCZyB1",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "I'm rewriting ab+a+b=2026 as (a+1)(b+1)=2027, and since 2027 is prime, the only factorization gives a=0, which isn't positive. So there are no positive integer solutions.\n\n",
+        "signature": "Eq8DCqQBCBMYAipASo/BF3F9JTJ4SCtv93/tTRbmhSDqbzY+tdN90uul8Szpa2Dumfg8Qjc7aa4PxUWQrZN+TywUMqkeATNPKLcf9TIPY2xhdWRlLW9wdXMtNC03OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaaAREKD2NsYXVkZS1vcHVzLTQtN6gBh+u51wYSDEf3B2kh+W69n2MqvBoMiKmvKJeth+LopPQyIjD+EZYePKkXZUFvl5S4ex1DwWFFD7leJKpgsiyhawxZN5bI2PF8PS74aqNmljvds7cqtwGcGnra5XtnUHzMRu9TVxNyJ5vkR27pW3LR6ZxoZfpJfMGOT/BMw0on0TZ2+goNCOO75F47RNbAawz1NoGA2EHn4wyN22E4nnbmE12rcRXyair8uQNT4i2WT8HTCv+FwEmQIpBqY6a0B7qFwz+TAA5HO3Cgxm0byvpZdRg+M9Mlm73TvP/pmPjAGkrrYBSkLXyetxrhk8zPAUq5SvXIKodURAEG1ND0eAOvCaMLS3Na7vvAZVc5OcUYAQ=="
+      },
+      {
+        "type": "text",
+        "text": "[]"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 66,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 118,
+      "output_tokens_details": {
+        "thinking_tokens": 110
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-49-09Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

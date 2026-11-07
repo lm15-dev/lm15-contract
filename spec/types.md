@@ -522,7 +522,7 @@ kind-correct wire form, or raise when the wire cannot express it:
 |---|---|---|---|---|---|
 | `effort` | string (ReasoningEffort) | yes | — | always | closed vocabulary; the one dial (MAP-7 rule 2). Required since 2026-09-02: `Reasoning()` no longer means off. (amended 2026-10-10) A constructor given only `thinking_budget` fills `effort` from MAP-7 rule 3's table: the highest level whose budget is at or below the given one, `minimal` below 1024; the field is always present once built |
 | `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007); a token cap on budget wires only (Anthropic manual class `budget_tokens`, floor 1024 server-side; Gemini `thinkingBudget`); RAISES on OpenAI, xAI, the chat dialect, and Anthropic's adaptive class |
-| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, RAISE elsewhere |
+| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`, Anthropic `thinking.display: "summarized"`, MAP-7 rule 7 amended 2026-11-07; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, RAISE elsewhere |
 
 `effort="off"` forbids `thinking_budget` and `summary` (INV-026). Tri-state at
 the Config level: `reasoning` absent = the model decides (every

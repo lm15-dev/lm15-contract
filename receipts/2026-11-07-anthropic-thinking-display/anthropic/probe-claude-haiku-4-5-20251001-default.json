@@ -1,0 +1,74 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgneTyuMUdDzQx9iUBWzc",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Let's denote:\n- p = number of pens (cost 3 each)\n- n = number of notebooks (cost 7 each)\n\nConstraints:\n- 3p + 7n = 50\n- p ≥ 1 (at least one pen)\n- n ≥ 1 (at least one notebook)\n\nI need to find the maximum value of p.\n\nFrom the equation: 3p + 7n = 50\nSo: 3p = 50 - 7n\nTherefore: p = (50 - 7n)/3\n\nFor p to be an integer, (50 - 7n) must be divisible by 3.\n\nLet me check different values of n (where n ≥ 1):\n\nn = 1: p = (50 - 7)/3 = 43/3 ≈ 14.33 (not an integer)\nn = 2: p = (50 - 14)/3 = 36/3 = 12 ✓\nn = 3: p = (50 - 21)/3 = 29/3 ≈ 9.67 (not an integer)\nn = 4: p = (50 - 28)/3 = 22/3 ≈ 7.33 (not an integer)\nn = 5: p = (50 - 35)/3 = 15/3 = 5 ✓\nn = 6: p = (50 - 42)/3 = 8/3 ≈ 2.67 (not an integer)\nn = 7: p = (50 - 49)/3 = 1/3 (not an integer)\n\nSo the valid combinations are:\n- n = 2, p = 12\n- n = 5, p = 5\n\nThe maximum number of pens is 12.\nChecking: 3(12) + 7(2) = 36 + 14 = 50 ✓ confirms this solution works.\n\n",
+        "signature": "EsUJCrgBCBMYAipAIHrqHbEGlmT7pZybycYT2SxbWFt1HgPWA/qIh5gdaQrjY6Tx4skyrrWVXthoEXQUsrOI2VkyfXDLxhew8V83TDIZY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMTgAQgh0aGlua2luZ1okNzA1MjAyYjEtNzljYS00ZWYwLTk2MDQtMDhmMjFjZGQ2MDJmmgEbChljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxqAG/6rnXBhIMNgdP08Pwb3CsfI1qGgyXQ7lOhzrzttrGXsgiMCadyhzSxhP7DAT4yyhhBIcZsCtW8M+sPeuB/cEg2mCI2YS2kt9H0fID5R9csgllvSq5B6qyB8oxcuCMLav7GaF+uTge4RvOByLFN1X+GwqBKdzQb0QsN41fkikJhnhptkwz4JkNirHo/hfqzOxi2J780o6RTyW4vVg5HcmqP8zXdcfRzu6pjE6iAtETgfRfMnEo7IvJajs23bLCJRbtgLRRthZJJQziI8+0j2X4chr4H1OyClHc7FIxy6+A7O488GInI7J3LKatIeSzfrTyUCY5UwY5wGBgjJlbzvLCq3Thb5exrYjLBbUVgZbpxgdjlL6UU65KdjLnnmu756r65VPYGkP/CDVYfvLpWmvjgKS9qFQWt5lTr1JuCa/tyvkW6yH1fsC61OKpC2WR+JjsFtrdYSBBs2MT4XBfRaWXmWf9QPzJq4di0F1Y0TFH+xgvLg77jXcbTj2NhulGF4cXdCM54K1Xms748A2FIy9Zofiqerxt268LgBlrhUOyKSwfZYT1mXDnMjsbd+3DDhFNhbQ2jlmNWUDdUENPKoNRSDEi+HyeTFj4XBOxvBpSeNde/i4PAMD8mbzTIEgSVHWI0LeEss9UPz5SQXB583LIuG9H/NonLO0QPWrERTdG+DrfSLRsW8Nq1C4teQUWJKC1PTgdtwnlUXhg8oCOxG7U3Pn5WvEgCoab+Ce1H75m9Kkz8Y42ben1MizJRHl3nu006mUAqv7ZFUpiD9UHGBGTOwC6nO6e1cAT67/eLuGS61fuc5Tzpn1FEbVD6sCG9gdasNn51UdkxImW2sUY9jZYLAxjr2E7i5yyHUzvLPaqSsv+BsjoG+e7/B/sm7q0QmT31FoUYFoe2dPz9p5VEYp5JqOJ1MbeFX/7tYbl/MljP8oimm4q2q4nnfJMV4Yp4h1PnoJuL6PJkc1XHGCZzgprrAOjfEPAJ2InCWV5tm9NVDWXvD/SNTJVmHyDpZ0qWtV1q8AP3hVU5zQ6t+hbqPggsREd4hAzelh9PPzkBYW2PJiuN2eQq+H/ennZZ4X0nxyAIkeO5AIdppyYo03XJDmA9oteKT4dQkiZkha7G7cK+3fY1u0UejF5OgIXA2WzA4mMekdNnvQXl1PBr07h7PYAnUqEASf1cN4IRWkO8uzBCFxQsasjWcC0WKYxElUWY9K3zS3SbwKYtmxnRseL/0bVgYrDUgX+8VBjv/OyKN2V1QyYl6Dp/l/KP13BSuXm4/H87UrLxQjEuFh5ASWkFg2051KqtbVNvX8n9H5ueWOxL3GoUTlir3m7w/IuyHpGnTyCLJJd0yrc0xFr7nRuMhyiJooESOzgw3rjFDdSN2v6GAE="
+      },
+      {
+        "type": "text",
+        "text": "12"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 72,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 508,
+      "output_tokens_details": {
+        "thinking_tokens": 501
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-47-55Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

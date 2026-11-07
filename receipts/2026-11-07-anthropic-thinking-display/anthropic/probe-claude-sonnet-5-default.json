@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-5",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-sonnet-5",
+    "id": "msg_011CgnePbhWGnsjARyNLvojF",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "EsgECsQCCBMYAipAjIDCcp3kWzsOlN9JQ9HTg64RTnGHEZL7xaqX6ghA7y7IMdp+FJszD7009wRkqF8AaypszZYM1C8yslz6KEBgSDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaaAREKD2NsYXVkZS1zb25uZXQtNagBgeq51wbCAToIBBAAGgwC2ooDTzcFRE4EJq0gATIEEnHPJToEODMjikIEODMjikoEODMjilAAWgTZBeFWYAJoAXAA2gFgChZwcmVmaXhfYmVmb3JlX2Jsb2NrX3YxEiBb+Vc3YGTT0fsGEc1nXOATl+KeRB+/rIpkFC3qShrj/CIAMiDCwBPIapyS4i+Wbz2GF3aPi3pEyQKtzAl7+h4JivtOH0gDEgx466sRisvkpB400KwaDOZLNwV2UFSfL/imsyIwHcmf6b19GXWq2UF2U/RCeESjUFcs/BtBDML3lBIsR8bCvj3kyPPGmWV/UYjzgtPSKrABslvCe3T7xGlc58YSWXIabMghZgmlBSMVsrRAFC6zuNfzuOT4jIjmPl5qnBYd7IyvVMjxu2dPn8/YRRaIXdjm4uWNKqgNwylMqj0+mAo2xrUubVYNJh735R2BHeAxRqnqgIhhYovt40peakToDkT5l7be3V6fkmkOg+RFacnD7u0LdSJcf5CmRPhs5GRNy15lhQuHinpQsCVKYisez5ORU1KzlYHnJdXZrCuRsk7YmJ4YAQ=="
+      },
+      {
+        "type": "text",
+        "text": "12"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 49,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 93,
+      "output_tokens_details": {
+        "thinking_tokens": 90
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-46-56Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

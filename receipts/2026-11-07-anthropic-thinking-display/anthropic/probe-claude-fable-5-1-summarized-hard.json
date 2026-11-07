@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-fable-5-1",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-fable-5-1",
+    "id": "msg_011CgneYmTsnPWsb5bLC8eun",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "I'm reducing the equation to (a+1)(b+1) = 2027, then checking whether 2027 is prime by testing divisors up to about 45. So far 2 through 13 don't divide it, and I'm moving on to 17.\n\nI'm checking the remaining divisors, 17 through 43, and none of them divide 2027, so it's prime. That means a+1 would have to be 2027 with b+1 equal to 1, which forces b = 0, so there are no positive solutions and the list is empty.\n\n",
+        "signature": "CAQSjwkKEAgTGAI4AUIIdGhpbmtpbmcSDNw91PMiMkPSa3nA7BoMxVotnuH0nHymITbkIjAzmlzKgWlf6GdvtBGC/QsL7e2yJ4/9vONYgfkYvNmLVLWNow3eiB1uN55CJH/5XKEqrAh0EHvYc/vce67q6RljwCm3/b7kmuYOcquwfKJzsDSR9jUeL9PBhkp/W/SHVlk9YL8H9wVSMqP28VSaVmyYoLk9rFLjxxvt9UAmDWbyvqpkFsrl0KJz1IoyvwtCIA0o36K3SRKwaIrlrlk8FGEPwKESYCLbpaC2uOlVMcy/JG5oqi2U9OFymI1Z8hW6H58CTETb5gcC/DbycUGIzG1lFQuG1M5cSC/54ThFswYNKr+oz8ZsEkCGPM75SPzVeHMSRSqT2eM+7HzVl4jDrw7ZcllcaIZW+lDno3g3KROwb0PxDgDY8PhJdeH0Wf9JP43TV7EkAuXdOb/a/RFWNBfbYFMHc9FONcUpAZnLAeFZ1JS4+yrPnj5dEUowjd1hJYWirlTvkt69pu/x6IJTiDDO6hcjScO2Hsqv/aIY4H6JpnFQ6reK9WMu5czXnrJRL782Hgfrc0WJ+pGYGPlIRjpKggmKO0Rbrmw9NKSisExGPpUm6/Gye3nVFVGmSAwNw/bFRr6GDUPmAA0F6wB2cvLLr7zdw+q/XrAV5YkRy/1s4buTOQyyaHHeY55RC6wQxbl5k3pbLSh+Z+7FhV57eNXSUPCB+fapiGoRdB+ZqmQsPtJgEmsL3oa4nsEpyumVR0TM08siTHjC8BtzHCl2xIc8MGVhPGcyz26OXJ8wpUSHcA+HYGpHEcnIi0Ru6b23Mbxh3SpGZX777RqF+XiKYXQgXgiN+x5KnoJKAF7vn9mR8qaTjSWuTT2J97t6n7U0ZTqKd3pyx5H52nZ+5i3MwCvw6MK249dwccnXcyz4jakyJE/LjcRdCz//5+uDUoFvSovFxXafZXIX6VPLe56ky4O4hgF+NG37DDc5LkhJk0lJ3PSqEbv+yq2UNGPzf7NXIJphi6cmuSs+wH/dclzuKMNKZWiOZ7pE89aOBF3j+zVAkgVDlbCtS7d6tbUXML/rUuS4VAlfoZ9sHvDYyI3bCPnEVnWmUcCJ2HeG7WwNxFQkiHC6G65lyhzVHkYjddRCw9cT1TzWj9JC14h+seRIfoExHgjXtCRJwk1NOZPetrw0BYd1HBJBubPGcNXyWeoC6MTVnx49FN5gGPIMXjOVvEk5O6+UUXjao1IElDW/ImqpuPLQiIS49DxKYAlCXkhFSc718AiLtze8UCZxhcWMOz1eGoumAss15swMyRCh8FUSjfkAj6cusa0nC59PD8e/n92KAVHUrRy21QufZGLwfMJrN6OrWNMTGOZdnhSvmrCfIJr+n0uH+Gl/BObCgubDClazarFJj5QRZSeoCtW1IsVgxfn2CDmCsWmJlhc0tUPeCuFC36y4wL++TxnYfuVsYPyG8Od1On5QbbhlPKIdEu37yPzh0xZc94XJAQWHmV3knekWA8iuHNpBAAoeqEN2G8X4dEGrP6Z27gVFcaAhKSQYAQ=="
+      },
+      {
+        "type": "text",
+        "text": "[]"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 63,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 373,
+      "output_tokens_details": {
+        "thinking_tokens": 369
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-49-00Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

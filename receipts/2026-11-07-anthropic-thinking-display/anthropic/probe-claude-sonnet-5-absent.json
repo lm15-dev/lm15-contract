@@ -1,0 +1,70 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-5",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-sonnet-5",
+    "id": "msg_011CgneQ3R5QAHzbcjzGU5Gk",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "EpkGCsQCCBMYAipA+iI009ygVuiVrMI+sIHyoUssdHTn5yq1adjinbmqbb+0fwOync2kEkUEUYm33PJUpBL22o0ancwBurUJHfiiiDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaaAREKD2NsYXVkZS1zb25uZXQtNagBiOq51wbCAToIBBAAGgwC2ooDTzcFRE4EJq0gATIEEnHPJToEODMjikIEODMjikoEODMjilAAWgTZBeFWYAJoAXAA2gFgChZwcmVmaXhfYmVmb3JlX2Jsb2NrX3YxEiBb+Vc3YGTT0fsGEc1nXOATl+KeRB+/rIpkFC3qShrj/CIAMiDCwBPIapyS4i+Wbz2GF3aPi3pEyQKtzAl7+h4JivtOH0gDEgzUOkOjGHT3McS5huMaDMv7bd5ruW8/4GNPQiIwE0QDC4s00ayOWbWs9MfSQikV6i3QxjACA+lJJghmHabiXdtG5wh7G8e1RVsiWU/nKoEDrD4Dy/fIhJbSbQa2vXoCQ9uviInjz9OdPkkHbVbyIkfYVJW69GYBk0o8u0Zrdw6Oh+FFtIM5mEmS7uGwX1XEWqLRZJXyhPTnglpwG/MDZmUZXF8PQdOlhGQCI+1AMTFQ8L90+z79NL6CsbdkI/NfDow5ZCSLq/KlUo8Mg0o2sn/vFv5M60sy4667D44XOOGYacrfJt+wO+9yvPuxQhJ9wargRbNyBlIcaVyCt91uOeRvj6ALZ8eWbzRAI3yKvSdfTVPWumaAVAf09kC6n4rHBAhS+c2+Mtb5ekRXtmZ/KsTxwR3cO+T2rcqsGy6byvSSJir/27zEmeKj+4chUoCarZ3aMACUTZ71RIAiBicFqNCdnBMIBet6mdMK6KrAXetihKUoVTvkIRP//YINZdBvf1k88WMqQCQRBGOiF2LBPC+8rw44qFBoCI5yVifjHsQlAuS3hDPzpSbux3Sh8EFY2+My6AXtwiQS2zZ5RmtNbHuycGi3JuCqcBEcLZRe/W5BUhgB"
+      },
+      {
+        "type": "text",
+        "text": "**12**"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 49,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 234,
+      "output_tokens_details": {
+        "thinking_tokens": 228
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-47-02Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

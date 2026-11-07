@@ -1,0 +1,616 @@
+[
+  {
+    "probe": "claude-haiku-5-5-default",
+    "status": 200,
+    "summary": "model=claude-haiku-5-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 201, 'output_tokens_details': {'thinking_tokens': 198}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 201,
+    "thinking_tokens": 198
+  },
+  {
+    "probe": "claude-haiku-5-5-summarized",
+    "status": 200,
+    "summary": "model=claude-haiku-5-5 stop=end_turn blocks=['text'] text='We need 3p + 7n = 50 with p ≥ 1, n ≥ 1, maximize p.\\n\\nn=1: 3p' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 139, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        192
+      ]
+    ],
+    "output_tokens": 139,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-haiku-5-5-absent",
+    "status": 200,
+    "summary": "model=claude-haiku-5-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 125, 'output_tokens_details': {'thinking_tokens': 122}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 125,
+    "thinking_tokens": 122
+  },
+  {
+    "probe": "claude-haiku-5-5-disabled",
+    "status": 200,
+    "summary": "model=claude-haiku-5-5 stop=end_turn blocks=['text'] text='Let p = pens, n = notebooks, with p ≥ 1 and n ≥ 1.\\n\\n3p + 7n ' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 214, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        319
+      ]
+    ],
+    "output_tokens": 214,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-5-5-default",
+    "status": 200,
+    "summary": "model=claude-sonnet-5-5 stop=end_turn blocks=['text'] text='We need 3p + 7n = 50 with p ≥ 1 and n ≥ 1, and we want the l' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 151, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        243
+      ]
+    ],
+    "output_tokens": 151,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-5-5-summarized",
+    "status": 200,
+    "summary": "model=claude-sonnet-5-5 stop=end_turn blocks=['text'] text='We need 3p + 7n = 50 with p ≥ 1 and n ≥ 1, and we want the l' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 186, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        303
+      ]
+    ],
+    "output_tokens": 186,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-5-5-absent",
+    "status": 200,
+    "summary": "model=claude-sonnet-5-5 stop=end_turn blocks=['text'] text='We need 3p + 7n = 50 with p ≥ 1 and n ≥ 1, maximizing p.\\n\\nMo' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 118, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        168
+      ]
+    ],
+    "output_tokens": 118,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-5-5-disabled",
+    "status": 400,
+    "summary": "{\"type\": \"invalid_request_error\", \"message\": \"To turn thinking off on this model, send \\\"thinking\\\": {\\\"type\\\": \\\"between_tools\\\"} instead of {\\\"type\\\": \\\"disabled\\\"}. The model does not think before ",
+    "error": "To turn thinking off on this model, send \"thinking\": {\"type\": \"between_tools\"} instead of {\"type\": \"disabled\"}. The model does not think before responding. The short updates it writes between tool calls come back as thinking blocks."
+  },
+  {
+    "probe": "claude-opus-5-5-default",
+    "status": 200,
+    "summary": "model=claude-opus-5-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 69, 'output_tokens_details': {'thinking_tokens': 66}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 69,
+    "thinking_tokens": 66
+  },
+  {
+    "probe": "claude-opus-5-5-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-5-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 53, 'output_tokens_details': {'thinking_tokens': 50}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        188
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 53,
+    "thinking_tokens": 50
+  },
+  {
+    "probe": "claude-opus-5-5-absent",
+    "status": 200,
+    "summary": "model=claude-opus-5-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 60, 'output_tokens_details': {'thinking_tokens': 57}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 60,
+    "thinking_tokens": 57
+  },
+  {
+    "probe": "claude-opus-5-5-disabled",
+    "status": 400,
+    "summary": "{\"type\": \"invalid_request_error\", \"message\": \"\\\"thinking.type.disabled\\\" is not supported for this model. Use \\\"thinking.type.adaptive\\\" and \\\"output_config.effort\\\" to control thinking behavior.\"}",
+    "error": "\"thinking.type.disabled\" is not supported for this model. Use \"thinking.type.adaptive\" and \"output_config.effort\" to control thinking behavior."
+  },
+  {
+    "probe": "claude-fable-5-1-default",
+    "status": 200,
+    "summary": "model=claude-fable-5-1 stop=end_turn blocks=['text'] text='3p + 7n = 50, n ≥ 1, p ≥ 1.\\nn=1: 3p=43 no. n=2: 36, p=12. n=' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 88, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        108
+      ]
+    ],
+    "output_tokens": 88,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-fable-5-1-summarized",
+    "status": 200,
+    "summary": "model=claude-fable-5-1 stop=end_turn blocks=['text'] text='3p + 7n = 50, p,n ≥ 1. Maximize p: n=1 → 3p=43 no; n=2 → 36,' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 60, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        79
+      ]
+    ],
+    "output_tokens": 60,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-fable-5-1-absent",
+    "status": 200,
+    "summary": "model=claude-fable-5-1 stop=end_turn blocks=['text'] text='3p + 7n = 50, p ≥ 1, n ≥ 1. Maximize p: n=2 → 3p=36 → p=12. ' usage={'input_tokens': 51, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 69, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        87
+      ]
+    ],
+    "output_tokens": 69,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-fable-5-1-disabled",
+    "status": 400,
+    "summary": "{\"type\": \"invalid_request_error\", \"message\": \"\\\"thinking.type.disabled\\\" is not supported for this model. Use \\\"thinking.type.adaptive\\\" and \\\"output_config.effort\\\" to control thinking behavior.\"}",
+    "error": "\"thinking.type.disabled\" is not supported for this model. Use \"thinking.type.adaptive\" and \"output_config.effort\" to control thinking behavior."
+  },
+  {
+    "probe": "claude-opus-5-default",
+    "status": 200,
+    "summary": "model=claude-opus-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 63, 'output_tokens_details': {'thinking_tokens': 60}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 63,
+    "thinking_tokens": 60
+  },
+  {
+    "probe": "claude-opus-5-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 60, 'output_tokens_details': {'thinking_tokens': 57}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        129
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 60,
+    "thinking_tokens": 57
+  },
+  {
+    "probe": "claude-opus-5-absent",
+    "status": 200,
+    "summary": "model=claude-opus-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 124, 'output_tokens_details': {'thinking_tokens': 121}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 124,
+    "thinking_tokens": 121
+  },
+  {
+    "probe": "claude-opus-5-disabled",
+    "status": 200,
+    "summary": "model=claude-opus-5 stop=end_turn blocks=['text'] text='<thinking>3p + 7n = 50, p ≥ 1, n ≥ 1, maximize p.\\nMinimize n' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 119, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        202
+      ]
+    ],
+    "output_tokens": 119,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-5-default",
+    "status": 200,
+    "summary": "model=claude-sonnet-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 93, 'output_tokens_details': {'thinking_tokens': 90}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 93,
+    "thinking_tokens": 90
+  },
+  {
+    "probe": "claude-sonnet-5-summarized",
+    "status": 200,
+    "summary": "model=claude-sonnet-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 118, 'output_tokens_details': {'thinking_tokens': 115}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        219
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 118,
+    "thinking_tokens": 115
+  },
+  {
+    "probe": "claude-sonnet-5-absent",
+    "status": 200,
+    "summary": "model=claude-sonnet-5 stop=end_turn blocks=['thinking', 'text'] text='**12**' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 234, 'output_tokens_details': {'thinking_tokens': 228}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        6
+      ]
+    ],
+    "output_tokens": 234,
+    "thinking_tokens": 228
+  },
+  {
+    "probe": "claude-sonnet-5-disabled",
+    "status": 200,
+    "summary": "model=claude-sonnet-5 stop=end_turn blocks=['text'] text='I need to find the maximum number of pens, given at least on' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 165, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        295
+      ]
+    ],
+    "output_tokens": 165,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-fable-5-default",
+    "status": 200,
+    "summary": "model=claude-fable-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 62, 'output_tokens_details': {'thinking_tokens': 59}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 62,
+    "thinking_tokens": 59
+  },
+  {
+    "probe": "claude-fable-5-summarized",
+    "status": 200,
+    "summary": "model=claude-fable-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 62, 'output_tokens_details': {'thinking_tokens': 59}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        146
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 62,
+    "thinking_tokens": 59
+  },
+  {
+    "probe": "claude-fable-5-absent",
+    "status": 200,
+    "summary": "model=claude-fable-5 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 77, 'output_tokens_details': {'thinking_tokens': 74}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 77,
+    "thinking_tokens": 74
+  },
+  {
+    "probe": "claude-fable-5-disabled",
+    "status": 400,
+    "summary": "{\"type\": \"invalid_request_error\", \"message\": \"\\\"thinking.type.disabled\\\" is not supported for this model. Use \\\"thinking.type.adaptive\\\" and \\\"output_config.effort\\\" to control thinking behavior.\"}",
+    "error": "\"thinking.type.disabled\" is not supported for this model. Use \"thinking.type.adaptive\" and \"output_config.effort\" to control thinking behavior."
+  },
+  {
+    "probe": "claude-opus-4-8-default",
+    "status": 200,
+    "summary": "model=claude-opus-4-8 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 74, 'output_tokens_details': {'thinking_tokens': 71}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        0
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 74,
+    "thinking_tokens": 71
+  },
+  {
+    "probe": "claude-opus-4-8-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-4-8 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 49, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 110, 'output_tokens_details': {'thinking_tokens': 107}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        248
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 110,
+    "thinking_tokens": 107
+  },
+  {
+    "probe": "claude-opus-4-7-default",
+    "status": 200,
+    "summary": "model=claude-opus-4-7 stop=end_turn blocks=['text'] text='14' usage={'input_tokens': 54, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 6, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 6,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-opus-4-7-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-4-7 stop=end_turn blocks=['text'] text='14' usage={'input_tokens': 54, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 6, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 6,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-sonnet-4-6-default",
+    "status": 200,
+    "summary": "model=claude-sonnet-4-6 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 43, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 68, 'output_tokens_details': {'thinking_tokens': 62}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        70
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 68,
+    "thinking_tokens": 62
+  },
+  {
+    "probe": "claude-sonnet-4-6-summarized",
+    "status": 200,
+    "summary": "model=claude-sonnet-4-6 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 43, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 68, 'output_tokens_details': {'thinking_tokens': 62}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        70
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 68,
+    "thinking_tokens": 62
+  },
+  {
+    "probe": "claude-opus-4-6-default",
+    "status": 200,
+    "summary": "model=claude-opus-4-6 stop=end_turn blocks=['text'] text='14' usage={'input_tokens': 43, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 5, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 5,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-opus-4-6-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-4-6 stop=end_turn blocks=['text'] text='14' usage={'input_tokens': 43, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 5, 'output_tokens_details': {'thinking_tokens': 0}, 'service_tier': 'standard', 'inference_geo': 'global', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 5,
+    "thinking_tokens": 0
+  },
+  {
+    "probe": "claude-opus-4-5-20251101-default",
+    "status": 200,
+    "summary": "model=claude-opus-4-5-20251101 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 415, 'output_tokens_details': {'thinking_tokens': 408}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        723
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 415,
+    "thinking_tokens": 408
+  },
+  {
+    "probe": "claude-opus-4-5-20251101-summarized",
+    "status": 200,
+    "summary": "model=claude-opus-4-5-20251101 stop=end_turn blocks=['thinking', 'text'] text='14' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 498, 'output_tokens_details': {'thinking_tokens': 491}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        879
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 498,
+    "thinking_tokens": 491
+  },
+  {
+    "probe": "claude-haiku-4-5-20251001-default",
+    "status": 200,
+    "summary": "model=claude-haiku-4-5-20251001 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 508, 'output_tokens_details': {'thinking_tokens': 501}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        908
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 508,
+    "thinking_tokens": 501
+  },
+  {
+    "probe": "claude-haiku-4-5-20251001-summarized",
+    "status": 200,
+    "summary": "model=claude-haiku-4-5-20251001 stop=end_turn blocks=['thinking', 'text'] text='16' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 451, 'output_tokens_details': {'thinking_tokens': 445}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        744
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 451,
+    "thinking_tokens": 445
+  },
+  {
+    "probe": "claude-sonnet-4-5-20250929-default",
+    "status": 200,
+    "summary": "model=claude-sonnet-4-5-20250929 stop=end_turn blocks=['thinking', 'text'] text='14' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 476, 'output_tokens_details': {'thinking_tokens': 470}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        879
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 476,
+    "thinking_tokens": 470
+  },
+  {
+    "probe": "claude-sonnet-4-5-20250929-summarized",
+    "status": 200,
+    "summary": "model=claude-sonnet-4-5-20250929 stop=end_turn blocks=['thinking', 'text'] text='12' usage={'input_tokens': 72, 'cache_creation_input_tokens': 0, 'cache_read_input_tokens': 0, 'cache_creation': {'ephemeral_5m_input_tokens': 0, 'ephemeral_1h_input_tokens': 0}, 'output_tokens': 339, 'output_tokens_details': {'thinking_tokens': 332}, 'service_tier': 'standard', 'inference_geo': 'not_available', 'speed': 'standard'}",
+    "blocks": [
+      [
+        "thinking",
+        624
+      ],
+      [
+        "text",
+        2
+      ]
+    ],
+    "output_tokens": 339,
+    "thinking_tokens": 332
+  }
+]

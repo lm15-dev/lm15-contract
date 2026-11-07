@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-11-07T00-49-00Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-fable-5-1",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-fable-5-1",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "request_sha256": "9ebec1eeb71fc499533c85811141bf62765b161277245d514536bc67fc900740",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "7e3179067b70f28b27711ac3d29c9fe0085b816a0cf7db11645ceafec3a33cf7",
+  "response_bytes": 2585,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

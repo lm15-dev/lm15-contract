@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-5-5",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-5-5",
+    "id": "msg_011CgneXRhiMbv6BfgpuQuN7",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "I'm checking whether 2027 is prime by trying each prime up to about 45. Nothing from 2 through 13 divides it, and I'm now testing 17, which leaves a remainder of 4.\n\nI've confirmed 2027 is prime, so the factor pairs only give a+1=1 or b+1=1, which would force a or b to zero. That means there are no positive solutions.\n\n",
+        "signature": "CAQSrAoKEAgTGAI4AUIIdGhpbmtpbmcSDDDVjta7bjuWaeJxIhoMc+PF7XdQHy2JAAdOIjCb0cSnUSjwtEu7pSx+n5SwdtvVCPtilUkI+nhQ0qdCPX2S/56kB/VlldHmrKulPqUqyQkij1UWplZRrVvRUzZ4Kj7aeoGr5zU7HLoR6g2mvCVMIbx68cz3C21bgbCqN+54BeVgizQjtKaZq7xc6xaKKTcALqJA7VAg2Xx6ej9vw3J02WSD58B1m4DoB+wBYjtAIfKOZN3voXxz6SywV/hVNADTss63fBrx7u8M+bqjX1o7oEBjqwuA/F+zA1uMFsdeV39D8Cov9MCmZIpDjvzdtckc7ABX5dbYmI9v9mi4VVUsMeDE3lNQeshJhZAdanPQawDT8lUXaLDyJFNNIsjOU7g7oi4EY+iYf8nykcXCN1tfQLMfLWm6RHE0uPIUQfBmVQ5gXWJzuWzqsMv5B3cNbPs3G5UmL4yDoz15ha0tyAPj+UN91rbM7QeXgaMRFfeK7PKpNxIiO8+WWjIBk9vk+NgeK37nIx/RDlIKiGegd9zvp1XFT1g+2/Wt+9XM0Q6ncNQiq20mDN0WDXKLsLPg2UAxudDzcuYHUTg0q0jFKS1Ytjog/5B2J6QpX2n4ddwHsxR+0GN+NN1zDwzV/7JMHB5lhv7BgNO5lyAPpngdK9Jp/DWpMc7Nu5HI2/TUkeIhqSam5aAKaKxap6jgBUDYzkQUQLYz7p7D5PdDmyxCwBzaG2dOZofJCQyhDQ8VE8t55TtbOwGdWCOm67uQxg+EKAzpa7UguUw9UaMW+aaJJhz2ZHETwgxaXTqFvhSQ6WpHZq/PbLVCoJuQum84CQnWhPTXltdJek/VAolueuXHb4/D9ujeEaCsG48VQwbhoxqkzB7rk4AcTmUvKtzccP5hypSILhQYdJ9kqhyFJ8JPQjSGVx+6Grf0lNC8KgJNTApGhPzPWMitCaMnT2J13ZPUWeWVefio2jeOgJPpoJW/r6oVqGTIuJAi8lqnaOgs3rPpbl6juLVWcT2Xy3KZUfJOh5/zfgsubKnzJUB/joma+FIWv2BfzocMBQ58EnNaiPgTlhTbUWl9XvkXJ3/Q8PgL/2N49Nz8FjfrOAkShCrl4EDWd+jBEgOKjHENIbPNg5WelWWzef4zBGByUQp71URSHF+4e98nWfZFeiRKMpS5Tm0edoJyzT0D+7/wtJ2Y2BACzr7/Sny9qWYK+nNuNSDreP2NroT/V9/JRUDDWtL0sv3PqmZa8IxLYYpmL6QwAH+y+Euu37YnwRscHP70mF7kiq32Wx2RJms4cj6I0U2OVE45ygvEU+zEmqMKUOWOigKFuqxmYjQZQfY9tiAVkB7JdiY2cSlOc3pgK1uruWtq6em1Of6LbZIiIgiq4baEI9V8HUGVJvoZHYDHrPkqYDfzUb/JrycY9Lt6PwuxHcA0sHF3y7NKLwgOSleTdXOI0JqxiHOy3NqFXxbwLVCQJRV0M47pJs/AU8Z4Tljf7GdKUAAPIC6aa0yw5M4aYsqeFZuG13imjUSIkMAy9E4gFJzDwW9MetWmKicd+rHf+srX9Vh8mZocV4GRWnsLIWcbnAcPJzAngWQ9RSsKY0zZL/pGdpW1BibZ6jFoqfxFLsJbURR+/yrQrq/MiXnmHekFlacvfA/a2JwTwjHs2Mydf7ZfVWhjGs2Im5XbagOxAr4N3ki9XF8lGZjGnpFgX3wORKQwHPNRc7fS+457Fzu3LjYNvkyeuMl6ber80VLaGAE="
+      },
+      {
+        "type": "text",
+        "text": "**No pairs.**\n\nSince ab + a + b = 2026 can be rewritten as (a+1)(b+1) = 2027, and 2027 is prime (it has no prime factor up to √2027 ≈ 45), the only factorizations are 1 × 2027. That would require a = 0 or b = 0, which are not positive. So the list is empty."
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 63,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 560,
+      "output_tokens_details": {
+        "thinking_tokens": 444
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-48-42Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

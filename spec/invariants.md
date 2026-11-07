@@ -371,7 +371,13 @@ changes/2026-09-14-gauntlet-connection-budget-and-reply-faults.md A2–A4.
     `anthropic.thinking_budget`): the wire `thinking` object's `"display"`
     field (e.g. `"summarized"`) selects how thinking is surfaced; canonical
     `Reasoning` deliberately maps only to `{type, budget_tokens}` and has no
-    display knob, because no other provider exposes one.
+    display knob, because no other provider exposes one. (Amended
+    2026-11-07, `changes/2026-11-07-anthropic-thinking-display.md`: the
+    default became `"omitted"` on Opus 4.7, 4.8 and Claude 5, so
+    `"summarized"` is now what `Reasoning.summary` means on Anthropic,
+    MAP-7 rule 7. `"omitted"` and the beta `"updates"` stay blessed here;
+    the two cases keep their extension spelling, which still reaches the
+    wire verbatim.)
   - **openai `max_tool_calls`** (case `openai.max_tool_calls`): the
     Responses API's cap on total tool invocations per response is neither a
     token limit (`max_tokens`) nor a tool-selection constraint

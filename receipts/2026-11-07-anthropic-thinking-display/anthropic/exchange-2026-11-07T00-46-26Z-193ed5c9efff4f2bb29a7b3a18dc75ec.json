@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-11-07T00-46-26Z",
+  "provider": "anthropic",
+  "status": 400,
+  "model": "claude-sonnet-5-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-5-5",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "request_sha256": "9e582654aef1141258f5768869f8df33eb312fadd22635e097e5d8a8d153c1b2",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d7c1adaed2ad179c6587a27b78b2b7f69b646b13d325e378b4ece249d81fe259",
+  "response_bytes": 356,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

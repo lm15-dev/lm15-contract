@@ -151,7 +151,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
             "stream_contradiction_assembled (a Responses stream with fragments)") + "~contradict"),
         "stream_final_copy_diverges": ("stream", first(
             streams,
-            lambda c, g: c["feature"] == "streaming_reasoning_summary",
+            lambda c, g: c["provider"] == "openai-codex" and c["feature"] == "streaming_reasoning_summary",
             "stream_final_copy_diverges (a stream whose reasoning summary has several parts)") + "~final-copy"),
         "stream_split_sensitive": ("stream", first(
             streams,

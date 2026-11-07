@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-5-5",
+      "max_tokens": 8000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Find every pair of positive integers (a, b) with a <= b such that a*b + a + b = 2026 and gcd(a, b) = 1. Answer with the list only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-sonnet-5-5",
+    "id": "msg_011CgneXhN3k6BxutXFqHjDi",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "CAQS8gcKEAgTGAI4AUIIdGhpbmtpbmcSDLrC+1CgU0Xryzu5aRoMNMGvK0YAZGsrpxA+IjDS8zOLEZ2e5D1+E2xVTccnQp92SOy+M1AW6i6xis57zxxUjLWaVirhcVSXZNh3NMcqjwfU67iCQ40ttH5nF256F3vaM0J7XyRyx6IchWez9PLHIIMq7IlqbrcrGx/dtkt8CG0zNodqWBRyVUphxm28Ai+gq/ZaduFrHpaXhkdz/ht2Avu7HGLYN1wSGHBPYEGadbC0uTFXFfuNoYSgv0cEzPIf5K4EpeiIxWCug8TvN/u52I0/R73XLfcslmpKWhu4f5hSKY/OZkZD4oZMCPdDxJwmjS6Qa0FZ+NnJFgMOeybbL95WioRZpRQimuK2YvCWqbAG3ZHLDFc2oBlS1x5Dg48TzUmFAJ4rjuSSdNLqIHCGehXtkfzHKh3UAXLUSdoEQ7C9sT5j/yE64Q+/Ogs8MAjaEyuEKXw53nglfSkRKHJAEhpeDrX5oMeS1iqKtdFx9IZLtrJC0aeAmrJfH650XorvixhyGDOvjYRuMlReBfI4fTrbVdIPq0XqmbfytwVH163pZqJGgYFh4Y1595kP38KpAaCL+Q6oMRW7g/9eCn8UxKrgh2EmLbSEcUFeEIuPPCc92rug/2RxiM3faFtuQwwxUtO/7DaAl36rzUxadvMV8e5lmryF3j5PUbSEHMgUDuzKsb1FzGiR/TeY/v73drlwABnsfCWJsAMRXPy5UBL0TibjPTp8730kmMWXcevrGuo793hCg/0FiCHi6YskkKJAiTAPrXuDAabfUY56Z2ff7ul3ViKN2JqWFaLw2aGEuGdaKxyl3GAD0YHCwnVflBgFln5Rj5lbrBfz07ds2O+/zXtg5vwDqRu56L50mN6jGgLUSbVQ5fAHfZus3R1iheASBO09vb8YRXSJdgqVEDHrIgo86VB+wKWDe2AL0s/lZkUcohjObuQmD+L67CvkhSDOeDsmlSJtcftXRYy/cRp8bhqW1HtyuAP/1+M8nIhkmdQr+egrNjpLlO9pqA6h8xK2MyY6IRUWYvLO4NjUhR6cniPSf38S3HhVT51ZAUAPjIzXQ05NwPNx6rSbrz6OtL2OYpXaFoS1hbvoUmxOT18ZnWYzzPDEugglt6di3lBfIqZ0o8cbCpEtDqzq4XpTXJiNNlDtWLMPRyzDQljX14zWrJv0eQWAMTXkMxkR+7NwvewMsbo1nGMZXAQU7plDJVbJZXjNgVO+erLgIj8rtjah+w4Yih77cbKeEkIvw4MjhLek8vTk1naACQkZ2b90i4Kbm7SzDGqrJ4Uh8DHqiZSn3WaTgMSMBHVZphYyEn2WrBgB"
+      },
+      {
+        "type": "text",
+        "text": "**[]** (there are no such pairs)\n\nAdding 1 to both sides gives (a+1)(b+1) = 2027. Since 2027 is prime, the only factorization is 1 × 2027, which forces a = 0. That is not a positive integer, so no pair exists."
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 63,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 366,
+      "output_tokens_details": {
+        "thinking_tokens": 275
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-48-45Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

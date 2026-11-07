@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-11-07T00-52-11Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-opus-5-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "max_tokens": 3000,
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "request_sha256": "09211bd2a7095614d22aadb7b383dae8dc3a3d22a59a031c4c3aff4332b18b99",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d25aab551938d656a10450e553e4852426d46b3f9eaaa37dbfa5fcc299ab9d50",
+  "response_bytes": 5512,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

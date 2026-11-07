@@ -299,10 +299,22 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    `includeThoughts: true`; Groq preset `reasoning_format: parsed` —
    receipted 2026-09-02 on qwen3.6-27b: the default leaks a raw
    `<think>` block into `content`, `parsed` returns `message.reasoning`
-   and clean content) and
-   is satisfied silently where thinking is always returned (Anthropic,
-   xAI); `"concise"`/`"detailed"` verbatim on OpenAI Responses, RAISE
-   elsewhere. Gemini gets `includeThoughts` only when asked.
+   and clean content; Anthropic `thinking.display: "summarized"` —
+   amended 2026-11-07, below) and
+   is satisfied silently where thinking is always returned (xAI; the
+   servers of the Messages wire whose `thinking_format` is not
+   `anthropic`: DeepSeek, Meta, Moonshot); `"concise"`/`"detailed"`
+   verbatim on OpenAI Responses, RAISE elsewhere. Gemini gets
+   `includeThoughts` only when asked. **Anthropic (amended 2026-11-07,
+   `changes/2026-11-07-anthropic-thinking-display.md`):** `display`
+   defaults to `"omitted"` (a thinking block with empty text and its
+   signature) on Opus 4.7, Opus 4.8 and every Claude 5 model, and to
+   `"summarized"` on earlier ones (live, 14 models). Any `summary` adds
+   `"display": "summarized"` to the `thinking` object the request sends
+   (`adaptive` or `enabled`), on every model, where the compat's
+   `thinking_format` is `anthropic`; no `summary` sends no `display` (the
+   model's default). Every Claude model accepted it (live 2026-11-07).
+   `"omitted"` and the beta `"updates"` stay `extensions` (INV-049).
 8. **Replay.** Native when the continuation state is present: Anthropic
    signed blocks, Gemini signatures (required on 3.x function calls —
    400 without), OpenAI reasoning items (`openai:reasoning_item` with

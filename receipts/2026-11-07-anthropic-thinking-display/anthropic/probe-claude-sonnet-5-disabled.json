@@ -1,0 +1,68 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-sonnet-5",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-sonnet-5",
+    "id": "msg_011CgneQKLHFczqVkjwf9V12",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I need to find the maximum number of pens, given at least one notebook.\n\nLet p = pens, n = notebooks (n ≥ 1, p ≥ 1)\n\n3p + 7n = 50\n\nTo maximize p, minimize n (with n ≥ 1).\n\nTry n = 1: 3p = 43, not divisible by 3.\nTry n = 2: 3p = 36, p = 12. This works!\n\nCheck: 12×3 + 2×7 = 36 + 14 = 50 ✓\n\n**12**"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 49,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 165,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-47-05Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

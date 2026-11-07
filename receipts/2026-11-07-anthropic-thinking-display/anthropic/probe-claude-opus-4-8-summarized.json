@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-4-8",
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pens cost 3, notebooks 7. I spent 50 on at least one of each. How many pens at most? Answer with the number only."
+            }
+          ]
+        }
+      ],
+      "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-opus-4-8",
+    "id": "msg_011CgneRhWYpzFxtegpndTSg",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "I'm solving 3p + 7n = 50 for the largest possible p with n at least 1, so I want n as small as possible. n=1 leaves 47, which isn't divisible by 3, but n=2 gives 36, so p=12. Checking larger n like n=5 only gives fewer pens, so 12 is the maximum.\n\n",
+        "signature": "Es4DCqQBCBMYAipAczhleBfiCIUwYq/0BX6NuIZoKh6E0wsQ7an5Y6uFvWO/PtoEqVRt2w1B3hA2oJLoFmdx3eF22wAiXcMjTgKSNDIPY2xhdWRlLW9wdXMtNC04OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaaAREKD2NsYXVkZS1vcHVzLTQtOKgBoOq51wYSDOj6tSR3glb+1l3k4RoMlPwmYAdtmSSa7aooIjCsaa8QYJNRyFJqaUXKdbOV2kSIdeO13IwjlKk2ClAZ0B+/5kBPGSydy6zeIduoNEkq1gGO1tocA4iGp9Es+J0J50vXB/2C8fSwGVktRIWan8hn7HQD6ckkaTJXYeYiGGwD+Xfp/BMDihyuXBwBX6vDPIRLmlVF6mSje3tc1gbK0Hy++JUH/hGuxcKmaBFcYAyyMsfYGuvIxoH5iRrn8bIHzKP/NE2XQER8CkeOV8uzrWIqVTDa71hY1cm8aAwZfpZnungrYkauiHO17Ldvzhpbx1NCwrnyM1LL3Kpb9hbYxO+4AXb09UpX13IrOSSOX2MCsprSfmZHV6OYxUYPox+WPpmdjQw3gMWTGAE="
+      },
+      {
+        "type": "text",
+        "text": "12"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 49,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 110,
+      "output_tokens_details": {
+        "thinking_tokens": 107
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-07T00-47-24Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}
