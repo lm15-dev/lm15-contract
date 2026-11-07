@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-11-07 — Claude shows its thinking when asked (MAP-7 rule 7 amended)
+
+changes/2026-11-07-anthropic-thinking-display.md (decided in session, to ratify): a
+reasoning summary asked for on the Messages wire is `thinking.display: "summarized"`
+where the compat's `thinking_format` is `anthropic`; Opus 4.7, Opus 4.8 and every Claude 5
+return a thinking block with empty text without it (live, 14 models). 3 live cases
+(`anthropic.reasoning_summary`, `anthropic.streaming_reasoning_summary`,
+`anthropic.reasoning_summary_budget`); 8 new checks. The six SDKs move their pin to
+`9d8e1ce`, measured with `harness/check.py --direction all` (R through
+`tools/check-contract.py --compare-python`, against Python `b30ff1f`: 30 agree, the 2
+known differences); each also tests what the cases do not pin (no summary sends no
+`display`; DeepSeek, Meta and Moonshot get none). Rust still refuses
+`summary="concise"`/`"detailed"` on this wire where the others substitute `auto` (MAP-13);
+unchanged here, its message corrected. A TypeScript build of 2.2.0 was checked live on
+claude-opus-5-5 (no summary: 0 characters of thinking; `summary: "auto"`: 177).
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 2,140 / 2,140 | 2,140 / 2,140 | 2,140 / 2,140 | 2,140 / 2,140 | 2,140 / 2,140 | 2,140 / 2,140 |
+| Version | 2.2.0 | 2.2.0 | 2.2.0 | v2.2.0 | 2.2.0 | 2.2.0 |
+| Commit | `b30ff1f` | `9c0ea40` | `9046bee` | `8620c95` | `c0f0641` | `59a3442` |
+
+Not moved: Java, Ruby, .NET and Swift.
+
 ## 2026-11-05 — a stream's final copy completes its fragments (MAP-20)
 
 changes/2026-11-05-stream-final-copy.md (ratified 2026-11-05, "i approve"): a stream's final
