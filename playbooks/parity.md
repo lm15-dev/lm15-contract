@@ -2,6 +2,31 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-11-09 — Tinker (Thinking Machines), on two doors
+
+changes/2026-11-09-tinker-live.md (decided in session, to ratify): providers `tinker`
+(Chat Completions, alias `thinkingmachines`) and `tinker-anthropic` (Messages); a URI model
+string is one name; registry aliases route; `RouterConfig(base_models=...)` and the chat
+adapter's `base_models` (a fine-tune follows its base model's `model_overrides`); chat
+compat values `thinking_format="reasoning_effort_switch"`, `reasoning_off="switch"`,
+`json_schema="none"`; `stop_in_text` on chat and Messages compat (MAP-22); MAP-21 (FastAPI
+`detail` bodies), MAP-15 forms with a null code, MAP-23 (a catalog entry naming its
+`base_model` is a fine-tune). 36 live cases, 17 error envelopes, 7 router cases, 2 auth
+cases; 126 new checks. Every SDK carries the same eight changes by hand (presets, aliases
+and the rule come through the tables) and a Tinker test file of its own; Python,
+TypeScript and Go were also checked live (a checkpoint by its path with its base named,
+the stop cut, both doors). Rust: `BuildContext` gains `base_model` (custom dialects that
+build it by hand add the field). R: the copied provider table now carries aliases.
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 |
+| Version | unreleased | unreleased | unreleased | unreleased | unreleased | unreleased |
+| Commit (branch `tinker`) | `3ac4c01` | `170d55e` | `6fa7a35` | `085e60d` | `ff48f6d` | `9ccfc87` |
+
+R through `tools/check-contract.py --compare-python` against Python `3ac4c01`: 30 agree, the
+2 known differences. Not moved: Java, Ruby, .NET and Swift.
+
 ## 2026-11-07 — Claude shows its thinking when asked (MAP-7 rule 7 amended)
 
 changes/2026-11-07-anthropic-thinking-display.md (decided in session, to ratify): a
