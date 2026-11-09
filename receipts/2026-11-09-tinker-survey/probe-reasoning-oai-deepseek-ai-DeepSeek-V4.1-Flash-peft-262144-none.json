@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": "none"
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "reasoning_effort is not supported for model 'deepseek-ai/DeepSeek-V4.1-Flash:peft:262144' (resolved base 'deepseek-ai/DeepSeek-V4.1-Flash'). This model accepts one of: low, high, max; or true or false."
+  },
+  "timestamp": "2026-11-09T14-30-44Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

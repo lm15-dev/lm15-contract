@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-09T14-51-30Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris and in Tokyo? Use the tool for each city."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "parallel_tool_calls": false
+    }
+  },
+  "request_sha256": "b840580f5e7c6fd8188d817efb88a1b7ec230a0eeb0bdde678167b837e978e30",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "3264eae88b633a31dbde814650cf4f0f2b8c258906dc19bf4debd521954d3517",
+  "response_bytes": 763,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

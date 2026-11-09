@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-8B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "adaptive"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_a90a1e0286c449ef9870d57ef3e63391",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Okay, let's see. I need to calculate 17 multiplied by 23. Hmm, how do I approach this? Maybe I can break it down into smaller parts. Let me think... I remember that multiplication can be done using the distributive property. So, 17 times 2",
+        "signature": ""
+      }
+    ],
+    "model": "Qwen/Qwen3-8B",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 23,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-30-33Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

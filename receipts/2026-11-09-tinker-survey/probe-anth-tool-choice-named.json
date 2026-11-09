@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "tool",
+        "name": "get_weather"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_79a48518d6924d89b5a49ce0b049e5c8",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked to say \"ok\" and also wants me to call the function named \"get_weather\" in my next response. I should say \"ok\" and also call get_weather. But I need a required parameter \"city\". The user didn't specify a city. I should probably ask for a city, but the instruction says \"Call the function named 'get_weather' in your next response.\" I could call it with a placeholder or ask. However, typically if required param is missing, I should ask. But the user explicitly told me to call it. I can say \"ok\" and then call it with a generic city like \"New York\" or ask which city. Actually, let me just call it with a default or ask. But the instruction is clear: call the function. I will say \"ok\" and call get_weather with city \"New York\" as a reasonable default, or perhaps better to ask \"Which city?\" but that delays the call. Actually, I can include both: say ok, ask for city, but also call? No, I must call it in this turn if possible. I'll call with \"New York\".",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "ok\nI'll check the weather for you."
+      },
+      {
+        "type": "tool_use",
+        "id": "functions.get_weather:0",
+        "name": "get_weather",
+        "input": {
+          "city": "New York"
+        }
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "tool_use",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 267,
+      "cache_creation_input_tokens": 79,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-09Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

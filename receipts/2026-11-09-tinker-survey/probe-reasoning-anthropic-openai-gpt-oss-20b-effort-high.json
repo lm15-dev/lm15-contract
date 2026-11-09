@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_58a27b432b914fd09c202ebb8e1d4c7d",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks: \"What is 17*23? Reply with just the number.\" The answer is 391. Actually, 17*23 = 391. Wait fill: 17 * 23 = 391. Yes. And user wants just the number. So reply \"391\". Ensure",
+        "signature": ""
+      }
+    ],
+    "model": "openai/gpt-oss-20b",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 80,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-31-15Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-11-09T15-07-45Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAb0lEQVR4nO3PAQkAAAyEwO9feoshgnABdLep8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3IPanc8OLDQitxAAAAAElFTkSuQmCC"
+              }
+            },
+            {
+              "type": "text",
+              "text": "What is the dominant color of this image? One word."
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 300,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "e957c0a1cb3da34180eb9af0fec43b8f60a344c98311926b5c4ebd68cb13526d",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "92fdf950d4f0982754a647d5d37c7c29dcd0b735b7f48d9e906c7cce11696188",
+  "response_bytes": 458,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

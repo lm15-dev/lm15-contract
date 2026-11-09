@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-397B-A17B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "adaptive"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_238f4f33f5a14c19b53f5710df62e326",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Operation: Multiplication (17 * 23).\n    *   Constraint: Reply with just the number.\n\n2.  **Perform the Calculation:**\n    *   Method 1: Standard multiplication.\n        *",
+        "signature": ""
+      }
+    ],
+    "model": "Qwen/Qwen3.5-397B-A17B",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 25,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-30-34Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

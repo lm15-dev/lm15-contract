@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ef2e8ff9-ee09-512c-9f71-c89e551c43cc:sample:0:853915817083",
+    "object": "chat.completion",
+    "created": 1794234684,
+    "model": "zai-org/GLM-5.3-Flash:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "17 × 23.\n\nLet me compute: 17 × 23 = 17 × 20 + 17 × 3 = 340 + 51 = 391.\n\nReply with just the number.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 47,
+      "total_tokens": 72,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-31-22Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

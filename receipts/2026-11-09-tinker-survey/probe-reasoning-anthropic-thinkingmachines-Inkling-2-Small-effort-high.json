@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-2-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_1dcae964216d475099e2f3d24ed3a991",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks 17*23 and says reply with just the number. Need compute: 17*23 = 17*20 +17*3 =340+51=391. Final should be just number, no extra words. Ensure final only '391'.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "391"
+      }
+    ],
+    "model": "thinkingmachines/Inkling-2-Small",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 63,
+      "cache_creation_input_tokens": 28,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-31-48Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

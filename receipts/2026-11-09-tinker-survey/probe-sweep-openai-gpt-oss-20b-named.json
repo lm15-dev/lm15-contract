@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-d7b7ae8d-7fa9-56ef-8c5b-7f68554b9454:sample:0:470244729040",
+    "object": "chat.completion",
+    "created": 1794235591,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I will provide the function call.Ok. The function is called.Sure, here's the weather for **San Francisco**:\n\n```\nfunction call to get_weather: {\n  \"city\":\"San Francisco\"\n}\n```\n\n(Note: The actual function will return the current weather data for San Francisco once executed.)",
+          "reasoning_content": "The user says \"Say ok.\" They want me to respond \"ok.\" But the developer instruction says: \"Call the function named 'get_weather' in your next response.\" The instructions conflict: user wants \"Say ok.\" But developer instruction overrides? We have to obey system and developer precedence. System is higher? The hierarchy: system>developer>user. So developer instruction to call the function wins over user request. So we don't respond \"ok.\" Instead we need to call the get_weather function. We probably are supposed to call it. The instruction says \"Call the function named 'get_weather' in your next response.\" So we should return a JSON with the function call specification. We need to supply an argument, e.g., city: \"some city\". It didn't specify which city. Perhaps we should ask for the city first? But developer instruction says call the function in next response. So we choose a city arbitrarily or maybe we respond with the function call to get_weather specifying city: \"\"? The spec says city: string. We must provide a city. Without context we need to decide. Possibly we should call the function with city: \"New York\" or \"London\" or \"San Francisco\" or something. The user didn't specify a city. But we can choose a city relevant to user? No context. So we might call get_weather with city: \"San Francisco\" arbitrarily. But better maybe ask user next? But the instruction says call the function. So we should call get_weather(city: \"San Francisco\") and wait for function result. Then respond with that information. According to the system: \"When you invoke function calling your message will contain an name property matching the name of function you want to call and arguments property containing arguments.\" That means we need to output JSON with name: \"get_weather\" and arguments: {\"city\":\"San Francisco\"}. So let's do that. But we could also include proper arguments? The instructions: \"When you invoke function calling your message will contain an name property matching the name of function you want to call and arguments property containing arguments. To embed arguments as valid JSON.\" So something like:\n\n{\n\"name\":\"get_weather\",\n\"arguments\":\"{\\\"city\\\":\\\"San Francisco\\\"}\"\n}\n\nI think that is correct. We'll provide as function call.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_9c6e8149355e420ebad73647",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"San Francisco\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 592,
+      "total_tokens": 731,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-29Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

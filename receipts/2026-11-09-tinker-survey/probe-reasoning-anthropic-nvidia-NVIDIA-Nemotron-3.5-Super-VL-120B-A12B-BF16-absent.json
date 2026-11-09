@@ -1,0 +1,47 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_f82bf4446797428eb501fada27f0e22e",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user wants the result of 17 * 23 and asks to reply with just the number.\n\n17 * 23:\n17 * 20 = 340\n17 * 3 = 51\n340 + 51 = 391.",
+        "signature": ""
+      }
+    ],
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 31,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-30-59Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

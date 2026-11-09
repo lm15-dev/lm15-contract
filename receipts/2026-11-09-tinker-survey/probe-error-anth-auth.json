@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 401,
+  "body": {
+    "detail": "Unable to validate api-key"
+  },
+  "timestamp": "2026-11-09T14-50-49Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

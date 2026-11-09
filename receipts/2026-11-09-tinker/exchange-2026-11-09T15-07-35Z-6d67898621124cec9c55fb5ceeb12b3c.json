@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-11-09T15-07-35Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user asks for the weather in Paris and explicitly asks to use the tool. I should call get_weather with city=\"Paris\".",
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "functions.get_weather:0",
+          "content": "Sunny, 22°C"
+        }
+      ],
+      "max_completion_tokens": 800,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "66f73fc527015a1ece81a7908f7e5512e88f6f791faf7d5d39122540a19d2d36",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e9fa5da20d3862818d557a3d86664011c6d94f532819090738665262bd8afb0b",
+  "response_bytes": 599,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

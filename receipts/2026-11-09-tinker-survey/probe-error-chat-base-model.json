@@ -1,0 +1,29 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-9B-Base",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "Base model 'Qwen/Qwen3.5-9B-Base' is not a chat model."
+  },
+  "timestamp": "2026-11-09T14-51-53Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

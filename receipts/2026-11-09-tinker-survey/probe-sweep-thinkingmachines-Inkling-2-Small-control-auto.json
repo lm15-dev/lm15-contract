@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-2-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-04320755-02fb-5b5f-ab4a-5c9dfa8d35d4:sample:0:640966665080",
+    "object": "chat.completion",
+    "created": 1794235649,
+    "model": "thinkingmachines/Inkling-2-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user asks \"Say ok.\" The trivial response is \"ok\". But we need consider if any tool needed? No. Need obey user. Final should be just \"ok\" maybe. Need not use get_weather. Ensure exact? They said Say ok. Final: ok.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 102,
+      "completion_tokens": 68,
+      "total_tokens": 170,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-28Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

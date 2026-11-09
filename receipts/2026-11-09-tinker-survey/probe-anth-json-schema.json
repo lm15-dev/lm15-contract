@@ -1,0 +1,72 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Name one city and its country."
+        }
+      ],
+      "output_config": {
+        "format": {
+          "type": "json_schema",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "country"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_1203732116124415a50967731923e5e8",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks: \"Name one city and its country.\" This is a straightforward request. I should provide one example, clearly stating both the city and the country. For instance, Tokyo, Japan; or Paris, France; or New York, USA. I'll pick a well-known one. Let's go with Paris, France. Or maybe Tokyo, Japan. Either works. I'll provide a clear, concise answer.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "Paris, France."
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 93,
+      "cache_creation_input_tokens": 21,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-17Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

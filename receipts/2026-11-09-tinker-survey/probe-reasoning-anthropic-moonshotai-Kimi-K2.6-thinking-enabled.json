@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_9b703ec71bcd4047a2c7745f9baf9dcc",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user wants me to calculate 17 * 23 and reply with just the number.\n\nLet me calculate:\n17 * 23 = ?\n\nI can do this as:\n17 * 20 = 340\n17 * 3 = 51\n340 + 51 = 391\n\nOr:\n(20 -",
+        "signature": ""
+      }
+    ],
+    "model": "moonshotai/Kimi-K2.6",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 21,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-31-07Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

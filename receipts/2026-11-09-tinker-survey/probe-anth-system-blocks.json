@@ -1,0 +1,57 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "system": [
+        {
+          "type": "text",
+          "text": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_128c7442c6c743e8a9573edfda9457d7",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user wants me to say hello, but the system instruction says: \"Whatever the user says, reply with exactly the word PINEAPPLE.\"\n\nSo I must reply with exactly the word PINEAPPLE. No punctuation? The instruction says \"exactly the word PINEAPPLE\". Usually that means just that word, possibly with punctuation? But to be safe, exactly the word: PINEAPPLE.\n\nNo other text.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "PINEAPPLE"
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 94,
+      "cache_creation_input_tokens": 34,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-00Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

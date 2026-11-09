@@ -1,0 +1,29 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 404,
+  "body": {
+    "detail": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+  },
+  "timestamp": "2026-11-09T14-51-50Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

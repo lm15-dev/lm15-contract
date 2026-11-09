@@ -64,6 +64,15 @@ LIVE_SECRET_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("together api key", re.compile(r"\btgp_v1_[A-Za-z0-9_-]{20,}")),
     ("fireworks api key", re.compile(r"\bfw_[A-Za-z0-9]{20,}\b")),
     ("parasail api key", re.compile(r"\bpsk-[A-Za-z0-9_-]{20,}")),
+    # Tinker (Thinking Machines) keys: "tml-" + 69 alphanumerics (observed
+    # shape 2026-11-09); the 40-char floor keeps prose like "tml-renderers"
+    # from matching.
+    ("tinker api key", re.compile(r"\btml-[A-Za-z0-9]{40,}\b")),
+    # Tinker echoes the account in its errors and catalog: the account's
+    # email address and organisation ids (tml:organization:<uuid>). Not
+    # credentials, but personal data: research/providers/tinker/_tinker.py
+    # and the survey's candidate.json "redact" replace them before writing.
+    ("tinker account id", re.compile(r"tml:(?:organization_user|organization|project|user):[0-9a-f]{8}-")),
     # Cloud hosts (changes/2026-09-03-cloud-hosts.md, AUTH-5): any PEM
     # private key block; the AWS test-suite pair (AKIDEXAMPLE) is not
     # AKIA-shaped and is expected in fixtures.

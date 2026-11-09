@@ -1,0 +1,40 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "bogus"
+      }
+    }
+  },
+  "status": 422,
+  "body": {
+    "detail": "Validation Error",
+    "errors": [
+      {
+        "loc": "body -> output_config -> effort",
+        "msg": "Input should be 'low', 'medium', 'high', 'xhigh' or 'max'",
+        "type": "literal_error"
+      }
+    ]
+  },
+  "timestamp": "2026-11-09T14-31-21Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

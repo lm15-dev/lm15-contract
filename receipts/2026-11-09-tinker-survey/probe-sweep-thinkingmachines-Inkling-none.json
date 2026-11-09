@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-df600d80-8f55-595d-ab9a-fa57163e763a:sample:0:488664769940",
+    "object": "chat.completion",
+    "created": 1794235633,
+    "model": "thinkingmachines/Inkling",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to a weather tool or real-time data in this environment, so I can't check the current weather in Paris for you.\n\nTo get the latest forecast, I'd recommend checking:\n- **Weather.com** or your phone's built-in weather app\n- **Météo-France** (the official French meteorological service)\n- A quick search for \"Paris weather\" on your browser\n\nIf you'd like, I can tell you what the climate is generally like in Paris for this time of year, or help you plan activities based on typical conditions!",
+          "reasoning_content": "The user is asking for the weather in Paris and explicitly asks to \"Use the tool.\" However, I don't have access to any weather tool or function calling capability in this environment. I should inform the user that I don't have access to a weather tool, but I can provide general information or suggest how they can check the weather.\n\nWait, let me check if there's any tool available. Looking at the system, I don't see any tool definitions or function schemas provided. So I cannot call any tool.\n\nI should be honest and say I don't have access to weather tools, and suggest alternatives like checking a weather website or app. I should not make up weather data.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 252,
+      "total_tokens": 277,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-11Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-37-19Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "request_sha256": "400b5e9bbc56ea95386084d49422b25595b599f0ac47279b1669100756a91a71",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "554e68ebea0bb7454909f77fcb5b5f4841872e5bf8d2d666cf27a1831c2a5c5b",
+  "response_bytes": 474,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

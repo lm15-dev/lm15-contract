@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-30-58Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "request_sha256": "c9fe7e50db7128afaa76def76d58f2f461455cb2805508e71adbf89604ff1ff9",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "54a6422794178f3590bc166cb8100d9de96de3ef37c45fac6216d3d7aa4323af",
+  "response_bytes": 550,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

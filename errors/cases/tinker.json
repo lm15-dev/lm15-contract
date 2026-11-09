@@ -1,0 +1,246 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-11-09",
+    "evidence": "tinker.thinkingmachines.dev error envelopes captured verbatim 2026-11-09 by research/providers/tinker/{reasoning_survey,anthropic_survey,chat_extra_probes}.py and survey.py; receipts/2026-11-09-tinker-survey/; account email and organisation ids redacted before writing"
+  },
+  "cases": [
+    {
+      "id": "tinker.unauthenticated",
+      "provider": "tinker",
+      "status": 401,
+      "body": {
+        "detail": "Unable to validate api-key"
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 401 verbatim 2026-11-09T14-39-23Z — receipts/2026-11-09-tinker-survey/probe-error-auth.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.model_not_found",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "Sampling is not supported for lm15-survey/no-such-model. (organization: \"<redacted> - default org\" <redacted>)"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "Sampling is not supported for lm15-survey/no-such-model. (organization: \"<redacted> - default org\" <redacted>)"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-39-25Z — receipts/2026-11-09-tinker-survey/probe-error-model.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.checkpoint_not_found",
+      "provider": "tinker",
+      "status": 404,
+      "body": {
+        "detail": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 404,
+        "message": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 404 verbatim 2026-11-09T14-51-50Z — receipts/2026-11-09-tinker-survey/probe-error-chat-checkpoint-missing.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.checkpoint_path_invalid",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "model_path 'tinker://not-a-path' is not a valid tinker path. Expected a checkpoint path of the form 'tinker://<model_id>/sampler_weights/<name>' (sampling requires a sampler weights checkpoint)."
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "model_path 'tinker://not-a-path' is not a valid tinker path. Expected a checkpoint path of the form 'tinker://<model_id>/sampler_weights/<name>' (sampling requires a sampler weights checkpoint)."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-51-51Z — receipts/2026-11-09-tinker-survey/probe-error-chat-checkpoint-malformed.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.training_weights_not_sampler",
+      "provider": "tinker",
+      "status": 404,
+      "body": {
+        "detail": "Weights not found for model_path tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/weights/lm15-untrained"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 404,
+        "message": "Weights not found for model_path tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/weights/lm15-untrained"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 404 verbatim 2026-11-09T14-51-52Z — receipts/2026-11-09-tinker-survey/probe-error-chat-training-weights.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.base_model_not_chat",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "Base model 'Qwen/Qwen3.5-9B-Base' is not a chat model."
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "Base model 'Qwen/Qwen3.5-9B-Base' is not a chat model."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-51-53Z — receipts/2026-11-09-tinker-survey/probe-error-chat-base-model.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.context_length",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "Prompt length plus max_tokens exceeds the model's context window: 70015 prompt tokens + 10 max_tokens > 65536."
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "Prompt length plus max_tokens exceeds the model's context window: 70015 prompt tokens + 10 max_tokens > 65536."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-51-49Z — receipts/2026-11-09-tinker-survey/probe-error-chat-context.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.tool_choice_unmet",
+      "provider": "tinker",
+      "status": 422,
+      "body": {
+        "detail": "model returned no tool call when tool_choice required one"
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 422,
+        "message": "model returned no tool call when tool_choice required one"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 422 verbatim 2026-11-09T14-51-55Z — receipts/2026-11-09-tinker-survey/probe-error-chat-tool-required-unmet.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.validation_error",
+      "provider": "tinker",
+      "status": 422,
+      "body": {
+        "detail": "Validation Error",
+        "errors": [
+          {
+            "loc": "body -> messages -> 0 -> role",
+            "msg": "Input should be 'system', 'user', 'assistant' or 'tool'",
+            "type": "literal_error"
+          }
+        ]
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 422,
+        "message": "Validation Error: body -> messages -> 0 -> role: Input should be 'system', 'user', 'assistant' or 'tool'"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 422 verbatim 2026-11-09T14-39-03Z — receipts/2026-11-09-tinker-survey/probe-role-developer.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.effort_not_supported",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "reasoning_effort is not supported for model 'Qwen/Qwen3.5-4B' (resolved base 'Qwen/Qwen3.5-4B'). This model accepts true or false."
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "reasoning_effort is not supported for model 'Qwen/Qwen3.5-4B' (resolved base 'Qwen/Qwen3.5-4B'). This model accepts true or false."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-30-22Z — receipts/2026-11-09-tinker-survey/probe-reasoning-oai-Qwen-Qwen3.5-4B-high.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker.image_not_supported",
+      "provider": "tinker",
+      "status": 400,
+      "body": {
+        "detail": "Image input is not supported for this model."
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker",
+        "provider_code": null,
+        "status": 400,
+        "message": "Image input is not supported for this model."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-51-40Z — receipts/2026-11-09-tinker-survey/probe-chat-image-user-qwen.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    }
+  ]
+}

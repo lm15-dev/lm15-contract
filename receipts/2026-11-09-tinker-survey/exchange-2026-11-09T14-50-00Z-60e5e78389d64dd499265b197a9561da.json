@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-11-09T14-50-00Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "system": [
+        {
+          "type": "text",
+          "text": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        }
+      ]
+    }
+  },
+  "request_sha256": "5705dd2eb0f7403f9d02b761bc560f74d3a13ab7e939866b414c2bd71ef2a322",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "864a8925ab1256871093cf3153af592b2f604873a42b962d550440c2f4089f66",
+  "response_bytes": 727,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

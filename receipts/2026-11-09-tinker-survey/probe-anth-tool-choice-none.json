@@ -1,0 +1,71 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "none"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_999d3d71aa93409fb8de38c129f0f6cb",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking for the weather in Paris and explicitly asks to \"Use the tool.\" However, I don't have access to any external tools, APIs, or real-time data sources in this environment. I cannot actually call a weather service or browse the internet.\n\nI need to:\n1. Clarify that I don't have access to tools/weather APIs in this conversation\n2. Offer to help if they can provide the tool or if they want general information\n3. Not make up current weather data\n\nWait, let me check if there's a hidden tool use capability. The system prompt doesn't mention any tools. I should be honest about my limitations.\n\nActually, sometimes users say \"Use the tool\" expecting me to use a tool that was provided in a different context, but here there is none. I should politely explain I don't have access to external tools or real-time weather data, but I can describe typical Paris weather or help them find it.\n\nI should not hallucinate current weather conditions.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "I don't have access to external tools, APIs, or real-time internet data in this chat, so I can't call a weather service to get the current conditions in Paris right now.\n\nIf you have a specific weather tool or function available (for example, in a connected app or plugin), please share it or let me know how to access it!\n\nOtherwise, I can tell you that Paris generally has:\n- **Mild, wet winters** (around 3–8°C / "
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 300,
+      "cache_creation_input_tokens": 25,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-12Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-d184b9c1-4cdb-5514-ae9c-08a558084aab:sample:0:590746197209",
+    "object": "chat.completion",
+    "created": 1794235547,
+    "model": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time tools or live weather data. For the current weather in Paris, I recommend checking a trusted weather website, app, or a quick search. \n\nIf you'd like, I can help you understand typical Paris climate patterns, give packing tips for the season, or explain how to read weather forecasts! Just let me know.",
+          "reasoning_content": "Here's a thinking process:\n\n1.  **Analyze User Input:**\n   - User asks: \"What is the weather in Paris? Use the tool.\"\n   - Key elements: Weather query for Paris, instruction to \"Use the tool\"\n\n2.  **Identify Constraints & Capabilities:**\n   - I am an AI language model.\n   - I don't have built-in tool usage capabilities unless specifically provided with a tool interface or API access.\n   - The prompt says \"Use the tool\" but no tool is provided in the context.\n   - I need to check if there's a weather tool available. Since this is a text-based interface without explicit tool definitions, I should state my limitations and offer to help differently, or explain that I can't access real-time tools but can provide general info or suggest how to check.\n\n   - Wait, sometimes these prompts are from a system that expects me to simulate or acknowledge tool use, or maybe there's a hidden tool. But as a standard AI, I should respond honestly about my capabilities.\n   - I'll respond by explaining I don't have real-time weather access or tool usage in this context, and offer to help find the weather via other means or provide general info.\n\n   - Actually, let me think if there's a standard way models handle \"Use the tool\" when no tool is defined. Usually, I should just say I don't have access to tools, or ask for clarification. I'll keep it simple and direct.\n\n   - I'll respond: I don't have access to real-time tools or live weather data. For current weather in Paris, I recommend checking a weather website, app, or search engine. I'm happy to help with weather-related explanations, travel tips, or historical climate data for Paris!\n\n   - Check if this meets the prompt's intent. The prompt says \"Use the tool.\" Maybe I should just state I can't. I'll output a clear, helpful response.\n   - I'll output exactly that.✅",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 27,
+      "completion_tokens": 485,
+      "total_tokens": 512,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-45-44Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

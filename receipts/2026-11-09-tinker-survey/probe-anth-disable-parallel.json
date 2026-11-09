@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "auto",
+        "disable_parallel_tool_use": true
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_290ceb7e721143a38934bcd88b342255",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks for the weather in Paris and explicitly instructs to use the tool. I should call get_weather with city=\"Paris\".",
+        "signature": ""
+      },
+      {
+        "type": "tool_use",
+        "id": "functions.get_weather:0",
+        "name": "get_weather",
+        "input": {
+          "city": "Paris"
+        }
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "tool_use",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 48,
+      "cache_creation_input_tokens": 90,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-15Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

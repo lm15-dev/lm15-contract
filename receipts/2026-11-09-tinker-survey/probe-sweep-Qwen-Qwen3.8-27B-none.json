@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-4aaa89d9-48b4-520f-97e3-db7e9f201c44:sample:0:364018206649",
+    "object": "chat.completion",
+    "created": 1794235444,
+    "model": "Qwen/Qwen3.8-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to real-time weather data, so I can't tell you the exact current weather in Paris right now. However, in late October, Paris typically experiences cool, damp weather with temperatures generally ranging between **9°C (48°F) and 16°C (61°F)**. It can be overcast with a chance of rain.\n\nFor the most accurate conditions today, I recommend checking a live weather link such as:\n*   **BBC Weather (Paris)**\n*   **AccuWeather**\n*   **Météo France**",
+          "reasoning_content": "The user is asking about the weather in Paris, following the instruction \"use the tool.\" However, as an assistant, I do not have access to real-time weather data or external tools to retrieve current weather conditions. I need to explain that I cannot provide real-time information, and offer to help with general climate information for Paris or suggest how to find current weather (e.g., checking a weather website or app).\n\nPlan:\n1.  Clarify that I do not have real-time data access.\n2.  Offer current options to check the weather (e.g., weather sites/apps).\n3.  (Optional but helpful) Provide general climate information for Paris.\n4.  Keep the tone helpful and concise.\n\nConstraint Checklist & Confidence Score:\n1. Provide current weather? No (No tool access)\n2. Explain limitation? Yes\n3. Provide solutions/alternatives? Yes\n4. Tone? Helpful\n5. Concise? Yes\n\nConfidence Score: 5/5\n\nSteps:\n1. State inability to provide real-time data.\n2. Suggest checking local news, weather sites (Accuweather, Weather.com, BBC Weather).\n3. Briefly mention typical weather patterns based on current month (October).\n\nRefinement:\n\"Currently, sunset is at 7:01 PM and sunrise is at 8:05 AM. The current temperature is 14°C with a chance of rain. I can't access real-time data, but for current conditions, you can check the Paris Observatory website.\"\n\nActually, the \"Tool\" mentioned in the prompt is likely the internal system function to call `weather` (if available in a different environment), but in this specific context, there is no tool available. I must just answer based on my training data cut-off or explain my limitations.\n\nWait, looking at the instructions again: \"Use the tool.\" This is a user command, but I have no tools. I will state that I cannot access real-time weather data.\n\nResponse generation:\n\"I cannot access real-time weather data, but I can tell you that Paris generally experiences cool, partly cloudy days in late October. To get the current conditions for today, please check a local news update or a weather app.\" (Or similar).\n\nLet's try to be helpful and mention specific forecast if the date corresponds to a significant pattern, but general safety is better.\n\nCurrent date (implicit): Oct 23, 2024.\nGeneral Paris weather for this time of year: 9°C to 16°C (48°F to 60°F). Partly cloudy, chance of rain.\n\nFinal response structure:\n1. Limitation statement.\n2. Suggestion for real-time check.\n3. (Optional) Typical weather for the season.\n\nLet's just say I can't check the live weather.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 63,
+      "completion_tokens": 719,
+      "total_tokens": 782,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-43-56Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

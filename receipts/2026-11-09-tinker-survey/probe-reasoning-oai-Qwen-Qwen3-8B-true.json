@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-8B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-3876b3a0-921d-527b-86ae-92f0390570a3:sample:0:790648035215",
+    "object": "chat.completion",
+    "created": 1794234617,
+    "model": "Qwen/Qwen3-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "Okay, let me figure out 17 multiplied by 23. Hmm, I need to do this step by step. I remember that multiplying two numbers can sometimes be broken down into smaller parts. Let's see, 17 times 23. Maybe I can use the distributive property here",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "completion_tokens": 64,
+      "total_tokens": 87,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-30-16Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

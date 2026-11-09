@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-09T14-43-31Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "Qwen/Qwen3.6-35B-A3B",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "request_sha256": "b21e5b44b9a7f3eee3d2de7e135a3a15ce32c4c2f0bf081ea0a892e261b82262",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c72ed2a83d102452db9a516443ef6214621b9bb6923d77babb773f241f76da5a",
+  "response_bytes": 782,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:1/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_ea092cced9994ce89e03ed9961d05e5b",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "We are told: \"What is 17*23? Reply with just the number.\"\n\nWe need to compute 17 multiplied by 23. 17 * 23 = 391. Let's double-check: 20*17=340; 3*17=51; sum=391. Yes",
+        "signature": ""
+      }
+    ],
+    "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:1/sampler_weights/lm15-untrained",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 80,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-37-17Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "reasoning_effort is not supported for model 'moonshotai/Kimi-K3.1-Pro:peft:262144' (resolved base 'moonshotai/Kimi-K3.1-Pro'). This model accepts one of: low, medium, high, max."
+  },
+  "timestamp": "2026-11-09T14-30-45Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

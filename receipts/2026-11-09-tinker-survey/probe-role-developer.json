@@ -1,0 +1,40 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "developer",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "status": 422,
+  "body": {
+    "detail": "Validation Error",
+    "errors": [
+      {
+        "loc": "body -> messages -> 0 -> role",
+        "msg": "Input should be 'system', 'user', 'assistant' or 'tool'",
+        "type": "literal_error"
+      }
+    ]
+  },
+  "timestamp": "2026-11-09T14-39-03Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://3447f8c5-f502-54e9-a030-6259fee3f875:train:0/sampler_weights/best-step-000000",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_13bc8d0762a84154aed9b61c2fac2ffa",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Thinking Process:\n\n1.  **Analyze the Request:** The user is asking for the product of 17 and 23 (\"What is 17*23?\"). There is a specific constraint: \"Reply with just the number.\"\n\n2.  **Calculate the Product:**\n    *",
+        "signature": ""
+      }
+    ],
+    "model": "tinker://3447f8c5-f502-54e9-a030-6259fee3f875:train:0/sampler_weights/best-step-000000",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 25,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-31-44Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

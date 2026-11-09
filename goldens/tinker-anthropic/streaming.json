@@ -1,0 +1,79 @@
+{
+  "canonical_response": {
+    "id": "msg_14eda299ebeb45b4846776d8f8f1d9e8",
+    "model": "thinkingmachines/Inkling-Small",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user said \"Say ok.\" which is a direct instruction to say \"ok\". I should comply and say \"ok\" or \"Ok.\" I can also be slightly more conversational but the core request is simple. No safety issues. Just respond with \"Ok.\" or \"Okay.\" Let's go with \"Ok.\""
+        },
+        {
+          "type": "text",
+          "text": "Ok."
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 17,
+      "output_tokens": 72,
+      "total_tokens": 89,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 17
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "msg_14eda299ebeb45b4846776d8f8f1d9e8",
+      "model": "thinkingmachines/Inkling-Small"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The user said \"Say ok.\" which is a direct instruction to say \"ok\". I should comply and say \"ok\" or \"Ok.\" I can also be slightly more conversational but the core request is simple. No safety issues. Just respond with \"Ok.\" or \"Okay.\" Let's go with \"Ok.\""
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "text",
+        "part_index": 1,
+        "text": "Ok."
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 17,
+        "output_tokens": 72,
+        "total_tokens": 89,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 17
+      },
+      "provider_data": {
+        "type": "message_delta",
+        "delta": {
+          "stop_reason": "end_turn"
+        },
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 72,
+          "cache_creation_input_tokens": 17,
+          "cache_read_input_tokens": 0
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-09T15-08-05Z.txt"
+  }
+}

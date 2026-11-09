@@ -460,6 +460,69 @@
       }
     },
     {
+      "id": "rule-tinker-checkpoint-uri",
+      "description": "A URI is one name (2026-11-09): the first ':' is followed by '//', so it is never read as provider:model; the tinker:// rule routes it whole",
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+      "expect": {
+        "provider": "tinker",
+        "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+        "source": "rule"
+      }
+    },
+    {
+      "id": "rule-boundary-tinker-uri",
+      "description": "a byte short of the rule's prefix: no '://' — not a URI and no route",
+      "model": "tinker//run/sampler_weights/x",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "tinker//run/sampler_weights/x"
+        }
+      }
+    },
+    {
+      "id": "prefix-tinker-explicit-uri",
+      "description": "the explicit form keeps working: tinker:<uri> sends the URI",
+      "model": "tinker:tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+      "expect": {
+        "provider": "tinker",
+        "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "prefix-tinker-anthropic-uri",
+      "model": "tinker-anthropic:tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+      "expect": {
+        "provider": "tinker-anthropic",
+        "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+        "source": "prefix"
+      }
+    },
+    {
+      "id": "uri-never-a-prefix",
+      "description": "openai://x is a URI, not provider openai with model //x: no rule names its scheme, so it routes nowhere",
+      "model": "openai://x",
+      "expect": {
+        "error": {
+          "class": "UnknownModelError",
+          "code": "unknown_model",
+          "model": "openai://x"
+        }
+      }
+    },
+    {
+      "id": "registry-alias-thinkingmachines",
+      "description": "a registry entry's alias (models.dev's id for Tinker) names its door",
+      "model": "thinkingmachines:Qwen/Qwen3-8B",
+      "expect": {
+        "provider": "tinker",
+        "model": "Qwen/Qwen3-8B",
+        "source": "prefix"
+      }
+    },
+    {
       "id": "openai-chat-litellm-openai",
       "op": "resolve_openai_chat_model",
       "model": "openai/gpt-4.1-mini",
@@ -727,6 +790,16 @@
           "code": "unknown_model",
           "model": "groq/"
         }
+      }
+    },
+    {
+      "id": "openai-chat-litellm-registry-alias",
+      "op": "resolve_openai_chat_model",
+      "model": "thinkingmachines/Qwen/Qwen3-8B",
+      "expect": {
+        "provider": "tinker",
+        "model": "Qwen/Qwen3-8B",
+        "source": "prefix"
       }
     }
   ]

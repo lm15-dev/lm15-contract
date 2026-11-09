@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-cc2cd93c-cac8-558a-9b98-44852bf279b4:sample:0:125662706558",
+    "object": "chat.completion",
+    "created": 1794235532,
+    "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "Kimi will respond: user \"Say ok.\" Simple. I'll say ok likely \"ok\". Must consider instructions? User asks exactly say ok. I should comply concise. Should have no tools. Respond \"ok\". Check if any trick? None. I'll output.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 169,
+      "completion_tokens": 67,
+      "total_tokens": 236,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-45-29Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

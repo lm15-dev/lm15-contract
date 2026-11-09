@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-31-00Z",
+  "provider": "tinker",
+  "status": 400,
+  "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": "xhigh"
+    }
+  },
+  "request_sha256": "20686986ac2597a6a606baf22c0d8a291d29eb8d9907a6eb086a3fd172c24fe0",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2c850958d769d39c062a85d7c7436ee89e39b1f3574fba5be8b1a3efcb0fffeb",
+  "response_bytes": 203,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

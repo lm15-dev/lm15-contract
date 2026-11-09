@@ -1,0 +1,47 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-9B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_5037766beb94419183fe5a0178e50ec1",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Thinking Process:\n\n1.  **Analyze the Request:** The user is asking for the product of 17 and 23 (\"17*23\") and specifically requests the reply to contain *just the number*.\n\n2.  **Perform the Calculation:**\n    *   Method 1:",
+        "signature": ""
+      }
+    ],
+    "model": "Qwen/Qwen3.5-9B",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 25,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-30-28Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_32c78e4c8d7d4776b26c287dd19a5029",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "We need answer user's simple arithmetic: 17*23. Need final just number. Compute 17*23 = 17*20 +17*3=340+51=391. Final only 391.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "391"
+      }
+    ],
+    "model": "Qwen/Qwen3.8-27B",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 64,
+      "cache_creation_input_tokens": 67,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-30-31Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

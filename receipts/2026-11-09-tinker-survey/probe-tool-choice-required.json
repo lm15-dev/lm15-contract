@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:538810663611",
+    "object": "chat.completion",
+    "created": 1794235152,
+    "model": "thinkingmachines/Inkling-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user said \"Say ok.\" I should respond with \"ok\" or similar. I don't need to call a function for this, but the instruction says \"Call at least one of the provided functions in your next response.\" Wait, let me check.\n\nThe system instruction at the top says: \"Call at least one of the provided functions in your next response.\"\n\nSo I must call at least one function. The only function available is get_weather, which requires a city parameter. I need to include a function call. I can ask for a city or pick one? The instruction is to call at least one. I should probably call it with some city, maybe \"New York\" or ask implicitly by calling? Actually I can just call it with a dummy or real city. Let me call get_weather with \"Tokyo\" or something, but that might be weird. Alternatively, I can say \"ok\" and include the function call in the same response.\n\nWait, the user just said \"Say ok.\" I should say ok, and also call a function because of the system rule. Let me call get_weather for \"Paris\" or just include it. Actually, maybe I can call it with an empty? No, required parameter city: string.\n\nI'll say \"ok\" and call get_weather for \"London\".",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 79,
+      "completion_tokens": 289,
+      "total_tokens": 368,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-39-10Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

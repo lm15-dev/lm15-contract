@@ -1,0 +1,37 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "xhigh"
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "type": "error",
+    "error": {
+      "type": "invalid_request_error",
+      "message": "reasoning_effort is not supported for model 'nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16' (resolved base 'nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16'). This model accepts true or false."
+    }
+  },
+  "timestamp": "2026-11-09T14-31-20Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

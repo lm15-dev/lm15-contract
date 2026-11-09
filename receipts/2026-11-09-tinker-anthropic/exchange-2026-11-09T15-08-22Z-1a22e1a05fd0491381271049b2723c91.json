@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-11-09T15-08-22Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Count from 1 to 20 separated by spaces."
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "max_tokens": 100,
+      "stop_sequences": [
+        " 7"
+      ],
+      "thinking": {
+        "type": "disabled"
+      }
+    }
+  },
+  "request_sha256": "f4b139f0d3b5208a985165a3d5a01e2d53cc78e89664b295de33b8774eb4767a",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ae5d5f9c4dad2f32c30e03676e3edcc8421bdba191a4f24c3cf563b01bf7dc5a",
+  "response_bytes": 868,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-31-40Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "tinker://3447f8c5-f502-54e9-a030-6259fee3f875:train:0/sampler_weights/best-step-000000",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://3447f8c5-f502-54e9-a030-6259fee3f875:train:0/sampler_weights/best-step-000000",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "request_sha256": "771fc20e44116a75b5738820a5e2c34fdc69d4477933e6082b5e749be8aa7aec",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "277971e4a79b0fa6ef8ac53eda618b68236dea6ecb3a3a21e9c72994465d1158",
+  "response_bytes": 594,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

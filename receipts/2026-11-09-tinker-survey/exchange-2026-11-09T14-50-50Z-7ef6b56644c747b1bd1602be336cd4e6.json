@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-50-50Z",
+  "provider": "tinker-anthropic",
+  "status": 400,
+  "model": "lm15-survey/no-such-model",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "lm15-survey/no-such-model",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "request_sha256": "d541665450696045d69553e1f47f13cd173ba40904e19edc9c032f6868f24958",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e2d4b907a61bc65b2f393d19aa2d59aeeeaf4d2f088f0a4d3dfd03ec2bbac5e2",
+  "response_bytes": 233,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

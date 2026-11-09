@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-cc2cd93c-cac8-558a-9b98-44852bf279b4:sample:0:597023112900",
+    "object": "chat.completion",
+    "created": 1794235528,
+    "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don’t have access to a live weather tool in this chat, so I can’t reliably fetch the current weather in Paris. You can check **Météo-France** or a weather app for current conditions. If you enable a weather tool or paste its results, I can help interpret the forecast.",
+          "reasoning_content": "I need respond to User asking weather Paris use tool. Should inspect available tools? In prompt no tools described explicitly. I have only channels, no actual tools listed. Should determine response. I must be honest, cannot fabricate current weather. User asks \"Use the tool.\" Usually these tasks have tool definitions maybe hidden? In this interface none provided. Should think if should call nonexistent weather tool? I cannot. I'll respond explaining no weather tool available in current chat, can't get live weather, suggest check weather service or provide if User shares data. But perhaps expected to use tool in an environment where tools not visible? I need consider typical benchmark tasks: User asks weather Paris use tool. Assistant should invoke e.g. get_weather? But no tools in system message. I should not invent. Could say \"I don’t have access to a live weather tool here, so I can’t reliably report the current weather in Paris. Please check a weather service like Météo-France, or enable/provide a weather tool and I’ll use it.\" I have no browsing. Could possibly state general climate? No, request current weather. Better no live info. Should not discuss identity. Make sure no mention knowledge cutoff unless relevant? Not needed. Respond direct apology perhaps. \"I don’t have a weather tool available in this chat, so I can’t fetch the current conditions in Paris. If you enable one or provide a forecast API result, I can interpret it; otherwise, Météo-France or a weather app will have the live forecast.\" Should I say \"currently\" no. Good.\n\nBut perhaps there is some implied tool use expected and response should just call \"weather\" tool with location? Can't call; only valid channels. No tool specs. Should not attempt to output fake JSON? I should not. Respond now.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 99,
+      "completion_tokens": 445,
+      "total_tokens": 544,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-45-19Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

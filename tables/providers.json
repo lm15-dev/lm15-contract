@@ -974,6 +974,100 @@
       "note": "Parasail open-model inference (Chat Completions dialect; serverless models)"
     },
     {
+      "id": "tinker",
+      "dialect": "openai-chat",
+      "kind": "bound",
+      "compat": "tinker",
+      "access": {
+        "provider": "tinker",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": true,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "bearer"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "TINKER_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "bearer"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1",
+        "backend_settings": []
+      },
+      "aliases": [
+        "thinkingmachines"
+      ],
+      "placeholder_key": null,
+      "console_url": "https://tinker.thinkingmachines.ai/keys",
+      "note": "Tinker (Thinking Machines): base models and your own checkpoints (tinker://…, routed whole) over the Chat Completions wire (beta); reasoning_effort per base family; RouterConfig(base_models=...) names a checkpoint's base; no response_format; GET /models lists your sampler checkpoints with their base model"
+    },
+    {
+      "id": "tinker-anthropic",
+      "dialect": "anthropic",
+      "kind": "bound",
+      "compat": "tinker",
+      "access": {
+        "provider": "tinker-anthropic",
+        "supports": {
+          "complete": true,
+          "stream": true,
+          "live": false,
+          "files": false,
+          "batches": false,
+          "images": false,
+          "speech": false,
+          "video": false,
+          "responses_api": false,
+          "models": false,
+          "caches": false,
+          "extra": []
+        },
+        "auth_modes": [
+          "x-api-key"
+        ],
+        "enterprise_variants": [],
+        "env_keys": [
+          "TINKER_API_KEY"
+        ],
+        "credential_policy": "key",
+        "auth_scheme": [
+          "x-api-key"
+        ],
+        "headers": [],
+        "host": null,
+        "login_hint": null,
+        "backend": "api",
+        "backend_options": {},
+        "system_prefix": null,
+        "base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1",
+        "backend_settings": []
+      },
+      "aliases": [],
+      "placeholder_key": null,
+      "console_url": "https://tinker.thinkingmachines.ai/keys",
+      "note": "Tinker over the Anthropic Messages wire (same TINKER_API_KEY, x-api-key; beta): output_config.effort; the Qwen, Kimi K2.6 and Nemotron families can neither turn reasoning off nor take an effort word here (use `tinker`); no output_config.format; no /models"
+    },
+    {
       "id": "meta",
       "dialect": "openai-responses",
       "kind": "bound",
@@ -2451,6 +2545,58 @@
         "strict_tools": "omit",
         "tool_result_media": "images",
         "cache_control": "none"
+      },
+      "tinker": {
+        "instruction_role": "system",
+        "max_tokens_field": "max_completion_tokens",
+        "stream_usage": "include",
+        "tool_result_name": "omit",
+        "thinking_format": "reasoning_effort",
+        "thinking_replay": "native",
+        "strict_tools": "omit",
+        "tool_result_media": "images",
+        "cache_control": "none",
+        "reasoning_off": "switch",
+        "json_schema": "none",
+        "stop_in_text": "included",
+        "model_overrides": [
+          [
+            "thinkingmachines/",
+            {
+              "reasoning_off": "send"
+            }
+          ],
+          [
+            "Qwen/Qwen3-",
+            {
+              "thinking_format": "reasoning_effort_switch"
+            }
+          ],
+          [
+            "Qwen/Qwen3.5-",
+            {
+              "thinking_format": "reasoning_effort_switch"
+            }
+          ],
+          [
+            "Qwen/Qwen3.6-",
+            {
+              "thinking_format": "reasoning_effort_switch"
+            }
+          ],
+          [
+            "moonshotai/Kimi-K2",
+            {
+              "thinking_format": "reasoning_effort_switch"
+            }
+          ],
+          [
+            "nvidia/NVIDIA-Nemotron-3",
+            {
+              "thinking_format": "reasoning_effort_switch"
+            }
+          ]
+        ]
       }
     },
     "chat_base_urls": {
@@ -2469,7 +2615,8 @@
       "deepinfra": "https://api.deepinfra.com/v1/openai",
       "together": "https://api.together.ai/v1",
       "fireworks": "https://api.fireworks.ai/inference/v1",
-      "parasail": "https://api.parasail.io/v1"
+      "parasail": "https://api.parasail.io/v1",
+      "tinker": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1"
     },
     "responses": {
       "openai": {
@@ -2620,13 +2767,23 @@
         "model_prefixes": [
           "kimi-"
         ]
+      },
+      "tinker": {
+        "thinking_format": "effort",
+        "thinking_replay": "unsigned",
+        "cache_control": "none",
+        "structured_output": "reject",
+        "parallel_tool_calls": "send",
+        "tool_result_media": "images",
+        "stop_in_text": "included"
       }
     },
     "anthropic_base_urls": {
       "anthropic": "https://api.anthropic.com/v1",
       "deepseek": "https://api.deepseek.com/anthropic/v1",
       "meta": "https://api.meta.ai/v1",
-      "moonshotai": "https://api.moonshot.ai/anthropic/v1"
+      "moonshotai": "https://api.moonshot.ai/anthropic/v1",
+      "tinker": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1"
     },
     "preset_aliases": {
       "openai_chat": "openai",
@@ -2705,6 +2862,11 @@
         "prefix": "jev-",
         "provider": "typesafe",
         "note": "TypeSafe Jev (live /v1/models listing 2026-09-17: jev-latest, jev-preview; versioned ids jev-1.13.0 accepted)"
+      },
+      {
+        "prefix": "tinker://",
+        "provider": "tinker",
+        "note": "a Tinker sampler checkpoint path (live /models listing 2026-11-09); a URI is one name, never provider:model"
       }
     ],
     "litellm_prefixes": {
@@ -2765,7 +2927,9 @@
       "deepinfra": "DeepInfra",
       "together": "Together AI",
       "fireworks": "Fireworks AI",
-      "parasail": "Parasail"
+      "parasail": "Parasail",
+      "tinker": "Thinking Machines",
+      "tinker-anthropic": "Thinking Machines"
     }
   }
 }

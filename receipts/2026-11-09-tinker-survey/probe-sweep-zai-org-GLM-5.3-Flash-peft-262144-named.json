@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ef2e8ff9-ee09-512c-9f71-c89e551c43cc:sample:0:398040447922",
+    "object": "chat.completion",
+    "created": 1794235659,
+    "model": "zai-org/GLM-5.3-Flash:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user is asking me to say \"ok\" but the system prompt says to call the function named \"get_weather\" in my next response. However, the get_weather function requires a \"city\" parameter which is required.\n\nThe user just says \"Say ok.\" - there's no city provided. The system instruction says to call get_weather in my next response. But I need a city parameter. I could use a default city like \"New York\" or ask the user. Given the explicit instruction to call the function, I should probably call it with a reasonable default city.\n\nLet me call get_weather with a city - maybe just use a common default.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_b20c443abf5a40bc8f16c72f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 172,
+      "completion_tokens": 145,
+      "total_tokens": 317,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-37Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

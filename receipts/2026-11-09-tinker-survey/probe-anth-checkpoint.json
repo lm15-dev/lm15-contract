@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_b74a1a3ba4914af6ac0e61ad0b294a45",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "Thinking Process:\n\n1.  **Analyze the Request:**\n    *   Input: \"Say ok.\"\n    *   Intent: The user wants me to output the word \"ok\" (or \"Okay\").\n    *   Constraint: Keep it simple and direct.\n\n2.  **Determine the Response:**\n    *   The most direct response is to simply say \"ok\" or \"Okay\".\n    *   Since the prompt is very short, a short response is best.\n\n3.  **Draft the Response:**\n    *   \"ok\"\n    *   \"Okay\"\n    *   \"OK\"\n\n    *Decision:* \"ok\" matches the input style, but \"OK\" (uppercase) or \"Okay\" (title case) is also common and polite. Given the lowercase input \"ok\", echoing it back exactly is a bit robotic, but often expected in testing. However, capitalizing is standard punctuation for emphasis/end. Let's go with \"OK\" or \"Okay\". Actually, the simplest is often best. \"ok\" works.\n\n    *Refinement:* I'll just output \"ok\" to be compliant.\n\n4.  **Final Output Generation:**\n    *   \"ok\"\n\n5.  **Safety Check:** No safety concerns. Just a simple command.\n\n6.  **Final Decision:** \"ok\" or \"Okay\". I'll use \"ok\" to mirror the request.",
+        "signature": ""
+      }
+    ],
+    "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+    "stop_reason": "max_tokens",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 300,
+      "cache_creation_input_tokens": 13,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-45Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

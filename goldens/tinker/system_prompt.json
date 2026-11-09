@@ -1,0 +1,32 @@
+{
+  "canonical_response": {
+    "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:532553542825",
+    "model": "thinkingmachines/Inkling-Small",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user asked \"Say ok.\" The instruction says I must answer in exactly two words. So I need to say \"Ok\" plus another word? Or \"Ok\" is one word, need exactly two words total.\n\nPossible responses:\n- \"Ok done\"\n- \"Ok fine\"\n- \"Ok now\"\n- \"Okay sure\" (but they said say \"ok\")\n- \"Ok, okay\" (comma might count? Better avoid punctuation ambiguity)\n\nBest: \"Ok done.\" That's two words.\n\nWait, \"Say ok.\" Could respond with \"Ok said\"? No.\n\nSimplest: \"Ok, ok\" but that's repetitive.\n\nActually \"Ok\" is one word. Need exactly two words. So \"Ok done\" works.\n\nLet's go with \"Ok done.\""
+        },
+        {
+          "type": "text",
+          "text": "Ok done."
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 27,
+      "output_tokens": 165,
+      "total_tokens": 192,
+      "cache_read_tokens": 0
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-09T15-07-36Z.txt"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-4B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-44521371-6113-5ae7-84f7-40ec1836212c:sample:0:767791357327",
+    "object": "chat.completion",
+    "created": 1794235396,
+    "model": "Qwen/Qwen3.5-4B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "The user is asking me to say \"ok\". This is a simple request that doesn't require any function calls or information retrieval. I should just respond with \"ok\" as requested.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "completion_tokens": 42,
+      "total_tokens": 313,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-43-15Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-11-09T14-31-07Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "moonshotai/Kimi-K2.6",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 1024
+      }
+    }
+  },
+  "request_sha256": "2f9a2d3a742a916b0956dc440ba6c16ca26e821cc13b0ab3259a2bae0b45994e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "08e4e3618c59062632a7808c8686567878d6aace63d53b1712433bb1f5b96338",
+  "response_bytes": 490,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

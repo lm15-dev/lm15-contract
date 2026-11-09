@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-cc2cd93c-cac8-558a-9b98-44852bf279b4:sample:0:459431256886",
+    "object": "chat.completion",
+    "created": 1794235537,
+    "model": "moonshotai/Kimi-K3.1-Pro:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "I need respond to user \"Say ok.\" Should obey instructions \"Call at least one of the provided functions in your next response.\" Only weather tool. Must call at least one provided function next response. Should decide city? User wants just ok. Could call weather arbitrary city? Should not invent? I can use get_weather with city perhaps \"New York\" though irrelevant. Must call. Then final \"ok\". Should call now. I have no specified city. Could choose current? Perhaps \"London\". Is that appropriate? Requirement forces. I should call get_weather({\"city\":\"London\"}), then respond ok, no need mention weather. Perhaps no extra text before. Do it.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 193,
+      "completion_tokens": 188,
+      "total_tokens": 381,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-45-33Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

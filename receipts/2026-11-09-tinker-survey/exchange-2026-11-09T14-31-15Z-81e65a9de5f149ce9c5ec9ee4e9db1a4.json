@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-31-15Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "request_sha256": "3531335a30eb4b829ac6b25ad73eb42f5e6d63b05c6809ecf33412770a4c842a",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2b09f9db66121e16eaf2a4d88318c64367c225a1ee5614ae6d06ef22e1ae7ff8",
+  "response_bytes": 496,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

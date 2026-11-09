@@ -1,0 +1,93 @@
+{
+  "canonical_response": {
+    "id": "msg_1da6983d4a314edda9a4d828990a1247",
+    "model": "thinkingmachines/Inkling-Small",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user wants to know the weather in Paris and explicitly asks to use the tool. I should call get_weather with city=\"Paris\"."
+        },
+        {
+          "type": "tool_call",
+          "id": "functions.get_weather:0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 73,
+      "output_tokens": 48,
+      "total_tokens": 121,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 73
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "id": "msg_1da6983d4a314edda9a4d828990a1247",
+      "model": "thinkingmachines/Inkling-Small"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The user wants to know the weather in Paris and explicitly asks to use the tool. I should call get_weather with city=\"Paris\"."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 1,
+        "input": "",
+        "id": "functions.get_weather:0",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 1,
+        "input": "{\"city\": \"Paris\"}"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 73,
+        "output_tokens": 48,
+        "total_tokens": 121,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 73
+      },
+      "provider_data": {
+        "type": "message_delta",
+        "delta": {
+          "stop_reason": "tool_use"
+        },
+        "usage": {
+          "input_tokens": 0,
+          "output_tokens": 48,
+          "cache_creation_input_tokens": 73,
+          "cache_read_input_tokens": 0
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-09T15-08-13Z.txt"
+  }
+}

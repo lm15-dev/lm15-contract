@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3-8B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-3876b3a0-921d-527b-86ae-92f0390570a3:sample:0:5527240845",
+    "object": "chat.completion",
+    "created": 1794235373,
+    "model": "Qwen/Qwen3-8B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I'm unable to access real-time data or external tools to check the current weather. However, you can check the weather in Paris using a weather website or app like [Weather.com](https://www.weather.com) or [AccuWeather](https://www.accuweather.com). Let me know if you'd like help with anything else! ☀️🌧️",
+          "reasoning_content": "Okay, the user is asking about the weather in Paris. I need to use the tool to get the current weather information. Let me check if the tool is available. Oh, right, the tool is the weather API. I'll query it for Paris. Wait, what's the correct format? Probably the city name, maybe the country code? Let me confirm. Paris is in France, so the country code is FR. But the tool might just take the city name. Let me test that. If I input \"Paris\", will it return the correct data? I should make sure the API is called correctly.\n\nI'll format the query as \"Paris, France\" to be specific. Then, the tool should fetch the current temperature, humidity, wind speed, and conditions. Once I get the data, I need to present it in a clear way. For example, \"The current temperature in Paris is 15°C with light rain.\" Also, include any additional details like wind speed and humidity. Make sure the response is friendly and informative. Let me double-check the API response to ensure accuracy. If there's an error, handle it gracefully, maybe say \"I couldn't retrieve the weather information.\" But I think it should work. Alright, time to call the tool and format the response.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "completion_tokens": 342,
+      "total_tokens": 361,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-42-51Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

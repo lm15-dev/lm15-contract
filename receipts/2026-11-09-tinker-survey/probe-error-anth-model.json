@@ -1,0 +1,34 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "lm15-survey/no-such-model",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "type": "error",
+    "error": {
+      "type": "invalid_request_error",
+      "message": "Sampling is not supported for lm15-survey/no-such-model. (organization: \"<redacted-email> - default org\" tml:organization:<redacted>)"
+    }
+  },
+  "timestamp": "2026-11-09T14-50-50Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

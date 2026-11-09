@@ -1,0 +1,51 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_d911823bc4d54d72a775230f692182fa",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user wants me to calculate 17 * 23 and reply with just the number.\n\n17 * 23 = 17 * 20 + 17 * 3 = 340 + 51 = 391",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "391"
+      }
+    ],
+    "model": "zai-org/GLM-5.3-Flash:peft:262144",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 48,
+      "cache_creation_input_tokens": 25,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-31-40Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

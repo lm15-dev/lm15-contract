@@ -1,0 +1,37 @@
+{
+  "canonical_response": {
+    "id": "msg_4e0bdf40213946c0a54b7200a5e6b1c8",
+    "model": "thinkingmachines/Inkling-Small",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user asks for the weather in Paris and explicitly tells me to use the tool. I have a function `get_weather` that takes a city parameter. I should call it with \"Paris\"."
+        },
+        {
+          "type": "tool_call",
+          "id": "functions.get_weather:0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 73,
+      "output_tokens": 60,
+      "total_tokens": 133,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 73
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-09T15-08-11Z.txt"
+  }
+}

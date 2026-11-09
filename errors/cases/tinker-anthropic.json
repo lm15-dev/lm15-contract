@@ -1,0 +1,152 @@
+{
+  "provenance": {
+    "source": "live-capture",
+    "date": "2026-11-09",
+    "evidence": "tinker.thinkingmachines.dev error envelopes captured verbatim 2026-11-09 by research/providers/tinker/{reasoning_survey,anthropic_survey,chat_extra_probes}.py and survey.py; receipts/2026-11-09-tinker-survey/; account email and organisation ids redacted before writing"
+  },
+  "cases": [
+    {
+      "id": "tinker-anthropic.unauthenticated",
+      "provider": "tinker-anthropic",
+      "status": 401,
+      "body": {
+        "detail": "Unable to validate api-key"
+      },
+      "expected": {
+        "class": "AuthError",
+        "code": "auth",
+        "provider": "tinker-anthropic",
+        "provider_code": null,
+        "status": 401
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 401 verbatim 2026-11-09T14-50-49Z — receipts/2026-11-09-tinker-survey/probe-error-anth-auth.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker-anthropic.model_not_found",
+      "provider": "tinker-anthropic",
+      "status": 400,
+      "body": {
+        "type": "error",
+        "error": {
+          "type": "invalid_request_error",
+          "message": "Sampling is not supported for lm15-survey/no-such-model. (organization: \"<redacted-email> - default org\" tml:organization:<redacted>)"
+        }
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400,
+        "message": "Sampling is not supported for lm15-survey/no-such-model. (organization: \"<redacted-email> - default org\" tml:organization:<redacted>)"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-50-50Z — receipts/2026-11-09-tinker-survey/probe-error-anth-model.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker-anthropic.checkpoint_not_found",
+      "provider": "tinker-anthropic",
+      "status": 404,
+      "body": {
+        "detail": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+      },
+      "expected": {
+        "class": "UnsupportedModelError",
+        "code": "unsupported_model",
+        "provider": "tinker-anthropic",
+        "provider_code": null,
+        "status": 404,
+        "message": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 404 verbatim 2026-11-09T14-50-51Z — receipts/2026-11-09-tinker-survey/probe-error-anth-checkpoint-missing.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker-anthropic.context_length",
+      "provider": "tinker-anthropic",
+      "status": 400,
+      "body": {
+        "type": "error",
+        "error": {
+          "type": "invalid_request_error",
+          "message": "Prompt length plus max_tokens exceeds the model's context window: 70015 prompt tokens + 10 max_tokens > 65536."
+        }
+      },
+      "expected": {
+        "class": "ContextLengthError",
+        "code": "context_length",
+        "provider": "tinker-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-50-53Z — receipts/2026-11-09-tinker-survey/probe-error-anth-context.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker-anthropic.effort_not_supported",
+      "provider": "tinker-anthropic",
+      "status": 400,
+      "body": {
+        "type": "error",
+        "error": {
+          "type": "invalid_request_error",
+          "message": "reasoning_effort is not supported for model 'Qwen/Qwen3.5-4B' (resolved base 'Qwen/Qwen3.5-4B'). This model accepts true or false."
+        }
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker-anthropic",
+        "provider_code": "invalid_request_error",
+        "status": 400,
+        "message": "reasoning_effort is not supported for model 'Qwen/Qwen3.5-4B' (resolved base 'Qwen/Qwen3.5-4B'). This model accepts true or false."
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 400 verbatim 2026-11-09T14-30-30Z — receipts/2026-11-09-tinker-survey/probe-reasoning-anthropic-Qwen-Qwen3.5-4B-thinking-disabled.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    },
+    {
+      "id": "tinker-anthropic.validation_error",
+      "provider": "tinker-anthropic",
+      "status": 422,
+      "body": {
+        "detail": "Validation Error",
+        "errors": [
+          {
+            "loc": "body -> output_config -> effort",
+            "msg": "Input should be 'low', 'medium', 'high', 'xhigh' or 'max'",
+            "type": "literal_error"
+          }
+        ]
+      },
+      "expected": {
+        "class": "InvalidRequestError",
+        "code": "invalid_request",
+        "provider": "tinker-anthropic",
+        "provider_code": null,
+        "status": 422,
+        "message": "Validation Error: body -> output_config -> effort: Input should be 'low', 'medium', 'high', 'xhigh' or 'max'"
+      },
+      "provenance": {
+        "source": "live-capture",
+        "date": "2026-11-09",
+        "evidence": "tinker.thinkingmachines.dev HTTP 422 verbatim 2026-11-09T14-30-40Z — receipts/2026-11-09-tinker-survey/probe-reasoning-anthropic-Qwen-Qwen3.5-4B-effort-bogus.json; MAP-21 (the detail is the message), MAP-15 forms where named; reviewed 2026-11-09"
+      }
+    }
+  ]
+}

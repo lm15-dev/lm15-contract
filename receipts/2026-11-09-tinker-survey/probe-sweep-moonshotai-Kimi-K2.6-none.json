@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ceda2c6d-2134-5e25-bb99-8c2ba1780c37:sample:0:263807506879",
+    "object": "chat.completion",
+    "created": 1794235500,
+    "model": "moonshotai/Kimi-K2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to weather tools or real-time data in this environment, so I can't check the current weather in Paris for you.\n\nIf you're looking for up-to-date information, I'd recommend:\n- **Weather apps**: AccuWeather, Weather.com, or your phone's built-in weather app\n- **Search engines**: Just search \"Paris weather now\" for current conditions\n- **Local French sources**: Météo-France for the most accurate local forecasts\n\nWould you like general information about Paris's typical weather patterns by season instead?",
+          "reasoning_content": "The user is asking for the weather in Paris and explicitly says \"Use the tool.\" However, I don't have access to any weather tools or real-time data APIs in this environment. I should check what tools are available to me.\n\nLooking at the context, I don't see any function definitions or tools provided in this conversation. I need to inform the user that I don't have access to a weather tool or any external tools in this interface.\n\nWait, let me reconsider. Sometimes in these prompts, there might be implied tools, but I don't see any function calling capability enabled here. I should be honest that I don't have access to real-time weather data or tools to check the current weather.\n\nI should:\n1. Clarify that I don't have access to weather tools or real-time data\n2. Offer to provide general climate information about Paris if helpful\n3. Suggest how they can check the weather (weather apps, websites)\n\nI should not make up current weather data.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 19,
+      "completion_tokens": 306,
+      "total_tokens": 325,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-44-58Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

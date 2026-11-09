@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-4B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-44521371-6113-5ae7-84f7-40ec1836212c:sample:0:763592195811",
+    "object": "chat.completion",
+    "created": 1794234613,
+    "model": "Qwen/Qwen3.5-4B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "Thinking Process:\n\n1.  **Calculate the product:** 17 multiplied by 23.\n    *   17 * 20 = 340\n    *   17 * 3 = 51\n    *   340 + 51 =",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 64,
+      "total_tokens": 89,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-30-12Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

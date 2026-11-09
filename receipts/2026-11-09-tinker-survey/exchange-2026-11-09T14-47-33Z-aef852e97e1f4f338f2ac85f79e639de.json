@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-09T14-47-33Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "zai-org/GLM-5.3-Flash:peft:262144",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "request_sha256": "a405854c971bf8673864512fa7a49075d41a096bb7848454edbb4cdc20d529a3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "eac8eb66fe5975f21097af796f28634b5d621c6c84e0324d2295e48f105d918e",
+  "response_bytes": 1612,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

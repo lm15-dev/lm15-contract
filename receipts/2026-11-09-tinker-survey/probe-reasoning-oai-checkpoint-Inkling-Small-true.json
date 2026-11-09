@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "reasoning_effort is not supported for model 'tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained' (resolved base 'thinkingmachines/Inkling-Small'). This model accepts a scalar effort in [0.0, 0.99]."
+  },
+  "timestamp": "2026-11-09T14-36-49Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

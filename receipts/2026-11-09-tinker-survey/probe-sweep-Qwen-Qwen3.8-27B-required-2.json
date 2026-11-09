@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-4aaa89d9-48b4-520f-97e3-db7e9f201c44:sample:0:383559810148",
+    "object": "chat.completion",
+    "created": 1794235450,
+    "model": "Qwen/Qwen3.8-27B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user's request is to \"respond with ok.\" However, there's a system instruction that says \"In your next response, please call at least one of the provided functions.\"\n\nThe only available function is get_weather, which requires a city parameter. I have to call it. For example, I can call get_weather with a generic city and then respond. But what the user wants is simply \"ok.\"\n\nThe system says to call at least one function in the next response. So I should call get_weather. Since no city is specified, I need to pick one. Let's try a neutral city like \"Tokyo\" or \"London.\"\n\nAfter that, respond with \"ok\" according to the user's request.\n\nActually, the instruction says that if I choose to call a function, I should only respond in a specific format. But at the same time, I'm also required to call at least one function. Let me call get_weather and then respond with \"ok\" afterwards. Hmm, the format issue: \"If you choose to call a function, you should only respond in the following format\"—this is about the format of the function call. After getting the result, I can respond.\n\nLet's make the call and then respond with \"ok.\"",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Tokyo\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 323,
+      "completion_tokens": 289,
+      "total_tokens": 612,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-44-07Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

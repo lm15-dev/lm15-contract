@@ -1,0 +1,52 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "top_p": 0.5
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_d61b247a8a4c4e8bbe50b49e54278f5f",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user said \"Say ok.\" This is a direct instruction to say \"ok\". I should respond with \"Ok\" or \"OK\" to comply with the simple request. There's no harmful content here. Just a simple acknowledgment.",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "Ok."
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 55,
+      "cache_creation_input_tokens": 17,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-23Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:315414755331",
+    "object": "chat.completion",
+    "created": 1794235157,
+    "model": "thinkingmachines/Inkling-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have access to external tools or real-time weather data, so I can't fetch the current conditions in Paris. \n\nTo get",
+          "reasoning_content": "The user is asking for the weather in Paris and explicitly says \"Use the tool.\" However, I don't have access to any external tools, APIs, or real-time data sources in this environment. I should clarify that I cannot use tools to fetch live weather data, but I can provide general information or explain that I don't have real-time access. Wait, looking at the system prompt, there's no tool mentioned. The user might be testing if I'll claim to use a tool. I should be honest: I don't have access to weather tools or real-time data. I can provide a general description or ask them to check a weather service, but I shouldn't fabricate current weather conditions.\n\nActually, let me reconsider. Sometimes in these prompts, the user expects me to say I don't have tools. I should respond clearly that I don't have access to external tools or live weather data, so I cannot provide the current weather in Paris. I can offer to help with something else or explain how they can check.\n\nWait, is there any hidden tool? No, I'm Inkling, a text-based AI without tool access in this turn.\n\nBest response: State clearly I don't have access to weather tools or real-time data, so I can't provide current conditions. Suggest checking a reliable source like Meteo France or a weather app. I should not invent weather details.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 300,
+      "total_tokens": 325,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-39-15Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

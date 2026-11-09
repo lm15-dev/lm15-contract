@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-4233b294-a84d-5a7a-a82b-bdf891bbfe75:sample:0:625872658781",
+    "object": "chat.completion",
+    "created": 1794235612,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok. (Calling weather function for London…)",
+          "reasoning_content": "The user simply says \"Say ok.\" The developer says to call at least one of the provided functions in next response. There's a function get_weather that takes city. Perhaps we need to call it. We can respond \"ok\" and also call get_weather for some city? The instruction: \"Call at least one of the provided functions in your next response.\" That means the next response must include a function call. So we must call get_weather. We can also say OK. The response should include the function call. According to the format, we must output a function call JSON block. Typically the assistant response format: call function like:\n\n{\n \"name\": \"get_weather\",\n \"arguments\": {\"city\": \"New York\"}\n}\n\nThen after that maybe we can also include a textual response? Usually you either do a function call OR respond. But requirement says call at least one function. So we need to do a function call. Probably we should also include \"ok.\" Might need to combine? Usually the pattern is you can send a function call and optionally a message. But best is to just return a function call. But user wants \"Say ok.\" So maybe we output \"ok\" as text and also call function. However system might expect either a function call or a message. Since developer instruction overrides, we must include function call. I think we can output a message with function call? According to OpenAI's function call spec, you either respond with role \"assistant\" and content: null and function_call. The instruction is to call at least one function. So we should produce a function call. We can choose a city like \"London\". Let's do that.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_c55a2d96da53437595e33bcf",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 379,
+      "total_tokens": 518,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-49Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

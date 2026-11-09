@@ -1,0 +1,29 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 401,
+  "body": {
+    "detail": "Unable to validate api-key"
+  },
+  "timestamp": "2026-11-09T14-39-23Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

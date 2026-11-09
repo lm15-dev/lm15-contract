@@ -1,0 +1,35 @@
+{
+  "canonical_response": {
+    "id": "chatcmpl-544bf786-ae77-4864-9bc3-cd15c599201c",
+    "model": "openai/gpt-oss-20b",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "We need to output JSON with fields: ageing: boolean, quality: integer 0-4. We need to derive from note.\n\nNote says: \"Ripe blackberry and cassis lead, framed by toasty oak and firm, fine-grained tannins. Long, layered finish with graphite and dried herbs. Impressive now; will reward a decade in the cellar.\"\n\nAgeing: \"will reward a decade in the cellar\" indicates the wine will improve with age. So ageing=true.\n\nQuality: We need to rate quality. The scale 0-4. Likely 3 or 4. \"Impressive now; will reward a decade\" suggests high quality. I'd rate 4 maybe. But maybe 3 if not extremely high. The description is pretty positive. I'll go with quality 4.\n\nReturn JSON: {\"ageing\":true,\"quality\":4} Ensure no extra fields.\n\nLet's output."
+        },
+        {
+          "type": "data",
+          "value": {
+            "ageing": true,
+            "quality": 4
+          }
+        }
+      ]
+    },
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 257,
+      "output_tokens": 209,
+      "total_tokens": 466,
+      "reasoning_tokens": 186
+    }
+  },
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-09-19T12-50-48Z.txt"
+  }
+}

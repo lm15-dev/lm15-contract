@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 50,
+      "user": "lm15-survey"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:106992999624",
+    "object": "chat.completion",
+    "created": 1794235145,
+    "model": "thinkingmachines/Inkling-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "The user said \"Say ok.\" which is a direct instruction to say \"ok\". I should respond with \"ok\" or \"OK\". This is simple and harmless. I'll say \"Ok.\" or \"OK.\"",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 17,
+      "completion_tokens": 50,
+      "total_tokens": 67,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-39-04Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

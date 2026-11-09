@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ef2e8ff9-ee09-512c-9f71-c89e551c43cc:sample:0:720324567740",
+    "object": "chat.completion",
+    "created": 1794235656,
+    "model": "zai-org/GLM-5.3-Flash:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user says \"Say ok.\" — a simple request. The system prompt says \"Call at least one of the provided functions in your next response.\" So I should call a function. But which one? The only function is get_weather which requires a city. The user didn't mention a city. Hmm.\n\nThe instruction says to call at least one function in my next response. I could call get_weather with some default city, but that seems arbitrary. However, the system instruction is explicit: \"Call at least one of the provided functions in your next response.\"\n\nMaybe I should just say ok and call get_weather? That seems odd. Perhaps the best approach is to follow the system instruction and call get_weather for some city, or ask the user which city. But the system prompt demands calling a function.\n\nI'll call get_weather with a reasonable default like \"London\" or maybe just \"New York\". Actually, without user context, calling a random city seems wasteful but the instruction is explicit. Let me call it and then say ok.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_b6b271dd325547329f9a801d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 172,
+      "completion_tokens": 223,
+      "total_tokens": 395,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-33Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

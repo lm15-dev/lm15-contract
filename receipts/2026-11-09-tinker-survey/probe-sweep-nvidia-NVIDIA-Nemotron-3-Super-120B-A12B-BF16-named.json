@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-d7081ffa-1d86-5e2d-810f-a5d9d225f593:sample:0:828284984166",
+    "object": "chat.completion",
+    "created": 1794235569,
+    "model": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "Okay, the user wants me to say \"ok\". I need to respond with just \"ok\". However, I should note that the instruction says to call the get_weather function in the next response. But the user is asking me to say \"ok\", not to get weather. \n\nLooking at the system message: \"Call the function named 'get_weather' in your next response.\" This seems to be a directive that I must follow regardless of what the user says. So even though the user said \"Say ok\", I still need to call get_weather in my next response.\n\nBut the user's message is \"Say ok.\" which is a request for me to output \"ok\". However, the system instruction overrides that - I must call get_weather in my next response.\n\nI need to call get_weather with some city parameter. Since no city was specified, I should choose a default city. Maybe \"London\" or \"New York\" as common examples. Let me pick \"London\".\n\nSo I'll call get_weather with city: \"London\".\n\nThen after getting the weather data, I can respond with that information. But the user said \"Say ok\" - but I have to follow the system instruction to call get_weather first.\n\nActually, re-reading: \"Call the function named 'get_weather' in your next response.\" This means my very next response should be the function call. Not that I should call it and then respond normally.\n\nSo my next response should be just the function call to get_weather, nothing else.\n\nI'll do that.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 285,
+      "completion_tokens": 348,
+      "total_tokens": 633,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-05Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

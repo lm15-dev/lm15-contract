@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-11-09T14-51-40Z",
+  "provider": "tinker",
+  "status": 400,
+  "model": "Qwen/Qwen3.5-4B",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-4B",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAb0lEQVR4nO3PAQkAAAyEwO9feoshgnABdLep8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3I8QUNyPEFDcjxBQ3IPanc8OLDQitxAAAAAElFTkSuQmCC"
+              }
+            },
+            {
+              "type": "text",
+              "text": "What is the dominant color of this image? One word."
+            }
+          ]
+        }
+      ],
+      "max_completion_tokens": 400,
+      "reasoning_effort": false
+    }
+  },
+  "request_sha256": "d2fa5c3f2494c2aef3bcbaee61013c5fbc7b58ba6e0ca7cbfc01fe05c7b9456c",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9399d3a366e11981e86084050da781c437a58f0048554bbd134fa11dc85737e1",
+  "response_bytes": 57,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

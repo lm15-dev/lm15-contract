@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": 0.5
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "reasoning_effort is not supported for model 'openai/gpt-oss-120b' (resolved base 'openai/gpt-oss-120b'). This model accepts one of: low, medium, high."
+  },
+  "timestamp": "2026-11-09T14-31-28Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

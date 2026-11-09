@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-30-37Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "Qwen/Qwen3.8-27B",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.8-27B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "thinking": {
+        "type": "adaptive"
+      }
+    }
+  },
+  "request_sha256": "5b321afb69966d2efb767b2fc60908eafc36db4dd2456bcfab7c137d77b4a2a3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "67dfde72eeebdbffc0dd47bc9281b5edec190c11d3e5dc88aa0c9a230c15436f",
+  "response_bytes": 450,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

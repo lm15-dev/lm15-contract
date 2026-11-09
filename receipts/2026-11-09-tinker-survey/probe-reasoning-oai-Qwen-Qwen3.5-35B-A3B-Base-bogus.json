@@ -1,0 +1,47 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-35B-A3B-Base",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": "bogus"
+    }
+  },
+  "status": 422,
+  "body": {
+    "detail": "Validation Error",
+    "errors": [
+      {
+        "loc": "body -> reasoning_effort -> bool",
+        "msg": "Input should be a valid boolean",
+        "type": "bool_type"
+      },
+      {
+        "loc": "body -> reasoning_effort -> literal['none','minimal','low','medium','high','xhigh','max']",
+        "msg": "Input should be 'none', 'minimal', 'low', 'medium', 'high', 'xhigh' or 'max'",
+        "type": "literal_error"
+      },
+      {
+        "loc": "body -> reasoning_effort -> constrained-float",
+        "msg": "Input should be a valid number, unable to parse string as a number",
+        "type": "float_parsing"
+      }
+    ]
+  },
+  "timestamp": "2026-11-09T14-30-23Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

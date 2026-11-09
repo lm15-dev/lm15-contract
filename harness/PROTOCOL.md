@@ -102,6 +102,15 @@ Shims that predate this field treat unknown fields per JSON convention
 (ignore), so the addition is backward compatible only for cases that do not
 declare it — cases that DO declare `base_url` require a shim that honors it.
 
+`base_models` (additive, 2026-11-09, changes/2026-11-09-tinker-live.md):
+`{"<model id>": "<base model id>"}` on a case means the shim builds the
+adapter with that map (the Chat Completions adapter's `base_models`
+option; `RouterConfig(base_models=...)` passes the same map), on every op
+the case drives (`build_request`, `parse_response`, `replay_stream`,
+`ingest_openai_chat`). A preset's `model_overrides` are matched against
+the model id, then against its base model. Adapters without per-model
+rules ignore it. First case: `tinker.checkpoint_base_model`.
+
 `credential`, `now`, `settings` (additive, 2026-09-03,
 changes/2026-09-03-cloud-hosts.md): on every op that today takes
 `api_key`, the harness MAY instead send `credential`, a spec/auth.md

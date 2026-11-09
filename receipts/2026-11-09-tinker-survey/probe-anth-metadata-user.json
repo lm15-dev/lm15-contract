@@ -1,0 +1,54 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "max_tokens": 300,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "metadata": {
+        "user_id": "lm15-survey"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "msg_c93f4db420d04ee693bf787f215b8970",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user said \"Say ok.\" which is a direct instruction to say \"ok\" (or \"OK\"). I should comply and respond with \"OK\" or \"Ok.\" It's simple and straightforward. No safety concerns. I can just say \"OK.\"",
+        "signature": ""
+      },
+      {
+        "type": "text",
+        "text": "OK."
+      }
+    ],
+    "model": "thinkingmachines/Inkling-Small",
+    "stop_reason": "end_turn",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 60,
+      "cache_creation_input_tokens": 17,
+      "cache_read_input_tokens": 0
+    }
+  },
+  "timestamp": "2026-11-09T14-50-26Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

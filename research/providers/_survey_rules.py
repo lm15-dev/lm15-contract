@@ -544,6 +544,15 @@ def validate_spec(spec: dict[str, Any]) -> list[str]:
             value = models.get(role)
             if value is not None and (not isinstance(value, str) or not value):
                 problems.append(f"models.{role}: a model id or null")
+    redact = spec.get("redact", [])
+    if not isinstance(redact, list) or not all(isinstance(r, str) and r for r in redact):
+        problems.append("redact: a list of regular expressions for account data the server echoes (emails, org ids)")
+    else:
+        for pattern in redact:
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                problems.append(f"redact: {pattern!r} is not a regular expression ({exc})")
     for key in ("console_url", "terms_url"):
         value = spec.get(key)
         if value is not None and (not isinstance(value, str) or not value.startswith("https://")):

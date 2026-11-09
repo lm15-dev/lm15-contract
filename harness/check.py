@@ -831,9 +831,11 @@ def expand_files(value: Any) -> Any:
 
 def host_fields(case: JsonObject) -> JsonObject:
     """``credential`` / ``now`` / ``settings`` a cloud-host case pins
-    (PROTOCOL.md, 2026-09-03); absent on every pre-existing case."""
+    (PROTOCOL.md, 2026-09-03), and ``base_models`` (2026-11-09: the
+    fine-tune → base model map the adapter is built with); absent on every
+    case that does not need them."""
     out: JsonObject = {}
-    for key in ("credential", "now", "settings"):
+    for key in ("credential", "now", "settings", "base_models"):
         if key in case:
             out[key] = expand_files(case[key])
     return out

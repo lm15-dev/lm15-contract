@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-31-55Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "zai-org/GLM-5.3-Flash:peft:262144",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "max"
+      }
+    }
+  },
+  "request_sha256": "3266911e31259a4c934f07c458560a20a9cfb6b6639d99f42c369587eb04ec69",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cb7a94110306bc5cf4180cfd950743351abe960c2353e294f04195091160794e",
+  "response_bytes": 360,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

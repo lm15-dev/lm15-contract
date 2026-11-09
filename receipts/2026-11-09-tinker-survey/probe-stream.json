@@ -1,0 +1,29 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 100,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    }
+  },
+  "status": 200,
+  "body": "data: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:706776583443\",\"object\":\"chat.completion.chunk\",\"created\":1794235140,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:706776583443\",\"object\":\"chat.completion.chunk\",\"created\":1794235140,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":\"The user said \\\"Say ok.\\\" This is a direct instruction to say \\\"ok\\\". I should comply and respond with \\\"Ok\\\" or \\\"OK\\\". There's no hidden trick or safety issue here. Just a simple request.\",\"tool_calls\":null},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:706776583443\",\"object\":\"chat.completion.chunk\",\"created\":1794235140,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"Ok.\",\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:706776583443\",\"object\":\"chat.completion.chunk\",\"created\":1794235140,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":17,\"completion_tokens\":53,\"total_tokens\":70,\"prompt_tokens_details\":{\"cached_tokens\":0}}}\n\ndata: [DONE]\n\n",
+  "timestamp": "2026-11-09T14-38-59Z",
+  "response_headers": {}
+}

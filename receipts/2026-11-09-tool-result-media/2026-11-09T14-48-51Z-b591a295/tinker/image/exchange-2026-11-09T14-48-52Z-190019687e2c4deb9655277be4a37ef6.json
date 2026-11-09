@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-11-09T14-48-52Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": null,
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.fetch_panel:0",
+              "type": "function",
+              "function": {
+                "name": "fetch_panel",
+                "arguments": "{\"label\": \"A\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "functions.fetch_panel:0",
+          "content": [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACOUlEQVR4nO3SQQnEQABFsYoY/1JWTs+VsCLm8PgQiIQ87znTzvtO+74z7ckHCDRNIIEEWpYPEKhPINCwfIBAfQKBdgkkkEDL8gEC9QkEGpYPEKhPINAugQQSaFk+QKA+gUDD8gEC9QkE2iWQQAItywcI1CcQaFg+QKA+gUC7BBJIoGX5AIH6BAINywcI1CcQaJdAAgm0LB8gUJ9AoGH5AIH6BALtEkgggZblAwTqEwg0LB8gUJ9AoF0CCSTQsnyAQH0CgYblAwTqEwi0SyCBBFqWDxCoTyDQsHyAQH0CgXYJJJBAy/IBAvUJBBqWDxCoTyDQLoEEEmhZPkCgPoFAw/IBAvUJBNolkEACLcsHCNQnEGhYPkCgPoFAuwQSSKBl+YDbQHWAW32BO+d3pgkkkEDL8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHCLQtHyDQtnyAQNvyAQJtywcItC0fINC2fIBA2/IBAm3LBwi0LR8g0LZ8gEDb8gECbcsHXPoD2XJoJuic38IAAAAASUVORK5CYII="
+              }
+            }
+          ]
+        }
+      ],
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "fetch_panel",
+            "description": "Retrieve a visual panel by its label.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "A",
+                    "B"
+                  ]
+                }
+              },
+              "required": [
+                "label"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "3aedc0e73f4fb05b7a9d301fd1ebbabf5d7b042c0e196c957331276420018768",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "293bda3015dd183bc09166f84dfec1656a416d1c3ea412b1d5d10d4ab262c47f",
+  "response_bytes": 654,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

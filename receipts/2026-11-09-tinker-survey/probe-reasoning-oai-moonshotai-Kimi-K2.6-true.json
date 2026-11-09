@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "moonshotai/Kimi-K2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ceda2c6d-2134-5e25-bb99-8c2ba1780c37:sample:0:723508987851",
+    "object": "chat.completion",
+    "created": 1794234650,
+    "model": "moonshotai/Kimi-K2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants to know what 17*23 is, and wants just the number as the reply. Let me calculate 17*23.\n\n17 * 23 = 17 * (20 + 3) = 17*20 + 17*3 = 340 + 51 = 391\n\nOr",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 21,
+      "completion_tokens": 64,
+      "total_tokens": 85,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-30-46Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

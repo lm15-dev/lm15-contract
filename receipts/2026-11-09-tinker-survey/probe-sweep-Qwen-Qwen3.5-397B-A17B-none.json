@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-397B-A17B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-98f7f3ec-c70b-5c8e-a1d7-ffe5ff0ad8a8:sample:0:16939062882",
+    "object": "chat.completion",
+    "created": 1794235456,
+    "model": "Qwen/Qwen3.5-397B-A17B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have real-time access to current weather data. For the most accurate and up-to-date weather information in Paris, I recommend checking a trusted weather service like:\n- [Météo-France](https://meteofrance.com/)\n- [Weather.com](https://weather.com)\n- [AccuWeather](https://accuweather.com)\n\nWould you like help finding a specific forecast detail (e.g., weekly outlook, historical averages)? 🌦️",
+          "reasoning_content": "Okay, the user is asking about the weather in Paris and wants me to use a tool. Let me check if I have access to a weather tool. Hmm, looking at my capabilities, I don't actually have real-time data access or tools to fetch current weather information. My knowledge is up to date until 2026, but I can't get live data. I need to inform the user that I can't provide real-time weather updates. Maybe suggest they check a weather website or app. Let me make sure I'm clear about my limitations here. Yeah, I should apologize and direct them to a reliable source.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 21,
+      "completion_tokens": 230,
+      "total_tokens": 251,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-44-14Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

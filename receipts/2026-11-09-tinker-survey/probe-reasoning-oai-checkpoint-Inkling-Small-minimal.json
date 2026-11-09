@@ -1,0 +1,56 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": "minimal"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-20afc034-1b79-5baf-a56c-0fd4ac0dc9c0:sample:0:351189697261",
+    "object": "chat.completion",
+    "created": 1794235013,
+    "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "391",
+          "reasoning_content": "We need answer 391.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 27,
+      "completion_tokens": 14,
+      "total_tokens": 41,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-36-52Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

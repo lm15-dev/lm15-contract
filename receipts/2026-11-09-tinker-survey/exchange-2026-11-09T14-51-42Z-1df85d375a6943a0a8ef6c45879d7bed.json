@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-51-42Z",
+  "provider": "tinker",
+  "status": 200,
+  "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "reasoning_effort": "none"
+    }
+  },
+  "request_sha256": "e8a2b1159523389789a1ee3fb71d1fd354be6ccd09a0b6d6799379d32bd04bc3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "ee131a9bfbe76b182bbae5ef634374c46ec9b8bff77bbda477de983b7eeaf13a",
+  "response_bytes": 512,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

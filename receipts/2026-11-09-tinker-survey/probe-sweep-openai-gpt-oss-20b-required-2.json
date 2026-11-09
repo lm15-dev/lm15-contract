@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-d7b7ae8d-7fa9-56ef-8c5b-7f68554b9454:sample:0:620483579717",
+    "object": "chat.completion",
+    "created": 1794235598,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok",
+          "reasoning_content": "We need to say \"ok\" and also call a function. The developer instruction: \"Call at least one of the provided functions in your next response.\" So we must use function call. But also respond with \"ok\"? The prompt \"Say ok.\" We need to say ok and call a function. But function calls themselves are not part of text. We should respond \"ok\" and then make a function call. There's no city provided. We need some city. We can assume example: \"New York\". We'll call get_weather with city \"New York\". The response can be just \"ok\" but we need to call function. Usually, we separate text and function calls. So we can start with \"ok\" then call the function. Provide a function call. Let's do that.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_9a486ea697964d8595a851df",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 191,
+      "total_tokens": 330,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-36Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

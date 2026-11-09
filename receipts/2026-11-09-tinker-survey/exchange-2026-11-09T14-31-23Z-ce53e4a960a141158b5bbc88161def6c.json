@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-31-23Z",
+  "provider": "tinker",
+  "status": 400,
+  "model": "thinkingmachines/Inkling-Small:peft:262144:sampling-nvfp4",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small:peft:262144:sampling-nvfp4",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "request_sha256": "a5132fda0f0816f93141dd1df100778cab247ea672e755f3b309bdb5860fe3a2",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "dfc2cdd1788c491980ea22a189f10f2c23c9d5b1c045271f28bac18b38fbd7d5",
+  "response_bytes": 217,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

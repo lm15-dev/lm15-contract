@@ -1,0 +1,199 @@
+# SamplingClient
+
+*Generated from tinker 0.38.0 at commit [`4fb85c7`](https://github.com/thinking-machines-lab/tinker/tree/4fb85c7a2be46300f340cedd16ef2fab881c0c38). Source links point at that snapshot.*
+
+## *class* [**tinker.SamplingClient**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L194)(*holder*, *sampling_session_id*, *base_model*, *shadow=False*, *retry_config=None*, *record_stability_info=False*)
+
+Client for text generation and inference from trained or base models.
+
+The SamplingClient lets you generate text tokens from either a base model or from weights you've saved using a TrainingClient. You typically get one by calling `service_client.create_sampling_client()` or `training_client.save_weights_and_get_sampling_client()`.
+
+**Key methods:**
+
+- sample() - generate text completions with customizable parameters
+- compute_logprobs() - get log probabilities for prompt tokens
+
+**Create method parameters:**
+
+- `model_path`: Path to saved model weights (starts with 'tinker://')
+- `base_model`: Name of base model to use for inference (e.g., 'Qwen/Qwen3-8B')
+- `retry_config`: Configuration for retrying failed requests
+
+**Example:**
+
+```python
+sampling_client = service_client.create_sampling_client(base_model="Qwen/Qwen3-8B").result()
+prompt = types.ModelInput.from_ints(tokenizer.encode("The weather today is"))
+params = types.SamplingParams(max_tokens=20, temperature=0.7)
+future = sampling_client.sample(prompt=prompt, sampling_params=params, num_samples=1)
+result = future.result()
+```
+
+**Multi-processing support:** This class is picklable, so it can be passed to a separate process/worker to sample. It is also safe to pass the same instance of SamplingClient to multiple processes/workers. To avoid pickle, pass `get_sampler_handle()` instead and rebuild the client with [`SamplingClient.from_sampler_handle()`](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/samplingclient/index.md).
+
+If you are using Tinker SDK with more than one process you should always create SamplingClient from the main process and then pass it to the other processes/workers. ServiceClient and TrainingClient should always be managed from the main process.
+
+**Parameters:**
+
+- [**holder**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L231) (*[InternalClientHolder](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/internal_client_holder.py#L259)*)
+- [**sampling_session_id**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L233) (*str*)
+- [**base_model**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L234) (*str*)
+- [**shadow**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L235) (*bool*, default: `False`)
+- [**retry_config**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L236) (*[RetryConfig](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/retry_handler.py#L40) | None*, default: `None`)
+- [**record_stability_info**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L237) (*bool*, default: `False`)
+
+### [**sample**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L475)(*prompt*, *num_samples*, *sampling_params*, *include_prompt_logprobs=False*, *topk_prompt_logprobs=0*, *topk_sample_logprobs=0*, *target_prompt_logprobs=None*, *prompt_alt_tokens_k=0*, *prompt_logprobs_last_n=None*)
+
+Generate text completions from the model.
+
+**Parameters:**
+
+- [**prompt**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L477) (*types.[ModelInput](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/modelinput/index.md)*) – The input tokens as ModelInput
+- [**num_samples**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L478) (*int*) – Number of independent samples to generate
+- [**sampling_params**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L479) (*types.[SamplingParams](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/samplingparams/index.md)*) – Parameters controlling generation (temperature, max_tokens, etc.)
+- [**include_prompt_logprobs**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L480) (*bool*, default: `False`) – Whether to include log probabilities for prompt tokens
+- [**topk_prompt_logprobs**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L481) (*int*, default: `0`) – Number of top token log probabilities to return per prompt position
+- [**topk_sample_logprobs**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L482) (*int*, default: `0`) – Number of top token log probabilities to return per sampled position
+- [**target_prompt_logprobs**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L483) (*types.[TensorData](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/tensordata/index.md) | None*, default: `None`) – Token ids whose log probabilities to return at each prompt position, as an int64 [`TensorData`](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/tensordata/index.md) of shape `[len(prompt) - 1, K]`: `target_prompt_logprobs[i][j]` is scored at prompt position `i + 1` (position 0 has no preceding context). Use `-1` for cells you don't need; no logprob is computed for them. Dense (`TensorData.from_torch(ids)`) or sparse CSR (`TensorData.from_torch_sparse(ids, pad_value=-1)`), which sends and returns only the cells you name. The server requires exactly `len(prompt) - 1` rows and at least one id, and bounds the cost, `len(prompt) * distinct ids`, the way it bounds a top-k width. Rows before the first one that names an id are not scored.
+- [**prompt_alt_tokens_k**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L484) (*int*, default: `0`) – Number of tokens to draw, independently and at the request's temperature, from the model's next-token distribution at every prompt position after the first, in the same prefill. Returned as `SampleResponse.prompt_alt_tokens`: two `[len(prompt) - 1, k]` tensors, `tokens` (int64) and `logprobs` (float32), whose row `i` covers prompt position `i + 1` (position 0 has no preceding context), so `tokens[i]` are alternatives to `prompt[i + 1]`. The server bounds `len(prompt) * k` the way it bounds a top-k width.
+- [**prompt_logprobs_last_n**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L485) (*int | None*, default: `None`) – Score only the last N prompt tokens: `prompt_logprobs[-N:]` are scored and earlier entries are `None` (likewise for `topk_prompt_logprobs` rows). The server can then serve the prefix before them from its prefix cache, so scoring a short suffix of a long, recently used prompt costs about as much as the suffix. Requires `include_prompt_logprobs`, and must be between 1 and `len(prompt) - 1`; does not affect `target_prompt_logprobs` or `prompt_alt_tokens_k`. None (the default) scores the whole prompt.
+
+**Returns:**
+
+- An [`APIFuture`](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/apifuture/index.md) containing the [`SampleResponse`](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/sampleresponse/index.md) with generated text and other logprob information. Await it, or call `.result()`.
+
+**Example:**
+
+```python
+prompt = types.ModelInput.from_ints(tokenizer.encode("The weather today is"))
+params = types.SamplingParams(max_tokens=20, temperature=0.7)
+future = sampling_client.sample(prompt=prompt, sampling_params=params, num_samples=1)
+result = future.result()  # or `await future`
+for sequence in result.sequences:
+    print(tokenizer.decode(sequence.tokens))
+```
+
+**Example: log probabilities of chosen token ids at chosen prompt positions.**
+
+`max_tokens=1` makes the request a single prefill of the prompt (one token is still generated, and can be ignored); `target_prompt_logprobs` names the ids to score. Here, we score one candidate token at the last position in the prompt and send in a sparse tensor:
+
+```python
+tokens = tokenizer.encode("Hello world")
+position = len(tokens) - 1
+ids = torch.full((len(tokens) - 1, 1), -1, dtype=torch.int64)
+ids[position - 1, 0] = candidate_token_id  # row i - 1 scores prompt position i
+target = types.TensorData.from_torch_sparse(ids, pad_value=-1)
+future = sampling_client.sample(
+    prompt=types.ModelInput.from_ints(tokens),
+    num_samples=1,
+    sampling_params=types.SamplingParams(max_tokens=1),
+    include_prompt_logprobs=True,
+    target_prompt_logprobs=target,
+)
+result = future.result()
+prompt_logprobs = result.prompt_logprobs  # [len(tokens)], None at position 0
+actual_token_logprob = prompt_logprobs[position]
+target_logprobs = result.target_prompt_logprobs.to_torch()  # [len(tokens) - 1, 1]
+candidate_token_logprob = target_logprobs[position - 1, 0]
+```
+
+**Example: alternatives to every prompt token, drawn from the model's own distribution**
+
+at that position in a single prefill (`max_tokens=1`; the generated token can be ignored):
+
+```python
+tokens = tokenizer.encode("The weather today is")
+result = sampling_client.sample(
+    prompt=types.ModelInput.from_ints(tokens),
+    num_samples=1,
+    sampling_params=types.SamplingParams(max_tokens=1, temperature=1.0),
+    prompt_alt_tokens_k=4,
+).result()
+alt_tokens = result.prompt_alt_tokens.tokens.to_torch()  # [len(tokens) - 1, 4]
+alt_logprobs = result.prompt_alt_tokens.logprobs.to_torch()  # [len(tokens) - 1, 4]
+alternatives_to_last_token = alt_tokens[-1]  # row i covers prompt position i + 1
+```
+
+### [**compute_logprobs**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L648)(*prompt*, *prompt_logprobs_last_n=None*)
+
+Compute log probabilities for prompt tokens.
+
+**Parameters:**
+
+- [**prompt**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L649) (*types.[ModelInput](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/types/modelinput/index.md)*) – The input tokens as ModelInput
+- [**prompt_logprobs_last_n**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L649) (*int | None*, default: `None`) – Score only the last N tokens: `logprobs[-N:]` are scored and earlier entries are None, and the server can serve the prefix before them from its prefix cache. Must be between 1 and `len(prompt) - 1`. None (the default) scores the whole prompt.
+
+**Returns:**
+
+- An [`APIFuture`](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/apifuture/index.md) containing a list of log probabilities for each token in the prompt. None values indicate tokens where log probabilities couldn't be computed or were not requested. Await it, or call `.result()`.
+
+**Example:**
+
+```python
+prompt = types.ModelInput.from_ints(tokenizer.encode("Hello world"))
+future = sampling_client.compute_logprobs(prompt)
+logprobs = future.result()  # or `await future`
+for i, logprob in enumerate(logprobs):
+    if logprob is not None:
+        print(f"Token {i}: logprob = {logprob:.4f}")
+```
+
+**Example: log P(completion | context) for several completions of one long context.**
+
+After the first call, the server can serve the context from its prefix cache:
+
+```python
+context = tokenizer.encode(long_context)
+for completion in completions:
+    completion_tokens = tokenizer.encode(completion)
+    logprobs = sampling_client.compute_logprobs(
+        types.ModelInput.from_ints(context + completion_tokens),
+        prompt_logprobs_last_n=len(completion_tokens),
+    ).result()
+    completion_logprob = sum(logprobs[-len(completion_tokens):])
+```
+
+### [**get_tokenizer**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L722)()
+
+Get the tokenizer for the current model.
+
+**Returns:**
+
+- `PreTrainedTokenizer` compatible with the model
+
+### [**get_base_model**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L737)()
+
+The base model name of this sampler, e.g. "Qwen/Qwen3-8B".
+
+Known since the client was created, so this never waits on the server.
+
+**Returns:** *str*
+
+### [**get_sampler_handle**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L774)()
+
+Get a string handle to this client's sampler.
+
+A pickle-free alternative for passing a SamplingClient to other processes. Every `SamplingClient.from_sampler_handle` call on the handle, in any process and any number of times, creates a new client for the same sampler. The handle carries no credentials.
+
+**Returns:** *str*
+
+### [**from_sampler_handle**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L788)(*handle*, *api_key=None*)
+
+Create a SamplingClient for the sampler behind `handle`.
+
+The new client authenticates with this process's credentials, resolved the same way as for `ServiceClient()`.
+
+**Parameters:**
+
+- [**handle**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L788) (*str*) – A handle from `get_sampler_handle`.
+- [**api_key**](https://github.com/thinking-machines-lab/tinker/blob/4fb85c7a2be46300f340cedd16ef2fab881c0c38/src/tinker/lib/public_interfaces/sampling_client.py#L788) (*str | None*, default: `None`) – API key to use instead of the one resolved from the environment.
+
+**Returns:** *[SamplingClient](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/samplingclient/index.md)*
+
+## Referenced by
+
+- [ServiceClient.create_sampling_client](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/serviceclient/#create_sampling_client)
+- [tinker_cookbook.completers.TinkerTokenCompleter](https://tinker-docs.thinkingmachines.ai/cookbook/api-reference/completers/tinkertokencompleter/index.md)
+- [tinker_cookbook.eval.SamplingClientEvaluator.__call__](https://tinker-docs.thinkingmachines.ai/cookbook/api-reference/eval/samplingclientevaluator/#samplingclientevaluator-call)
+- [TrainingClient.create_sampling_client](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/trainingclient/#create_sampling_client)
+- [TrainingClient.save_weights_and_get_sampling_client](https://tinker-docs.thinkingmachines.ai/tinker/api-reference/trainingclient/#save_weights_and_get_sampling_client)

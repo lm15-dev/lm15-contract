@@ -1,0 +1,19 @@
+{
+  "id": "tinker",
+  "name": "Tinker (Thinking Machines)",
+  "dialect": "openai-chat",
+  "base_url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1",
+  "env_key": "TINKER_API_KEY",
+  "console_url": "https://tinker.thinkingmachines.ai/keys",
+  "terms_url": "https://thinkingmachines.ai/legal/terms/",
+  "litellm_prefix": null,
+  "redact": ["[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "tml:(?:organization_user|organization|project|user):[0-9a-f-]{36}"],
+  "models": {
+    "plain": "thinkingmachines/Inkling-Small",
+    "reasoner": "thinkingmachines/Inkling-Small",
+    "off": "thinkingmachines/Inkling-Small",
+    "replayer": "thinkingmachines/Inkling-Small",
+    "always_on": "openai/gpt-oss-20b"
+  },
+  "_note": "No Tinker chat model is non-reasoning: every one reasons by default (reasoning_survey.py). Inkling-Small is plain because its traces are short enough for the battery's caps; the Qwen and other families are covered by `sweep` and reasoning_survey.py."
+}

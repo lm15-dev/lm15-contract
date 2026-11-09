@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-11-09T14-36-49Z",
+  "provider": "tinker",
+  "status": 400,
+  "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:2/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "reasoning_effort": true
+    }
+  },
+  "request_sha256": "dd03f3e7ef21e601fd274dfdf3cb958df0ad692c26ae5e93d8c20bfb0c9744ef",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "a14ffaa1c81c509df06a8e77e0fc673314af504d246b0905b055f8e41ee65b8f",
+  "response_bytes": 244,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

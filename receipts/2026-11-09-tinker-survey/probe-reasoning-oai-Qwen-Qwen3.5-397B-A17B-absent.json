@@ -1,0 +1,55 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-397B-A17B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-98f7f3ec-c70b-5c8e-a1d7-ffe5ff0ad8a8:sample:0:550834690646",
+    "object": "chat.completion",
+    "created": 1794234613,
+    "model": "Qwen/Qwen3.5-397B-A17B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "Thinking Process:\n\n1.  **Analyze the Request:** The user is asking for the product of two numbers, 17 and 23. They specifically requested that the reply contain *just* the number.\n\n2.  **Calculate the Product:**\n    *   $17 \\times ",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "length",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 25,
+      "completion_tokens": 64,
+      "total_tokens": 89,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-30-12Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

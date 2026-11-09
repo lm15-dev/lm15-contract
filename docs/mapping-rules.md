@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-20 a stream's fragments and final copies; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-20 a stream's fragments and final copies; MAP-21 an error body with only `detail`; MAP-22 a stop sequence the server returns; MAP-23 a catalog entry naming its base model; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -1328,6 +1328,78 @@ no refusal delta); Gemini's `groundingMetadata` on the stream path (read
 by the complete path only; `gap` in the table). Each is an INV-051
 difference that predates this rule; none is pinned by a recorded stream.
 
+## MAP-21 — An error body in FastAPI's shape carries its message in `detail`
+
+**Written 2026-11-09** with the Tinker provider (`changes/2026-11-09-tinker-live.md`;
+maintainer, in session: "support tinker fully and most excellently"); to ratify.
+
+A server built on FastAPI answers errors as `{"detail": "<text>"}`, with no
+`error` envelope (Tinker on both its doors, for 401, 404, 400 and 422;
+the Codex backend's `{"detail": …}` was already read, by that adapter
+only). Every OpenAI-family and Anthropic-family dialect read the envelope
+alone and raised an error whose message was empty: "invalid_request
+(tinker, HTTP 400)", with the provider's explanation ("This model accepts
+true or false") lost.
+
+1. **When the body has no `error` member and its message would be empty**,
+   the message is read from `detail`:
+   - `detail` a non-empty string: that string, trimmed; when the body also
+     has `errors`, a list of `{loc, msg}` (Tinker's validation errors),
+     `": "` and the entries follow;
+   - `detail` a list of `{loc, msg}` (FastAPI's default 422): the entries.
+   An entry reads `<loc>: <msg>`; a list `loc` is joined with `" -> "`;
+   entries are joined with `"; "`; an entry without a string `msg` is
+   skipped. Example: `Validation Error: body -> messages -> 0 -> role:
+   Input should be 'system', 'user', 'assistant' or 'tool'`.
+2. **No provider code is invented.** Such an error has `provider_code`
+   null; classification proceeds as for any other body: the status (MAP
+   class table), MAP-15 (forms may name `code: null`, matching an error
+   with no code), MAP-18.
+3. **Pinned** by `errors/cases/tinker.json` and
+   `errors/cases/tinker-anthropic.json`, whose `expected.message` is the
+   detail as read.
+
+## MAP-22 — `Config.stop` means one thing: the text ends before the sequence
+
+**Written 2026-11-09** with the Tinker provider; to ratify.
+
+The dialects' own rule is that a reply stopped by a stop sequence does not
+contain it (OpenAI, Anthropic), and lm15's client-side stop (MAP-13) cuts
+before it. Tinker stops at the sequence on both doors and returns it at
+the end of the text (stop `[" 7"]` → `"1 2 3 4 5 6 7"`, `finish_reason`
+stop, Anthropic `stop_reason` end_turn — live 2026-11-09).
+
+1. A compat preset says which: `stop_in_text` `"excluded"` (the default,
+   the dialects' rule) or `"included"`, on `OpenAIChatCompat` (overridable
+   per model) and `AnthropicCompat`.
+2. **Under `"included"`, with `Config.stop` set**, the text is cut at the
+   first stop sequence exactly as for a client-side stop: on the complete
+   path in `parse_response`, on the stream path in the stream reader (text
+   after the cut is dropped; every other event passes, because the server
+   has already stopped). The stop sequences are still sent: the server
+   stops there and no token past them is paid for. Nothing is recorded on
+   `response.adaptations`: the reply is made to mean what `Config.stop`
+   means, nothing the caller asked for is changed.
+3. Pinned by `tinker.stop_sequence`, `tinker.streaming_stop_sequence` and
+   the `tinker-anthropic` pair (goldens: `1 2 3 4 5 6`).
+
+## MAP-23 — A catalog entry that names its base model is a fine-tune
+
+**Written 2026-11-09** with the Tinker provider; to ratify.
+
+Tinker's `GET /models` lists the account's sampler checkpoints, each with
+a non-standard `base_model` (`"Qwen/Qwen3.5-4B"`). A model list entry
+(Chat Completions or any dialect sharing its catalog reader) whose
+`base_model` is a non-empty string different from its own id becomes
+`ModelInfo.origin = {type: "fine-tune", base_model: <it>}`; the verbatim
+entry stays in `origin.provider_data` as always. No other provider's
+catalog carried the field on 2026-11-09 (every pinned models body was
+searched). The entry is still ADVISORY metadata (`docs/model-hydration.md`):
+it never changes what `build_request` produces by itself. A caller who
+wants a fine-tune to follow its base model's per-model rules says so
+(`RouterConfig(base_models=...)`, `harness/PROTOCOL.md` `base_models`).
+Pinned by `tinker.models` (golden: three checkpoints and their bases).
+
 ---
 
 History: MAP-1 and MAP-2 were implicit in the reference adapters; they were
@@ -1390,3 +1462,7 @@ tool calls arriving with empty inputs on the Codex backend in every SDK;
 the corpus had no stream with two calls, and no harness check compared a
 stream with its own final copy
 (`lm15-contract/changes/2026-11-05-stream-final-copy.md`).
+MAP-21, MAP-22 and MAP-23 were written on 2026-11-09 with the Tinker
+provider: its FastAPI error bodies lost their message in every dialect, it
+returns the stop sequence it stopped at, and its catalog names each
+checkpoint's base model (`lm15-contract/changes/2026-11-09-tinker-live.md`).

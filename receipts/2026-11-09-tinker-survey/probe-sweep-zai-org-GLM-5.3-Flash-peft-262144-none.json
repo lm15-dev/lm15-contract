@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "zai-org/GLM-5.3-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-ef2e8ff9-ee09-512c-9f71-c89e551c43cc:sample:0:897916767305",
+    "object": "chat.completion",
+    "created": 1794235664,
+    "model": "zai-org/GLM-5.3-Flash:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have any tools available in this conversation, so I'm unable to check the current weather in Paris or look up real-time information. There's no weather API or search function connected here for me to use.\n\nTo get current conditions in Paris, I'd suggest checking:\n- A weather site like weather.com, AccuWeather, or Météo-France (the official French meteorological service)\n- Your phone's built-in weather app\n- Just searching \"Paris weather\" in a search engine\n\nIf you have questions about Paris's typical climate by season, I'm happy to help with that from general knowledge!",
+          "reasoning_content": "The user is asking about the weather in Paris and explicitly says \"Use the tool.\" However, I need to check whether I actually have a tool available to me. Looking at my context, there are no tools defined. There's no function calling capability provided in this conversation—no tool definitions, no functions block, nothing.\n\nThe system prompt doesn't mention any tools either. So the user seems to think I have access to a weather tool, but I don't. I should be honest about this rather than hallucinating that I called a tool or making up weather data.\n\nI could:\n1. Fabricate a tool call or weather data — bad, this would be dishonest\n2. Explain I don't have a weather tool available and offer alternatives\n\nOption 2 is correct. I should clearly explain that no tool is available in this conversation, and I can't provide real-time weather data. I can suggest they check a weather website or app. I shouldn't make up current weather conditions since weather changes constantly and any specific numbers I gave would be fabricated.\n\nI could mention general Paris climate information if helpful, but the user wants current weather, so the main point is that I can't access that without a tool.\n\nFormat: Should be brief and conversational. A short paragraph or two. No need for headers or lists. Maybe a short suggestion of where to check.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 23,
+      "completion_tokens": 404,
+      "total_tokens": 427,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-40Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

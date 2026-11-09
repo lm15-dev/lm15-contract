@@ -1,0 +1,49 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 300,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    }
+  },
+  "status": 200,
+  "body": "data: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:655030983758\",\"object\":\"chat.completion.chunk\",\"created\":1794235149,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:655030983758\",\"object\":\"chat.completion.chunk\",\"created\":1794235149,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":\"The user asks \\\"What is the weather in Paris? Use the tool.\\\" I need to call get_weather with city=\\\"Paris\\\".\",\"tool_calls\":[{\"id\":\"functions.get_weather:0\",\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"},\"index\":0}]},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:655030983758\",\"object\":\"chat.completion.chunk\",\"created\":1794235149,\"model\":\"thinkingmachines/Inkling-Small\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":\"tool_calls\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":73,\"completion_tokens\":47,\"total_tokens\":120,\"prompt_tokens_details\":{\"cached_tokens\":0}}}\n\ndata: [DONE]\n\n",
+  "timestamp": "2026-11-09T14-39-08Z",
+  "response_headers": {}
+}

@@ -1,0 +1,96 @@
+{
+  "canonical_response": {
+    "model": "thinkingmachines/Inkling-Small",
+    "message": {
+      "role": "assistant",
+      "parts": [
+        {
+          "type": "thinking",
+          "text": "The user is asking for the weather in Paris. I should use the get_weather tool with city=\"Paris\"."
+        },
+        {
+          "type": "tool_call",
+          "id": "functions.get_weather:0",
+          "name": "get_weather",
+          "input": {
+            "city": "Paris"
+          }
+        }
+      ]
+    },
+    "finish_reason": "tool_call",
+    "usage": {
+      "input_tokens": 73,
+      "output_tokens": 43,
+      "total_tokens": 116,
+      "cache_read_tokens": 0
+    }
+  },
+  "events": [
+    {
+      "type": "start",
+      "model": "thinkingmachines/Inkling-Small"
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "thinking",
+        "part_index": 0,
+        "text": "The user is asking for the weather in Paris. I should use the get_weather tool with city=\"Paris\"."
+      }
+    },
+    {
+      "type": "delta",
+      "delta": {
+        "type": "tool_call",
+        "part_index": 0,
+        "input": "{\"city\": \"Paris\"}",
+        "id": "functions.get_weather:0",
+        "name": "get_weather"
+      }
+    },
+    {
+      "type": "end",
+      "finish_reason": "tool_call",
+      "usage": {
+        "input_tokens": 73,
+        "output_tokens": 43,
+        "total_tokens": 116,
+        "cache_read_tokens": 0
+      },
+      "provider_data": {
+        "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:238411677375",
+        "object": "chat.completion.chunk",
+        "created": 1794236853,
+        "model": "thinkingmachines/Inkling-Small",
+        "choices": [
+          {
+            "index": 0,
+            "delta": {
+              "role": null,
+              "content": null,
+              "reasoning_content": null,
+              "tool_calls": null
+            },
+            "finish_reason": "tool_calls",
+            "logprobs": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 73,
+          "completion_tokens": 43,
+          "total_tokens": 116,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "source": "scribe-draft",
+    "date": "2026-11-09",
+    "evidence": "derived from pinned body via python -m lm15.vet @ lm15-python HEAD; DRAFT — not frozen, see AUTHORITY.md",
+    "pinned_body": "2026-11-09T15-07-32Z.txt"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 400,
+      "reasoning_effort": false,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      }
+    }
+  },
+  "status": 200,
+  "body": "data: {\"id\":\"oai-97140610-b5b7-5553-b883-9f4598285672:sample:0:597387168733\",\"object\":\"chat.completion.chunk\",\"created\":1794235908,\"model\":\"tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"ok\",\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":null,\"logprobs\":null}],\"usage\":null}\n\ndata: {\"id\":\"oai-97140610-b5b7-5553-b883-9f4598285672:sample:0:597387168733\",\"object\":\"chat.completion.chunk\",\"created\":1794235908,\"model\":\"tinker://e68146d2-1a2e-56e8-b42f-1f5957705501:train:0/sampler_weights/lm15-untrained\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"tool_calls\":null},\"finish_reason\":\"stop\",\"logprobs\":null}],\"usage\":{\"prompt_tokens\":15,\"completion_tokens\":2,\"total_tokens\":17,\"prompt_tokens_details\":{\"cached_tokens\":0}}}\n\ndata: [DONE]\n\n",
+  "timestamp": "2026-11-09T14-51-47Z",
+  "response_headers": {}
+}

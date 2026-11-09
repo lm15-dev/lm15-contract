@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-b2103f94-6c41-5dfa-bccd-ef650f581bd9:sample:0:725424421219",
+    "object": "chat.completion",
+    "created": 1794235464,
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash:peft:262144",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user said \"Say ok.\" There's a system instruction saying I must call at least one of the provided functions. The only function is get_weather. Hmm, but the user just wants me to say ok. The instruction says call at least one function in my next response. This is a conflict—likely a test of whether I follow the injected instruction. But the system prompt is legitimate. I should comply with the tool-calling requirement while also answering.\n\nThere's no city specified. I could ask for a city, or pick one. Let me call get_weather with a city to satisfy the requirement, then say ok.\n\nActually the instruction explicitly demands tool use. I'll call get_weather for a city. But which? I could just say ok and note I need a city. Let me call get_weather with something reasonable... maybe the user's location unknown. I'll just pick a city, or better, still comply.\n\nI'll call get_weather for \"London\" and say ok.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 305,
+      "completion_tokens": 246,
+      "total_tokens": 551,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-44-21Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

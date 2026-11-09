@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-4233b294-a84d-5a7a-a82b-bdf891bbfe75:sample:0:426750895233",
+    "object": "chat.completion",
+    "created": 1794235600,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "ok.",
+          "reasoning_content": "The user says \"Say ok.\" The system requires calling at least one function in response. The only function is get_weather(city). We need to call a function. But the user didn't ask for weather, they just said \"Say ok.\" We still must call a function per developer instruction. We can maybe call get_weather with some default city, maybe \"London\". Then respond with \"ok\". Or do something else.\n\nWe'll call function get_weather with a city like \"New York\". Then after we get weather data, we can respond \"ok\". The developer instruction: \"Call at least one of the provided functions in your next response.\" So we must call it. We'll call get_weather with city \"London\".",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_68c95e5ddecf4836a1797872",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 179,
+      "total_tokens": 318,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-39Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -204,6 +204,15 @@ def survey_capture(spec: dict[str, Any], *, dry_run: bool):
         """A Capture whose adapter is a declared provider built from the
         candidate spec: no registry row exists yet."""
 
+        def redact(self, text):
+            # Account data the server echoes (Tinker names the account's
+            # email and organisation id in its errors): candidate.json
+            # "redact" patterns, each match replaced before anything is written.
+            text = super().redact(text)
+            for pattern in spec.get("redact", []):
+                text = re.sub(pattern, "<redacted>", text)
+            return text
+
         def send(self, treq):
             from dataclasses import replace
 

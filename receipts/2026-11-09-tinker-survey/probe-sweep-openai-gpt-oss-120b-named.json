@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-120b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": {
+        "type": "function",
+        "function": {
+          "name": "get_weather"
+        }
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-4233b294-a84d-5a7a-a82b-bdf891bbfe75:sample:0:505234165350",
+    "object": "chat.completion",
+    "created": 1794235604,
+    "model": "openai/gpt-oss-120b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "We need to follow developer instruction: \"Call the function named \"get_weather\" in your next response.\" The user says \"Say ok.\" We need to comply with developer instruction to call the function. Also user wants \"ok\". According to policy, we must call the function. We can also include a textual acknowledgment? The prior instruction says next response must call function, so we must call function, not give text. Possibly we can wrap in a function call. So we call get_weather with some city? We need a city parameter. But we don't know which city. Maybe we can ask? But we must call function; we need a city string. We could use a placeholder like \"New York\". But that would give weather info. The user only said \"Say ok.\" But developer instruction says call function. So we call function with a city. Could choose generic like \"London\". Provide function call.\n\nThus final response should be a function call.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_77054c37bc13451c8d20662d",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 228,
+      "total_tokens": 367,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-41Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

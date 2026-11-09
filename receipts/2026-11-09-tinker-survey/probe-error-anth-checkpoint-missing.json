@@ -1,0 +1,30 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ]
+    }
+  },
+  "status": 404,
+  "body": {
+    "detail": "Weights not found for model_path tinker://00000000-0000-5000-8000-000000000000:train:0/sampler_weights/none"
+  },
+  "timestamp": "2026-11-09T14-50-51Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,284 @@
+[
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "text",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "magenta",
+        "cyan",
+        "yellow",
+        "blue",
+        "red",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "magenta",
+        "cyan",
+        "yellow",
+        "blue",
+        "red",
+        "green"
+      ]
+    },
+    "output": "{\"A\":[\"magenta\",\"cyan\",\"yellow\",\"blue\",\"red\",\"green\"]}",
+    "usage": {
+      "prompt_tokens": 205,
+      "completion_tokens": 57,
+      "total_tokens": 262,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "wall_s": 1.8
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "mixed",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "blue",
+        "cyan",
+        "magenta",
+        "yellow",
+        "green",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "blue",
+        "cyan",
+        "magenta",
+        "yellow",
+        "green",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"blue\",\"cyan\",\"magenta\",\"yellow\",\"green\",\"red\"]}",
+    "usage": {
+      "prompt_tokens": 218,
+      "completion_tokens": 74,
+      "total_tokens": 292,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "wall_s": 2.54
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "image",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "red",
+        "cyan",
+        "yellow",
+        "blue",
+        "magenta",
+        "green"
+      ]
+    },
+    "expected": {
+      "A": [
+        "red",
+        "cyan",
+        "yellow",
+        "blue",
+        "magenta",
+        "green"
+      ]
+    },
+    "output": "{\"A\":[\"red\",\"cyan\",\"yellow\",\"blue\",\"magenta\",\"green\"]}",
+    "usage": {
+      "prompt_tokens": 206,
+      "completion_tokens": 58,
+      "total_tokens": 264,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "wall_s": 2.62
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "pdf",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 422,
+    "outcome": "tool_result_rejected",
+    "detail": "{\"detail\":\"Validation Error\",\"errors\":[{\"loc\":\"body -> messages -> 2 -> content -> str\",\"msg\":\"Input should be a valid string\",\"type\":\"string_type\"},{\"loc\":\"body -> messages -> 2 -> content -> list[union[TextContentPart,ImageUrlContentPart,InputAudioContentPart]] -> 0 -> TextContentPart -> type\",\"msg\":\"Input should be 'text'\",\"type\":\"literal_error\"},{\"loc\":\"body -> messages -> 2 -> content -> list[union[TextContentPart,ImageUrlContentPart,InputAudioContentPart]] -> 0 -> TextContentPart -> text\",\"msg\":\"Field required\",\"type\":\"missing\"},{\"loc\":\"body -> messages -> 2 -> content -> list[union[TextContentPart,ImageUrlContentPart,InputAudioContentPart]] -> 0 -> ImageUrlContentPart -> type\",\"msg\":\"Input should be 'image_url'\",\"type\":\"literal_error\"},{\"loc\":\"body -> messages -> 2 -> content -> list[union[TextContentPart,ImageUrlContentPart,InputAudioContentPart]] -> 0 -> ImageUrlContentPart -> image_url\",\"msg\":\"Field required\",\"type\":\"missing\"},{\"loc\":\"body -> messages -> 2 -> content -> list[union[TextContentPart,ImageUrlContentPart,InputAudioContentPart]] -> 0 -> InputAudioContentPart -> t",
+    "wall_s": 0.73
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "pair",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+        "red",
+        "green"
+      ],
+      "B": [
+        "yellow",
+        "magenta",
+        "cyan",
+        "green",
+        "blue",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+        "red",
+        "green"
+      ],
+      "B": [
+        "yellow",
+        "magenta",
+        "cyan",
+        "green",
+        "blue",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"yellow\",\"blue\",\"magenta\",\"cyan\",\"red\",\"green\"],\"B\":[\"yellow\",\"magenta\",\"cyan\",\"green\",\"blue\",\"red\"]}",
+    "usage": {
+      "prompt_tokens": 276,
+      "completion_tokens": 151,
+      "total_tokens": 427,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "wall_s": 2.85
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "error",
+    "inference_calls": 2,
+    "kind": "raw-wire-discovery-probe",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "turn2_status": 200,
+    "outcome": "error_acknowledged",
+    "answer": {
+      "A": null,
+      "note": "panel service unavailable (HTTP 503)"
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "yellow",
+        "red",
+        "green",
+        "magenta",
+        "blue"
+      ]
+    },
+    "output": "{\"A\":null,\"note\":\"panel service unavailable (HTTP 503)\"}",
+    "usage": {
+      "prompt_tokens": 214,
+      "completion_tokens": 38,
+      "total_tokens": 252,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      }
+    },
+    "wall_s": 1.22
+  },
+  {
+    "provider": "tinker",
+    "model": "thinkingmachines/Inkling-Small",
+    "dialect": "openai-chat",
+    "cell": "control",
+    "inference_calls": 1,
+    "kind": "unpatched-sdk-call",
+    "sdk_fixture": false,
+    "cost_usd": null,
+    "turn1_status": 200,
+    "outcome": "content_received",
+    "answer": {
+      "A": [
+        "cyan",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "red"
+      ]
+    },
+    "expected": {
+      "A": [
+        "cyan",
+        "green",
+        "blue",
+        "yellow",
+        "magenta",
+        "red"
+      ]
+    },
+    "output": "{\"A\":[\"cyan\",\"green\",\"blue\",\"yellow\",\"magenta\",\"red\"]}",
+    "usage": {
+      "prompt_tokens": 105,
+      "completion_tokens": 159,
+      "total_tokens": 264,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "wall_s": 1.73
+  }
+]

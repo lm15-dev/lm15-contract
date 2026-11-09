@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-11-09T14-48-57Z",
+  "status": 200,
+  "latency_s": 0.99,
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Call fetch_panel with label \"A\" (once). When the tool result arrives, inspect the panel. Each panel is a grid of 3 columns and 2 rows of solid colors. Read it left to right across the top row, then left to right across the bottom row. Use only the names red, green, blue, yellow, magenta, cyan. Return ONLY JSON {\"A\":[six color names]}. Do not guess before receiving the panel."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "functions.fetch_panel:0",
+              "name": "fetch_panel",
+              "input": {
+                "label": "A"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "functions.fetch_panel:0",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Panel returned by the requested tool."
+                },
+                {
+                  "type": "image",
+                  "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAMAAAACACAIAAADS5vE8AAACZUlEQVR4nO3SQQkAMRTE0Iqofykrp+dK6Hr4hxAIxMAMb9271e1P3jnqFi4gQOoCREcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFBEgeLSBA8mgBAZJHCwiQPFpAgOTRAgIkjxYQIHm0gADJowUESB4tIEDyaAEBkkcLCJA8WkCA5NECAiSPFhAgebSAAMmjBQRIHi0gQPJoAQGSRwsIkDxaQIDk0QICJI8WECB5tIAAyaMFTAGdf4I7+sJZ/H+zAhSgAJnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/AKnj/wuQOv6/WQ9KjmgmNA8AaAAAAABJRU5ErkJggg=="
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 1600,
+      "tools": [
+        {
+          "name": "fetch_panel",
+          "description": "Retrieve a visual panel by its label.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "response_sha256": "1ae20472f6775ba3692fc813ddb7bef1dd445fa303bdef35061c88b17008fa2d",
+  "response_headers": {
+    "Content-Type": "application/json"
+  },
+  "provenance": "raw-body patched: first wire + verbatim model turn + tool results; NOT current SDK output"
+}

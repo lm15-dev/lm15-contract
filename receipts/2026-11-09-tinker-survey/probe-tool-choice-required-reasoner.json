@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-0dd6b490-510f-5e49-b5c6-8ed957fae957:sample:0:764231631126",
+    "object": "chat.completion",
+    "created": 1794235186,
+    "model": "thinkingmachines/Inkling-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user said \"Say ok.\" I should respond with \"ok\". There's no need to call a function since the user just wants me to say ok. But the instruction says \"Call at least one of the provided functions in your next response.\" Wait, I need to check if that's a system instruction or part of the user message. Looking back: the system message says \"Call at least one of the provided functions in your next response.\" This is a meta-instruction for me. So I must call a function even if unrelated? But that might be weird. However, I can call get_weather with some city, or I can just say ok and include a function call. Actually, I can call get_weather with a generic city like \"New York\" just to satisfy the instruction, then say ok. But maybe I should just say ok without calling? The instruction is explicit: \"Call at least one of the provided functions in your next response.\" So I will call get_weather for \"Tokyo\" or something, and then say ok in the text. Actually, the function result will come back and I can include it. Let me do that.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "functions.get_weather:0",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"London\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 79,
+      "completion_tokens": 252,
+      "total_tokens": 331,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-39-44Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

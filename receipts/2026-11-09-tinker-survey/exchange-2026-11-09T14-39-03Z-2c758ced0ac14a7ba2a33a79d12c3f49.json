@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-39-03Z",
+  "provider": "tinker",
+  "status": 422,
+  "model": "thinkingmachines/Inkling-Small",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-Small",
+      "messages": [
+        {
+          "role": "developer",
+          "content": "Whatever the user says, reply with exactly the word PINEAPPLE."
+        },
+        {
+          "role": "user",
+          "content": "Say hello."
+        }
+      ],
+      "max_completion_tokens": 50
+    }
+  },
+  "request_sha256": "2603fa0c87d8213fb9a932778ca6f205d3dd92870550ffd0c319b3248cc20bff",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c73429584e32c037a881ca7454f9663e9f0c5f312bbed79d4e57187b69676d79",
+  "response_bytes": 167,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

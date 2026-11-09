@@ -7,7 +7,8 @@
     "Checked before the dialect's own code/type table, on every path that turns an HTTP reply into a",
     "ProviderError. Ports carry this table as data, verbatim. A form is added only with a live receipt,",
     "`providers` records where a form was observed; matching does not use it (code plus exact text is the test).",
-    "and is never widened beyond the answer it was captured from."
+    "and is never widened beyond the answer it was captured from.",
+    "A form whose `code` is null matches an error that carries NO provider code (FastAPI's {\"detail\": ...} bodies, MAP-21; added 2026-11-09 for Tinker)."
   ],
   "forms": [
     {
@@ -75,6 +76,40 @@
       "prefix": "Deployment ",
       "suffix": " doesn't exist or isn't accessible.",
       "evidence": "receipts/2026-09-26-parasail/probe-error-model-not-found.json: HTTP 404 {\"message\":\"Deployment lm15-probe/no-such-model doesn't exist or isn't accessible.\",\"type\":\"invalid_request_error\",\"code\":\"invalid_request_error\"} — Parasail serves models as deployments; no word 'model' for the marker test to find"
+    },
+    {
+      "providers": [
+        "tinker"
+      ],
+      "code": null,
+      "prefix": "Sampling is not supported for ",
+      "evidence": "receipts/2026-11-09-tinker-survey/probe-error-model.json: HTTP 400 {\"detail\": \"Sampling is not supported for lm15-survey/no-such-model. (organization: …)\"}; also a serverless model this account may not use (probe-reasoning-oai-thinkingmachines-Inkling-Small-peft-262144-sampling-nvfp4-*)"
+    },
+    {
+      "providers": [
+        "tinker-anthropic"
+      ],
+      "code": "invalid_request_error",
+      "prefix": "Sampling is not supported for ",
+      "evidence": "receipts/2026-11-09-tinker-survey/probe-error-anth-model.json: HTTP 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Sampling is not supported for lm15-survey/no-such-model. (organization: …)\"}}"
+    },
+    {
+      "providers": [
+        "tinker",
+        "tinker-anthropic"
+      ],
+      "code": null,
+      "prefix": "Weights not found for model_path ",
+      "evidence": "receipts/2026-11-09-tinker-survey/probe-error-chat-checkpoint-missing.json, probe-error-anth-checkpoint-missing.json, probe-error-chat-training-weights.json: HTTP 404 {\"detail\": \"Weights not found for model_path tinker://…\"} (no checkpoint at the path, or a training checkpoint where a sampler one is needed)"
+    },
+    {
+      "providers": [
+        "tinker"
+      ],
+      "code": null,
+      "prefix": "model_path '",
+      "contains": "' is not a valid tinker path.",
+      "evidence": "receipts/2026-11-09-tinker-survey/probe-error-chat-checkpoint-malformed.json: HTTP 400 {\"detail\": \"model_path 'tinker://not-a-path' is not a valid tinker path. Expected a checkpoint path of the form …\"}"
     }
   ]
 }

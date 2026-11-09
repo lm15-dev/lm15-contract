@@ -27,7 +27,10 @@ from pathlib import Path
 
 # bindings whose preset is `images`: documents raise, pinned by the reference's
 # tests and the ledger's document 400s (no server accepted a document there)
-IMAGES_ONLY = ("xai", "moonshotai", "moonshotai-responses", "moonshotai-anthropic", "zai", "fireworks", "parasail")
+# tinker: a PDF in a tool result is a 422 on the chat door and accepted-but-not-received on the
+# Messages door (receipts/2026-11-09-tool-result-media/): images only, documents refused client-side.
+IMAGES_ONLY = ("xai", "moonshotai", "moonshotai-responses", "moonshotai-anthropic", "zai", "fireworks", "parasail",
+               "tinker", "tinker-anthropic")
 
 # binding → why its cell is open (blank by declaration, not by omission)
 OPEN: dict[str, str] = {

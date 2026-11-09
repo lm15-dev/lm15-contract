@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "Qwen/Qwen3.5-397B-A17B",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "auto"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-98f7f3ec-c70b-5c8e-a1d7-ffe5ff0ad8a8:sample:0:70623016265",
+    "object": "chat.completion",
+    "created": 1794235458,
+    "model": "Qwen/Qwen3.5-397B-A17B",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Ok.",
+          "reasoning_content": "Thinking Process:\n\n1.  **Analyze the Request:** The user is asking me to \"Say ok.\" This is a simple instruction to confirm understanding or compliance.\n2.  **Determine the Action:** I need to output the text \"ok\" or a variation like \"Okay\" or \"Ok.\"\n3.  **Check for Tools:** There are no tools required for this simple acknowledgment.\n4.  **Formulate the Output:** Keep it simple and direct. \"Ok.\" or \"Okay.\"\n5.  **Final Decision:** \"Ok.\" is the most direct response to \"Say ok.\"\n\n*Self-Correction/Refinement:* The prompt is extremely simple. No need for elaboration. Just output the requested text.\n\n*Output:* Ok.cw",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 271,
+      "completion_tokens": 168,
+      "total_tokens": 439,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-44-17Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

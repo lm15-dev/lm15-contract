@@ -68,6 +68,12 @@ are not proof of support.
 
 `Usage` counters are `absent`, not zero, when unreported (INV-029). Go uses pointers, Rust `Option`, TypeScript `undefined`. Never `0`.
 
+**Model strings (2026-11-09, `changes/2026-11-09-tinker-live.md`; to ratify).** A model string is split at its first `:`; a routable head is the provider (rung 1). Three additions, in every SDK:
+
+- **A URI is one name.** A string whose first `:` is followed by `//` (`tinker://<run>:train:0/sampler_weights/<name>`) is never `provider:model`, whatever its scheme, in the router (rung 1 and its "did you mean" hint) and in an adapter's own prefix strip (`tinker:` is stripped once from `tinker:tinker://…`, never from `tinker://…`). It falls through whole to the catalog and rule rungs; the `tinker://` rule (data, `tables/providers.json` routing) routes it. `openai://x` routes nowhere.
+- **A registry entry's alias routes.** `ProviderDefinition.aliases` on a built-in entry (first: `thinkingmachines` on `tinker`, models.dev's id) is accepted as `alias:model` and as litellm's `alias/model`, like a declared provider's, and a declared provider may not take it (one spelling, one door). Exported in `tables/providers.json` (`aliases`).
+- **A fine-tune's base model is declared, never discovered.** `RouterConfig(base_models={model id: base model id})` (TS `baseModels`, Go `WithBaseModels`, Rust `RouterConfig::base_models`, Julia/R `base_models`) reaches every Chat Completions adapter the router builds (and the adapter's own `base_models` option): a compat preset's `model_overrides` are matched against the model id first, then its base model's id. lm15 never asks a server; the provider's catalog states it (`ModelInfo.origin.base_model`, MAP-23).
+
 ## Providers, direct
 
 | Concept | Python | TypeScript | Go | Rust |

@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-11-09T14-31-05Z",
+  "provider": "tinker-anthropic",
+  "status": 200,
+  "model": "deepseek-ai/DeepSeek-V4.1-Flash:peft:262144",
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/anthropic/api/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$TINKER_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash:peft:262144",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is 17*23? Reply with just the number."
+        }
+      ],
+      "max_tokens": 64,
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "request_sha256": "b302b89351119f09ec37599f361d37705042b83c0d5fae28810f27a6deefebbd",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c96d26a8931f4eb059e1533d9d8cb3e0cb9af34b46e03ab1764d9eba4ccf809d",
+  "response_bytes": 415,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

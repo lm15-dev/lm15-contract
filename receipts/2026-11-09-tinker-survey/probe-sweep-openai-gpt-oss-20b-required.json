@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "required"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-d7b7ae8d-7fa9-56ef-8c5b-7f68554b9454:sample:0:751875641338",
+    "object": "chat.completion",
+    "created": 1794235588,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "User says: \"Say ok.\" I must call at least one of the provided functions. There's only get_weather. So I can call get_weather for some city (maybe \"San Francisco\") and then respond \"ok.\" But they want me to say ok... But instructions: \"Call at least one of the provided functions in your next response.\" So I must call the function to get weather. Probably I should do something like:\n\n{\n  \"name\": \"get_weather\",\n  \"arguments\": {\n    \"city\": \"London\"\n  }\n}\n\nThen presumably reply \"ok.\" The function call is the JSON. According to instruction \"call at least one of the provided functions in your next response.\" So yes. Just call get_weather. Then in same response? \"Ok.\"? But you typically respond with function call JSON. Then the system will handle. The user wanted \"Say ok.\" But we must call function. So I do the function call JSON. Then likely add a message \"Ok.\"? I think the correct approach: first function call JSON. Then maybe system will provide result. But user said \"Say ok.\" We might respond with \"Ok.\" after function call, to satisfy user. But typical tool usage: We just provide function call JSON. But we can also add a normal message after? I'm not sure. The instruction: \"Call at least one of the provided functions in your next response.\" So I must include a tool invocation in the next response. I can include a normal text message and then a function call. Like:\n\nOk.\n\nThen function call.\n\nBut safe approach: just call function. Let's do:\n\n{\n\"name\":\"get_weather\",\n\"arguments\":{\"city\":\"New York\"}\n}\n\nThat's it.",
+          "name": null,
+          "tool_calls": [
+            {
+              "id": "call_157aec3b0a0c46148ec92c91",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"New York\"}"
+              }
+            }
+          ],
+          "tool_call_id": null
+        },
+        "finish_reason": "tool_calls",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 139,
+      "completion_tokens": 382,
+      "total_tokens": 521,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-46-25Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

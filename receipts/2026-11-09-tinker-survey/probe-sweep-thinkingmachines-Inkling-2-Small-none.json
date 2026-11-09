@@ -1,0 +1,76 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "thinkingmachines/Inkling-2-Small",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the weather in Paris? Use the tool."
+        }
+      ],
+      "max_completion_tokens": 2000,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ]
+            }
+          }
+        }
+      ],
+      "tool_choice": "none"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "oai-04320755-02fb-5b5f-ab4a-5c9dfa8d35d4:sample:0:55175434350",
+    "object": "chat.completion",
+    "created": 1794235647,
+    "model": "thinkingmachines/Inkling-2-Small",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don’t have a live weather tool available in this chat, so I can’t verify current conditions in Paris right now. Please check Météo-France, the European Centre for Medium-Range Weather Forecasts, or a weather app for real-time data.\n\nIn general, Paris has a temperate oceanic climate: mild, damp winters; cool to warm summers; frequent light rain; and changeable skies year-round. If you tell me the date/season or what you need it for—travel, clothing, events—I can give more specific guidance.",
+          "reasoning_content": "The user asks weather in Paris and says use the tool. But no actual weather tool is provided in prompt. We have only functions. Need answer maybe explain can't access live weather. But maybe hidden tools? Only functions. We should not fabricate current weather. Need maybe say I don't have a live weather tool available; based on general climate Paris varies; check reliable source. Since user specifically requests use tool, but no tool exists. Need be honest. Could provide seasonal typical weather and how to check. Need final concise. Ensure not claim current conditions. Maybe mention if they mean typical: oceanic/temperate, mild winters, cool summers. No live data.",
+          "name": null,
+          "tool_calls": null,
+          "tool_call_id": null
+        },
+        "finish_reason": "stop",
+        "logprobs": null
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 26,
+      "completion_tokens": 271,
+      "total_tokens": 297,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "timestamp": "2026-11-09T14-47-24Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

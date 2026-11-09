@@ -1,0 +1,29 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://tinker.thinkingmachines.dev/services/tinker-prod/oai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $TINKER_API_KEY"
+    },
+    "body": {
+      "model": "tinker://not-a-path",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Say ok."
+        }
+      ],
+      "max_completion_tokens": 10
+    }
+  },
+  "status": 400,
+  "body": {
+    "detail": "model_path 'tinker://not-a-path' is not a valid tinker path. Expected a checkpoint path of the form 'tinker://<model_id>/sampler_weights/<name>' (sampling requires a sampler weights checkpoint)."
+  },
+  "timestamp": "2026-11-09T14-51-51Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}
