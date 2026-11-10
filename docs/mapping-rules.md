@@ -1332,7 +1332,7 @@ difference that predates this rule; none is pinned by a recorded stream.
 ## MAP-21 — An error body in FastAPI's shape carries its message in `detail`
 
 **Written 2026-11-09** with the Tinker provider (`changes/2026-11-09-tinker-live.md`;
-maintainer, in session: "support tinker fully and most excellently"); to ratify.
+maintainer, in session: "support tinker fully and most excellently"); ratified 2026-11-10 ("yes i approve the rules").
 
 A server built on FastAPI answers errors as `{"detail": "<text>"}`, with no
 `error` envelope (Tinker on both its doors, for 401, 404, 400 and 422;
@@ -1362,7 +1362,7 @@ true or false") lost.
 
 ## MAP-22 — `Config.stop` means one thing: the text ends before the sequence
 
-**Written 2026-11-09** with the Tinker provider; to ratify.
+**Written 2026-11-09** with the Tinker provider; ratified 2026-11-10 ("yes i approve the rules"), rule 4 included.
 
 The dialects' own rule is that a reply stopped by a stop sequence does not
 contain it (OpenAI, Anthropic), and lm15's client-side stop (MAP-13) cuts
@@ -1383,8 +1383,8 @@ stop, Anthropic `stop_reason` end_turn — live 2026-11-09).
    means, nothing the caller asked for is changed.
 3. Pinned by `tinker.stop_sequence`, `tinker.streaming_stop_sequence` and
    the `tinker-anthropic` pair (goldens: `1 2 3 4 5 6`).
-4. **The response door reads the text as returned** (stated 2026-11-10; to
-   ratify). `response_from_openai_chat` (MAP-12 rule 9) is given a body and
+4. **The response door reads the text as returned** (stated and ratified
+   2026-11-10). `response_from_openai_chat` (MAP-12 rule 9) is given a body and
    no request, so it has no `Config.stop` to cut with: under `"included"`
    its text ends with the sequence the server stopped at
    (`1 2 3 4 5 6 7`). This is the one place the door and `parse_response`
@@ -1394,11 +1394,11 @@ stop, Anthropic `stop_reason` end_turn — live 2026-11-09).
    maintainer: an optional `stop` on the adapter's door, as
    `response_format` is (additive in Python and TypeScript; a new function
    or a breaking signature in Go and Rust, whose doors take positional
-   arguments).
+   arguments); not decided by the ratification.
 
 ## MAP-23 — A catalog entry that names its base model is a fine-tune
 
-**Written 2026-11-09** with the Tinker provider; to ratify.
+**Written 2026-11-09** with the Tinker provider; ratified 2026-11-10 ("yes i approve the rules").
 
 Tinker's `GET /models` lists the account's sampler checkpoints, each with
 a non-standard `base_model` (`"Qwen/Qwen3.5-4B"`). A model list entry

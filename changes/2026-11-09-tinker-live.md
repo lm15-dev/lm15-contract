@@ -1,6 +1,14 @@
 # 2026-11-09 — Tinker (Thinking Machines): two doors, checkpoints by path, the reasoning switch per family
 
-Status: DECIDED IN SESSION 2026-11-09, TO RATIFY. The maintainer approved the
+Ratification: RATIFIED 2026-11-10 — Maxime Rivest, in session ("yes i
+approve the rules"), asked about MAP-21, MAP-22 (with its rule 4, the
+response door) and MAP-23, after the change was implemented, passed 2,266 of
+2,266 checks in all six SDKs and was released as 2.3.0. Transcribed. The
+decisions under § Decisions shipped with the rules and were not put to him
+one by one. Left open by him: an optional `stop` on the response door, and
+how Rust's compat, registry and wire types grow (`playbooks/parity.md`).
+
+Status (when written): DECIDED IN SESSION 2026-11-09, TO RATIFY. The maintainer approved the
 study's recommendations ("i approve all that you recommended … support tinker
 fully and most excellently"): the URI naming rule, the ids `tinker` and
 `tinker-anthropic` with the alias `thinkingmachines`, the catalog's fine-tune
@@ -148,8 +156,8 @@ no benchmarking): receipts record wire shapes only, no latency.
   first survey's FunctAI checkpoint was deleted during the run.
 - **Beta.** Tinker calls both doors beta; production throughput is a
   waitlist.
-- **The response door does not cut** (stated 2026-11-10, MAP-22 rule 4; to
-  ratify). `response_from_openai_chat` has no request, so a body Tinker
+- **The response door does not cut** (stated 2026-11-10, MAP-22 rule 4;
+  ratified the same day). `response_from_openai_chat` has no request, so a body Tinker
   stopped at a sequence reads with the sequence at its end. Found the day
   after the merge: the reference's own suite compares the door with
   `parse_response` on every recorded body and failed on

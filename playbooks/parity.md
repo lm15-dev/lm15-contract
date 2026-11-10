@@ -4,7 +4,7 @@ Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
 ## 2026-11-09 — Tinker (Thinking Machines), on two doors
 
-changes/2026-11-09-tinker-live.md (decided in session, to ratify): providers `tinker`
+changes/2026-11-09-tinker-live.md (ratified 2026-11-10, "yes i approve the rules"): providers `tinker`
 (Chat Completions, alias `thinkingmachines`) and `tinker-anthropic` (Messages); a URI model
 string is one name; registry aliases route; `RouterConfig(base_models=...)` and the chat
 adapter's `base_models` (a fine-tune follows its base model's `model_overrides`); chat
