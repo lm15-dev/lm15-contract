@@ -743,7 +743,8 @@ caller.
    records as unmapped (`_lm15_unmapped`) are already pinned by the
    `response` direction over every recorded chat body, and the reference
    test suite requires the door and `parse_response` to agree byte for
-   byte on each of them. The whole body is `provider_data`; a key the
+   byte on each of them (a stop sequence the server returned excepted:
+   MAP-22 rule 4). The whole body is `provider_data`; a key the
    reader does not know is neither refused nor lost. An error envelope
    raises the typed provider error. `model` fills `Response.model` when
    the body carries none. **A body with more than one choice is refused
@@ -1382,6 +1383,18 @@ stop, Anthropic `stop_reason` end_turn — live 2026-11-09).
    means, nothing the caller asked for is changed.
 3. Pinned by `tinker.stop_sequence`, `tinker.streaming_stop_sequence` and
    the `tinker-anthropic` pair (goldens: `1 2 3 4 5 6`).
+4. **The response door reads the text as returned** (stated 2026-11-10; to
+   ratify). `response_from_openai_chat` (MAP-12 rule 9) is given a body and
+   no request, so it has no `Config.stop` to cut with: under `"included"`
+   its text ends with the sequence the server stopped at
+   (`1 2 3 4 5 6 7`). This is the one place the door and `parse_response`
+   differ on a recorded body; the reference suite requires that the same
+   cut applied to the door's reading gives `parse_response`'s answer byte
+   for byte. No SDK's door takes the stop sequences today. Open for the
+   maintainer: an optional `stop` on the adapter's door, as
+   `response_format` is (additive in Python and TypeScript; a new function
+   or a breaking signature in Go and Rust, whose doors take positional
+   arguments).
 
 ## MAP-23 — A catalog entry that names its base model is a fine-tune
 

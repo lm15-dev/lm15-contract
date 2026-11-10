@@ -148,6 +148,17 @@ no benchmarking): receipts record wire shapes only, no latency.
   first survey's FunctAI checkpoint was deleted during the run.
 - **Beta.** Tinker calls both doors beta; production throughput is a
   waitlist.
+- **The response door does not cut** (stated 2026-11-10, MAP-22 rule 4; to
+  ratify). `response_from_openai_chat` has no request, so a body Tinker
+  stopped at a sequence reads with the sequence at its end. Found the day
+  after the merge: the reference's own suite compares the door with
+  `parse_response` on every recorded body and failed on
+  `tinker.stop_sequence`; the same suite did not honour this file's first
+  pinned ingest refusal on a wire case (`tinker.reasoning_effort_switch`)
+  and its type check failed on the MAP-15 forms with a null code. All three
+  were in the reference's tests and types, not in what any SDK sends or
+  reads; the reference's CI was red from the merge until they were fixed.
+  An optional `stop` on the door is left to the maintainer.
 
 ## For the ports (TypeScript, Go, Rust, Julia, R)
 
