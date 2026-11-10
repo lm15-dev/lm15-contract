@@ -21,11 +21,26 @@ build it by hand add the field). R: the copied provider table now carries aliase
 | | Python | TypeScript | Rust | Go | Julia | R |
 |---|---|---|---|---|---|---|
 | Contract checks (all directions) | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 | 2,266 / 2,266 |
-| Version | unreleased | unreleased | unreleased | unreleased | unreleased | unreleased |
-| Commit (branch `tinker`) | `3ac4c01` | `170d55e` | `6fa7a35` | `085e60d` | `ff48f6d` | `9ccfc87` |
+| Version | 2.3.0 | 2.3.0 | 2.3.0 | v2.3.0 | 2.3.0 | 2.3.0 |
+| Commit | `af6ebbc` | `ebe2ada` | `34e0b8e` | `08800d6` | `101d2bd` | `2d00499` |
+| Commit merged 2026-11-09 (no version) | `3ac4c01` | `170d55e` | `6fa7a35` | `085e60d` | `ff48f6d` | `9ccfc87` |
 
-R through `tools/check-contract.py --compare-python` against Python `3ac4c01`: 30 agree, the
+R through `tools/check-contract.py --compare-python` against Python `af6ebbc`: 30 agree, the
 2 known differences. Not moved: Java, Ruby, .NET and Swift.
+
+Released 2026-11-10 as 2.3.0 after every SDK's own suite and the harness were run again on
+the release commits (each 2,266 of 2,266 at `18b3788`). The reference's CI had been red
+since the merge: its suite did not honour the pinned ingest refusal of
+`tinker.reasoning_effort_switch`, compared the response door with `parse_response` on
+`tinker.stop_sequence` without the MAP-22 cut (MAP-22 rule 4, stated that day), and its
+type check failed on the MAP-15 forms with a null code. Fixed in tests and types in Python
+`d91fe31`; no SDK's wire or reading changed. Python also gained `response_format` on the
+async adapter's response door. Rust: `cargo semver-checks` against 2.2.0 reports the new
+compat fields (`stop_in_text`, `aliases`, `BuildContext.base_model`) and the three new
+compat enum variants as breaking for exhaustive literals and matches; released as a minor
+with that stated in the release notes (no compat, registry or wire type is
+`#[non_exhaustive]`; a policy for how they grow is open). Live on the published packages:
+Python from PyPI and TypeScript from npm, `tinker:Qwen/Qwen3.5-4B`.
 
 ## 2026-11-07 — Claude shows its thinking when asked (MAP-7 rule 7 amended)
 

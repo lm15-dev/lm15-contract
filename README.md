@@ -17,14 +17,14 @@ reference) and how each kind of fixture may change.
 
 | Implementation | Version at the pin | Contract pin | Checks |
 |---|---|---|---|
-| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
-| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
-| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
-| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
-| [LanguageModel15.jl](https://github.com/lm15-dev/LanguageModel15.jl) | 2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
-| [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.2.0 | `9d8e1ce` | 2,140 / 2,140 |
+| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [LanguageModel15.jl](https://github.com/lm15-dev/LanguageModel15.jl) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
 
-Measured with `harness/check.py --direction all` at the pin on 2026-11-07
+Measured with `harness/check.py --direction all` at the pin on 2026-11-10
 (R through its `tools/check-contract.py`). Versions are the ones each
 repository is set to at that commit; publishing them is a separate step.
 Every language shares its major version, the contract's generation
