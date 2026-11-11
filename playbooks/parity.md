@@ -48,6 +48,15 @@ A TypeScript build of 2.3.1 was checked live with the report's history (a record
 reasoning item before a tool call and before text, reasoning effort medium):
 `claude-opus-5-5` and `claude-haiku-4-5-20251001` answered, no adaptation recorded.
 
+Released 2026-11-11 as 2.3.1 after every SDK's CI was green on the release commits: Go
+(`v2.3.1` on the module proxy), R (a GitHub release; not on CRAN), Julia
+(JuliaRegistries/General#175732). Python, TypeScript and Rust were built and checked by
+their release workflows at the tag `v2.3.1` and publish to PyPI, npm and crates.io when
+the maintainer approves the run (each environment requires it). Follow-ups: issues #4
+(whitespace-only text on Anthropic), #5 (state of the same dialect from another
+server), #6 (a turn in progress moved to another provider), #7 (a citation in a
+history), #8 (the scrape refresh).
+
 Not moved: Java, Ruby, .NET and Swift.
 
 ## 2026-11-09 — Tinker (Thinking Machines), on two doors

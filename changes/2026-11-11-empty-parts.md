@@ -176,12 +176,13 @@ being written.
   `content: ""` or an empty block) and is now refused by 13, because it
   reaches them as no message.
 
-### Not decided (each with its receipts; follow-up issues filed)
+### Not decided (each with its receipts and its issue)
 
-1. **Whitespace-only text.** Anthropic's own door refuses a message whose
-   only text is whitespace. Leaving it out withholds characters, so it
+1. **Whitespace-only text** (issue #4). Anthropic's own door refuses a
+   message whose only text is whitespace. Leaving it out withholds characters, so it
    would be a recorded adaptation. Not seen in production.
-2. **State of the same dialect from another server.** Anthropic refused a
+2. **State of the same dialect from another server** (issue #5).
+   Anthropic refused a
    signature from DeepSeek's Messages door (`Invalid signature in thinking
    block`) and a redacted block from Meta's (`Invalid data in
    redacted_thinking block`); the Codex door refused reasoning items from
@@ -190,13 +191,15 @@ being written.
    its judgments, and each is a stuck conversation of the same kind as
    the one fixed here. The builder cannot tell the issuer: a
    `ContinuationState` names its dialect only.
-3. **A turn in progress moved to another provider.** Gemini 3.x refuses a
+3. **A turn in progress moved to another provider** (issue #6). Gemini
+   3.x refuses a
    current-turn function call without its `thoughtSignature` (Google
    documents the placeholder `skip_thought_signature_validator` for
    history from another model; receipt: accepted); DeepSeek's Messages
    door refuses a current turn without its thinking. Claude answers (its
    reference says thinking is switched off for that request).
-4. **What a citation in a history should be.** Pinned now: such a
+4. **What a citation in a history should be** (issue #7). Pinned now:
+   such a
    history builds on every wire, and a citation quoting nothing writes
    nothing. Left as the reference has it: two builders write no citation,
    two write its quoted text as assistant text.
@@ -207,7 +210,8 @@ being written.
    Messages wire; the OpenAI wires refuse a mark on a message with no
    text block, as before).
 
-Found on the way, not part of this change: a refresh of the scrapes on
+Found on the way, not part of this change (issue #8): a refresh of the
+scrapes on
 2026-11-11 shows three request parameters the reference's doc-drift check
 does not know (`access_programs` on Responses; `diagnostics` and `speed`
 on Messages) and one dead URL in `scrapes/gemini/update.sh`
