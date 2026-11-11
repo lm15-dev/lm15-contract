@@ -17,14 +17,14 @@ reference) and how each kind of fixture may change.
 
 | Implementation | Version at the pin | Contract pin | Checks |
 |---|---|---|---|
-| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
-| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
-| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
-| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.3.0 | `18b3788` | 2,266 / 2,266 |
-| [LanguageModel15.jl](https://github.com/lm15-dev/LanguageModel15.jl) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
-| [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.3.0 | `18b3788` | 2,266 / 2,266 |
+| [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
+| [lm15-ts](https://github.com/lm15-dev/lm15-ts) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
+| [lm15-rs](https://github.com/lm15-dev/lm15-rs) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
+| [lm15-go](https://github.com/lm15-dev/lm15-go) | v2.3.1 | `81b519f` | 4,269 / 4,269 |
+| [LanguageModel15.jl](https://github.com/lm15-dev/LanguageModel15.jl) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
+| [lm15-r](https://github.com/lm15-dev/lm15-r) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
 
-Measured with `harness/check.py --direction all` at the pin on 2026-11-10
+Measured with `harness/check.py --direction all` at the pin on 2026-11-11
 (R through its `tools/check-contract.py`). Versions are the ones each
 repository is set to at that commit; publishing them is a separate step.
 Every language shares its major version, the contract's generation
@@ -36,7 +36,7 @@ Every language shares its major version, the contract's generation
 | Path | What it holds |
 |---|---|
 | [`spec/`](spec/) | The canonical types, closed vocabularies and numbered invariants (`types.md`, `vocabularies.md`, `invariants.md`), credentials and sign-in (`auth.md`, `auth-managed.md`), the scope of 1.0 (`SCOPE.md`), and each provider's support and evidence (`support-matrix.json`). |
-| [`docs/`](docs/) | The normative rules for exact JSON (`serde-rules.md`) and for mapping to and from each provider's wire (`mapping-rules.md`, MAP-1 to MAP-16). |
+| [`docs/`](docs/) | The normative rules for exact JSON (`serde-rules.md`) and for mapping to and from each provider's wire (`mapping-rules.md`, MAP-1 to MAP-24). |
 | `cases/`, `bodies/`, `errors/` | Recorded provider traffic: the request each case must build, the exact bytes the provider answered, and error envelopes. |
 | `goldens/` | The canonical response and stream events each recorded answer must read as. |
 | `serde/`, `mapping/`, `consumer/`, `router/`, `auth/` | Vectors: JSON round trips, content-decided mapping rules, bounded collection, model-string routing, credential resolution, signing, token exchange and the sign-in runs. |

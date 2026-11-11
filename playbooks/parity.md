@@ -2,6 +2,54 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-11-11 — a part with nothing for a wire writes nothing (MAP-24)
+
+changes/2026-11-11-empty-parts.md (decided in session, to ratify; lm15-contract issue #3): a
+conversation answered by an OpenAI Responses model and continued on Claude failed on every
+request (`messages: text content blocks must be non-empty`), because hidden reasoning (a
+`ThinkingPart` with empty text and `openai:reasoning_item` state) reached the Messages wire
+as an empty text block. A part with nothing for the wire it is sent to now writes nothing,
+on the four dialects, and a message left with nothing is not written; MAP-7 rule 8 says
+that state of another dialect is not state here. 17 vectors (`mapping/empty-parts.json`,
+72 checks), every golden replayed into every dialect (1,908 checks, no hand-written
+answers), 10 live cases (20 checks), 3 ingest round trips with the new lossy class
+`nothing_written`: 2,003 new checks. The six SDKs move their pin to `81b519f`, measured
+with `harness/check.py --direction all` (R through `tools/check-contract.py
+--compare-python`, against Python `f114d33`: 32 agree; the two known differences are
+gone, see below):
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 4,269 / 4,269 | 4,269 / 4,269 | 4,269 / 4,269 | 4,269 / 4,269 | 4,269 / 4,269 | 4,269 / 4,269 |
+| Version | 2.3.1 | 2.3.1 | 2.3.1 | v2.3.1 | 2.3.1 | 2.3.1 |
+| Commit | `f114d33` | `93396be` | `77d7009` | `64af5d8` | `4532a65` | `ba1eff3` |
+| How | block filter in each builder | block filter in each builder | `Option` from each part and message builder | block filter in each builder | block filter in each builder | one pass over the request before any dialect builds |
+
+Found while porting (each is in the change entry):
+
+- Rust already left another dialect's hidden thinking out of the Messages wire and then
+  wrote the message with `content: []`.
+- Julia and R refused an assistant citation on the Responses and Chat Completions wires
+  (the reference writes none): a reply with citations could not be sent back to OpenAI.
+  Julia also refused an assistant data part there.
+- Python, TypeScript and Go dropped an assistant data part on those two wires without a
+  record, against `changes/2026-09-19-jev-state.md` D3; R had reported it as its finding
+  F1 and kept two known differences from the reference for it. All six send its JSON now.
+- Rust, Julia and R wrote a citation in an assistant message on the Messages and
+  generateContent wires as `title — url — text`; the reference writes the text it
+  quotes. They follow the reference.
+- R sent a thinking part whose signature is the empty string as a signed block.
+- Not moved: Rust's `assistant_after_tool_result="insert"` (no preset uses it; the
+  reference declares the knob and does not implement it) still inserts its empty assistant
+  row. It is an inserted turn, not a message left with nothing; noted because it is the one
+  place an SDK writes an empty message on purpose.
+
+A TypeScript build of 2.3.1 was checked live with the report's history (a recorded hidden
+reasoning item before a tool call and before text, reasoning effort medium):
+`claude-opus-5-5` and `claude-haiku-4-5-20251001` answered, no adaptation recorded.
+
+Not moved: Java, Ruby, .NET and Swift.
+
 ## 2026-11-09 — Tinker (Thinking Machines), on two doors
 
 changes/2026-11-09-tinker-live.md (ratified 2026-11-10, "yes i approve the rules"): providers `tinker`
