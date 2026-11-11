@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-97ecbec1-21ed-4792-9e7e-f62e58d66711",
+    "object": "chat.completion",
+    "created": 1794358450,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Hello! How can I help you today?",
+          "reasoning": "The user message is blank. There's no content. The system instructions say: \"You are ChatGPT\" etc. The user hasn't asked a question or provided a prompt. We need to respond appropriately. Possibly the user wants to do something? The previous context: They provided a tool description. There's no question. We could ask for clarification or respond with a default message. According to policies, we can say \"Hello! How can I help?\" Probably."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.062475792,
+      "prompt_tokens": 114,
+      "prompt_time": 0.007202177,
+      "completion_tokens": 110,
+      "completion_time": 0.145371862,
+      "total_tokens": 224,
+      "total_time": 0.152574039,
+      "completion_tokens_details": {
+        "reasoning_tokens": 92
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_84bb35977d",
+    "x_groq": {
+      "id": "req_01m741j6cwe7c9ad169xn031jj",
+      "seed": 32263849
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-10Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741j6cwe7c9ad169xn031jj"
+  }
+}

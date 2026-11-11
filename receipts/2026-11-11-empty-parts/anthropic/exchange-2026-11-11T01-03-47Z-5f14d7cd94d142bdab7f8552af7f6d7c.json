@@ -1,0 +1,92 @@
+{
+  "timestamp": "2026-11-11T01-03-47Z",
+  "provider": "anthropic",
+  "status": 400,
+  "model": "claude-haiku-4-5-20251001",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "The user wants the weather in Paris. I'll use the get_weather tool.",
+              "signature": "7fd9eaa4-4de6-431c-a498-417af56b8737"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "content": "ok"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "request_sha256": "03098cf19093e357c0a5e5e697599d748a1ee6b22b90c66dfa752b38abe0629c",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "91f1b872aaf13081b87445829d8cd64ebfa4de658c7e9a94c2ba091d27d17ce4",
+  "response_bytes": 175,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

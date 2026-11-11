@@ -1,0 +1,144 @@
+[
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-34Z-6ea8b34e13764b49bd8ba75798d7ed24.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-39Z-aa261c77fae7450f9f25e749bd3e7cef.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-51Z-e0088235050e4ddc8d3ae999424c2f54.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-02Z-5b945638229d42e19290698b9de316bf.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-07Z-eae0caf40344405aa308e5e0cad621ea.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "messages.1.content.0: Input tag 'redacted_thinking' found using 'type' does not match any of the expected tags: 'image', 'server_tool_use', 'text', 'thinking', 'tool_result', 'tool_use', 'video', 'web_search_tool_result'",
+    "exchange": "exchange-2026-11-11T01-04-22Z-c7ba6b26e53f42cc8071ae4637256e08.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "messages.1.content.0: Input tag 'redacted_thinking' found using 'type' does not match any of the expected tags: 'image', 'server_tool_use', 'text', 'thinking', 'tool_result', 'tool_use', 'video', 'web_search_tool_result'",
+    "exchange": "exchange-2026-11-11T01-04-23Z-4d75813ef01145528ce0a25dc4296760.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-25Z-be3e2317c36f4473a9b230573eff37ed.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-32Z-0543bedd637141b4a27162f3e02e075a.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-52Z-90f5cde2746f4431a8c060464b7de244.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-56Z-76c0dcf104cc45f3a16478847a13ca04.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-02Z-ab290686955741be9e6442c34a711399.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-21Z-a971f54ca23043979fa928578a8c9a5a.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-28Z-4b2e7ffb130e4e4889d4e106474b312c.json"
+  }
+]

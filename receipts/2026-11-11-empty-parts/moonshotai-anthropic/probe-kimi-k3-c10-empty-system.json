@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "system": ""
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-f5b8969b-4963-9574-81d8-efa898d1bf84",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a simple, benign request. There's also a tool available called \"delete_program\" which deletes the test program - but the user hasn't asked me to use that tool. They just asked me to reply with the single word \"bye\".\n\nI should simply reply with \"bye\" as requested. No tool call is needed here."
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 161,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 97,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 80
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 161,
+      "cached_tokens": 0,
+      "completion_tokens": 97,
+      "total_tokens": 258
+    }
+  },
+  "timestamp": "2026-11-11T00-54-40Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

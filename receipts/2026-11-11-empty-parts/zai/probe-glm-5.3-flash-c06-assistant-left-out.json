@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "content": "",
+          "reasoning_content": "The user wants me to delete the test program and then reply with the single word \"bye\".\n\nI should call the delete_program function first, then reply with \"bye\".",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{}",
+                "name": "delete_program"
+              },
+              "id": "call_-7086082132954574079",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1794358488,
+    "id": "202611110854438f0b61c030dd4a83",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110854438f0b61c030dd4a83",
+    "usage": {
+      "completion_tokens": 40,
+      "completion_tokens_details": {
+        "reasoning_tokens": 34
+      },
+      "prompt_tokens": 155,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 195
+    }
+  },
+  "timestamp": "2026-11-11T00-54-43Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "75764b0b-2875-4d70-a7e5-96f16aaedaf2"
+  }
+}

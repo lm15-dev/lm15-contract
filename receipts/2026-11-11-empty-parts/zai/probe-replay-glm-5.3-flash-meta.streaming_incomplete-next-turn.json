@@ -1,0 +1,84 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "content": "",
+          "reasoning_content": "The user wants me to delete the test program and then reply with the single word \"bye\". Let me call the delete_program function first.",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{}",
+                "name": "delete_program"
+              },
+              "id": "call_-7086081308320853551",
+              "index": 0,
+              "type": "function"
+            }
+          ]
+        }
+      }
+    ],
+    "created": 1794359050,
+    "id": "20261111090402415527dcce4344e1",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111090402415527dcce4344e1",
+    "usage": {
+      "completion_tokens": 34,
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      },
+      "prompt_tokens": 155,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 189
+    }
+  },
+  "timestamp": "2026-11-11T01-04-01Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "98d3f32b-d9c4-4ba9-904d-17cf81207f43"
+  }
+}

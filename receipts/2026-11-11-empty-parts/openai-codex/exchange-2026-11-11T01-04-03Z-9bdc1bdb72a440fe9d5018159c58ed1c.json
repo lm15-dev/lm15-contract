@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-11-11T01-04-03Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-5.6-luna",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "tool_call_0",
+          "name": "multiplyNumbers",
+          "arguments": "{\"b\":44,\"a\":57}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "tool_call_0",
+          "output": "ok"
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "7b5e1bb288e8ed7bca375836d8dd3d6a9b9b8c9dc5e5c0b16384d025b09b2a7e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c74eaf5b6fcf854aebc63ca4c87156433bc617d6d78119078340c53008b0952b",
+  "response_bytes": 25017,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,101 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "call_1",
+              "name": "delete_program",
+              "input": {}
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_1",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-2f2e034a31f8994e5543d6f26",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked me to delete the test program, I called the tool, and it returned \"ok\". The deletion was successful. I should confirm this to the user briefly."
+      },
+      {
+        "type": "text",
+        "text": "The test program has been deleted successfully."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 223,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 56,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 35
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 223,
+      "cached_tokens": 0,
+      "completion_tokens": 56,
+      "total_tokens": 279
+    }
+  },
+  "timestamp": "2026-11-11T00-55-47Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

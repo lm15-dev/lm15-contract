@@ -1,0 +1,50 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ],
+      "systemInstruction": {
+        "parts": [
+          {
+            "text": "Reply with the single word: bye"
+          }
+        ]
+      }
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": 400,
+      "message": "Unable to submit request because at least one contents field is required. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini",
+      "status": "INVALID_ARGUMENT"
+    }
+  },
+  "timestamp": "2026-11-11T02-25-30Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

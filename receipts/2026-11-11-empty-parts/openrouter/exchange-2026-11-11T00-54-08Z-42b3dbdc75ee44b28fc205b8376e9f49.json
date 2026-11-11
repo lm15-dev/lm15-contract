@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-11T00-54-08Z",
+  "provider": "openrouter",
+  "status": 200,
+  "model": "openai/gpt-4.1-mini",
+  "sent": {
+    "method": "POST",
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $OPENROUTER_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-4.1-mini",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": ""
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "13124c73d14809ab3b3584505c4c8ce21789390446f8ba4f82623f44defb8ac8",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "bec849202fd6ead8f520a542ddf35faa5e756da55ab30a9b1c95851cc618a93f",
+  "response_bytes": 815,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

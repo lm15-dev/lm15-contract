@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-11-11T00-54-30Z",
+  "provider": "vertex",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "delete_program",
+                "args": {}
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "delete_program",
+                "response": {
+                  "result": "ok"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "adb5044fd29d664296dfae151bd2b5d9cb47fb5af3c1d8ce1e87a2db86def1e3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "bdcef8152cff133de15fa229ed614802a9206f48ccbdd889711b4e36e0067668",
+  "response_bytes": 835,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

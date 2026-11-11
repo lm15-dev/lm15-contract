@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-11-11T01-03-51Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "We have n ≡ −1 (mod 2,3,4,5), so n+1 is divisible by 2,3,4 and 5. Hence n+1 is a multiple of lcm(2,3,4,5)=60, so n = 60k−1. The smallest positive choice is k=1, giving n = 59 (indeed 59≡1 (mod2), 2 (mod3), 3 (mod4), 4 (mod5))."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "887416b2c65946309645ddc05f28360581d81a9b3afb30dff19899317374bf52",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "65e12c20f23430ae1a9d8289280aaf41a56e6165d1cf2bc815cd9a25cf377fcc",
+  "response_bytes": 991,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

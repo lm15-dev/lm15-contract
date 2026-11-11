@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-11-11T01-04-45Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "ca2981bb1b60c31702bf3b9f82d318b05f681040bc507ae11ae1d8e47fe02967",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "e0e8ef054cd1bde53af50637ffba05be69c897af3e53003e978752fbc1ebca16",
+  "response_bytes": 1877,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

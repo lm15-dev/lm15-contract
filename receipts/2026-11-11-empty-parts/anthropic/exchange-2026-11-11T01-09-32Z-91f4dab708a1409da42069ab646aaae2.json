@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-11-11T01-09-32Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-opus-5-5",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Work out the largest prime number below 200 first. Then delete the test program with the tool; do not write any text before the call."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "",
+              "signature": "CAQSgwYKEAgTGAI4AUIIdGhpbmtpbmcSDJAz1ZHoZT4I6VGrwxoMuf9kD/NZGkLC+ZLGIjCWu9yX4dRYa3v4DGAkviJIpKUQTF0PeZZUZIs0NE25+IlOt2SAJ57sPGYeMm/AAIwqoAUFZNbV7cNsraSnTMtPWdC/fEkPAxIuPFikAd0xwInwd9mEOIe9maf0H3q3ziuZ0XIf3MnjxBQakEV9aaFeqQDoClUdtWHWUXFwp5Fes8d+0PrAWSLDQ1rcZcjcVYMDnltWgmFOTOYWsZDEmtvvggPgWLtfVAr9EgX1C8+SeNtU5auEQKrmrydmuTuPgC+db/Yfx7Fz7hM4+u8tKLl0wJ1LGoEKHI+NoNfKf6IJcOOjf1SuYU/5VUMy4eMMhMceJHRmFFJY05P+maUFJedbhKk/u2E50XTJMW+pa3nzblQSIla9OgSJV5PeDxSGMvrp32CF+cmYc0BmJoOeldkUTpo7zmf9XUgnZG5fNtPz+6IyQqPEcBKPRtRWUCsJZRD6EHprUdBo1CrsgH7AfnNLSFcQ/+Eo5pHCczCl7gXFWIeMUuB9VfIzz5oaNlzlzx1op8NrWYmGkBzVay28KGmBZ2i/K4cmDrXvYYuNz5ufHt8Lj+9XK7rljLjgRSd5k5PJ54z1WFe+GCgjD6T26ItJ6G9q1j+VWfdN0Q8dnV+BmPDvlCetmxJ5ncY/9sJXE3MqpNiaW3Ueppxpe5+QPX2KSDp7YyLstoTNUSdmzC0mX/E8gOH4TSQl9tgKH57IehLhum/AtogQXqRW4PPvN5VXn5hGyhLfHt8vuqpvsj62XoI+cNigvkNo9Ml7RUkJ/JMqQ4t2F7Oh/MxC9uRKB+sfb6htrgZbyXtFwsDpcVHymc4qswaqau2iRCLfp/pQ6jO6wEvC0TnA22MAc9HISW9l+eqovcGpjRV1czSSyFVtz0yaPgakwIkTTsDwRQtDUCCbvvadZ+HlkaT0/E+9KS00cJg+a7yYfmXgyazYh+gx/n6qoaHEqoO8Ufia6Et8z+VxjOcYAQ=="
+            },
+            {
+              "type": "tool_use",
+              "id": "toolu_01HFVAJefrX4uU77y7u1fy5N",
+              "name": "delete_program",
+              "input": {}
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "toolu_01HFVAJefrX4uU77y7u1fy5N",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 4000,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "high"
+      }
+    }
+  },
+  "request_sha256": "05380d24dffad82045a06ce7166638378e7e977b753b1fa007f8473dbb22b372",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "d98963353fc63ac6a31eb92057ebe52566b8ab80e5633ce78799ea20fdd932f2",
+  "response_bytes": 718,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

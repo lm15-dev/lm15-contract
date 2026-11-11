@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-11-11T02-25-28Z",
+  "provider": "deepseek",
+  "status": 200,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "6746f76a197c6d2def0791bb1381666b9648f5b278e76053a25091bf3ff43e02",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c8d6f2fa0a61a52fae9841bca38de4bdbf41757da09693f0a5c5e6ae17f9df85",
+  "response_bytes": 697,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-11-11T01-03-56Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "0486e194f5193114f909a416c653d5543111a313aa8152d90cf10b9f320790fe",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "58f32f7634822f2c7ab5534d81c8013bf06adf46e7d3fb9b957f0d76d1da024f",
+  "response_bytes": 856,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-11-11T00-55-00Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "\n\n"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "85fa95b8783ed9688f4cc582bfdb136fee07e7aa1a6f63d8338e5919114b2aed",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "7a935b6aacad825adb01431abf2d809be446c0ae3a1a2675b1b0f39b57b5555a",
+  "response_bytes": 1195,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

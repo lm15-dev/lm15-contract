@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-11-11T00-54-12Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5-20251001",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "system": ""
+    }
+  },
+  "request_sha256": "6bd8024b2bc6d3bf3b8f2ede75ab8013496653fbcdb9a2fcf2a80b9aabffabdd",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "03a4415a84cfba008a3e1e609d163771a0c588667f8624f03904ba604d9b2676",
+  "response_bytes": 515,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

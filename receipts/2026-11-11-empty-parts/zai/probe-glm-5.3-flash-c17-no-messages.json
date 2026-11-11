@@ -1,0 +1,40 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "1214",
+      "message": "Input cannot be empty"
+    }
+  },
+  "timestamp": "2026-11-11T02-25-26Z",
+  "response_headers": {
+    "X-Request-ID": "59b43625-a4e7-4957-887e-2ba2a23826ef"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-f7109dde-9364-41e5-8d23-1345fd9793cc",
+    "object": "chat.completion",
+    "created": 1794363927,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "The user says \"Reply with the single word: bye\". They want a single word response \"bye\". The instruction says: \"Reply with the single word: bye\". So I should just output \"bye\". No extra words.\n\nWe do not need to call any function. Just output bye."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.029913162,
+      "prompt_tokens": 121,
+      "prompt_time": 0.008429463,
+      "completion_tokens": 70,
+      "completion_time": 0.075787067,
+      "total_tokens": 191,
+      "total_time": 0.08421653,
+      "completion_tokens_details": {
+        "reasoning_tokens": 60
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_92d51d08e5",
+    "x_groq": {
+      "id": "req_01m746sb48ew89nm62gvk8rswx",
+      "seed": 747722058
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T02-25-27Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m746sb48ew89nm62gvk8rswx"
+  }
+}

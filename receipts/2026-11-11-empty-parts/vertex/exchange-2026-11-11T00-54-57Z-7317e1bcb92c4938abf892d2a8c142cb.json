@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-11-11T00-54-57Z",
+  "provider": "vertex",
+  "status": 200,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": ""
+            },
+            {
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "3ffdfd0796157985488c37e283af7c97ce90e831f8f1b927adf9e2df7312fa55",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "cfe3ea1f36d4c831685ed7a03b8674b957c34f5888619f296e6825d864e2fe4a",
+  "response_bytes": 2227,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

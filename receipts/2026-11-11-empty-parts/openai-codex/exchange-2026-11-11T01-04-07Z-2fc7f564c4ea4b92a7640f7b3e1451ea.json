@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-11-11T01-04-07Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-5.6-luna",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "21578aa61bf51f57e13efd41a8816510c6a36383518e739a82edee76297190cf",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "bc7ff1d31f0bb65ab8729f95ec66e5a2b4db1c2a4c2bf9e5ec95aef0cb4afce6",
+  "response_bytes": 14389,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

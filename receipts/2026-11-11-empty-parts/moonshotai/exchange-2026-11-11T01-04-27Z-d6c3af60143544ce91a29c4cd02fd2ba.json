@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-11-11T01-04-27Z",
+  "provider": "moonshotai",
+  "status": 200,
+  "model": "kimi-k2.6",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "bc4faeec1955bdf3ac478c8f784f2713a0ec4d52bbd8b8e46f8efe335cdf4bf1",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "b3275342f594b4223c11e1b31af3f2bfc8e2ffaa5ff8a751012289fc1a62ad6a",
+  "response_bytes": 492,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

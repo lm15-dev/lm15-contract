@@ -94,6 +94,11 @@ state (MAP-7 rule 11). The `redacted` field was removed 2026-09-06
 (changes/2026-09-06-ratification.md D5): there is no flag and no
 placeholder text.
 
+On a wire whose dialect does not consume that state (a history that
+changed model), hidden thinking writes nothing; an empty TextPart writes
+nothing on any wire. The part stays in the canonical message
+(MAP-24, docs/mapping-rules.md).
+
 ### RefusalPart
 
 | Field | JSON type | Req | Default | Omission | Constraints |

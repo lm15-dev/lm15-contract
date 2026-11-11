@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-2f4aa3249d5daee7c566ae24696b93a0",
+    "object": "chat.completion",
+    "created": 1794359039,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-9e9192ae86e0c98f",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ],
+          "reasoning": "We have a function for deleting test program; the user wants to delete the test program. The user gave a message: \"Delete the test program now.\" That's the instruction. We need to call the function. Then after that, the user says \"Thanks. Reply with the single word: bye\". So we must reply with \"bye\". But what about the deletion? The user said \"Delete the test program now.\" That is instruction to execute. According to policy, we must call the provided function to delete the program. So do that first. Then after that we respond. There's no instruction to not delete. So we call delete_program. Then respond with \"bye\". It's straightforward."
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": 200012,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 133,
+      "total_tokens": 291,
+      "completion_tokens": 158,
+      "prompt_tokens_details": {
+        "cached_tokens": 128,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 138
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T01-03-59Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "2f4aa3249d5daee7c566ae24696b93a0"
+  }
+}

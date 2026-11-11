@@ -1,0 +1,109 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "",
+              "signature": "EoADCpABCBEYAipAnS65/8zPh5m53r1gv+j7ou4TaBppUP7AtCqauwlT7ZFtXMlkvndMIzLdRwPTpQyEAPgyh/71BeFHhbocqNyDyDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaoAYS34NQGEgxrafcj6gPI11dR/1QaDFIqxkmTGUA/bxmDayIwLQb4lTokNRD3pYrn4NLWh/cZema6onVCUJ48bn0jlSqXw0tJ9hQxDLLfQsdNEDKeKpwBH21Dpg39LP/8Y2kUDi1G8alF0qcfFZuSHdKUSGG4qb2jWoYCjCPLNawnnZdB73wFUcEJj8HqtMq3ZpdxlPskK24S1PcTi2nNFzYTtb7361PltZwXgmA/chaqEb6hOcwlO7EqmMtiprslZIerpF92QXI+WOngpjWdia1xpt7/EHjziQE737jbylatKhRiYJUKV+dZQ1dtFtyXeE+5GAE="
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-2f2e05a48e45432c61d45e092",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked me to delete the test program. I have a delete_program tool available. However, looking at the conversation, the previous assistant response was completely off-topic (talking about Mersenne primes instead of confirming deletion). Now the user says \"Thanks. Reply with the single word: bye\"\n\nWait — the user's first message was \"Delete the test program now.\" The correct action would have been to call the delete_program tool. The previous response didn't do that. Now the user says thanks and asks me to reply with \"bye\".\n\nBut I should still delete the test program since that was the original request and it hasn't been done yet. The user said \"Thanks\" — but maybe they think it was done. Actually, the task wasn't completed. I should call delete_program now, then reply \"bye\" as requested.\n\nThe user explicitly asked me to reply with the single word \"bye\". I should call the tool first to complete the deletion, then say \"bye\"."
+      },
+      {
+        "type": "text",
+        "text": "I'll delete the test program now."
+      },
+      {
+        "type": "tool_use",
+        "id": "delete_program_0_14ed34cb",
+        "name": "delete_program",
+        "input": {}
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 236,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 238,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 197
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 236,
+      "cached_tokens": 0,
+      "completion_tokens": 238,
+      "total_tokens": 474
+    }
+  },
+  "timestamp": "2026-11-11T01-04-07Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

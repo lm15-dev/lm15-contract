@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-11-11T01-03-37Z",
+  "provider": "deepseek-anthropic",
+  "status": 400,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "0709cc73840043a2b74dc650c4f1082176582fbbbb3e32cb7cb3ee2c8d8ca8ee",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "c9abd15eaab9ed7eca45bf2c9ab50a7c6b03ff4697a80c587647fcd24a809855",
+  "response_bytes": 227,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

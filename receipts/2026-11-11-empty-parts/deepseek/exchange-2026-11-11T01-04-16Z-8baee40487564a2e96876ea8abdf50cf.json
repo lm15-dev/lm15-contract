@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-11-11T01-04-16Z",
+  "provider": "deepseek",
+  "status": 200,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)Paris is the capital and largest city of France. Located in the north-central part of the country along the Seine River, it serves as the nation's political, economic, and cultural center. The city has an estimated population of approximately 2.04 million within its administrative boundaries, with a metropolitan area population of about 13.2 million as of 2026. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))\n\nParis is renowned for its iconic landmarks, including the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Its rich history and cultural heritage make it a major destination for tourists worldwide.  ",
+          "reasoning_content": ""
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "034f16623c75793115b622f7d4aa60b6e193f2853ed39bb1a767754ec45dedb2",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "90e8baab9da8f49b48acd73cd592c05bf7472d6b1b75453c015f38aecae8a469",
+  "response_bytes": 705,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,91 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": ""
+        },
+        {
+          "role": "assistant",
+          "content": "Deleted."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bcbcdf0d99f65e4edcf5",
+    "object": "chat.completion",
+    "created": 1794358460,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning_content": "The user wants me to reply with the single word \"bye\". This is a straightforward request. I should not use any tools, just reply with that single word."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 96,
+      "completion_tokens": 37,
+      "total_tokens": 133,
+      "completion_tokens_details": {
+        "reasoning_tokens": 34
+      }
+    }
+  },
+  "timestamp": "2026-11-11T00-54-20Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-11-11T02-25-26Z",
+  "provider": "deepseek-anthropic",
+  "status": 400,
+  "model": "deepseek-v4-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "9ddd4a0e62b6d80c5fb4ed360a18801874e9d5cbb3bac461c7875b9d7b92e8e9",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "3aa09d5e7252261da869f1aa2f8597519e81b788cfe1bb82480205eec0e154f7",
+  "response_bytes": 192,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

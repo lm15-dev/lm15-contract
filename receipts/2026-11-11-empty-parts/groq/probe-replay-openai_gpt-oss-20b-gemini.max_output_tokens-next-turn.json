@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-efa855ce-5106-4c64-9423-14e9ae3c16a2",
+    "object": "chat.completion",
+    "created": 1794359032,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "reasoning": "We need to delete the test program via function delete_program. Then reply with single word \"bye\". Let's call function.",
+          "tool_calls": [
+            {
+              "id": "fc_cbc3e865-609a-4e8a-bc0a-e57f01e1159b",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.030076679,
+      "prompt_tokens": 133,
+      "prompt_time": 0.007610656,
+      "completion_tokens": 44,
+      "completion_time": 0.049038027,
+      "total_tokens": 177,
+      "total_time": 0.056648683,
+      "completion_tokens_details": {
+        "reasoning_tokens": 25
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_996f667773",
+    "x_groq": {
+      "id": "req_01m7423yc5ep3snb37p521w53q",
+      "seed": 1144991779
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-52Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423yc5ep3snb37p521w53q"
+  }
+}

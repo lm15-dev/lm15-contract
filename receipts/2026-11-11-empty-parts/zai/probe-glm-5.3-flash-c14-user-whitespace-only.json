@@ -1,0 +1,69 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": " "
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "It looks like your message came through empty. How can I help you today?\n\nFor reference, I have the ability to delete the test program if that's something you'd like to do — just let me know!",
+          "reasoning_content": "The user sent an empty message. There's no actual request or question here. The available tool is \"delete_program\" which deletes the test program, but I shouldn't call it without a request from the user.\n\nI should respond by asking what the user would like help with. Since the message is empty, I can't know their intent. I shouldn't invoke the delete_program tool without being asked.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358555,
+    "id": "20261111085549bbbc007992f54a63",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111085549bbbc007992f54a63",
+    "usage": {
+      "completion_tokens": 126,
+      "completion_tokens_details": {
+        "reasoning_tokens": 81
+      },
+      "prompt_tokens": 140,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 266
+    }
+  },
+  "timestamp": "2026-11-11T00-55-48Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "01a5b6c0-4e29-42de-b78e-a2fee509ca2b"
+  }
+}

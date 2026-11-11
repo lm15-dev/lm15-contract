@@ -1,0 +1,142 @@
+[
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-34Z-9ce0bf6821294f47ac0a46820f87762a.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-36Z-2ca953b6d7fa4aef9c8a882cc00a864d.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-37Z-f1b4c253324946c797e0782e26b902c5.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-39Z-9ab8c6bcdfae483d8228693c2aeb3d63.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-41Z-bf64bed290d545d7ab70ecd4db04014b.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-42Z-94d2d8b81cc446638af473d23d9e2f6a.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-44Z-c992b53311b24df7bc5d5d54437da55a.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-45Z-24db43a2d0304537a2cb94c1a65b7f23.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-46Z-3bd49b38057b4d879b9d552cdda5d169.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-47Z-7eb79b2631b54e67ad9894cfb37fc494.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-49Z-ec2b9eea7a484522a6656b97cefa38d1.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-51Z-21e025f37d8d4ef6b1bcafcd883f1240.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-52Z-bccd2107720c4b6fbbad2040451798e3.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-53Z-ff849f37fa3c4cfa920edaa3653d4bf3.json"
+  }
+]

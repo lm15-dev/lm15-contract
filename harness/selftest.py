@@ -163,6 +163,11 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         "estimate_unknown_as_zero": ("mapping", "usage.estimate.cache_read_unknown"),
         "usage_parts_unchecked": ("mapping", "usage.usage_reject.cache_exceeds_input"),
         "usage_split_kept": ("mapping", "usage.parse.openai_chat.total_disagrees"),
+        # MAP-24 (changes/2026-11-11-empty-parts.md).
+        "empty_text_block_written": ("mapping", "empty-parts.foreign-hidden-thinking[anthropic]"),
+        "empty_part_changes_the_wire": ("mapping", "empty-parts.empty-text-part[openai_chat]"),
+        "own_state_dropped": ("mapping", "empty-parts.own-state-anthropic[anthropic]"),
+        "replay_empty_message": ("mapping", "history-replay.meta.streaming_incomplete[openai_chat]"),
         "index_names_first_serde": ("serde", "part.tool_call_index_member_names"),
         "opaque_keys_sorted": ("request", first(
             [(c, {}) for c in check.load_wire_cases()],

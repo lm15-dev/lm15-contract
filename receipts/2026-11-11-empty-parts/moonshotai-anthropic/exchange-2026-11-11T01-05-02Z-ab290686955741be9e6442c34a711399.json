@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-11-11T01-05-02Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "tool_call_0",
+              "name": "multiplyNumbers",
+              "input": {
+                "b": 44,
+                "a": 57
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "tool_call_0",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "bee8e1ef6cf0328b50bf527f6c38702a71178878b7e01e75ce7493613e3b532f",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "161fe267ec0db2541c1ae048a353250ca932a87e9682030914444dee28f0ca00",
+  "response_bytes": 3170,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

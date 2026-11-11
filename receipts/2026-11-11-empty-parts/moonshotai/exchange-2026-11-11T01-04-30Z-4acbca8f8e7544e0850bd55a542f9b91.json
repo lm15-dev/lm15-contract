@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-11-11T01-04-30Z",
+  "provider": "moonshotai",
+  "status": 200,
+  "model": "kimi-k2.6",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "c9193fb82b3f010af97f450d817547e1c3e5d43790dfd866b8dc2da8f028c19e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "1a03414dd0bbe85fe93fab0028543fc71fbd30315c0b0319eb5b7375d3324743",
+  "response_bytes": 2071,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

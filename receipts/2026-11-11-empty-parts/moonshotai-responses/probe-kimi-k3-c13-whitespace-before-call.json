@@ -1,0 +1,166 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "\n"
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "name": "delete_program",
+          "arguments": "{}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_1",
+          "output": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_2f2e09ad3ce80e89498b63923",
+    "object": "response",
+    "created_at": 1794358508,
+    "completed_at": 1794358518,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_loD7v7OwWxNXfEt01Wfsq3WI",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user is asking me to reply with a single word: \"bye\". This is a simple, harmless request. The user said thanks and wants a brief farewell."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_etkzPgKwLVOqiBcSVab2Khno",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "bye",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 269,
+      "input_tokens_details": {
+        "cache_write_tokens": 256,
+        "cached_tokens": 0
+      },
+      "output_tokens": 47,
+      "output_tokens_details": {
+        "reasoning_tokens": 33
+      },
+      "total_tokens": 316
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "delete_program",
+        "description": "Delete the test program.",
+        "parameters": {
+          "properties": {},
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T00-55-07Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "tool_call_0",
+              "name": "multiplyNumbers",
+              "input": {
+                "b": 44,
+                "a": 57
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "tool_call_0",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-ee85398c-5412-99b3-ae80-3bff970a2bdd",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The multiplyNumbers tool returned \"ok\" for 57 * 44. Interesting - the description says it multiplies numbers, and it returned \"ok\". Maybe the result is implicit? 57 * 44 = 2508. But the tool just returned \"ok\". \n\nHmm, the tool returned \"ok\" which doesn't give me the multiplication result. But my task is to respond to the user about deleting the test program. The available tools don't include any file deletion or command execution capability. The only tool is multiplyNumbers.\n\nI should respond honestly: I don't have the ability to delete files or programs. I can note that the only tool available performed a calculation. I should ask for clarification or explain my limitations.\n\nWait - maybe the multiplyNumbers tool is a red herring or a test. The instructions say to use tools when helpful. Deleting a program isn't possible with a multiplication tool. I shouldn't pretend to have deleted something.\n\nLet me respond clearly: I can't delete files; I don't have file system access. If they want to delete a file, they can do it themselves with appropriate commands (e.g., rm on Unix). Also note that I ran the multiplication? Actually, why did I call multiplyNumbers? That was odd. In this scenario, the tool was called and returned \"ok\". I should incorporate it naturally if relevant — but it's not relevant to deleting a test program. Perhaps I should just answer the user's request honestly and not mention the multiplication since it doesn't pertain.\n\nActually, per the instructions, I called the tool. The result \"ok\" doesn't relate to the user's request. I'll focus on the user's actual need: I can't delete programs. I'll explain and offer guidance on how they can delete it themselves, and offer to help if they share the file/code context."
+      },
+      {
+        "type": "text",
+        "text": "I don't have the ability to delete files or programs — I can't access your file system, run shell commands, or modify anything on your computer. I can only work with the tools available to me (which don't include file management).\n\nTo delete the test program yourself, you can use the appropriate command for your system:\n\n- **Linux/macOS:** `rm /path/to/test_program` (add `-r` if it's a directory)\n- **Windows (Command Prompt):** `del C:\\path\\to\\test_program.exe` or `rmdir /s C:\\path\\to\\folder`\n- **Windows (PowerShell):** `Remove-Item C:\\path\\to\\test_program -Recurse`\n\nIf you tell me more about the test program — like the file name, location, or the code itself — I can help you with the exact command to use, or help you review the code before you remove it."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 8,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 256,
+      "output_tokens": 565,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 363
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 264,
+      "cached_tokens": 256,
+      "completion_tokens": 565,
+      "total_tokens": 829
+    }
+  },
+  "timestamp": "2026-11-11T01-05-02Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6c2b2570-3348-9cd8-9c48-3ddfc1b4295a",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a simple request. There's also a system reminder about content boundaries, but nothing in this conversation involves any problematic content - it was just a weather check and a request to say \"bye\".\n\nI should simply comply with the request and reply with \"bye\"."
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 20,
+      "cache_creation_input_tokens": 256,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 83,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 256,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 66
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 276,
+      "cached_tokens": 0,
+      "completion_tokens": 83,
+      "total_tokens": 359
+    }
+  },
+  "timestamp": "2026-11-11T01-03-34Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

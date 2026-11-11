@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-11T01-04-01Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)Paris is the capital and largest city of France. Located in the north-central part of the country along the Seine River, it serves as the nation's political, economic, and cultural center. The city has an estimated population of approximately 2.04 million within its administrative boundaries, with a metropolitan area population of about 13.2 million as of 2026. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))\n\nParis is renowned for its iconic landmarks, including the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Its rich history and cultural heritage make it a major destination for tourists worldwide.  "
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "85334d51e8bb1a43907a5377aeb9e37c592c7fda196b3621aef33ca0ad629e04",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "61e5ae60236c1dcadccb0ca2cf74d4793cfc791382e669dbe4fb238c12c52ff2",
+  "response_bytes": 822,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

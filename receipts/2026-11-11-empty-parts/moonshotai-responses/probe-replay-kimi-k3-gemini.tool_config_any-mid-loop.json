@@ -1,0 +1,153 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "tool_call_0",
+          "name": "multiplyNumbers",
+          "arguments": "{\"b\":44,\"a\":57}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "tool_call_0",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_6cff2425-cd81-97dc-89df-e375a7dac34c",
+    "object": "response",
+    "created_at": 1794359125,
+    "completed_at": 1794359134,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_2JQrIsCVadKYQWY0Q1E7xswL",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user has asked to \"Delete the test program now.\" However, the only tool available to me is a \"multiplyNumbers\" tool, which multiplies two numbers. There is no tool for deleting files or programs.\n\nI don't have the capability to delete any program - there's no file system tool, no delete tool, and no knowledge of what \"test program\" the user is referring to. I should inform the user that I don't have the ability to delete programs, and clarify what they might need.\n\nI should respond helpfully, explaining my limitations here."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_ijOSdvqSK3rWLCgsqX5imdEG",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "I don't have the ability to delete files or programs. I don't have access to any file system tools in this conversation, and I also don't have any context about a \"test program\" — this appears to be the start of our conversation, so I haven't created or worked with any program.\n\nIf you're trying to delete a test program, here's how you can typically do it yourself:\n\n**On Windows (Command Prompt):**\n```cmd\ndel filename.ext\n```\n\n**On macOS/Linux (Terminal):**\n```bash\nrm filename.ext\n```\n\n**In an IDE (like VS Code):**\n- Right-click the file in the file explorer and select \"Delete\"\n\nIf you can tell me more about what program you're referring to — such as where it's located or what language it's in — I'd be happy to give you more specific instructions. Or if you'd like help writing a script to delete files programmatically, I can assist with that too.",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 264,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 256
+      },
+      "output_tokens": 316,
+      "output_tokens_details": {
+        "reasoning_tokens": 112
+      },
+      "total_tokens": 580
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "multiplyNumbers",
+        "description": "The multiplyNumbers tool.",
+        "parameters": {
+          "properties": {
+            "a": {
+              "type": "string"
+            },
+            "b": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T01-05-25Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

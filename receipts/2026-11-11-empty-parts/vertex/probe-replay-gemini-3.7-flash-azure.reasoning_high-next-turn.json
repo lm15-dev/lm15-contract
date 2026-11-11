@@ -1,0 +1,105 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "We have n ≡ −1 (mod 2,3,4,5), so n+1 is divisible by 2,3,4 and 5. Hence n+1 is a multiple of lcm(2,3,4,5)=60, so n = 60k−1. The smallest positive choice is k=1, giving n = 59 (indeed 59≡1 (mod2), 2 (mod3), 3 (mod4), 4 (mod5))."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "delete_program",
+                "args": {},
+                "id": "call_15595659120782909086"
+              },
+              "thoughtSignature": "AY89a1/a5O2zJwQ6p2YYhQpH1dFB5FxY9pdoUUvS8XVciD9coGOr7RrEWjJOCGCRhFGtDH081HeQYdHJ5BEFZV7N1MxVO6IGLzZG3KocQIo34PPYcpOi"
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 141,
+      "candidatesTokenCount": 10,
+      "totalTokenCount": 151,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 141
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 10
+        }
+      ]
+    },
+    "modelVersion": "gemini-3.7-flash",
+    "createTime": "2026-11-11T01:04:05.621811Z",
+    "responseId": "Bb_zavP5Ja340MMP0YKP2Ac"
+  },
+  "timestamp": "2026-11-11T01-04-05Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

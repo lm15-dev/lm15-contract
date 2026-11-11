@@ -1,0 +1,175 @@
+[
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-e0f9b21293d84c19a3d1a3ee6bcc8e24.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-03Z-6f476b58917144f3b7b6b0590a224e38.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-05Z-e384f9edbef941fe88287fd17199fd66.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-07Z-d11f4ce27732419cb75613a84f8fb800.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 400,
+    "message": "messages.1: all messages must have non-empty content (request_id: 0f9a5e35-ab1b-4e18-8af5-e976f8ce1bcd)",
+    "exchange": "exchange-2026-11-11T00-54-10Z-610ae62ec72f43eba2daeffc70134d03.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-11Z-99172f94ee6649afb02de30e558351c7.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-13Z-2486bb74e081473491ca8559108ff993.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-17Z-5d323bd589fe4b218636ebba7c118fad.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-19Z-d5f854323eb843f299e445e2d0549fda.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-22Z-d36d1c34fd0b4b03a10670997ef2643d.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-25Z-61ac03dcce0741f9a166736946b039b0.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-27Z-7e68bc7e8a6d4fa1bb14322d4181a697.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-29Z-9fbdf6bc824f445285d5f031daeafc16.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-31Z-68fced1fc66f4ed199a3fc33db08aa58.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-33Z-a88b409cf8e5415a8af3d0c4d67b0964.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 400,
+    "message": "The `content[].thinking` in the thinking mode must be passed back to the API. (request_id: 5d8ebc76-6131-4ade-bb5b-14d51c4abfb4)",
+    "exchange": "exchange-2026-11-11T00-54-36Z-ad450f78eec84000a947bf8e58adc234.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "x01-empty-system-block",
+    "asks": "an empty system prompt (the array form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-37Z-696344192bf74525bef5103569b53d07.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "x02-tool-result-empty-block",
+    "asks": "a tool result whose content is one empty text block",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-39Z-e32ba77d30114f07b4c0b83257e66eca.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "cell": "x03-whitespace-beside-text",
+    "asks": "a space as its own text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-41Z-1b29d1911ab94d5b8ffe736715ee205a.json"
+  }
+]

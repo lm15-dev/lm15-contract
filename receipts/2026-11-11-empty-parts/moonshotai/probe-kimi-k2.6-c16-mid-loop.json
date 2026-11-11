@@ -1,0 +1,83 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bcc9edd0d5066c76946d",
+    "object": "chat.completion",
+    "created": 1794358473,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The test program has been successfully deleted.",
+          "reasoning_content": "The user asked me to delete the test program, and I used the delete_program function. The result came back as \"ok\", which means the test program was successfully deleted. I should confirm this to the user in a clear and concise manner."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 76,
+      "completion_tokens": 60,
+      "total_tokens": 136,
+      "completion_tokens_details": {
+        "reasoning_tokens": 50
+      }
+    }
+  },
+  "timestamp": "2026-11-11T00-54-32Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

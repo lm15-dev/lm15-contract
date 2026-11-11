@@ -1,0 +1,70 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "system": ""
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "08e3fd06-3a34-44bb-9f79-d7feaab91e4b",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user says \"Thanks. Reply with the single word: bye\". There's a tool available: delete_program. Should I call it? The user just wants \"bye\". No instruction to delete program. I'll just reply \"bye\".",
+        "signature": "08e3fd06-3a34-44bb-9f79-d7feaab91e4b"
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 153,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 51,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T00-54-22Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

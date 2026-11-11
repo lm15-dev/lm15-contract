@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime.",
+          "reasoning_content": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "2bb852b4-6e7d-4c67-95dc-bb991706460d",
+    "object": "chat.completion",
+    "created": 1794359044,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning_content": "We need answer single word bye. But context: user asked delete test program now earlier, assistant answered unrelated Mersenne prime. Then thanks reply single word bye. Need perhaps tool call? They asked delete program now previously, but last request is reply single word bye. We should just \"bye\". No tool. Ensure single word."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 490,
+      "completion_tokens": 69,
+      "total_tokens": 559,
+      "prompt_tokens_details": {
+        "cached_tokens": 256
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 67
+      },
+      "prompt_cache_hit_tokens": 256,
+      "prompt_cache_miss_tokens": 234
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-04-04Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

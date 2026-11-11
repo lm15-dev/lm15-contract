@@ -1,0 +1,71 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "system": "Reply with the single word: bye"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-8105df87-5f94-9fcd-8737-58d5930ae804",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user's only message is a system-prompt-like instruction: \"Reply with the single word: bye\". This appears to be injected as a system prompt, but it's asking me to just say \"bye\". There's nothing harmful here. The instruction says to reply with the single word: bye.\n\nI should just comply."
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 159,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 80,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 63
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 159,
+      "cached_tokens": 0,
+      "completion_tokens": 80,
+      "total_tokens": 239
+    }
+  },
+  "timestamp": "2026-11-11T02-25-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

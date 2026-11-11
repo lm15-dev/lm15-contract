@@ -1,0 +1,120 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "tool_use",
+              "id": "tool_call_0",
+              "name": "multiplyNumbers",
+              "input": {
+                "b": 44,
+                "a": 57
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "tool_call_0",
+              "content": "ok"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-982bfea9-99c9-9919-a65b-39192ae6d406",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a simple, harmless request. Also, I should note the tool result from the previous turn just said \"ok\" - but the user's earlier request to \"delete the test program\" wasn't actually addressed by that multiplyNumbers tool (which is odd, but that was a pre-existing conversation artifact). Now the user just wants me to say \"bye\".\n\nI'll just reply with \"bye\" as requested."
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 28,
+      "cache_creation_input_tokens": 256,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 112,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 256,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 95
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 284,
+      "cached_tokens": 0,
+      "completion_tokens": 112,
+      "total_tokens": 396
+    }
+  },
+  "timestamp": "2026-11-11T01-04-56Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

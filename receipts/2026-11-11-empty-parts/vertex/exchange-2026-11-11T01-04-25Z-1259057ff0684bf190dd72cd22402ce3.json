@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-11-11T01-04-25Z",
+  "provider": "vertex",
+  "status": 400,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "multiplyNumbers",
+                "args": {
+                  "b": 44,
+                  "a": 57
+                },
+                "id": "tool_call_0"
+              },
+              "thoughtSignature": "CocEAb4+9vsM4fnVZjuXmyEYpIBoinmtIIzfaCg5wvd5W/VsyFGxlAolz+8OjnCqQlLfvzd5jmYj93bJU2dLpJcrjJ5EwkDRU4Zw6nFYnfcllGgMyhViw1JnoD7XqvYpNi7CYs8YVao3BJh7piExskh0mI0vb5d3UPWLbwRJvlcM5aTYHtdwutOnDB1oM3AjQj5dqs5/WpePsO6pKjFkC8+rg7D1igs9KJ+c0SvZJzgSyhqMlOs56k854JR1sjbgV97UZnllaCNUJd6RDPPCH0A2ardAS3sSGh3ad+aSVPnVESCqKmsJAV7b6IyKNM7dnh0+OE2VKXrhZUC6OfAvqMMdqQa1LA64LwdyZTuGPBCW3UiKk/h/KWKY/vkjL3nj5twabVW0jsM0luDMyyksY1NogEDEeq/IHAtGmOLG2cVkojEWeAYU2oFYbEPTYp39EislgyMXS8aRAFk83KHwaw6xa5R6ZUvPGosY+D8DgxXjZ44b6Wfby67oHLW1rIgVhiSDnp2PH+b/2jX/88OzUmrpi42XbSY8ZVJyvm04foQAnVHDX1v+Tg1Ddc0qtqCNqH9dRch6FwFinXTDpd/t0F1VkA5eJj+rGhpMPkIxYMXe/XxL1/ET5lVqHGBssRFaKi2MERkQM/ort0oit2ApxrqzY1wu3UkzDZ8VsrZIsV/u56OiRkRCrSzs"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "multiplyNumbers",
+                "response": {
+                  "result": "ok"
+                },
+                "id": "tool_call_0"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "multiplyNumbers",
+              "description": "The multiplyNumbers tool.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "b": {
+                    "type": "string"
+                  },
+                  "a": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "2c941dda9dcd0e02cafce2e31c58b89ef81c11f47c1dae8b2e507e559f178b01",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "15802fd27073eb2a29ad1b2f1eb6c29a903ec4c7952a4679a0e4c70bb3d0c9c8",
+  "response_bytes": 116,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,95 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I can't delete programs or files. The only tool I have available is one that multiplies numbers — it doesn't perform any file or program deletion, so the call above didn't accomplish anything related to your request (it just multiplied 57 × 44).\n\nIf you need to delete a test program, you'll need to do that yourself, for example:\n- **Locally:** `rm /path/to/test_program` (Linux/macOS) or `del /path\\to\\test_program` (Windows)\n- **In a repo:** delete the file and commit/push the change\n- **On a server:** use the appropriate deployment or management interface\n\nIf you tell me where the test program lives, I can suggest the exact command to remove it.",
+          "reasoning_content": "The user asked me to \"delete the test program now.\" The only tool I have available is `multiplyNumbers` which multiplies two numbers. I cannot delete programs or files with this tool.\n\nWait, I already called the multiplyNumbers tool in the previous turn? Actually, looking at the conversation, there's a function call already made (multiplyNumbers with a=57, b=44) and a result \"ok\". But that doesn't make sense for deleting a test program.\n\nActually, looking at this again - the tool call was already made in the conversation history. The result was \"ok\". But multiplying numbers doesn't delete a test program. I should not have called that tool - it's not relevant to the request. But the call was made and returned \"ok\".\n\nI should respond to the user. The honest answer is that I don't have a tool to delete programs/files. The only tool available is multiplyNumbers, which doesn't perform deletion. The previous call was incorrect/irrelevant.\n\nI should tell the user I can't delete programs since I don't have that capability. I shouldn't pretend the multiplication call deleted anything.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359128,
+    "id": "2026111109051049adcb846533489c",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026111109051049adcb846533489c",
+    "usage": {
+      "completion_tokens": 388,
+      "completion_tokens_details": {
+        "reasoning_tokens": 231
+      },
+      "prompt_tokens": 184,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 572
+    }
+  },
+  "timestamp": "2026-11-11T01-05-10Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "1d0bb8c3-1b00-4012-897e-299076e69b45"
+  }
+}

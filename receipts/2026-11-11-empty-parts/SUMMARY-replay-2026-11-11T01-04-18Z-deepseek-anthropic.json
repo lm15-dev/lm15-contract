@@ -1,0 +1,146 @@
+[
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-34Z-cd62dffbb6b043fcbe4d628e4d29cbf6.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "The `content[].thinking` in the thinking mode must be passed back to the API. (request_id: 708dc7c3-c16f-4a1a-9078-2343f82c476a)",
+    "exchange": "exchange-2026-11-11T01-03-37Z-8a0bec0d7ee048d59c124739b2f5642f.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-38Z-c7e328898f3a435f9619d098b3059613.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-42Z-a9cc0e64675743429b2bc0c15997c497.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-45Z-43499e26ffb746cc9abd60439590ddc1.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 422,
+    "message": "Failed to deserialize the JSON body into the target type: messages[1].content: unknown variant `redacted_thinking`, expected one of `text`, `image`, `document`, `thinking`, `server_tool_use`, `tool_use`, `tool_result`, `web_search_tool_result`, `tool_addition` at line 1 column 3196 (request_id: 8ff0",
+    "exchange": "exchange-2026-11-11T01-03-50Z-e02c3fbb4e704452afe28f67dc2cbb4b.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 422,
+    "message": "Failed to deserialize the JSON body into the target type: messages[1].content: unknown variant `redacted_thinking`, expected one of `text`, `image`, `document`, `thinking`, `server_tool_use`, `tool_use`, `tool_result`, `web_search_tool_result`, `tool_addition` at line 1 column 3196 (request_id: 2b5c",
+    "exchange": "exchange-2026-11-11T01-03-51Z-3d18c8a6b6fc4cd68bf850c12e6414c1.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-53Z-6af1b7385f4142719940d0d6056f9a41.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-55Z-00b03b5a5e274f029e2f99c8d0907d9c.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-59Z-78ea8797788d4dcd82050430389b8dcd.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-05Z-d7ba11c4420649fb9d61a385e2c52cf8.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "The `content[].thinking` in the thinking mode must be passed back to the API. (request_id: 2465ee95-d8a2-49d8-9543-910d0584698f)",
+    "exchange": "exchange-2026-11-11T01-04-08Z-e1ad4ac26dc343229b2b81465ffba6d6.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-09Z-04d12d7712794f2892dbd7382aaefc64.json"
+  },
+  {
+    "door": "deepseek-anthropic",
+    "dialect": "messages",
+    "model": "deepseek-v4-flash",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-12Z-3dce257fdb2a41d0af1c6ce5039e4db3.json"
+  }
+]

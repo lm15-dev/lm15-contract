@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-11-11T01-05-28Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)Paris is the capital and largest city of France. Located in the north-central part of the country along the Seine River, it serves as the nation's political, economic, and cultural center. The city has an estimated population of approximately 2.04 million within its administrative boundaries, with a metropolitan area population of about 13.2 million as of 2026. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))\n\nParis is renowned for its iconic landmarks, including the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Its rich history and cultural heritage make it a major destination for tourists worldwide.  "
+            },
+            {
+              "type": "text",
+              "text": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)"
+            },
+            {
+              "type": "text",
+              "text": "([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "da54e1d01159a880037d0710e0c45a036b3e558ad02c3d027fdc8db5cbda1ec9",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "47b4621939b3e155f5cf6d60b638943924c65e8dd8a926a9089e71bcaf4e4e43",
+  "response_bytes": 513,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

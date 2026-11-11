@@ -1,0 +1,108 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgvEu1pscFSPhAdcDTqDF",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "text",
+        "text": "I apologize for the confusion in my previous response. Looking at your request to \"Delete the test program now,\" I need to clarify:\n\nI don't have access to any tools that would allow me to delete files or programs. The only tool available to me is a weather checking function, which isn't relevant to your request.\n\nIf you need to delete a test program, you would need to:\n- Do it manually through your file system or IDE\n- Use command-line tools directly on your computer\n- Contact someone with administrative access to the system where the program is stored\n\nCould you provide more context about what test program you're referring to and where it's located? That might help me provide more helpful guidance."
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 633,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 152,
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-03-36Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-11-11T01-04-04Z",
+  "provider": "vertex",
+  "status": 400,
+  "model": null,
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "functionCall": {
+                "name": "get_weather",
+                "args": {
+                  "city": "Paris"
+                },
+                "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "get_weather",
+                "response": {
+                  "result": "ok"
+                },
+                "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "description": "The get_weather tool.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "request_sha256": "dbdceb290578ea49d03e1f3f1f892baf15c9f6a91c5cfcc7c980cfeb303e6c43",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "da8263b9383206de005af825b9d7da462695d09a2c6c8b89141bf3158de28d33",
+  "response_bytes": 430,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

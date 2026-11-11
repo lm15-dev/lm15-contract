@@ -1,0 +1,83 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": " "
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "No explicit request was made.",
+              "thoughtSignature": "AY89a19OJFerDWLD02FYk2qqBNdBbOLDuc852T1RUUEnWl2HF6WAhnPMLa6+QVWYaF1/08oa4QvCtjakuizsn0pExT1YKBZg7a9z0u/SsCn9aITkV0GIk/KTDRQ20eNGphyTO4izwdN+zwCU4n8WKGH966CO/YdRYGgsABx/JjX0QFBBHj6w2Kgdx9q9gwm0C1/e5tstABx4n/OOCQzlvUqqku0is3jvxjdqSsOxoL29wMfYuU+SqHh6yw/c/dRHx8bQVMcRj3bxWniW4R+6wgJlQamviQfG8Mdr2BSzr7njgU3PMT+ey4VVj8mZ9d7Pg1ExKz+LASZjXLjmchVY3aItZNLn8wNeDXjgIZC92/dZjTLHqQL8WBxWkp7W0SjM0ljh5lhc5SWtxDLUgb90CLkPyAaBg5mEuSExWJuQzhbweDFXmAvApJMr9COTdapn0xDfqKfuoQ5VOgczj8a5qm68R/7h2c6XbaB4Nwa2FNmdTHVEoqtrO/1NtztCI9UJfHhT"
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 10,
+      "candidatesTokenCount": 6,
+      "totalTokenCount": 76,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 10
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 6
+        }
+      ],
+      "thoughtsTokenCount": 60
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T00:54:23.736120Z",
+    "responseId": "v7zzavj2LK340MMP0YKP2Ac"
+  },
+  "timestamp": "2026-11-11T00-54-23Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

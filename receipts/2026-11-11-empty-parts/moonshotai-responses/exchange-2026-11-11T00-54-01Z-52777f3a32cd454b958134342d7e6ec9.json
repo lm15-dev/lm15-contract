@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-11-11T00-54-01Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "name": "delete_program",
+          "arguments": "{}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_1",
+          "output": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2bee7692bf401be1734f8eb8ea32355ad7811a594def1e0a01d09dc55006623e",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "388a4c0f1a414f37667c15ea44e04ae6119c6bcf4e33b5973e6f36169811d5da",
+  "response_bytes": 1542,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,360 @@
+[
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-c055e4f207cf4894a7afcab8827c5250.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-03Z-57edba35711f474084ee979bd1ed9428.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-04Z-cd25505f5ebb439dbb87e066314485bc.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-05Z-bd9a273e8c7e4f85ad6bf38746c48c0c.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-06Z-0c42a4dc72144b5d97b48842c9a81765.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-07Z-4f057bf709c7436391a81fbb7f9873e9.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-09Z-33a8773f348b451b93affeb95ccf6130.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-10Z-a8a34be8b743455da6b65963b0e0173a.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-11Z-741a17f07bf146439641608404af72a1.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-12Z-bf955e0970064b0bb237e1ec7967e0ea.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-14Z-b9312cf961294e7db2a953cb61418912.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 400,
+    "message": "messages: text content blocks must contain non-whitespace text",
+    "exchange": "exchange-2026-11-11T00-54-15Z-e9d4f2ab662249fda6003e26eb51ed85.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-16Z-e15a05c475c84794877191220aa370ec.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 400,
+    "message": "messages: text content blocks must contain non-whitespace text",
+    "exchange": "exchange-2026-11-11T00-54-17Z-74e82eaac5a44d69b7a2a91ab0aabdb1.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-19Z-ae6e03d6ec6c4ba7ab89dbf90588c3eb.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-20Z-2f119b92c5a0443d9c902cac9add5ac5.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "x01-empty-system-block",
+    "asks": "an empty system prompt (the array form)",
+    "status": 400,
+    "message": "system: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-21Z-b6b2e60fe68f41069805f71052455e4f.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "x02-tool-result-empty-block",
+    "asks": "a tool result whose content is one empty text block",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-22Z-afff89f2d374415eb6c50aff6fc0204a.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "cell": "x03-whitespace-beside-text",
+    "asks": "a space as its own text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-24Z-358ec89d26f44060b4c3c62ebd4bcc77.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-25Z-7f8ba21e925a4d45a746a45617bb779d.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-28Z-aa3198da42ea4596986c081c75d39f1a.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-29Z-37071bedd9d34a41a17c0081fd45b1a8.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-30Z-00a35e9463ac4cc7a49d89d9a2e3159b.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-31Z-d7671a63b7a64b65a20cb7c617dce3a0.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-37Z-01798875039c4baf8d0a043a0ba33ec9.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-39Z-78b346e3a5dd4692b1345bb9d8b59bd6.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-44Z-3fc038b58793467c815e07c7d468c57a.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "messages: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-54-45Z-1e86380fd3914373864b095712c68ec3.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-46Z-14c94ed2ad8b4d3dbb9c6bd0c5a93184.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-49Z-a212ac95ee154c69b581663d92c749d6.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 400,
+    "message": "messages: text content blocks must contain non-whitespace text",
+    "exchange": "exchange-2026-11-11T00-54-53Z-a604fee4e4b741cca11253fe62edf9d7.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-54Z-c6f9aaf9d948482e806b92de26df8aaf.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 400,
+    "message": "messages: text content blocks must contain non-whitespace text",
+    "exchange": "exchange-2026-11-11T00-54-57Z-44724b49e01e48eb90ec4399a6386265.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-58Z-77b1549f4059430cbca354b5ab9a7664.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-00Z-72a604d00f194de4b3550a7cd734ab7c.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "x01-empty-system-block",
+    "asks": "an empty system prompt (the array form)",
+    "status": 400,
+    "message": "system: text content blocks must be non-empty",
+    "exchange": "exchange-2026-11-11T00-55-02Z-a1cb0fde923840439fb525cf3da8d2a8.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "x02-tool-result-empty-block",
+    "asks": "a tool result whose content is one empty text block",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-03Z-f2dd20d6eab6410a95f5b26871901969.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "cell": "x03-whitespace-beside-text",
+    "asks": "a space as its own text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-06Z-2ba4aeb9a70d4ab98d6b71c749e0da5d.json"
+  }
+]

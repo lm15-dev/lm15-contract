@@ -1,0 +1,107 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgvEuyAfNgESyW7wE8crX",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a straightforward request. I should simply respond with \"bye\".\n\nHowever, I notice that earlier the user asked me to \"Delete the test program now.\" I didn't execute that function call. Looking back at the conversation, the user first asked me to delete a program, but I didn't actually call the delete_program function. Then I provided information about Mersenne primes (which seems unrelated to what they asked). Then they thanked me and asked me to reply with \"bye\".\n\nSince they're now just asking me to say bye, I should do that. But I'm reflecting on the fact that I didn't follow their earlier instruction to delete the program. However, they seem to be ending the conversation now by asking me to say bye, so I'll just respond with \"bye\".",
+        "signature": "EsYICrgBCBMYAipA9qDnq89qlTDIYIiNYMMV2OTcfBVhORG5ltzHQOXP6ICJKo5hZiIBzeIHar6Acj2z240S7GYH4ZdVDvH2kvoM3jIZY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMTgAQgh0aGlua2luZ1okNzA1MjAyYjEtNzljYS00ZWYwLTk2MDQtMDhmMjFjZGQ2MDJmmgEbChljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxqAH3/c7XBhIMe04EVMFylCjmzUUXGgxpgqngsyTPOkcTaUUiMNt+/8aXEjAAySgYVA5+zhow9JBFH+EZeW8Q7NqsaM/ccz6uMaWZBh6JwMs3NDQqWSq6BjeuCKrQDw5ouBjb4tZ5QdhnUmOKykYAaO1nSvoJt1td34ZxJk9QWp6wkGKjrLLGd+DxuUJAFB+ltUBJ5hdEqwEZDYIXAGsFi1N4JyR1vFAytdzXz9CnvymC+cEME2w/rdmE5rhPIa5V9E1mTdzI2rDWBTXeDz9mtX4lYrYiEQc6EcbXtPJEmzryBd4XU+6asFN2AUrqLbRcWgFC+4ZyOJepMQFZ8+a8+Hb2/pz25sFcGduta/x141EpVInfMyciS0sgLHOGLEh/dYiu1LWpUcGnlDC4D5zXSPUoSy3afqZ79LH61K39VVjmanOuIm2UlBXQ9XnLaa8JOLQUnsOREGlKyD21VSS298Yf3KZ8RXuemMcPIqOyPJcLWpAzIjSiooZ/KIXMZ6Qm4HVAe8uYFc9jVE9/6gS8DGEn/muIW5W+dThxGFCdO7VbxtuYDFVfHoaHUmqnKNprcDzHEAvJVKbD+cGlIYUigQPEkTjSuUkCCalUCHE8NN64wxC/aJWHvPNgHcRES+YfqasE7QFtkUZpz36M4PjUsnx50aV3dv2APWd9ECyf64RSh8yvitUynqUvhAmjBYHUF0GNcO55QAzJmBynvpwmCB0N3KGhcGaLdD6AFNCATtPPD9Oq+sFCpASj83eUGhNyP3EYpTHed8BO57AviSggM6+WGiV0/kVqdbLZQw1KNNQTcUSSgKT48Se5NA+/Vvh9uYTPSfpVN6dgPryBHJlZpAG9nh4lIxa8ULTNpylNGWbBl3WsFN7XyUivkrv8X4kyOsMrvkefMboqUbgJBWX2YywpHVJq8jBf6CZo2O2mil3OwQhCtQqcjyp9YGgGcB41p0HEpu5Ri4YAi1fZ3C1UhxtJmU115fpPbcKOtIyaFPsqtYGVZ4Ag+fyMARvKvWhwQk5motrKvzsKmyUWczFne+jL/nSh8P1dz2x3tekxrT2EIA8gHomoz2X52nt9FrAyzpcAPoqZmuWuz8DZ1tkZsEUQKHjrtcwpv8Wv3D7Bl65PGaxXOKiR2aCEkfhqaE3lJFHBMFV+MVbhynEGLDDnICupeJ2d3fPUoXOnBXYPdYCs3ZU1FmY07jISfrDvchChP5AYAQ=="
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 812,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 193,
+      "output_tokens_details": {
+        "thinking_tokens": 187
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-03-49Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

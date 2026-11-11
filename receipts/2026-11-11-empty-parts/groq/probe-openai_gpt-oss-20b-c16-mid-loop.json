@@ -1,0 +1,96 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-8a43ec0b-ec52-46b8-b17c-1c4bf58f866d",
+    "object": "chat.completion",
+    "created": 1794358458,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The test program has been deleted.",
+          "reasoning": "We are told to call the delete_program function. It expects an object. The assistant called delete_program with {}. The function responded \"ok\". So the test program is deleted. Now we respond to user. Probably a confirmation."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.003117638,
+      "prompt_tokens": 142,
+      "prompt_time": 0.007010182,
+      "completion_tokens": 63,
+      "completion_time": 0.073458198,
+      "total_tokens": 205,
+      "total_time": 0.08046838,
+      "completion_tokens_details": {
+        "reasoning_tokens": 47
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_d6de37e6be",
+    "x_groq": {
+      "id": "req_01m741je7fed3v99w465rcg2rr",
+      "seed": 985714343
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-18Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741je7fed3v99w465rcg2rr"
+  }
+}

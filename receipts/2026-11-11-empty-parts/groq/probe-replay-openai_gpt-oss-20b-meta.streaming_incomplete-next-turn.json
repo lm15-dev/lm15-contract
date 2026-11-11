@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-940ff75e-6cf7-4b33-9bc9-cec761b3c489",
+    "object": "chat.completion",
+    "created": 1794359020,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "reasoning": "The user says: \"Delete the test program now.\" Then they say: \"Thanks. Reply with the single word: bye\". There's a request to use a tool: delete_program. So we need to call the function. Then respond with \"bye\". According to policy, we must execute the tool request. The tool is defined: functions.delete_program with no arguments. So we call it. Then respond with \"bye\".",
+          "tool_calls": [
+            {
+              "id": "fc_0f2ec76c-92cd-430b-893a-1dddd978831a",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.086720717,
+      "prompt_tokens": 133,
+      "prompt_time": 0.008942095,
+      "completion_tokens": 105,
+      "completion_time": 0.154343305,
+      "total_tokens": 238,
+      "total_time": 0.1632854,
+      "completion_tokens_details": {
+        "reasoning_tokens": 86
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_8b41efc9a3",
+    "x_groq": {
+      "id": "req_01m7423jbxegjavrttxhj0yf3f",
+      "seed": 611605580
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-39Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423jbxegjavrttxhj0yf3f"
+  }
+}

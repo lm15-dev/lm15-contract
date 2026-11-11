@@ -1,0 +1,102 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "\n\n"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "delete_program",
+                "args": {}
+              },
+              "thoughtSignature": "AY89a1/bDDaTYkRIKNtO3NIxyuTzowmw++rbYB9FlDq4KPmeH2NS+rpEiCW38dnIyY3/Peh+kd6TJdTygD5A6ueP7yQR1CFMMlY2VNIyiC5IF+44Hd5LWTYbSovPlBl1y9Gkh6i6RwpB+nE35acprQUjtXNtHlqG2E9sn+nZz28O6BxyHNjodbPNbJVJ/ZPDHe2TVDTelKwft8WPGgSdHoPoDmjuxZjhjM7dfA/CDagJEb9w+/kLlo397lBsWaR3fjKtR6dRdla8Sil6Uh1l8rDnOS0Qp5lCxcIf5nJ+6+TTVdf63KnOD6U3/q17kPt4m5nHxkveo9VeIGDen5IJTW1gpJ3qpuowJawxADT1n2nuqBwS1dB6caPNsj88rkNgZTVw9nRkbf0POMkU6CbUcgMu1GY11Z16hl/VVEVyN4Gr4U1srgpkqmAIp+qGYKLZ117iBzo6zBh98RX2U/d10A6JOg9lN625GHO22r2piFPkxY961yvot3Jzn2SRDOKDzefH0xbVKes="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 25,
+      "candidatesTokenCount": 10,
+      "totalTokenCount": 105,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 25
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 10
+        }
+      ],
+      "thoughtsTokenCount": 70
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T00:54:20.027440Z",
+    "responseId": "vLzzarDWAZ2N1tEPufCp0Q8"
+  },
+  "timestamp": "2026-11-11T00-54-19Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

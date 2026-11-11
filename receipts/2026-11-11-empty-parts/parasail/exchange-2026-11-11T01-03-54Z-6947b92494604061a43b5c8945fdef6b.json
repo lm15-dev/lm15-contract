@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-11-11T01-03-54Z",
+  "provider": "parasail",
+  "status": 200,
+  "model": "openai/gpt-oss-20b",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime.",
+          "reasoning_content": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "9750f40d7e47cc2177258a3d44aef034d0233b28ec23543fd6594cb43cbb59e0",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "2a7fc4a974432ef1ef83850eeaeff5ae0c138108cbb983dcc0114c0a3896e855",
+  "response_bytes": 879,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

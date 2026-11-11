@@ -1,0 +1,71 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "f38ee03c-3ff9-41d3-be64-64b31ece37e7",
+    "object": "chat.completion",
+    "created": 1794363928,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning_content": "The user's message is just a system prompt with tools and then the instruction \"Reply with the single word: bye\". So I should reply \"bye\". No tool call needed."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 279,
+      "completion_tokens": 38,
+      "total_tokens": 317,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 36
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 279
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T02-25-28Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

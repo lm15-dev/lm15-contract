@@ -1,0 +1,102 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingBudget": 2048
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "bye",
+              "thoughtSignature": "AY89a1+1xujwSDfR6795f+tWq35O6t93qxD/uoa88lroDwqw0M+eJ+FODj3ZKLnLgxDGTjNoSK0DXso26VGfAzicyN/htBtmpMKlRdIjlKuqCwr8UjRaIBJUaOcO0s+xwmmWeQWcQhBC7VvRXRjlbH/0HLQVDdQk29wc9YneTTe3QHQQrDfUKCevOS5ztTtE78IKZiVcweA7w7KTE6+yuFOgSiLcF05oXIsk1fbgkfw="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 58,
+      "candidatesTokenCount": 1,
+      "totalTokenCount": 79,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 58
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1
+        }
+      ],
+      "thoughtsTokenCount": 20
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T01:03:43.015183Z",
+    "responseId": "777zas921u7Qww-vpdfQDg"
+  },
+  "timestamp": "2026-11-11T01-03-42Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

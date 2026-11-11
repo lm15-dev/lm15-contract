@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-e7b95c9d756e258784dfce656098b0c5",
+    "object": "chat.completion",
+    "created": 1794359021,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-aef7fe9607f070be",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ],
+          "reasoning": "The user wants to delete the test program. That calls the `delete_program` function. Then the user says thanks and requests reply with \"bye\". Wait the sequence: User says \"Delete the test program now.\" Assistant should call the function. After deletion, presumably we respond with something like \"Done\". But then next user message says: \"Thanks. Reply with the single word: bye\". So we only reply with \"bye\". Actually the instructions: The conversation: user: Delete the test program now. Assistant: Delete_program call. Next user: Thanks. Reply with the single word: bye. So final assistant reply must be \"bye\". But we also need to call the function as side effect. So we do two steps: call delete_program. Then the final reply \"bye\". According to formatting, we need to output function call in the JSON block. Then after that we respond only the word 'bye'? Actually system message: \"When you think you have completed the user's request, you should respond with a JSON object of the following form: {\"name\":\"stdout\",\"content\":\"Answer\"}\". Wait I'm a ChatGPT with functions. The typical pattern: The assistant calls function then, after receiving result, responds accordingly. But here after calling delete_program, we might not need to output anything else but the user's request: \"bye\". So we would send function call, then after result, output \"bye\". But we need to know the function's result content to respond. But we don't need to include function result, we just want to display \"bye\". Usually, we call function; after receiving the result we respond. But the function might return a result that we may ignore? The user doesn't request the result. If the function doesn't block or needs output, we could just call function. We should produce a function call and finish. But the user wants a reply \"bye\". That is the final output. So we return \"bye\" as final.\n\nBut per format, if the function requires to be called, we have to output JSON function call. This will be processed. The assistant's final dialogue must include the function call. According to OpenAI tool usage, we produce a function call message. That's it. Then after returning result, we produce the final answer.\n\nThus first output: the function call. Then next message: content \"bye\".\n\nBut the user says \"Thanks. Reply with the single word: bye\". So after deletion, we should respond with \"bye\". So we need to call the function and reply \"bye\".\n\nWe'll produce the function call first. Then new message with content \"bye\". But the instruction for the assistant: \"Respond with the single word: bye\". That might be the final output. However, in a tool usage, we need two messages. The first is function call. The second is content \"bye\".\n\nLet's do it."
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": 200012,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 133,
+      "total_tokens": 733,
+      "completion_tokens": 600,
+      "prompt_tokens_details": {
+        "cached_tokens": 80,
+        "created_cache_tokens": 48,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 580
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T01-03-40Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "e7b95c9d756e258784dfce656098b0c5"
+  }
+}

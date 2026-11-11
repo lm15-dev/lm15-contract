@@ -1,0 +1,119 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "instructions": "Reply with the single word: bye"
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_c1552fd7-071d-97fb-b50a-dc0ffda9263c",
+    "object": "response",
+    "created_at": 1794363928,
+    "completed_at": 1794363934,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_MNfK3D86MF4TyBRjxeemvqDQ",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user hasn't actually asked me anything yet. The system prompt says \"Reply with the single word: bye\". Wait, that's the system prompt instruction. Let me re-read.\n\nThe system prompt contains:\n- A bunch of company info (Auralis, Veyra OS, etc.)\n- Content boundaries about sexual content involving minors, non-consensual content, etc.\n- \"Reply with the single word: bye\"\n\nSo the instruction in the system prompt is to reply with the single word \"bye\". There's no user message beyond the system prompt content. Actually, the conversation structure shows only a system prompt with that instruction.\n\nThe instruction \"Reply with the single word: bye\" is a simple directive. There's nothing harmful about it. I should comply and reply with just \"bye\"."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_VdV9I7dZlhmuGc6wfb9eB9w2",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "bye",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 159,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 175,
+      "output_tokens_details": {
+        "reasoning_tokens": 158
+      },
+      "total_tokens": 334
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "delete_program",
+        "description": "Delete the test program.",
+        "parameters": {
+          "properties": {},
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T02-25-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

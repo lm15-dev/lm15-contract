@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "system",
+          "content": ""
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-aa84b1a3-e743-494e-b633-90274906c1b4",
+    "object": "chat.completion",
+    "created": 1794358451,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "User: \"Thanks. Reply with the single word: bye\". So we just reply \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.030562156,
+      "prompt_tokens": 123,
+      "prompt_time": 0.005963587,
+      "completion_tokens": 31,
+      "completion_time": 0.039327603,
+      "total_tokens": 154,
+      "total_time": 0.04529119,
+      "completion_tokens_details": {
+        "reasoning_tokens": 21
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_228717f27c",
+    "x_groq": {
+      "id": "req_01m741j7kwefyt16d2g4p9n8fv",
+      "seed": 1852319962
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-11Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741j7kwefyt16d2g4p9n8fv"
+  }
+}

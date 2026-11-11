@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-11-11T01-03-36Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5-20251001",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "request_sha256": "03bd70b4e8006be12d9531e337d4ac73b48767005f4295e52d4e7733a2235127",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "64ec6ed34aa3355e2c1dec2c363dd3d2f6baaad70f7f27b6c656c192959785db",
+  "response_bytes": 1234,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

@@ -1,0 +1,47 @@
+{
+  "timestamp": "2026-11-11T00-55-19Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": " "
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "4bba5f3f4e19d19b352a8323bb56d046d1d7ed574d137b26dae1c21ff3683743",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "562c09de77c4e48a9a1b11952029e11f17d7092a7545e01cc9e1738856c2d622",
+  "response_bytes": 1819,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

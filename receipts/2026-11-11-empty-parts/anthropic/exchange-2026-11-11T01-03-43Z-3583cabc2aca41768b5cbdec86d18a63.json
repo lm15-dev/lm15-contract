@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-11-11T01-03-43Z",
+  "provider": "anthropic",
+  "status": 200,
+  "model": "claude-haiku-4-5-20251001",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "",
+              "signature": "EoADCpABCBEYAipAnS65/8zPh5m53r1gv+j7ou4TaBppUP7AtCqauwlT7ZFtXMlkvndMIzLdRwPTpQyEAPgyh/71BeFHhbocqNyDyDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaoAYS34NQGEgxrafcj6gPI11dR/1QaDFIqxkmTGUA/bxmDayIwLQb4lTokNRD3pYrn4NLWh/cZema6onVCUJ48bn0jlSqXw0tJ9hQxDLLfQsdNEDKeKpwBH21Dpg39LP/8Y2kUDi1G8alF0qcfFZuSHdKUSGG4qb2jWoYCjCPLNawnnZdB73wFUcEJj8HqtMq3ZpdxlPskK24S1PcTi2nNFzYTtb7361PltZwXgmA/chaqEb6hOcwlO7EqmMtiprslZIerpF92QXI+WOngpjWdia1xpt7/EHjziQE737jbylatKhRiYJUKV+dZQ1dtFtyXeE+5GAE="
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "request_sha256": "753a64fd9fc7f4c30cc3b4a80d7bb3e1e4c5b6f4a5f7867d61136b00a1e83e19",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "1b0d57cb0f7f58ad84943126b08cfa0f26464a78bb9de626b921a1d1e82760da",
+  "response_bytes": 1345,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

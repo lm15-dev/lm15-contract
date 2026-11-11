@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-11T01-05-36Z",
+  "provider": "zai",
+  "status": 200,
+  "model": "glm-5.3-flash",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)Paris is the capital and largest city of France. Located in the north-central part of the country along the Seine River, it serves as the nation's political, economic, and cultural center. The city has an estimated population of approximately 2.04 million within its administrative boundaries, with a metropolitan area population of about 13.2 million as of 2026. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))\n\nParis is renowned for its iconic landmarks, including the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Its rich history and cultural heritage make it a major destination for tourists worldwide.  "
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "64e5585213eaa5138b2059901f2084c1f401fe59166b09cf2145fae866cf9de3",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "58920129e79ac69299b55baefb59524c4575dce2da9d5012755a154b242d10b3",
+  "response_bytes": 760,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

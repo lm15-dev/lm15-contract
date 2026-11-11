@@ -1,0 +1,146 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "\n\n"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_2f2e09132ed1599423ea2b145",
+    "object": "response",
+    "created_at": 1794358500,
+    "completed_at": 1794358506,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_h5lqtEUjGljMLRJR8fJG0K17",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user asked me to delete the test program, and then asked me to reply with the single word \"bye\". This is a simple, harmless request. They want me to just say \"bye\"."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_PhMlx1qQI80hWEwlDzEk8iAG",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "bye",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 202,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 54,
+      "output_tokens_details": {
+        "reasoning_tokens": 40
+      },
+      "total_tokens": 256
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "delete_program",
+        "description": "Delete the test program.",
+        "parameters": {
+          "properties": {},
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T00-54-59Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

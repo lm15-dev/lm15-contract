@@ -1,0 +1,139 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "name": "delete_program",
+          "arguments": "{}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_1",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_2f2e0192ba42a4d96834d4616",
+    "object": "response",
+    "created_at": 1794358535,
+    "completed_at": 1794358541,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_p4OENzF2C8uEdLXCZsOBQkDA",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The tool returned \"ok\", so the test program was successfully deleted."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_oRgSbqUl8MpYAzpuIrz4l4xW",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "Done — the test program has been deleted.",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 223,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens": 36,
+      "output_tokens_details": {
+        "reasoning_tokens": 14
+      },
+      "total_tokens": 259
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "delete_program",
+        "description": "Delete the test program.",
+        "parameters": {
+          "properties": {},
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T00-55-34Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -1,0 +1,180 @@
+[
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-8c343c71c91043a3bc7c47c042c75349.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-14Z-506b8af6c69743ab8be7be85bf91842a.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-16Z-25d293099c64487db9b987260d461704.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-17Z-edc6344c851f451ea89e613dfa0bbc9c.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-18Z-026fe2bd8dd440ee8bbe99f3199bc734.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-23Z-8a8b2ececbf849edb16cbecc61ebba8e.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-29Z-10fda781f8124b81ac92148b7d9e4cee.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-38Z-d6c5cadbc3b34f308d7288b8666ab188.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-39Z-4c308a74c27c425b87f0dc65b5ec51a7.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-40Z-4b4e13e9b67d4de19ecbcc7f5f082a4e.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-44Z-549840026c4646adafc513733c1d570b.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-00Z-67bdfb2e38ae448a85d047db20824ae8.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-08Z-98cd7ba4764d4b7fbc4f9b5cdba0f84c.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-19Z-a62c5740e84546ceadf35d6ab35ca5de.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-30Z-6bcfb699074e4186ad1aa7486effa874.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-47Z-9ad13752e05c4b2dbadfca0f2b406ca5.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "x01-empty-system-block",
+    "asks": "an empty system prompt (the array form)",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-55-56Z-d9f43fb7f74846899a4766b69798ad50.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "x02-tool-result-empty-block",
+    "asks": "a tool result whose content is one empty text block",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-55-57Z-4bf8077961bb4d81a60ac99413c26ceb.json"
+  },
+  {
+    "door": "moonshotai-anthropic",
+    "dialect": "messages",
+    "model": "kimi-k3",
+    "cell": "x03-whitespace-beside-text",
+    "asks": "a space as its own text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-58Z-88080820a38d4916879cbf293b17bde8.json"
+  }
+]

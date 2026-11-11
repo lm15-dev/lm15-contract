@@ -1,0 +1,98 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "",
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "49b3e4e2-ec39-4960-9449-7efdf46a5b08",
+    "object": "chat.completion",
+    "created": 1794359050,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can't do that — I don't have any file system access in this conversation, so I have no way to delete a program. The only tool available to me is a multiplication helper, which can't touch files.\n\nIf you tell me where the file lives (e.g., a path, a repo, or a cloud service), I can walk you through deleting it yourself — for example:\n\n- **Linux/macOS:** `rm /path/to/test_program`\n- **Windows (PowerShell):** `Remove-Item C:\\path\\to\\test_program`\n- **Git-tracked file:** `git rm test_program && git commit -m \"Remove test program\"`\n\nJust confirm the exact path first, since deletion isn't reversible.",
+          "reasoning_content": "The user asked me to delete a test program. I don't have any tools to delete files — only multiplyNumbers, which is irrelevant. Also I called it weirdly (that was odd — I shouldn't have). I need to tell the user I can't delete files.\n\nWait, I already made a pointless multiply call. I should just respond honestly: I have no file deletion capability."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 364,
+      "completion_tokens": 234,
+      "total_tokens": 598,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 79
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 236
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-04-09Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

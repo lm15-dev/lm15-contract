@@ -82,6 +82,10 @@ MUTATIONS = (
     "estimate_unknown_as_zero", # estimate_cost: an unknown estimate answered 0.0 (a lower bound posing as a price)
     "usage_parts_unchecked",    # serde_roundtrip usage: a Usage breaking INV-029 accepted (a 1.x record read with the 2.0 meaning)
     "usage_split_kept",         # parse_response (mapping/usage.json): a withheld split answered with the wire's numbers
+    "empty_text_block_written",    # mapping (MAP-24): a hidden thinking part from another dialect written as an empty text block (issue #3)
+    "empty_part_changes_the_wire", # mapping (MAP-24): an empty part leaves a trace (the array form, a joining newline): not the wire built without it
+    "own_state_dropped",           # mapping (MAP-24 rule 1): an empty thinking part carrying the dialect's own state left out too
+    "replay_empty_message",        # mapping (history replay): a recorded reply with nothing for the wire written as an empty message
     "sigv4_signature_drift",    # sigv4_sign: the Authorization header's signature hex rewritten
     "token_credential_drift",   # token_exchange_parse: the yielded credential's expiry rewritten
     "token_assertion_drift",    # token_exchange_build: corrupt the signed JWT
@@ -328,6 +332,89 @@ def _order_parse_echo(msg: JsonObject) -> JsonObject | None:
     return None
 
 
+# ─── mapping vectors (MAP-24, mapping/empty-parts.json; history replay) ──
+#
+# The echo of a vector's request is a function of its `same_as` request
+# (the history without the parts that write nothing), so the request and
+# its equivalent echo the same body; a provider with an `expect` block
+# echoes those keys.
+
+def _fake_wire(body: Any) -> JsonObject:
+    return {"method": "POST", "url": "https://fake.invalid/", "params": {}, "headers": {}, "body": body}
+
+
+def _empty_parts_echo(msg: JsonObject) -> JsonObject | None:
+    doc = check.load_empty_parts_vectors()
+    provider = msg.get("provider")
+    model = doc["models"].get(provider)
+    request = msg.get("canonical_request")
+    if model is None or not isinstance(request, dict):
+        return None
+
+    def providers(vector: JsonObject) -> list[str]:
+        return vector.get("providers") or doc["dialects"]
+
+    def in_same(vector: JsonObject) -> bool:
+        same = vector.get("same_as")
+        return same is not None and provider in (same.get("providers") or providers(vector))
+
+    def equivalent_body(stripped: JsonObject) -> JsonObject:
+        body: JsonObject = {"echo": stripped}
+        for vector in doc["build"]:
+            if provider in providers(vector) and in_same(vector) and vector["same_as"]["request"] == stripped:
+                body.update(json.loads(json.dumps((vector.get("expect") or {}).get(provider) or {})))
+        return body
+
+    for vector in doc["build"]:
+        if provider not in providers(vector) or request != {"model": model, **vector["request"]}:
+            continue
+        hit = TARGET in (None, f"empty-parts.{vector['id']}", f"empty-parts.{vector['id']}[{provider}]")
+        if in_same(vector):
+            body = equivalent_body(vector["same_as"]["request"])
+            if hit and MUTATION == "empty_part_changes_the_wire":
+                body["echo"] = vector["request"]
+        else:
+            body = json.loads(json.dumps(vector["expect"][provider]))
+            if hit and MUTATION == "own_state_dropped":
+                for key in ("messages", "contents", "input"):
+                    for item in body.get(key, []):
+                        blocks = item.get("content", item.get("parts")) if isinstance(item, dict) else None
+                        if item.get("role") in ("assistant", "model") and isinstance(blocks, list) and len(blocks) > 1:
+                            del blocks[0]
+                            break
+        if hit and MUTATION == "empty_text_block_written":
+            # lm15 before 2026-11-11: the hidden part replayed "as text".
+            body = {"messages": [{"role": "assistant", "content": [{"type": "text", "text": ""}]}]}
+        return _fake_wire(body)
+    for vector in doc["build"]:
+        if provider in providers(vector) and in_same(vector) and request == {"model": model, **vector["same_as"]["request"]}:
+            return _fake_wire(equivalent_body(vector["same_as"]["request"]))
+    return None
+
+
+def _history_replay_echo(msg: JsonObject) -> JsonObject | None:
+    doc = check.load_history_replay()
+    provider = msg.get("provider")
+    request = msg.get("canonical_request")
+    messages = request.get("messages") if isinstance(request, dict) else None
+    if (provider not in doc["dialects"] or not isinstance(messages, list) or len(messages) < 3
+            or request.get("model") != doc["models"][provider]
+            or messages[0] != {"role": "user", "parts": [{"type": "text", "text": doc["first"]}]}
+            or messages[-1] != {"role": "user", "parts": [{"type": "text", "text": doc["last"]}]}):
+        return None
+    if MUTATION == "replay_empty_message":
+        hit = TARGET is None
+        if TARGET is not None and TARGET.startswith("history-replay."):
+            golden_id = TARGET[len("history-replay."):].split("[", 1)[0]
+            named = TARGET.split("[", 1)[1].rstrip("]") if "[" in TARGET else provider
+            hit = named == provider and any(gid == golden_id and req["messages"][1] == messages[1]
+                                            for gid, req in check.history_replay_requests())
+        if hit:
+            return _fake_wire({"messages": [{"role": "user", "content": "Go on."}, {"role": "assistant", "content": None},
+                                            {"role": "user", "content": "And then?"}]})
+    return _fake_wire({"echo": "history-replay"})
+
+
 # ─── mapping vectors (MAP-19, mapping/usage.json) ───────────────────
 
 def _usage_doc() -> JsonObject:
@@ -381,6 +468,10 @@ def op_build_request(msg: JsonObject) -> JsonObject:
         return order_echo
     if msg.get("provider") == "gemini" and not _candidates(msg):
         echo = _mapping_echo(msg.get("canonical_request"))
+        if echo is not None:
+            return echo
+    for mapping_echo in (_empty_parts_echo, _history_replay_echo):
+        echo = mapping_echo(msg)
         if echo is not None:
             return echo
     case = find_wire_case(msg)

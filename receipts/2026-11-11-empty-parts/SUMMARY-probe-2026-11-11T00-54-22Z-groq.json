@@ -1,0 +1,164 @@
+[
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-be3c9e19516d4e6eb8b5daa3dcb93303.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-02Z-630266b54dd341e3ad15aef1588ab31d.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-03Z-2b03f12d00e9490783cfb11d8ccb9710.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-04Z-67970aadb9034e58a2833f8823074ecc.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-06Z-ff210fc9941f4b7aa212e8da29a4f7aa.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-07Z-51127d0ccaa54f66b96f484476a9f529.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-08Z-1f5f890156304b93bf2a3fd164a5c7f4.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-09Z-2619ff5e1e854d3191044f1e86231623.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-10Z-cbbf4ef524784347ae83589f11d361a1.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-11Z-2705a4a0847b4947b20ec5c1287ff105.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-12Z-4e9d3a78c0bc4fffa1ef3c31066febc7.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-14Z-30afe4e0c4d5406a996372c2ed3eb117.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-15Z-eb5e532f5af14e4d8706e13030468b15.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-16Z-c76e5717bdd34a568b9403de67d513cf.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-17Z-e9af070546314bc6b1de376012e266bc.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-18Z-ee5d4be5bbb446608ad893c95c20225d.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "x01-assistant-null-no-calls",
+    "asks": "an assistant row with content null and no tool_calls (what lm15 wrote for a message holding only a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-19Z-ada3094c46834d0b881ecb2cab2aa000.json"
+  },
+  {
+    "door": "groq",
+    "dialect": "chat",
+    "model": "openai/gpt-oss-20b",
+    "cell": "x02-null-content-with-call",
+    "asks": "the standard row: content null beside the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-20Z-326f25b4d7bd405f8e55a99b1e4ad66f.json"
+  }
+]

@@ -1,0 +1,73 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user is asking me to reply with the single word \"bye\". This is a simple request that doesn't require any tool usage. The only tool available is delete_program, which deletes a test program — not relevant to this request.\n\nI should just reply with the single word \"bye\".",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358561,
+    "id": "20261111085556f8c5396d9d5a4ca9",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111085556f8c5396d9d5a4ca9",
+    "usage": {
+      "completion_tokens": 61,
+      "completion_tokens_details": {
+        "reasoning_tokens": 58
+      },
+      "prompt_tokens": 153,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 214
+    }
+  },
+  "timestamp": "2026-11-11T00-55-56Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "f757ab01-daa4-44ce-ac18-cf1a8c3f7102"
+  }
+}

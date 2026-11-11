@@ -1,0 +1,121 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "functionCall": {
+                "name": "get_weather",
+                "args": {
+                  "city": "Paris"
+                },
+                "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "get_weather",
+                "response": {
+                  "result": "ok"
+                },
+                "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingBudget": 2048
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "get_weather",
+              "description": "The get_weather tool.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "I am sorry, I cannot fulfill this request. I do not have the ability to delete programs.",
+              "thoughtSignature": "AY89a1+0IZHRWVTqAjsPV+DnVJkEnArI7do3In4s5aMoRtR1g1aZaj11llkiohRq9N5pekg+NHNpX9mpuSEgv+mhuuuuOAdMQs51nSE0MZ/5+Y18OuoBBd3Eyw5hFPwJYWB522BLWnLpRRxcUb5QxgLnmFuqUo99iAiPtwcaVrv+N5oL2AaBUXB/XkQZqebzCstkcWxc4zTvLga1rygLz5DVfczLzeiLol0Jo1y/16MXA8XTObHmnwRPsB8HNETwhIphE+wW4EteAVmE3PcNhuLCJjRqnhNYsLkQmHCm9o+1TKCrqF1nkY75QabMQ1gSTny5/a10CadnKK3H8otWwCSyDWSlfVhP2ordIqHJbdDFRJEqWyfqn5k7kESX6x4ZnyRZdotYNVq3LiT0Be8wwjbov9lgZCKbGQ4bsXuWP8mgBzo9Ydll637RjsSk9cbS6CDmIjkA/lYpj1JbJ0rndCrZTnZleWEFB155NESqDmQnXJefD/M768EnrV+wcGo5uQi7oZ7A9WNE1liCX3e1qQed6aNgYPp8hXSZy/Bx80mq7Nv/i0j70TAqsiRMC5HDjjtjqOEd0E72M3+R53kru0ujoSbzLHtzbgS5RfZGxWuhhz1vEAJh7gEoMKU77mxbh52NxgljBi67cpv+PONPm41SqWZAOsWx7PdG19zUuif9IzohKFINIuRsGllmgMuGl9GQByvC+97HMv3lIlS4BihVE1kueb8rx2eu9lmEIoKZ+GH/Vhgy2kMpNRG4gw=="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 39,
+      "candidatesTokenCount": 20,
+      "totalTokenCount": 167,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 39
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 20
+        }
+      ],
+      "thoughtsTokenCount": 108
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T01:03:36.940118Z",
+    "responseId": "6L7zatawObTIpPIP_omnoQI"
+  },
+  "timestamp": "2026-11-11T01-03-36Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

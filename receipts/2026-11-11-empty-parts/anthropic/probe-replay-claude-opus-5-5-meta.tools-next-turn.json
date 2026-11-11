@@ -1,0 +1,127 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "thinking": {
+        "type": "adaptive"
+      },
+      "output_config": {
+        "effort": "low"
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-opus-5-5",
+    "id": "msg_011CgvEvnHb1aqGM4R9DbzAy",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "CAQSyQgKEAgTGAI4AUIIdGhpbmtpbmcSDD42kk6x0qoInTxL9hoM6bH0X5ItN2tR4kSDIjB0rASQxYA/Fgjd2EldnkAT7ef3cYMBILzH4idZYxqtj+XVciedWFTiqwbuiJATCLMq5gcTpLoss0bOLhN9Yu+ZOYm20HzSknokCe3a3WK1vMBdSvIQjJoTEV1sNRMeWMzGVx5ASeHiKMq3GvgsEfrGz7Qv7gqoxRbC1EwKzzQdhIio9WaGl4eQUObYO4YwqKWT9k8N2Jm94GpH8AiqGuP1VgAtAvYumiGYzxSyHoSIo6oufMwfSOnQeDWtIEVk6ZepDPkn4XY4YnScRTa6hoGFV9Qcq6VCB9HXeUE6j9MlqiWlk/0tkL0VR9u0yicdr/zVrp2jA683u0drtxctg/yQbETymhPbChQZ/hyN/eMgQYS6AV5wLN/8+th29EnzIrrYjLEY8qkPtJauMKuv4AMmw/DNDKpCgQgQDH93f8bhYauFEfS2GjdrFqguZnk4UpZ6w2jB3Hv01k1Bcqijq+OYWy0KbRx2HS+NqTwv/R1lBec3zKtF60iuGsrMTMJzpzOyWLqNiUCKCkEYuIJJJ3VEg4bHRmkb9diI0kOZkVIeLI4tOPaitTbmyFy8FRbF36awt4mr0C8KPf31FYHlpUK2nFQJqc2X0XTwtcTrS/YHB9IegOyZpw4N9FRmc31P83/gaa9Qi/LKKUsR3jMJFUMT71OVTaJSWkGoMZEUdbhBE8RvggYmTDGptvOBiB6oQLQFN+gUdvcS8M39IxmXQioeaIk6gneQVeTrLyjidobyGtLDFtApclGMMweFXC/2c8tLmM5gb8A/wYcgSYCRyWnNoQVNff0Hczg9URZnvq8/rkn3vFrNRz0qXkA8xpYWGWBKhaEQWDnXpTyZp0ZnCjgY6/PYfZJMF/hj/KB1b8NN55VrY1Q5lT1pS4up9ft88xNzbWpR3TI7NEWFdpuUxeZtKBd7gFv4fkkVLVwtxmjifyD+uDsN0mjGX6Z/pEvrn06LWjedrmtw3pqPOR18uUdcCvVq4LUnKePfA9hQvjo5LIul/FUBjZPTl/EiH8OkqXASNBcFtuig/U6UKi3C3g2F3ZaxR5l7FoA6MPEWyDv3HdTPVPsUjEFCqVxylIg9L16IWsD1jof7rGuqhxgpYKvOcNzNoVHHbcgA6GrSSme3a1GXlB9YfPvRN4vWfLKEXAdMV/1C6z3XgBlk06UyBPv/I/IB+JWRpdUhrU5pCjfFlQ8PVh7ZuWCUbZV7ykV6SGCCuzicAODJep1syJEsGSfp5dgGSKfY4z1lVXHRAyKPRcmgwEhzrS0B+Cr/nh2/3EM1DQHdhillbBb9ET/HIZBVPHNQFcVicZBt7vj23sfO9cmjAVzt5yuYdAfioQTe3S0qrM+OBnP4s7iC4Un4L5vNPp63REVOIWtHPGWn5gDcU9eCqRiYTk+uhRgB"
+      },
+      {
+        "type": "text",
+        "text": "Bye.\n\nOne correction: I never deleted the test program. I don't have a tool that can delete files, and instead of telling you that, I ran a weather check for Paris that you never asked for. Sorry about that. The test program is still there, so you'll need to delete it yourself."
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 455,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 245,
+      "output_tokens_details": {
+        "thinking_tokens": 158
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-04-00Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

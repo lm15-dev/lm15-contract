@@ -1,0 +1,74 @@
+{
+  "timestamp": "2026-11-11T01-05-15Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "tool_call_0",
+          "name": "multiplyNumbers",
+          "arguments": "{\"b\":44,\"a\":57}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "tool_call_0",
+          "output": "ok"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "multiplyNumbers",
+          "description": "The multiplyNumbers tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "b": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2e35e93711ab9eb5d7b33c5adf4385f18701403ebd0c3a216e6bc4d44aa6dc31",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "03ab4ec03f405c39b07a03d783917a931a34d4688f66abd80f23a421909f936f",
+  "response_bytes": 2809,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

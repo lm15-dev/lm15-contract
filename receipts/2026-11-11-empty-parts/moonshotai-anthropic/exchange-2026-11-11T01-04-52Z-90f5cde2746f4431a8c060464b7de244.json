@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-11-11T01-04-52Z",
+  "provider": "moonshotai-anthropic",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "d654d89f6c3de50a113f49de770ffa8c7b1d15b52323b2276db8b66429293016",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "5b6c27e888276e6a28bfa5d13a7dc58e132ee6803c8d4f4a407d1207ca19c227",
+  "response_bytes": 858,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

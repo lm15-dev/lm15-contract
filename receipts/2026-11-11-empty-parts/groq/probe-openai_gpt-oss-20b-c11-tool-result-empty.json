@@ -1,0 +1,104 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": ""
+        },
+        {
+          "role": "assistant",
+          "content": "Deleted."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-7486f292-b7e4-48fe-a9e7-a11aa134eea6",
+    "object": "chat.completion",
+    "created": 1794358453,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "We should reply with \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.029942841,
+      "prompt_tokens": 162,
+      "prompt_time": 0.007812413,
+      "completion_tokens": 18,
+      "completion_time": 0.024998214,
+      "total_tokens": 180,
+      "total_time": 0.032810627,
+      "completion_tokens_details": {
+        "reasoning_tokens": 8
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_976a85d17a",
+    "x_groq": {
+      "id": "req_01m741j8pgewgtp25w48whwq8q",
+      "seed": 799422631
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-12Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741j8pgewgtp25w48whwq8q"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-166ee88aaee1625ff4719a45c3b3fb52",
+    "object": "chat.completion",
+    "created": 1794363926,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Sure thing! How can I assist you today? If you're looking to delete a test program or anything else, just let me know the details and I'd be happy to help.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "The user hasn't asked a question yet; they just listed tool info. The previous assistant said \"You are ChatGPT...\" So I need to respond appropriately. Probably respond with a short acknowledgement or ask for what they need. The \"Delete the test program.\" tool is weird: maybe the user wants to delete a test program. Possibly they'd like me to invoke the function. But they haven't explicitly asked. According to conventions, I should not call the function unless user explicitly requests. So respond with an offer: how can I help?"
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 110,
+      "total_tokens": 261,
+      "completion_tokens": 151,
+      "prompt_tokens_details": {
+        "cached_tokens": 80,
+        "created_cache_tokens": 16,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 106
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T02-25-26Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "166ee88aaee1625ff4719a45c3b3fb52"
+  }
+}

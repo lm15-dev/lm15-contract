@@ -1,0 +1,123 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "functionCall": {
+                "name": "multiplyNumbers",
+                "args": {
+                  "b": 44,
+                  "a": 57
+                },
+                "id": "tool_call_0"
+              },
+              "thoughtSignature": "CocEAb4+9vsM4fnVZjuXmyEYpIBoinmtIIzfaCg5wvd5W/VsyFGxlAolz+8OjnCqQlLfvzd5jmYj93bJU2dLpJcrjJ5EwkDRU4Zw6nFYnfcllGgMyhViw1JnoD7XqvYpNi7CYs8YVao3BJh7piExskh0mI0vb5d3UPWLbwRJvlcM5aTYHtdwutOnDB1oM3AjQj5dqs5/WpePsO6pKjFkC8+rg7D1igs9KJ+c0SvZJzgSyhqMlOs56k854JR1sjbgV97UZnllaCNUJd6RDPPCH0A2ardAS3sSGh3ad+aSVPnVESCqKmsJAV7b6IyKNM7dnh0+OE2VKXrhZUC6OfAvqMMdqQa1LA64LwdyZTuGPBCW3UiKk/h/KWKY/vkjL3nj5twabVW0jsM0luDMyyksY1NogEDEeq/IHAtGmOLG2cVkojEWeAYU2oFYbEPTYp39EislgyMXS8aRAFk83KHwaw6xa5R6ZUvPGosY+D8DgxXjZ44b6Wfby67oHLW1rIgVhiSDnp2PH+b/2jX/88OzUmrpi42XbSY8ZVJyvm04foQAnVHDX1v+Tg1Ddc0qtqCNqH9dRch6FwFinXTDpd/t0F1VkA5eJj+rGhpMPkIxYMXe/XxL1/ET5lVqHGBssRFaKi2MERkQM/ort0oit2ApxrqzY1wu3UkzDZ8VsrZIsV/u56OiRkRCrSzs"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "functionResponse": {
+                "name": "multiplyNumbers",
+                "response": {
+                  "result": "ok"
+                },
+                "id": "tool_call_0"
+              }
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingBudget": 2048
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "multiplyNumbers",
+              "description": "The multiplyNumbers tool.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "b": {
+                    "type": "string"
+                  },
+                  "a": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "I am sorry, I cannot delete the test program, I do not have that functionality.",
+              "thoughtSignature": "AY89a1/AG/AZCRUsxQraMsJbQCXkz+GeDi1w5EAKVFmcDWXmyWdi3CUDTHnGitWhOpBNR8UojJhaUftA85A5qRiTmGTP4v9jJBOefPr0Y6bEbLdErgb6ivg1cn/nKmZsbhOSX4jJ6YA5uAJsv6q2og8KzwJIlPqhWLUwyIoZn4ic/oGgDGVziYJEQXOeswDoSgeGhkfvSFH5m5CmHR98aaOn1x+nKS+qA+GbylfLoHyY5CacFX5sr2p5vtm2nKnFHs43I8dViJW4/CIdqPVPpPsrkVn4a5t5o+eoYlsbmqoEVy1jaIS00k7H9v8xGDxSZm8F0sLlRuFpMIrb30sC/SAhFtmdKR99ZxUBBSKPPi2bccIcFQeRdHexauJi16bTRX3D50Nyj5nUjNKG2RpKLxGis4w04YfwaiLy0hwCRnOK21AZAKyR+6GSDpK98q9uNlQQDMePaAK5c4GNC5Sl6rO0+rqu8kpBmSWYpI5H3Qy/j6gRkv9LSxvO76YyHntQ6VxtOdCUMsotEpQvGBeEi8PTsD5Byymcg8oa5aE7MjH6dYgRtAKKyWQpEr80JTj5xhXN7xTJTX2mC2BD+gEOeOpsOavsLmXWpqbXbbSBHJ0j6WSQX8jVaTOlI2ikjsgtAQH5CMrEdxblHPtET5iQsGfMkpL2XAgxBerJX4EwzRaA9owWQXPdZuEOe0GfAPjOoTXhDXI+24WPpqOz2f8C/LVPPBkBcfNJ70X8nJ1thpNYWpsiSMAYdmodW6zpJ2/RId91eztFb8XhW8kCuzX9w0YmeLUDIc+4O0fxNlQ6d/QCbTatY3d7s/LSKFNBsSB0/xGaj3aLKy26tU5J2h5jEt43o9ev4pQkzhC82EsTA6fpUCj2M+juLsYIbY/10EoQbx4D5j4kVTSA7Nrgv5kiMKnLtvuc/AZuwTs="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 28,
+      "candidatesTokenCount": 18,
+      "totalTokenCount": 194,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 28
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 18
+        }
+      ],
+      "thoughtsTokenCount": 148
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T01:03:55.975620Z",
+    "responseId": "-77zaoTGO52N1tEPufCp0Q8"
+  },
+  "timestamp": "2026-11-11T01-03-55Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

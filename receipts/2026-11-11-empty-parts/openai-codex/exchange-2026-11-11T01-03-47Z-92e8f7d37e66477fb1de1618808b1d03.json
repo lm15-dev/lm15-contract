@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-11-11T01-03-47Z",
+  "provider": "openai-codex",
+  "status": 200,
+  "model": "gpt-5.6-luna",
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "output": "ok"
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "request_sha256": "1497c9bf75ccfa7bcfd5e833e91f7c50d38ad5f2c772a215a9f144c875e9bcb1",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "1d01fef3341976ec2594c51a17c509b57951b78d2b2034d699741e5332e31a6e",
+  "response_bytes": 32620,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

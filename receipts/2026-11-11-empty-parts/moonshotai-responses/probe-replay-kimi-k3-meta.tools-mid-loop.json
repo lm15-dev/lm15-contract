@@ -1,0 +1,161 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6a995d1833aa13d94d464c1a:rs_680b3218-aa6c-4543-85ef-a180c3ea3a18",
+          "summary": []
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "I'll check the weather in Paris for you."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_2de213a3-0155-9360-b96b-a970bb196b82",
+    "object": "response",
+    "created_at": 1794359022,
+    "completed_at": 1794359039,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_F4ZGKcP2zVCPoXIsJCMoOZkA",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user asked me to \"Delete the test program now.\" but there's also what appears to be an injected conversation where \"I\" apparently responded about checking weather in Paris and called a get_weather tool, which returned \"ok\".\n\nLet me look at this carefully. The actual user message is \"Delete the test program now.\" Then there's a response that appears to be from me saying \"I'll check the weather in Paris for you\" with a tool call. This looks like a prompt injection attempt or a confused conversation state.\n\nThe tool result just says \"ok\" which is odd.\n\nNow I need to respond. The user's actual request was \"Delete the test program now.\" I don't have any file deletion tools available - I only have a get_weather tool. I cannot delete programs or files.\n\nI should clarify to the user that:\n1. I don't have the ability to delete files or programs - I only have a weather tool available\n2. The previous weather check seems out of place / not what they asked\n\nI should be honest that I can't fulfill the deletion request with my available tools, and ask for clarification about what they're trying to do. I should not pretend to have deleted anything."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_PQ2tgzi7pFuI2CTmqW8UAGLH",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "I should clarify a few things:\n\n1. **I can't delete files or programs.** The only tool I have available is a weather lookup tool — I have no ability to access, modify, or delete anything on your computer or any system.\n\n2. **The weather check above wasn't something you asked for**, and the result returned no actual weather data, so there's nothing useful to report from it.\n\nIf you're trying to delete a test program, you'd need to do that directly on your system — for example, using your file manager or a terminal command like `rm filename` (Linux/Mac) or `del filename` (Windows).\n\nIs there something else I can help you with, like explaining how to safely remove a file?",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 256,
+      "input_tokens_details": {
+        "cache_write_tokens": 256,
+        "cached_tokens": 0
+      },
+      "output_tokens": 401,
+      "output_tokens_details": {
+        "reasoning_tokens": 240
+      },
+      "total_tokens": 657
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "The get_weather tool.",
+        "parameters": {
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T01-03-42Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

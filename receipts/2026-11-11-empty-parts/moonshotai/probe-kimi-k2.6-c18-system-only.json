@@ -1,0 +1,64 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3d2183b6f18975ee00162",
+    "object": "chat.completion",
+    "created": 1794363928,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning_content": "The user wants me to reply with a single word: \"bye\". That's it. No tool calls needed. Just say \"bye\"."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 46,
+      "completion_tokens": 31,
+      "total_tokens": 77,
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      }
+    }
+  },
+  "timestamp": "2026-11-11T02-25-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-52777f3a32cd454b958134342d7e6ec9.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-15Z-2692f2ab775141d3ac4da0c47d52cf24.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-16Z-ef608d32aa21445a8733488f86bc332d.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-17Z-351653dddc3744328193f849607fe0d6.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 400,
+    "message": "Invalid request: the message at position 1 with role 'assistant' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-19Z-fc61c9545f8d41089cb0c3a6210d5e2d.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-20Z-c2fc8a6382fc4eca9f90f965a6fe5a4a.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-28Z-b8f4f13b2dda46aaab6663f0a1bf09ca.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-40Z-62c827df64bf4bd1a5b232bd98ba4bc4.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-41Z-add0076329a74df8acc175f7585cfc1f.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-42Z-6fe9dff03eb7447fb29858bcc2dc9721.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-46Z-cd2f1b36353a4ce5ab9d8a7ab60dedbc.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-59Z-c6322ee8817e4a42be8077580e5a8c83.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-07Z-e8d38b7a77aa48b7be9424ee000ea7a9.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-19Z-dbbe08b491f447fba242f5b2b907cc9a.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-27Z-ded3bf50f95348f39c99a2b0c060a023.json"
+  },
+  {
+    "door": "moonshotai-responses",
+    "dialect": "responses",
+    "model": "kimi-k3",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-34Z-3e2ea9b1fe534df1a1ea6eaea7b3759e.json"
+  }
+]

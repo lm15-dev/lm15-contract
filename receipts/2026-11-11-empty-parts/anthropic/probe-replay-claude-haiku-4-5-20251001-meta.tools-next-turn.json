@@ -1,0 +1,125 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgvEtu16m7Ckq87XdPQhe",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a straightforward request and I should comply.",
+        "signature": "Eo0DCrgBCBMYAipAMSRoXPntWpRRU94sTWz2dHxlldxDC0hMys8lpNesL7H4rfzPDBpm8o0IqlCNJfS8M7tl/g0zmk1fFjVPOfapYzIZY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMTgAQgh0aGlua2luZ1okNzA1MjAyYjEtNzljYS00ZWYwLTk2MDQtMDhmMjFjZGQ2MDJmmgEbChljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxqAHn/c7XBhIMFyw/JqVwdTw9LWHIGgxZBCmyYI19tyysLqAiMMgj2Jkze9T3+uJX19bEWpPV23ZP5P1IdRQjyykPUc9E3ClAL9z4vQ1oaIRtCQLReCqBAX+/9R99qxS12Tq+1Jfo+BDGAsmx7ruKZZaZs6rD/3TNDDt4jyxBHAt0w7dC615B8yqktInNLHxznII88NnYsXOnh/Od87dP8AZzRw1S+v/LdaEnM/L1Pgviii1Mayz6ZO22Pn4NoBDKQqr4spQJMlCsbXBXvRb6DCWybeVNUgFfahgB"
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 677,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 37,
+      "output_tokens_details": {
+        "thinking_tokens": 30
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-03-34Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

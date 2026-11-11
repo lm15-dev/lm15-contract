@@ -1,0 +1,72 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "We have n ≡ −1 (mod 2,3,4,5), so n+1 is divisible by 2,3,4 and 5. Hence n+1 is a multiple of lcm(2,3,4,5)=60, so n = 60k−1. The smallest positive choice is k=1, giving n = 59 (indeed 59≡1 (mod2), 2 (mod3), 3 (mod4), 4 (mod5))."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bef2c20f27f5b1c2e9ea",
+    "object": "chat.completion",
+    "created": 1794359026,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning_content": "The user wants me to reply with the single word: bye.\n\nI should just say \"bye\"."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 171,
+      "completion_tokens": 24,
+      "total_tokens": 195,
+      "completion_tokens_details": {
+        "reasoning_tokens": 21
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-03-45Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

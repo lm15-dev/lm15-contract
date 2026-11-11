@@ -1,0 +1,88 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants the weather in Paris. I'll use the get_weather tool.",
+          "tool_calls": [
+            {
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bf073ac1596efe4b611c",
+    "object": "chat.completion",
+    "created": 1794359047,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user asked for the weather in Paris. The tool returned \"ok\". I need to present this information to the user in a helpful way. Since the tool output is just \"ok\" without specific details like temperature or conditions, I'll provide a simple response based on what the tool returned, or note that the weather information for Paris is available/retrieved. However, looking at the tool output, it's just \"ok\" which is unusual for a weather API but that's what was returned. I'll just inform the user that the weather data for Paris has been fetched. Actually, the user said \"Delete the test program now\" but then there was a tool call for Paris weather... wait, looking back at the conversation:\n\nUser: \"Delete the test program now.\"\n\nThen there was a function call to get_weather with city \"Paris\". This seems like the user message was \"Delete the test program now\" but the system or someone else called get_weather for Paris. Actually, looking carefully at the conversation history provided:\n\nThe user's message is: \"Delete the test program now.\"\n\nBut then there was a function call to get_weather for Paris. This seems inconsistent. Wait, I need to look at what actually happened. The user said \"Delete the test program now.\" and there is NO tool call yet from me. The previous tool call shown was from a different turn perhaps? No, looking at the conversation:\n\nUser: \"Delete the test program now.\"\n\nThere is no previous context provided other than this. But then I see a tool call was made. Wait, actually, in the prompt I see:\n\nUser: \"Delete the test program now.\"\n\nThen there's a function call to get_weather:0 with city Paris.\n\nThen the result is \"ok\".\n\nWait, this looks like the function call was already made. But my role is to respond to the user. Let me re-read the structure.\n\nActually, looking at the provided conversation, it seems like:\n\n1. User says: \"Delete the test program now.\"\n2. Then there is a `<tool_call>` block for get_weather with Paris.\n3. Then the tool result: `ok`.\n\nThis is confusing. It seems like perhaps the system automatically called the weather tool? Or maybe the user message was supposed to be something else? Or maybe the function call and result are part of the context provided to me, and I need to respond to the user's request \"Delete the test program now\" while acknowledging the weather result?\n\nActually, looking more carefully at the raw prompt, I see:\n\n```\n<|im_start|>user\nDelete the test program now.<|im_end|>\n<|im_start|>assistant\nThe user wants the weather in Paris. I'll use the get_weather tool. <tool_call>...get_weather...Paris...\n```\n\nWait, that doesn't make sense. The user's message is \"Delete the test program now.\" but the assistant's reasoning is about weather in Paris"
+        },
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 106,
+      "completion_tokens": 600,
+      "total_tokens": 706,
+      "completion_tokens_details": {
+        "reasoning_tokens": 599
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-04-07Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

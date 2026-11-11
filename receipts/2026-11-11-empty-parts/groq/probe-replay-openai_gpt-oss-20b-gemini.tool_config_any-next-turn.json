@@ -1,0 +1,107 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-1f8eca11-9962-45e7-8d0e-32176f4f9617",
+    "object": "chat.completion",
+    "created": 1794359030,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "User wants reply with single word: \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.390766575,
+      "prompt_tokens": 171,
+      "prompt_time": 0.011665844,
+      "completion_tokens": 21,
+      "completion_time": 0.023921867,
+      "total_tokens": 192,
+      "total_time": 0.035587711,
+      "completion_tokens_details": {
+        "reasoning_tokens": 11
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_bb6a356524",
+    "x_groq": {
+      "id": "req_01m7423vreexcv42hsdzc0ffvz",
+      "seed": 32528826
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-49Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423vreexcv42hsdzc0ffvz"
+  }
+}

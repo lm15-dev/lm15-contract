@@ -1,0 +1,288 @@
+[
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-35Z-75c0ca8e272f4a16858594b1f6b13702.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-36Z-1d2fd714db5144fbafa8dcb196e9482f.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-39Z-a89857f213ef4e58a163cca499e24d00.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-40Z-5b57967266434de3b6daa7a2a6a5d519.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-42Z-0d13a355b4584cdfb3e17b0ba10f662f.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-44Z-c2fa4fe0f607479eb5b84cd31ea8f676.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-46Z-84818b1beff94862a3dbdd0d0d8ff1cb.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-48Z-a4ab1dd7815a45bda7835706a28994f6.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-50Z-8f5aee316be9464087e1e48cba9c8fe6.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-52Z-5b67d7bc78ef4eeab9a94a67af37c14c.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-54Z-57623dc3f1474cc2b1d1a7af62357848.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-55Z-ce3fba44f7c6446599d6247c19ac9bd9.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-58Z-4322f89a06e447118550771ae4959f22.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-00Z-658ad035c2b74e3fa393161dd3fa9872.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-01Z-486bd544046d45229c4d8e5872c60a0d.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:get_weather` , position 2. Please refer to https://aistudio.google.com/d",
+    "exchange": "exchange-2026-11-11T01-04-04Z-85229e31e3a54c8486d65b4057d8d67c.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-05Z-53dd8a7d61c74604a510af4b263c0658.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-08Z-bed281728c0a45fcade1ac2e560168e8.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-11Z-b2945a054e484919804edb44a88568a6.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-17Z-d2e742783b964df787b6b4f83b4de113.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:get_weather` , position 2. Please refer to https://aistudio.google.com/d",
+    "exchange": "exchange-2026-11-11T01-04-20Z-7f3470c414ad44f998a2a7311ec0d002.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-21Z-d14df91fd0194e5c85a473ebc2714ca5.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:get_weather` , position 2. Please refer to https://aistudio.google.com/d",
+    "exchange": "exchange-2026-11-11T01-04-23Z-ef2a6d4cc0324df1911ee92d3cdb4cbe.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "Invalid thought signature.",
+    "exchange": "exchange-2026-11-11T01-04-24Z-767b77f67c074706b8bf136417568c3a.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "Invalid thought signature.",
+    "exchange": "exchange-2026-11-11T01-04-25Z-1259057ff0684bf190dd72cd22402ce3.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "Invalid thought signature.",
+    "exchange": "exchange-2026-11-11T01-04-27Z-ec28cbcb89ef477689372de3a053739e.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-28Z-6407b19411914a02a877659440c92887.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-31Z-839967352d434e6b950cc688422e628e.json"
+  }
+]

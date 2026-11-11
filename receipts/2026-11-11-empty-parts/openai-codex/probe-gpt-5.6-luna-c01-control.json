@@ -1,0 +1,75 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_1",
+          "name": "delete_program",
+          "arguments": "{}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_1",
+          "output": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "status": 200,
+  "body": "event: response.created\ndata: {\"type\":\"response.created\",\"sequence_number\":0,\"response\":{\"id\":\"resp_026c10b8792fe10b016af3bcaa16f487d19c9a28d9d7ffa746\",\"object\":\"response\",\"created_at\":1794358442,\"completed_at\":null,\"status\":\"in_progress\",\"background\":false,\"frequency_penalty\":0.0,\"presence_penalty\":0.0,\"moderation\":null,\"model\":\"gpt-5.6-luna\",\"access_programs\":null,\"previous_response_id\":null,\"instructions\":\"You are a helpful assistant.\",\"output\":[],\"error\":null,\"incomplete_details\":null,\"tools\":[{\"type\":\"function\",\"name\":\"delete_program\",\"description\":\"Delete the test program.\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"required\":[]},\"output_schema\":null,\"strict\":true}],\"tool_choice\":\"auto\",\"parallel_tool_calls\":true,\"prompt_cache_key\":\"722f58c1-0660-4c20-8a07-bbcc1e26ee50\",\"prompt_cache_retention\":\"24h\",\"text\":{\"format\":{\"type\":\"text\"},\"verbosity\":\"medium\"},\"top_p\":0.98,\"top_logprobs\":0,\"temperature\":1.0,\"reasoning\":{\"context\":\"all_turns\",\"effort\":\"medium\",\"summary\":null,\"mode\":\"standard\"},\"user\":null,\"usage\":null,\"tool_usage\":{\"image_gen\":{\"input_tokens\":0,\"output_tokens\":0,\"total_tokens\":0,\"input_tokens_details\":{\"text_tokens\":0,\"image_tokens\":0},\"output_tokens_details\":{\"image_tokens\":0,\"text_tokens\":0}},\"web_search\":{\"num_requests\":0}},\"safety_identifier\":\"user-5Ie5j0kecta5YwLt7gnZVvVU\",\"store\":false,\"metadata\":{},\"max_output_tokens\":null,\"max_tool_calls\":null,\"service_tier\":\"auto\",\"truncation\":\"disabled\",\"image\":{\"context_compression\":\"disabled\"}}}\n\nevent: response.in_progress\ndata: {\"type\":\"response.in_progress\",\"sequence_number\":1,\"response\":{\"id\":\"resp_026c10b8792fe10b016af3bcaa16f487d19c9a28d9d7ffa746\",\"object\":\"response\",\"created_at\":1794358442,\"completed_at\":null,\"status\":\"in_progress\",\"background\":false,\"frequency_penalty\":0.0,\"presence_penalty\":0.0,\"moderation\":null,\"model\":\"gpt-5.6-luna\",\"access_programs\":null,\"previous_response_id\":null,\"instructions\":\"You are a helpful assistant.\",\"output\":[],\"error\":null,\"incomplete_details\":null,\"tools\":[{\"type\":\"function\",\"name\":\"delete_program\",\"description\":\"Delete the test program.\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"required\":[]},\"output_schema\":null,\"strict\":true}],\"tool_choice\":\"auto\",\"parallel_tool_calls\":true,\"prompt_cache_key\":\"722f58c1-0660-4c20-8a07-bbcc1e26ee50\",\"prompt_cache_retention\":\"24h\",\"text\":{\"format\":{\"type\":\"text\"},\"verbosity\":\"medium\"},\"top_p\":0.98,\"top_logprobs\":0,\"temperature\":1.0,\"reasoning\":{\"context\":\"all_turns\",\"effort\":\"medium\",\"summary\":null,\"mode\":\"standard\"},\"user\":null,\"usage\":null,\"tool_usage\":{\"image_gen\":{\"input_tokens\":0,\"output_tokens\":0,\"total_tokens\":0,\"input_tokens_details\":{\"text_tokens\":0,\"image_tokens\":0},\"output_tokens_details\":{\"image_tokens\":0,\"text_tokens\":0}},\"web_search\":{\"num_requests\":0}},\"safety_identifier\":\"user-5Ie5j0kecta5YwLt7gnZVvVU\",\"store\":false,\"metadata\":{},\"max_output_tokens\":null,\"max_tool_calls\":null,\"service_tier\":\"auto\",\"truncation\":\"disabled\",\"image\":{\"context_compression\":\"disabled\"}}}\n\nevent: response.output_item.added\ndata: {\"type\":\"response.output_item.added\",\"sequence_number\":2,\"output_index\":0,\"item\":{\"type\":\"message\",\"id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"role\":\"assistant\",\"status\":\"in_progress\",\"content\":[],\"phase\":\"final_answer\"}}\n\nevent: response.content_part.added\ndata: {\"type\":\"response.content_part.added\",\"sequence_number\":3,\"item_id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"output_index\":0,\"content_index\":0,\"part\":{\"type\":\"output_text\",\"text\":\"\",\"annotations\":[],\"logprobs\":[]}}\n\nevent: response.output_text.delta\ndata: {\"type\":\"response.output_text.delta\",\"sequence_number\":4,\"item_id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"output_index\":0,\"content_index\":0,\"delta\":\"bye\",\"logprobs\":[],\"obfuscation\":\"AZTqjuh0nDdq7\"}\n\nevent: response.metadata\ndata: {\"type\":\"response.metadata\",\"sequence_number\":5,\"response_id\":\"resp_026c10b8792fe10b016af3bcaa16f487d19c9a28d9d7ffa746\",\"metadata\":{\"openai_chatgpt_moderation_metadata\":{\"prompt\":{\"omnimod\":{\"protection_type\":\"omnimod\",\"outputs\":[{\"results\":[{\"category_flags\":{\"A1\":false,\"A2\":false,\"A3\":false,\"C1\":false,\"C11\":false,\"C2\":false,\"E1\":false,\"E2\":false,\"E3\":false,\"H1\":false,\"H2\":false,\"H3\":false,\"JB1\":false,\"K1\":false,\"K2\":false,\"K3\":false,\"K4\":false,\"P1\":false,\"P2\":false,\"P3\":false,\"P4\":false,\"PD1\":false,\"PD4\":false,\"S1\":false,\"S3+\":false,\"S4\":false,\"SH\":false,\"TXT-C3\":false,\"TXT-C4\":false,\"V1\":false,\"V2+\":false,\"V4+\":false,\"REFUSED\":false,\"CBRN-B1+\":false,\"IMG-C1\":false,\"IMG-C11\":false,\"IMG-C2\":false,\"IMG-S1\":false,\"IMG-SH\":false,\"IMG-V1\":false,\"IMG-V2+\":false,\"IMG-V4+\":false}}],\"is_blocked\":false}]}},\"generation\":{},\"tool_call\":{},\"tool_response\":{}}}}\n\nevent: response.output_text.done\ndata: {\"type\":\"response.output_text.done\",\"sequence_number\":6,\"item_id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"output_index\":0,\"content_index\":0,\"text\":\"bye\",\"logprobs\":[]}\n\nevent: response.content_part.done\ndata: {\"type\":\"response.content_part.done\",\"sequence_number\":7,\"item_id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"output_index\":0,\"content_index\":0,\"part\":{\"type\":\"output_text\",\"text\":\"bye\",\"annotations\":[],\"logprobs\":[]}}\n\nevent: response.output_item.done\ndata: {\"type\":\"response.output_item.done\",\"sequence_number\":8,\"output_index\":0,\"item\":{\"type\":\"message\",\"id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"bye\",\"annotations\":[],\"logprobs\":[]}],\"phase\":\"final_answer\"}}\n\nevent: response.completed\ndata: {\"type\":\"response.completed\",\"sequence_number\":9,\"response\":{\"id\":\"resp_026c10b8792fe10b016af3bcaa16f487d19c9a28d9d7ffa746\",\"object\":\"response\",\"created_at\":1794358442,\"completed_at\":1794358442,\"status\":\"completed\",\"background\":false,\"frequency_penalty\":0.0,\"presence_penalty\":0.0,\"moderation\":null,\"model\":\"gpt-5.6-luna\",\"access_programs\":null,\"previous_response_id\":null,\"instructions\":\"You are a helpful assistant.\",\"output\":[{\"type\":\"message\",\"id\":\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"type\":\"output_text\",\"text\":\"bye\",\"annotations\":[],\"logprobs\":[]}],\"phase\":\"final_answer\"}],\"error\":null,\"incomplete_details\":null,\"tools\":[{\"type\":\"function\",\"name\":\"delete_program\",\"description\":\"Delete the test program.\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"required\":[]},\"output_schema\":null,\"strict\":true}],\"tool_choice\":\"auto\",\"parallel_tool_calls\":true,\"prompt_cache_key\":\"722f58c1-0660-4c20-8a07-bbcc1e26ee50\",\"prompt_cache_retention\":\"24h\",\"text\":{\"format\":{\"type\":\"text\"},\"verbosity\":\"medium\"},\"top_p\":0.98,\"top_logprobs\":0,\"temperature\":1.0,\"reasoning\":{\"context\":\"all_turns\",\"effort\":\"medium\",\"summary\":null,\"mode\":\"standard\"},\"user\":null,\"usage\":{\"input_tokens\":98,\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0},\"output_tokens\":5,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":103,\"attribution\":{\"items\":{\"fc_026c10b8792fe10b016af3bcaa180887d185ac1230e2ec9db3\":{\"input_tokens\":10,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0,\"content\":[{\"input_tokens\":10,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0}]},\"fc_026c10b8792fe10b016af3bcaa180887d1b42df6be2410244f\":{\"input_tokens\":16,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0},\"msg_026c10b8792fe10b016af3bcaa180887d18ffb25f5be6c81d3\":{\"input_tokens\":13,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0,\"content\":[{\"input_tokens\":13,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0}]},\"msg_026c10b8792fe10b016af3bcaa180887d1954ef258ba2c8db8\":{\"input_tokens\":10,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0,\"content\":[{\"input_tokens\":10,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0}]},\"msg_026c10b8792fe10b016af3bcaa180887d1a996f3926da30654\":{\"input_tokens\":8,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0,\"content\":[{\"input_tokens\":8,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0}]},\"msg_026c10b8792fe10b016af3bcaadc5c87d18723901fefbfad8e\":{\"input_tokens\":2,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":5,\"content\":[{\"input_tokens\":2,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":5}]}},\"request_fields\":{\"instructions\":{\"input_tokens\":10,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0},\"tools\":{\"input_tokens\":29,\"cached_tokens\":0,\"cache_write_tokens\":0,\"output_tokens\":0}}}},\"tool_usage\":{\"image_gen\":{\"input_tokens\":0,\"output_tokens\":0,\"total_tokens\":0,\"input_tokens_details\":{\"text_tokens\":0,\"image_tokens\":0},\"output_tokens_details\":{\"image_tokens\":0,\"text_tokens\":0}},\"web_search\":{\"num_requests\":0}},\"safety_identifier\":\"user-5Ie5j0kecta5YwLt7gnZVvVU\",\"store\":false,\"metadata\":{},\"max_output_tokens\":null,\"max_tool_calls\":null,\"service_tier\":\"default\",\"truncation\":\"disabled\",\"image\":{\"context_compression\":\"disabled\"}}}\n\n",
+  "timestamp": "2026-11-11T00-54-01Z",
+  "response_headers": {}
+}

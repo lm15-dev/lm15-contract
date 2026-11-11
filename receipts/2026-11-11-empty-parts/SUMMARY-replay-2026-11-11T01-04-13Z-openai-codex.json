@@ -1,0 +1,146 @@
+[
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "Invalid 'input[1].id': string too long. Expected a string with maximum length 64, but got a string with length 67 instead.",
+    "exchange": "exchange-2026-11-11T01-03-34Z-a2371a34ba884cd5a71b68f1c097308f.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "Invalid 'input[1].id': string too long. Expected a string with maximum length 64, but got a string with length 67 instead.",
+    "exchange": "exchange-2026-11-11T01-03-36Z-e9eb12d49e624fa19ed7230a3eda74ce.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "The encrypted content for item rs_0a3e8f7b06a515a5006a9ad37131e88194a9624f9226e1f58c could not be verified. Reason: Encrypted content could not be decrypted or parsed.",
+    "exchange": "exchange-2026-11-11T01-03-37Z-333fea0ab08f4cf7bc45aa9d7d5c77db.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "Invalid 'input[1].id': 'rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185'. Expected an ID that contains letters, numbers, underscores, or dashes, but this value contained additional characters.",
+    "exchange": "exchange-2026-11-11T01-03-39Z-75a43952973e40de8e5e179b8966bf56.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-41Z-95296a1e32754d45b4ff772dd37d24cd.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-43Z-14bb88a5aa1e4546bef1e7b3abfdf027.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-47Z-92e8f7d37e66477fb1de1618808b1d03.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-51Z-0c7eab9b5fad4a60bb20e067865c33ea.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-55Z-581849eb714e4d47ad2140d6db7b8f33.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-59Z-0f648440513f4521b0df750aec7e8ab5.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-01Z-5c320ba712a440b98ea4942389074b20.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-03Z-9bdc1bdb72a440fe9d5018159c58ed1c.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-07Z-2fc7f564c4ea4b92a7640f7b3e1451ea.json"
+  },
+  {
+    "door": "openai-codex",
+    "dialect": "responses",
+    "model": "gpt-5.6-luna",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-10Z-0c9bfae97ae844d09a3b1e9524f342fc.json"
+  }
+]

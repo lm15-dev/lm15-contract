@@ -1,0 +1,96 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "Which one?"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "The test program, I assume."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "9aab5a30-834a-4dc3-b433-cfc87a455630",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". But wait — there's a concern: did I actually delete the program? In the previous turn, I said \"Which one? The test program, I assume.\" I never actually called the tool. So the deletion hasn't happened. The user says \"Thanks\" implying they think it's done. Should I clarify? The user's instruction is to reply with a single word: \"bye\". But honesty matters — I shouldn't imply I did something I didn't do. However, replying \"bye\" isn't strictly a false claim... but it does go along with the thanks.\n\nThe tension: the user wants one word. But there's an unresolved issue. I think the right move is a brief clarification that I haven't actually deleted it yet, and ask whether to proceed — but that violates the \"single word\" request. Better: be honest. I could say \"bye\" plus a quick note? The instruction says reply with the single word. Instruction-following is good but honesty about the unperformed action is more important than brevity.\n\nI'll give a one-line honest reply: acknowledge and note the deletion hasn't been executed yet.\n\nActually, the smoothest honest option: \"bye — though to be clear, I haven't actually deleted anything yet; say the word and I'll run it.\"\n\nThat's my answer.",
+        "signature": "9aab5a30-834a-4dc3-b433-cfc87a455630"
+      },
+      {
+        "type": "text",
+        "text": "bye — though to be clear, I haven't actually deleted anything yet (I only asked which program). Tell me to run it and I will."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 178,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 317,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T00-54-13Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

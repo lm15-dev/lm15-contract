@@ -1,0 +1,89 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "Which one?"
+        },
+        {
+          "role": "assistant",
+          "content": "The test program, I assume."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-03880af6-2271-4681-b1e8-3721445ae31b",
+    "object": "chat.completion",
+    "created": 1794358448,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "User wants \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.02997351,
+      "prompt_tokens": 155,
+      "prompt_time": 0.007491383,
+      "completion_tokens": 16,
+      "completion_time": 0.021459356,
+      "total_tokens": 171,
+      "total_time": 0.028950739,
+      "completion_tokens_details": {
+        "reasoning_tokens": 6
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_334cc21c60",
+    "x_groq": {
+      "id": "req_01m741j48se23vrsaxb182edy5",
+      "seed": 1023384969
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-08Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741j48se23vrsaxb182edy5"
+  }
+}

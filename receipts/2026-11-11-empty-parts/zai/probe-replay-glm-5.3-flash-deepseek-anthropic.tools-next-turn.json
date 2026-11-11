@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants the weather in Paris. I'll use the get_weather tool.",
+          "tool_calls": [
+            {
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user's previous message was \"Delete the test program now.\" — I called get_weather which seems odd, but that was the prior turn. Now the user says \"Thanks. Reply with the single word: bye\"\n\nThey just want me to reply with a single word: \"bye\"",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359087,
+    "id": "2026111109044487beffc5df3e4d9a",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026111109044487beffc5df3e4d9a",
+    "usage": {
+      "completion_tokens": 61,
+      "completion_tokens_details": {
+        "reasoning_tokens": 58
+      },
+      "prompt_tokens": 195,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 256
+    }
+  },
+  "timestamp": "2026-11-11T01-04-43Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "4d2ab165-aeac-41f7-b803-3b46e3ab2efd"
+  }
+}

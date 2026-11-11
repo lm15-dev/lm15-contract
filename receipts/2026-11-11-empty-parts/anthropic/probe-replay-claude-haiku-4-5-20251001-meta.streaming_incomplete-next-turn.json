@@ -1,0 +1,99 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgvEuPA29pWGfQRq9w4AY",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to delete the test program and then reply with just the word \"bye\". I have a function available called `delete_program` that can delete the test program. Let me call it.",
+        "signature": "EtsDCrgBCBMYAipAUPPouquehbde8nh2ElEFiyD8nr3QbN9qU8ayy0/DFJ5B4d4xzNS0IY7+Cp4PZ+kgrHRHrm2CMXhLqAz0fyd4wzIZY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMTgAQgh0aGlua2luZ1okNzA1MjAyYjEtNzljYS00ZWYwLTk2MDQtMDhmMjFjZGQ2MDJmmgEbChljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxqAHu/c7XBhIMSkd8mnizQExKCkKhGgxPnWztWJ/CgV2/3PkiMKbL/PeL9gRB55UGJ3e6xetM/vZrKHde8iavfljPwSc4f8Re/++brD9pUk5XPliA6yrPASvvQXgalP180CmsvvClsl/Y66Gx/TM5k31OBBx4MU2j+xxOG0LEHV09L+8z6yEL5KBelJQW7QQJgUNkgeVblRZOT/baCFdoE8xHmn1LqVjigE3T7wU+yqXhEFqxMdrucEB5BtKBezcW/ancOgB/tI4iJJ9P/oLOkNZVpuhNoTHYqioX3lgOLeqSwpBNpXS+CnluhOhQ4vZSirOF5zMoaWIy5nDyi+1RnSn6MDkkWE9kuUeA6cxqKNSbtmv11e+jGfDIWsaIjCQyS9fXzJNuqxgB"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_01UKrNxCUhrGa1END2Xuc5A8",
+        "name": "delete_program",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "container": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 587,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 87,
+      "output_tokens_details": {
+        "thinking_tokens": 48
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-03-41Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

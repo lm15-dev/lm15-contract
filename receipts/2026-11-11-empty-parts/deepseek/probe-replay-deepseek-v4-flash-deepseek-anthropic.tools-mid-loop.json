@@ -1,0 +1,95 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "The user wants the weather in Paris. I'll use the get_weather tool.",
+          "tool_calls": [
+            {
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "0776e14c-b429-441b-9d24-7a1fb170345d",
+    "object": "chat.completion",
+    "created": 1794359040,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can't delete anything — I don't have file or system access. The only tool available to me is a weather lookup, which I mistakenly called with Paris (it returned just \"ok,\" no real data).\n\nIf you want, I can help another way: tell me what the test program is and where it lives, and I can walk you through deleting it yourself (e.g., `rm test_program.py` in your terminal, or removing it via your IDE / `git rm` if it's tracked). But I can't perform the deletion for you.",
+          "reasoning_content": "The tool returned \"ok\" but no weather data. Hmm. I should be honest — I don't actually have a way to delete files or programs. The only tool I have is get_weather, which just returned \"ok\" with no useful content.\n\nWait, the user asked me to \"Delete the test program now.\" I have no tool to delete anything. I should tell them I can't do that — I only have a weather tool. I shouldn't pretend to have deleted anything.\n\nLet me be clear and honest."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 357,
+      "completion_tokens": 224,
+      "total_tokens": 581,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 108
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 229
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-04-00Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

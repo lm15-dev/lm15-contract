@@ -1,0 +1,86 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            },
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-a6d50d2c-890e-468e-8e10-088ac701c07f",
+    "object": "chat.completion",
+    "created": 1794358449,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "The user says: \"Thanks. Reply with the single word: bye\". So we should reply with \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.030313568,
+      "prompt_tokens": 123,
+      "prompt_time": 0.005998158,
+      "completion_tokens": 34,
+      "completion_time": 0.036082093,
+      "total_tokens": 157,
+      "total_time": 0.042080251,
+      "completion_tokens_details": {
+        "reasoning_tokens": 24
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_996f667773",
+    "x_groq": {
+      "id": "req_01m741j5ame5cajwxdnv5fwf4d",
+      "seed": 1899225805
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-09Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741j5ame5cajwxdnv5fwf4d"
+  }
+}

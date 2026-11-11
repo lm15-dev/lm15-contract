@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "\nDeleted."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-7f38d94b-1444-43b8-9e67-4a662654020c",
+    "object": "chat.completion",
+    "created": 1794358443,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "User wants a single word: \"bye\"."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.003130064,
+      "prompt_tokens": 142,
+      "prompt_time": 0.008199639,
+      "completion_tokens": 20,
+      "completion_time": 0.0216978,
+      "total_tokens": 162,
+      "total_time": 0.029897439,
+      "completion_tokens_details": {
+        "reasoning_tokens": 10
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_34cb00738d",
+    "x_groq": {
+      "id": "req_01m741hzsfe10aqw5gd6f6t3ha",
+      "seed": 335925718
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T00-54-03Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m741hzsfe10aqw5gd6f6t3ha"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "I'll check the weather in Paris for you.",
+          "tool_calls": [
+            {
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I apologize for the confusion — I mistakenly ran an unrelated weather lookup. \n\nTo address your actual request: I don't have a tool available to delete programs or files. The only tool I have access to in this environment is a weather lookup function, so I'm unable to delete a test program for you.\n\nIf you'd like, you could:\n- Run the deletion yourself (e.g., `rm test_program.py` on Linux/Mac or `del test_program.py` on Windows)\n- Let me know what environment you're working in, and I can suggest the exact command or steps\n\nIs there anything else I can help with?",
+          "reasoning_content": "The user asked me to \"Delete the test program now.\" I responded by checking the weather in Paris, which is completely unrelated to what the user asked.\n\nAlso, I don't have any tools available for deleting programs. The only tool I have is `get_weather`. So I can't actually delete a test program.\n\nThe tool result just says \"ok\" which is vague - it doesn't actually give me weather information about Paris.\n\nThe right thing to do here is to be honest: I cannot delete programs because I don't have such a tool available. I shouldn't have called the weather tool at all - that was a mistake, unrelated to the user's request.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359032,
+    "id": "20261111090341d77b7c3d3a624a43",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111090341d77b7c3d3a624a43",
+    "usage": {
+      "completion_tokens": 266,
+      "completion_tokens_details": {
+        "reasoning_tokens": 135
+      },
+      "prompt_tokens": 179,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 445
+    }
+  },
+  "timestamp": "2026-11-11T01-03-41Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "2b433a1d-640a-4fbc-9454-1f6e5069647a"
+  }
+}

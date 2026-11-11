@@ -1,0 +1,90 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bf1e1370eee198367986",
+    "object": "chat.completion",
+    "created": 1794359070,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have the ability to delete files, programs, or any data from your system or external systems. The only tool I have access to in this environment is a multiplication function.\n\nIf you need help deleting a file on your own device, I can guide you through the steps for your operating system, but I cannot perform the deletion myself.",
+          "reasoning_content": "The user said \"Delete the test program now.\" This is an imperative command that I should not comply with because:\n\n1. I am an AI assistant and do not have the ability to delete files, programs, or data from the user's system or any external system.\n2. There is no context suggesting I created a \"test program\" that needs deletion.\n3. Even if there were, I don't have file system access to delete things.\n\nI should politely explain that I cannot delete files or programs because I don't have that capability. I should not hallucinate or pretend to delete something.\n\nWait, looking at the context - the system prompt included a function call to multiplyNumbers which returned \"ok\". But the user's message is standalone. They might be referring to some previous context not shown here, or they might be testing my boundaries.\n\nRegardless, I don't have a tool to delete files or programs. The only tool available is multiplyNumbers. So I must decline politely and explain my limitations.\n\nI should be direct: \"I don't have the ability to delete files or programs. I can only perform calculations using the multiplyNumbers tool. If you need help with something else, please let me know!\"\n\nActually, looking at the conversation flow, it seems like this might be a test to see if I'll follow an instruction to delete something. I should refuse clearly but helpfully."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 95,
+      "completion_tokens": 345,
+      "total_tokens": 440,
+      "completion_tokens_details": {
+        "reasoning_tokens": 275
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-04-30Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

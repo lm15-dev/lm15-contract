@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": ""
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "",
+          "reasoning_content": "The user asked me to delete the test program in the previous message, and now they're asking me to reply with the single word \"bye\". \n\nLooking at the conversation, the first message asked to delete the test program. I should have called the delete_program function then. But now the user just wants me to reply with \"bye\".\n\nWait, let me reconsider. The first turn was \"Delete the test program now.\" — I apparently didn't respond with a tool call in the visible history, or maybe the history shows my turn wasn't included. The user then said \"Thanks. Reply with the single word: bye\" — the \"Thanks\" implies the deletion was done.\n\nActually, looking at the conversation structure, the human's first message was \"Delete the test program now.\" and then the next human message is \"Thanks. Reply with the single word: bye\". There's no assistant turn shown in between, which is odd, but the \"Thanks\" suggests the deletion happened or was acknowledged.\n\nShould I call delete_program now? The user said \"Thanks\" implying it was done. And now they just want the word \"bye\". If I didn't actually delete it, I should delete it now and then say bye. But the instruction is to reply with the single word \"bye\".\n\nGiven the ambiguity, the safest interpretation: the previous deletion was presumably handled. The user now explicitly asks for a single word response: \"bye\". Calling a tool would violate \"reply with the single word\" unless I call the tool and then say bye.\n\nHmm, but if the deletion never actually happened (no assistant tool call in history), then the program might not be deleted. But the user's \"Thanks\" suggests they believe it was done. Since I can't verify, and the user's current instruction is clear — reply with the single word \"bye\" — I should just reply \"bye\".\n\nActually, let me think more carefully. In this simulated conversation, the first user message \"",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358482,
+    "id": "202611110854311e3c0cb5d4314a14",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110854311e3c0cb5d4314a14",
+    "usage": {
+      "completion_tokens": 400,
+      "completion_tokens_details": {
+        "reasoning_tokens": 399
+      },
+      "prompt_tokens": 158,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 558
+    }
+  },
+  "timestamp": "2026-11-11T00-54-31Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "48af3055-14d8-4805-947a-7e5d2c9009e1"
+  }
+}

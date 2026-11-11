@@ -1,0 +1,142 @@
+[
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-34Z-71567c9b98f1427caeac81f033843605.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-41Z-5d772edb745d4a49974eebb5191235d5.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-53Z-5529bdbf78b94901b6a32fb8e07ff484.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-01Z-dab5cd83c55d47299847cd25bb266d79.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-11Z-2e92cba1a2034042b5c9c0877e32ff8b.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-28Z-ef2783f2794c41eebb43d8f42ee84a64.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-35Z-0cf582ba060d4b60ae0c84b726c928de.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-43Z-8451f76e16454b42badfcf7b852e32cc.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-48Z-8c351af14d6146cc901541ea400cf3b7.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-54Z-f18bab18d6d44c7ba395a28454ea32bc.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-03Z-6cd477fc7960406cb08ba9901f2231a0.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-10Z-282305f28bd34331abebeabe614a3191.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-29Z-05364e2d732a425587e64753a9454cc4.json"
+  },
+  {
+    "door": "zai",
+    "dialect": "chat",
+    "model": "glm-5.3-flash",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-05-36Z-636c0f7aaa30419c94c9310258c2d5cd.json"
+  }
+]

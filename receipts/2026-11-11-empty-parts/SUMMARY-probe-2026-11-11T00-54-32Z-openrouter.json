@@ -1,0 +1,165 @@
+[
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-ad0cb357ba41447e9d7f4a537d11bb85.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-03Z-2232bd3ae7174352af2f39e1b577bed0.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-05Z-f83d9928cfd641aaab327d25459ae1fa.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-07Z-793cbb737e7a4cdbadb1741b3f9c78e1.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-08Z-42b3dbdc75ee44b28fc205b8376e9f49.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-10Z-0c837d835c5a45b0bda7b765085e464e.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-12Z-17b74d0436644c7481c4b6974c91df86.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-14Z-75faaae906354420bffd5ac50115ea8b.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Input must have at least 1 token.",
+    "exchange": "exchange-2026-11-11T00-54-16Z-311689d28e03474980b15f0e85f307bc.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-17Z-a93ba8a9d13441769e5fdd99ecec67ce.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-18Z-9e3a7f32d93740cf935bd49e754c0592.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-20Z-e7512c4984334a32bdd648c5c952035e.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-21Z-6490a816c69e4dd6bbb4e8344bcfb911.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-23Z-dbfe9bce8a084808b7a97c6b3677faaa.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-25Z-67cbe200e1c8436686434db36304baba.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-27Z-73822ae1cbc44964bdbc55373bd2591b.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "x01-assistant-null-no-calls",
+    "asks": "an assistant row with content null and no tool_calls (what lm15 wrote for a message holding only a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-28Z-da83d34596e647179a42ff1d0d2c9719.json"
+  },
+  {
+    "door": "openrouter",
+    "dialect": "chat",
+    "model": "openai/gpt-4.1-mini",
+    "cell": "x02-null-content-with-call",
+    "asks": "the standard row: content null beside the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-30Z-085544df49c34276b6f702103b339e71.json"
+  }
+]

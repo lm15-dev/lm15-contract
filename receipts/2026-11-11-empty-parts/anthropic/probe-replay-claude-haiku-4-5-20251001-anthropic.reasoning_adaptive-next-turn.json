@@ -1,0 +1,108 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-haiku-4-5-20251001",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "",
+              "signature": "EoADCpABCBEYAipAnS65/8zPh5m53r1gv+j7ou4TaBppUP7AtCqauwlT7ZFtXMlkvndMIzLdRwPTpQyEAPgyh/71BeFHhbocqNyDyDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaoAYS34NQGEgxrafcj6gPI11dR/1QaDFIqxkmTGUA/bxmDayIwLQb4lTokNRD3pYrn4NLWh/cZema6onVCUJ48bn0jlSqXw0tJ9hQxDLLfQsdNEDKeKpwBH21Dpg39LP/8Y2kUDi1G8alF0qcfFZuSHdKUSGG4qb2jWoYCjCPLNawnnZdB73wFUcEJj8HqtMq3ZpdxlPskK24S1PcTi2nNFzYTtb7361PltZwXgmA/chaqEb6hOcwlO7EqmMtiprslZIerpF92QXI+WOngpjWdia1xpt7/EHjziQE737jbylatKhRiYJUKV+dZQ1dtFtyXeE+5GAE="
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 2648,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "thinking": {
+        "type": "enabled",
+        "budget_tokens": 2048
+      }
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-haiku-4-5-20251001",
+    "id": "msg_011CgvEuXPNMLpWcznjkhxaV",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is asking me to reply with the single word \"bye\". This is a straightforward request - they just want me to say goodbye with that one word.",
+        "signature": "Eq8DCrgBCBMYAipA9EqwqwX2D6Fm/4arK9E6dMrRNl7wKJbmJMxIRMvmfBrtgU6BvpkyK5NIFQC8hb3HzSyrwimlX2aUi2YH45DzAjIZY2xhdWRlLWhhaWt1LTQtNS0yMDI1MTAwMTgAQgh0aGlua2luZ1okNzA1MjAyYjEtNzljYS00ZWYwLTk2MDQtMDhmMjFjZGQ2MDJmmgEbChljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxqAHw/c7XBhIMZNzx8pRMtPqAqRRLGgzkkq/R0wps3p5kahgiMJBoTyarZ7HXNWXY2nkl2pkXytkTg37v8+hrUzmdkhSHRrknnatQ/gXWug/PTg/6lSqjAUJEEMPLqgR5CXyqX+rvlBnsUQFbSnqeKyeWbEB37geD3qULCip62sgMvlMnGAdjShSFEN0xzcA4cSm/wWlMJ4de0KQlJ0bmwil+g0Vqg4YdNGQCjf77YwZ0Ni5IRSmMYgHnnH8MwO5Hxs8Y8pebASyqfX5WQgl5QwLeFTYrZAFJifFnG8Co/q8tYtKLRwfWSG1EyfjsjUXeQseVz31WGmdFkrIYAQ=="
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "container": null,
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 632,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 45,
+      "output_tokens_details": {
+        "thinking_tokens": 38
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T01-03-43Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

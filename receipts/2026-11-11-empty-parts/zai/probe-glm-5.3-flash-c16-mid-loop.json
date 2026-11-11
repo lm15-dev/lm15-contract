@@ -1,0 +1,88 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_1",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_1",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "The test program has been successfully deleted. ✅",
+          "reasoning_content": "The user asked to delete the test program. I called the delete_program function and it returned \"ok\". Let me confirm to the user that the deletion was successful.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358572,
+    "id": "202611110856026dab6d1f8ba94897",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110856026dab6d1f8ba94897",
+    "usage": {
+      "completion_tokens": 45,
+      "completion_tokens_details": {
+        "reasoning_tokens": 33
+      },
+      "prompt_tokens": 156,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 201
+    }
+  },
+  "timestamp": "2026-11-11T00-56-02Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "962bf328-12e3-4b42-9cb6-63e16bb69cc2"
+  }
+}

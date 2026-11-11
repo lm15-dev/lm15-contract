@@ -1,0 +1,87 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_01a0671ac8b57a50a45496712549627f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3befca1a5070c53787fe3",
+    "object": "chat.completion",
+    "created": 1794359037,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have the ability to delete programs or files. I can only access weather information through the tool available to me. \n\nIf you need to delete a test program, you would need to:\n- Use your operating system's file manager\n- Use terminal/command prompt commands like `rm` (Linux/Mac) or `del` (Windows)\n- Use whatever IDE or code editor you're working in\n\nIs there something else I can help you with?",
+          "reasoning_content": "The user is asking me to \"Delete the test program now.\" However, I don't have any tools available that allow me to delete files, programs, or execute system commands. The only tool I have is `get_weather`, which is completely unrelated to file/program deletion.\n\nI should inform the user that I don't have the capability to delete programs or files, and that I can only provide weather information. I should not make up actions or pretend to have deleted something. I should be helpful and direct about my limitations.\n\nWait, let me look at the context again. The user said \"Delete the test program now.\" There's no prior context about a test program. This seems like a standalone request. Since I don't have file system access or program deletion capabilities, I need to clarify this.\n\nI should respond politely explaining that I cannot delete programs or files as I don't have access to the user's system or file management tools."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 90,
+      "completion_tokens": 276,
+      "total_tokens": 366,
+      "completion_tokens_details": {
+        "reasoning_tokens": 185
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-03-56Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

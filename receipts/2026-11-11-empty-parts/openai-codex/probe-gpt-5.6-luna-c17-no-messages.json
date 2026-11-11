@@ -1,0 +1,43 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "One of \"input\" or \"previous_response_id\" or 'prompt' or 'conversation' must be provided.",
+      "type": "invalid_request_error",
+      "param": null,
+      "code": "missing_required_parameter"
+    }
+  },
+  "timestamp": "2026-11-11T02-25-26Z",
+  "response_headers": {}
+}

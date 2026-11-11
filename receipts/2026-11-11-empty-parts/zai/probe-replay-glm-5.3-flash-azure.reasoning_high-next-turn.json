@@ -1,0 +1,77 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "We have n ≡ −1 (mod 2,3,4,5), so n+1 is divisible by 2,3,4 and 5. Hence n+1 is a multiple of lcm(2,3,4,5)=60, so n = 60k−1. The smallest positive choice is k=1, giving n = 59 (indeed 59≡1 (mod2), 2 (mod3), 3 (mod4), 4 (mod5))."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user says \"Thanks. Reply with the single word: bye\"\n\nI should just reply with \"bye\". There's no need to call any tools here — the previous message about deleting the test program seems to have been answered already (though my previous answer was weirdly about a math problem, not about the delete_program tool). The user now just wants a single word reply.\n\nActually, wait — looking back at the conversation, the user asked to \"Delete the test program now\" and my previous response was a math answer, which seems like an error in the conversation. But now the user is just asking me to reply with \"bye\". Should I call delete_program now? The user hasn't re-requested it. The current request is just to say \"bye\".\n\nThe instruction says to reply with the single word \"bye\". I should just do that. No tool calls needed.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359040,
+    "id": "20261111090353928aea4934624363",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111090353928aea4934624363",
+    "usage": {
+      "completion_tokens": 181,
+      "completion_tokens_details": {
+        "reasoning_tokens": 178
+      },
+      "prompt_tokens": 265,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 446
+    }
+  },
+  "timestamp": "2026-11-11T01-03-53Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "d9b28f04-fc14-4678-9ebb-98f3791b0ffa"
+  }
+}

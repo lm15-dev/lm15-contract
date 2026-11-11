@@ -1,0 +1,67 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://chatgpt.com/backend-api/codex/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "chatgpt-account-id": "<redacted: the signed-in account>",
+      "openai-beta": "responses=experimental",
+      "originator": "lm15",
+      "authorization": "Bearer $CODEX_CLI_LOGIN"
+    },
+    "body": {
+      "model": "gpt-5.6-luna",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "type": "reasoning",
+          "id": "rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185",
+          "summary": []
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": true,
+      "tools": [
+        {
+          "type": "function",
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "parameters": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "instructions": "You are a helpful assistant.",
+      "store": false
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "message": "Invalid 'input[1].id': 'rs_6aeca69773fe5d996675402e:rs_01a1ac6abdc37674988c6a525a043185'. Expected an ID that contains letters, numbers, underscores, or dashes, but this value contained additional characters.",
+      "type": "invalid_request_error",
+      "param": "input[1].id",
+      "code": "invalid_value"
+    }
+  },
+  "timestamp": "2026-11-11T01-03-39Z",
+  "response_headers": {}
+}

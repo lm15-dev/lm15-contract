@@ -1,0 +1,99 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "\n\n"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "bye",
+              "thoughtSignature": "AY89a1+Cu+XOfOMkEdos9EO536IkW/qJlAS3+7XXdP/iR3hv8GW9DLxb4N6D5pU+27wLdFpifuHSwW6k+cCH7TMir7VS9zoLWqZ1V9lvCkS98B0WSDdPWUoyiGLp6SbGlZ+yIhAgyODYnirTyXoyc1gegutbGavMd4Hqz7jHAB08viwG843puE1i6jcvrSxF07QbXtkuGZ/7xIV0DC33kkewPglMZN7c0ua6Dfly8nZ9lxDrsUN2yGcatH/n01nSeUbCOjoXCIou84fS4ao3xLEzj7eUYEPHhL+DIREB9PYhtdRZ8R4MKlPM7IUTZggpC1ds/2pmNJ5pYBUoK51deDJpvvKTcO0s7UYWw3LwfA2yS4pFzvx1Og1W8JIiIgIy5QEnxcIOMd/lfdNcIBjTVINUl84mvF4Az2+SfUibAtbkLm8mWs0xa3Azj3NEwFLUJtQIlUQ/aE64T7BvKTyJQRmRi4wMde9z9xZOeu2db/2qIBow2PvUqlgWoqyLS9RDEqQp1XleOwC/KsZFhnt+fDcX42Ufy6v6EEgUjXPSRNBz9lf9+qTVLSDyLQ/8i0qrKx/DvA6dUlfSxwRZwlcEdHLW7F+LAzM5SKJr1TzU/VyzJySQb/3KST7snvKv/93jR1KL+wlX4hD2/aHVryOcO7CrKmkp4pHfd6/z7W6oFbqwcvDsRqdQpAK1YgpVapimtC7uNNvFJVcXYUMrWSOQD7j81jg1jVpHNkPIcKbyM6CinxD+o+aiBUddlweUpEGW94w1OzH29IZ3Awn8oXxOYjFZjfsl8IoXkbddELQN+Z6h7n4hHawdkfAgaMFBoLTLqv9JnCMxwPv4hk+ozsmCf/FmtI9lZckWZejYWVU67Xi53VFRyYhZ3N97HfQRG/5OwLRrNUki+DxEIHXfA2zExQS7x4uSBLJHNRJgFIlxz8j2kP8KZwYn7goRibqhSpPnpqOq0bZdBzv4Oco20UwGxZkS2XiQDu7lV5uSyvP8yBZKoC86v3IlG8hPnch3WfjwY+JFpfhoUzGc9TslZOXcVc8Y8kVwiUL9NZyKnl3lMc/0aAOjr2VsMCzaiWlmDdJ+8pP8KlxgjohgJyBu9eRSZaqFYoaaLNI0xMXPcD4qUF3aBIAg8P8ZMVDe2Tx/g3LeUUUs8PAugVUxgZt2rfGrJEcllZIgw/M8PNff5nt/WNhxx4cVYGUk9FWRDmYoZMYGV8vBMiOamoNIf3xhH8ztM7Tf8PQE7Eb9DXaTNMUGUih6E+AhiVPdfZfdzcYi2jGw4K8QahQC7h6u6zXxTNhb0fwtZxgABZhigc4jsd/OAAfhfFr8EdIPNEKTiQzq98qgK7b2br2FCwY3FNy9yaF/3S5wKy6bAmErrCSXwNOuyQpQFLVQfL9r3q8y+Bk6iXiq/DLRH9eaqj+bymiROQF2suY7TkR+jSUN+e1bih/IBFw+5SgI+TtzMHJLglGWBqcJN8Z0gQvMvkRrDG9pDnlco2nKs+vK+QmU9nHp0l4qOWsCgt7wyABPy4rS/D2b1P8c9y1qoqLBcdZSCC48CIlWZc+mlSPE8XfyaiNGBpwmna/n0OE+H6MmJgku3qQGzKiutkmnzmlDzZb6Fc6GDo7KNq1J6/LAENx8Koh+Oua+yS/9umYUD7k/BRnw4c/kv1O9nyv22ndJRJss9q0QWh0iai/OA2kP50VJ+c6PVH3HRjMcZ9QlbrdNjQf+T0OkXiG9qDr8esoJ1osJaWObbAMAVVJx5aqDSIKaxd+WkVn6CSm1vdhvWQrhUHzYS9aQGHTw0GhyEE/+qOFv50ukYVzPdQu5tEqy2oLNR+/aJmtESaiV+SHr"
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 31,
+      "candidatesTokenCount": 1,
+      "totalTokenCount": 345,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 31
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1
+        }
+      ],
+      "thoughtsTokenCount": 313
+    },
+    "modelVersion": "gemini-3.7-flash",
+    "createTime": "2026-11-11T00:56:35.660419Z",
+    "responseId": "Q73zasOnKNbu0MMPr6XX0A4"
+  },
+  "timestamp": "2026-11-11T00-56-35Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

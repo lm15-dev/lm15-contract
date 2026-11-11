@@ -1,0 +1,42 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ],
+      "system": "Reply with the single word: bye"
+    }
+  },
+  "status": 400,
+  "body": {
+    "type": "error",
+    "error": {
+      "type": "invalid_request_error",
+      "message": "messages: at least one message is required"
+    },
+    "request_id": "req_011CgvM9BpE2NrCo36RgnLNx"
+  },
+  "timestamp": "2026-11-11T02-25-29Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

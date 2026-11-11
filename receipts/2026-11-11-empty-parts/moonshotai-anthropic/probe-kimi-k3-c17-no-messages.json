@@ -1,0 +1,41 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 400,
+  "body": {
+    "error": {
+      "type": "invalid_request_error",
+      "message": "Invalid request: messages must not be empty"
+    },
+    "request_id": "28071d20-dd77-11f1-a8d1-00163e6508e0",
+    "type": "error"
+  },
+  "timestamp": "2026-11-11T02-25-26Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

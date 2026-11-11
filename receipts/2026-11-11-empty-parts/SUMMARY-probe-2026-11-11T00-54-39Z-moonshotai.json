@@ -1,0 +1,170 @@
+[
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-963edef4c2db4f02af0630713962e46e.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-04Z-f0cf259d732445fca8c5934b5e731203.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-06Z-f4f81112397649e9aa910c3c0940bbcd.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 400,
+    "message": "Invalid request: the message at position 1 with role 'assistant' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-08Z-910264e2a82b4275ad9c211eb694736c.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 400,
+    "message": "Invalid request: the message at position 1 with role 'assistant' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-09Z-e01d9aa80b064ffd9a1711a6720f66d1.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-11Z-d8a6ac831b2845e190f22a53a609b077.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-13Z-6f64c14443704240b29d9b16d3c6040d.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 400,
+    "message": "Invalid request: text content is empty",
+    "exchange": "exchange-2026-11-11T00-54-16Z-b07a2894d5384cf686bf31596cb18174.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Invalid request: the message at position 0 with role 'user' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-17Z-bb0c803960154aafbe1c26c653def14f.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 400,
+    "message": "Invalid request: the message at position 0 with role 'system' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-19Z-d6b54d8fc9a94a93801782fc31c53239.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-20Z-8268e344327f4351a388658b9f93caf6.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-22Z-ec959103a62b4ff6b1ab32aafe3d9a4a.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-24Z-c9c7c559fc0844989f87aff625a19857.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-27Z-2d8139f50b2042feb894be1d9a1bfe63.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-30Z-b0b6e169f9784fb88007dffdcb3c7622.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-32Z-091b06e2b37e49f4b8603a2e114ab217.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "x01-assistant-null-no-calls",
+    "asks": "an assistant row with content null and no tool_calls (what lm15 wrote for a message holding only a hidden thinking part)",
+    "status": 400,
+    "message": "Invalid request: the message at position 1 with role 'assistant' must not be empty",
+    "exchange": "exchange-2026-11-11T00-54-35Z-b3dbc9201abb4a8f94da9ef5a2810c22.json"
+  },
+  {
+    "door": "moonshotai",
+    "dialect": "chat",
+    "model": "kimi-k2.6",
+    "cell": "x02-null-content-with-call",
+    "asks": "the standard row: content null beside the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-37Z-a994f7af123c4a16868faded6c9b4bf8.json"
+  }
+]

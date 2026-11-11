@@ -1,0 +1,78 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "Hello."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "86f4a881-d09e-46d0-8a87-63255a979a0b",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user is thanking me and asking for a single word reply: \"bye\". Simple.\n\nI should just reply \"bye\". No tool calls needed. The delete_program tool is available but irrelevant here — I shouldn't call it, as the user just wants a one-word reply.",
+        "signature": "86f4a881-d09e-46d0-8a87-63255a979a0b"
+      },
+      {
+        "type": "text",
+        "text": "bye"
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 159,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 59,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T00-54-33Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

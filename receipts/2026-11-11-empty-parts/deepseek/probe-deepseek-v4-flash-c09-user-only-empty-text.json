@@ -1,0 +1,71 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "b4e78d4c-182b-4f21-bc6f-b88ac645b083",
+    "object": "chat.completion",
+    "created": 1794358460,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't see a request yet — just a note that I have a `delete_program` tool available.\n\nIf you'd like me to **delete the test program**, just say so and I'll run it. Otherwise, let me know what you'd like to do. (I won't delete anything without confirmation, since that action isn't reversible.)",
+          "reasoning_content": "The user hasn't given a task yet. There's just a tool available. Maybe I should wait for instructions? The conversation has no user message except implicit. Actually the user message is empty—only system prompt with tools. There is no task. I should respond asking what they'd like, or perhaps the intended action is... Hmm.\n\nThere's no user content. I should ask for clarification. But maybe the \"task\" is implied to delete the program? Without any instruction, best to ask.\n\nGiven the guidance about not taking destructive actions without confirmation, I'll ask what they want."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 272,
+      "completion_tokens": 193,
+      "total_tokens": 465,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 120
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 144
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T00-54-20Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

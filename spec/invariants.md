@@ -102,7 +102,9 @@ rationale is the designed reason, ratified, not a guess.
 - **INV-015 — `TextPart.text` and `ThinkingPart.text` MAY be empty.**
   WHY: streaming reassembly and provider redaction produce legitimately
   empty fragments (RefusalPart docstring); MAP-2 also requires an empty
-  TextPart as the never-empty-message placeholder.
+  TextPart as the never-empty-message placeholder. (2026-11-11) Valid
+  in the canonical model does not mean written: an empty part with no
+  state the dialect consumes reaches no wire (MAP-24).
 - **INV-016 — `RefusalPart.text` is non-empty.** WHY: a refusal is final
   semantic content; an empty refusal communicates nothing (docstring).
 - **INV-017 — CitationPart requires at least one of `url`/`title`/`text`.**

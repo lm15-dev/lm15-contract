@@ -1,0 +1,92 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_01a0671ac8b57a50a45496712549627f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "I apologize — I mistakenly called a weather tool, which isn't relevant to your request.\n\nTo clarify: I don't have any tools available that can delete programs or files. The only tool I have access to is a weather lookup, so I'm unable to delete the test program for you.\n\nIf you'd like, I can help you with instructions on how to delete it yourself, depending on the context (e.g., a specific programming language, operating system, or environment). Just let me know the details.",
+          "reasoning_content": "The user asked me to \"Delete the test program now.\" But I only have access to a `get_weather` tool, which is clearly not related to deleting programs. I shouldn't have called that tool — it seems like a mistake or confusion. Let me respond to the user appropriately.\n\nI don't have any tools that can delete programs or files. I should apologize for the confusion and explain that I can't delete programs with my available tools.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359082,
+    "id": "20261111090435edb46664441541f0",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "20261111090435edb46664441541f0",
+    "usage": {
+      "completion_tokens": 195,
+      "completion_tokens_details": {
+        "reasoning_tokens": 90
+      },
+      "prompt_tokens": 169,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 364
+    }
+  },
+  "timestamp": "2026-11-11T01-04-35Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "b1460e9a-62a2-485e-b198-cc47406bc0a6"
+  }
+}

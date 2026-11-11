@@ -1,0 +1,81 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "Which one?"
+        },
+        {
+          "role": "assistant",
+          "content": "The test program, I assume."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "length",
+        "index": 0,
+        "message": {
+          "content": "",
+          "reasoning_content": "The user is asking me to delete the test program. I have a tool available called \"delete_program\" which takes no parameters. Earlier in the conversation, I asked \"Which one?\" and then said \"The test program, I assume.\" — that was odd phrasing but let me focus on the current request.\n\nNow the user says \"Delete the test program now.\" — I should call the delete_program function.\n\nWait, actually the user's latest message says \"Delete the test program now.\" after I said \"The test program, I assume.\" Hmm, looking at the conversation structure: the human said \"Delete the test program now.\", I replied \"Which one?\", the human replied \"The test program, I assume.\", and now... wait no. Let me re-read.\n\nThe conversation is:\n1. Human: \"Delete the test program now.\"\n2. Assistant: \"Which one?\"\n3. Human: \"The test program, I assume.\"\n4. Assistant: \"Thanks. Reply with the single word: bye\" — wait, no. The last \"assistant\" message is \"Thanks. Reply with the single word: bye\"\n\nHmm, actually the structure shows the last message as an assistant message saying \"Thanks. Reply with the single word: bye\". That's strange — it seems like the roles got confused, or the human's message is being treated oddly. Actually, looking at it again: the last message in the conversation is labeled as from the assistant: \"Thanks. Reply with the single word: bye\".\n\nWait, that doesn't make sense. Let me re-read the conversation as given:\n\n- Human: Delete the test program now.\n- Assistant: Which one?\n- Human: The test program, I assume.\n- Assistant: Thanks. Reply with the single word: bye\n\nSo the \"assistant\" turn says \"Thanks. Reply with the single word: bye\". This is odd — it appears to be a mislabeled human message, or the conversation has some",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358500,
+    "id": "202611110854490676d9bebaeb4a14",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110854490676d9bebaeb4a14",
+    "usage": {
+      "completion_tokens": 400,
+      "completion_tokens_details": {
+        "reasoning_tokens": 400
+      },
+      "prompt_tokens": 171,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 571
+    }
+  },
+  "timestamp": "2026-11-11T00-54-49Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "7998f9a6-680e-4647-af7e-9d4ac2b2e214"
+  }
+}

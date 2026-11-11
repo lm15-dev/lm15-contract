@@ -1,0 +1,86 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            },
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 400
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "bye",
+              "thoughtSignature": "AY89a1+RdRcQ1CcYtR1uvdJ0yWWVggiftuBdg7tyeSGh1AVvaHNPLCGImfEX/yh8ZOmlUI3SNUIc15CcRDn/k/+ECthVrSyryGyypKIh0rhMRCHwU0RXJINFKCvugnxIVTMXgPYDyvudN2jE7y8gAhPteeGX2exGxeQP84EBr0U+dIs6Rt44uJSmK3f/oBxZtB1TiqcP+L9k2uDdkpPh6Jg6Sm1gEu8e8aGvXPxsHEm4zELOxY5EQXJDM3kj1ob6eSElf2fiIK5ruWbcGvOwckyj/dFTp2FTojJ8UWfiPU8d+gp8voa/De3Zgk/v0oFaJ5OtsHLRMRCTnn71dQQb2XVg5T6BBQ=="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 25,
+      "candidatesTokenCount": 1,
+      "totalTokenCount": 66,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 25
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1
+        }
+      ],
+      "thoughtsTokenCount": 40
+    },
+    "modelVersion": "gemini-3.7-flash",
+    "createTime": "2026-11-11T00:55:39.592253Z",
+    "responseId": "C73zav2SJJ2N1tEPufCp0Q8"
+  },
+  "timestamp": "2026-11-11T00-55-39Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

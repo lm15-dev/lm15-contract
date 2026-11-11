@@ -1,0 +1,95 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "",
+          "tool_calls": [
+            {
+              "id": "call_01a0671ac8b57a50a45496712549627f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "cd272329-07b5-4dd5-93ea-c67706d24903",
+    "object": "chat.completion",
+    "created": 1794359035,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can't do that — I don't have any file or system access, so I can't delete programs, scripts, or files. The only tool I have available is a weather lookup.\n\nAlso, I don't know which \"test program\" you mean. Could you clarify:\n\n- **Where** it lives (local path, repo, server, cloud service)?\n- **What** it is (a file, a scheduled job, a deployed service)?\n\nOnce I know the target, I can walk you through the exact commands (e.g. `rm test_program.py`, `git rm`, `docker rm`, cancelling a cron job) or show you a safe script to do it — but you'd need to run it yourself.",
+          "reasoning_content": "I mistakenly called get_weather? That was odd. Anyway, the user asked to delete a test program. I don't have tools to delete anything — only a weather tool. So I should explain I can't delete files.\n\nWait, I did call a weather tool erroneously. I should acknowledge and clarify. The real answer: I don't have file deletion capability, and I don't know which \"test program\" they mean. Ask for clarification."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 340,
+      "completion_tokens": 243,
+      "total_tokens": 583,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 92
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 212
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-03-55Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

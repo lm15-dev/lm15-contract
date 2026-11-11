@@ -1,0 +1,102 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-3.7-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingLevel": "low"
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "bye",
+              "thoughtSignature": "AY89a1+bo8x/jOIZnqapcQ2weoTKEtqAZRrD4yZIPPH8zsFWHu+JEuhlXZIeJiKhYiqwdwGCUYYb46X4ue7lUQkXlJ17TbD0zRmuZ+SegF7KOzufr9mn96FIuMXNIdWRP3rELiCdFMSe8SRpIPeh/wEH2KN/RfsHfQFfoXnNJx+VjE6D04t55aDvT4Dt1G6sIMKODMz2PXeRbD3UcDaCS/aIOG8bUcBQfiZP3vI9eE82/ULekbybDxCEkhwpnoSmaNlaRoS2Xtm65buKkqmqVZAT1CWAdI+PwlPAWQnIbuc7svN7MkuuJoi+R248C/AOs9Qc9pqTX0ygm9Cn/g7F7TQnuJoQ9wwqcKW7G0DeRrnHuEFQrlS14OliVjl3M9dX+nsOoqcJkGWYPv0nkjUIo57Ote8Z3QiG6AGNyZPBJm/cmQdzE2VJOws0Z30KYO5T3CWzU+jFhYMr1URpNjus6uuyYT3Yl/QxbEfN+69aQrwxbuE39Jg29gaT0jp8ciKbE3F3tzoqCaOa3Vrh2wfdQP9idabRKIZBc1LLiX62gUPcfR8yxMserJIIbmBzrfMsya+r17v2ZKYxX1a/VH2MBLfcYetiQY1Pw61kx8vfUQNENEl9zxxO0nVCf5q3AYZbKeSerAuunbkfXh+Gosp/qH8O+0L2uGiVcuj4Z/y/4shoyLtWzJq27iKxGqkMyG+OWrFo9fWYGKHT6UaeQuwwMUYxLAelC3rIfjpsxPhuT2IqddG5czqGEuJRsdUsG6xgawwwNQs50SplMQ8s7UkiQ3wKMjFcl5PYWIizFydLrur/oFnI2pPnfhIk5DcyvfmwXWKs+nMlfpmkF+5EGw8Taj+grr/9uiPgnO5GvadwcRWqP/GAm5vUCO+jj7uMDNrq4cWeWusJLLua0kG4QOQ3KItrChrLkNNLrZwUYEIz7BwLzmgHS66yx1fUCaEJGT93UHE8dHpnzXiK3Ow6AwQpxg7LdBct63Eq14BDE3DGYyVLhrD8ZE+YeBPRsLKSFPLj1PibSFe/Z2A6hQjS0lGcyexou8HOGy89V9rFE4EyoTcXgXFQd3WUNV+1lOJrgh2Tdyi5B26iQMH2FIwXTTigQvyMjl6b4Y9tFocDauwGOPDa6cwX7ADK+JegTfzBQjcPGSee4HglLbARqWgtxG65YHJQiGL2IJ39qDHyR0GAO9Rju8DHNQyhzFzH7VxSJtt+I4O4WwIbtjRSB2snnaOgf4JMKfIWZipMOISEiAeH8d0wj2BUZ8Y3xI4wDT4bea0ECO41k3cIo8psCKzUHTjwnAlmDksZ3E7bRCZi04Tr8SeLrHzBtscUsl4TBWtiw50KDYT6pvA9BbHjvTJf2CIIGk685eb9mNt3H+eWSL6MSQd/DTbB+5+xN6VUYK64pp/Kopjd5Jt070BsioZdTBEEgNzNZoJ2zc96Gy1LByigfthxW/fzbVFTXDoSSGJeaf265X0uYTf6k+T98o1t99PlWhKmMlVwBr124Lhh5nEbwfKmkzlprgOe+pR8Ia33emh0K9TmdyV6QhRraP/TRVCgRbnit10k8jX+2fHrJZ+ly2G4CtL2mH20U3BS2SPpxXCz8+UIPA+tLz6HuKT6uvCxpnZYhGHjY+OqhUUuB1UtutgZRkNSIFwGCv9DhUbtralpPMTQu85IMOSjiqJMqZoXyZNcwumbtgS2sjfEzCONqJ+BNdDh1xjJZ/jXna+3Jmy8nkgPWA3ff0SNAi0JH0483b2xmVZN7qPLrXZ4r+QIa7Iy7poQZhpQ/6mQShNXyISNFNlLUmLABssgycoKO47Jth0C0l4LFOPt7ZBs+kXd8FGLsY8Tls0NRNPSVwp7l/9tK6kte7CsJQlSMY7pcTnli43fEfqVBuYhrBstTB+fAbCcofEG8Sef7L3YwN3D1EqcZz9aehY99ZGtxRnQwS/QoywikiIsDhoe1iPcjvhOyq1PFdE="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 65,
+      "candidatesTokenCount": 1,
+      "totalTokenCount": 418,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 65
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1
+        }
+      ],
+      "thoughtsTokenCount": 352
+    },
+    "modelVersion": "gemini-3.7-flash",
+    "createTime": "2026-11-11T01:04:11.315710Z",
+    "responseId": "C7_zar6iE8Hx0MMP3omt4AQ"
+  },
+  "timestamp": "2026-11-11T01-04-11Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "MAP-24, every recorded reply in every dialect's history. The harness's mapping direction takes each golden's canonical_response.message (what lm15 read from a real server), puts it in a history (a user turn with `first`, the message, one tool result with `tool_output` for each of its tool calls, a user turn with `last`) and builds it with build_request for each provider in `dialects`, the model filled in from `models`. The build must succeed and the body must hold no text block with no characters and no message with nothing in it. No answer is written by hand: a reply shape nobody thought of is covered when its golden lands. `refusals` names the (golden, provider) pairs whose pinned answer is an UnsupportedFeatureError before the wire (MAP-10: a part this wire has no slot for), each with its reason; it is empty today. Case ids read history-replay.<provider>.<feature>[<dialect>].",
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-11-11",
+    "evidence": "docs/mapping-rules.md MAP-24 rule 5 and MAP-10 rule 1; changes/2026-11-11-empty-parts.md. On 2026-11-11 the reference at 2.3.0 (af6ebbc) failed 87 of these 1,908 checks, over 58 recorded replies (gemini 42, anthropic 24, openai_chat 20, openai 1); no hand-written case covered a history that changes dialect."
+  },
+  "dialects": ["anthropic", "gemini", "openai", "openai_chat"],
+  "models": {
+    "anthropic": "claude-haiku-4-5",
+    "gemini": "gemini-2.5-flash",
+    "openai": "gpt-5.4",
+    "openai_chat": "gpt-5.4"
+  },
+  "first": "Go on.",
+  "tool_output": "ok",
+  "last": "And then?",
+  "refusals": {}
+}

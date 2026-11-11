@@ -1,0 +1,83 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bf29da6373467fa16b3b",
+    "object": "chat.completion",
+    "created": 1794359081,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "delete_program_0_a87533b5",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ],
+          "reasoning_content": "The user wants me to delete the test program and then reply with the single word \"bye\".\n\nFirst, I should call the delete_program function. Then I should reply with just \"bye\".\n\nLet me check the function definition - it takes no arguments and returns any type. So I can just call it.\n\nAfter the function call, I'll output \"bye\" as requested."
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 58,
+      "completion_tokens": 87,
+      "total_tokens": 145,
+      "cached_tokens": 58,
+      "completion_tokens_details": {
+        "reasoning_tokens": 75
+      },
+      "prompt_tokens_details": {
+        "cached_tokens": 58
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-04-41Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

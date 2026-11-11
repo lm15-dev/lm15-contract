@@ -1,0 +1,106 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/lm15-vertex-live/locations/global/publishers/google/models/gemini-2.5-flash:generateContent",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer <bearer from the cloud chain; see case.credential>"
+    },
+    "body": {
+      "contents": [
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "model",
+          "parts": [
+            {
+              "text": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+            },
+            {
+              "text": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime.",
+              "thoughtSignature": "EqUECqIEARFNMg9EeUzmAcNABG7iP760mG3KWb1IYtdxEV5M7dZCt5H4Jxu/O9swKuyqm4t5aCmp+bvA/juP59OlsKneXvFHFmO9lfrRJsujNWnEFiCD4JzOEMBxYAlLAPFl52HhM8bESfs1mMQiBf1mFiLpayn1P1fisqIu5aeF920Jgbo9pXFH4VsZy1DbLUtkV3VMhh0Td6pSaCmscj5gLZM1DiveAWmg6YOOy6OfNyebCKzFKKGLcGUYd63mscnzaIFgQvseh0o3Awi4abIhdAR/5W7qf9zFHjrqSFefwdjtUDaHetKmoYUcqDmPXL99bDZMnqvZN8dQ698OjZ9QZMXMHS0r8Ia57pWsse9Jo29XVvg+zHZ0VVy8PRDeQFINheb9mFUmuU0TdEdUj1RpXKezncvHSWZ693PdBn3xtGYY4z7dV3v786eoPaRrQmYBjoNe6wksuju0pCXLqgQZ4QkMkEqiGiZkqmVsKG1jPLzt4IOUc0QQueF20eNuEoGITJEC7nJnlGJWgGoAIjVNPp6PooMFI8j57OGWt2nimjQOJeQquW6cYIs+9fjR3zcQjigUa9T9mHcsYtgPPMzZmka2HZcTengPtuNvojidPMoZdAu0lXhxIGSnCVSMd9Pf/tNfkVbMHoUuq5OfcqOkoQyXjX9G5ehFwcJlwk6+pGrEtYDznxE4HCgyPpMGD3JFmssC4FE90S1BDXs8YjixiiG4vFkT"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "generationConfig": {
+        "maxOutputTokens": 600,
+        "thinkingConfig": {
+          "thinkingBudget": 2048
+        }
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "name": "delete_program",
+              "description": "Delete the test program.",
+              "parameters": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": "bye",
+              "thoughtSignature": "AY89a1/f2fQYLJEcZWhKmpgjYs4EkA056U6mEHZe5+5P4ujGXJlLws/6ipelVBLmWAc5FtCN3nMHjcO9MwrY5piK6kKtfLgFMQX8/IVIEBzXQk4r7ARY2/ntApkfkyP1x5N70zR0vluSG4mFEL9NRee53D594RY5+SR+Q32Gbh2lfJ+86ROnpO3w9WXPHAQmAR4PwK3ynep0XDVD7LJ7/a1gWPuLeCJDkwcJdzGhCJ8="
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
+    ],
+    "usageMetadata": {
+      "promptTokenCount": 221,
+      "candidatesTokenCount": 1,
+      "totalTokenCount": 242,
+      "trafficType": "ON_DEMAND",
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 221
+        }
+      ],
+      "candidatesTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 1
+        }
+      ],
+      "thoughtsTokenCount": 20
+    },
+    "modelVersion": "gemini-2.5-flash",
+    "createTime": "2026-11-11T01:03:52.507296Z",
+    "responseId": "-L7zaqD7Hp2N1tEPufCp0Q8"
+  },
+  "timestamp": "2026-11-11T01-03-52Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8"
+  }
+}

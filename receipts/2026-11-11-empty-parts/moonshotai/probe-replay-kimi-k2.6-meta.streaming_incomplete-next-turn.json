@@ -1,0 +1,79 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bef4da6373467fa16b39",
+    "object": "chat.completion",
+    "created": 1794359028,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "delete_program_0_30634cef",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ],
+          "reasoning_content": "The user wants me to delete the test program using the available function, and then reply with just the word \"bye\".\n\nI need to:\n1. Call delete_program function\n2. Reply with just \"bye\"\n\nThe delete_program function takes no arguments according to the schema: {} (empty object)."
+        },
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 58,
+      "completion_tokens": 73,
+      "total_tokens": 131,
+      "completion_tokens_details": {
+        "reasoning_tokens": 61
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-03-48Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

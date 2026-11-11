@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "I'll check the weather in Paris for you.",
+          "tool_calls": [
+            {
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-67f8f3e8-b2ba-4e8d-bcfa-7aaa3386b1e9",
+    "object": "chat.completion",
+    "created": 1794359016,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m not sure which test program you’re referring to. Could you let me know the name or location of the file you’d like removed? Once I have that, I can give you instructions on how to delete it.",
+          "reasoning": "The user says: \"Delete the test program now.\" They likely refer to deleting some test program that was earlier in the conversation. We need to see context: The conversation is only these messages: user: \"Delete the test program now.\" Assistant: used get_weather incorrectly. There's no test program in context. The user wants to delete a test program. As an LLM, we cannot delete files. But maybe they mean delete the test program that was referenced earlier? There hasn't been any test program. They might want us to remove or disregard a test program. We should clarify what they mean. According to policies, we should not pretend to delete anything. So we should ask for clarification or inform that we cannot delete files. Probably ask what test program. So respond: I need clarification."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.332731914,
+      "prompt_tokens": 149,
+      "prompt_time": 0.01033765,
+      "completion_tokens": 214,
+      "completion_time": 0.248675951,
+      "total_tokens": 363,
+      "total_time": 0.259013601,
+      "completion_tokens_details": {
+        "reasoning_tokens": 160
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_d23c14756c",
+    "x_groq": {
+      "id": "req_01m7423ew2en4va87efn5vsqzt",
+      "seed": 84618594
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423ew2en4va87efn5vsqzt"
+  }
+}

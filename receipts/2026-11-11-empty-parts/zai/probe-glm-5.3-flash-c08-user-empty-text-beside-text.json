@@ -1,0 +1,78 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": ""
+            },
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user is asking me to reply with the single word \"bye\". There's no need to call any tools here — the delete_program function exists, but the user hasn't asked me to delete a test program. They just said \"Thanks. Reply with the single word: bye\"\n\nI should just reply with \"bye\" as requested. No tool call is needed.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358508,
+    "id": "202611110855017c287cd21c9444a3",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110855017c287cd21c9444a3",
+    "usage": {
+      "completion_tokens": 77,
+      "completion_tokens_details": {
+        "reasoning_tokens": 73
+      },
+      "prompt_tokens": 148,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 225
+    }
+  },
+  "timestamp": "2026-11-11T00-55-01Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "da7be5f5-44ee-45c9-86e8-e42539823028"
+  }
+}

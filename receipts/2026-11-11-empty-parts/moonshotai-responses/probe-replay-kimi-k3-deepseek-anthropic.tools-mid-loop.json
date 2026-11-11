@@ -1,0 +1,156 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "The user wants the weather in Paris. I'll use the get_weather tool."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_5a49ed89-8c4e-9ff0-a880-f1ecbb130c31",
+    "object": "response",
+    "created_at": 1794359095,
+    "completed_at": 1794359109,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_KTks1g7fyJgfBPT894Qw5exn",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "Interesting — the tool returned \"ok\". The user said \"Delete the test program now.\" but my previous turn apparently treated it as a weather request for Paris (which seems like a mismatch — possibly the conversation context is odd, but regardless).\n\nThe user asked to \"Delete the test program now.\" I don't have a file deletion tool. The only tool available is get_weather. I can't delete programs. I should clarify that I don't have the capability to delete files/programs, and ask for clarification about what \"test program\" they mean — I have no context about any test program.\n\nThe prior assistant turn was odd (it responded about weather in Paris when the user asked to delete something), but I shouldn't perpetuate that. Actually, looking at the conversation: the human said \"Delete the test program now.\" and the assistant responded about weather. That's a mismatch. But I can't change the past. Now I need to respond appropriately.\n\nI should explain I don't have tools to delete programs or files, and I don't have context about a specific test program. Ask for clarification — what program, where it lives, and note that deletion is a destructive action I can't perform directly here. If they need to delete a file, I can provide commands (e.g., `rm filename`) but should be careful about destructive commands — I can provide guidance while warning about irreversibility.\n\nKeep it concise."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_nGzBEBKjUEP7uTXxy3ANUQCr",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "I don't have the ability to delete files or programs — the only tool available to me in this conversation is a weather lookup, which can't help with this. I also don't have any context about a \"test program\" from our conversation, so I'm not sure which program you're referring to.\n\nIf you want to delete a file yourself, here's how depending on your system:\n\n- **Linux/macOS (terminal):** `rm /path/to/test_program` (or `rm -r` for a directory)\n- **Windows (command prompt):** `del C:\\path\\to\\test_program`\n\n⚠️ A word of caution: these deletions are permanent (they don't go to the Recycle Bin/Trash), so double-check the path before running them.\n\nIf you can tell me more about what you're trying to delete — the file name, location, or the context — I'm happy to give you more specific instructions.",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 263,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 256
+      },
+      "output_tokens": 481,
+      "output_tokens_details": {
+        "reasoning_tokens": 280
+      },
+      "total_tokens": 744
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "The get_weather tool.",
+        "parameters": {
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T01-04-55Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

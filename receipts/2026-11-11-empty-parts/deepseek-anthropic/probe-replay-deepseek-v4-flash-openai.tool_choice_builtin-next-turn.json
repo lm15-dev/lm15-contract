@@ -1,0 +1,97 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)Paris is the capital and largest city of France. Located in the north-central part of the country along the Seine River, it serves as the nation's political, economic, and cultural center. The city has an estimated population of approximately 2.04 million within its administrative boundaries, with a metropolitan area population of about 13.2 million as of 2026. ([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))\n\nParis is renowned for its iconic landmarks, including the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Its rich history and cultural heritage make it a major destination for tourists worldwide.  "
+            },
+            {
+              "type": "text",
+              "text": "[Your Go-To 3-Day Paris Itinerary for First-Timers - Klook Travel Blog](https://www.klook.com/blog/3-days-in-paris/?utm_source=openai)"
+            },
+            {
+              "type": "text",
+              "text": "([en.wikipedia.org](https://en.wikipedia.org/wiki/Paris?utm_source=openai))"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "220a179c-862f-4cad-a1bf-fd877baf5102",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked me to delete the test program, and I have a tool for that. Wait — looking back at the conversation, my previous turn was a completely off-topic response about Paris, which was wrong. The user asked \"Delete the test program now.\" I should have called delete_program. But then the user said \"Thanks. Reply with the single word: bye\".\n\nHmm, this is odd. The user says \"Thanks.\" — but I never actually deleted the program. Did I? My previous response was nonsense. But now the user just wants me to reply with the single word \"bye\".\n\nThe user's current instruction is clear and simple: reply with single word \"bye\". Should I still delete the program? The user said \"Thanks\" implying they consider it done, but it wasn't. However, the current request is just to say bye. The task is a bit ambiguous.\n\nActually, the user's latest instruction is simply to reply with the single word \"bye\". That's what I should do. But should I first delete the program since it was never actually deleted? The user said \"Thanks\" — they may believe it's deleted. If I don't delete it, the original request remains unfulfilled.\n\nHmm. The single word constraint: \"Reply with the single word: bye\". I could just say \"bye\". But there's an outstanding action. However, the user explicitly asked for a single word response. Doing a tool call plus \"bye\" wouldn't violate the word constraint on my text reply.\n\nI think the best is to just comply: reply \"bye\". But the program was never deleted. Given the user seems to think it's done, and they now want only \"bye\"... I think the safest is to honor the current instruction. But leaving a test program undeleted after they asked to delete it is a real issue.\n\nI'll just reply \"bye\" as asked — actually no, better to delete it first then say bye? The instruction \"Reply with the single word: bye\" — adding a tool call is fine. But the user said \"Thanks\", suggesting they think it's done; if I say \"bye\" only and the program still exists, that's a failure.\n\nI'll do the delete call and then reply \"bye\". Hmm, but that could be seen as ignoring their \"thanks\". The delete is idempotent-ish; if it's already gone, error is fine.\n\nI think the cleanest: call delete_program, then respond \"bye\". That satisfies both the original request and the current one.",
+        "signature": "220a179c-862f-4cad-a1bf-fd877baf5102"
+      },
+      {
+        "type": "tool_use",
+        "id": "call_00_B74F8ppb7LnsmBsXADzX0403",
+        "name": "delete_program",
+        "input": {}
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 279,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 256,
+      "output_tokens": 548,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T01-04-12Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

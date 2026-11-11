@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-11-11T01-04-55Z",
+  "provider": "moonshotai-responses",
+  "status": 200,
+  "model": "kimi-k3",
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "The user wants the weather in Paris. I'll use the get_weather tool."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "output": "ok"
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "request_sha256": "2f963f584356b7b8207535bf8c43f40570998b697fed643327e71fcc7f544864",
+  "request_hash_format": "sha256 of UTF-8 compact JSON: method,url,headers (ordered pairs),body_b64; unredacted transport input",
+  "response_sha256": "9ff3c70f8074b025d94a90972865270e8bee7dc40ec3f5477894395754e44cbe",
+  "response_bytes": 3548,
+  "note": "sent is redacted; request hash cannot be reconstructed from it; body/model may be absent on account surfaces"
+}

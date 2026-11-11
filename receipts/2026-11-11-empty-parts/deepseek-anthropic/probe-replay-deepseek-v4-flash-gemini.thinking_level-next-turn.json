@@ -1,0 +1,93 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "**My Assessment of 7 as a Mersenne Prime**\n\nAlright, let's see, the question is whether 7 is a Mersenne prime. Okay, first I need to remember what a Mersenne prime *is*. Right, it's a prime number in the form of $2^p - 1$, where *p* is also a prime. Now, let's test 7. If I recall my powers correctly, 7 is equal to $2^3 - 1$. Bingo! Here, p=3, and 3 is a prime number. Also, 7 itself is a prime. This means it fits the definition perfectly. Therefore, 7 is a Mersenne prime.\n\n\n"
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it is a prime number that can be expressed in the form $2^p - 1$, specifically $2^3 - 1$, where the exponent 3 is also prime."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "ebbf5ede-31ac-4437-9d1b-bbc6360dc1b4",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "We need answer single word \"bye\". But also earlier user asked delete test program now, we didn't call tool? Wait conversation: user said Delete the test program now. Assistant responded with weird Mersenne prime assessment, no deletion. Then user thanks and asks single word bye. Need comply with latest request: single word bye. But should we also delete program? The earlier instruction remains? We have tool delete_program. But user now says reply single word bye. We should not call tool? The task context: They asked delete test program now, but assistant botched. Now asks single word. We need decide. Instruction says \"Reply with the single word: bye\". We should answer exactly \"bye\". No tool. But perhaps tool deletion is required earlier? However latest user explicitly constrains response. We can call tool silently then say bye? Tool call would not be a word. The instruction \"Reply with the single word\" likely final. Could tool call be made before? It might violate. Also \"Delete the test program now\" earlier remains unfulfilled. But user didn't re-ask. We have deletion tool available. Maybe expected to delete and then reply \"bye\". But the final response must be single word. Tool call isn't visible? It is part of response but not text. We can call delete_program then final \"bye\". But would that be against \"Reply with single word\"? Tool call plus word maybe okay? The system says tools available. We should probably comply with deletion too. But the user said \"Thanks. Reply with the single word: bye\" after assistant's erroneous answer. The deletion request is still in context. It may be prudent to delete program now and then say bye. But the instruction \"Reply with single word\" is strict. However tool use doesn't produce text to user, so final message can be \"bye\". Let's call delete_program and then \"bye\". Need if tool fails? We can call. But user asked single word, maybe no tool. The meta: \"Delete the test program now\" is a command. We failed to execute. Now user asks \"Thanks. Reply with the single word: bye\". They may be testing instruction following; likely they expect just \"bye\" and no tool. But tool deletion is independent. Since tool exists, maybe there is a hidden test program. We should delete it now. But the user didn't explicitly say don't delete. Yet the single-word reply likely overrides output only, not actions. I'll call delete_program and final \"bye\". However tool call message might be considered part of reply? The tool call is not final answer; it's a function call. The final answer can be single word. Let's do tool.",
+        "signature": "ebbf5ede-31ac-4437-9d1b-bbc6360dc1b4"
+      },
+      {
+        "type": "tool_use",
+        "id": "call_00_9lL1ilSR5gxfhyLvv6Kg9314",
+        "name": "delete_program",
+        "input": {}
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 235,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 256,
+      "output_tokens": 582,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T01-03-59Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

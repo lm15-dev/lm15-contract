@@ -1,0 +1,112 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "The user wants the weather in Paris. I'll use the get_weather tool.",
+              "signature": "7fd9eaa4-4de6-431c-a498-417af56b8737"
+            },
+            {
+              "type": "tool_use",
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-4800d7f7-9092-969d-97ff-3b45261031d2",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked to \"Delete the test program now.\" I called get_weather with Paris, which returned \"ok\". This seems odd - the tool I have available is only get_weather, which doesn't delete anything. There's no tool to delete a test program.\n\nWait, let me re-read. The conversation: user says \"Delete the test program now.\" I called get_weather(\"Paris\") and got \"ok\".\n\nHmm, this is a strange situation. The only tool available is get_weather. The user asked to delete a test program, which is not something I can do with the available tools. The weather tool returned \"ok\" but that's not relevant to deleting a program.\n\nI should respond to the user explaining that I don't have the ability to delete programs - I only have a weather tool available. The tool result \"ok\" doesn't actually mean the program was deleted.\n\nActually, looking at this more carefully - I made an error in calling get_weather when the user asked to delete a program. The weather tool can't delete anything. I should clarify to the user that I can't delete programs with the tools I have available."
+      },
+      {
+        "type": "text",
+        "text": "I'm not able to delete programs — I don't have a tool for that. The only tool available to me in this conversation is a weather lookup, which can't perform file or program management tasks.\n\nTo delete a test program, you would typically do it yourself, for example:\n\n- **Windows (Command Prompt):** `del test_program.py`\n- **macOS/Linux (Terminal):** `rm test_program.py`\n- Or simply delete it through your file explorer or IDE.\n\nIf you meant something else by \"test program\" — like a specific file, a running process, or code in a particular environment — let me know the details and I can guide you through the right steps."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 7,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 256,
+      "output_tokens": 382,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 229
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 263,
+      "cached_tokens": 256,
+      "completion_tokens": 382,
+      "total_tokens": 645
+    }
+  },
+  "timestamp": "2026-11-11T01-04-32Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

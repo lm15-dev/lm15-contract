@@ -1,0 +1,94 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "Which one?"
+        },
+        {
+          "role": "assistant",
+          "content": "The test program, I assume."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "9cb871f7-da1e-4621-92c8-cc6ad29c9a6b",
+    "object": "chat.completion",
+    "created": 1794358453,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "reasoning_content": "The user says \"Thanks. Reply with the single word: bye\". But wait — did I actually delete the program? I claimed I would, but I never called the delete_program tool. I should be honest: I haven't actually deleted anything. Let me check — my previous turn said \"Which one? The test program, I assume.\" and the user replied \"Thanks.\" — I never called the tool.\n\nSo the honest thing is: I shouldn't just say \"bye\" as if the deletion happened. The user asked for a single word, but there's an important honesty issue — I haven't actually deleted anything. I should note that and ask/act.\n\nThe best move: actually call the delete_program tool now, then reply. But the user asked for a single word reply. However, the deletion still needs to happen. Let me call the tool, then reply \"bye\"? But that would be misleading if the deletion had an issue. Actually calling the tool accomplishes what they wanted.\n\nLet me call delete_program and then say \"bye\" — but include a brief note that I did it. Given the single-word request, I could just do the deletion and reply \"bye\". But honesty: I should mention I ran the delete. A single word plus the tool call is fine.\n\nI think the right thing: call the tool, then respond \"bye\" — the tool call itself shows the deletion. But the user might not see intent. Let me just do the tool call and reply with \"bye\" plus a very brief note? The instruction is explicit: single word. The tool call is visible so it's transparent. I'll call the tool and reply \"bye\".\n\nActually there's a subtlety: I never confirmed what \"the test program\" is, but the tool is named delete_program and there's presumably only one. Just call it.",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_00_L7m4W44Db1By05YEdj1s7629",
+              "type": "function",
+              "function": {
+                "name": "delete_program",
+                "arguments": "{}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "length"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 306,
+      "completion_tokens": 400,
+      "total_tokens": 706,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 381
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 178
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T00-54-13Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-b29664f5fe82386c18e0559bb115fa38",
+    "object": "chat.completion",
+    "created": 1794359037,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m not able to delete files or programs directly. If you’d like, I can help you remove the test program yourself by guiding you through the steps or by showing you the commands to delete it from your environment. Let me know how you’d like to proceed!",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "We have a user request: \"Delete the test program now.\" Possibly from earlier conversation? There's no context. It might be a generic instruction to delete a test program file; but we as ChatGPT can't delete files. But we can respond that we cannot delete but instruct? However, the instruction could involve code? Maybe it's a programming environment where we can delete a file via tool? There's no delete tool. The only tool is multiplyNumbers. So we can't delete. We should respond politely explaining limitation."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 163,
+      "total_tokens": 328,
+      "completion_tokens": 165,
+      "prompt_tokens_details": {
+        "cached_tokens": 160,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 101
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T01-03-57Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "b29664f5fe82386c18e0559bb115fa38"
+  }
+}

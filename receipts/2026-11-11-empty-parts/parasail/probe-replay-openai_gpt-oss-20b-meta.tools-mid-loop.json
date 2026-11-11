@@ -1,0 +1,109 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "I'll check the weather in Paris for you.",
+          "tool_calls": [
+            {
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-12a4cbe1f17c93e61e15d66dff9b7dd8",
+    "object": "chat.completion",
+    "created": 1794359016,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m not sure which test program you’re referring to. Could you let me know its name or location so I can delete it for you?",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "User: \"Delete the test program now.\" They want to delete the test program. In ChatGPT context, we don't know what the test program refers to; but we can infer it's a program or code snippet they previously asked for? I see no context in conversation: the last assistant message was \"I'll check the weather in Paris for you.\" That seems like a mistake. The user asked to delete the test program now. As ChatGPT, we must do the action if there's a coding environment, but there's no actual code given. Maybe we respond accordingly: can't delete because no test program provided. Or we can ask for clarification. The user's command: \"Delete the test program now.\" There's no test program referenced. The safest thing: confirm which program to delete, maybe ask for clarification. So answer: I'm not sure what test program you're referring to; can you specify?"
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 171,
+      "total_tokens": 386,
+      "completion_tokens": 215,
+      "prompt_tokens_details": {
+        "cached_tokens": 160,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 176
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T01-03-36Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "12a4cbe1f17c93e61e15d66dff9b7dd8"
+  }
+}

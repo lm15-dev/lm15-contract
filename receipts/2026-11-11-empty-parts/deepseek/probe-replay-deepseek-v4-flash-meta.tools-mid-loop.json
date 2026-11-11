@@ -1,0 +1,95 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "I'll check the weather in Paris for you.",
+          "reasoning_content": "",
+          "tool_calls": [
+            {
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "f3c99ab9-5716-4cd3-bc95-07777af7df62",
+    "object": "chat.completion",
+    "created": 1794359018,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can't do that, and I should apologize — I just made an unrelated tool call (checking the weather in Paris) that has nothing to do with your request. That was a mistake on my part.\n\nThe only tool I have available is a weather lookup. I have no ability to access, modify, or delete files or programs on your system, so I can't remove the test program for you.\n\nTo delete it yourself, you'd typically run something like `rm <path-to-file>` in a terminal, or remove it through your file manager / IDE — but double-check the path first, since deletion is permanent. If you tell me the language or project setup, I can suggest the right cleanup steps (e.g., removing a entry from `package.json`, `Makefile`, `pytest` config, etc.).",
+          "reasoning_content": "The user asked me to delete a test program. I don't have any file deletion tools — only get_weather. I mistakenly called get_weather on Paris (that was an error on my part — actually the tool result returned \"ok\"). Now I should clarify honestly.\n\nI should apologize for the irrelevant tool call and explain I can't delete files since I only have a weather tool."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 349,
+      "completion_tokens": 247,
+      "total_tokens": 596,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 78
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 221
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-03-38Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

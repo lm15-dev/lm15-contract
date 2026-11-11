@@ -1,0 +1,113 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "Which one?"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "The test program, I assume."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-opus-5-5",
+    "id": "msg_011CgvEDQupbtuMhFomaEnkD",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "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"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_018Tu2HjUt2f373kwDX53Sry",
+        "name": "delete_program",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "container": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 384,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 318,
+      "output_tokens_details": {
+        "thinking_tokens": 290
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T00-54-39Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

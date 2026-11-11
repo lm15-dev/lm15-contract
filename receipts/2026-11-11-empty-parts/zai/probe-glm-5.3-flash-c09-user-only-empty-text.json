@@ -1,0 +1,69 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "It looks like your message came through without any content. How can I help you today?\n\nI have access to a tool that can delete the test program — for example, if you'd like me to do that, just say the word and I'll take care of it.",
+          "reasoning_content": "The user hasn't sent a message - the human turn is empty except for what appears to be a system setup. Wait, looking at this again, the \"Human\" turn contains what appears to be a system prompt or setup, but no actual user request. There's no question or task from the user.\n\nActually, looking at the structure, the human turn is empty - there's no user message content at all. The functions block describes a `delete_program` tool.\n\nSince there's no actual user request, I should probably not call any tools. The appropriate response would be to ask what the user would like help with, or acknowledge readiness. Calling delete_program without any instruction would be inappropriate - it's a destructive action.\n\nI should respond by asking what they'd like to do. I shouldn't call the tool without a request.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358518,
+    "id": "202611110855108d452ecd40654a1f",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110855108d452ecd40654a1f",
+    "usage": {
+      "completion_tokens": 225,
+      "completion_tokens_details": {
+        "reasoning_tokens": 168
+      },
+      "prompt_tokens": 139,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 364
+    }
+  },
+  "timestamp": "2026-11-11T00-55-09Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "c4c6ebb9-f4d1-4038-aa7d-9ee7b5c3f0b4"
+  }
+}

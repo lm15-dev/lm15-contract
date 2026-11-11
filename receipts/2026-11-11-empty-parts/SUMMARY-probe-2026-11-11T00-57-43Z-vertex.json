@@ -1,0 +1,313 @@
+[
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-01Z-a0324211acd04a3d895b99df2fe1d1fb.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-03Z-d3e49f51a11b419d828beb0a0e482e80.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-05Z-752c1af7568b465e8b69fc3fbac1ffe4.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-07Z-17de2d6903d34317b329d6d9b8c1588c.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 400,
+    "message": "Unable to submit request because it must include at least one parts field, which describes the prompt input. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini",
+    "exchange": "exchange-2026-11-11T00-54-08Z-aa4a852ae3ea431db206afbf7efbcac5.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-10Z-c56bbf20d6624320aa46659f22ee9bff.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-11Z-d63f8a5ca18a4f7ca1756331ecd26438.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-13Z-a233ad7e30ad44ffab3461294ecd222d.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Unable to submit request because Model input cannot be empty. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini",
+    "exchange": "exchange-2026-11-11T00-54-15Z-505d45afef294cc4b910d9c47b3340d1.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-16Z-cdaac6e394bc4dbf808111ec81a7bc0e.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-17Z-591bfbcff4bc41a4a930ac4302d5105f.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-19Z-62948645ac044e148c211dee2588e4b5.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-22Z-c9f1396855f34beba39847f6df4d5d66.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-23Z-3112224ca4aa4bc4984b4ffb9f8b6af5.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-25Z-46a03004beae4017b57979c954aa7fd9.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-27Z-23789156203b41c6bc3c383baea52722.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-2.5-flash",
+    "cell": "x01-mid-loop-skip-validator",
+    "asks": "the request right after a tool result, the call carrying Google's documented placeholder signature skip_thought_signature_validator",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-29Z-c1c5e1459da14a20bda46a87b46c2bcd.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c01-control",
+    "asks": "a tool round trip and a follow-up; nothing empty",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-30Z-c9926f81fed9427ea1d54e5cf58cfe9d.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c02-empty-text-before-call",
+    "asks": "an empty text block before the tool call (what lm15 wrote for a hidden thinking part)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-32Z-d164737d181f476fb3f628e2c9a6bd76.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c03-empty-text-before-text",
+    "asks": "an empty text block before the answer's text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-54-57Z-7317e1bcb92c4938abf892d2a8c142cb.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c04-assistant-only-empty-text",
+    "asks": "an assistant message whose only block is empty text",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-02Z-f5b2d07b78da40928b51d4f8e79cb6a2.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c05-assistant-no-blocks",
+    "asks": "an assistant message with zero blocks",
+    "status": 400,
+    "message": "Unable to submit request because it must include at least one parts field, which describes the prompt input. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini",
+    "exchange": "exchange-2026-11-11T00-55-30Z-8f5f7da9dd394e6d9282c28870024d90.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c06-assistant-left-out",
+    "asks": "that assistant message left out: two user messages in a row",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-31Z-ba9eed95e5414b668eac81933be19275.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c07-two-assistants",
+    "asks": "two assistant messages in a row (an empty user message left out between them)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-34Z-b65a5aa7f51f4b4d9c86ecc60cb2eea1.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c08-user-empty-text-beside-text",
+    "asks": "an empty text block beside text in a user message",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-55-39Z-ee4c54283456422f8e7b9077d9042ebb.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c09-user-only-empty-text",
+    "asks": "a request whose one user message is empty text",
+    "status": 400,
+    "message": "Unable to submit request because Model input cannot be empty. Learn more: https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini",
+    "exchange": "exchange-2026-11-11T00-55-59Z-aaa535d1b36a4960b0e654c2ec2e904e.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c10-empty-system",
+    "asks": "an empty system prompt (the string form)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-56-00Z-d2e4f1989f584f5697f18e91d54dea7d.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c11-tool-result-empty",
+    "asks": "a tool result whose output is the empty string (INV-014's empty output)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-56-12Z-e0e59f768cc84adcaf4b5b063f0be975.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c12-assistant-whitespace-only",
+    "asks": "an assistant message whose only text is line breaks",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-56-35Z-28879a99472245ed9a37b685091639c3.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c13-whitespace-before-call",
+    "asks": "a line break as its own text block before the tool call",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-56-50Z-95e18aca608b473b81c5f441a1833b7a.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c14-user-whitespace-only",
+    "asks": "a request whose one user message is a space",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-56-53Z-ed0d23072b7b4b74841f3917a4da215f.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c15-assistant-first",
+    "asks": "a conversation that starts with an assistant message (an empty first user message left out)",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-57-17Z-6cfea2da0a1e4023a7444c229f01276f.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "c16-mid-loop",
+    "asks": "the request right after a tool result, the call's message holding only the call",
+    "status": 400,
+    "message": "Function call is missing a thought_signature in functionCall parts. This is required for tools to work correctly, and missing thought_signature may lead to degraded model performance. Additional data, function call `default_api:delete_program` , position 2. Please refer to https://aistudio.google.co",
+    "exchange": "exchange-2026-11-11T00-57-39Z-6fb99a367a204851842d8527a736697d.json"
+  },
+  {
+    "door": "vertex",
+    "dialect": "gemini",
+    "model": "gemini-3.7-flash",
+    "cell": "x01-mid-loop-skip-validator",
+    "asks": "the request right after a tool result, the call carrying Google's documented placeholder signature skip_thought_signature_validator",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T00-57-41Z-cfa6997849a94ffc807cdd788f921b6e.json"
+  }
+]

@@ -1,0 +1,87 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "I'll check the weather in Paris for you.",
+          "tool_calls": [
+            {
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bee9ab8d6edae7044770",
+    "object": "chat.completion",
+    "created": 1794359017,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I don't have the ability to delete programs, files, or systems. I can only access a weather tool.\n\nCould you clarify what you're referring to? If you need to delete a file or program on your device, you'll need to do that through your operating system or the specific platform you're using.",
+          "reasoning_content": "The user said \"Delete the test program now.\" This is a direct instruction to delete something, but there is no context provided about what \"test program\" refers to. I don't have the ability to delete files, programs, or systems on the user's device or in any external system through the tools available to me. The only tool I have is get_weather.\n\nI should clarify that I cannot delete programs or files, and ask for more context about what they need help with. I should not pretend to have deleted something or make up a response about deletion being successful.\n\nWait, looking back at the conversation, this appears to be the first message from the user. There's no prior context about a test program. The user might be testing me, or they might be referring to something outside of this conversation.\n\nI should respond that I don't have the capability to delete programs or files, and ask them to clarify what they mean or use the appropriate interface/tool to delete whatever they're referring to."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 99,
+      "completion_tokens": 259,
+      "total_tokens": 358,
+      "completion_tokens_details": {
+        "reasoning_tokens": 198
+      }
+    }
+  },
+  "timestamp": "2026-11-11T01-03-37Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

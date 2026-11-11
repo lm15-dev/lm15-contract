@@ -1,0 +1,73 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "system",
+          "content": ""
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user says \"Thanks. Reply with the single word: bye\". There's a delete_program tool available, but the user hasn't asked me to delete a program. They just want me to reply with \"bye\". I should not call the tool since it wasn't requested. Just reply \"bye\".",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794358526,
+    "id": "202611110855191f63d89035394aea",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "202611110855191f63d89035394aea",
+    "usage": {
+      "completion_tokens": 64,
+      "completion_tokens_details": {
+        "reasoning_tokens": 60
+      },
+      "prompt_tokens": 149,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 213
+    }
+  },
+  "timestamp": "2026-11-11T00-55-19Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "dfb3e07d-6ae6-46bc-af46-8737a5710bd4"
+  }
+}

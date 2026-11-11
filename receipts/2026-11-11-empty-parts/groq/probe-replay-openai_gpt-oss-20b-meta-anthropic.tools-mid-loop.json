@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_01a0671ac8b57a50a45496712549627f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-ae1f7716-41e0-45c0-900a-90d5ee143573",
+    "object": "chat.completion",
+    "created": 1794359024,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m not sure which test program you’re referring to. Could you tell me the name or location of the file you’d like deleted?",
+          "reasoning": "The user says: \"Delete the test program now.\" Likely they are asking to delete some test program file. But we don't have file system access. The user might have a test program that we created earlier? We need to ask clarification: what test program? Or respond that we cannot delete. According to policies: we cannot claim to have deleted. We should ask for clarification."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.030419773,
+      "prompt_tokens": 149,
+      "prompt_time": 0.008490086,
+      "completion_tokens": 115,
+      "completion_time": 0.146323952,
+      "total_tokens": 264,
+      "total_time": 0.154814038,
+      "completion_tokens_details": {
+        "reasoning_tokens": 78
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_e2cb7a84ec",
+    "x_groq": {
+      "id": "req_01m7423pjbesbr7930tgx836sw",
+      "seed": 124302479
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-44Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423pjbesbr7930tgx836sw"
+  }
+}

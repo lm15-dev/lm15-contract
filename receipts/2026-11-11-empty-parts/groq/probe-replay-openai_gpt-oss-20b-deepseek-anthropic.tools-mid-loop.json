@@ -1,0 +1,100 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "The user wants the weather in Paris. I'll use the get_weather tool.",
+          "tool_calls": [
+            {
+              "id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "content": "ok"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-53fe0ebb-f5b1-430a-91bf-42408f2f903b",
+    "object": "chat.completion",
+    "created": 1794359026,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m not sure which test program you’re referring to—there isn’t a specific program attached to our conversation. Could you please provide more details or let me know which file/segment you’d like me to delete? Once I have that information, I’ll be happy to help.",
+          "reasoning": "The user says: \"Delete the test program now.\" There's no context. The conversation seems to be a glitch. They previously used get_weather incorrectly? They asked to delete test program now. In the system, we have no test program to delete. As ChatGPT, we should respond politely, asking for clarification. Probably we need to ask what test program? Provide a standard response: \"I don't have any test program. Please clarify.\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.084625138,
+      "prompt_tokens": 149,
+      "prompt_time": 0.008485036,
+      "completion_tokens": 155,
+      "completion_time": 0.197005561,
+      "total_tokens": 304,
+      "total_time": 0.205490597,
+      "completion_tokens_details": {
+        "reasoning_tokens": 89
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_ce54c53bd5",
+    "x_groq": {
+      "id": "req_01m7423rvzergbp319b6qxcth8",
+      "seed": 55589781
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-46Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423rvzergbp319b6qxcth8"
+  }
+}

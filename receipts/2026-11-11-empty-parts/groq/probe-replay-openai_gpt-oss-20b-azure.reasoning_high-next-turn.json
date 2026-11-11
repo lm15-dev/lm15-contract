@@ -1,0 +1,85 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $GROQ_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": "We have n ≡ −1 (mod 2,3,4,5), so n+1 is divisible by 2,3,4 and 5. Hence n+1 is a multiple of lcm(2,3,4,5)=60, so n = 60k−1. The smallest positive choice is k=1, giving n = 59 (indeed 59≡1 (mod2), 2 (mod3), 3 (mod4), 4 (mod5))."
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-81f5dc7d-5bcf-46fd-b08e-190cedecaf00",
+    "object": "chat.completion",
+    "created": 1794359018,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "bye",
+          "reasoning": "The user requests: \"Reply with the single word: bye\". That is the instruction. We just reply \"bye\". Ensure no other text."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "queue_time": 0.802964064,
+      "prompt_tokens": 248,
+      "prompt_time": 0.013142282,
+      "completion_tokens": 40,
+      "completion_time": 0.045774881,
+      "total_tokens": 288,
+      "total_time": 0.058917163,
+      "completion_tokens_details": {
+        "reasoning_tokens": 30
+      }
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_228717f27c",
+    "x_groq": {
+      "id": "req_01m7423ggte4dbh7f7rpvsjs02",
+      "seed": 854913062
+    },
+    "service_tier": "on_demand"
+  },
+  "timestamp": "2026-11-11T01-03-37Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "req_01m7423ggte4dbh7f7rpvsjs02"
+  }
+}

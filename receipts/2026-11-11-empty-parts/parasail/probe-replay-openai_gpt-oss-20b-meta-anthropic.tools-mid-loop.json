@@ -1,0 +1,109 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "call_01a0671ac8b57a50a45496712549627f",
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\":\"Paris\"}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "call_01a0671ac8b57a50a45496712549627f",
+          "content": "ok"
+        }
+      ],
+      "max_completion_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "get_weather",
+            "description": "The get_weather tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-5e49383cc4ddf6defef52acd88bc31d9",
+    "object": "chat.completion",
+    "created": 1794359029,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "Sure thing! Could you let me know which test program you’d like me to delete? If it’s a file on your local system, just tell me its name and location, and I’ll take care of removing it. If it’s code you posted earlier, let me know what you want to discard and I’ll handle it.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "We have a user: \"Delete the test program now.\" This seems like an instruction. Possibly context: some earlier code or test program? We don't see prior context. The assistant executed get_weather on \"Paris\" inadvertently due to misinterpretation; might be wrong. We need to handle request: \"Delete the test program now.\" Probably the user wants to delete some test program. The assistant could ask for clarification: where is the program? But likely we should respond acknowledging deletion. If no code context, we say: \"Sure, deleting the test program.\" Or ask: \"Which test program?\" Ok. I'd respond politely, ask clarification of location or filename."
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 155,
+      "total_tokens": 366,
+      "completion_tokens": 211,
+      "prompt_tokens_details": {
+        "cached_tokens": 144,
+        "created_cache_tokens": 0,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 134
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T01-03-48Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "5e49383cc4ddf6defef52acd88bc31d9"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $ZAI_API_KEY"
+    },
+    "body": {
+      "model": "glm-5.3-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "bye",
+          "reasoning_content": "The user asked me to delete a test program, but I don't have any tool that can delete programs. The only tool I have is `multiplyNumbers`. Looking at my previous turn, I apparently called `multiplyNumbers(57, 44)` which returned \"ok\" — that was odd behavior, but it's already done.\n\nNow the user says \"Thanks. Reply with the single word: bye\"\n\nThis is a simple request. I should just reply with \"bye\" as requested.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1794359109,
+    "id": "2026111109050355106ef60dba41d3",
+    "model": "glm-5.3-flash",
+    "object": "chat.completion",
+    "request_id": "2026111109050355106ef60dba41d3",
+    "usage": {
+      "completion_tokens": 102,
+      "completion_tokens_details": {
+        "reasoning_tokens": 99
+      },
+      "prompt_tokens": 194,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "total_tokens": 296
+    }
+  },
+  "timestamp": "2026-11-11T01-05-03Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=UTF-8",
+    "X-Request-ID": "fd052e8d-05f8-4f66-a0ce-3d9f499c3821"
+  }
+}

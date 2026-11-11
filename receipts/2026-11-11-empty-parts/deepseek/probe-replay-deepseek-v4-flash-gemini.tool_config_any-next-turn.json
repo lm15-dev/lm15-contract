@@ -1,0 +1,102 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Delete the test program now."
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "reasoning_content": "",
+          "tool_calls": [
+            {
+              "id": "tool_call_0",
+              "type": "function",
+              "function": {
+                "name": "multiplyNumbers",
+                "arguments": "{\"b\":44,\"a\":57}"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "tool_call_0",
+          "content": "ok"
+        },
+        {
+          "role": "user",
+          "content": "Thanks. Reply with the single word: bye"
+        }
+      ],
+      "max_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "multiplyNumbers",
+            "description": "The multiplyNumbers tool.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "b": {
+                  "type": "string"
+                },
+                "a": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "dab37c5c-126c-448b-951e-54225855c58e",
+    "object": "chat.completion",
+    "created": 1794359047,
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I can't delete files — I have no file or system access, and I didn't delete anything (my earlier tool call was just a multiplication, unrelated to your request).\n\nbye",
+          "reasoning_content": "The user asks to reply with the single word \"bye\". But there's an issue: I can't actually delete a test program — I only have a multiply tool. I should be honest that I don't have any file deletion capability. But the user asked to reply with single word \"bye\". Hmm, honesty matters: I should not pretend I deleted anything. The earlier turn involved a nonsense tool call. I should clarify briefly that I have no ability to delete files, but comply with \"bye\"? The instruction \"Reply with the single word: bye\" — I could comply but should note the fabrication. Best: short note that I can't delete files, then \"bye\". The user wants single word though. I think a brief clarification is warranted since I never deleted anything."
+        },
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 373,
+      "completion_tokens": 195,
+      "total_tokens": 568,
+      "prompt_tokens_details": {
+        "cached_tokens": 128
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 158
+      },
+      "prompt_cache_hit_tokens": 128,
+      "prompt_cache_miss_tokens": 245
+    },
+    "system_fingerprint": "bc19ba97cbe016479903222bb1578db6"
+  },
+  "timestamp": "2026-11-11T01-04-06Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

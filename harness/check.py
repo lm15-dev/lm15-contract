@@ -1786,7 +1786,9 @@ INGEST_LOSSY_CLASSES = frozenset({"thinking_as_text", "tool_result_name_omitted"
                                   # MAP-13: the wire carries the request AFTER a recorded adaptation
                                   "adapted",
                                   # 2026-09-19 D3: a user data part went out as JSON text; it reads back as a text part
-                                  "data_part_as_text"})
+                                  "data_part_as_text",
+                                  # MAP-24 (2026-11-11): a part that wrote nothing, and a message left out, are not on the wire
+                                  "nothing_written"})
 
 
 def ingest_expectation(case: JsonObject) -> tuple[str, Any]:
@@ -2220,12 +2222,16 @@ def _gemini_schema_slot(body: Any, surface: str) -> tuple[Any, str, str] | None:
 def run_mapping_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Vectors under mapping/: MAP-16 (docs/mapping-rules.md, the field
     Gemini's schema goes in), INV-002 (opaque objects keep a member
-    order JavaScript would change, mapping/opaque-order.json), and MAP-19
-    with InferencePricing.estimate (mapping/usage.json)."""
+    order JavaScript would change, mapping/opaque-order.json), MAP-19
+    with InferencePricing.estimate (mapping/usage.json), and MAP-24 (a
+    part with nothing for a wire writes nothing: mapping/empty-parts.json,
+    and every recorded reply replayed into every dialect)."""
     report = DirectionReport("mapping")
     _run_gemini_schema_vectors(shim, case_filter, report)
     _run_opaque_order_vectors(shim, case_filter, report)
     _run_usage_vectors(shim, case_filter, report)
+    _run_empty_parts_vectors(shim, case_filter, report)
+    _run_history_replay(shim, case_filter, report)
     return report
 
 
@@ -2403,6 +2409,211 @@ def _run_opaque_order_vectors(shim: Shim, case_filter: str | None, report: Direc
                     diff = Diff(at, list(hit), list(obj), "member order changed in a stream event (INV-002)")
                     break
         report.results.append(CaseResult(case_id, "pass") if diff is None else CaseResult(case_id, "fail", diff=diff))
+
+
+# ─── mapping: a part with nothing for a wire writes nothing (MAP-24) ──
+#
+# changes/2026-11-11-empty-parts.md.  Two families:
+#
+# - mapping/empty-parts.json: hand-written histories.  `same_as` states the
+#   rule as an equivalence (the wire of the history equals the wire of the
+#   same history without the parts and messages that write nothing);
+#   `expect` pins the bytes where a part must be written.
+# - history replay: every recorded reply (goldens/*/*.json: what lm15 read
+#   from a real server) put in a history and built for every dialect.  It
+#   needs no hand-written answer: the build must succeed and the body must
+#   hold nothing MAP-24 forbids.  A reply shape no hand-written vector
+#   thought of is covered the day its golden lands.
+
+EMPTY_PARTS_FILE = MAPPING_DIR / "empty-parts.json"
+HISTORY_REPLAY_FILE = MAPPING_DIR / "history-replay.json"
+
+
+def load_empty_parts_vectors() -> JsonObject:
+    return json.loads(EMPTY_PARTS_FILE.read_text(encoding="utf-8"))
+
+
+def load_history_replay() -> JsonObject:
+    return json.loads(HISTORY_REPLAY_FILE.read_text(encoding="utf-8"))
+
+
+def _is_empty_text_block(block: Any) -> bool:
+    """A text block with no characters, in the four dialects' spellings: a
+    typed block (Messages and Chat Completions `text`, Responses
+    `input_text` / `output_text`) or a Gemini part that is only text.  A
+    Gemini part that carries a `thoughtSignature` is state, not a block of
+    nothing (MAP-24 rule 1)."""
+    if not isinstance(block, dict) or block.get("text") != "":
+        return False
+    if "type" in block:
+        return block["type"] in ("text", "input_text", "output_text")
+    return set(block) <= {"text", "thought"}
+
+
+def empty_wire_findings(body: Any) -> list[tuple[str, str]]:
+    """Every place a built chat body holds what MAP-24 forbids: a text
+    block with no characters (in a message, a system prompt or a tool
+    result that has other blocks) or a message with nothing in it.  Reads
+    only the message lists and the system slots; opaque payloads (a tool
+    call's input, a schema) are never looked into."""
+    out: list[tuple[str, str]] = []
+    if not isinstance(body, dict):
+        return out
+
+    def blocks(at: str, value: Any) -> None:
+        if isinstance(value, list):
+            for i, block in enumerate(value):
+                if _is_empty_text_block(block):
+                    out.append((f"{at}[{i}]", "a text block with no characters"))
+
+    system = body.get("system")
+    if system == "":
+        out.append(("$.system", "an empty system prompt"))
+    blocks("$.system", system)
+    if body.get("instructions") == "":
+        out.append(("$.instructions", "an empty system prompt"))
+    instruction = body.get("systemInstruction")
+    if isinstance(instruction, dict):
+        blocks("$.systemInstruction.parts", instruction.get("parts"))
+    for key in ("messages", "contents", "input"):
+        items = body.get(key)
+        if not isinstance(items, list):
+            continue
+        for i, item in enumerate(items):
+            if not isinstance(item, dict):
+                continue
+            at = f"$.{key}[{i}]"
+            role = item.get("role")
+            if role is None:
+                # A Responses item that is not a message: only a tool
+                # output written as blocks can hold a text block.
+                blocks(f"{at}.output", item.get("output"))
+                continue
+            content = item["content"] if "content" in item else item.get("parts", _ABSENT)
+            if role == "tool":
+                # A Chat Completions tool row is always written; its
+                # content may be the empty string (INV-014).
+                blocks(f"{at}.content", content)
+                continue
+            if content is _ABSENT:
+                continue
+            if content is None:
+                if not item.get("tool_calls") and not item.get("reasoning_content"):
+                    out.append((at, "a message with no content, no call and no reasoning"))
+            elif content == "" or content == []:
+                out.append((at, "a message with nothing in it"))
+            elif isinstance(content, list):
+                blocks(f"{at}.{'content' if 'content' in item else 'parts'}", content)
+                for j, block in enumerate(content):
+                    if isinstance(block, dict) and block.get("type") == "tool_result":
+                        blocks(f"{at}.content[{j}].content", block.get("content"))
+    return out
+
+
+def _empty_wire_result(case_id: str, body: Any) -> CaseResult | None:
+    found = empty_wire_findings(body)
+    if not found:
+        return None
+    at, what = found[0]
+    return CaseResult(case_id, "fail", diff=Diff(at, "<nothing written>", what,
+                                                 "MAP-24: no wire is sent a text block with no characters or a message with nothing in it"))
+
+
+def _run_empty_parts_vectors(shim: Shim, case_filter: str | None, report: DirectionReport) -> None:
+    doc = load_empty_parts_vectors()
+    models: dict[str, str] = doc["models"]
+
+    def build(provider: str, request: JsonObject) -> JsonObject:
+        return shim.call("build_request", provider=provider, canonical_request={"model": models[provider], **request},
+                         stream=False, api_key=API_KEY)
+
+    for vector in doc["build"]:
+        bare = f"empty-parts.{vector['id']}"
+        same = vector.get("same_as")
+        for provider in vector.get("providers") or doc["dialects"]:
+            case_id = f"{bare}[{provider}]"
+            if case_filter and case_filter not in (case_id, bare):
+                continue
+            reply = build(provider, vector["request"])
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            wire = reply["result"]
+            body = wire.get("body")
+            failure = _empty_wire_result(case_id, body)
+            if failure is None and same is not None and provider in (same.get("providers") or [provider]):
+                other = build(provider, same["request"])
+                if not other.get("ok"):
+                    failure = shim_reply_failure(case_id, other)
+                else:
+                    diff = first_difference(other["result"], wire)
+                    if diff is not None:
+                        failure = CaseResult(case_id, "fail", diff=Diff(
+                            diff.path, diff.expected, diff.actual,
+                            "MAP-24: the wire must equal the one built without the parts that write nothing "
+                            f"({diff.note})" if diff.note else
+                            "MAP-24: the wire must equal the one built without the parts that write nothing"))
+            if failure is None:
+                expect = (vector.get("expect") or {}).get(provider) or {}
+                for key, want in expect.items():
+                    got = body.get(key, _ABSENT) if isinstance(body, dict) else _ABSENT
+                    diff = first_difference(want, got, (key,))
+                    if diff is not None:
+                        failure = CaseResult(case_id, "fail", diff=diff)
+                        break
+            report.results.append(failure or CaseResult(case_id, "pass"))
+
+
+def history_replay_requests() -> list[tuple[str, JsonObject]]:
+    """(golden id, canonical request without a model) for every recorded
+    reply: a user turn, the reply as recorded, the tool results its calls
+    need, a user turn."""
+    doc = load_history_replay()
+    out: list[tuple[str, JsonObject]] = []
+    for path in sorted(GOLDENS_DIR.glob("*/*.json")):
+        try:
+            golden = json.loads(path.read_text(encoding="utf-8"))
+        except ValueError:
+            continue
+        response = golden.get("canonical_response") if isinstance(golden, dict) else None
+        message = response.get("message") if isinstance(response, dict) else None
+        if not isinstance(message, dict) or not message.get("parts"):
+            continue
+        messages: list[JsonObject] = [{"role": "user", "parts": [{"type": "text", "text": doc["first"]}]}, message]
+        results = [{"type": "tool_result", "id": part["id"], "name": part["name"],
+                    "content": [{"type": "text", "text": doc["tool_output"]}]}
+                   for part in message["parts"] if isinstance(part, dict) and part.get("type") == "tool_call"]
+        if results:
+            messages.append({"role": "tool", "parts": results})
+        messages.append({"role": "user", "parts": [{"type": "text", "text": doc["last"]}]})
+        out.append((f"{path.parent.name}.{path.stem}", {"messages": messages}))
+    return out
+
+
+def _run_history_replay(shim: Shim, case_filter: str | None, report: DirectionReport) -> None:
+    doc = load_history_replay()
+    models: dict[str, str] = doc["models"]
+    refusals: dict[str, str] = doc.get("refusals") or {}
+    for golden_id, request in history_replay_requests():
+        bare = f"history-replay.{golden_id}"
+        for provider in doc["dialects"]:
+            case_id = f"{bare}[{provider}]"
+            if case_filter and case_filter not in (case_id, bare):
+                continue
+            reply = shim.call("build_request", provider=provider, canonical_request={"model": models[provider], **request},
+                              stream=False, api_key=API_KEY)
+            if case_id in refusals:
+                # MAP-10: the reply holds a part this wire has no slot for;
+                # the refusal is the pinned answer, never a silent drop.
+                error = reply.get("error") or {}
+                ok = not reply.get("ok") and error.get("type") == "UnsupportedFeatureError"
+                report.results.append(CaseResult(case_id, "pass") if ok else CaseResult(
+                    case_id, "fail", reason=f"expected UnsupportedFeatureError ({refusals[case_id]})"))
+                continue
+            if not reply.get("ok"):
+                report.results.append(shim_reply_failure(case_id, reply))
+                continue
+            report.results.append(_empty_wire_result(case_id, reply["result"].get("body")) or CaseResult(case_id, "pass"))
 
 
 USAGE_VECTORS_FILE = MAPPING_DIR / "usage.json"

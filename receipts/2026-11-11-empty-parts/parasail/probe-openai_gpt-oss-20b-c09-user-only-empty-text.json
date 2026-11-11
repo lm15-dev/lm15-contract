@@ -1,0 +1,86 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.parasail.io/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $PARASAIL_API_KEY"
+    },
+    "body": {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "user",
+          "content": ""
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-9c4d987096b906ecf36c4c5b9c094c98",
+    "object": "chat.completion",
+    "created": 1794358483,
+    "model": "openai/gpt-oss-20b",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "I’m happy to help, but I’m not sure what you’d like me to do. Could you let me know what you’re looking for—whether it’s a new program, modifications, or something else?",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "reasoning": "The user didn't provide any specific request. Probably they might want a program or something. No text following. Maybe they intend to run or create or delete code? But nothing specified. The last message from user is empty, no content. The last message says just empty string. We need to respond appropriately. According to policy, we should ask for clarification. Probably a polite ask: \"Could you please clarify?\""
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+      "prompt_tokens": 114,
+      "total_tokens": 249,
+      "completion_tokens": 135,
+      "prompt_tokens_details": {
+        "cached_tokens": 96,
+        "created_cache_tokens": 16,
+        "multimodal_tokens": null
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 82
+      }
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null,
+    "ec_transfer_params": null,
+    "metrics": null
+  },
+  "timestamp": "2026-11-11T00-54-43Z",
+  "response_headers": {
+    "Content-Type": "application/json",
+    "x-request-id": "9c4d987096b906ecf36c4c5b9c094c98"
+  }
+}

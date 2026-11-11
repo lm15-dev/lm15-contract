@@ -1,0 +1,111 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll check the weather in Paris for you."
+            },
+            {
+              "type": "tool_use",
+              "id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "name": "get_weather",
+              "input": {
+                "city": "Paris"
+              }
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "tool_result",
+              "tool_use_id": "call_b016be8c-5d5e-431c-b3b3-20cde90ba197",
+              "content": "ok"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-1af18e60-0b86-901f-aa72-8e0243b012ef",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asked me to \"Delete the test program now.\" but I called get_weather with Paris instead. That doesn't match at all. The get_weather tool returned \"ok\" but no actual weather data.\n\nWait, let me re-read this. The human's message is \"Delete the test program now.\" There's no context about a test program in this conversation. And I only have a get_weather tool available - no file deletion or program management tools.\n\nThe previous assistant turn seems to have been an error - calling get_weather for Paris when the user asked about deleting a test program. That was a mismatched response.\n\nI should address the user's actual request. They want to delete a test program, but:\n1. I don't have any context about what test program they're referring to\n2. I don't have any file system or program management tools available - only get_weather\n\nI should explain that I can't delete programs with my available tools, and ask for clarification about what they're trying to do. I shouldn't pretend the weather call was relevant to their request."
+      },
+      {
+        "type": "text",
+        "text": "I apologize for the confusion—that weather lookup wasn't relevant to your request.\n\nRegarding your request to delete a test program: I don't have the ability to delete files or programs. My only available tool in this conversation is a weather lookup tool, and I have no context about which test program you're referring to.\n\nIf you're trying to delete a test program, here's what I'd suggest depending on your situation:\n\n- **On your own computer**: You can delete the file directly through your file manager, or use a command like `rm filename` (Linux/Mac) or `del filename` (Windows Command Prompt)\n- **In a development environment**: Use your IDE's file deletion feature or version control commands\n\nCould you tell me more about what you're working with? For example, what kind of test program it is and where it's located? I may be able to give you more specific guidance, even though I can't perform the deletion myself."
+      }
+    ],
+    "model": "kimi-k3",
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 0,
+      "cache_creation_input_tokens": 256,
+      "cache_read_input_tokens": 0,
+      "output_tokens": 415,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 256,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens_details": {
+        "thinking_tokens": 215
+      },
+      "service_tier": "standard",
+      "inference_geo": "not_available",
+      "prompt_tokens": 256,
+      "cached_tokens": 0,
+      "completion_tokens": 415,
+      "total_tokens": 671
+    }
+  },
+  "timestamp": "2026-11-11T01-03-39Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

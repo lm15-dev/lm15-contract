@@ -1,0 +1,290 @@
+[
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-34Z-ff2eec9ba3a947f3b04c6d6b57bd6b65.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-36Z-3680ea3d32fc4a2e807425e3a31caee5.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-39Z-7f7ed99fad724a1cb71ebf162e2328a0.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-41Z-699ca7ebbf624134a00ea30c15785fb6.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-43Z-3583cabc2aca41768b5cbdec86d18a63.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `data` in `redacted_thinking` block",
+    "exchange": "exchange-2026-11-11T01-03-45Z-0f34df11bef8499c8b6367a6ee0314da.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `data` in `redacted_thinking` block",
+    "exchange": "exchange-2026-11-11T01-03-46Z-e84e66f5effd4c7cbe592bc0d367ec4c.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `signature` in `thinking` block",
+    "exchange": "exchange-2026-11-11T01-03-47Z-5f14d7cd94d142bdab7f8552af7f6d7c.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `signature` in `thinking` block",
+    "exchange": "exchange-2026-11-11T01-03-48Z-b52e39f6dbf2403183bbb1e07191f187.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-49Z-e5b15eb793b745d4928ba92a2f6f6578.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-52Z-a8ade548027c443bb3d20052c5e2b3dc.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-54Z-91e368f57fce46209d1df18f52d3907e.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-57Z-f51ce58191bc41b897d234576d6d0b34.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-haiku-4-5-20251001",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-03-59Z-a09f9e9407d649d481349c2813b8ee53.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-00Z-b4f4cbe476e341bea4cac97ab72c50bc.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "meta.tools",
+    "what": "a hidden reasoning item (empty text, openai:reasoning_item), text and a tool call: the shape of the report",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-05Z-c3a25e9ca65b435e94d0ed47916d4259.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "azure.reasoning_high",
+    "what": "a hidden OpenAI reasoning item before the answer's text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-10Z-ed502c2803244fe9bdeb6e737e3b576f.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "meta.streaming_incomplete",
+    "what": "a reply cut during reasoning: its only part is the hidden reasoning item",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-15Z-6adb7f33f7934478bd24266c8c89e470.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "anthropic.reasoning_adaptive",
+    "what": "Claude's thinking with display omitted (empty text, anthropic:thinking_signature) and text",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-17Z-52b7c50cdb964fc38fd0bc52243421ca.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `data` in `redacted_thinking` block",
+    "exchange": "exchange-2026-11-11T01-04-18Z-decab0d5c03a492c82aa96bac1708b48.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "meta-anthropic.tools",
+    "what": "two redacted thinking parts (empty text, anthropic:redacted_thinking) and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `data` in `redacted_thinking` block",
+    "exchange": "exchange-2026-11-11T01-04-19Z-52a63e93479c4826b15d86f70ff1d519.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "next-turn",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `signature` in `thinking` block",
+    "exchange": "exchange-2026-11-11T01-04-21Z-90dfab56745143ea9dec853b8f9350da.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "deepseek-anthropic.tools",
+    "what": "thinking with text on a server that signs nothing, and a tool call",
+    "shape": "mid-loop",
+    "status": 400,
+    "message": "messages.1.content.0: Invalid `signature` in `thinking` block",
+    "exchange": "exchange-2026-11-11T01-04-22Z-fa70988134d947eaa7680cce78846559.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "gemini.thinking_level",
+    "what": "Gemini 3.x thinking with text, and text carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-23Z-a8cd4cf5db15446d9ebe2b907a849bd1.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-28Z-946b03af808d4f9a9ca9069251355a3c.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "gemini.tool_config_any",
+    "what": "a Gemini tool call carrying a thought signature",
+    "shape": "mid-loop",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-32Z-5301639258034bd5acac1080c01b5159.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "gemini.max_output_tokens",
+    "what": "a reply with no parts, read as one empty text part (MAP-2)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-38Z-b5d1e779d92d4b5b9b9c5e75cfef6c7d.json"
+  },
+  {
+    "door": "anthropic",
+    "dialect": "messages",
+    "model": "claude-opus-5-5",
+    "source": "openai.tool_choice_builtin",
+    "what": "text and two citations (web search)",
+    "shape": "next-turn",
+    "status": 200,
+    "exchange": "exchange-2026-11-11T01-04-40Z-521eb9b1410d484faa6fc170397a3489.json"
+  }
+]

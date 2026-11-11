@@ -1,0 +1,165 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/responses",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k3",
+      "input": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text": "The user wants the weather in Paris. I'll use the get_weather tool."
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "name": "get_weather",
+          "arguments": "{\"city\":\"Paris\"}"
+        },
+        {
+          "type": "function_call_output",
+          "call_id": "call_00_6zEsUcVJkI8VXPCv0tnb4321",
+          "output": "ok"
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "input_text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_output_tokens": 600,
+      "tools": [
+        {
+          "type": "function",
+          "name": "get_weather",
+          "description": "The get_weather tool.",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "resp_05352c73-e43f-9e7a-8676-fac2934b59bb",
+    "object": "response",
+    "created_at": 1794359091,
+    "completed_at": 1794359094,
+    "status": "completed",
+    "error": null,
+    "incomplete_details": null,
+    "output": [
+      {
+        "type": "reasoning",
+        "id": "rs_1yJBZKDikN4gJTePiF68euXA",
+        "status": "completed",
+        "summary": [
+          {
+            "type": "summary_text",
+            "text": "The user asks me to reply with the single word: bye. No tool is relevant here; just output bye. Ensure final only contains bye."
+          }
+        ]
+      },
+      {
+        "type": "message",
+        "id": "msg_x260zMXQp1vhvSo7sUjs7x6p",
+        "status": "completed",
+        "role": "assistant",
+        "content": [
+          {
+            "type": "output_text",
+            "text": "bye",
+            "annotations": []
+          }
+        ]
+      }
+    ],
+    "usage": {
+      "input_tokens": 283,
+      "input_tokens_details": {
+        "cache_write_tokens": 256,
+        "cached_tokens": 0
+      },
+      "output_tokens": 46,
+      "output_tokens_details": {
+        "reasoning_tokens": 29
+      },
+      "total_tokens": 329
+    },
+    "store": false,
+    "background": false,
+    "previous_response_id": null,
+    "conversation": null,
+    "instructions": null,
+    "reasoning": null,
+    "text": {
+      "format": {
+        "type": "text"
+      }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "name": "get_weather",
+        "description": "The get_weather tool.",
+        "parameters": {
+          "properties": {
+            "city": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "strict": true
+      }
+    ],
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "metadata": null,
+    "model": "kimi-k3",
+    "temperature": 1,
+    "top_p": 0.95,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "prompt_cache_key": null,
+    "safety_identifier": null,
+    "service_tier": "default"
+  },
+  "timestamp": "2026-11-11T01-04-51Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}

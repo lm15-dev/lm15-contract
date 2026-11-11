@@ -2,7 +2,7 @@
 
 Normative rules for mapping between provider wires and the canonical lm15
 representation (MAP-1..MAP-9 mostly the response side; MAP-10 the request
-side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-20 a stream's fragments and final copies; MAP-21 an error body with only `detail`; MAP-22 a stop sequence the server returns; MAP-23 a catalog entry naming its base model; MAP-12 the reverse direction, a foreign request
+side of message content; MAP-16 where a schema goes on the Gemini wire; MAP-17 a tool with no description; MAP-18 the class of a refused key; MAP-19 what a usage counter means; MAP-20 a stream's fragments and final copies; MAP-21 an error body with only `detail`; MAP-22 a stop sequence the server returns; MAP-23 a catalog entry naming its base model; MAP-24 a part with nothing for the wire it is sent to; MAP-12 the reverse direction, a foreign request
 body read INTO a canonical Request). Companion to `serde-rules.md` (which governs the JSON wire
 format); these govern WHAT becomes a canonical part. Goldens and conformance
 fixtures cite these rules by number.
@@ -39,6 +39,10 @@ producer — relaxing it for one edge case would weaken a guarantee all ports
 and consumers rely on. Erroring would turn a legitimate provider response into
 a crash. With the empty part, `response.text == ""` plus the finish_reason
 (e.g. `"length"`) reads as exactly what happened.
+
+(2026-11-11) Kept in a history and sent on, that message has nothing to
+write: no wire is sent an empty text block, and a message left with
+nothing is not written (MAP-24). The canonical message keeps its part.
 
 ## MAP-3 — A stream yields exactly one end event, and it is final
 
@@ -328,6 +332,17 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    Azure reasoning item is `openai:reasoning_item`. State replays
    verbatim on any door of that dialect; the server judges.** (Ratified
    2026-09-06, D7.)
+   **(Amended 2026-11-11, MAP-24,
+   `changes/2026-11-11-empty-parts.md`.)** "State is present" means
+   state of the dialect being written. A history that changes model holds
+   state for one dialect on its way to another; that is an ordinary
+   input, and the other dialect's builder reads only its own kinds: for
+   it the part is "without state". With text, it is replayed as assistant
+   text (decision G, unchanged). With empty text (rules 9 and 11: hidden
+   thinking) there is nothing to replay natively and no text to replay as
+   text: the part writes nothing on that wire (MAP-24 rule 1). Before
+   this amendment the Messages and generateContent builders wrote the
+   empty text as a block, which the Messages API refuses.
 9. **An OpenAI reasoning item with no summary is an empty `ThinkingPart`**
    carrying its replay state, never dropped. `Usage.reasoning_tokens`
    comes from every provider's exact field.
@@ -514,6 +529,9 @@ same rule to *parts inside messages*. This rule does.
    kind (image, document, …) inside the same wire item, or
    `build_request` raises `UnsupportedFeatureError`. There is no
    `extensions` door for a part: a part is not a knob.
+   (2026-11-11) A part with nothing for the wire (MAP-24: empty text, or
+   hidden thinking whose state is another dialect's) is not a part the
+   wire fails to carry: it writes nothing and nothing raises.
 2. **No lossy rendering of a non-text part.** A caption, a type name, a
    placeholder, a data URI as prose, or base64 as text is a silent
    substitution and is forbidden. `parts_to_text` (and its port
@@ -717,6 +735,11 @@ caller.
    - `data_part_as_text` — a user DataPart goes out as its compact JSON
      in a text slot (changes/2026-09-19-jev-state.md D3); the wire has no
      data marker, so it reads back as a TextPart holding that JSON.
+   - `nothing_written` — (added 2026-11-11, MAP-24) a part with nothing
+     for the wire wrote nothing, and a message left with nothing was not
+     written; neither is on the wire, so neither reads back. (Where a
+     preset writes `reasoning_content` on every assistant row, an empty
+     one reads back as an empty ThinkingPart with no state.)
    21 of the 118 cases carry a declaration (17 one class, 4 two — the xai
    tool-result cases). Adding a class is an additive change to this rule
    and to the registry's `lossy` table; `tools/audit.py` fails a
@@ -1412,6 +1435,139 @@ it never changes what `build_request` produces by itself. A caller who
 wants a fine-tune to follow its base model's per-model rules says so
 (`RouterConfig(base_models=...)`, `harness/PROTOCOL.md` `base_models`).
 Pinned by `tinker.models` (golden: three checkpoints and their bases).
+
+## MAP-24 — A part with nothing for a wire writes nothing
+
+**Written 2026-11-11** (`changes/2026-11-11-empty-parts.md`; lm15-contract
+issue #3); decided in session ("Okay, so let's build it"), to ratify.
+Measured that day: 18 wire shapes (and six more that only one wire has)
+on 14 server and model pairs over the four dialects, then ten recorded
+replies replayed through the reference into the same servers
+(`receipts/2026-11-11-empty-parts/`, `research/empty-parts/`).
+
+A conversation answered by an OpenAI Responses model and continued on
+Claude failed on every later request with HTTP 400 `messages: text
+content blocks must be non-empty`, and, the history being stored, on
+every retry. lm15 reads hidden reasoning as a `ThinkingPart` with empty
+text and its replay state (MAP-7 rules 9 and 11), reads a reply with no
+parts as one empty `TextPart` (MAP-2), and reads a Chat Completions
+assistant row with null content the same way (MAP-12). Each is a part
+lm15 makes on purpose. MAP-7 rule 8 said what such a part becomes on its
+own dialect and "as assistant text" elsewhere, without saying what the
+text is when there is none; two builders wrote it as an empty text block.
+
+1. **A part writes its state or its content; with neither, it writes
+   nothing.** In a message of any role a part is written, in this order:
+   (a) in the dialect's native form when it carries continuation state
+   that dialect consumes (MAP-7 rule 8: a signed or redacted thinking
+   block, a Gemini part with its `thoughtSignature`, a Responses
+   reasoning item), whatever its text; (b) else as its content, by the
+   rules that already say how (text as a text block, thinking as
+   assistant text, MAP-10 for media); (c) and where (b) would be a text
+   block with no characters, as nothing. **No wire is sent a text block
+   with no characters**: not in a message, not as a system prompt, not
+   inside a tool result that has another block. Stated as an
+   equivalence, which is how the vectors check it: the wire request is
+   exactly the one built from the same request without that part
+   (`mapping/empty-parts.json`, `same_as`). So an empty part also leaves
+   no trace: no newline where a wire joins text into one string, no
+   array where a lone text part is a string, no `[developer]` prefix
+   with nothing after it. Only text can have no characters: a tool call,
+   a media part and a data part always have content (a data part is its
+   value in compact JSON on every wire, in an assistant message too:
+   `changes/2026-09-19-jev-state.md` D3), and continuation state with no
+   value (a signature that is the empty string) is no state.
+2. **State of another dialect is not state here** (MAP-7 rule 8,
+   amended). Callers change model in the middle of a conversation, so a
+   part carrying state for dialect A arriving at dialect B's builder is
+   an expected input, never an error and never a reason to refuse.
+3. **A message left with nothing to write is not written.** The messages
+   around it keep their order; lm15 writes no filler turn and repairs no
+   role sequence. Every server probed accepted two user messages in a
+   row, two assistant messages in a row and a conversation that starts
+   with an assistant message (14 of 14); the shapes a wire has for "a
+   message with nothing in it" were refused by Gemini on Vertex, by
+   DeepSeek and by Moonshot (an empty block list; an assistant row with
+   null content and no call). The Messages reference says consecutive
+   turns of one role are combined. A message index the caller gave
+   (`CacheConfig.prefix_until_index`) still names the caller's message:
+   a message left out before it does not move the mark. A request left
+   with no message at all is sent as it is, and the provider's own
+   refusal names the missing input (13 of the 14; with a system prompt
+   and no message, seven answered).
+4. **A tool result is always written.** An empty output is an answer
+   (INV-014: one empty `TextPart`) and reaches every wire as the empty
+   string under its call id, as before (accepted by all 14). Inside a
+   result that has another block, an empty text part writes no block
+   (rule 1; Moonshot's Messages door refuses one there).
+5. **Nothing is recorded, and the history is not touched.** This is
+   translation (MAP-13 rule 2), not an adaptation: no character the
+   caller or a model wrote is withheld, and state only its issuer can
+   read was never the other provider's to receive. There is no
+   `Adaptation`, under any policy, and `plan()` lists none. The
+   canonical message keeps the part (MAP-7 rules 9 and 11: never dropped
+   on read), so the same history sent back to dialect A replays the
+   state natively.
+6. **Every recorded reply is also a history.** The harness's `mapping`
+   direction puts each golden's message (what lm15 read from a real
+   server) in a history and builds it for every dialect: the build must
+   succeed and the body must hold no text block with no characters and
+   no message with nothing in it (`mapping/history-replay.json`;
+   `harness/PROTOCOL.md`). No answer is written by hand, so a reply shape
+   nobody thought of is covered when its golden lands. A reply holding a
+   part a wire has no slot for (MAP-10) is listed there with its pinned
+   refusal.
+
+Not decided here, stated so nobody reads them as covered:
+
+- **Whitespace is content.** Text that is only spaces or line breaks is
+  written. The Messages API refuses a message whose only text is
+  whitespace ("text content blocks must contain non-whitespace text",
+  Anthropic's own door only; the two other Messages servers and every
+  other wire accepted it). Leaving such text out would withhold
+  characters a model wrote, so it would be a recorded adaptation
+  (MAP-13), not this rule.
+- **State of the same dialect from another server.** MAP-7 rule 8 stands:
+  it replays verbatim and the server judges. On 2026-11-11 the servers
+  judged against it: Anthropic refused a signature issued by DeepSeek's
+  Messages door and a redacted block issued by Meta's; the Codex door
+  refused reasoning items issued by Azure and by Meta; Gemini 3.7 on
+  Vertex refused a signature recorded on the Gemini API. A
+  `ContinuationState` names its dialect, not its issuer, so the builder
+  cannot tell them apart.
+- **A turn in progress moved to another provider.** A history that ends
+  in a tool result whose call another model made is refused by servers
+  that require their own reasoning for the current turn (Gemini 3.x: a
+  `thoughtSignature` on the call, for which Google documents the
+  placeholder `skip_thought_signature_validator`; DeepSeek's Messages
+  door: the turn's thinking). Claude and the others answered.
+- **What a citation in a history should be.** Pinned here: a history
+  holding citations builds on every wire (the history replay), and a
+  citation that quotes nothing writes nothing anywhere. Left as the
+  reference has it: the Responses and Chat builders write no citation at
+  all, the Messages and generateContent builders write the text it
+  quotes as assistant text. Whether a quote the model never spoke
+  belongs in its turn is open.
+
+**Why:** lm15's first promise is that changing the model string keeps the
+program working (MAP-13). A part lm15 reads on purpose and cannot write
+breaks it in the worst way: the refusal comes from history, so every retry
+repeats it. The parts in question carry nothing the next model can use,
+so writing nothing loses nothing; a placeholder would be lm15 writing
+model input nobody wrote (MAP-7 rule 11), and a refusal would leave the
+conversation as stuck as the server's 400 did. Before this rule no case
+sent one dialect's reply to another: the six SDKs passed 2,266 checks
+while five of them wrote hidden thinking as an empty block, and
+replaying the recorded replies found 87 failing builds in the reference.
+
+Pinned by `mapping/empty-parts.json` (17 vectors, 72 checks), the history
+replay (every golden in four dialects), and the live cases
+`anthropic.foreign_reasoning_history`, `anthropic.empty_message_history`,
+`anthropic.empty_text_history`, `anthropic.omitted_thinking_replay`,
+`vertex.foreign_reasoning_history`, `vertex.empty_message_history`,
+`deepseek.foreign_reasoning_history`, `deepseek.empty_message_history`,
+`moonshotai.empty_text_history` and
+`moonshotai-responses.empty_text_history`.
 
 ---
 

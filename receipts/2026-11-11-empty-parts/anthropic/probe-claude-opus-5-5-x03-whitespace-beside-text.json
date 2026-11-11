@@ -1,0 +1,108 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$ANTHROPIC_API_KEY"
+    },
+    "body": {
+      "model": "claude-opus-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": " "
+            },
+            {
+              "type": "text",
+              "text": "Deleted."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "model": "claude-opus-5-5",
+    "id": "msg_011CgvEFSFyunVKj8jFFzqij",
+    "type": "message",
+    "role": "assistant",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "",
+        "signature": "CAQSwAgKEAgTGAI4AUIIdGhpbmtpbmcSDF1etxVLsSScaS0bWxoMXPTIAOhO8k1NH+lNIjBoxBSIS+umV6vdOu3n+XXeo2nNwaaoiRI+iPeQtlzcbFHtWOQfxdjdWlQHiNN+QXQq3QeKVK9ZAfUszw9J4nEBM590KxjVcKwI4B5N9Wokc0UlcgkUKKdosF8G092yCBz/TzEInZ+CitRsqCPu/5SCfipfWwSpbf1N11hTTIX96hKcSP+sTOoBWinlQRYD+jLk1AAbsNefL/4mGALfdkeiwgplz3xNy74OxxNI7Z57RH37jpyoyssCVhL9paRAsbATr1X8Btyuup1iJfBFeVL7+7FAJNKxul2BNCF24uO8kZA9ZACjhzaTjMvTrDj9eZS5r9Rc6oFnhovSfgRSSJMV6OgquZ5z0XyyiU/OMhYrH79Dr0DmoVCXEf2JESYVFvaPec4zotzVjKb8mWoB2lxqhTBo81mEyN3J/l9I2FS8om3CLhglyMu5hMnDKsjDnwyMjXQakt1NY8mLTLxXUji/FpumbeZSxipWvX8+I0coOcnkzZrkhV3thZXNIKuXrY0EItIZNf8c8H2yRS/x1fSzLC79+QdQ70CbjHGvcLmzKnLc/jB2YiH4/A/5iA5N9qRayE+DujFvpAD1NaJUShiNDBe5gZNW7hnNRLCsrylp0yrV1X8g7EmGizCUJhRxpL+2aO/jUq+9aGlPrxz7FH4jXkvyu3zP99ezXOsrGmkVlcnaTWpAqMdL5AbEQ7k19fV6Ern/3h+6gx8lxNQjUhJ+em+VKhHayM67vwegTnhCcumOPfx8dx3lOdORQYbR4ovwkTtW2tIA+6OcjSq921nB6MGlhYApZvsEDwFDiGDMu727u4A6Mjq02Sh4jKH7Kb0BoSpCktoFUNQFcDDPtybt7h+Y7XzAnaQ7AyXFdVtJzlGJqasA2s/IqabFnlJFnMQqSF8OFOjrwBenPg++ZzliMJl3dhN1XJRa/7PHgt81sJqKe258QM8h1lhoP7O3J5DqHnrsc+9nveYNlaco3Q9cLWKb8mwN1MXkX6C2I2Hug5VYJFiS9y54uJ4UrvzQQAZeI4YKNWO3C/e02Bpkv0jyr4SXapO6+IKHPOdyYvE5+o5rmMXoKCbSI6j7/YKb7MyMWy0SSNbiovtzuTzTlT7AjSVEwgZVyEahTJAuQAsg7rcurDOtZti9muYw1hlhlsShugDYksSLnqzH3h7z4YH5jNV4mwEiQREsQ0Wap/fYMyUTDw3oSF/qv6dDYERuFUzEgbxVx+JIusTsUdEnZwPUbtV9YVoTmLb4QPOWWA0J3Pc5l61iGNLMyw+wjzoJYoNsr3Vt4mJZzcmLVw8LFm00ecluDeEcZln9XhsVZFSDNy+iStWkePOH87jKeCC5ZaHkxl7M5Fdyc/Ar60EOJs1OxdEoD1/nOS/llMjYaaPBfBgB"
+      },
+      {
+        "type": "tool_use",
+        "id": "toolu_016GhR69TVV4iRSiuyoyDaUQ",
+        "name": "delete_program",
+        "input": {},
+        "caller": {
+          "type": "direct"
+        }
+      }
+    ],
+    "container": null,
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "stop_details": null,
+    "usage": {
+      "input_tokens": 377,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 183,
+      "output_tokens_details": {
+        "thinking_tokens": 155
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    },
+    "diagnostics": null
+  },
+  "timestamp": "2026-11-11T00-55-06Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

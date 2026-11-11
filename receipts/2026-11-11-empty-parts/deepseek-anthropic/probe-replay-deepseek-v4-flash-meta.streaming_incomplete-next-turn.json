@@ -1,0 +1,80 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "ac2b22c3-4aee-499c-b6a0-265ddc98ded4",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks me to delete the test program. I should call the tool. But wait, should I confirm? The instruction says \"Delete the test program now.\" It's a destructive action, but the user explicitly requested it. However, there's an ambiguity—\"the test program\" is undefined. But the tool takes no parameters, so presumably it's clear.\n\nI'll call the tool and then reply \"bye\".\n\nThe user wants a single word reply: bye. But I need to make the tool call first. Let me call the tool.",
+        "signature": "ac2b22c3-4aee-499c-b6a0-265ddc98ded4"
+      },
+      {
+        "type": "tool_use",
+        "id": "call_00_tLOKuj7kdvwFtpWpNUnp4729",
+        "name": "delete_program",
+        "input": {}
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 159,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 134,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T01-03-42Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": " "
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 400,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "e546fa86-02a2-4392-afbf-f48e1f91ceb7",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user hasn't asked anything yet. There's a tool available: delete_program. But no instruction. I should probably ask what they want, or... The conversation just has a system prompt and tools. The user turn is empty? Actually the human turn appears empty. I should respond asking for clarification.\n\nLet me just ask what they'd like to do.",
+        "signature": "e546fa86-02a2-4392-afbf-f48e1f91ceb7"
+      },
+      {
+        "type": "text",
+        "text": "I don't see a request yet — what would you like me to do? If you'd like me to remove the test program, just say so and I'll run the delete for you."
+      }
+    ],
+    "stop_reason": "end_turn",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 145,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 113,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T00-54-31Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

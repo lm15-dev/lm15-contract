@@ -1,0 +1,94 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.deepseek.com/anthropic/v1/messages",
+    "params": {},
+    "headers": {
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "$DEEPSEEK_API_KEY"
+    },
+    "body": {
+      "model": "deepseek-v4-flash",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Delete the test program now."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "thinking",
+              "thinking": "",
+              "signature": "EoADCpABCBEYAipAnS65/8zPh5m53r1gv+j7ou4TaBppUP7AtCqauwlT7ZFtXMlkvndMIzLdRwPTpQyEAPgyh/71BeFHhbocqNyDyDIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiQ3MDUyMDJiMS03OWNhLTRlZjAtOTYwNC0wOGYyMWNkZDYwMmaoAYS34NQGEgxrafcj6gPI11dR/1QaDFIqxkmTGUA/bxmDayIwLQb4lTokNRD3pYrn4NLWh/cZema6onVCUJ48bn0jlSqXw0tJ9hQxDLLfQsdNEDKeKpwBH21Dpg39LP/8Y2kUDi1G8alF0qcfFZuSHdKUSGG4qb2jWoYCjCPLNawnnZdB73wFUcEJj8HqtMq3ZpdxlPskK24S1PcTi2nNFzYTtb7361PltZwXgmA/chaqEb6hOcwlO7EqmMtiprslZIerpF92QXI+WOngpjWdia1xpt7/EHjziQE737jbylatKhRiYJUKV+dZQ1dtFtyXeE+5GAE="
+            },
+            {
+              "type": "text",
+              "text": "Yes, 7 is a Mersenne prime because it equals 2³ − 1 (where 3 is itself prime), and 7 is a prime number."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Thanks. Reply with the single word: bye"
+            }
+          ]
+        }
+      ],
+      "stream": false,
+      "max_tokens": 600,
+      "tools": [
+        {
+          "name": "delete_program",
+          "description": "Delete the test program.",
+          "input_schema": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "a812bce6-4f08-4c79-9dc9-323098fb8342",
+    "type": "message",
+    "role": "assistant",
+    "model": "deepseek-v4-flash",
+    "content": [
+      {
+        "type": "thinking",
+        "thinking": "The user asks to delete the test program. I should call the tool. But wait — there's odd context: the assistant's previous turn was a random statement about 7 being a Mersenne prime, unrelated. Now the user says \"Thanks. Reply with the single word: bye\".\n\nHmm, actually the first user message asked to delete the test program. The assistant responded with Mersenne prime trivia — a wrong/hallucinated response that ignored the tool call. Now the user says thanks and asks to reply with the single word \"bye\".\n\nBut the deletion was never actually done. Should I still delete? The user now says \"Thanks\" implying they think it's done. The right thing: actually perform the deletion, then reply \"bye\"? The user requested a single word reply. But the task wasn't completed. Deleting is destructive — but the user explicitly asked for it originally and hasn't rescinded it. Actually \"Thanks\" suggests satisfaction but the tool was never called.\n\nI think the correct action: call delete_program, then say \"bye\". But the instruction is \"Reply with the single word: bye\". Hmm, doing the deletion is what was requested and still pending. I'll call the tool and reply \"bye\". Actually, if deletion should happen, I should be cautious — but it's explicitly requested twice-ish. I'll do it.\n\nWait — should I ask? The user said thanks, implying done. But it isn't. Silently not deleting would be bad. I'll delete and reply bye. But note tension: a single-word reply vs. also confirming. I'll just call the tool then say \"bye\".\n\nActually, let me reconsider. Maybe the safest: the user's latest instruction is just \"bye\" — the deletion was already requested. Since it wasn't done, doing it now fulfills original intent. However, executing a destructive action when the user believes it's already done... it's still what they wanted. I'll do it but mention briefly? They asked for single word. I'll do the tool call and reply \"bye\" — the tool call itself is the record.\n\nHmm, but honesty matters: I should probably note the deletion is now done. But the user gave a strict format. I'll comply with \"bye\" since the tool call is visible.",
+        "signature": "a812bce6-4f08-4c79-9dc9-323098fb8342"
+      },
+      {
+        "type": "tool_use",
+        "id": "call_00_t1xR9J1H5TuS7ZoPpqo31666",
+        "name": "delete_program",
+        "input": {}
+      }
+    ],
+    "stop_reason": "tool_use",
+    "stop_sequence": null,
+    "usage": {
+      "input_tokens": 199,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 128,
+      "output_tokens": 497,
+      "service_tier": "standard"
+    }
+  },
+  "timestamp": "2026-11-11T01-03-45Z",
+  "response_headers": {
+    "Content-Type": "application/json"
+  }
+}

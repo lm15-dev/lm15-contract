@@ -1,0 +1,64 @@
+{
+  "sent": {
+    "method": "POST",
+    "url": "https://api.moonshot.ai/v1/chat/completions",
+    "params": {},
+    "headers": {
+      "content-type": "application/json",
+      "authorization": "Bearer $MOONSHOTAI_API_KEY"
+    },
+    "body": {
+      "model": "kimi-k2.6",
+      "messages": [
+        {
+          "role": "user",
+          "content": " "
+        }
+      ],
+      "max_completion_tokens": 400,
+      "tools": [
+        {
+          "type": "function",
+          "function": {
+            "name": "delete_program",
+            "description": "Delete the test program.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "status": 200,
+  "body": {
+    "id": "chatcmpl-6af3bcc323bee8fcee575664",
+    "object": "chat.completion",
+    "created": 1794358467,
+    "model": "kimi-k2.6",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "It looks like your message might be empty. How can I help you today?",
+          "reasoning_content": "The user sent a message with just spaces or empty content. I should respond helpfully, perhaps asking how I can assist them today. Since there's no specific request, I'll provide a friendly greeting and offer help."
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 40,
+      "completion_tokens": 61,
+      "total_tokens": 101,
+      "completion_tokens_details": {
+        "reasoning_tokens": 43
+      }
+    }
+  },
+  "timestamp": "2026-11-11T00-54-27Z",
+  "response_headers": {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+}
