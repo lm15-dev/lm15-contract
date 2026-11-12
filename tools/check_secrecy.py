@@ -115,7 +115,7 @@ PATH_ALLOWLIST: dict[str, frozenset[str]] = {
 # of the changed test material, never to silence a new secret finding.
 ALLOWLIST_SHA256 = {
     "auth/test-keys/rsa-2048-test-only.pem": "6e3e52ed07726dfd0d08091e1560ceffbb45cc92a01caea9980bd77fac6f942f",
-    "auth/token-vectors.json": "a826e661c0489ece0f5e3560f0ba52708da00ca94cb0f100514e50ad59d81950",
+    "auth/token-vectors.json": "a1bba4465f47c5a3672c8a64a4b3f619c22e9411afe50e0022531863e04a981a",
     "research/providers/_aws_bearer.py": "d507cb6f2b6be2a2b0cec0809356c22d739ea1fbdf00286e853a48a076c90e71",
     "research/cloud-hosts/sources/aws-sts-assume-role.md": "de00601cf1c5c813f6ca4fad2f6067f6ed10c81923ffc644b82cdfdcdb85f607",
     "research/cloud-hosts/sources/gcp-metadata-token.md": "3982907f85cd097a6c8a611015617737458f5fa08807fdde3a58158ed1e49a80",
