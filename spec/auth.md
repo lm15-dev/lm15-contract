@@ -194,7 +194,22 @@ default), Broker (extra package), `AZURE_USERNAME`+`AZURE_PASSWORD` (ROPC).
 `external_account` (`audience`, `subject_token_type`, `token_url`,
 `credential_source` ∈ {`file`, `url`, `executable`, AWS} → STS
 `urn:ietf:params:oauth:grant-type:token-exchange` → optional
-`service_account_impersonation_url`); `impersonated_service_account`
+`service_account_impersonation_url`; an AWS source, `environment_id`
+`aws1` and `regional_cred_verification_url` required, signs `POST` to
+that URL for its region with SigV4, service `sts`, empty payload, and
+its subject token is google-auth's serialization: `{"headers": [{key,
+value}…], "method", "url"}`, headers `Authorization`, `host`,
+`x-amz-date`, `x-amz-security-token` when the credentials carry one,
+then `x-goog-cloud-target-resource` = `audience` (unsigned), compact
+JSON with sorted keys, percent-encoded keeping `/`; region
+`AWS_REGION`, `AWS_DEFAULT_REGION`, else `region_url` with its last
+character dropped; AWS credentials `AWS_ACCESS_KEY_ID` +
+`AWS_SECRET_ACCESS_KEY` (+ `AWS_SESSION_TOKEN`), then the container
+endpoint (the `aws-chain` container rung: an lm15 addition, stated:
+Google's libraries skip it, so on ECS they find no identity or the
+host's), then `url` (role name, then `url/<role>`); IMDSv2 when
+`imdsv2_session_token_url` is given, TTL 300, one session token per
+acquisition); `impersonated_service_account`
 (`source_credentials` nested, `service_account_impersonation_url`,
 `delegates` → `iamcredentials …:generateAccessToken`). Other `type` values
 (`external_account_authorized_user`, `gdch_service_account`) raise
@@ -834,6 +849,14 @@ receipt for `azure-anthropic` by Pamela Fox (Microsoft), 2026-09-18,
 `pamelafox/python-stack-foundry-models`; see
 changes/2026-09-19-cloud-identity-and-endpoints.md and
 auth/named-credentials.json.
+
+Amended 2026-11-12 (AUTH-1 `gcp-chain`: `external_account` with an AWS
+`credential_source`, a stated gap in every SDK until now, implemented to
+google-auth's subject token byte for byte, with the container endpoint
+added as an AWS identity) — asked for in session ("I want to do option
+two": a Bigspin service on ECS reaching Gemini on Vertex in an
+organization that forbids API keys); see
+changes/2026-11-12-gcp-aws-source.md; to ratify.
 
 Amended 2026-09-30 (AUTH-10: `backend_settings`, `client_version` on the
 subscription doors with `LM15_CLAUDE_CODE_VERSION` /

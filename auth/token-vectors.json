@@ -2,7 +2,7 @@
  "provenance": {
   "source": "hand-authored",
   "date": "2026-09-03",
-  "evidence": "changes/2026-09-03-cloud-hosts.md; spec/auth.md AUTH-11 (jwt-rs256) and AUTH-1 (gcp-chain service_account, azure-chain environment certificate). Claim sets and lifetimes from the resolver sources frozen under research/cloud-hosts/sources/: google-auth service_account.py:393-420 (iat, exp=iat+3600, iss, aud=https://oauth2.googleapis.com/token, scope) and jwt.py:75-107 (header typ/alg/kid); MSAL assertion.py:99-118 (aud, iss, sub, exp=iat+600, iat, jti; x5t header = base64url SHA-1 of the DER certificate); Google doc gcp-service-account-oauth.md:240-333 (RS256 is the only algorithm; grant_type jwt-bearer); Entra doc entra-client-credentials.md:151-168 (client_assertion form). Signed with auth/test-keys/rsa-2048-test-only.pem via openssl dgst -sha256 -sign (RSASSA-PKCS1-v1_5)."
+  "evidence": "changes/2026-09-03-cloud-hosts.md; spec/auth.md AUTH-11 (jwt-rs256) and AUTH-1 (gcp-chain service_account, azure-chain environment certificate). Claim sets and lifetimes from the resolver sources frozen under research/cloud-hosts/sources/: google-auth service_account.py:393-420 (iat, exp=iat+3600, iss, aud=https://oauth2.googleapis.com/token, scope) and jwt.py:75-107 (header typ/alg/kid); MSAL assertion.py:99-118 (aud, iss, sub, exp=iat+600, iat, jti; x5t header = base64url SHA-1 of the DER certificate); Google doc gcp-service-account-oauth.md:240-333 (RS256 is the only algorithm; grant_type jwt-bearer); Entra doc entra-client-credentials.md:151-168 (client_assertion form). Signed with auth/test-keys/rsa-2048-test-only.pem via openssl dgst -sha256 -sign (RSASSA-PKCS1-v1_5). (2026-11-12) gcp-external-account-aws*.build: the subject token computed by google-auth 2.62.2 itself (google.auth.aws.Credentials.retrieve_subject_token, the clock pinned to 'now', the environment's keys), its decoded form kept beside it as subject_token_readable (not compared); the STS body is lm15's JSON form of the exchange (changes/2026-11-12-gcp-aws-source.md)."
  },
  "description": "RS256 assertion and token-exchange vectors (--direction token). lm15 pins ONE JWT serialization: header and payload as compact JSON (no spaces) with keys in the order shown, base64url without padding, RSASSA-PKCS1-v1_5/SHA-256 over '<header>.<payload>'. The servers accept any valid JSON (RFC 7519); the pinned order is lm15's canonical fact so that four ports produce identical bytes. Every value here is fake: the key is the corpus test key, the tenant/client/project ids are placeholders, the response tokens are plain marker strings. 'now' is the fixed clock the shim must use. A value of the form {\"$file\": <repo path>, \"strip_comment_lines\"?: true} is expanded by the HARNESS to that file's contents (dropping lines that start with '#' when asked) before the op is sent; the shim never reads the repository.",
  "now": "2026-09-03T12:00:00Z",
@@ -278,6 +278,141 @@
      "secret_access_key": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
      "session_token": "SESSION-VECTOR-NOT-A-SECRET",
      "expires_at": "2026-09-03T18:00:00Z"
+    }
+   }
+  },
+  {
+   "id": "gcp-external-account-aws.build",
+   "provider": "vertex",
+   "rung": "adc-env",
+   "input": {
+    "credential_file": {
+     "type": "external_account",
+     "audience": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws",
+     "subject_token_type": "urn:ietf:params:aws:token-type:aws4_request",
+     "token_url": "https://sts.googleapis.com/v1/token",
+     "credential_source": {
+      "environment_id": "aws1",
+      "region_url": "http://169.254.169.254/latest/meta-data/placement/availability-zone",
+      "url": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "regional_cred_verification_url": "https://sts.{region}.amazonaws.com?Action=GetCallerIdentity&Version=2011-06-15"
+     },
+     "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/lm15-test@lm15-test-project.iam.gserviceaccount.com:generateAccessToken"
+    },
+    "env": {
+     "AWS_ACCESS_KEY_ID": "AKIDEXAMPLE",
+     "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "AWS_SESSION_TOKEN": "SESSION-TOKEN-VECTOR-NOT-A-SECRET",
+     "AWS_REGION": "us-east-2"
+    }
+   },
+   "expect": {
+    "request": {
+     "method": "POST",
+     "url": "https://sts.googleapis.com/v1/token",
+     "headers": {
+      "content-type": "application/json"
+     },
+     "body_encoding": "json",
+     "body": {
+      "grantType": "urn:ietf:params:oauth:grant-type:token-exchange",
+      "audience": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws",
+      "scope": "https://www.googleapis.com/auth/cloud-platform",
+      "requestedTokenType": "urn:ietf:params:oauth:token-type:access_token",
+      "subjectToken": "%7B%22headers%22%3A%5B%7B%22key%22%3A%22Authorization%22%2C%22value%22%3A%22AWS4-HMAC-SHA256%20Credential%3DAKIDEXAMPLE/20260903/us-east-2/sts/aws4_request%2C%20SignedHeaders%3Dhost%3Bx-amz-date%3Bx-amz-security-token%2C%20Signature%3D720a6fee3fa3500027801628012048361dd1ac4b60741f027a604ca26878efde%22%7D%2C%7B%22key%22%3A%22host%22%2C%22value%22%3A%22sts.us-east-2.amazonaws.com%22%7D%2C%7B%22key%22%3A%22x-amz-date%22%2C%22value%22%3A%2220260903T120000Z%22%7D%2C%7B%22key%22%3A%22x-amz-security-token%22%2C%22value%22%3A%22SESSION-TOKEN-VECTOR-NOT-A-SECRET%22%7D%2C%7B%22key%22%3A%22x-goog-cloud-target-resource%22%2C%22value%22%3A%22//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws%22%7D%5D%2C%22method%22%3A%22POST%22%2C%22url%22%3A%22https%3A//sts.us-east-2.amazonaws.com%3FAction%3DGetCallerIdentity%26Version%3D2011-06-15%22%7D",
+      "subjectTokenType": "urn:ietf:params:aws:token-type:aws4_request"
+     }
+    },
+    "subject_token_readable": {
+     "headers": [
+      {
+       "key": "Authorization",
+       "value": "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20260903/us-east-2/sts/aws4_request, SignedHeaders=host;x-amz-date;x-amz-security-token, Signature=720a6fee3fa3500027801628012048361dd1ac4b60741f027a604ca26878efde"
+      },
+      {
+       "key": "host",
+       "value": "sts.us-east-2.amazonaws.com"
+      },
+      {
+       "key": "x-amz-date",
+       "value": "20260903T120000Z"
+      },
+      {
+       "key": "x-amz-security-token",
+       "value": "SESSION-TOKEN-VECTOR-NOT-A-SECRET"
+      },
+      {
+       "key": "x-goog-cloud-target-resource",
+       "value": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws"
+      }
+     ],
+     "method": "POST",
+     "url": "https://sts.us-east-2.amazonaws.com?Action=GetCallerIdentity&Version=2011-06-15"
+    }
+   }
+  },
+  {
+   "id": "gcp-external-account-aws-no-session.build",
+   "provider": "vertex",
+   "rung": "adc-env",
+   "input": {
+    "credential_file": {
+     "type": "external_account",
+     "audience": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws",
+     "subject_token_type": "urn:ietf:params:aws:token-type:aws4_request",
+     "token_url": "https://sts.googleapis.com/v1/token",
+     "credential_source": {
+      "environment_id": "aws1",
+      "region_url": "http://169.254.169.254/latest/meta-data/placement/availability-zone",
+      "url": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+      "regional_cred_verification_url": "https://sts.{region}.amazonaws.com?Action=GetCallerIdentity&Version=2011-06-15"
+     },
+     "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/lm15-test@lm15-test-project.iam.gserviceaccount.com:generateAccessToken"
+    },
+    "env": {
+     "AWS_ACCESS_KEY_ID": "AKIDEXAMPLE",
+     "AWS_SECRET_ACCESS_KEY": "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
+     "AWS_DEFAULT_REGION": "eu-west-1"
+    }
+   },
+   "expect": {
+    "request": {
+     "method": "POST",
+     "url": "https://sts.googleapis.com/v1/token",
+     "headers": {
+      "content-type": "application/json"
+     },
+     "body_encoding": "json",
+     "body": {
+      "grantType": "urn:ietf:params:oauth:grant-type:token-exchange",
+      "audience": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws",
+      "scope": "https://www.googleapis.com/auth/cloud-platform",
+      "requestedTokenType": "urn:ietf:params:oauth:token-type:access_token",
+      "subjectToken": "%7B%22headers%22%3A%5B%7B%22key%22%3A%22Authorization%22%2C%22value%22%3A%22AWS4-HMAC-SHA256%20Credential%3DAKIDEXAMPLE/20260903/eu-west-1/sts/aws4_request%2C%20SignedHeaders%3Dhost%3Bx-amz-date%2C%20Signature%3D2f3609b3e74c71224dfd3236557175246fc6184d3c1f96bab99b6122e52c9ba3%22%7D%2C%7B%22key%22%3A%22host%22%2C%22value%22%3A%22sts.eu-west-1.amazonaws.com%22%7D%2C%7B%22key%22%3A%22x-amz-date%22%2C%22value%22%3A%2220260903T120000Z%22%7D%2C%7B%22key%22%3A%22x-goog-cloud-target-resource%22%2C%22value%22%3A%22//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws%22%7D%5D%2C%22method%22%3A%22POST%22%2C%22url%22%3A%22https%3A//sts.eu-west-1.amazonaws.com%3FAction%3DGetCallerIdentity%26Version%3D2011-06-15%22%7D",
+      "subjectTokenType": "urn:ietf:params:aws:token-type:aws4_request"
+     }
+    },
+    "subject_token_readable": {
+     "headers": [
+      {
+       "key": "Authorization",
+       "value": "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20260903/eu-west-1/sts/aws4_request, SignedHeaders=host;x-amz-date, Signature=2f3609b3e74c71224dfd3236557175246fc6184d3c1f96bab99b6122e52c9ba3"
+      },
+      {
+       "key": "host",
+       "value": "sts.eu-west-1.amazonaws.com"
+      },
+      {
+       "key": "x-amz-date",
+       "value": "20260903T120000Z"
+      },
+      {
+       "key": "x-goog-cloud-target-resource",
+       "value": "//iam.googleapis.com/projects/123456789012/locations/global/workloadIdentityPools/lm15-test-pool/providers/lm15-test-aws"
+      }
+     ],
+     "method": "POST",
+     "url": "https://sts.eu-west-1.amazonaws.com?Action=GetCallerIdentity&Version=2011-06-15"
     }
    }
   }
