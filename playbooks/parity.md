@@ -2,6 +2,30 @@
 
 Status: LEDGER (kept current by whoever moves a pin; not itself normative).
 
+## 2026-11-12 — Google `external_account` with an AWS source (AUTH-1 `gcp-chain`)
+
+changes/2026-11-12-gcp-aws-source.md (asked for in session, to ratify): Vertex reached from AWS
+through workload identity federation, for an organization that forbids API keys. Every SDK
+refused an AWS `credential_source` as a stated gap; all six read it now, the subject token
+google-auth's byte for byte (two vectors in `auth/token-vectors.json`, computed by google-auth
+2.62.2), the AWS identity from the environment, the container endpoint (an lm15 addition,
+stated) or EC2 metadata. The six SDKs move their pin to `f67699c`:
+
+| | Python | TypeScript | Rust | Go | Julia | R |
+|---|---|---|---|---|---|---|
+| Contract checks (all directions) | 4,271 / 4,271 | 4,271 / 4,271 | 4,271 / 4,271 | 4,271 / 4,271 | 45 / 45 token, `Pkg.test()` | 45 / 45 token, 64 / 64 auth |
+| Version | 2.4.0 | 2.4.0 | 2.4.0 | v2.4.0 | 2.4.0 | 2.4.0 |
+| Commit | `1ae9820` | `82c812c` | `3165041` | `02f2e91` | `d43d2be` | `1a938f3` |
+
+Each SDK also walks the acquisition in its own tests (ECS container endpoint, EC2 metadata with
+IMDSv2 once, the environment's keys first, refusals before any request). Live, lm15-python
+and lm15-ts: Gemini on Vertex answered through an AWS identity federated into `lm15-vertex-live`,
+from the environment's keys and from a container endpoint; a service account allowed only
+`aiplatform.endpoints.predict` is enough. The Rust doctor no longer reports an AWS-sourced file
+as absent. Released 2026-11-12: Go on the module proxy, R as a GitHub release, Julia's
+registration requested (JuliaRegistries/General#175956); Python, TypeScript and Rust wait for
+the maintainer's approval to publish.
+
 ## 2026-11-11 — a part with nothing for a wire writes nothing (MAP-24)
 
 changes/2026-11-11-empty-parts.md (decided in session, to ratify; lm15-contract issue #3): a
