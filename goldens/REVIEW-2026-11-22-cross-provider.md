@@ -78,6 +78,10 @@ call; Python completion fragments leave the name absent so StreamAssemblyError
 can retain partial text and usage. Eight shared synthetic controls derive the
 bad calls from the recorded named call, without editing the original transcript.
 The harness self-test deliberately accepts a nameless live call and must catch it.
+A socket-level TypeScript test also caught its session rewrapping the decoder's
+ProviderError as TransportError. The session now preserves canonical decoder
+errors while retaining transport wrapping for unexpected exceptions; it rejects
+pending readers and closes the socket, without undoing earlier delivered text.
 
 Trade-off: a malformed completed frame is refused as a unit. Earlier delivered
 frames remain delivered; no live partial-response object is invented. This

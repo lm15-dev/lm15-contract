@@ -24,7 +24,12 @@ tests were recorded before changes. Per MAP-1/MAP-9, completed live calls now
 raise ProviderError if no non-empty string name exists. Completion-stream
 fragments preserve absence and assembly raises StreamAssemblyError, retaining
 partial text/usage. Valid calls, including an explicitly named `"tool"`, keep
-IDs, names and inputs verbatim.
+IDs, names and inputs verbatim. A further failing socket-level TypeScript test
+found the live session wrapping the decoder's ProviderError as TransportError.
+It now preserves canonical error types through session dispatch, closes the
+socket and rejects readers; unexpected decoder exceptions retain transport
+wrapping. This avoids misclassifying malformed provider data as a connection
+fault. Already delivered text is retained.
 
 `mapping/live-tool-names.json` adds eight synthetic negative controls derived
 from the recorded named Gemini Live call: missing/null/empty/numeric name under
