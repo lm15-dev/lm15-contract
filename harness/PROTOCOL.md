@@ -351,9 +351,10 @@ Out: `{"models": [<ModelInfo JSON>]}`
 ### replay_live
 
 The `live` direction also runs `mapping/live-tool-names.json`: synthetic
-malformed calls derived from a recorded named call. Missing/null/empty/non-string
-names on completed Gemini live calls must produce `ProviderError` / `provider`
-(MAP-9), not a fabricated tool name. Original recorded transcripts stay unchanged.
+malformed calls derived from recorded named calls. Missing/null/empty/non-string
+names on completed Gemini Live or OpenAI Realtime calls must produce
+`ProviderError` / `provider` (MAP-9), not a fabricated tool name. Original
+recorded transcripts stay unchanged.
 
 In: `{"provider": "openai"|"gemini", "live_config": <LiveConfig JSON>, "client_events": [<LiveClientEvent JSON>], "server_frames_b64": [str], "base_url"?: str}`
 Out: `{"setup_frames": [<wire JSON>], "client_frames": [[<wire JSON>]], "events": [[<LiveServerEvent JSON>]]}`
@@ -517,10 +518,13 @@ call sites (openai.py, openai_chat.py, anthropic.py, gemini.py):
   native type name for shape failures), stringified, with falsy values
   recorded as `"<missing>"`.
 - **Transport:** the recorder list is attached to
-  `Response.provider_data["_lm15_unmapped"]` only when non-empty. The shim's
-  `parse_response`/`replay_stream` surface it as the top-level `"unmapped"`
-  array (the rest of provider_data is not serialized), and the harness fails
-  any case with a non-empty `unmapped`.
+  `Response.provider_data["_lm15_unmapped"]` (and `ImageGenerationResponse` /
+  `SpeechGenerationResponse` `provider_data["_lm15_unmapped"]`) only when
+  non-empty. The shim's `parse_response`/`replay_stream` surface it as the
+  top-level `"unmapped"` array (the rest of provider_data is not serialized),
+  and the harness fails any case with a non-empty `unmapped` — including
+  non-chat parse surfaces (`generation`, `batch`, `files`, `cache`, `video`,
+  `models`) before stripping or comparing `provider_data`.
 
 ## Stream checks (2026-11-05)
 

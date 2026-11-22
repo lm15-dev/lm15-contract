@@ -264,7 +264,12 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     if decode_target is None or encode_target is None:
         raise SystemExit("selftest: live corpus too thin to self-test (need a golden with "
                          "events and a transcript with client frames)")
-    targets["live_guessed_tool_name"] = ("live", check.live_name_vectors()[0][0])
+    live_vectors = check.live_name_vectors()
+    openai_live_vector = next((cid for cid, f in live_vectors if f["provider"] == "openai"), None)
+    if openai_live_vector is None:
+        raise SystemExit("selftest: missing openai live-tool-names vector")
+    targets["live_guessed_tool_name"] = ("live", live_vectors[0][0])
+    targets["live_guessed_openai_tool_name"] = ("live", openai_live_vector)
     targets["live_dropped_event"] = ("live", f"{decode_target}[decode]")
     targets["live_frame_key_drop"] = ("live", f"{encode_target}[encode]")
 
@@ -284,6 +289,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
                          "a narration-text golden, and a multipart build case)")
     targets["gen_wrong_media_type"] = ("generation", f"{media_target}[parse]")
     targets["gen_dropped_narration"] = ("generation", f"{text_target}[parse]")
+    targets["gen_unmapped_ignored"] = ("generation", f"{media_target}[parse]")
     targets["gen_multipart_field_drop"] = ("generation", f"{multipart_target}[build]")
 
     files_cases = check.load_surface_cases("files")
@@ -320,6 +326,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         raise SystemExit("selftest: batch corpus too thin to self-test (need >=2 entries "
                          "and a completed status golden)")
     targets["batch_entry_order_swap"] = ("batch", f"{swap_target}[result_fetches.parse]")
+    targets["batch_unmapped_ignored"] = ("batch", f"{swap_target}[result_fetches.parse]")
     targets["batch_status_vocab_drift"] = ("batch", f"{vocab_target}[status.parse]")
 
     cache_cases = check.load_surface_cases("cache")

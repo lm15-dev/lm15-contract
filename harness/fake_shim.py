@@ -58,15 +58,18 @@ MUTATIONS = (
     "validate_rejects_valid",    # validate: rejecting everything must fail the positive controls
     "models_wrong_id",      # parse_models_response: first model's id rewritten
     "models_param_drop",    # build_models_request: one query parameter dropped
-    "live_guessed_tool_name",  # replay_live: accept a nameless completed call
+    "live_guessed_tool_name",  # replay_live: accept a nameless completed Gemini call
+    "live_guessed_openai_tool_name",  # replay_live: accept a nameless completed OpenAI Realtime call
     "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
     "live_frame_key_drop",  # replay_live: one key dropped from the first encoded client frame
     "gen_wrong_media_type",     # generation_parse: first media part's media_type rewritten
     "gen_dropped_narration",    # generation_parse: the narration text field dropped
+    "gen_unmapped_ignored",     # generation_parse: _lm15_unmapped inside provider_data must fail before stripping
     "gen_multipart_field_drop", # generation_build: a multipart form field name corrupted
     "file_readiness_flip",      # file_op_parse: readiness "ready" -> "pending"
     "file_param_drop",          # file_op_build: one query parameter dropped
     "batch_entry_order_swap",   # batch_op_parse entries: first two entries swapped
+    "batch_unmapped_ignored",   # batch_op_parse entries: _lm15_unmapped inside entry.response.provider_data must fail
     "batch_status_vocab_drift", # batch_op_parse job: canonical status replaced by the wire word
     "video_status_vocab_drift", # video_op_parse job: canonical status replaced by the wire word
     "video_part_url_drift",     # video_op_parse part: the delivery URL rewritten
@@ -832,7 +835,7 @@ def find_live_case(msg: JsonObject) -> JsonObject:
 def op_replay_live(msg: JsonObject) -> JsonObject:
     for case_id, fields in check.live_name_vectors():
         if all(msg.get(k) == v for k, v in fields.items()):
-            if MUTATION == "live_guessed_tool_name" and targeted({"id": case_id}):
+            if MUTATION in ("live_guessed_tool_name", "live_guessed_openai_tool_name") and targeted({"id": case_id}):
                 return {"events": [[{"type": "tool_call", "name": "tool"}]]}
             raise PinnedRaise({"type": "ProviderError", "code": "provider", "message": "live call has no name"})
     case = find_live_case(msg)
@@ -1059,6 +1062,8 @@ def op_generation_parse(msg: JsonObject) -> JsonObject:
                 result["audio"] = dict(result["audio"], media_type="audio/not-the-format")
         elif MUTATION == "gen_dropped_narration":
             result.pop("text", None)
+        elif MUTATION == "gen_unmapped_ignored":
+            result["provider_data"] = {"echo": "fixture", "_lm15_unmapped": [{"path": "data[0]", "type": "<empty>"}]}
     return result
 
 
@@ -1130,6 +1135,12 @@ def op_batch_op_parse(msg: JsonObject) -> JsonObject:
         entries = [dict(e) for e in golden["entries"]]
         if MUTATION == "batch_entry_order_swap" and targeted(case) and len(entries) >= 2:
             entries[0], entries[1] = entries[1], entries[0]
+        elif MUTATION == "batch_unmapped_ignored" and targeted(case) and entries:
+            resp = dict(entries[0].get("response") or {})
+            pd = dict(resp.get("provider_data") or {})
+            pd["_lm15_unmapped"] = [{"path": "content[0]", "type": "mystery"}]
+            resp["provider_data"] = pd
+            entries[0] = {**entries[0], "response": resp}
         return {"entries": entries}
     body = base64.b64decode(msg["body_b64"])
     step = next(s for s in case["steps"]

@@ -1679,20 +1679,34 @@ def run_token_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
 
 # ─── Direction: live ───────────────────────────────────────────────
 
-def live_name_vectors() -> list[tuple[str, JsonObject]]:
-    """Synthetic negative controls derived from a named, recorded live call."""
-    fixture = json.loads((MAPPING_DIR / "live-tool-names.json").read_text(encoding="utf-8"))
-    source = next(case for case in load_live_cases() if case["id"] == fixture["source_case"])
-    calls = []
+def _recorded_live_call(source: JsonObject) -> JsonObject:
+    calls: list[JsonObject] = []
     for entry in load_live_transcript(source):
-        if entry["dir"] == "server":
-            payload = json.loads(live_server_frame_bytes(entry))
-            calls.extend(payload.get("toolCall", {}).get("functionCalls", []))
+        if entry["dir"] != "server":
+            continue
+        payload = json.loads(live_server_frame_bytes(entry))
+        calls.extend(payload.get("toolCall", {}).get("functionCalls", []))
+        if payload.get("type") == "response.output_item.done":
+            item = payload.get("item")
+            if isinstance(item, dict) and item.get("type") == "function_call":
+                calls.append(item)
     if len(calls) != 1 or not isinstance(calls[0].get("name"), str) or not calls[0]["name"]:
-        raise ValueError("live name controls require exactly one recorded named call")
+        raise ValueError(f"live name controls require exactly one recorded named call in {source['id']}")
+    return calls[0]
+
+
+def live_name_vectors() -> list[tuple[str, JsonObject]]:
+    """Synthetic negative controls derived from recorded named live calls."""
+    fixture = json.loads((MAPPING_DIR / "live-tool-names.json").read_text(encoding="utf-8"))
+    live_by_id = {case["id"]: case for case in load_live_cases()}
+    recorded_calls: dict[str, JsonObject] = {}
     vectors = []
     for case in fixture["cases"]:
-        call = dict(calls[0])
+        source_id = case.get("source_case", fixture["source_case"])
+        source = live_by_id[source_id]
+        if source_id not in recorded_calls:
+            recorded_calls[source_id] = _recorded_live_call(source)
+        call = dict(recorded_calls[source_id])
         if case.get("omit_name"):
             del call["name"]
         else:
@@ -1701,6 +1715,8 @@ def live_name_vectors() -> list[tuple[str, JsonObject]]:
             payload = {"toolCall": {"functionCalls": [call]}}
         elif case["envelope"] == "modelTurn":
             payload = {"serverContent": {"modelTurn": {"parts": [{"functionCall": call}]}}}
+        elif case["envelope"] == "output_item_done":
+            payload = {"type": "response.output_item.done", "output_index": 0, "item": call}
         else:
             raise ValueError("unknown live name-control envelope")
         fields = {"provider": source["provider"], "live_config": source["live_config"],
@@ -1864,6 +1880,10 @@ def run_models_direction(shim: Shim, case_filter: str | None) -> DirectionReport
                           **case_base_url(case))
         if not reply.get("ok"):
             report.results.append(shim_reply_failure(f"{case_id}[parse]", reply))
+            continue
+        unmapped = _find_nested_unmapped(reply["result"].get("models"))
+        if unmapped:
+            report.results.append(CaseResult(f"{case_id}[parse]", "fail", reason=f"unmapped provider fields: {unmapped}"))
             continue
         split = _strip_models_provider_data(reply["result"].get("models"))
         if split is None:
@@ -2047,7 +2067,29 @@ def _compare_build(report: DirectionReport, label: str, spec: JsonObject, reply:
         report.results.append(CaseResult(label, "fail", diff=diff))
 
 
+def _find_nested_unmapped(value: Any) -> Any | None:
+    """Return the first non-empty ``_lm15_unmapped`` list inside any parsed object or its ``provider_data``."""
+    stack = [value]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            unmapped = node.get("_lm15_unmapped")
+            if unmapped:
+                return unmapped
+            pd = node.get("provider_data")
+            if isinstance(pd, dict) and pd.get("_lm15_unmapped"):
+                return pd["_lm15_unmapped"]
+            stack.extend(node.values())
+        elif isinstance(node, list):
+            stack.extend(node)
+    return None
+
+
 def _compare_golden(report: DirectionReport, label: str, golden_value: Any, actual_value: Any) -> None:
+    unmapped = _find_nested_unmapped(actual_value)
+    if unmapped:
+        report.results.append(CaseResult(label, "fail", reason=f"unmapped provider fields: {unmapped}"))
+        return
     diff = first_difference(_digest_long_strings(golden_value), _digest_long_strings(actual_value))
     if diff is None:
         report.results.append(CaseResult(label, "pass"))
@@ -2328,6 +2370,13 @@ def run_generation_direction(shim: Shim, case_filter: str | None) -> DirectionRe
             report.results.append(CaseResult(
                 parse_label, "fail",
                 reason="provider_data is absent — the wire body (or the header record) must be preserved verbatim",
+            ))
+            continue
+        unmapped = _find_nested_unmapped(result.get("provider_data"))
+        if unmapped:
+            report.results.append(CaseResult(
+                parse_label, "fail",
+                reason=f"unmapped provider fields: {unmapped}",
             ))
             continue
         result.pop("provider_data", None)

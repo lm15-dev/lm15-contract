@@ -418,6 +418,209 @@
         "date": "2026-11-22",
         "evidence": "spec/vocabularies.md FinishReason (closed enum)"
       }
+    },
+    {
+      "id": "reject.model_info.empty_id",
+      "kind": "model_info",
+      "value": {
+        "id": "",
+        "provider": "openai",
+        "api_family": "openai_responses"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md ModelInfo (id must be a non-empty string)"
+      }
+    },
+    {
+      "id": "reject.model_info.zero_context_window",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-5",
+        "provider": "openai",
+        "api_family": "openai_responses",
+        "inference": {
+          "context_window": 0
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md InferenceModelInfo (context_window must be a positive integer)"
+      }
+    },
+    {
+      "id": "reject.model_info.negative_pricing_rate",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-5",
+        "provider": "openai",
+        "api_family": "openai_responses",
+        "inference": {
+          "pricing": {
+            "input_per_million": -0.5
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md InferencePricing (rates must be non-negative finite numbers)"
+      }
+    },
+    {
+      "id": "reject.model_info.bool_pricing_rate",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-5",
+        "provider": "openai",
+        "api_family": "openai_responses",
+        "inference": {
+          "pricing": {
+            "output_per_million": true
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-003 (bool never coerces to numeric rate)"
+      }
+    },
+    {
+      "id": "reject.model_info.unsorted_pricing_tiers",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-5",
+        "provider": "openai",
+        "api_family": "openai_responses",
+        "inference": {
+          "pricing": {
+            "tiers": [
+              {
+                "above_input_tokens": 200000,
+                "input_per_million": 2.0
+              },
+              {
+                "above_input_tokens": 100000,
+                "input_per_million": 1.5
+              }
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-057 (InferencePricing.tiers strictly ascending)"
+      }
+    },
+    {
+      "id": "reject.model_info.non_object_dimensions",
+      "kind": "model_info",
+      "value": {
+        "id": "gpt-5",
+        "provider": "openai",
+        "api_family": "openai_responses",
+        "inference": {
+          "pricing": {
+            "dimensions": "flat"
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md InferencePricing (dimensions is a JSON object)"
+      }
+    },
+    {
+      "id": "reject.token_logprob.bool_logprob",
+      "kind": "token_logprob",
+      "value": {
+        "token": "hello",
+        "logprob": false
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-003, INV-008 (bool is not numeric)"
+      }
+    },
+    {
+      "id": "reject.token_logprob.negative_byte",
+      "kind": "token_logprob",
+      "value": {
+        "token": "hello",
+        "logprob": -0.5,
+        "bytes": [
+          104,
+          -1
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md TopLogprob (bytes are non-negative integers)"
+      }
+    },
+    {
+      "id": "reject.stream_event.adaptation_empty_field",
+      "kind": "stream_event",
+      "value": {
+        "type": "start",
+        "adaptations": [
+          {
+            "field": "",
+            "action": "dropped",
+            "reason": "no wire slot"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md Adaptation (field must be non-empty)"
+      }
+    },
+    {
+      "id": "reject.stream_event.adaptation_unknown_action",
+      "kind": "stream_event",
+      "value": {
+        "type": "start",
+        "adaptations": [
+          {
+            "field": "config.seed",
+            "action": "invented",
+            "reason": "no wire slot"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/vocabularies.md AdaptationAction (closed enum)"
+      }
+    },
+    {
+      "id": "reject.stream_event.adaptation_empty_reason",
+      "kind": "stream_event",
+      "value": {
+        "type": "start",
+        "adaptations": [
+          {
+            "field": "config.seed",
+            "action": "dropped",
+            "reason": ""
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md Adaptation (reason must be non-empty)"
+      }
     }
   ]
 }

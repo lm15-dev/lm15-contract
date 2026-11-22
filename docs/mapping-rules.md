@@ -475,8 +475,9 @@ turn answered differently under `stream=True` (INV-051). Pinned by the
 four `<dialect>.tool_call_unnamed_complete` cases.
 
 **Completed live calls follow the same boundary** (clarified 2026-11-22).
-A Gemini Live `toolCall.functionCalls` or supported
-`serverContent.modelTurn.parts[].functionCall` without a non-empty string
+A Gemini Live `toolCall.functionCalls`, supported
+`serverContent.modelTurn.parts[].functionCall`, or OpenAI Realtime
+`response.output_item.done` `function_call` item without a non-empty string
 name raises `ProviderError` before a completed `LiveServerToolCallEvent` is
 returned. The live-completion stream instead preserves the absence in its
 `ToolCallDelta`; MAP-9 assembly raises `StreamAssemblyError` with the partial

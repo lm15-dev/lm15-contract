@@ -2,7 +2,7 @@
   "provenance": {
     "source": "hand-authored",
     "date": "2026-11-22",
-    "evidence": "MAP-1 and MAP-9: a completed live call is not actionable without a real name. Synthetic corruptions of gemini.live_tool_no_description's recorded call, not new live captures. Both existing decoder envelopes are exercised. changes/2026-11-22-cross-provider-review.md"
+    "evidence": "MAP-1 and MAP-9: a completed live call is not actionable without a real name. Synthetic corruptions of gemini.live_tool_no_description and openai.live_tool_no_description recorded calls, not new live captures. Both Gemini decoder envelopes and OpenAI Realtime response.output_item.done are exercised. changes/2026-11-22-cross-provider-review.md, changes/2026-11-22-live-and-surface-hardening.md"
   },
   "source_case": "gemini.live_tool_no_description",
   "cases": [
@@ -13,6 +13,10 @@
     {"id": "gemini.live_name.modelTurn.missing", "envelope": "modelTurn", "omit_name": true},
     {"id": "gemini.live_name.modelTurn.null", "envelope": "modelTurn", "name": null},
     {"id": "gemini.live_name.modelTurn.empty", "envelope": "modelTurn", "name": ""},
-    {"id": "gemini.live_name.modelTurn.number", "envelope": "modelTurn", "name": 123}
+    {"id": "gemini.live_name.modelTurn.number", "envelope": "modelTurn", "name": 123},
+    {"id": "openai.live_name.output_item_done.missing", "source_case": "openai.live_tool_no_description", "envelope": "output_item_done", "omit_name": true},
+    {"id": "openai.live_name.output_item_done.null", "source_case": "openai.live_tool_no_description", "envelope": "output_item_done", "name": null},
+    {"id": "openai.live_name.output_item_done.empty", "source_case": "openai.live_tool_no_description", "envelope": "output_item_done", "name": ""},
+    {"id": "openai.live_name.output_item_done.number", "source_case": "openai.live_tool_no_description", "envelope": "output_item_done", "name": 123}
   ]
 }
