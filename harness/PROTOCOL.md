@@ -172,9 +172,10 @@ Refusal (MAP-9, a tool call whose fragments never carried a name):
 
 ### normalize_error
 In: `{"provider": str, "status": int, "body_text": str}`
-Out: `{"class": str, "code": str, "provider_code": str|null, "message": str}`
+Out: `{"class": str, "code": str, "provider": str|null, "provider_code": str|null, "status": int|null, "request_id": str|null, "message": str}`
 - `class` is the canonical lm15 error class name; `code` the canonical
-  ErrorCode literal.
+  ErrorCode literal; `provider`, `status`, and `request_id` are the
+  normalized error's fields (all checked when pinned by the fixture).
 
 ### serde_roundtrip
 In: `{"kind": str, "value": <JSON>}`  (kinds enumerated in "Serde kinds" below)
@@ -195,9 +196,13 @@ Out: on acceptance, `{"ok": true, "normalized": <JSON>}` — `normalized` is
 ALWAYS present on `ok: true` (verified against the reference shim:
 `lm15.vet.op_validate` unconditionally returns
 `{"ok": True, "normalized": to_dict(obj)}`). On rejection, `ok: false` with
-the canonical error type. Used by reject vectors (invalid input MUST be
-rejected) and accept vectors (sloppy input MUST normalize to an exact
-expected output, compared against `normalized`).
+the canonical error type. Reject vectors (`serde/reject.json`, run in the
+`serde` direction) require an outer `ok: false` with `error.type` equal to
+`ValueError` or `TypeError` and a string message. An unrelated exception or
+missing operation is not evidence of validation. The same `validate` operation
+also runs every valid `serde/canonical.json` value as a positive control:
+outer `ok: true`, inner `result.ok: true`, and exact `result.normalized`.
+An implementation that rejects everything must fail too.
 
 ### surface_dump
 In: `{}`
@@ -206,10 +211,10 @@ Out: `{"types": {<TypeName>: {"fields": [str]}}, "enums": {<EnumName>: [str]}}`
   hand-maintained list — this feeds the coverage ratchet.
 
 ### explain_auth
-In: `{"provider": str, "sentinel": str, "env": {str: str}, "api_keys_providers": [str], "credentials_path"?: str}`
-Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "settings"?: {<name>: {"value": str|null, "from": str|null, "state"?: "unprobed"}}, "report_text": str}`
+In: `{"provider": str, "sentinel": str, "env": {str: str}, "api_keys_providers": [str], "credentials_path"?: str, "credential"?: str, "base_url"?: str}`
+Out: `{"configured": bool, "steps": [{"kind": str, "state": str}], "base_url"?: str, "settings"?: {<name>: {"value": str|null, "from": str|null, "state"?: "unprobed"}}, "settings_error"?: str, "report_text": str}`
 - Drives the AUTH-7 explain surface over the AUTH-1 chain
-  (`auth/resolution.json`; spec/auth.md). The harness owns EVERY input:
+  (`auth/resolution.json` and `auth/named-credentials.json`; spec/auth.md). The harness owns EVERY input:
   - `env` is the complete environment for resolution. It is always present
     (possibly empty); the shim must never consult its real process
     environment or real home-directory credential stores.

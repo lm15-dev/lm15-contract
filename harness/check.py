@@ -53,10 +53,12 @@ BODIES_DIR = CONTRACT_ROOT / "bodies"
 ERRORS_DIR = CONTRACT_ROOT / "errors" / "cases"
 GOLDENS_DIR = CONTRACT_ROOT / "goldens"
 SERDE_FILE = CONTRACT_ROOT / "serde" / "canonical.json"
+SERDE_REJECT_FILE = CONTRACT_ROOT / "serde" / "reject.json"
 SHIMS_FILE = CONTRACT_ROOT / "harness" / "shims.json"
 CHANGES_DIR = CONTRACT_ROOT / "changes"
 MAPPING_DIR = CONTRACT_ROOT / "mapping"
 AUTH_FILE = CONTRACT_ROOT / "auth" / "resolution.json"
+AUTH_NAMED_FILE = CONTRACT_ROOT / "auth" / "named-credentials.json"
 
 ROUTER_FILE = CONTRACT_ROOT / "router" / "resolution.json"
 DIRECTIONS = ("request", "response", "stream", "error", "serde", "auth", "token", "models", "live", "files", "batch", "generation", "video", "cache", "router", "ingest", "mapping", "managed")
@@ -473,8 +475,16 @@ def load_serde_cases() -> list[JsonObject]:
     return list(json.loads(SERDE_FILE.read_text(encoding="utf-8"))["cases"])
 
 
+def load_serde_reject_cases() -> list[JsonObject]:
+    return list(json.loads(SERDE_REJECT_FILE.read_text(encoding="utf-8"))["cases"])
+
+
 def load_auth_fixture() -> JsonObject:
     return json.loads(AUTH_FILE.read_text(encoding="utf-8"))
+
+
+def load_auth_named_fixture() -> JsonObject:
+    return json.loads(AUTH_NAMED_FILE.read_text(encoding="utf-8"))
 
 
 def load_router_fixture() -> JsonObject:
@@ -500,17 +510,16 @@ CLOUD_RUNG_KINDS = frozenset({
 def cloud_auth_providers(fixture: JsonObject) -> frozenset[str]:
     """Providers whose credential policy is a cloud chain (D14).
 
-    Derived from the fixture: a provider is cloud-chain when any of its
-    cases pins a CLOUD_RUNG_KINDS step. Classification is per provider, so
-    every case of a cloud-chain provider is a cloud case even when the
-    selected rung is a plain environment key.
+    Use the contract's provider policies, not the steps one case happens
+    to reach. Named-credential refusals can occur before any cloud rung.
     """
-    providers = set()
-    for case in fixture["cases"]:
-        steps = case.get("expect", {}).get("steps", [])
-        if any(isinstance(step, dict) and step.get("kind") in CLOUD_RUNG_KINDS for step in steps):
-            providers.add(case["provider"])
-    return frozenset(providers)
+    present = {case["provider"] for case in fixture["cases"]}
+    tables = json.loads((CONTRACT_ROOT / "tables" / "providers.json").read_text(encoding="utf-8"))
+    return frozenset(
+        provider["id"] for provider in tables["providers"]
+        if provider["id"] in present
+        and provider["access"]["credential_policy"] in {"aws-chain", "azure-chain", "gcp-chain"}
+    )
 
 
 def auth_case_in_scope(case: JsonObject, scope: str, cloud_providers: frozenset[str]) -> bool:
@@ -1080,6 +1089,39 @@ def run_serde_direction(shim: Shim, case_filter: str | None, report_dir: Path) -
         report.results.append(CaseResult(case_id, "fail", reason=reason, diff=diff))
     if flagged:
         write_canonicalization_proposal(flagged, report_dir)
+    # Exercise the same validate entrypoint with valid controls as well: an
+    # implementation that rejects everything is not a validator either.
+    for case in load_serde_cases():
+        case_id = case["id"] + "~validate"
+        if case_filter and case_filter not in (case["id"], case_id):
+            continue
+        reply = shim.call("validate", kind=case["kind"], value=case["value"])
+        if reply.get("ok") is not True:
+            report.results.append(shim_reply_failure(case_id, reply))
+            continue
+        result = reply.get("result", {})
+        diff = first_difference(True, result.get("ok", _ABSENT), ("ok",))
+        if diff is None:
+            diff = first_difference(case["value"], result.get("normalized", _ABSENT), ("normalized",))
+        report.results.append(CaseResult(case_id, "fail" if diff else "pass", diff=diff))
+    # Reject vectors (PROTOCOL.md § validate): invalid canonical values MUST be
+    # rejected so a naive echo shim cannot pass the serde direction.
+    for case in load_serde_reject_cases():
+        case_id = case["id"]
+        if case_filter and case_id != case_filter:
+            continue
+        reply = shim.call("validate", kind=case["kind"], value=case["value"])
+        error = reply.get("error")
+        if (reply.get("ok") is False and isinstance(error, dict)
+                and error.get("type") in {"ValueError", "TypeError"}
+                and isinstance(error.get("message"), str)):
+            report.results.append(CaseResult(case_id, "pass"))
+        else:
+            report.results.append(CaseResult(
+                case_id, "fail",
+                reason="validate must reject invalid input with ValueError or TypeError, not accept it or fail for an unrelated reason",
+                diff=Diff("$", "ok=false with a validation error", reply, "invalid canonical rejection"),
+            ))
     return report
 
 
@@ -1101,10 +1143,10 @@ def run_error_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
             continue
         result = reply["result"]
         expected = case["expected"]
-        # class/code/provider_code compare strictly (every current fixture
-        # specifies all three); message only when the fixture pins one.
+        # Compare every pinned field in expected (class, code, provider,
+        # provider_code, status, request_id, message).
         diff = None
-        for key in ("class", "code", "provider_code", "message"):
+        for key in ("class", "code", "provider", "provider_code", "status", "request_id", "message"):
             if key not in expected:
                 continue
             diff = first_difference(expected[key], result.get(key, _ABSENT), (key,))
@@ -1347,7 +1389,8 @@ def run_auth_direction(shim: Shim, case_filter: str | None, auth_scope: str = "a
     report = DirectionReport("auth")
     fixture = load_auth_fixture()
     sentinel = str(fixture["sentinel"])
-    cloud_providers = cloud_auth_providers(fixture)
+    named_fixture = load_auth_named_fixture()
+    cloud_providers = cloud_auth_providers({"cases": fixture["cases"] + named_fixture["cases"]})
     with tempfile.TemporaryDirectory(prefix="lm15-auth-") as tmp:
         tmp_dir = Path(tmp)
         for case in fixture["cases"]:
@@ -1407,6 +1450,87 @@ def run_auth_direction(shim: Shim, case_filter: str | None, auth_scope: str = "a
                 report.results.append(CaseResult(case_id, "pass"))
             else:
                 report.results.append(CaseResult(case_id, "fail", diff=diff))
+
+        if named_fixture is not None:
+            named_sentinel = str(named_fixture["sentinel"])
+            for case in named_fixture["cases"]:
+                case_id = case["id"]
+                if case_filter and case_id != case_filter:
+                    continue
+                if not auth_case_in_scope(case, auth_scope, cloud_providers):
+                    continue
+                fields = {
+                    "provider": case["provider"],
+                    "sentinel": named_sentinel,
+                    "env": case.get("env", {}),
+                    "api_keys_providers": case.get("api_keys_providers", []),
+                    "credential": case["credential"],
+                }
+                if "base_url" in case:
+                    fields["base_url"] = case["base_url"]
+                if "files" in case:
+                    home = Path(tempfile.mkdtemp(prefix="home-", dir=tmp_dir))
+                    fields["env"] = {k: v.replace("~/", f"{home}/") if isinstance(v, str) else v for k, v in fields["env"].items()}
+                    fields["env"]["HOME"] = str(home)
+                    fields["files"] = {}
+                    for rel, content in case["files"].items():
+                        text = expand_files(content)
+                        if not rel.startswith("~/"):
+                            raise ValueError("auth fixture files must be relative to sandbox HOME (~/)")
+                        target = (home / rel[2:]).resolve()
+                        if not target.is_relative_to(home.resolve()):
+                            raise ValueError("auth fixture file escapes sandbox HOME")
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        target.write_text(text, encoding="utf-8")
+                        fields["files"][str(target)] = text
+                reply = shim.call("explain_auth", **fields)
+                if named_sentinel in json.dumps(reply, ensure_ascii=False):
+                    report.results.append(CaseResult(
+                        case_id, "fail",
+                        reason="AUTH-5 violation: the planted sentinel appears in the shim reply",
+                    ))
+                    continue
+                expect = case["expect"]
+                if "error" in expect:
+                    if reply.get("ok"):
+                        report.results.append(CaseResult(
+                            case_id, "fail",
+                            reason=f"expected refusal matching {expect['error']!r}, got ok=true",
+                        ))
+                        continue
+                    err_msg = str((reply.get("error") or {}).get("message", ""))
+                    if re.search(str(expect["error"]), err_msg):
+                        report.results.append(CaseResult(case_id, "pass"))
+                    else:
+                        report.results.append(CaseResult(
+                            case_id, "fail",
+                            diff=Diff("$.error.message", expect["error"], err_msg, "error message does not match pattern"),
+                        ))
+                    continue
+                if not reply.get("ok"):
+                    report.results.append(shim_reply_failure(case_id, reply))
+                    continue
+                result = reply["result"]
+                report_text = result.get("report_text")
+                if not isinstance(report_text, str) or not report_text:
+                    report.results.append(CaseResult(
+                        case_id, "fail",
+                        reason="report_text missing or empty — the AUTH-5 check needs the rendered report",
+                    ))
+                    continue
+                diff = None
+                for key in ("configured", "steps", "base_url"):
+                    if key not in expect:
+                        continue
+                    diff = first_difference(expect[key], result.get(key, _ABSENT), (key,))
+                    if diff is not None:
+                        break
+                if diff is None and isinstance(expect.get("settings"), dict) and "error" in expect["settings"]:
+                    diff = first_difference(expect["settings"]["error"], result.get("settings_error", _ABSENT), ("settings", "error"))
+                if diff is None:
+                    report.results.append(CaseResult(case_id, "pass"))
+                else:
+                    report.results.append(CaseResult(case_id, "fail", diff=diff))
     return report
 
 

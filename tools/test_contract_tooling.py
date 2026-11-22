@@ -71,7 +71,7 @@ class AuthScopeTests(unittest.TestCase):
 
     def test_core_runs_the_non_cloud_cases_only(self):
         fixture = check.load_auth_fixture()
-        total = len(fixture["cases"])
+        total = len(fixture["cases"]) + len(check.load_auth_named_fixture()["cases"])
         core_report, core_providers = self.run_scope("core")
         cloud_report, cloud_providers = self.run_scope("cloud")
         all_report, _ = self.run_scope("all")
@@ -153,6 +153,12 @@ class ProvenanceTests(unittest.TestCase):
     """D11 (exchange receipts from 2026-09-06) and D12 (reviewed line shape)."""
 
     def run_checker(self, root):
+        # These tests isolate provenance-block rules. Ratchet behavior has its
+        # own negative controls in test_audit_remediation.py.
+        (root / "tools").mkdir(exist_ok=True)
+        (root / check_provenance.RECEIPT_ALLOWLIST_REL).write_text('{"cases":{}}', encoding="utf-8")
+        unreviewed = ["goldens/p/unreviewed.json"] if (root / "goldens/p/unreviewed.json").exists() else []
+        (root / check_provenance.UNREVIEWED_RATCHET_REL).write_text(json.dumps({"unreviewed": unreviewed}), encoding="utf-8")
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             result = check_provenance.main(["--root", str(root)])

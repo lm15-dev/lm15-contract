@@ -12,11 +12,24 @@ jobs:
     env:
       PYTHONWARNDEFAULTENCODING: "1"
       PYTHONWARNINGS: "error::EncodingWarning"
+    defaults:
+      run:
+        working-directory: lm15-contract
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: lm15-contract
+      - uses: actions/checkout@v4
+        with:
+          repository: lm15-dev/lm15-python
+          # Reflection source, not the contract oracle. Pin for reproducible checks.
+          ref: 1ae98203f643059f0c103933c80ab0e7f68c5f26
+          path: lm15-python
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Prepare stdlib-only reference shim
+        run: python3 -m venv ../lm15-python/.venv
       - name: Paths every OS can store (a Windows clone must work)
         run: python3 tools/check_portable_paths.py
       - name: Enforce fixture provenance
@@ -24,11 +37,10 @@ jobs:
       - name: Enforce secrecy invariant (spec/auth.md AUTH-5)
         run: python3 tools/check_secrecy.py
       - name: Audit corpus (orphan ratchet, volatile lint, burn-down reports)
-        run: python3 tools/audit.py
+        run: python3 tools/audit.py --require-reference
       - name: Spec drift (reflected surface must be covered by spec/)
-        # Skips itself with a notice when lm15-python is not checked out as
-        # a sibling (same convention as the python2 vet smoke test); full
-        # teeth locally and in any cross-repo checkout.
+        env:
+          LM15_SPEC_DRIFT_STRICT: "1"
         run: python3 tools/spec_drift.py
       - name: "Content coverage (MAP-10: every binding pins its tool-result media cell or declares it open)"
         run: python3 tools/check_content_coverage.py

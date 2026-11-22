@@ -1,25 +1,30 @@
-# lm15 1.0 scope
+# lm15 contract scope
 
-What the 1.0 freeze covers, what is provisional, and what is out of scope.
+What the frozen contract covers, what is provisional, and what is out of scope.
 Companion to [types.md](types.md), [vocabularies.md](vocabularies.md),
 [invariants.md](invariants.md), and `harness/PROTOCOL.md`.
 
-## 2026-09-22 managed-authentication amendment — RATIFIED CORE
+*(Originally ratified as the 1.0 freeze on 2026-06-11; updated to reflect the
+2.x contract — 2.4.0 across six SDKs at parity: Python, TypeScript, Rust, Go,
+Julia, and R — with 18 harness directions and 2.0 one-meaning `Usage`
+semantics under MAP-19.)*
+
+## 2026-09-22 managed-authentication amendment — RATIFIED CORE (implemented)
 
 [AUTH-12–26](auth-managed.md) defines SDK-owned login/lifecycle and an explicitly
-interactive `connect()` returning a model-bound client, Python and TypeScript
-first. It preserves existing API-key/cloud-only use, canonical request/response
-types, and subscription access. Explicit key/named cloud authority wins; otherwise
-subscriptions precede ambient keys. Existing Claude/Codex paths cannot be retired
-until a permitted replacement proves equivalent account access under R1.
+interactive `connect()` returning a model-bound client. It preserves existing
+API-key/cloud-only use, canonical request/response types, and subscription
+access. Explicit key/named cloud authority wins; otherwise subscriptions
+precede ambient keys. Existing Claude/Codex paths cannot be retired until a
+permitted replacement proves equivalent account access under R1.
 See [the amendment](../changes/2026-09-22-managed-authentication.md) for decisions,
 [examples](../docs/auth-examples.md) and [acceptance suite](../auth/managed/README.md).
 
-The core is ratified, not implemented; reserved details still need promotion.
-Its managed-auth harness and provider/platform evidence remain implementation
-work. Existing key/cloud/subscription gates remain required; only the unsafe xAI
-fallback expectation is corrected under R3. Ratification alone does not establish
-a multilingual 1.0 release gate or change SDK pins/support claims.
+The core is ratified, implemented, and graded across SDKs by the `managed`
+harness direction (45 runs). Reserved details (non-file stores, cross-tab
+browser rules) remain reserved until promoted. Existing key/cloud/subscription
+gates remain required; only the unsafe xAI fallback expectation is corrected
+under R3.
 
 The narrow bound-client convenience fills the selected model in a canonical
 Request and returns full canonical results. It does not add conversation state,
@@ -27,52 +32,58 @@ an agent loop, model ranking, account fallback or inference retries. Provider
 revocation, full same-slot multi-account arbitration and automatic imports from
 foreign CLI login files are outside this first managed-auth contract.
 
-## FROZEN — the chat core, auth resolution, and model listing
+## FROZEN — the chat core, auth resolution, model listing, and 2.0 usage
 
-The 1.0 contract freezes exactly the surface the seven harness directions
-exercise (`request`, `response`, `stream`, `error`, `serde`, `auth`,
-`models`):
+The frozen contract covers the core surfaces graded across the harness
+directions (`request`, `response`, `stream`, `error`, `serde`, `auth`,
+`token`, `models`, `router`, `mapping`, `managed`):
 
-- **Canonical types** — Part/Message/Request/Response/StreamEvent/Delta,
-  Tool, Config family, Usage, ContinuationState (types.md tables).
+- **Canonical types** — 12 closed `Part` variants (`DataPart` added under
+  MAP-14), Message/Request/Response/StreamEvent/Delta, Tool, Config family,
+  `Adaptation` (MAP-13), `Usage` (2.0 one-meaning counters under MAP-19,
+  `changes/2026-10-31-usage-one-meaning.md`), `InferencePricing`, and
+  `ContinuationState` (types.md tables).
 - **Canonical serde** — the one omission rule, the Number rule, opaque
   payload verbatimness, and the from_dict leniencies (serde-rules.md,
-  INV-040..048).
+  INV-040..048), pinned by `serde/canonical.json` (round-trip) and
+  `serde/reject.json` (`validate` invalid-input rejections).
 - **Errors** — the canonical class hierarchy, ErrorCode vocabulary, and HTTP
-  mapping (vocabularies.md "ErrorCode").
-- **Request building** — canonical Request → provider wire request for the
-  four adapters (`openai`, `openai_chat`, `anthropic`, `gemini`),
-  including the four blessed extension knobs (INV-049).
+  mapping (vocabularies.md "ErrorCode"), checking `class`, `code`, `provider`,
+  `provider_code`, `status`, `request_id`, and `message`.
+- **Request building** — canonical Request → provider wire request across all
+  pinned doors (38 providers in `spec/support-matrix.json` and
+  `tables/providers.json`), including the blessed extension knobs (INV-049)
+  and visible adaptations (MAP-13).
 - **Response parsing and streaming** — provider body/SSE → canonical
-  Response and the post-coalesce event trace (MAP-1..3).
-- **Credential resolution** — the AUTH-1 chain as observed through AUTH-7
-  explain output, and the AUTH-5 secrecy invariant (spec/auth.md, ratified
-  2026-08-31; harness `auth` direction over `auth/resolution.json`).
-- **Model listing** — `list_models()` wire requests and the wire-entry →
-  `ModelInfo` mapping for all six adapters (harness `models` direction;
-  mapping rules in `changes/2026-08-31-list-models-provisional.md`, promoted
-  by `changes/2026-08-31-list-models-harness.md`). What freezes is the
-  MAPPING and the request shape — pinned bodies are catalog snapshots, and
-  catalog contents change server-side without contract meaning. Multi-page
-  catalogs remain future additive work.
+  Response and the post-coalesce event trace (MAP-1..4, MAP-9, MAP-20,
+  MAP-24, INV-051).
+- **Credential resolution & cloud signing** — the AUTH-1 chain and named
+  cloud identities as observed through AUTH-7 explain output, the AUTH-5
+  secrecy invariant, and SigV4 / token-exchange vectors (spec/auth.md;
+  harness `auth` over `auth/resolution.json` + `auth/named-credentials.json`,
+  and `token` over `auth/sigv4-vectors.json` + `auth/token-vectors.json`).
+- **Model listing and routing** — `list_models()` wire requests and wire-entry
+  → `ModelInfo` mapping (harness `models`), plus deterministic model-string
+  routing (harness `router`).
 
 Frozen means: ports must match exactly; the corpus is the oracle per
 AUTHORITY.md; behavior changes require maintainer ratification.
 
-## PROVISIONAL — may change in 1.x
+## PROVISIONAL — may evolve additively or with a `changes/` entry
 
-These surfaces ship in 1.0 but are NOT frozen. The intent is additive
-evolution, but breaking changes in a 1.x release are permitted with a
-`changes/` entry (no major-version bump required):
+These surfaces ship and have their own harness directions (`files`, `batch`,
+`generation`, `video`, `live`, `cache`, `ingest`), but are NOT frozen under
+the same major-version gate as the core:
 
-- **Non-chat endpoints** — files, batch, image generation,
-  audio generation (the `FileUploadRequest`/`FileInfo`/`FilePage`/`Batch*`/
-  `ImageGeneration*`/`SpeechGeneration*` types and their adapter routes).
-  Media generation stays in because its outputs are the SAME typed parts
-  the chat surface accepts as inputs (`ImagePart`, `AudioPart`) — the
-  conversation with the arrow reversed.
-- **Live sessions** — `LiveConfig` and the live client/server event types;
-  the live surface has no harness direction yet.
+- **Non-chat endpoints** — files, batch, image generation, audio generation,
+  and video generation (`FileUploadRequest`/`FileInfo`/`FilePage`/`Batch*`/
+  `ImageGeneration*`/`SpeechGeneration*`/`VideoGeneration*`/`VideoJobInfo`
+  types and their adapter routes; harness directions `files`, `batch`,
+  `generation`, `video`). Media generation stays in because its outputs are
+  the SAME typed parts the chat surface accepts as inputs (`ImagePart`,
+  `AudioPart`, `VideoPart`) — the conversation with the arrow reversed.
+- **Live sessions** — `LiveConfig` and the live client/server event types,
+  graded by the `live` harness direction.
 - **Chat Completions ingest** — `request_from_openai_chat` (MAP-12,
   ratified 2026-09-08;
   changes/2026-09-08-openai-chat-ingest.md): a chat request body read INTO

@@ -15,6 +15,12 @@ reference) and how each kind of fixture may change.
 
 ## Where the languages stand
 
+**2026-11-22 audit hardening:** Python and TypeScript pass **4,466 checks**
+(50 inapplicable cases skipped) against the changes in
+[the remediation record](changes/2026-11-22-audit-remediation.md). The other
+four ports have not moved to this contract revision. The table below records
+the earlier shared baseline, not a claim of parity with these new checks.
+
 | Implementation | Version at the pin | Contract pin | Checks |
 |---|---|---|---|
 | [lm15-python](https://github.com/lm15-dev/lm15-python) (reference) | 2.3.1 | `81b519f` | 4,269 / 4,269 |
@@ -72,8 +78,8 @@ Shims are registered in [harness/shims.json](harness/shims.json).
 ```bash
 python3 tools/check_provenance.py     # every fixture says where it came from
 python3 tools/check_secrecy.py        # no credential anywhere
-python3 tools/audit.py
-python3 tools/spec_drift.py           # needs ../lm15-python
+python3 tools/audit.py --require-reference
+LM15_SPEC_DRIFT_STRICT=1 python3 tools/spec_drift.py  # needs ../lm15-python
 python3 tools/check_content_coverage.py
 python3 tools/check_gateway.py
 python3 -m unittest discover -s tools -p 'test_*.py'

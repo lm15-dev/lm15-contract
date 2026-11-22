@@ -503,8 +503,8 @@ kind-correct wire form, or raise when the wire cannot express it:
   `{"type": "tool", "name"}` — works for server tools too
   (live-captured 2026-09-01; the API reference is silent). Allowlist
   covering ALL declared tools → plain `any`/`auto` (no restriction).
-  Proper-subset allowlists RAISE — the wire cannot express them and
-  degrading would let the model call excluded tools.
+  Proper-subset allowlists are enforced by sending only the allowed tools,
+  with a `client_side` adaptation (MAP-13, amended 2026-09-14).
 - **gemini**: function-name allowlists ride `allowedFunctionNames` with
   mode `ANY` (`required`) or `VALIDATED` (`auto` — the doc-required mode;
   `allowedFunctionNames` is illegal under `AUTO`). Builtin names RAISE —
@@ -513,26 +513,31 @@ kind-correct wire form, or raise when the wire cannot express it:
   `allowed_tools` form; builtin names RAISE — the dialect wire has no
   hosted-tool tool_choice (offering builtins is a separate per-server
   policy — see BuiltinTool, chat dialect policy).
-- **xAI** (MAP-8, live 2026-09-02): `allowed` subsets RAISE — api.x.ai
+- **xAI** (MAP-8, live 2026-09-02; amended by MAP-13): `allowed` subsets
+  are enforced by filtering the sent tools, recorded as `client_side` — api.x.ai
   accepts `allowed_tools` and ignores it (the excluded tool was called);
   a single name with `required` maps to the forced-function form, which
   held. A forced tool together with `response_format` RAISES (JSON text
   came back, no call).
-- **Gemini `parallel=false`** RAISES (MAP-8): no wire knob; two calls
-  came back with the preference set on 2.5 and 3.7.
+- **Gemini `parallel=false`** is dropped with an adaptation (MAP-13): no
+  wire knob; two calls came back with the preference set on 2.5 and 3.7.
+
+These adaptations are refused under `adaptations="refuse"`.
 
 ### Reasoning
 
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
 | `effort` | string (ReasoningEffort) | yes | — | always | closed vocabulary; the one dial (MAP-7 rule 2). Required since 2026-09-02: `Reasoning()` no longer means off. (amended 2026-10-10) A constructor given only `thinking_budget` fills `effort` from MAP-7 rule 3's table: the highest level whose budget is at or below the given one, `minimal` below 1024; the field is always present once built |
-| `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007); a token cap on budget wires only (Anthropic manual class `budget_tokens`, floor 1024 server-side; Gemini `thinkingBudget`); RAISES on OpenAI, xAI, the chat dialect, and Anthropic's adaptive class |
-| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`, Anthropic `thinking.display: "summarized"`, MAP-7 rule 7 amended 2026-11-07; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, RAISE elsewhere |
+| `thinking_budget` | int | no | `null` | omit-empty | `> 0`; float-coerced (INV-007); a token cap on budget wires only (Anthropic manual class `budget_tokens`, floor 1024 server-side; Gemini `thinkingBudget`); dropped with a recorded adaptation where no budget knob exists; effort still carries the intent (MAP-13) |
+| `summary` | string (ReasoningSummary) | no | `null` | omit-empty | closed vocabulary; visibility: `null` = provider default, `auto` = show the thinking where a knob exists (OpenAI `summary: auto`, Gemini `includeThoughts`, Anthropic `thinking.display: "summarized"`, MAP-7 rule 7 amended 2026-11-07; satisfied silently where thinking is always shown), `concise`/`detailed` = OpenAI detail levels, substituted to `auto` with an adaptation elsewhere (MAP-13) |
 
 `effort="off"` forbids `thinking_budget` and `summary` (INV-026). Tri-state at
 the Config level: `reasoning` absent = the model decides (every
 provider's default); `Reasoning(effort="off")` = explicitly off (MAP-5:
-the native disable or a loud failure). Property: `is_off`.
+the native disable where supported; MAP-13 records a substitution to the
+lowest effort where disabling is impossible, or a drop where no dial exists;
+strict mode refuses those adaptations). Property: `is_off`.
 
 `total_budget` was removed 2026-09-02 (MAP-7 rule 6): `Config.max_tokens`
 is the ceiling. On Anthropic's manual class the adapter adds the thinking
@@ -542,14 +547,15 @@ class `max_tokens` is the total — provider semantics.
 **Per-provider mapping (MAP-7, receipted 2026-09-02).** OpenAI: `reasoning.effort`
 verbatim (`off` → `none`). Anthropic adaptive class (Sonnet/Opus 4.6+,
 Sonnet 5, Opus 5, Fable, Mythos): `thinking: {type: adaptive}` +
-`output_config.effort` (`minimal` RAISES). Anthropic manual class (4.5 and
+`output_config.effort` (`minimal` clamps to `low` with an adaptation). Anthropic manual class (4.5 and
 earlier): `thinking: {type: enabled, budget_tokens}` from the shared
 grading table (minimal 1024 · low 2048 · medium 8192 · high 16384 · xhigh
 24576 · max 32768) unless `thinking_budget` is given. Gemini 2.5: the same
 table into `thinkingBudget` (`off` → 0). Gemini 3.x: `thinkingLevel`
-verbatim for minimal/low/medium/high; `xhigh`/`max` and `off` RAISE (no
-level; no honoured off switch). xAI: `reasoning_effort` verbatim; `off`
-RAISES. Groq/compat: per `thinking_format`; the `groq` preset adds
+verbatim for minimal/low/medium/high; `xhigh`/`max` clamp to `high`, and
+`off` substitutes the lowest supported effort (no honoured off switch),
+with adaptations. xAI: `reasoning_effort` verbatim; `off` substitutes the
+lowest effort with an adaptation. Groq/compat: per `thinking_format`; the `groq` preset adds
 `reasoning_format: "parsed"` so a `<think>` block never leaks into text.
 Model classes are detected by name (a stated, rotting table; the server
 400s loudly when wrong; `extensions` overrides).
@@ -559,7 +565,7 @@ Model classes are detected by name (a stated, rotting table; the server
 | Field | JSON type | Req | Default | Omission | Constraints |
 |---|---|---|---|---|---|
 | `mode` | string (CacheMode) | no | `"auto"` | always | closed vocabulary |
-| `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary. `long`: Anthropic `ttl: 1h`; OpenAI every class `prompt_cache_retention: 24h` (5.6+ amended 2026-09-02, review probe 2); Gemini RAISES |
+| `retention` | string (CacheRetention) | no | `null` | omit-empty | closed vocabulary. `long`: Anthropic `ttl: 1h`; OpenAI every class `prompt_cache_retention: 24h` (5.6+ amended 2026-09-02, review probe 2); Gemini drops this request knob with an adaptation (lifetime belongs to the stored object, MAP-13) |
 | `key` | string | no | `null` | omit-empty | |
 | `prefix_until_index` | int | no | `null` | omit-empty | `>= 0`; float-coerced; index of the last message of the reusable prefix, clamped to the last message; mutually exclusive with `prefix` |
 | `prefix` | string (CachePrefix) | no | `null` | omit-empty | closed vocabulary: `stable` = the end of system + tools, `history` = the end of the last message; mutually exclusive with `prefix_until_index` (MAP-6 A2) |
@@ -574,7 +580,9 @@ OpenAI Responses and the openai_chat dialect `prompt_cache_breakpoint:
 {"mode": "explicit"}` on a TEXT block only (gpt-5.6+, live-captured
 2026-09-01; pre-5.6 models reject with HTTP 400 — the loud failure is the
 contract). On OpenAI, a prefix message that is assistant/tool or does not
-end with text RAISES rather than move the boundary. The mapping is gated
+end with text moves the boundary to the nearest earlier eligible message,
+or drops it if none exists, with an adaptation (MAP-13; strict mode refuses).
+The mapping is gated
 on the compat policy's `cache_control` (`"openai"`), like
 `prompt_cache_key`; compat servers declaring `"none"` get nothing. Gemini
 has no in-request breakpoint (see changes/2026-09-01-provider-refresh.md

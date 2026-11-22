@@ -461,10 +461,26 @@ def rechunk_variant(dialect: str, frames: list[Frame]) -> list[Frame] | None:
     return out if touched else None
 
 
+def trailing_usage_variant(dialect: str, frames: list[Frame]) -> list[Frame] | None:
+    """MAP-3: usage-only trailers may update counts, never the stop reason.
+
+    Repeat the recorded final usage without inventing provider content. The
+    canonical result must stay the same, including length/tool-call finishes.
+    """
+    if dialect != "gemini":
+        return None
+    for frame in reversed(frames):
+        payload = frame.payload
+        if payload is not None and isinstance(payload.get("usageMetadata"), dict):
+            return [*frames, frame.with_payload({"usageMetadata": copy.deepcopy(payload["usageMetadata"])})]
+    return None
+
+
 VARIANTS: tuple[tuple[str, Callable[[str, list[Frame]], list[Frame] | None], str], ...] = (
     ("split", split_variant, "same"),
     ("merge", merge_variant, "same"),
     ("rechunk", rechunk_variant, "same"),
+    ("trailing-usage", trailing_usage_variant, "same"),
     ("final-only", final_only_variant, "same"),
     ("contradict", contradict_variant, "refuse"),
 )

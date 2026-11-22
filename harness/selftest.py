@@ -211,6 +211,25 @@ def pick_targets() -> dict[str, tuple[str, str]]:
         raise SystemExit("selftest: no auth case pins settings — the AUTH-10 origin compare is untested")
     targets["auth_setting_from_drift"] = ("auth", settings_target)
 
+    named_cases = (check.load_auth_named_fixture() or {}).get("cases", [])
+    named_err_target = next((c["id"] for c in named_cases if "error" in c.get("expect", {}) and c.get("credential") == (check.load_auth_named_fixture() or {}).get("sentinel")), None)
+    if named_err_target is None:
+        raise SystemExit("selftest: no named-credentials sentinel refusal case")
+    targets["auth_named_error_sentinel_leak"] = ("auth", named_err_target)
+
+    err_cases = check.load_error_cases()
+    err_provider_target = next((c["id"] for c in err_cases if "provider" in c.get("expected", {})), None)
+    if err_provider_target is None:
+        raise SystemExit("selftest: no error case pins provider")
+    targets["error_provider_drift"] = ("error", err_provider_target)
+
+    reject_cases = check.load_serde_reject_cases()
+    if not reject_cases:
+        raise SystemExit("selftest: no serde/reject.json cases")
+    targets["validate_accepts_invalid"] = ("serde", reject_cases[0]["id"])
+    targets["validate_unrelated_error"] = ("serde", reject_cases[0]["id"])
+    targets["validate_rejects_valid"] = ("serde", check.load_serde_cases()[0]["id"] + "~validate")
+
     model_cases = check.load_model_cases()
     id_target = next(
         (c["id"] for c in model_cases

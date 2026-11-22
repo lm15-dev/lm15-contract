@@ -680,6 +680,95 @@ def check_golden_usage(root: Path, problems: list[str]) -> str:
     return f"golden usage: {count} Usage object(s), INV-029 and MAP-19 rule 3 checked"
 
 
+# ─── Refusal receipts (MAP-13 rule 7) ────────────────────────────────
+
+_RECEIPT_PATH_RE = re.compile(r"(?:research/[A-Za-z0-9_./-]+/)?receipts/[A-Za-z0-9_./+=-]+")
+_NO_RECEIPT_RE = re.compile(r"\bno receipt\b|\bhypothesis\b", re.IGNORECASE)
+
+
+def _unreceipted_compat_fields(python2: Path) -> set[tuple[str, str]]:
+    """Parse lm15-python/lm15/compat.py for preset fields whose active comment
+    marks them as having 'no receipt' (MAP-13 rule 7). Historical notes like
+    'Until 2026-09-14 this said ...' are excluded."""
+    compat_file = python2 / "lm15" / "compat.py"
+    if not compat_file.is_file():
+        return set()
+    hits: set[tuple[str, str]] = set()
+    current_preset: str | None = None
+    for line in compat_file.read_text(encoding="utf-8").splitlines():
+        preset_m = re.match(r'^\s*"([a-z0-9_-]+)"\s*:\s*\w+Compat\(', line)
+        if preset_m:
+            current_preset = preset_m.group(1)
+            continue
+        if current_preset is not None and re.match(r"^\s*\),?\s*$", line):
+            current_preset = None
+            continue
+        if current_preset is None:
+            continue
+        field_m = re.match(r"^\s*([a-z_]+)\s*=.*#(.*)$", line)
+        if field_m:
+            field_name, comment = field_m.group(1), field_m.group(2)
+            if _NO_RECEIPT_RE.search(comment) and not comment.lstrip().lower().startswith("until "):
+                hits.add((current_preset, field_name))
+    return hits
+
+
+def _feature_to_compat_fields(feature: str) -> tuple[str, ...]:
+    if "tool_result" in feature:
+        return ("tool_result_media",)
+    if "reasoning" in feature or "thinking" in feature:
+        return ("thinking_format", "reasoning_format")
+    if "tool_choice" in feature:
+        return ("tool_choice_mode", "tool_choice")
+    if "response_format" in feature or "structured_output" in feature:
+        return ("structured_output",)
+    return ()
+
+
+def check_refusal_receipts(root: Path, cases: list[tuple[Path, dict]], python2: Path, problems: list[str]) -> str:
+    """HARD (MAP-13 rule 7): no refusal / raises case may rest on a 'no receipt'
+    hypothesis, and every live-capture build_request refusal must cite an
+    existing receipt file on disk."""
+    unreceipted = _unreceipted_compat_fields(python2)
+    checked = 0
+    for path, data in cases:
+        raises = (data.get("expect_lm15") or {}).get("raises")
+        if not isinstance(raises, dict):
+            continue
+        checked += 1
+        case_id = str(data.get("id", path.relative_to(root)))
+        prov = data.get("provenance") or {}
+        evidence = str(prov.get("evidence", ""))
+        description = str(data.get("description", ""))
+        if _NO_RECEIPT_RE.search(evidence) or _NO_RECEIPT_RE.search(description):
+            problems.append(
+                f"MAP-13 {case_id}: refusal cites 'no receipt' or 'hypothesis' — "
+                "a refusal cannot rest on an unreceipted guess (MAP-13 rule 7)"
+            )
+        if raises.get("op") != "build_request":
+            continue
+        exchange = prov.get("exchange")
+        cited_paths = [m.rstrip(".,;:") for m in _RECEIPT_PATH_RE.findall(evidence)]
+        has_live_receipt = (
+            (isinstance(exchange, str) and (root / exchange).is_file())
+            or any((root / rel).exists() for rel in cited_paths)
+        )
+        if prov.get("source") == "live-capture" and not has_live_receipt:
+            problems.append(
+                f"MAP-13 {case_id}: live-capture build_request refusal cites no existing receipt "
+                "path under receipts/ (MAP-13 rule 7)"
+            )
+        provider = str(data.get("provider", ""))
+        feature = str(data.get("feature", ""))
+        for compat_field in _feature_to_compat_fields(feature):
+            if (provider, compat_field) in unreceipted and not has_live_receipt:
+                problems.append(
+                    f"MAP-13 {case_id}: build_request refusal rests on unreceipted compat field "
+                    f"{provider}.{compat_field} without a live receipt (MAP-13 rule 7)"
+                )
+    return f"refusal receipts: {checked} raises case(s) checked (MAP-13 rule 7; {len(unreceipted)} unreceipted compat field(s) tracked)"
+
+
 # ─── main ────────────────────────────────────────────────────────────
 
 def main(argv: list[str] | None = None) -> int:
@@ -688,6 +777,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=default_root)
     parser.add_argument("--python2", type=Path, default=None,
                         help="lm15-python checkout for the vet shim (default: sibling of --root)")
+    parser.add_argument("--require-reference", action="store_true",
+                        help="fail instead of skipping checks that need the Python checkout")
     parser.add_argument("--allowlist", type=Path, default=None,
                         help="orphan allowlist (default: <root>/tools/orphan-allowlist.json)")
     args = parser.parse_args(argv)
@@ -724,7 +815,15 @@ def main(argv: list[str] | None = None) -> int:
         check_support_matrix(root, python2, problems),
         check_provider_tables(root, python2, problems),
         check_golden_usage(root, problems),
+        check_refusal_receipts(root, cases, python2, problems),
     ]
+
+    if args.require_reference:
+        for summary in summaries:
+            if "skipped" in summary:
+                problems.append(f"REFERENCE: required check did not run: {summary}")
+        if not (python2 / "lm15" / "compat.py").is_file():
+            problems.append("REFERENCE: missing compat.py for refusal-receipt checks")
 
     for problem in problems:
         print(f"FAIL {problem}")

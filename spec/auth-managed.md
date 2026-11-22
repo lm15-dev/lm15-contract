@@ -832,10 +832,11 @@ ID and credential revision/expiry. A label, provider name or access-token hash
 alone is not an adequate cache key. Cross-process changes must be observed before
 request dispatch admission; stale caches cannot bypass logout.
 
-The file layout both initial SDKs share is
-[auth/managed/store-layout.md](../auth/managed/store-layout.md): the layout
-lm15-python writes since 2026-09-22, binding on the second implementation and
-promoted to a normative rule after mixed-language race tests pass. The draft
+The file layout every SDK shares is
+[auth/managed/store-layout.md](../auth/managed/store-layout.md): the
+contract-defined layout (AUTHORITY.md: the specification and harness are the
+oracle, not any SDK) shared across implementations and exercised by the
+`managed` harness direction and mixed-language race tests. The draft
 envelope schema [auth-store.schema.json](auth-store.schema.json), with examples in
 [store-vectors.json](../auth/managed/store-vectors.json), is a reserved design
 artifact for non-file stores, not a frozen storage layout. A layout change must

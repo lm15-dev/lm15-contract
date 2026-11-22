@@ -51,6 +51,11 @@ MUTATIONS = (
     "auth_state_flip",      # explain_auth: first step's state flipped
     "auth_sentinel_leak",   # explain_auth: the planted sentinel leaks into report_text
     "auth_setting_from_drift",  # explain_auth: a setting's value right, its origin (AUTH-10 from) wrong
+    "auth_named_error_sentinel_leak",  # explain_auth named-credentials refusal: sentinel leaks into error message (AUTH-5)
+    "error_provider_drift",  # normalize_error: provider rewritten to wrong name
+    "validate_accepts_invalid",  # validate: invalid serde/reject.json value accepted instead of rejected
+    "validate_unrelated_error",  # validate: an implementation bug is not a validation rejection
+    "validate_rejects_valid",    # validate: rejecting everything must fail the positive controls
     "models_wrong_id",      # parse_models_response: first model's id rewritten
     "models_param_drop",    # build_models_request: one query parameter dropped
     "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
@@ -717,13 +722,34 @@ def op_normalize_error(msg: JsonObject) -> JsonObject:
             and body_text == msg["body_text"]
         ):
             expected = case["expected"]
+            provider = expected.get("provider")
+            if MUTATION == "error_provider_drift" and targeted(case):
+                provider = "wrong-provider"
             return {
                 "class": expected.get("class"),
                 "code": expected.get("code"),
+                "provider": provider,
                 "provider_code": expected.get("provider_code"),
+                "status": expected.get("status"),
+                "request_id": expected.get("request_id"),
                 "message": expected.get("message", ""),
             }
     raise LookupError("no error fixture matches this (provider, status, body_text)")
+
+
+def op_validate(msg: JsonObject) -> JsonObject:
+    for case in check.load_serde_cases():
+        if case["kind"] == msg.get("kind") and case["value"] == msg.get("value"):
+            if MUTATION == "validate_rejects_valid" and targeted(case):
+                raise PinnedRaise({"type": "ValueError", "message": "rejects everything"})
+    for case in check.load_serde_reject_cases():
+        if case["kind"] == msg.get("kind") and case["value"] == msg.get("value"):
+            if MUTATION == "validate_accepts_invalid" and targeted(case):
+                return {"ok": True, "normalized": msg["value"]}
+            if MUTATION == "validate_unrelated_error" and targeted(case):
+                raise PinnedRaise({"type": "RuntimeError", "message": "implementation failed"})
+            raise PinnedRaise({"type": "ValueError", "message": f"rejected invalid {case['kind']}"})
+    return {"ok": True, "normalized": msg["value"]}
 
 
 def op_serde_roundtrip(msg: JsonObject) -> JsonObject:
@@ -849,6 +875,39 @@ def _case_files_match(case: JsonObject, msg: JsonObject) -> bool:
 
 
 def op_explain_auth(msg: JsonObject) -> JsonObject:
+    if msg.get("credential") is not None:
+        named_fixture = check.load_auth_named_fixture()
+        for case in (named_fixture or {}).get("cases", []):
+            if case["provider"] != msg["provider"]:
+                continue
+            if case.get("credential") != msg.get("credential"):
+                continue
+            if case.get("base_url") != msg.get("base_url"):
+                continue
+            if case.get("api_keys_providers", []) != msg.get("api_keys_providers", []):
+                continue
+            if not _case_env_matches(case, msg):
+                continue
+            if ("files" in case) != ("files" in msg):
+                continue
+            if not _case_files_match(case, msg):
+                continue
+            expect = case["expect"]
+            if "error" in expect:
+                message = str(expect["error"])
+                if MUTATION == "auth_named_error_sentinel_leak" and targeted(case):
+                    message += f" ({msg['sentinel']})"
+                raise PinnedRaise({"type": "NotConfiguredError", "code": "not_configured", "message": message})
+            steps = [dict(step) for step in expect["steps"]]
+            report_text = "\n".join(f"{s['kind']}: {s['state']}" for s in steps) or "empty chain"
+            reply: JsonObject = {"configured": expect["configured"], "steps": steps, "report_text": report_text}
+            if "base_url" in expect:
+                reply["base_url"] = expect["base_url"]
+            if isinstance(expect.get("settings"), dict) and "error" in expect["settings"]:
+                reply["settings_error"] = expect["settings"]["error"]
+            return reply
+        raise LookupError("no named-credentials fixture matches this explain_auth call")
+
     fixture = check.load_auth_fixture()
     for case in fixture["cases"]:
         if case["provider"] != msg["provider"]:
@@ -1208,6 +1267,7 @@ HANDLERS: dict[str, Callable[[JsonObject], JsonObject]] = {
     "replay_stream": op_replay_stream,
     "normalize_error": op_normalize_error,
     "serde_roundtrip": op_serde_roundtrip,
+    "validate": op_validate,
     "estimate_cost": op_estimate_cost,
     "explain_auth": op_explain_auth,
     "resolve_model": op_resolve_model,

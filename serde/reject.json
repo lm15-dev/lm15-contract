@@ -1,0 +1,423 @@
+{
+  "description": "Invalid canonical values that every SDK MUST reject via the vet `validate` op (PROTOCOL.md \u00a7 validate; spec/invariants.md). Defeats an echo shim on the serde direction.",
+  "cases": [
+    {
+      "id": "reject.config.bool_as_max_tokens",
+      "kind": "config",
+      "value": {
+        "max_tokens": true
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-003 (bool is never a number)"
+      }
+    },
+    {
+      "id": "reject.config.bool_as_temperature",
+      "kind": "config",
+      "value": {
+        "temperature": false
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-003 (bool is never a number)"
+      }
+    },
+    {
+      "id": "reject.config.float_as_max_tokens",
+      "kind": "config",
+      "value": {
+        "max_tokens": 2.5
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-007 (non-integral float rejected for int field)"
+      }
+    },
+    {
+      "id": "reject.config.zero_max_tokens",
+      "kind": "config",
+      "value": {
+        "max_tokens": 0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md Config.max_tokens (must be >= 1)"
+      }
+    },
+    {
+      "id": "reject.config.negative_temperature",
+      "kind": "config",
+      "value": {
+        "temperature": -0.1
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md Config.temperature (must be >= 0)"
+      }
+    },
+    {
+      "id": "reject.config.top_p_out_of_range",
+      "kind": "config",
+      "value": {
+        "top_p": 1.5
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/types.md Config.top_p (must be in [0, 1])"
+      }
+    },
+    {
+      "id": "reject.config.non_object_reasoning",
+      "kind": "config",
+      "value": {
+        "reasoning": "high"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-042 (present non-object config nest)"
+      }
+    },
+    {
+      "id": "reject.config.non_object_cache",
+      "kind": "config",
+      "value": {
+        "cache": true
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-042 (present non-object config nest)"
+      }
+    },
+    {
+      "id": "reject.config.bad_response_format_type",
+      "kind": "config",
+      "value": {
+        "response_format": {
+          "type": "xml"
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-050 (response_format has exactly two shapes)"
+      }
+    },
+    {
+      "id": "reject.reasoning.unknown_effort",
+      "kind": "reasoning",
+      "value": {
+        "effort": "ultra"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/vocabularies.md ReasoningEffort (closed enum)"
+      }
+    },
+    {
+      "id": "reject.cache_config.off_with_key",
+      "kind": "cache_config",
+      "value": {
+        "mode": "off",
+        "key": "k"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-027 (mode=off forbids key/retention/prefix/resource)"
+      }
+    },
+    {
+      "id": "reject.cache_config.prefix_and_index",
+      "kind": "cache_config",
+      "value": {
+        "mode": "auto",
+        "prefix": "stable",
+        "prefix_until_index": 0
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-027 (prefix and prefix_until_index are mutually exclusive)"
+      }
+    },
+    {
+      "id": "reject.tool_choice.none_with_allowed",
+      "kind": "tool_choice",
+      "value": {
+        "mode": "none",
+        "allowed": [
+          "f"
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-028 (mode=none forbids allowed and parallel)"
+      }
+    },
+    {
+      "id": "reject.tool_choice.none_with_parallel",
+      "kind": "tool_choice",
+      "value": {
+        "mode": "none",
+        "parallel": true
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-028 (mode=none forbids allowed and parallel)"
+      }
+    },
+    {
+      "id": "reject.part.image_two_sources",
+      "kind": "part",
+      "value": {
+        "type": "image",
+        "url": "https://a.example/i.png",
+        "file_id": "f1"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-011 (media part takes exactly one source)"
+      }
+    },
+    {
+      "id": "reject.part.image_no_source",
+      "kind": "part",
+      "value": {
+        "type": "image"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-011 (media part takes exactly one source)"
+      }
+    },
+    {
+      "id": "reject.part.image_bad_base64",
+      "kind": "part",
+      "value": {
+        "type": "image",
+        "data": "not valid base64!!!",
+        "media_type": "image/png"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-012 (base64 data validation)"
+      }
+    },
+    {
+      "id": "reject.part.tool_result_empty_content",
+      "kind": "part",
+      "value": {
+        "type": "tool_result",
+        "id": "call_1",
+        "content": []
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-013 (tool_result content is non-empty)"
+      }
+    },
+    {
+      "id": "reject.part.unknown_type",
+      "kind": "part",
+      "value": {
+        "type": "mystery"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-044 (closed PartType union)"
+      }
+    },
+    {
+      "id": "reject.message.unknown_role",
+      "kind": "message",
+      "value": {
+        "role": "system",
+        "parts": [
+          {
+            "type": "text",
+            "text": "hi"
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-020 (closed Role vocabulary)"
+      }
+    },
+    {
+      "id": "reject.request.duplicate_tool_names",
+      "kind": "request",
+      "value": {
+        "model": "m",
+        "messages": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "type": "text",
+                "text": "hi"
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "dup",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          {
+            "type": "function",
+            "name": "dup",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ]
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-030 (unique tool names)"
+      }
+    },
+    {
+      "id": "reject.request.allowed_tool_not_in_tools",
+      "kind": "request",
+      "value": {
+        "model": "m",
+        "messages": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "type": "text",
+                "text": "hi"
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "name": "present",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
+        "config": {
+          "tool_choice": {
+            "mode": "auto",
+            "allowed": [
+              "missing"
+            ]
+          }
+        }
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-031 (allowed subset of tools)"
+      }
+    },
+    {
+      "id": "reject.usage.cache_exceeds_input",
+      "kind": "usage",
+      "value": {
+        "input_tokens": 10,
+        "cache_read_tokens": 11
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-029 (parts never exceed wholes)"
+      }
+    },
+    {
+      "id": "reject.usage.reasoning_exceeds_output",
+      "kind": "usage",
+      "value": {
+        "output_tokens": 5,
+        "reasoning_tokens": 6
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-029 (parts never exceed wholes)"
+      }
+    },
+    {
+      "id": "reject.usage.total_mismatch",
+      "kind": "usage",
+      "value": {
+        "input_tokens": 10,
+        "output_tokens": 5,
+        "total_tokens": 20
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/invariants.md INV-029 (explicit total must equal input + output)"
+      }
+    },
+    {
+      "id": "reject.credential.empty_api_key",
+      "kind": "credential",
+      "value": {
+        "kind": "api_key",
+        "value": ""
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/auth.md AUTH-2 (non-empty ApiKey.value)"
+      }
+    },
+    {
+      "id": "reject.response.invalid_finish_reason",
+      "kind": "response",
+      "value": {
+        "model": "m",
+        "message": {
+          "role": "assistant",
+          "parts": [
+            {
+              "type": "text",
+              "text": "hi"
+            }
+          ]
+        },
+        "finish_reason": "bogus"
+      },
+      "provenance": {
+        "source": "hand-authored",
+        "date": "2026-11-22",
+        "evidence": "spec/vocabularies.md FinishReason (closed enum)"
+      }
+    }
+  ]
+}

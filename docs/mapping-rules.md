@@ -137,16 +137,21 @@ a default (the tri-state is defined in spec/types.md §Reasoning). Every
 adapter must translate it into the provider's native disable mechanism:
 
 - OpenAI Responses dialect: `reasoning: {"effort": "none"}`
-- Chat Completions `reasoning_effort` servers (incl. Groq, vLLM, SGLang):
-  `reasoning_effort: "none"`
+- Chat Completions `reasoning_effort` servers (incl. Groq, vLLM, SGLang, Ollama):
+  `reasoning_effort: "none"` (or `false` on switch-only servers like Tinker)
 - OpenRouter: `reasoning: {"enabled": false}`
-- DeepSeek: `thinking: {"type": "disabled"}`
-- Qwen/DashScope, Z.AI: `enable_thinking: false`
-- Gemini: `thinkingConfig: {"thinkingBudget": 0}`
+- DeepSeek, Z.AI, Moonshot (Kimi): `thinking: {"type": "disabled"}`
+- Qwen/DashScope: `enable_thinking: false`
+- Gemini 2.5: `thinkingConfig: {"thinkingBudget": 0}`
 - Anthropic and Claude Code: omit `thinking` — thinking is opt-in there,
   so absence IS the native off switch.
-- xAI: RAISES `UnsupportedFeatureError`. Grok reasoning models have no
-  off switch and api.x.ai silently ignores disable-shaped fields.
+- Models/providers that cannot stop reasoning and silently ignore a disable
+  field (xAI Grok reasoning models, Gemini 3.x, Together/DeepInfra gpt-oss):
+  amended 2026-09-14 by MAP-13 — send the model's lowest supported effort
+  level and record a `substituted` adaptation on `config.reasoning.effort`
+  (refused under `adaptations="refuse"`). Servers with no reasoning dial
+  (`thinking_format="none"` / `reasoning_format="none"`) drop `config.reasoning`
+  and record a `dropped` adaptation (refused under `adaptations="refuse"`).
 
 When the selected model cannot honor the disable (gpt-5-mini's floor is
 `"minimal"`; gemini-2.5-pro rejects budget 0), the provider's 400 surfaces
@@ -197,7 +202,10 @@ it has; the outcome is always visible in `Usage.cache_read_tokens` /
    marks the last block of the last message (Anthropic); on OpenAI 5.6+
    implicit mode already does exactly that, so nothing is sent.
    `prefix_until_index=N` marks the last block of message N (Anthropic:
-   any block; OpenAI: a text block, else RAISE). On the OpenAI 5.6+ class
+   any block; OpenAI: a text block — amended 2026-09-14 by MAP-13: if message
+   N is not a user/developer message ending with text, moves to the nearest
+   earlier one or drops with a recorded adaptation; refuses under
+   `adaptations="refuse"`). On the OpenAI 5.6+ class
    a placed mark travels with `prompt_cache_options: {mode: "explicit"}`:
    without the mode the warm call still wrote the volatile suffix at
    1.25x (pinned 18 tokens after reading 3066); with it the warm call
@@ -212,13 +220,19 @@ it has; the outcome is always visible in `Usage.cache_read_tokens` /
    either condition.
 5. **`retention="long"`** names a specific mechanism: Anthropic `ttl:
    "1h"` (2x write); OpenAI, every class, `prompt_cache_retention:
-   "24h"`; Gemini (lifetime belongs to the stored object) RAISES. The
+   "24h"`; on providers without an in-request cache lifetime knob (Gemini,
+   servers with `cache_control="none"`), amended 2026-09-14 by MAP-13:
+   `dropped` with a recorded adaptation on `config.cache.retention`
+   (refused under `adaptations="refuse"`). The
    5.6+ class used to RAISE on a doc line about `prompt_cache_options.ttl`
    (30m only) — a different field. Every pinned 5.6 body already echoes
    `prompt_cache_retention: "24h"` as its default, and sending it answers
    200 with the same echo (review probe 2, 2026-09-02). Amended.
 6. **`key`** is a best-effort affinity hint: OpenAI and OpenRouter
-   `prompt_cache_key`; Anthropic and Gemini RAISE.
+   `prompt_cache_key`; on providers without a cache affinity field
+   (Anthropic, Gemini, servers with `cache_control="none"`), amended
+   2026-09-14 by MAP-13: `dropped` with a recorded adaptation on
+   `config.cache.key` (refused under `adaptations="refuse"`).
 7. **`resource`** is a `CacheInfo.id` from the resource tier. The adapter
    references the object and sends only what the object does not hold —
    Gemini: `cachedContent` + the messages after `prefix_until_index`, no
@@ -256,9 +270,13 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    medium, high, xhigh, max`. Providers with levels get the word
    verbatim (OpenAI; Anthropic adaptive class as `output_config.effort`;
    Gemini 3.x as `thinkingLevel`; xAI and Groq as `reasoning_effort`).
-   Model-unsupported words fail with the server's 400. Words with no
-   native level on a provider RAISE client-side: Anthropic `minimal`,
-   Gemini 3.x `xhigh`/`max`.
+   Model-unsupported words fail with the server's 400. Amended 2026-09-14 by
+   MAP-13: words with no native level on a provider or server are `clamped`
+   to the nearest supported level (Anthropic `minimal` → `low`, Gemini 3.x
+   `xhigh`/`max` → `high`, servers with a declared `reasoning_efforts` list)
+   or `substituted` to `"on"` on boolean-only thinking switches (`qwen`,
+   `qwen_chat_template`, `reasoning_effort_switch`) with a recorded
+   adaptation (refused under `adaptations="refuse"`).
 3. **Budget-only model classes express effort as a budget** through one
    grading table — minimal 1024, low 2048, medium 8192, high 16384,
    xhigh 24576, max 32768 — Anthropic's manual class (4.5 and earlier:
@@ -269,12 +287,18 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    `minimal` below 1024 (`spec/types.md` §Reasoning).
 4. **`effort="off"`** sends the native disable (OpenAI `none`; Anthropic
    omits `thinking`; Gemini 2.5 `thinkingBudget: 0`; compat disable
-   forms) and RAISES where the provider cannot disable or accepts the
-   disable without honouring it: xAI, Gemini 3.x (3.7 Flash took
-   `thinkingBudget: 0` and spent 58 tokens). MAP-5, extended.
+   forms). Amended 2026-09-14 by MAP-13: where the provider cannot disable
+   or accepts the disable without honouring it (xAI, Gemini 3.x — 3.7 Flash
+   took `thinkingBudget: 0` and spent 58 tokens — and servers with
+   `reasoning_off="lowest"`), the adapter sends the lowest supported level
+   and records a `substituted` adaptation on `config.reasoning.effort`
+   (refused under `adaptations="refuse"`). MAP-5, extended.
 5. **`thinking_budget`** maps where the wire has a budget (Anthropic
-   manual class; Gemini, both classes) and RAISES elsewhere (OpenAI,
-   Anthropic adaptive class, xAI, the chat dialect). On budget classes
+   manual class; Gemini, both classes). Amended 2026-09-14 by MAP-13: on
+   wires without a thinking token budget (OpenAI, Anthropic adaptive class,
+   xAI, the chat dialect), `effort` carries the intent and `thinking_budget`
+   is `dropped` with a recorded adaptation (refused under
+   `adaptations="refuse"`). On budget classes
    the budget is the spelling and `effort` stays the intent; they are
    not a conflict.
 6. **`total_budget` is gone.** `Config.max_tokens` is the ceiling: on
@@ -308,7 +332,9 @@ cells) and 17 sources (lm15-contract/research/reasoning/).
    is satisfied silently where thinking is always returned (xAI; the
    servers of the Messages wire whose `thinking_format` is not
    `anthropic`: DeepSeek, Meta, Moonshot); `"concise"`/`"detailed"`
-   verbatim on OpenAI Responses, RAISE elsewhere. Gemini gets
+   verbatim on OpenAI Responses, and (amended 2026-09-14 by MAP-13)
+   `substituted` to `"auto"` with a recorded adaptation elsewhere (refused
+   under `adaptations="refuse"`). Gemini gets
    `includeThoughts` only when asked. **Anthropic (amended 2026-11-07,
    `changes/2026-11-07-anthropic-thinking-display.md`):** `display`
    defaults to `"omitted"` (a thinking block with empty text and its
@@ -381,14 +407,18 @@ research/structured-output/). The 2026-09-01 kind-aware `ToolChoice`
 mapping holds; three cells were silent, and `response_format` had no
 canonical shape.
 
-1. **xAI ignores allowlists.** `tool_choice.allowed` subsets RAISE on
-   xAI; a single name with `mode="required"` maps to the forced-function
-   form, which held. The single cell of 2026-09-02 was repeated five
-   times with fresh nonces on the review's request: 5/5 called the
-   disallowed tool (`research/review-2026-09-02/`).
-2. **Gemini has no parallel knob.** `parallel=False` RAISES on Gemini
-   (two calls came back regardless). The MAP-6 fallback exception does
-   not apply: the outcome is not observable from usage.
+1. **xAI ignores allowlists.** The single cell of 2026-09-02 was repeated
+   five times with fresh nonces on the review's request: 5/5 called the
+   disallowed tool (`research/review-2026-09-02/`). A single name with
+   `mode="required"` maps to the forced-function form, which held; amended
+   2026-09-14 by MAP-13, proper `tool_choice.allowed` subsets on xAI (and
+   Anthropic) are enforced `client_side` by sending only the allowed tools,
+   with a recorded adaptation (refused under `adaptations="refuse"`).
+2. **Gemini has no parallel knob.** Two calls came back regardless of
+   `parallel=False`. Amended 2026-09-14 by MAP-13: `parallel=False` is
+   `dropped` with a recorded adaptation on `config.tool_choice.parallel`
+   on Gemini and other servers without a parallel switch (refused under
+   `adaptations="refuse"`).
 3. **xAI drops a forced tool next to a `response_format`** (JSON text,
    no call): the pair RAISES on xAI. Elsewhere the server decides —
    Gemini and Groq 400, OpenAI and Anthropic let the call win.
@@ -652,18 +682,21 @@ caller.
    `tools/audit.py` (every key, content-block type, tool type and
    tool_choice form in a chat-dialect case body has a row; every top-level
    body parameter the scraped OpenAI reference documents has a row):
-   - **map** — reads into the named canonical field.
+   - **map** — reads into the named canonical field (including, as amended
+     2026-09-14 under MAP-13, `seed`, `presence_penalty`, `frequency_penalty`,
+     `top_k`, and the deprecated top-level `functions` / `function_call`
+     spellings translated into `Request.tools` / `Config.tool_choice`).
    - **extensions** — passes verbatim into `config.extensions[key]`
-     (`seed`, `logit_bias`, `presence_penalty`, `frequency_penalty`,
-     `metadata`, `verbosity`, `moderation`, OpenRouter's `provider`):
+     (`logit_bias`, `metadata`, `verbosity`, `moderation`, `prediction`,
+     OpenRouter's `provider`):
      generation knobs the wire documents, no canonical field expresses,
      and a chat server receives unchanged. The builder re-emits
      `extensions` verbatim, so they round-trip.
    - **refuse** — `UnsupportedFeatureError` (`unsupported_feature`) naming
      the key and what the canonical model cannot carry: `n` (lm15 reads one
      choice; the others would be lost silently), the deprecated
-     `functions` / `function_call` / `role: function` shape, `audio`,
-     `modalities`, `prediction`, `web_search_options`, `top_k`, a
+     `role: function` and `assistant.function_call` message shapes, `audio`,
+     `modalities`, `web_search_options`, a
      per-message `name`, a `custom` tool, `strict: true` on a tool, a
      content block with no canonical part. A key with NO verdict is
      refused too: lm15 never drops a key it did not decide about.

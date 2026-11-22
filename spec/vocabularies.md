@@ -110,9 +110,12 @@ Runtime mirror: `REASONING_EFFORTS`. Amended 2026-09-02 (MAP-7,
 changes/2026-09-02-reasoning-design.md): `adaptive` removed (it meant
 "absent" — leaving `config.reasoning` unset is how the model decides on
 every provider); `max` added (OpenAI, Anthropic adaptive class). Every
-provider has this dial with these words; each model accepts a subset and
-rejects the rest with a 400; words with no native level on a provider
-RAISE client-side rather than downgrade.
+provider maps this canonical dial according to MAP-7. Model-unsupported
+words sent verbatim may receive a provider 400. Amended 2026-09-14 by
+MAP-13: known unsupported levels clamp to the nearest supported level,
+boolean-only switches substitute `on`, and wires without a dial drop the
+request, each with a recorded adaptation. `adaptations="refuse"` refuses
+these changes before sending.
 
 | Value |
 |---|

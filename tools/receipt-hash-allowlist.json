@@ -1,0 +1,47 @@
+{
+  "comment": "Shrinking allowlist for live-capture cases whose pinned_body bytes legitimately differ from receipt.response_sha256 (privacy redaction or bidirectional live .jsonl transcript). Each entry pins body_sha256 of the checked-in body so tampering is still caught; never add new unredacted mismatches.",
+  "cases": {
+    "gemini.live_tool_no_description": {
+      "pinned_body": "2026-10-02T21-10-12Z.jsonl",
+      "body_sha256": "f07bc29c4e0e14167e7d1467201bb99cc6183824302931a0341b23fb6cf94985",
+      "receipt_sha256": "ac7e9ea440c7ef060e4884bcdfe0d436ad589bdf9b0b34c3a19a7129778dd58e",
+      "reason": "Live transcript .jsonl stores both client and server frames; exchange receipt response_sha256 hashed server frames only."
+    },
+    "openai.live_tool_no_description": {
+      "pinned_body": "2026-10-02T21-10-08Z.jsonl",
+      "body_sha256": "74295ad89eaafa44ba0e9c9b0d8450f165032909b252d8919d2ad6176734c8e2",
+      "receipt_sha256": "3bcc6da9b32786681d11dd025d8d8e9e4dd1ddd84d894cc962a273b001b80a4b",
+      "reason": "Live transcript .jsonl stores both client and server frames; exchange receipt response_sha256 hashed server frames only."
+    },
+    "openai-codex.streaming": {
+      "pinned_body": "2026-11-05T15-32-13Z.txt",
+      "body_sha256": "73686750b4b9b64a3b566685b3d6ef71fcdec462074dd5b32276888771330f71",
+      "receipt_sha256": "9baa6844773075fd9a160656f0caad93f7c511114449c0096305d9bb77fa0ebc",
+      "reason": "Redacted echoed per-account safety_identifier to \"user-REDACTED\" (AUTH-5 privacy redaction)."
+    },
+    "openai-codex.streaming_parallel_tool_calls": {
+      "pinned_body": "2026-11-05T15-30-56Z.txt",
+      "body_sha256": "8cb155e1712dcd7b5dacb21407386960e9d29bbe65bfad3a1ef4be15663f516f",
+      "receipt_sha256": "17c886c81bee8dbf9843256683243303eb9ee711ef0dc3439480a42ad43f4578",
+      "reason": "Redacted echoed per-account safety_identifier to \"user-REDACTED\" (AUTH-5 privacy redaction)."
+    },
+    "openai-codex.streaming_reasoning_summary": {
+      "pinned_body": "2026-11-05T15-37-04Z.txt",
+      "body_sha256": "c8a0fa74bcc7afe1eb4c172e1dee2523b394fa60d7d69cbb2c638f144033c68e",
+      "receipt_sha256": "3b5a046d4fa2ffe4f373d39eb208cfdefdc5b7ac033e2d173f1412facf36c5ff",
+      "reason": "Redacted echoed per-account safety_identifier to \"user-REDACTED\" (AUTH-5 privacy redaction)."
+    },
+    "openai-codex.streaming_tool_call": {
+      "pinned_body": "2026-11-05T15-32-18Z.txt",
+      "body_sha256": "9ecfff799b3e94022b2407cdd551674899622b31f8d751c440035bf9304da13a",
+      "receipt_sha256": "cc4080eb6bab9164de88d1a7c6eb78d0d1019006b0c3b51f6b8b4d6c296ee287",
+      "reason": "Redacted echoed per-account safety_identifier to \"user-REDACTED\" (AUTH-5 privacy redaction)."
+    },
+    "tinker.models": {
+      "pinned_body": "2026-11-09T15-08-03Z.txt",
+      "body_sha256": "7f63016c86452a9649ccf8462e1a83977c6484ee9ede9d82c5de26aec5d5e13c",
+      "receipt_sha256": "3a8d0038cdd6b1a98da7919f3a962656b63bcf9d1caf3b2997b81a67614f3b97",
+      "reason": "Redacted account owned_by to \"tml:organization_user:<redacted>\" (AUTH-5 personal-data redaction)."
+    }
+  }
+}
