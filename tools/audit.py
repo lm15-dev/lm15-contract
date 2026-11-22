@@ -680,6 +680,27 @@ def check_golden_usage(root: Path, problems: list[str]) -> str:
     return f"golden usage: {count} Usage object(s), INV-029 and MAP-19 rule 3 checked"
 
 
+def check_golden_links(root: Path, cases: list[tuple[Path, dict]], problems: list[str]) -> str:
+    """A golden must belong to an active case and name the body actually graded."""
+    linked: dict[str, list[dict]] = {}
+    for _, case in cases:
+        key = f"goldens/{case['provider']}/{case['feature']}.json"
+        linked.setdefault(key, []).append(case)
+    count = 0
+    for path in sorted((root / "goldens").glob("*/*.json")):
+        count += 1
+        relative = str(path.relative_to(root))
+        owners = linked.get(relative, [])
+        if not owners:
+            problems.append(f"GOLDEN-LINK {relative}: no active case selects this golden; archive retired evidence")
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        body = data.get("provenance", {}).get("pinned_body")
+        if body is not None and not any(case.get("pinned_body") == body for case in owners):
+            problems.append(f"GOLDEN-LINK {relative}: provenance.pinned_body differs from every active case")
+    return f"golden links: {count} golden(s) checked against active cases"
+
+
 # ─── Refusal receipts (MAP-13 rule 7) ────────────────────────────────
 
 _RECEIPT_PATH_RE = re.compile(r"(?:research/[A-Za-z0-9_./-]+/)?receipts/[A-Za-z0-9_./+=-]+")
@@ -815,6 +836,7 @@ def main(argv: list[str] | None = None) -> int:
         check_support_matrix(root, python2, problems),
         check_provider_tables(root, python2, problems),
         check_golden_usage(root, problems),
+        check_golden_links(root, cases, problems),
         check_refusal_receipts(root, cases, python2, problems),
     ]
 
