@@ -15,9 +15,12 @@ reference) and how each kind of fixture may change.
 
 ## Where the languages stand
 
-**2026-11-22 audit hardening:** Python and TypeScript pass **4,466 checks**
-(50 inapplicable cases skipped) against the changes in
-[the remediation record](changes/2026-11-22-audit-remediation.md). The other
+**2026-11-22 audit hardening and cross-provider review:** Python and TypeScript
+pass **4,470 checks** (50 inapplicable cases skipped) against the
+[remediation record](changes/2026-11-22-audit-remediation.md) and
+[cross-provider review](changes/2026-11-22-cross-provider-review.md).
+Twelve goldens have been reviewed and one obsolete golden archived, leaving
+327 active unreviewed goldens; this is not full backlog closure. The other
 four ports have not moved to this contract revision. The table below records
 the earlier shared baseline, not a claim of parity with these new checks.
 

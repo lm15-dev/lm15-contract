@@ -474,6 +474,18 @@ stream path had already refused, made on the complete path, so the same
 turn answered differently under `stream=True` (INV-051). Pinned by the
 four `<dialect>.tool_call_unnamed_complete` cases.
 
+**Completed live calls follow the same boundary** (clarified 2026-11-22).
+A Gemini Live `toolCall.functionCalls` or supported
+`serverContent.modelTurn.parts[].functionCall` without a non-empty string
+name raises `ProviderError` before a completed `LiveServerToolCallEvent` is
+returned. The live-completion stream instead preserves the absence in its
+`ToolCallDelta`; MAP-9 assembly raises `StreamAssemblyError` with the partial
+response. Missing, null, empty and non-string names are never replaced with
+`"tool"`. A real, explicitly supplied name `"tool"` remains valid. Synthetic
+negative controls in `mapping/live-tool-names.json` exercise this boundary;
+they are not claims of observed provider failures. Previously delivered frames
+are not undone; a malformed completed frame is refused as a unit.
+
 **Assembly algorithm** (the same in every port; written down 2026-09-02
 after the independent review found it lived only in code):
 
