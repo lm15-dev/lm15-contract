@@ -349,6 +349,12 @@ Out: `{"models": [<ModelInfo JSON>]}`
   `ok: false` reply.
 
 ### replay_live
+
+The `live` direction also runs `mapping/live-tool-names.json`: synthetic
+malformed calls derived from a recorded named call. Missing/null/empty/non-string
+names on completed Gemini live calls must produce `ProviderError` / `provider`
+(MAP-9), not a fabricated tool name. Original recorded transcripts stay unchanged.
+
 In: `{"provider": "openai"|"gemini", "live_config": <LiveConfig JSON>, "client_events": [<LiveClientEvent JSON>], "server_frames_b64": [str], "base_url"?: str}`
 Out: `{"setup_frames": [<wire JSON>], "client_frames": [[<wire JSON>]], "events": [[<LiveServerEvent JSON>]]}`
 - Recorded-transcript replay of the live websocket CODEC — three pure

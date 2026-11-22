@@ -58,6 +58,7 @@ MUTATIONS = (
     "validate_rejects_valid",    # validate: rejecting everything must fail the positive controls
     "models_wrong_id",      # parse_models_response: first model's id rewritten
     "models_param_drop",    # build_models_request: one query parameter dropped
+    "live_guessed_tool_name",  # replay_live: accept a nameless completed call
     "live_dropped_event",   # replay_live: last decoded event dropped from its frame group
     "live_frame_key_drop",  # replay_live: one key dropped from the first encoded client frame
     "gen_wrong_media_type",     # generation_parse: first media part's media_type rewritten
@@ -829,6 +830,11 @@ def find_live_case(msg: JsonObject) -> JsonObject:
 
 
 def op_replay_live(msg: JsonObject) -> JsonObject:
+    for case_id, fields in check.live_name_vectors():
+        if all(msg.get(k) == v for k, v in fields.items()):
+            if MUTATION == "live_guessed_tool_name" and targeted({"id": case_id}):
+                return {"events": [[{"type": "tool_call", "name": "tool"}]]}
+            raise PinnedRaise({"type": "ProviderError", "code": "provider", "message": "live call has no name"})
     case = find_live_case(msg)
     transcript = check.load_live_transcript(case)
     setup = next((e["frames"] for e in transcript if e["dir"] == "client" and e.get("kind") == "setup"), [])

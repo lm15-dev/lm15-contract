@@ -264,6 +264,7 @@ def pick_targets() -> dict[str, tuple[str, str]]:
     if decode_target is None or encode_target is None:
         raise SystemExit("selftest: live corpus too thin to self-test (need a golden with "
                          "events and a transcript with client frames)")
+    targets["live_guessed_tool_name"] = ("live", check.live_name_vectors()[0][0])
     targets["live_dropped_event"] = ("live", f"{decode_target}[decode]")
     targets["live_frame_key_drop"] = ("live", f"{encode_target}[encode]")
 

@@ -1,0 +1,18 @@
+{
+  "provenance": {
+    "source": "hand-authored",
+    "date": "2026-11-22",
+    "evidence": "MAP-1 and MAP-9: a completed live call is not actionable without a real name. Synthetic corruptions of gemini.live_tool_no_description's recorded call, not new live captures. Both existing decoder envelopes are exercised. changes/2026-11-22-cross-provider-review.md"
+  },
+  "source_case": "gemini.live_tool_no_description",
+  "cases": [
+    {"id": "gemini.live_name.toolCall.missing", "envelope": "toolCall", "omit_name": true},
+    {"id": "gemini.live_name.toolCall.null", "envelope": "toolCall", "name": null},
+    {"id": "gemini.live_name.toolCall.empty", "envelope": "toolCall", "name": ""},
+    {"id": "gemini.live_name.toolCall.number", "envelope": "toolCall", "name": 123},
+    {"id": "gemini.live_name.modelTurn.missing", "envelope": "modelTurn", "omit_name": true},
+    {"id": "gemini.live_name.modelTurn.null", "envelope": "modelTurn", "name": null},
+    {"id": "gemini.live_name.modelTurn.empty", "envelope": "modelTurn", "name": ""},
+    {"id": "gemini.live_name.modelTurn.number", "envelope": "modelTurn", "name": 123}
+  ]
+}

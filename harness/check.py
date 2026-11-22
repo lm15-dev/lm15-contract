@@ -1679,6 +1679,35 @@ def run_token_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
 
 # ─── Direction: live ───────────────────────────────────────────────
 
+def live_name_vectors() -> list[tuple[str, JsonObject]]:
+    """Synthetic negative controls derived from a named, recorded live call."""
+    fixture = json.loads((MAPPING_DIR / "live-tool-names.json").read_text(encoding="utf-8"))
+    source = next(case for case in load_live_cases() if case["id"] == fixture["source_case"])
+    calls = []
+    for entry in load_live_transcript(source):
+        if entry["dir"] == "server":
+            payload = json.loads(live_server_frame_bytes(entry))
+            calls.extend(payload.get("toolCall", {}).get("functionCalls", []))
+    if len(calls) != 1 or not isinstance(calls[0].get("name"), str) or not calls[0]["name"]:
+        raise ValueError("live name controls require exactly one recorded named call")
+    vectors = []
+    for case in fixture["cases"]:
+        call = dict(calls[0])
+        if case.get("omit_name"):
+            del call["name"]
+        else:
+            call["name"] = case["name"]
+        if case["envelope"] == "toolCall":
+            payload = {"toolCall": {"functionCalls": [call]}}
+        elif case["envelope"] == "modelTurn":
+            payload = {"serverContent": {"modelTurn": {"parts": [{"functionCall": call}]}}}
+        else:
+            raise ValueError("unknown live name-control envelope")
+        fields = {"provider": source["provider"], "live_config": source["live_config"],
+                  "client_events": [], "server_frames_b64": [base64.b64encode(json.dumps(payload).encode("utf-8")).decode("ascii")]}
+        vectors.append((case["id"], fields))
+    return vectors
+
 def run_live_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
     """Recorded-transcript replay of the live websocket codec (replay_live).
 
@@ -1736,6 +1765,11 @@ def run_live_direction(shim: Shim, case_filter: str | None) -> DirectionReport:
                                 ("events",), volatile=volatile, usage_int_float=True)
         report.results.append(CaseResult(f"{case_id}[decode]", "pass") if diff is None
                               else CaseResult(f"{case_id}[decode]", "fail", diff=diff))
+    for case_id, fields in live_name_vectors():
+        if case_filter and case_filter != case_id:
+            continue
+        reply = shim.call("replay_live", **fields)
+        report.results.append(compare_raise(case_id, reply, {"type": "ProviderError", "code": "provider"}, None, {}))
     return report
 
 
